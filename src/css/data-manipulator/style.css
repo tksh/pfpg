@@ -1,0 +1,71 @@
+* {
+    font-size: 1rem;
+}
+
+h2 {
+    background-color: #0009;
+    color: white;
+    letter-spacing: .1rem;
+    padding-left: .2rem;
+}
+
+h3 {
+    background-color: #fff6;
+    padding-left: .2rem;
+}
+
+button,
+input[type="file"]::file-selector-button {
+    background-color: #fff9;
+    transition: .5s;
+}
+
+button:hover,
+input[type="file"]::file-selector-button:hover {
+    background-color: #fff6;
+}
+
+textarea {
+    width: 100%;
+    background-color: #fffc;
+    margin-bottom: 1rem;
+    resize: vertical;
+    word-break: break-all;
+}
+
+.height-0 {
+    height: 1rem;
+}
+
+.height-1 {
+    height: 8rem;
+}
+
+.height-2 {
+    height: 32rem;
+}
+
+.displayNone {
+    display: none;
+}
+
+.bg-1 {
+    background-color: skyblue;
+}
+
+.bg-2 {
+    background-color: pink;
+}
+
+.bg-3 {
+    background-color: mediumaquamarine;
+}
+
+.pad {
+    padding: 1rem;
+}
+
+h3 span {
+    font-weight: normal;
+    font-style: italic;
+}
