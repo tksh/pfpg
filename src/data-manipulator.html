@@ -13,10 +13,15 @@
     <script src="./js/data-manipulator/data-io/select-file.js"></script>
     <script src="./js/data-manipulator/data-io/read-textarea.js"></script>
     <!-- <script src="./js/data-manipulator/data-io/input-from-textarea.js"></script> -->
-    <!-- <script src="./js/data-manipulator/data-io/output-to-textarea.js"></script> -->
+    <script src="./js/data-manipulator/data-io/output-to-textarea.js"></script>
     <!-- <script src="./js/data-manipulator/data-io/merge-as-url-params.js"></script> -->
     <!-- <script src="./js/data-manipulator/data-io/textarea-copy-button.js"></script> -->
     <!-- <script src="./js/data-manipulator/data-io/read-url-params.js"></script> -->
+
+
+    <script src="./js/data-manipulator/encode-artwork-data/artwork-data-encode.js"></script>
+    <script src="./js/data-manipulator/encode-artwork-data/detect-uint-n.js"></script>
+
 
     <!-- For Uint5Portray -->
     <!-- <script src="./js/data-manipulator/for-uint-5-portray/extract-d-values.js"></script>
@@ -53,7 +58,7 @@
         <input type="file" id="select-file-uint8portray-artwork-data" onchange="selectFileToInput('select-file-uint8portray-artwork-data', 'textarea-uint8portray-artwork-data-uploaded')" />
         <br />
         <textarea id="textarea-uint8portray-artwork-data-uploaded" placeholder="./jsonl_extracted/%{ARTWORK_ID}_artwork_id_size_and_bg_color.jsonl"></textarea>
-        <button onclick="encodeArtworkInfo('uint8')">Encode via <b>encodeArtworkInfo('uint8')</b></button>
+        <button onclick="encodeArtworkData('uint8')">Encode via <b>encodeArtworkData('uint8')</b></button>
         <textarea id="textarea-uint8portray-artwork-data-encoded" class="height-0" placeholder="Artwork Data encoded"></textarea>
 
 
@@ -89,7 +94,7 @@
         <input type="file" id="select-file-uint5portray-artwork-data" onchange="selectFileToInput('select-file-uint5portray-artwork-data', 'textarea-uint5portray-artwork-data-uploaded')" />
         <br />
         <textarea id="textarea-uint5portray-artwork-data-uploaded" placeholder="./jsonl_extracted/%{ARTWORK_ID}_artwork_id_size_and_bg_color.jsonl"></textarea>
-        <button onclick="encodeArtworkInfo('uint5')">Encode via <b>encodeArtworkInfo('uint5')</b></button>
+        <button onclick="encodeArtworkData('uint5')">Encode via <b>encodeArtworkData('uint5')</b></button>
         <textarea id="textarea-uint5portray-artwork-data-encoded" class="height-0" placeholder="Artwork Data encoded"></textarea>
 
 
