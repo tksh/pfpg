@@ -14,20 +14,38 @@
     <script src="./js/data-manipulator/data-io/read-textarea.js"></script>
     <!-- <script src="./js/data-manipulator/data-io/input-from-textarea.js"></script> -->
     <script src="./js/data-manipulator/data-io/output-to-textarea.js"></script>
+    <script src="./js/data-manipulator/data-io/json-to-map-obj.js"></script>
     <!-- <script src="./js/data-manipulator/data-io/merge-as-url-params.js"></script> -->
     <!-- <script src="./js/data-manipulator/data-io/textarea-copy-button.js"></script> -->
     <!-- <script src="./js/data-manipulator/data-io/read-url-params.js"></script> -->
 
+    <!-- Base N enc -->
+    <script src="./js/data-manipulator/base-n-enc/base-52-enc.js"></script>
 
+    <!-- URLCompressor -->
+    <script src="./js/data-manipulator/url-comp-0-1-0/convert.js"></script>
+    <script src="./js/data-manipulator/url-comp-0-1-0/url-comp.js"></script>
+
+    <!-- Artwork Data -->
     <script src="./js/data-manipulator/encode-artwork-data/artwork-data-encode.js"></script>
     <script src="./js/data-manipulator/encode-artwork-data/detect-uint-n.js"></script>
 
+    <!-- Stroke Width Count -->
+    <script src="./js/data-manipulator/stroke-width-count/stroke-width-count-enc.js"></script>
+
+    <script src="./js/data-manipulator/compare/compare-length-of-string.js"></script>
 
     <!-- For Uint5Portray -->
-    <!-- <script src="./js/data-manipulator/for-uint-5-portray/extract-d-values.js"></script>
-    <script src="./js/data-manipulator/for-uint-5-portray/generate-base63-dict.js"></script>
-    <script src="./js/data-manipulator/for-uint-5-portray/base63-encode.js"></script>
-    <script src="./js/data-manipulator/for-uint-5-portray/base63-decode.js"></script> -->
+    <script src="./js/data-manipulator/encode-strokes-values-uint-5/extract-d-values.js"></script>
+    <script src="./js/data-manipulator/encode-strokes-values-uint-5/generate-swap63-dict.js"></script>
+    <script src="./js/data-manipulator/encode-strokes-values-uint-5/swap63-encode.js"></script>
+    <script src="./js/data-manipulator/encode-strokes-values-uint-5/swap63-decode.js"></script>
+
+    <!--
+    <script src="./js/data-manipulator/for-uint-5-portray/extract-d-values.js"></script>
+    <script src="./js/data-manipulator/for-uint-5-portray/generate-swap63-dict.js"></script>
+    <script src="./js/data-manipulator/for-uint-5-portray/swap63-encode.js"></script>
+    <script src="./js/data-manipulator/for-uint-5-portray/swap63-decode.js"></script> -->
 
     <!-- For Uint[6-14]Portray -->
     <!-- <script src="./js/data-manipulator/for-uint-6-to-14-portray/base-x-encode.js"></script>
@@ -98,16 +116,397 @@
         <textarea id="textarea-uint5portray-artwork-data-encoded" class="height-0" placeholder="Artwork Data encoded"></textarea>
 
 
-        <h3>2. ⬆ Aggregated Data for Compression: <span>For the second element of encoded url params</span></h3>
+        <h3>2.1 ⬆ Strokes Attributes: <span>For the second element of encoded url params</span></h3>
+        <label for="select-file-uint5portray-strokes-attrs">Select the JSON Lines (.jsonl) file that contains the difference between the relative-d-values rows and its frequency dictionary</label>
+        <br />
+        <input type="file" id="select-file-uint5portray-strokes-attrs" onchange="selectFileToInput('select-file-uint5portray-strokes-attrs', 'textarea-uint5portray-strokes-attrs-uploaded')" />
+        <br />
+        <textarea id="textarea-uint5portray-strokes-attrs-uploaded" placeholder="./jsonl_extracted/%{ARTWORK_ID}__strokes_order_width_and_dval.jsonl">{
+            "1": {
+                "g_stroke": "#000",
+                "g_opacity": 1,
+                "g_stroke-opacity": 1,
+                "id": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
+                "stroke-width": [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+                "d": {
+                    "absolute": {
+                        "x1": [1, 4, 7, 6, 8, 7, 19, 25, 24, 28, 30, 17, 4, 22, 26, 22, 22, 23, 23],
+                        "y1": [0, 0, 0, 15, 20, 5, 0, 0, 15, 0, 0, 28, 24, 0, 11, 16, 19, 22, 8],
+                        "x2": [1, 4, 6, 10, 8, 11, 24, 26, 24, 28, 30, 20, 8, 24, 23, 22, 24, 31, 26],
+                        "y2": [26, 25, 23, 21, 23, 0, 5, 24, 22, 25, 27, 31, 22, 9, 17, 20, 23, 27, 10]
+                    },
+                    "relative": {
+                        "x1": [1, 3, 3, 0, -2, -1, 8, 1, -2, 4, 2, -13, -16, 14, 2, -1, 0, -1, -8],
+                        "y1": [0, -26, -25, -8, -1, -18, 0, -5, -9, -22, -25, 1, -7, -22, 2, -1, -1, -1, -19],
+                        "x2": [0, 0, -1, 4, 0, 4, 5, 1, 0, 0, 0, 3, 4, 2, -3, 0, 2, 8, 3],
+                        "y2": [26, 25, 23, 6, 3, -5, 5, 24, 7, 25, 27, 3, -2, 9, 6, 4, 4, 5, 2]
+                    }
+                }
+            },
+            "2": {
+                "g_stroke": "#000",
+                "g_opacity": 1,
+                "g_stroke-opacity": 1,
+                "id": [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35],
+                "stroke-width": [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+                "d": {
+                    "absolute": {
+                        "x1": [0, 9, 7, 6, 9, 2, 16, 18, 12, 13, 19, 24, 21, 24, 23, 14],
+                        "y1": [0, 3, 8, 10, 22, 25, 0, 0, 29, 28, 29, 28, 17, 15, 8, 0],
+                        "x2": [31, 14, 9, 8, 10, 4, 18, 20, 14, 15, 22, 24, 22, 22, 23, 16],
+                        "y2": [1, 0, 2, 17, 20, 24, 2, 2, 30, 29, 31, 31, 16, 16, 10, 1]
+                    },
+                    "relative": {
+                        "x1": [0, -22, -7, -3, 1, -8, 12, 0, -8, -1, 4, 2, -3, 2, 1, -9],
+                        "y1": [0, 2, 8, 8, 5, 5, -24, -2, 27, -2, 0, -3, -14, -1, -8, -10],
+                        "x2": [31, 5, 2, 2, 1, 2, 2, 2, 2, 2, 3, 0, 1, -2, 0, 2],
+                        "y2": [1, -3, -6, 7, -2, -1, 2, 2, 1, 1, 2, 3, -1, 1, 2, 1]
+                    }
+                }
+            },
+            "3": {
+                "g_stroke": "#000",
+                "g_opacity": 1,
+                "g_stroke-opacity": 1,
+                "id": [36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97],
+                "stroke-width": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                "d": {
+                    "absolute": {
+                        "x1": [1, 7, 7, 7, 12, 14, 14, 14, 15, 17, 18, 16, 20, 18, 20, 21, 24, 25, 26, 27, 29, 31, 25, 26, 28, 14, 15, 16, 13, 15, 13, 14, 14, 18, 17, 12, 13, 13, 12, 12, 12, 14, 16, 15, 15, 16, 14, 9, 13, 14, 17, 16, 15, 12, 12, 14, 14, 22, 21, 22, 2, 10],
+                        "y1": [26, 7, 5, 12, 23, 25, 27, 28, 28, 28, 27, 29, 23, 25, 27, 25, 23, 24, 25, 26, 26, 28, 29, 27, 28, 20, 21, 24, 17, 16, 17, 18, 19, 10, 12, 9, 11, 10, 13, 14, 12, 10, 11, 10, 8, 5, 8, 10, 2, 1, 1, 4, 6, 18, 20, 20, 18, 11, 14, 11, 28, 30],
+                        "x2": [0, 8, 8, 8, 15, 17, 15, 15, 15, 16, 20, 18, 19, 18, 23, 24, 20, 22, 24, 26, 28, 29, 26, 28, 31, 16, 17, 17, 15, 16, 16, 16, 16, 15, 18, 14, 15, 11, 12, 15, 14, 18, 17, 17, 17, 18, 15, 10, 15, 19, 20, 18, 17, 14, 16, 17, 17, 23, 22, 23, 4, 14],
+                        "y2": [27, 11, 9, 9, 26, 27, 27, 30, 30, 31, 30, 27, 25, 26, 29, 28, 30, 31, 31, 31, 31, 31, 31, 31, 31, 22, 24, 26, 20, 18, 15, 17, 19, 15, 14, 13, 14, 14, 14, 14, 14, 10, 9, 7, 5, 2, 7, 11, 3, 5, 4, 7, 10, 18, 21, 18, 16, 13, 12, 11, 31, 28]
+                    },
+                    "relative": {
+                        "x1": [1, 7, -1, -1, 4, -1, -3, -1, 0, 2, 2, -4, 2, -1, 2, -2, 0, 5, 4, 3, 3, 3, -4, 0, 0, -17, -1, -1, -4, 0, -3, -2, -2, 2, 2, -6, -1, -2, 1, 0, -3, 0, -2, -2, -2, -1, -4, -6, 3, -1, -2, -4, -3, -5, -2, -2, -3, 5, -2, 0, -21, 6],
+                        "y1": [26, -20, -6, 3, 14, -1, 0, 1, -2, -2, -4, -1, -4, 0, 1, -4, -5, -6, -6, -5, -5, -3, -2, -4, -3, -11, -1, 0, -9, -4, -1, 3, 2, -9, -3, -5, -2, -4, -1, 0, -2, -4, 1, 1, 1, 0, 6, 3, -9, -2, -4, 0, -1, 8, 2, -1, 0, -5, 1, -1, 17, -1],
+                        "x2": [-1, 1, 1, 1, 3, 3, 1, 1, 0, -1, 2, 2, -1, 0, 3, 3, -4, -3, -2, -1, -1, -2, 1, 2, 3, 2, 2, 1, 2, 1, 3, 2, 2, -3, 1, 2, 2, -2, 0, 3, 2, 4, 1, 2, 2, 2, 1, 1, 2, 5, 3, 2, 2, 2, 4, 3, 3, 1, 1, 1, 2, 4],
+                        "y2": [1, 4, 4, -3, 3, 2, 0, 2, 2, 3, 3, -2, 2, 1, 2, 3, 7, 7, 6, 5, 5, 3, 2, 4, 3, 2, 3, 2, 3, 2, -2, -1, 0, 5, 2, 4, 3, 4, 1, 0, 2, 0, -2, -3, -3, -3, -1, 1, 1, 4, 3, 3, 4, 0, 1, -2, -2, 2, -2, 0, 3, -2]
+                    }
+                }
+            },
+            "4": {
+                "g_stroke": "#eee",
+                "g_opacity": 1,
+                "g_stroke-opacity": 1,
+                "id": [98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116],
+                "stroke-width": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                "d": {
+                    "absolute": {
+                        "x1": [14, 9, 10, 11, 13, 8, 9, 11, 11, 13, 15, 10, 11, 0, 4, 6, 9, 10, 18],
+                        "y1": [6, 6, 4, 9, 9, 10, 12, 15, 17, 22, 11, 24, 26, 28, 28, 27, 26, 29, 27],
+                        "x2": [9, 14, 12, 11, 15, 10, 10, 12, 12, 15, 16, 10, 12, 2, 7, 9, 10, 13, 20],
+                        "y2": [8, 4, 3, 10, 8, 8, 16, 15, 17, 25, 12, 29, 28, 30, 30, 29, 27, 27, 25]
+                    },
+                    "relative": {
+                        "x1": [14, 0, -4, -1, 2, -7, -1, 1, -1, 1, 0, -6, 1, -12, 2, -1, 0, 0, 5],
+                        "y1": [6, -2, 0, 6, -1, 2, 4, -1, 2, 5, -14, 12, -3, 0, -2, -3, -3, 2, 0],
+                        "x2": [-5, 5, 2, 0, 2, 2, 1, 1, 1, 2, 1, 0, 1, 2, 3, 3, 1, 3, 2],
+                        "y2": [2, -2, -1, 1, -1, -2, 4, 0, 0, 3, 1, 5, 2, 2, 2, 2, 1, -2, -2]
+                    }
+                }
+            },
+            "5": {
+                "g_stroke": "#fff",
+                "g_opacity": 1,
+                "g_stroke-opacity": 1,
+                "id": [117, 118, 119, 120, 121, 122, 123],
+                "stroke-width": [1, 1, 1, 1, 1, 1, 1],
+                "d": {
+                    "absolute": {
+                        "x1": [12, 11, 11, 11, 11, 12, 13],
+                        "y1": [21, 4, 6, 11, 15, 21, 23],
+                        "x2": [12, 9, 10, 9, 10, 14, 15],
+                        "y2": [23, 7, 8, 14, 16, 22, 24]
+                    },
+                    "relative": {
+                        "x1": [12, -1, 2, 1, 2, 2, -1],
+                        "y1": [21, -19, -1, 3, 1, 5, 1],
+                        "x2": [0, -2, -1, -2, -1, 2, 2],
+                        "y2": [2, 3, 2, 3, 1, 1, 1]
+                    }
+                }
+            }
+        }
+        </textarea>
+        <br />
+
+        <h3>2.2 ⬆ Aggregated Data for Compression: <span>For the second element of encoded url params</span></h3>
         <label for="select-file-uint5portray-agg-data-for-comp">Select the JSON Lines (.jsonl) file that contains the difference between the relative-d-values rows and its frequency dictionary</label>
         <br />
         <input type="file" id="select-file-uint5portray-agg-data-for-comp" onchange="selectFileToInput('select-file-uint5portray-agg-data-for-comp', 'textarea-uint5portray-agg-data-for-comp-uploaded')" />
         <br />
-        <textarea id="textarea-uint5portray-agg-data-for-comp-uploaded" placeholder="./jsonl_extracted/%{ARTWORK_ID}__strokes_order_width_and_dval.jsonl"></textarea>
+        <textarea id="textarea-uint5portray-agg-data-for-comp-uploaded" placeholder="./jsonl_extracted/%{ARTWORK_ID}__strokes_order_width_and_dval.jsonl">{
+            "1": {
+                "list_of_width": [3],
+                "count_by_width": [19],
+                "absolute": {
+                    "x1": {
+                        "diff": [1, 3, 3, -1, 2, -1, 12, 6, -1, 4, 2, -13, -13, 18, 4, -4, 0, 1, 0],
+                        "diff_values_sorted_by_freq": [-1, -13],
+                        "diff_counts_sorted_by_freq": [3, 2],
+                        "padded_and_joined_as_bigint": "001004007006008007019025024028030017004022026022022023023"
+                    },
+                    "y1": {
+                        "diff": [0, 0, 0, 15, 5, -15, -5, 0, 15, -15, 0, 28, -4, -24, 11, 5, 3, 3, -14],
+                        "diff_values_sorted_by_freq": [15, -15],
+                        "diff_counts_sorted_by_freq": [2, 2],
+                        "padded_and_joined_as_bigint": "000000000015020005000000015000000028024000011016019022008"
+                    },
+                    "x2": {
+                        "diff": [1, 3, 2, 4, -2, 3, 13, 2, -2, 4, 2, -10, -12, 16, -1, -1, 2, 7, -5],
+                        "diff_values_sorted_by_freq": [-2, -1],
+                        "diff_counts_sorted_by_freq": [2, 2],
+                        "padded_and_joined_as_bigint": "001004006010008011024026024028030020008024023022024031026"
+                    },
+                    "y2": {
+                        "diff": [26, -1, -2, -2, 2, -23, 5, 19, -2, 3, 2, 4, -9, -13, 8, 3, 3, 4, -17],
+                        "diff_values_sorted_by_freq": [-2],
+                        "diff_counts_sorted_by_freq": [3],
+                        "padded_and_joined_as_bigint": "026025023021023000005024022025027031022009017020023027010"
+                    }
+                },
+                "relative": {
+                    "x1": {
+                        "diff": [1, 2, 0, -3, -2, 1, 9, -7, -3, 6, -2, -15, -3, 30, -12, -3, 1, -1, -7],
+                        "diff_values_sorted_by_freq": [-3, -2, -7],
+                        "diff_counts_sorted_by_freq": [4, 2, 2]
+                    },
+                    "y1": {
+                        "diff": [0, -26, 1, 17, 7, -17, 18, -5, -4, -13, -3, 26, -8, -15, 24, -3, 0, 0, -18],
+                        "diff_values_sorted_by_freq": [-3],
+                        "diff_counts_sorted_by_freq": [2]
+                    },
+                    "x2": {
+                        "diff": [0, 0, -1, 5, -4, 4, 1, -4, -1, 0, 0, 3, 1, -2, -5, 3, 2, 6, -5],
+                        "diff_values_sorted_by_freq": [-5, -4, -1],
+                        "diff_counts_sorted_by_freq": [2, 2, 2]
+                    },
+                    "y2": {
+                        "diff": [26, -1, -2, -17, -3, -8, 10, 19, -17, 18, 2, -24, -5, 11, -3, -2, 0, 1, -3],
+                        "diff_values_sorted_by_freq": [-3, -2, -17],
+                        "diff_counts_sorted_by_freq": [3, 2, 2]
+                    }
+                }
+            },
+            "2": {
+                "list_of_width": [2],
+                "count_by_width": [16],
+                "absolute": {
+                    "x1": {
+                        "diff": [0, 9, -2, -1, 3, -7, 14, 2, -6, 1, 6, 5, -3, 3, -1, -9],
+                        "diff_values_sorted_by_freq": [-1],
+                        "diff_counts_sorted_by_freq": [2],
+                        "padded_and_joined_as_bigint": "000009007006009002016018012013019024021024023014"
+                    },
+                    "y1": {
+                        "diff": [0, 3, 5, 2, 12, 3, -25, 0, 29, -1, 1, -1, -11, -2, -7, -8],
+                        "diff_values_sorted_by_freq": [-1],
+                        "diff_counts_sorted_by_freq": [2],
+                        "padded_and_joined_as_bigint": "000003008010022025000000029028029028017015008000"
+                    },
+                    "x2": {
+                        "diff": [31, -17, -5, -1, 2, -6, 14, 2, -6, 1, 7, 2, -2, 0, 1, -7],
+                        "diff_values_sorted_by_freq": [-6],
+                        "diff_counts_sorted_by_freq": [2],
+                        "padded_and_joined_as_bigint": "031014009008010004018020014015022024022022023016"
+                    },
+                    "y2": {
+                        "diff": [1, -1, 2, 15, 3, 4, -22, 0, 28, -1, 2, 0, -15, 0, -6, -9],
+                        "diff_values_sorted_by_freq": [-1],
+                        "diff_counts_sorted_by_freq": [2],
+                        "padded_and_joined_as_bigint": "001000002017020024002002030029031031016016010001"
+                    }
+                },
+                "relative": {
+                    "x1": {
+                        "diff": [0, -22, 15, 4, 4, -9, 20, -12, -8, 7, 5, -2, -5, 5, -1, -10],
+                        "diff_values_sorted_by_freq": [],
+                        "diff_counts_sorted_by_freq": []
+                    },
+                    "y1": {
+                        "diff": [0, 2, 6, 0, -3, 0, -29, 22, 29, -29, 2, -3, -11, 13, -7, -2],
+                        "diff_values_sorted_by_freq": [-3, -29],
+                        "diff_counts_sorted_by_freq": [2, 2]
+                    },
+                    "x2": {
+                        "diff": [31, -26, -3, 0, -1, 1, 0, 0, 0, 0, 1, -3, 1, -3, 2, 2],
+                        "diff_values_sorted_by_freq": [-3],
+                        "diff_counts_sorted_by_freq": [3]
+                    },
+                    "y2": {
+                        "diff": [1, -4, -3, 13, -9, 1, 3, 0, -1, 0, 1, 1, -4, 2, 1, -1],
+                        "diff_values_sorted_by_freq": [-4, -1],
+                        "diff_counts_sorted_by_freq": [2, 2]
+                    }
+                }
+            },
+            "3": {
+                "list_of_width": [1],
+                "count_by_width": [62],
+                "absolute": {
+                    "x1": {
+                        "diff": [1, 6, 0, 0, 5, 2, 0, 0, 1, 2, 1, -2, 4, -2, 2, 1, 3, 1, 1, 1, 2, 2, -6, 1, 2, -14, 1, 1, -3, 2, -2, 1, 0, 4, -1, -5, 1, 0, -1, 0, 0, 2, 2, -1, 0, 1, -2, -5, 4, 1, 3, -1, -1, -3, 0, 2, 0, 8, -1, 1, -20, 8],
+                        "diff_values_sorted_by_freq": [-1, -2, -5, -3],
+                        "diff_counts_sorted_by_freq": [6, 4, 2, 2],
+                        "padded_and_joined_as_bigint": "001007007007012014014014015017018016020018020021024025026027029031025026028014015016013015013014014018017012013013012012012014016015015016014009013014017016015012012014014022021022002010"
+                    },
+                    "y1": {
+                        "diff": [26, -19, -2, 7, 11, 2, 2, 1, 0, 0, -1, 2, -6, 2, 2, -2, -2, 1, 1, 1, 0, 2, 1, -2, 1, -8, 1, 3, -7, -1, 1, 1, 1, -9, 2, -3, 2, -1, 3, 1, -2, -2, 1, -1, -2, -3, 3, 2, -8, -1, 0, 3, 2, 12, 2, 0, -2, -7, 3, -3, 17, 2],
+                        "diff_values_sorted_by_freq": [-2, -1, -3, -8, -7],
+                        "diff_counts_sorted_by_freq": [8, 5, 3, 2, 2],
+                        "padded_and_joined_as_bigint": "026007005012023025027028028028027029023025027025023024025026026028029027028020021024017016017018019010012009011010013014012010011010008005008010002001001004006018020020018011014011028030"
+                    },
+                    "x2": {
+                        "diff": [0, 8, 0, 0, 7, 2, -2, 0, 0, 1, 4, -2, 1, -1, 5, 1, -4, 2, 2, 2, 2, 1, -3, 2, 3, -15, 1, 0, -2, 1, 0, 0, 0, -1, 3, -4, 1, -4, 1, 3, -1, 4, -1, 0, 0, 1, -3, -5, 5, 4, 1, -2, -1, -3, 2, 1, 0, 6, -1, 1, -19, 10],
+                        "diff_values_sorted_by_freq": [-1, -2, -4, -3],
+                        "diff_counts_sorted_by_freq": [6, 4, 3, 3],
+                        "padded_and_joined_as_bigint": "000008008008015017015015015016020018019018023024020022024026028029026028031016017017015016016016016015018014015011012015014018017017017018015010015019020018017014016017017023022023004014"
+                    },
+                    "y2": {
+                        "diff": [27, -16, -2, 0, 17, 1, 0, 3, 0, 1, -1, -3, -2, 1, 3, -1, 2, 1, 0, 0, 0, 0, 0, 0, 0, -9, 2, 2, -6, -2, -3, 2, 2, -4, -1, -1, 1, 0, 0, 0, 0, -4, -1, -2, -2, -3, 5, 4, -8, 2, -1, 3, 3, 8, 3, -3, -2, -3, -1, -1, 20, -3],
+                        "diff_values_sorted_by_freq": [-1, -3, -2, -4],
+                        "diff_counts_sorted_by_freq": [8, 6, 6, 2],
+                        "padded_and_joined_as_bigint": "027011009009026027027030030031030027025026029028030031031031031031031031031022024026020018015017019015014013014014014014014010009007005002007011003005004007010018021018016013012011031028"
+                    }
+                },
+                "relative": {
+                    "x1": {
+                        "diff": [1, 6, -8, 0, 5, -5, -2, 2, 1, 2, 0, -6, 6, -3, 3, -4, 2, 5, -1, -1, 0, 0, -7, 4, 0, -17, 16, 0, -3, 4, -3, 1, 0, 4, 0, -8, 5, -1, 3, -1, -3, 3, -2, 0, 0, 1, -3, -2, 9, -4, -1, -2, 1, -2, 3, 0, -1, 8, -7, 2, -21, 27],
+                        "diff_values_sorted_by_freq": [-1, -3, -2, -8, -7, -4],
+                        "diff_counts_sorted_by_freq": [6, 5, 5, 2, 2, 2]
+                    },
+                    "y1": {
+                        "diff": [26, -46, 14, 9, 11, -15, 1, 1, -3, 0, -2, 3, -3, 4, 1, -5, -1, -1, 0, 1, 0, 2, 1, -2, 1, -8, 10, 1, -9, 5, 3, 4, -1, -11, 6, -2, 3, -2, 3, 1, -2, -2, 5, 0, 0, -1, 6, -3, -12, 7, -2, 4, -1, 9, -6, -3, 1, -5, 6, -2, 18, -18],
+                        "diff_values_sorted_by_freq": [-2, -1, -3, -5],
+                        "diff_counts_sorted_by_freq": [8, 5, 4, 2]
+                    },
+                    "x2": {
+                        "diff": [-1, 2, 0, 0, 2, 0, -2, 0, -1, -1, 3, 0, -3, 1, 3, 0, -7, 1, 1, 1, 0, -1, 3, 1, 1, -1, 0, -1, 1, -1, 2, -1, 0, -5, 4, 1, 0, -4, 2, 3, -1, 2, -3, 1, 0, 0, -1, 0, 1, 3, -2, -1, 0, 0, 2, -1, 0, -2, 0, 0, 1, 2],
+                        "diff_values_sorted_by_freq": [-1, -2, -3],
+                        "diff_counts_sorted_by_freq": [12, 3, 2]
+                    },
+                    "y2": {
+                        "diff": [1, 3, 0, -7, 6, -1, -2, 2, 0, 1, 0, -5, 4, -1, 1, 1, 4, 0, -1, -1, 0, -2, -1, 2, -1, -1, 1, -1, 1, -1, -4, 1, 1, 5, -3, 2, -1, 1, -3, -1, 2, -2, -2, -1, 0, 0, 2, 2, 0, 3, -1, 0, 1, -4, 1, -3, 0, 4, -4, 2, 3, -5],
+                        "diff_values_sorted_by_freq": [-1, -2, -4, -3, -5],
+                        "diff_counts_sorted_by_freq": [13, 4, 3, 3, 2]
+                    }
+                }
+            },
+            "4": {
+                "list_of_width": [1],
+                "count_by_width": [19],
+                "absolute": {
+                    "x1": {
+                        "diff": [14, -5, 1, 1, 2, -5, 1, 2, 0, 2, 2, -5, 1, -11, 4, 2, 3, 1, 8],
+                        "diff_values_sorted_by_freq": [-5],
+                        "diff_counts_sorted_by_freq": [3],
+                        "padded_and_joined_as_bigint": "014009010011013008009011011013015010011000004006009010018"
+                    },
+                    "y1": {
+                        "diff": [6, 0, -2, 5, 0, 1, 2, 3, 2, 5, -11, 13, 2, 2, 0, -1, -1, 3, -2],
+                        "diff_values_sorted_by_freq": [-2, -1],
+                        "diff_counts_sorted_by_freq": [2, 2],
+                        "padded_and_joined_as_bigint": "006006004009009010012015017022011024026028028027026029027"
+                    },
+                    "x2": {
+                        "diff": [9, 5, -2, -1, 4, -5, 0, 2, 0, 3, 1, -6, 2, -10, 5, 2, 1, 3, 7],
+                        "diff_values_sorted_by_freq": [],
+                        "diff_counts_sorted_by_freq": [],
+                        "padded_and_joined_as_bigint": "009014012011015010010012012015016010012002007009010013020"
+                    },
+                    "y2": {
+                        "diff": [8, -4, -1, 7, -2, 0, 8, -1, 2, 8, -13, 17, -1, 2, 0, -1, -2, 0, -2],
+                        "diff_values_sorted_by_freq": [-1, -2],
+                        "diff_counts_sorted_by_freq": [4, 3],
+                        "padded_and_joined_as_bigint": "008004003010008008016015017025012029028030030029027027025"
+                    }
+                },
+                "relative": {
+                    "x1": {
+                        "diff": [14, -14, -4, 3, 3, -9, 6, 2, -2, 2, -1, -6, 7, -13, 14, -3, 1, 0, 5],
+                        "diff_values_sorted_by_freq": [14],
+                        "diff_counts_sorted_by_freq": [2]
+                    },
+                    "y1": {
+                        "diff": [6, -8, 2, 6, -7, 3, 2, -5, 3, 3, -19, 26, -15, 3, -2, -1, 0, 5, -2],
+                        "diff_values_sorted_by_freq": [-2],
+                        "diff_counts_sorted_by_freq": [2]
+                    },
+                    "x2": {
+                        "diff": [-5, 10, -3, -2, 2, 0, -1, 0, 0, 1, -1, -1, 1, 1, 1, 0, -2, 2, -1],
+                        "diff_values_sorted_by_freq": [-1, -2],
+                        "diff_counts_sorted_by_freq": [4, 2]
+                    },
+                    "y2": {
+                        "diff": [2, -4, 1, 2, -2, -1, 6, -4, 0, 3, -2, 4, -3, 0, 0, 0, -1, -3, 0],
+                        "diff_values_sorted_by_freq": [-4, -3, -2, -1],
+                        "diff_counts_sorted_by_freq": [2, 2, 2, 2]
+                    }
+                }
+            },
+            "5": {
+                "list_of_width": [1],
+                "count_by_width": [7],
+                "absolute": {
+                    "x1": {
+                        "diff": [12, -1, 0, 0, 0, 1, 1],
+                        "diff_values_sorted_by_freq": [],
+                        "diff_counts_sorted_by_freq": [],
+                        "padded_and_joined_as_bigint": "012011011011011012013"
+                    },
+                    "y1": {
+                        "diff": [21, -17, 2, 5, 4, 6, 2],
+                        "diff_values_sorted_by_freq": [],
+                        "diff_counts_sorted_by_freq": [],
+                        "padded_and_joined_as_bigint": "021004006011015021023"
+                    },
+                    "x2": {
+                        "diff": [12, -3, 1, -1, 1, 4, 1],
+                        "diff_values_sorted_by_freq": [],
+                        "diff_counts_sorted_by_freq": [],
+                        "padded_and_joined_as_bigint": "012009010009010014015"
+                    },
+                    "y2": {
+                        "diff": [23, -16, 1, 6, 2, 6, 2],
+                        "diff_values_sorted_by_freq": [],
+                        "diff_counts_sorted_by_freq": [],
+                        "padded_and_joined_as_bigint": "023007008014016022024"
+                    }
+                },
+                "relative": {
+                    "x1": {
+                        "diff": [12, -13, 3, -1, 1, 0, -3],
+                        "diff_values_sorted_by_freq": [],
+                        "diff_counts_sorted_by_freq": []
+                    },
+                    "y1": {
+                        "diff": [21, -40, 18, 4, -2, 4, -4],
+                        "diff_values_sorted_by_freq": [],
+                        "diff_counts_sorted_by_freq": []
+                    },
+                    "x2": {
+                        "diff": [0, -2, 1, -1, 1, 3, 0],
+                        "diff_values_sorted_by_freq": [],
+                        "diff_counts_sorted_by_freq": []
+                    },
+                    "y2": {
+                        "diff": [2, 1, -1, 1, -2, 0, 0],
+                        "diff_values_sorted_by_freq": [],
+                        "diff_counts_sorted_by_freq": []
+                    }
+                }
+            }
+        }
+        </textarea>
         <br />
-        <button onclick="base63Encode()">Encode via <b>base63Encode()</b> using Strokes Info and Values</button>
-        <textarea id="textarea-uint5portray-agg-data-for-comp-encoded" class="height-1" placeholder="Strokes info and values encoded"></textarea>
 
+
+        <button onclick="swap63Encode()">Encode via <b>swap63Encode()</b> from relative d values</button>
+        <textarea id="textarea-uint5portray-strokes-attrs-encoded" class="height-1" placeholder="Strokes values encoded"></textarea>
+        <br />
+        <button onclick="bigintEncode()">Encode via <b>bigintEncode()</b> from padded and joined bigint d values</button>
+        <textarea id="textarea-uint5portray-agg-data-for-comp-encoded" class="height-1" placeholder="Strokes values encoded"></textarea>
 
 
         <h3>3. ⬇ Encoded URL Params: <span>Artwork Data, strokes info and d values are encoded as a string</span></h3>

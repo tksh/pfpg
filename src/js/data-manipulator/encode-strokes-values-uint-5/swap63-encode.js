@@ -3,7 +3,7 @@
 
 ////////////////////////////////// Output: //////////////////////////////////
 
-// Format: [1st:color]=[1st char: binary flag for URLComp or not][strokesInfo(width number, amount base52 encoded, ...)]-[x1:dict]-[x1:diff]-[y1:dict]-[y1:diff]-[x2:dict]-[x2:diff]-[y2:dict]-[y2:diff]&[2nd:color]=...
+// Format: [1st:color]=[1st char: binary flag for URLComp or not][widthCount(width number, amount base52 encoded, ...)]-[x1:dict]-[x1:diff]-[y1:dict]-[y1:diff]-[x2:dict]-[x2:diff]-[y2:dict]-[y2:diff]&[2nd:color]=...
 // e.g. 000=1E9_eLsiCq2FV ... 3MIQzvvmCESj9yYZkIDMJ4l4
 
 //New
@@ -14,7 +14,7 @@
 //                      For *0*:mixed-enc  => Base X number for mixed-enc,
 //                      For *1*:bigint-enc => split by X digits for bigint-enc,
 //                      For *2*:swap63-enc => Nothing (Encoded value start at 3rd char)]
-//         After 4th char: strokesInfo(width number, amount base52 encoded, ...)]
+//         After 4th char: widthCount(width number, amount base52 encoded, ...)]
 //                             [`list_of_width`(Int) と `count_by_width`(base52 encoded Char(s)) を交互に並べた文字列]
 //                             `-`[x1:swap63-encoded] [y1:swap63-encoded] [x2:swap63-encoded] [y2:swap63-encoded]
 
@@ -54,27 +54,40 @@ function swap63Encode(swap63DictMap = generateSwap63Dict()) {
     // Map(5) {'1' => 'wyyvtuDwtzxifJxuvunv56nudvqm96wo9xuuucvvuzvzAwvvvyzxsvxDyVUSByqATCUWytEBzzAx', '2' => 'v9oswnHvnuzxsxwmvxDDAA7tWtvshunl_AxxwxxxxxyvwtvxwspCtuxxwwxyuwxw', '3' => 'wCuuzusuvxxrxuxtvAzyyyrvveuurvsttxxputwvsvttturpyutrsqttsAtvaBVbpyJuvwttrurvwrqppqqstrskuvmruyxmsqtruvtrwwwvBymtrvuDxuvqwuMuuwwwyywwvuxxuvyyrstuutwxyxxwxwyxxswxxtvyxzwxxxwwxAyxxxzyywwwxzwzzsyxvxxyytxwxyCCBAAyxzyxyxyxtuvAxzyzwvxvtsssuwwzyyzvwttxtvyt', '4' => 'JvruxouwuwvpwjxuvvABtvBuxzuxAhHsvtssxvqAxvxxwwwxwvwxyywyxxtuwutzvvywAxxxxwtt', '5' => 'HuxwxxuQcuywAwvtutuxxxyxywww'}
 
 
-    // Choose smaller one between URLComp or not, for each color
 
-    const optimizedEncodedStrokesByColor = applyUrlCompIfEffective(encodedDvalByGroup)
-    //console.log('optimizedEncodedStrokesByColor: ', optimizedEncodedStrokesByColor)
+    //  From agg-data-for-comp
+
+    // Get the width count (list_of_width and count_by_width) encoded as a string
+    const widthCountEncodedByGroup = encodeWidthCount('uint5')
+    //console.log(widthCountEncodedByGroup)          // Map(5) {'1' => '3t', '2' => '2q', '3' => '1bk', '4' => '1t', '5' => '1h'}
+    //console.log(widthCountEncodedByGroup.get("1")) // 3t
+
+
+    // Get the group colors(stroke, opacity, stroke-opacity) encoded as 5 or 10 chars hex
+
+
+
+
+
+    // Choose smaller one between URLComp applied or not, for each group
+
+    const optimizedEncodedStrokesByGroup = applyUrlCompIfEffective(encodedDvalByGroup)
+    //console.log('optimizedEncodedStrokesByGroup: ', optimizedEncodedStrokesByGroup)
     // Map { 000 → (2) […] }
     //     0: 000 → Array [ 400, "000=13xbqDCEgLL7jANz5XKXua ... LiAh5KEXgVutC" ]
 
 
 
-    // Whole color strings joined with `&`
-    const wholeColorStrJoined = joinWholeColorStr(optimizedEncodedStrokesByColor)
+    // Whole group strings joined with `&`
+    const wholeGroupStrJoined = joinWholeGroupStr(optimizedEncodedStrokesByGroup)
 
 
 
     // Output to textarea
-    outputToTextarea(wholeColorStrJoined, 'textarea-uint5portray-strokes-values-encoded')
+    outputToTextarea(wholeGroupStrJoined, 'textarea-uint5portray-strokes-values-encoded')
     // 000=19gUZa0HMswFYl ... lCLwK3WhT
 
 }
-
-
 
 
 
@@ -96,7 +109,6 @@ function swap63EncodeForDvalByColor(dictMap, strokesAttrsMap) {
         const relDvals = attrsObj.d.relative
 
         const numberOfPath = (attrsObj.d.relative.x1).length // x1 to y2 arrays have same length
-        console.log('numberOfPath: ', numberOfPath);
 
         // Swap from number to char
         for (let key in relDvals) {
@@ -121,10 +133,6 @@ function swap63EncodeForDvalByColor(dictMap, strokesAttrsMap) {
 
 function applyUrlCompIfEffective(encodedDvalByColor) {
 
-    // Get the strokes info encoded from another .json file
-    const strokesInfoEncodedMapByColor = encodeStrokesInfo('uint5')
-    //console.log('strokesInfoEncodedMapByColor: ', strokesInfoEncodedMapByColor) // Map { 000 → "1cs" }
-
     // Store smaller length strings
     //let lengthAndStringArray = [];
     const strokesValuesByColorMap = new Map();
@@ -134,48 +142,48 @@ function applyUrlCompIfEffective(encodedDvalByColor) {
     let lengthBeforeURLComp = [];
     let lengthAfterURLComp = [];
 
-    for (const [keyColor, dvalSwap63EncodedStr] of encodedDvalByColor) {
+    for (const [groupId, dvalSwap63EncodedStr] of encodedDvalByColor) {
 
-        // Get encoded strokes info that have same color as a key
-        const strokesInfoEncoded = strokesInfoEncodedMapByColor.get(keyColor)
-        //console.log('strokesInfoEncoded: ', strokesInfoEncoded) // 1cs
+        // Get encoded width count that have same group_id as a key
+        const widthCountEncoded = widthCountEncodedByGroup.get(groupId)
+        //console.log('widthCountEncoded: ', widthCountEncoded) // 3t
 
-        // Join the [strokes info] and [dict]_[diff] with `-` (hyphen)
-        const strokesInfoAndDval = strokesInfoEncoded + '-' + dvalSwap63EncodedStr
-        // [strokesInfo]-[x1:dval, y1:dval, x2:dval, y2:dval]
+        // Join the [width count] and [dict]_[diff] with `-` (hyphen)
+        const widthCountAndDval = widthCountEncoded + '-' + dvalSwap63EncodedStr
+        // [widthCount]-[x1:dval, y1:dval, x2:dval, y2:dval]
 
         // Compress with URLCompressor
-        const strokesInfoAndDvalURLCompressed = URLCompressor.compress(strokesInfoAndDval)
-        console.log(`${keyColor} \t | After URLCompressor:  `, strokesInfoAndDvalURLCompressed.length)
-        // 000 	 | After URLCompressor:   400
+        const widthCountAndDvalURLCompressed = URLCompressor.compress(widthCountAndDval)
+        //console.log(`${groupId} \t | After URLCompressor:  `, widthCountAndDvalURLCompressed.length)
+        // 1 	 | After URLCompressor:   78
 
 
         // Judge the URLCompressor should be applied or not
-        const applyURLCompressorOrNotByColor = compareLengthOfString(keyColor, strokesInfoAndDval, strokesInfoAndDvalURLCompressed)
+        const applyURLCompressorOrNotByColor = compareLengthOfString(groupId, widthCountAndDval, widthCountAndDvalURLCompressed)
         // URLCompressor is effective for color #000, should be applied it: 488 => 395
         // URLCompressor is effective for color #000, should be applied it: 492 => 400
         // console.log('applyURLCompressorOrNotByColor: ', applyURLCompressorOrNotByColor) // true
 
         // Add the prefix to smaller size one
-        const smallerWithPrefixByColor = addEncMethodPrefix(strokesInfoAndDval, strokesInfoAndDvalURLCompressed, applyURLCompressorOrNotByColor)
-        // 0[strokesInfo]-[x1:dval, y1:dval, x2:dval, y2:dval] / URLComp not applied
-        // 1[strokesInfo]-[x1:dval, y1:dval, x2:dval, y2:dval] / URLComp applied
+        const smallerWithPrefixByColor = addEncMethodPrefix(widthCountAndDval, widthCountAndDvalURLCompressed, applyURLCompressorOrNotByColor)
+        // 0[widthCount]-[x1:dval, y1:dval, x2:dval, y2:dval] / URLComp not applied
+        // 1[widthCount]-[x1:dval, y1:dval, x2:dval, y2:dval] / URLComp applied
         //console.log('smallerWithPrefixByColor: ', smallerWithPrefixByColor) // 19gUZa0HMswFYlcjyOT0hPaVTdR3z-8 ... xAQ8lCLwK3WhT
 
-        // Add color key to format as url params
-        const colorPrefixAddedByColor = keyColor + '=' + smallerWithPrefixByColor
-        // 000=[strokes encoded string with prefix]
-        console.log('colorPrefixAddedByColor: ', colorPrefixAddedByColor)
+
+        // Add colors (stroke, opacity, stroke-opacity) encoded as 5 or 10 chars hex
+        const groupColorsPrefixAddedByGroup = groupColorsEncodedByGroup.get(groupId) + '=' + smallerWithPrefixByGroup
+        console.log('groupColorsPrefixAddedByGroup: ', groupColorsPrefixAddedByGroup)
 
         // Push to array to store whole color stroke groups
-        strokesValuesByColorMap.set(keyColor, colorPrefixAddedByColor)
+        strokesValuesByGroup.set(groupId, groupColorsPrefixAddedByGroup)
 
 
         // For reference: Count the non dynamic compressioned strokes values length
 
         // Join the hex color code (key) and encoded strokes values (value) with `=` (equal)
-        const joinedAsURLParamsBeforeURLComp = keyColor + '=' + strokesInfoAndDval
-        const joinedAsURLParamsAfterURLComp = keyColor + '=' + strokesInfoAndDvalURLCompressed
+        const joinedAsURLParamsBeforeURLComp = groupId + '=' + widthCountAndDval
+        const joinedAsURLParamsAfterURLComp = groupId + '=' + widthCountAndDvalURLCompressed
 
         // Push to the array for whole colors, `+ 1` for encode methods prefix length
         lengthBeforeURLComp.push(joinedAsURLParamsBeforeURLComp.length + 1)

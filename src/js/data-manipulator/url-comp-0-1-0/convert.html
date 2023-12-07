@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>エンコード・デコード</title>
+<script src="url-comp.js" defer></script>  <!-- data-compressor.js の読み込み -->
+<script src="convert.js" defer></script>
+<style>
+  div.InputBlock {
+    margin-bottom:2em;
+    margin-right:0.5em;
+    display:inline-block;
+    width:350px;
+    height:16em;
+  }
+  textarea.InputBox {
+    word-break:break-all;
+    resize:none;
+    width:98%;
+    height:10em;
+  }
+</style>
+</head>
+<body>
+  <h1 style="text-align:center">URLCompressorデモプログラム(エンコード・デコード)</h1>
+  <p>入力した文字列を、URLCompressorライブラリ、base 64 URL、パーセントエンコーディングの3種類の方法でエンコードします。使い方の説明は、<a href="#HowTo">ページの下の方</a>にあります。</p>
+
+  <div class="InputBlock">
+    <label for="original">元の文字列</label>
+    <textarea id="original" name="original" rows="10" cols="30" spellcheck="false" class="InputBox" oninput="showCount('original','originalCnt')">この欄に何か文字列を入力して、下のエンコードボタンをクリックしてください。入力した文字列を3種類の方法でエンコードし、結果を各欄に表示します。</textarea>
+    <div id="originalCnt"></div>
+    <input type="button" value="エンコード" onclick="convertOriginal()">
+    <input type="button" value="この欄をクリア" onclick="clearText('original','originalCnt')">
+    <input type="button" value="他の欄をクリア" onclick="clearText('percent','percentCnt');clearText('base64url','base64urlCnt');clearText('compressed','compressedCnt');">
+  </div>
+
+  <div class="InputBlock">
+    <label for="compressed">URLCompressor</label>
+    <textarea id="compressed" name="compressed"  rows="10" cols="30" spellcheck="false" class="InputBox" oninput="showCount('compressed','compressedCnt')"></textarea>
+    <div id="compressedCnt"></div>
+    <input type="button" value="デコード" onclick="convertCompressed()">
+    <input type="button" value="この欄をクリア" onclick="clearText('compressed','compressedCnt')">
+    <input type="button" value="他の欄をクリア" onclick="clearText('original','originalCnt');clearText('percent','percentCnt');clearText('base64url','base64urlCnt');">
+  </div>
+
+  <div class="InputBlock">
+    <label for="percent">パーセントエンコーディング</label>
+    <textarea id="percent" name="base64" rows="10" cols="30" spellcheck="false" class="InputBox" oninput="showCount('percent','percentCnt')"></textarea>
+    <div id="percentCnt"></div>
+    <input type="button" value="デコード" onclick="convertPercent()">
+    <input type="button" value="この欄をクリア" onclick="clearText('percent','percentCnt')">
+    <input type="button" value="他の欄をクリア" onclick="clearText('original','originalCnt');clearText('base64url','base64urlCnt');clearText('compressed','compressedCnt');">
+  </div>
+
+  <div class="InputBlock">
+    <label for="base64url">Base 64 URL</label>
+    <textarea id="base64url" name="base64url" rows="10" cols="30" spellcheck="false" class="InputBox" oninput="showCount('base64url','base64urlCnt')"></textarea>
+    <div id="base64urlCnt"></div>
+    <input type="button" value="デコード" onclick="convertBase64url()">
+    <input type="button" value="この欄をクリア" onclick="clearText('base64url','base64urlCnt')">
+    <input type="button" value="他の欄をクリア" onclick="clearText('original','originalCnt');clearText('percent','percentCnt');clearText('compressed','compressedCnt');">
+  </div>
+
+  <h2 id="HowTo">使い方</h2>
+  <h3>エンコードの方法</h3>
+  <p><b>元の文字列</b>の欄に、エンコードしたい文字列を入力し、<b>エンコード</b>ボタンをクリックしてください。<b>URLCompressor</b>、<b>パーセントエンコーディング</b>、<b>Base 64 URL</b>の各欄に、それぞれの方法でエンコードされた文字列が表示されます。</p>
+  <h3>デコードの方法</h3>
+  <p>エンコードした文字列から、逆に元の文字列を求める事(デコード)もできます。デコードするには、<b>URLCompresor</b>、<b>パーセントエンコーディング</b>、<b>Base 64 URL</b>のいずれかの欄に、その欄に応じたエンコード方式でエンコードした文字列を入力し、<b>デコード</b>ボタンをクリックしてください。<b>元の文字列</b>の欄にデコード結果が表示されるとともに、入力したエンコード方式以外のエンコード方法で再エンコードした結果も、それぞれの欄に表示されます。</p>
+  <p>なお、不正な文字列を入力すると、デコードが失敗する事があります。</p>
+  <h3>元の文字列のバイト数について</h3>
+  <p><b>元の文字列</b>の欄の下に表示されるバイト数は、文字列をUTF-8で表現した場合のバイト数を表しています。</p>
+</body>
+</html>
