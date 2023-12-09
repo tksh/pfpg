@@ -19,7 +19,7 @@
 //                     `-`[x1:swap63-encoded] [y1:swap63-encoded] [x2:swap63-encoded] [y2:swap63-encoded]
 
 
-function swap63Encode(swap63DictMap = generateSwap63Dict()) {
+function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getSwap63Chars())) {
 
     // Dictionary and input values
 
@@ -49,7 +49,7 @@ function swap63Encode(swap63DictMap = generateSwap63Dict()) {
 
 
     // Get the string of d values encoded as Map
-    const encodedDvalByGroup = swap63EncodeForDvalByGroup(swap63DictMap, strokesAttrsMap)
+    const encodedDvalByGroup = swap63EncForDvalByGroup(swap63DictMap, strokesAttrsMap)
     console.log('encodedDvalByGroup: ', encodedDvalByGroup)
     // Map(5) {'1' => 'wyyvtuDwtzxifJxuvunv56nudvqm96wo9xuuucvvuzvzAwvvvyzxsvxDyVUSByqATCUWytEBzzAx', '2' => 'v9oswnHvnuzxsxwmvxDDAA7tWtvshunl_AxxwxxxxxyvwtvxwspCtuxxwwxyuwxw', '3' => 'wCuuzusuvxxrxuxtvAzyyyrvveuurvsttxxputwvsvttturpyutrsqttsAtvaBVbpyJuvwttrurvwrqppqqstrskuvmruyxmsqtruvtrwwwvBymtrvuDxuvqwuMuuwwwyywwvuxxuvyyrstuutwxyxxwxwyxxswxxtvyxzwxxxwwxAyxxxzyywwwxzwzzsyxvxxyytxwxyCCBAAyxzyxyxyxtuvAxzyzwvxvtsssuwwzyyzvwttxtvyt', '4' => 'JvruxouwuwvpwjxuvvABtvBuxzuxAhHsvtssxvqAxvxxwwwxwvwxyywyxxtuwutzvvywAxxxxwtt', '5' => 'HuxwxxuQcuywAwvtutuxxxyxywww'}
 
@@ -97,7 +97,7 @@ function swap63Encode(swap63DictMap = generateSwap63Dict()) {
 // Swap63 encode
 
 // Get the string of d values encoded as Map
-function swap63EncodeForDvalByGroup(dictMap, strokesAttrsMap) {
+function swap63EncForDvalByGroup(dictMap, strokesAttrsMap) {
     //console.log(dictMap); // Map(63) {-31 => '0', -30 => '1', -29 => '2', -28 => '3', -27 => '4', …}
 
     const encodedStrByGroup = new Map();
@@ -235,14 +235,14 @@ function chooseSmallerAndAddPrefix(applyCompOrNotBoolean, compressedStr, rawStr,
     if (applyCompOrNotBoolean === true) { // Compression applied
         smallerStrWithPrefix = addPrefixAsFlags(compressedStr,
             1,              // Flag for 1st char as URLComp applied
-            numFor2ndFlag,  // Flag for 2nd char as swap63Encode applied
-            valueFor3rdFlag // No flag needed for 3rd char when swap63Encode applied
+            numFor2ndFlag,  // Flag for 2nd char as swap63Enc applied
+            valueFor3rdFlag // No flag needed for 3rd char when swap63Enc applied
         )
     } else { // Compression not applied
         smallerStrWithPrefix = addPrefixAsFlags(rawStr,
             0,              // Flag for 1st char as URLComp not applied
-            numFor2ndFlag,  // Flag for 2nd char as swap63Encode applied
-            valueFor3rdFlag // No flag needed for 3rd char when swap63Encode applied
+            numFor2ndFlag,  // Flag for 2nd char as swap63Enc applied
+            valueFor3rdFlag // No flag needed for 3rd char when swap63Enc applied
         )
     }
     return smallerStrWithPrefix

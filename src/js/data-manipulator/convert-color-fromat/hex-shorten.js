@@ -1,10 +1,22 @@
-// 10桁のhex を受け取り 省略して 5桁 に変換する関数
+// 10桁のhex を受け取り 省略して 6|5|3|1桁 に変換する関数
+
+// Format and index number: stroke[0-5]
+//                          opacity[6-7]
+//                          stroke-opacity[8-9]
+
+// To 6: Delete the opacity and stroke-opacity if both are ff|FF
+// To 5: If same chars at odd and even number index in all [0-9], reduce into one
+// To 3: After to 5, Delete the opacity and stroke-opacity if both are ff|FF
+// To 1: After to 3, If three chars are same, reduce into one
+
+
 function hex10To5or3(hex) {
     // hexが10桁でない場合はエラーを返す
     if (hex.length !== 10) {
         return "Invalid hex code";
     }
 
+    // To 5:
     // 省略形に変換できるかどうかを判定するフラグ
     let canShorten = true;
     // 省略形に変換した結果を格納する変数
@@ -21,37 +33,58 @@ function hex10To5or3(hex) {
         }
     }
 
+    // To 3:
     // 省略形に変換できた場合はresultを返す前に、以下の処理を行う
-    // 4,5 桁目 の透明度情報が 両方とも 'f' ならば 削除して 色情報の3桁のみに省略する
+    // 4,5 桁目 の透明度情報が 両方とも 'f' ならば 削除して 色情報の3桁目までのみに 省略する
     if (canShorten) {
-        // resultの長さが5であり
-        // かつ resultの 5桁目[4] と 5桁目[4]が
+        // resultの 4桁目[3] と 5桁目[4]が
         // ともに f または F であるかどうか をチェックする
-        if (result.length === 5
-            && result[3].toLowerCase() === "f"
+        if (result[3].toLowerCase() === "f"
             && result[4].toLowerCase() === "f"
         ) {
             // もしそうであれば、resultの 4,5桁目を 削除する
             result = result.slice(0, -2);
+
+            // TO 1:
+            // さらに もし 色情報の3桁全てが同じならば 1桁だけに 省略する
+            if (result[0] === result[1] && result[1] === result[2]) {
+                result = result[0]
+            }
         }
         // resultを返す
         return result;
-    } else {
-        // 省略形に変換できなかった場合は元のhexを#付きで返す
-        return hex;
+    }
+
+    // To 6:
+    if (!canShorten) {
+        if (hex[6].toLowerCase() === "f"
+            && hex[7].toLowerCase() === "f"
+            && hex[8].toLowerCase() === "f"
+            && hex[9].toLowerCase() === "f"
+        ) {
+            // もしそうであれば、resultの 7,8,9,10桁目を 削除する
+            result = hex.slice(0, -4);
+            return result;
+        } else {
+            // 省略形に変換できず 二つの透明度情報も省略できなかった場合は 元のhexを返す
+            return hex;
+        }
     }
 }
 
 
 // Test
-// console.log(hex10To5or3("AABBCCFF99")); // ABCF9
-// console.log(hex10To5or3("AABBCCFFff")); // ABC
-// console.log(hex10To5or3("112233ff88")); // 123f8
-// console.log(hex10To5or3("112233eeee")); // 123ee
-// console.log(hex10To5or3("123456ffff")); // 123456ffff
-// console.log(hex10To5or3("AABBCCabcd")); // AABBCCabcd
-// console.log(hex10To5or3("1122334455")); // 12345
-// console.log(hex10To5or3("112233FFFF")); // 123
+//console.log(hex10To5or3("AABBCCFF99")); // ABCF9
+//console.log(hex10To5or3("AABBCCFFff")); // ABC
+//console.log(hex10To5or3("112233ff88")); // 123f8
+//console.log(hex10To5or3("112233eeee")); // 123ee
+//console.log(hex10To5or3("123456ffff")); // 123456
+//console.log(hex10To5or3("AABBCCabcd")); // AABBCCabcd
+//console.log(hex10To5or3("1122334455")); // 12345
+//console.log(hex10To5or3("112233FFFF")); // 123
+//console.log(hex10To5or3("111111ffFF")); // 1
+//console.log(hex10To5or3("AAAAAAFFFF")); // A
+//console.log(hex10To5or3("aaaaaaffff")); // a
 
 
 

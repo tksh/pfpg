@@ -1,7 +1,7 @@
 // Swap63 変換辞書用の キーとバリューの配列 を定義する
 //   エンコード時と デコード時で key,value を 逆にする
 
-function generateSwap63Dict(keys = getSwap63Nums(), values = getSwap63Chars()) {
+function generateSwap63DictToEnc(keys = getSwap63Nums(), values = getSwap63Chars()) {
     console.log('keys: ', keys) // Array(63) [ -31, -30, … -1, 0, 1, 2, … , 31]
     console.log('values: ', values) // Array(63) [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, … "Z", "_"]
 

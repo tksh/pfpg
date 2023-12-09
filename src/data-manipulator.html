@@ -31,7 +31,7 @@
     <script src="./js/data-manipulator/encode-artwork-data/detect-uint-n.js"></script>
 
     <!-- Stroke Width Count -->
-    <script src="./js/data-manipulator/stroke-width-count/stroke-width-count-enc.js"></script>
+    <script src="./js/data-manipulator/width-count/width-count-enc.js"></script>
     <!-- Compare -->
     <script src="./js/data-manipulator/compare/compare-length-of-string.js"></script>
     <!-- Convert Color Format -->
@@ -45,9 +45,9 @@
 
     <!-- For Uint5Portray -->
     <script src="./js/data-manipulator/encode-strokes-values-uint-5/extract-d-values.js"></script>
-    <script src="./js/data-manipulator/encode-strokes-values-uint-5/generate-swap63-dict.js"></script>
-    <script src="./js/data-manipulator/encode-strokes-values-uint-5/swap63-encode.js"></script>
-    <script src="./js/data-manipulator/encode-strokes-values-uint-5/swap63-decode.js"></script>
+    <script src="./js/data-manipulator/encode-strokes-values-uint-5/swap63-dict.js"></script>
+    <script src="./js/data-manipulator/encode-strokes-values-uint-5/swap63-enc.js"></script>
+    <script src="./js/data-manipulator/encode-strokes-values-uint-5/swap63-dec.js"></script>
 
     <!--
     <script src="./js/data-manipulator/for-uint-5-portray/extract-d-values.js"></script>
@@ -510,7 +510,7 @@
         <br />
 
 
-        <button onclick="swap63Encode()">Encode via <b>swap63Encode()</b> from relative d values</button>
+        <button onclick="swap63Enc()">Encode via <b>swap63Enc()</b> from relative d values</button>
         <textarea id="textarea-uint5portray-strokes-attrs-encoded" class="height-1" placeholder="Strokes values encoded"></textarea>
         <br />
         <button onclick="bigintEncode()">Encode via <b>bigintEncode()</b> from padded and joined bigint d values</button>
