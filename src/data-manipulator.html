@@ -44,7 +44,6 @@
     <script src="./js/data-manipulator/group-colors/colors-hex-enc.js"></script>
 
     <!-- For Uint5Portray -->
-    <script src="./js/data-manipulator/encode-strokes-values-uint-5/extract-d-values.js"></script>
     <script src="./js/data-manipulator/encode-strokes-values-uint-5/swap63-dict.js"></script>
     <script src="./js/data-manipulator/encode-strokes-values-uint-5/swap63-enc.js"></script>
     <script src="./js/data-manipulator/encode-strokes-values-uint-5/swap63-dec.js"></script>
@@ -74,62 +73,33 @@
 
 <body>
     <h1>data-manipulator</h1>
-    <div class="bg-1 pad">
-
-        <h2>UInt [6-14] Portray</h2>
+    <div class="bg-0 pad">
+        <h2>Encode: Artwork Data</h2>
 
         <h3>1. ⬆ Artwork Data: <span>For the first element of encoded url params</span></h3>
-        <label for="select-file-uint8portray-artwork-data">Select the JSON Lines (.jsonl) file that contains artwork id, grid size and background color</label>
+        <label for="select-file-artwork-data">Select the JSON file that contains artwork id, grid size and background color</label>
         <br />
-        <input type="file" id="select-file-uint8portray-artwork-data" onchange="selectFileToInput('select-file-uint8portray-artwork-data', 'textarea-uint8portray-artwork-data-uploaded')" />
-        <br />
-        <textarea id="textarea-uint8portray-artwork-data-uploaded" placeholder="./jsonl_extracted/%{ARTWORK_ID}_artwork_id_size_and_bg_color.jsonl"></textarea>
-        <button onclick="encodeArtworkData('uint8')">Encode via <b>encodeArtworkData('uint8')</b></button>
-        <textarea id="textarea-uint8portray-artwork-data-encoded" class="height-0" placeholder="Artwork Data encoded"></textarea>
-
-
-        <h3>2. ⬆ Aggregated Data for Compression: <span>For the second element of encoded url params</span></h3>
-        <label for="select-file-uint8portray-agg-data-for-comp">Select the JSON Lines (.jsonl) file that contains the difference between the relative-d-values rows and its frequency dictionary</label>
-        <br />
-        <input type="file" id="select-file-uint8portray-agg-data-for-comp" onchange="selectFileToInput('select-file-uint8portray-agg-data-for-comp', 'textarea-uint8portray-agg-data-for-comp-uploaded')" />
-        <br />
-        <textarea id="textarea-uint8portray-agg-data-for-comp-uploaded" placeholder="./jsonl_extracted/%{ARTWORK_ID}_diff_of_dval_rows_and_freq_dict.jsonl"></textarea>
+        <input type="file" id="select-file-artwork-data" onchange="selectFileToInput('select-file-artwork-data', 'textarea-artwork-data-uploaded')" />
         <br />
 
-        <button onclick="mixedEncode()">Encode via <b>mixedEncode()</b> using Strokes Info and Values</button>
-        <br />
-        <button onclick="base64BigIntEncode()">Encode via <b>base64BigIntEncode()</b></button>
+        <!-- Textarea to input the artwork data json -->
+        <textarea id="textarea-artwork-data-uploaded" class="height-1" placeholder="./json_extracted/%{ARTWORK_ID}_strokes_attrs.json"></textarea>
 
-        <textarea id="textarea-uint8portray-agg-data-for-comp-encoded" class="height-1" placeholder="Strokes values encoded"></textarea>
+        <button onclick="encodeArtworkData()">Encode via <b>encodeArtworkData</b></button>
 
-
-        <h3>3. ⬇ Encoded URL Params: <span>Artwork Data, strokes info and d values are encoded as a string</span></h3>
-        <button onclick="mergeArtworkInfoAndValuesAsUrlParams('uint8')">Merge above encoded strings via <b>mergeAsUInt8PortrayUrlParams()</b></button>
-        <textarea id="textarea-uint8portray-encoded" class="height-2" placeholder="Encoded URL params string"></textarea>
-        <button onclick="copyTextarea('textarea-uint8portray-encoded')">Copy to clipboard</button>
-        <p id="uint8portray-encoded-url-params-size"></p>
+        <!-- Textarea to output the artwork data encoded -->
+        <textarea id="textarea-artwork-data-encoded" class="height-0" placeholder="Artwork Data encoded"></textarea>
 
     </div>
-    <div class="bg-2 pad">
-
-        <h2>UInt5Portray</h2>
-
-        <h3>1. ⬆ Artwork Data: <span>For the first element of encoded url params</span></h3>
-        <label for="select-file-uint5portray-artwork-data">Select the JSON Lines (.jsonl) file that contains artwork id, grid size and background color</label>
-        <br />
-        <input type="file" id="select-file-uint5portray-artwork-data" onchange="selectFileToInput('select-file-uint5portray-artwork-data', 'textarea-uint5portray-artwork-data-uploaded')" />
-        <br />
-        <textarea id="textarea-uint5portray-artwork-data-uploaded" placeholder="./jsonl_extracted/%{ARTWORK_ID}_artwork_id_size_and_bg_color.jsonl"></textarea>
-        <button onclick="encodeArtworkData('uint5')">Encode via <b>encodeArtworkData('uint5')</b></button>
-        <textarea id="textarea-uint5portray-artwork-data-encoded" class="height-0" placeholder="Artwork Data encoded"></textarea>
-
+    <div class="bg-1 pad">
+        <h2>Encode: Strokes Values</h2>
 
         <h3>2.1 ⬆ Strokes Attributes: <span>For the second element of encoded url params</span></h3>
-        <label for="select-file-uint5portray-strokes-attrs">Select the JSON Lines (.jsonl) file that contains the difference between the relative-d-values rows and its frequency dictionary</label>
+        <label for="select-file-strokes-attrs">Select the JSON file that contains the strokes values extracted from SVG</label>
         <br />
-        <input type="file" id="select-file-uint5portray-strokes-attrs" onchange="selectFileToInput('select-file-uint5portray-strokes-attrs', 'textarea-uint5portray-strokes-attrs-uploaded')" />
+        <input type="file" id="select-file-strokes-attrs" onchange="selectFileToInput('select-file-strokes-attrs', 'textarea-strokes-attrs-uploaded')" />
         <br />
-        <textarea id="textarea-uint5portray-strokes-attrs-uploaded" placeholder="./jsonl_extracted/%{ARTWORK_ID}__strokes_order_width_and_dval.jsonl">{
+        <textarea id="textarea-strokes-attrs-uploaded" class="height-1" placeholder="./json_extracted/%{ARTWORK_ID}_strokes_attrs.json">{
             "1": {
                 "g_stroke": "#000",
                 "g_opacity": 1,
@@ -240,11 +210,11 @@
         <br />
 
         <h3>2.2 ⬆ Aggregated Data for Compression: <span>For the second element of encoded url params</span></h3>
-        <label for="select-file-uint5portray-agg-data-for-comp">Select the JSON Lines (.jsonl) file that contains the difference between the relative-d-values rows and its frequency dictionary</label>
+        <label for="select-file-agg-data-for-comp">Select the JSON file that contains the data aggregated from strokes values</label>
         <br />
-        <input type="file" id="select-file-uint5portray-agg-data-for-comp" onchange="selectFileToInput('select-file-uint5portray-agg-data-for-comp', 'textarea-uint5portray-agg-data-for-comp-uploaded')" />
+        <input type="file" id="select-file-agg-data-for-comp" onchange="selectFileToInput('select-file-agg-data-for-comp', 'textarea-agg-data-for-comp-uploaded')" />
         <br />
-        <textarea id="textarea-uint5portray-agg-data-for-comp-uploaded" placeholder="./jsonl_extracted/%{ARTWORK_ID}__strokes_order_width_and_dval.jsonl">{
+        <textarea id="textarea-agg-data-for-comp-uploaded" class="height-1" placeholder="./json_extracted/%{ARTWORK_ID}_agg_data_for_comp.json">{
             "1": {
                 "list_of_width": [3],
                 "count_by_width": [19],
@@ -509,36 +479,51 @@
         </textarea>
         <br />
 
+        <!-- Buttons to encode the s:trokes values -->
+        <h3>Select: Encoding Methods</h3>
 
-        <button onclick="swap63Enc()">Encode via <b>swap63Enc()</b> from relative d values</button>
-        <textarea id="textarea-uint5portray-strokes-attrs-encoded" class="height-1" placeholder="Strokes values encoded"></textarea>
-        <br />
-        <button onclick="bigintEncode()">Encode via <b>bigintEncode()</b> from padded and joined bigint d values</button>
-        <textarea id="textarea-uint5portray-agg-data-for-comp-encoded" class="height-1" placeholder="Strokes values encoded"></textarea>
-
-
-        <h3>3. ⬇ Encoded URL Params: <span>Artwork Data, strokes info and d values are encoded as a string</span></h3>
-        <button onclick="mergeArtworkInfoAndValuesAsUrlParams('uint5')">Merge above encoded strings via <b>mergeAsUInt8PortrayUrlParams()</b></button>
-        <textarea id="textarea-uint5portray-encoded" class="height-1" placeholder="Encoded URL params string"></textarea>
-        <button onclick="copyTextarea('textarea-uint5portray-encoded')">Copy to clipboard</button>
-        <p id="uint5portray-encoded-url-params-size"></p>
+        <button onclick="mixedEncode()">Encode via <b>mixedEncode()</b></button>
+        <p>For: UInt[5-14]Portray / From: Agg Data for Compression (list_of_width, count_by_width, diff, diff_values_sorted_by_freq and diff_counts_sorted_by_freq)</p>
         <br />
 
+        <button onclick="bigintEncode()">Encode via <b>bigintEncode()</b></button>
+        <p>For: UInt[5-14]Portray / From: Agg Data for Compression (list_of_width, count_by_width and padded_and_joined_as_bigint)</p>
+        <br />
 
-    </div>
-    <div class="bg-3 pad">
-
-    <h2>Decoded From URL Params</h2>
-    <textarea id="textarea-decoded-svg" class="height-2" placeholder="Decoded as svg"></textarea>
-    <button onclick="copyTextarea('textarea-decoded-svg')">Copy to clipboard</button>
-    <p id="encoded-size-compare"></p>
-
-    </div>
+        <button onclick="swap63Enc()">Encode via <b>swap63Enc()</b></button>
+        <p>For: UInt5Portray ONLY / From: Strokes Attributes (relative d values) and Agg Data for Compression (list_of_width and count_by_width)</p>
 
 
-    <!-- Script to decode / HTMLドキュメントが読み込まれてから実行しないとエラーになる -->
-    <!-- Decode from URL Params -->
-    <script src="./js/data-manipulator/common/decode.js"></script>
+        <!-- Textarea to output the strokes values encoded -->
+        <textarea id="textarea-strokes-values-encoded" class="height-1" placeholder="Strokes values encoded"></textarea>
+
+
+        </div>
+        <div class="bg-2 pad">
+            <h2>Merge: Encoded Artwork Data and Strokes Values</h2>
+
+            <h3>3. ⬇ Finished URL Params:</h3>
+            <button onclick="mergeArtworkInfoAndValuesAsUrlParams('uint8')">Merge via <b>mergeAsUInt8PortrayUrlParams()</b></button>
+            <textarea id="textarea-encoded-url-params" class="height-2" placeholder="Encoded URL params string"></textarea>
+            <button onclick="copyTextarea('textarea-encoded-url-params')">Copy to clipboard</button>
+            <p id="encoded-url-params-size"></p>
+
+
+        </div>
+        <div class="bg-3 pad">
+            <h2>Decoded: From URL Params</h2>
+
+            <h3>3. ⬇ Decoded SVG String:</h3>
+            <textarea id="textarea-decoded-svg" class="height-2" placeholder=""></textarea>
+            <button onclick="copyTextarea('textarea-decoded-svg')">Copy to clipboard</button>
+            <p id="encoded-size-compare"></p>
+
+        </div>
+
+
+        <!-- Script to decode / HTMLドキュメントが読み込まれてから実行しないとエラーになる -->
+        <!-- Decode from URL Params -->
+        <script src="./js/data-manipulator/common/decode.js"></script>
 
 </body>
 

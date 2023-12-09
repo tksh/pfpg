@@ -14,14 +14,9 @@
 // ?202310_002=255x255-555C&
 
 
-function encodeArtworkData(uintX) {
+function encodeArtworkData() {
     // Read from textarea
-    let rawJson = "";
-    if (uintX === 'uint8') {
-        rawJson = readTextarea('textarea-uint8portray-artwork-data-uploaded')
-    } else if (uintX === 'uint5') {
-        rawJson = readTextarea('textarea-uint5portray-artwork-data-uploaded')
-    }
+    const rawJson = readTextarea('textarea-artwork-data-uploaded')
     //console.log(rawJson)
     // {
     //     "artwork_id": "202310_002",
@@ -56,9 +51,5 @@ function encodeArtworkData(uintX) {
 
 
     // Output to textarea
-    if (uintX === 'uint8') {
-        outputToTextarea(artworkDataEncodedStr, 'textarea-uint8portray-artwork-data-encoded')
-    } else if (uintX === 'uint5') {
-        outputToTextarea(artworkDataEncodedStr, 'textarea-uint5portray-artwork-data-encoded')
-    }
+    outputToTextarea(artworkDataEncodedStr, 'textarea-artwork-data-encoded')
 }

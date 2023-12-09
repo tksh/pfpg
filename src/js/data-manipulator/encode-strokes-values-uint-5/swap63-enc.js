@@ -29,7 +29,7 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
 
 
     // Read the relative d values from .json as Map() grouped by group_id
-    const strokesAttrsMap = jsonToMapObj('textarea-uint5portray-strokes-attrs-uploaded')
+    const strokesAttrsMap = jsonToMapObj('textarea-strokes-attrs-uploaded')
     //console.log('strokesAttrsMap: ', strokesAttrsMap)
     //Map(5) {'1' => {…}, '2' => {…}, '3' => {…}, '4' => {…}, '5' => {…}}
     //    [[Entries]]
@@ -58,7 +58,7 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
     //  From agg-data-for-comp
 
     // Get the width count (list_of_width and count_by_width) encoded as a string
-    const widthCountEncodedByGroup = encodeWidthCount('uint5')
+    const widthCountEncodedByGroup = encodeWidthCount()
     console.log(widthCountEncodedByGroup)          // Map(5) {'1' => '3t', '2' => '2q', '3' => '1bk', '4' => '1t', '5' => '1h'}
     console.log(widthCountEncodedByGroup.get("1")) // 3t
 
@@ -85,7 +85,7 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
 
 
     // Output to textarea
-    outputToTextarea(wholeGroupStrJoined, 'textarea-uint5portray-strokes-attrs-encoded')
+    outputToTextarea(wholeGroupStrJoined, 'textarea-strokes-values-encoded')
     // 000=19gUZa0HMswFYl ... lCLwK3WhT
 
 }

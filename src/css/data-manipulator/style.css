@@ -49,6 +49,10 @@ textarea {
     display: none;
 }
 
+.bg-0 {
+    background-color: plum;
+}
+
 .bg-1 {
     background-color: skyblue;
 }

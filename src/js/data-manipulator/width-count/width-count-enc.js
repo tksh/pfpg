@@ -21,9 +21,9 @@
 
 
 
-function encodeWidthCount(uintN) { //'uint5 or 'uint8'
+function encodeWidthCount() { //'uint5 or 'uint8'
     // Read the Aggregated Data for Compression from .json as Map() grouped by group_id
-    const aggDataMap = jsonToMapObj(`textarea-${uintN}portray-agg-data-for-comp-uploaded`)
+    const aggDataMap = jsonToMapObj(`textarea-agg-data-for-comp-uploaded`)
 
     const encodedStrByGroupId = new Map()
 
