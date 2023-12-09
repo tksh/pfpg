@@ -10,7 +10,7 @@
 // To 1: After to 3, If three chars are same, reduce into one
 
 
-function hex10To5or3(hex) {
+function hex10To6or5or3or1(hex) {
     // hexが10桁でない場合はエラーを返す
     if (hex.length !== 10) {
         return "Invalid hex code";
@@ -74,17 +74,17 @@ function hex10To5or3(hex) {
 
 
 // Test
-//console.log(hex10To5or3("AABBCCFF99")); // ABCF9
-//console.log(hex10To5or3("AABBCCFFff")); // ABC
-//console.log(hex10To5or3("112233ff88")); // 123f8
-//console.log(hex10To5or3("112233eeee")); // 123ee
-//console.log(hex10To5or3("123456ffff")); // 123456
-//console.log(hex10To5or3("AABBCCabcd")); // AABBCCabcd
-//console.log(hex10To5or3("1122334455")); // 12345
-//console.log(hex10To5or3("112233FFFF")); // 123
-//console.log(hex10To5or3("111111ffFF")); // 1
-//console.log(hex10To5or3("AAAAAAFFFF")); // A
-//console.log(hex10To5or3("aaaaaaffff")); // a
+//console.log(hex10To6or5or3or1("AABBCCFF99")); // ABCF9
+//console.log(hex10To6or5or3or1("AABBCCFFff")); // ABC
+//console.log(hex10To6or5or3or1("112233ff88")); // 123f8
+//console.log(hex10To6or5or3or1("112233eeee")); // 123ee
+//console.log(hex10To6or5or3or1("123456ffff")); // 123456
+//console.log(hex10To6or5or3or1("AABBCCabcd")); // AABBCCabcd
+//console.log(hex10To6or5or3or1("1122334455")); // 12345
+//console.log(hex10To6or5or3or1("112233FFFF")); // 123
+//console.log(hex10To6or5or3or1("111111ffFF")); // 1
+//console.log(hex10To6or5or3or1("AAAAAAFFFF")); // A
+//console.log(hex10To6or5or3or1("aaaaaaffff")); // a
 
 
 

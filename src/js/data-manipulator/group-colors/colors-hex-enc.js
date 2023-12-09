@@ -20,7 +20,7 @@ function encodeColors(strokesAttrsMap){
         console.log("colorsStr: ", colorsStr)
 
         // Shorten if could, 10 chars => 5 chars
-        colorsStr = hex10To5or3(colorsStr)
+        colorsStr = hex10To6or5or3or1(colorsStr)
 
         // Set into Map
         encodedColorsByGroup.set(groupId, colorsStr)
