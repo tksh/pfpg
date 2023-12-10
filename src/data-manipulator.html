@@ -21,6 +21,7 @@
 
     <!-- Base N enc -->
     <script src="./js/data-manipulator/base-n-enc/base-52-enc.js"></script>
+    <script src="./js/data-manipulator/base-n-enc/base-64-url-enc-for-bigint.js"></script>
 
     <!-- URLCompressor -->
     <script src="./js/data-manipulator/url-comp-0-1-0/convert.js"></script>
@@ -98,7 +99,7 @@
             "bg_color": "#9999"
         }</textarea>
 
-        <button onclick="encodeArtworkData()">Encode via <b>encodeArtworkData</b></button>
+        <button onclick="encodeArtworkData()">Encode via <b>encodeArtworkData()</b></button>
 
         <!-- Textarea to output the artwork data encoded -->
         <textarea id="textarea-artwork-data-encoded" class="height-0" placeholder="Artwork Data encoded"></textarea>
@@ -508,7 +509,7 @@
 
 
         <!-- Textarea to output the strokes values encoded -->
-        <textarea id="textarea-strokes-values-encoded" class="height-1" placeholder="Strokes values encoded"></textarea>
+        <textarea id="textarea-strokes-values-encoded" class="height-1" placeholder="Strokes Values encoded"></textarea>
 
 
         </div>
@@ -517,7 +518,7 @@
 
             <h3>3. ⬇ Finished URL Params:</h3>
             <button onclick="mergeArtworkDataAndStrokesValues()">Merge via <b>mergeArtworkDataAndStrokesValues()</b></button>
-            <textarea id="textarea-encoded-url-params" class="height-2" placeholder="Encoded URL params"></textarea>
+            <textarea id="textarea-encoded-url-params" class="height-2" placeholder="Encoded URL Params"></textarea>
             <button onclick="copyTextarea('textarea-encoded-url-params')">Copy to clipboard</button>
             <p id="encoded-url-params-size"></p>
 

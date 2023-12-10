@@ -95,7 +95,7 @@ function bigintEncByGroup(strokesAttrsMap, digits_of_chunk) {
 
 
         // Pad and join
-        let encodedStr = ""; // x1, y1, x2, y2, joined witout spaces
+        let joinedDvalsStr = ""; // x1, y1, x2, y2, joined witout spaces
 
         for (let key in absDvals) {
             const dval = absDvals[key]
@@ -111,10 +111,13 @@ function bigintEncByGroup(strokesAttrsMap, digits_of_chunk) {
             //console.log("joinedDvals: ", joinedDvals)
             // 01040706080719252428301704222622222323
 
-            encodedStr = encodedStr + joinedDval
+            joinedDvalsStr = joinedDvalsStr + joinedDval
         }
+        // Encode with Base64 URL safe encode
+        const joinedDvalsBigInt = BigInt(joinedDvalsStr)
+        const base64EncodedDvalsStr = base64UrlEncForBigInt(joinedDvalsBigInt)
 
-        encodedStrByGroup.set(groupId, encodedStr)
+        encodedStrByGroup.set(groupId, base64EncodedDvalsStr)
     }
 
     // Encoded
