@@ -43,10 +43,13 @@
     <!-- Group Colors -->
     <script src="./js/data-manipulator/group-colors/colors-hex-enc.js"></script>
 
-    <!-- For Uint5Portray -->
-    <script src="./js/data-manipulator/encode-strokes-values-uint-5/swap63-dict.js"></script>
-    <script src="./js/data-manipulator/encode-strokes-values-uint-5/swap63-enc.js"></script>
-    <script src="./js/data-manipulator/encode-strokes-values-uint-5/swap63-dec.js"></script>
+    <!-- BigInt encoding method -->
+    <script src="./js/data-manipulator/method-bigint/bigint-enc.js"></script>
+
+    <!-- Swap63 encoding method -->
+    <script src="./js/data-manipulator/method-swap63/swap63-dict.js"></script>
+    <script src="./js/data-manipulator/method-swap63/swap63-enc.js"></script>
+    <script src="./js/data-manipulator/method-swap63/swap63-dec.js"></script>
 
     <!--
     <script src="./js/data-manipulator/for-uint-5-portray/extract-d-values.js"></script>
@@ -83,7 +86,11 @@
         <br />
 
         <!-- Textarea to input the artwork data json -->
-        <textarea id="textarea-artwork-data-uploaded" class="height-1" placeholder="./json_extracted/%{ARTWORK_ID}_strokes_attrs.json"></textarea>
+        <textarea id="textarea-artwork-data-uploaded" class="height-1" placeholder="./json_extracted/%{ARTWORK_ID}_artwork_data.json">{
+            "artwork_id": "202308_001",
+            "grid_size": "31x31",
+            "bg_color": "#9999"
+        }</textarea>
 
         <button onclick="encodeArtworkData()">Encode via <b>encodeArtworkData</b></button>
 
@@ -486,7 +493,7 @@
         <p>For: UInt[5-14]Portray / From: Agg Data for Compression (list_of_width, count_by_width, diff, diff_values_sorted_by_freq and diff_counts_sorted_by_freq)</p>
         <br />
 
-        <button onclick="bigintEncode()">Encode via <b>bigintEncode()</b></button>
+        <button onclick="bigintEnc()">Encode via <b>bigintEnc()</b></button>
         <p>For: UInt[5-14]Portray / From: Agg Data for Compression (list_of_width, count_by_width and padded_and_joined_as_bigint)</p>
         <br />
 

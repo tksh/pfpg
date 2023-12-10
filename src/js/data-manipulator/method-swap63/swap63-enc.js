@@ -49,7 +49,7 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
 
 
     // Get the string of d values encoded as Map
-    const encodedDvalByGroup = swap63EncForDvalByGroup(swap63DictMap, strokesAttrsMap)
+    const encodedDvalByGroup = swap63EncByGroup(swap63DictMap, strokesAttrsMap)
     console.log('encodedDvalByGroup: ', encodedDvalByGroup)
     // Map(5) {'1' => 'wyyvtuDwtzxifJxuvunv56nudvqm96wo9xuuucvvuzvzAwvvvyzxsvxDyVUSByqATCUWytEBzzAx', '2' => 'v9oswnHvnuzxsxwmvxDDAA7tWtvshunl_AxxwxxxxxyvwtvxwspCtuxxwwxyuwxw', '3' => 'wCuuzusuvxxrxuxtvAzyyyrvveuurvsttxxputwvsvttturpyutrsqttsAtvaBVbpyJuvwttrurvwrqppqqstrskuvmruyxmsqtruvtrwwwvBymtrvuDxuvqwuMuuwwwyywwvuxxuvyyrstuutwxyxxwxwyxxswxxtvyxzwxxxwwxAyxxxzyywwwxzwzzsyxvxxyytxwxyCCBAAyxzyxyxyxtuvAxzyzwvxvtsssuwwzyyzvwttxtvyt', '4' => 'JvruxouwuwvpwjxuvvABtvBuxzuxAhHsvtssxvqAxvxxwwwxwvwxyywyxxtuwutzvvywAxxxxwtt', '5' => 'HuxwxxuQcuywAwvtutuxxxyxywww'}
 
@@ -59,8 +59,8 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
 
     // Get the width count (list_of_width and count_by_width) encoded as a string
     const widthCountEncodedByGroup = encodeWidthCount()
-    console.log(widthCountEncodedByGroup)          // Map(5) {'1' => '3t', '2' => '2q', '3' => '1bk', '4' => '1t', '5' => '1h'}
-    console.log(widthCountEncodedByGroup.get("1")) // 3t
+    //console.log(widthCountEncodedByGroup)          // Map(5) {'1' => '3t', '2' => '2q', '3' => '1bk', '4' => '1t', '5' => '1h'}
+    //console.log(widthCountEncodedByGroup.get("1")) // 3t
 
 
     // Get the group colors(stroke, opacity, stroke-opacity) encoded as 3 or 5 or 6 or 10 chars hex
@@ -70,7 +70,8 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
 
 
     // Choose smaller one between URLComp applied or not, for each group
-    const optimizedEncodedStrokesByGroup = applyUrlCompIfEffective(encodedDvalByGroup,
+    const optimizedEncodedStrokesByGroup = applyUrlCompIfEffective(
+        encodedDvalByGroup,
         widthCountEncodedByGroup,
         colorsEncodedByGroup)
     //console.log('optimizedEncodedStrokesByGroup: ', optimizedEncodedStrokesByGroup)
@@ -97,7 +98,7 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
 // Swap63 encode
 
 // Get the string of d values encoded as Map
-function swap63EncForDvalByGroup(dictMap, strokesAttrsMap) {
+function swap63EncByGroup(dictMap, strokesAttrsMap) {
     //console.log(dictMap); // Map(63) {-31 => '0', -30 => '1', -29 => '2', -28 => '3', -27 => '4', …}
 
     const encodedStrByGroup = new Map();
