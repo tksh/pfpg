@@ -33,17 +33,17 @@ function bigintEnc() {
     //  From agg-data-for-comp
 
     // Get the width count (list_of_width and count_by_width) encoded as a string
-    const widthCountEncodedByGroup = encodeWidthCount()
+    const encodedWidthCountByGroup = encodeWidthCount()
 
     // Get the group colors(stroke, opacity, stroke-opacity) encoded as 3 or 5 or 6 or 10 chars hex
-    const colorsEncodedByGroup = encodeColors(strokesAttrsMap)
-    //console.log(colorsEncodedByGroup) // Map(5) {'1' => '000', '2' => '000', '3' => '000', '4' => 'eee', '5' => 'fff'}
+    const encodedColorsByGroup = encodeColors(strokesAttrsMap)
+    //console.log(encodedColorsByGroup) // Map(5) {'1' => '000', '2' => '000', '3' => '000', '4' => 'eee', '5' => 'fff'}
 
     // Choose smaller one between URLComp applied or not, for each group
     const optimizedEncodedStrokesByGroup = applyUrlCompIfEffective(
         encodedDvalByGroup,
-        widthCountEncodedByGroup,
-        colorsEncodedByGroup)
+        encodedWidthCountByGroup,
+        encodedColorsByGroup)
     //console.log('optimizedEncodedStrokesByGroup: ', optimizedEncodedStrokesByGroup)
     // Map(5) {'1' => '0=129CaJGsAQK33q3FDaoQNuZs6u8XQW_EYegViBcDQ0gxtk-YqavrFw0V3KXggctKtnLfj_rl3ZzTzitfvmVp-Wz09Um3k4e8YyZ9kGHG0aT', '2' => '0=129ziJH ...
 
@@ -60,8 +60,7 @@ function bigintEnc() {
 }
 
 
-
-// Inner functions
+// BigInt encode
 
 function getDigitsOfChunk() {
     // Read from textarea as JSON
