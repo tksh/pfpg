@@ -16,7 +16,7 @@
     <script src="./js/data-manipulator/data-io/json-to-map-obj.js"></script>
     <script src="./js/data-manipulator/data-io/merge-as-url-params.js"></script>
     <script src="./js/data-manipulator/data-io/copy-textarea.js"></script>
-    <!-- <script src="./js/data-manipulator/data-io/merge-as-url-params.js"></script> -->
+    <script src="./js/data-manipulator/data-io/show-text-size.js"></script>
     <!-- <script src="./js/data-manipulator/data-io/read-url-params.js"></script> -->
 
     <!-- Base N enc -->
@@ -84,10 +84,10 @@
 <body>
     <h1>data-manipulator</h1>
     <div class="bg-0 pad">
-        <h2>Encode: Artwork Data</h2>
+        <h2>Encode the Artwork Data: <span>For the first element of encoded url params</span></h2>
 
-        <h3>1. ⬆ Artwork Data: <span>For the first element of encoded url params</span></h3>
-        <label for="select-file-artwork-data">Select the JSON file that contains artwork id, grid size and background color</label>
+        <h3>1. ⬆ Artwork Data:</h3>
+        <label for="select-file-artwork-data" class="custom-file-upload-button">Select the JSON file that contains artwork id, grid size and background color</label>
         <br />
         <input type="file" id="select-file-artwork-data" onchange="selectFileToInput('select-file-artwork-data', 'textarea-artwork-data-uploaded')" />
         <br />
@@ -103,12 +103,14 @@
 
         <!-- Textarea to output the artwork data encoded -->
         <textarea id="textarea-artwork-data-encoded" class="height-0" placeholder="Artwork Data encoded"></textarea>
+        <!-- Show the result text size -->
+        <p id="encoded-artwork-data-size"></p>
 
     </div>
     <div class="bg-1 pad">
-        <h2>Encode: Strokes Values</h2>
+        <h2>Encode the Strokes Values: <span>For the second element of encoded url params</span></h2>
 
-        <h3>2.1 ⬆ Strokes Attributes: <span>For the second element of encoded url params</span></h3>
+        <h3>2.1 ⬆ Strokes Attributes</h3>
         <label for="select-file-strokes-attrs">Select the JSON file that contains the strokes values extracted from SVG</label>
         <br />
         <input type="file" id="select-file-strokes-attrs" onchange="selectFileToInput('select-file-strokes-attrs', 'textarea-strokes-attrs-uploaded')" />
@@ -223,7 +225,7 @@
         </textarea>
         <br />
 
-        <h3>2.2 ⬆ Aggregated Data for Compression: <span>For the second element of encoded url params</span></h3>
+        <h3>2.2 ⬆ Aggregated Data for Compression</h3>
         <label for="select-file-agg-data-for-comp">Select the JSON file that contains the data aggregated from strokes values</label>
         <br />
         <input type="file" id="select-file-agg-data-for-comp" onchange="selectFileToInput('select-file-agg-data-for-comp', 'textarea-agg-data-for-comp-uploaded')" />
@@ -497,24 +499,26 @@
         <h3>Select: Encoding Methods</h3>
 
         <button onclick="mixedEncode()">Encode via <b>mixedEncode()</b></button>
-        <p>For: UInt[5-14]Portray / From: Agg Data for Compression (list_of_width, count_by_width, diff, diff_values_sorted_by_freq and diff_counts_sorted_by_freq)</p>
+        <p>For: UInt[5-14]Portray<br>With: Agg Data for Compression (list_of_width, count_by_width, diff, diff_values_sorted_by_freq and diff_counts_sorted_by_freq)</p>
         <br />
 
         <button onclick="bigintEnc()">Encode via <b>bigintEnc()</b></button>
-        <p>For: UInt[5-14]Portray / From: Agg Data for Compression (list_of_width, count_by_width and padded_and_joined_as_bigint)</p>
+        <p>For: UInt[5-14]Portray<br>With: Strokes Attributes (<b>absolute</b> d values) and Agg Data for Compression (list_of_width and count_by_width)</p>
         <br />
 
         <button onclick="swap63Enc()">Encode via <b>swap63Enc()</b></button>
-        <p>For: UInt5Portray ONLY / From: Strokes Attributes (relative d values) and Agg Data for Compression (list_of_width and count_by_width)</p>
+        <p>For: <b>UInt5Portray ONLY</b><br>With: Strokes Attributes (<b>relative</b> d values) and Agg Data for Compression (list_of_width and count_by_width)</p>
 
 
         <!-- Textarea to output the strokes values encoded -->
         <textarea id="textarea-strokes-values-encoded" class="height-1" placeholder="Strokes Values encoded"></textarea>
+        <!-- Show the result text size -->
+        <p id="encoded-strokes-values-size"></p>
 
 
         </div>
         <div class="bg-2 pad">
-            <h2>Merge: Encoded Artwork Data and Strokes Values</h2>
+            <h2>Merge the Encoded Artwork Data and Strokes Values</h2>
 
             <h3>3. ⬇ Finished URL Params:</h3>
             <button onclick="mergeArtworkDataAndStrokesValues()">Merge via <b>mergeArtworkDataAndStrokesValues()</b></button>
@@ -526,7 +530,7 @@
         </div>
         <br>
         <div class="bg-3 pad">
-            <h2>Decoded: From URL Params</h2>
+            <h2>Decode the URL Params</h2>
 
             <h3>3. ⬇ Decoded SVG String:</h3>
             <textarea id="textarea-decoded-svg" class="height-2" placeholder="If inputed text at address bar includes the url params like /data-manipulator.html?..., Decoding to SVG is automatically starts when page loaded and result text will export here."></textarea>

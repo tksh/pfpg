@@ -77,6 +77,8 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
     outputToTextarea(wholeGroupStrJoined, 'textarea-strokes-values-encoded')
     // 000=19gUZa0HMswFYl ... lCLwK3WhT
 
+    // Show the size of result in html and console
+    showStringSize('Strokes Values', wholeGroupStrJoined, 'encoded-strokes-values-size')
 }
 
 

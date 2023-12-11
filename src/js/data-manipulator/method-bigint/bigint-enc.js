@@ -57,6 +57,9 @@ function bigintEnc() {
     // Output to textarea
     outputToTextarea(wholeGroupStrJoined, 'textarea-strokes-values-encoded')
     // 0=129CaJGsAQK33q3FDaoQNuZs6u8XQW_EYegViBcDQ0gxtk-YqavrFw0V3KXggctKtnLfj_rl3ZzTzitfvmVp-Wz09Um3k4e8YyZ9kGHG0aT&0=129ziJH ...
+
+    // Show the size of result in html and console
+    showStringSize('Strokes Values', wholeGroupStrJoined, 'encoded-strokes-values-size')
 }
 
 

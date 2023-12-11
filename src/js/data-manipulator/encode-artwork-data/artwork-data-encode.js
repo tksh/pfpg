@@ -24,7 +24,7 @@ function encodeArtworkData() {
     //     "bg_color": "#555C"
     // }
 
-    const artworkDataObj = JSON.parse(rawJson);
+    const artworkDataObj = JSON.parse(rawJson)
     //console.log('artworkDataObj: ', artworkDataObj)
     // {artwork_id: '202310_002', grid_size: '255x255', bg_color: '#555C'}
     // artwork_id: "202310_002"
@@ -52,4 +52,7 @@ function encodeArtworkData() {
 
     // Output to textarea
     outputToTextarea(artworkDataEncodedStr, 'textarea-artwork-data-encoded')
+
+    // Show the size of result in html and console
+    showStringSize('Artwork Data', artworkDataEncodedStr, 'encoded-artwork-data-size')
 }

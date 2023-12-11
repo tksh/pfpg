@@ -33,6 +33,13 @@ textarea {
     word-break: break-all;
 }
 
+/* For function button <button> and select file button <input type="file"> */
+button,                         /* <button> */
+::file-selector-button,         /* <input type="file"> */
+::-webkit-file-upload-button {  /* <input type="file"> */
+    padding: .7rem;
+}
+
 .height-0 {
     height: 1rem;
 }
@@ -69,7 +76,7 @@ textarea {
     padding: 1rem;
 }
 
-h3 span {
+h2 span {
     font-weight: normal;
     font-style: italic;
 }
