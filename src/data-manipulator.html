@@ -16,7 +16,7 @@
     <script src="./js/data-manipulator/data-io/json-to-map-obj.js"></script>
     <script src="./js/data-manipulator/data-io/merge-as-url-params.js"></script>
     <script src="./js/data-manipulator/data-io/copy-textarea.js"></script>
-    <script src="./js/data-manipulator/data-io/show-text-size.js"></script>
+    <script src="./js/data-manipulator/data-io/show-the-result.js"></script>
     <!-- <script src="./js/data-manipulator/data-io/read-url-params.js"></script> -->
 
     <!-- Base N enc -->
@@ -103,8 +103,9 @@
 
         <!-- Textarea to output the artwork data encoded -->
         <textarea id="textarea-artwork-data-encoded" class="height-0" placeholder="Artwork Data encoded"></textarea>
-        <!-- Show the result text size -->
+        <!-- Show the result -->
         <p id="encoded-artwork-data-size"></p>
+        <p id="encoded-artwork-data-time"></p>
 
     </div>
     <div class="bg-1 pad">
@@ -507,13 +508,14 @@
         <br />
 
         <button onclick="swap63Enc()">Encode via <b>swap63Enc()</b></button>
-        <p>For: <b>UInt5Portray ONLY</b><br>With: Strokes Attributes (<b>relative</b> d values) and Agg Data for Compression (list_of_width and count_by_width)</p>
+        <p>For: <b>UInt5Portray ONLY</b> (grid size: 31 x 31)<br>With: Strokes Attributes (<b>relative</b> d values) and Agg Data for Compression (list_of_width and count_by_width)</p>
 
 
         <!-- Textarea to output the strokes values encoded -->
         <textarea id="textarea-strokes-values-encoded" class="height-1" placeholder="Strokes Values encoded"></textarea>
-        <!-- Show the result text size -->
+        <!-- Show the result -->
         <p id="encoded-strokes-values-size"></p>
+        <p id="encoded-strokes-values-time"></p>
 
 
         </div>

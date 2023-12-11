@@ -1,4 +1,5 @@
 function bigintEnc() {
+    const startTime = performance.now()
 
     // Get digits of chunk for padding
     const digits_of_chunk = getDigitsOfChunk()
@@ -60,6 +61,11 @@ function bigintEnc() {
 
     // Show the size of result in html and console
     showStringSize('Strokes Values', wholeGroupStrJoined, 'encoded-strokes-values-size')
+
+    // Show the processing time in html and console
+    const endTime = performance.now()
+    const elapsedTime = Math.floor(endTime - startTime)
+    showProcessingTime('bigintEnc()', elapsedTime, 'encoded-strokes-values-time')
 }
 
 

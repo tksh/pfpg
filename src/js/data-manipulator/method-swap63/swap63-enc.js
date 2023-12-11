@@ -8,6 +8,7 @@
 
 
 function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getSwap63Chars())) {
+    const startTime = performance.now()
 
     // Dictionary and input values
 
@@ -79,6 +80,12 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
 
     // Show the size of result in html and console
     showStringSize('Strokes Values', wholeGroupStrJoined, 'encoded-strokes-values-size')
+
+    // Show the processing time in html and console
+    const endTime = performance.now()
+    const elapsedTime = Math.floor(endTime - startTime)
+    showProcessingTime('swap63Enc()', elapsedTime, 'encoded-strokes-values-time')
+
 }
 
 

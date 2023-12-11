@@ -15,6 +15,8 @@
 
 
 function encodeArtworkData() {
+    const startTime = performance.now()
+
     // Read from textarea
     const rawJson = readTextarea('textarea-artwork-data-uploaded')
     //console.log(rawJson)
@@ -55,4 +57,9 @@ function encodeArtworkData() {
 
     // Show the size of result in html and console
     showStringSize('Artwork Data', artworkDataEncodedStr, 'encoded-artwork-data-size')
+
+        // Show the processing time in html and console
+        const endTime = performance.now()
+        const elapsedTime = Math.floor(endTime - startTime)
+        showProcessingTime('encodeArtworkData()', elapsedTime, 'encoded-artwork-data-time')
 }
