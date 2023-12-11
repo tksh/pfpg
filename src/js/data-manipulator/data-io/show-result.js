@@ -8,10 +8,10 @@ function showStringSize(nameOfInput, inputStr, outputElemId) {
 }
 
 function showProcessingTime(nameOfInput, inputNum, outputElemId) {
-    // Show the size in html
+    // Show the time in html
     const outputText = document.getElementById(`${outputElemId}`)
     outputText.textContent = `Processing time of ${nameOfInput}: ${inputNum} milliseconds`
 
-    // Show the size in console
+    // Show the time in console
     console.log(`Processing time of ${nameOfInput}: `, inputNum, ' ms');
 }
