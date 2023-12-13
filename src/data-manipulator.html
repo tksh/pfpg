@@ -21,6 +21,7 @@
 
     <!-- Base N enc -->
     <script src="./js/data-manipulator/base-n-enc/base-52-enc.js"></script>
+    <script src="./js/data-manipulator/base-n-enc/base-52-dec.js"></script>
     <script src="./js/data-manipulator/base-n-enc/base-64-url-enc-for-bigint.js"></script>
 
     <!-- URLCompressor -->
@@ -43,6 +44,13 @@
 
     <!-- Group Colors -->
     <script src="./js/data-manipulator/group-colors/colors-hex-enc.js"></script>
+
+    <!-- Base0to52 encoding method -->
+    <script src="./js/data-manipulator/method-base0to52/base0to52-enc.js"></script>
+    <script src="./js/data-manipulator/method-base0to52/base-x-enc.js"></script>
+    <script src="./js/data-manipulator/method-base0to52/get-alphabet.js"></script>
+    <script src="./js/data-manipulator/method-base0to52/plus-and-minus.js"></script>
+    <script src="./js/data-manipulator/method-base0to52/join-whole-color-str.js"></script>
 
     <!-- BigInt encoding method -->
     <script src="./js/data-manipulator/method-bigint/bigint-enc.js"></script>
@@ -499,7 +507,7 @@
         <!-- Buttons to encode the s:trokes values -->
         <h3>Select: Encoding Methods</h3>
 
-        <button onclick="mixedEncode()">Encode via <b>mixedEncode()</b></button>
+        <button onclick="base0to52Enc()">Encode via <b>base0to52Enc()</b></button>
         <p>For: UInt[5-14]Portray<br>With: Agg Data for Compression (list_of_width, count_by_width, diff, diff_values_sorted_by_freq and diff_counts_sorted_by_freq)</p>
         <br />
 
