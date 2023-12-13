@@ -74,41 +74,30 @@ function base0to52Enc() {
                 // Get the strings as key, and arrays as value
                 //                let keyDiff = ''
                 //                let keyValue = ''
-                ///                let valueDiff = []
-                //                let valueValue = []
+                ///                let diffArr = []
+                //                let freqDiffValueArr = []
 
-                let valueDiff = aggDataObj.relative[key].diff
-                let valueValue = aggDataObj.relative[key].diff_values_sorted_by_freq
-                //console.log('valueDiff: ', valueDiff)   // (19) [1, 2, 0, -3, -2, 1, 9, -7, -3, 6, -2, -15, -3, 30, -12, -3, 1, -1, -7]
-                //console.log('valueValue: ', valueValue) // (3) [-3, -2, -7]
+                let diffArr = aggDataObj.relative[key].diff
+                let freqDiffValueArr = aggDataObj.relative[key].diff_values_sorted_by_freq
+                //console.log('diffArr: ', diffArr)   // (19) [1, 2, 0, -3, -2, 1, 9, -7, -3, 6, -2, -15, -3, 30, -12, -3, 1, -1, -7]
+                //console.log('freqDiffValueArr: ', freqDiffValueArr) // (3) [-3, -2, -7]
 
-                console.log('valueDiff.length:  ', valueDiff.length)  // 484
-                console.log('valueValue.length: ', valueValue.length) // 133
+                console.log('diffArr.length:  ', diffArr.length)  // 484
+                console.log('freqDiffValueArr.length: ', freqDiffValueArr.length) // 133
 
-                valueValueFiltered = valueValue.filter((num) => num !== undefined);
-                console.log('valueValueFiltered.length: ', valueValueFiltered.length) // 133
-                console.log('valueValueFiltered: ', valueValueFiltered) //
+//                // undefinedでない要素だけを抽出
+//                freqDiffValueArrFiltered = freqDiffValueArr.filter((num) => num !== undefined);
+//                console.log('freqDiffValueArrFiltered.length: ', freqDiffValueArrFiltered.length) // 133
+//                console.log('freqDiffValueArrFiltered: ', freqDiffValueArrFiltered) //
 
 
                 // Generate the frequency dictionary
 
-                // {1st freq num => 'x', 2nd freq num => 'y', ...}
-                // The number of keys for the compression dictionary is at most 29, sometimes less
-
-                // If      `valueValue`length is OVER maxDictSize,  then dict length is maxDictSize
-                // Else if `valueValue`length is UNDER maxDictSize, then dict length equals `valueValue`length
+                // If      `freqDiffValueArr`length is OVER maxDictSize,  then dict length is maxDictSize
+                // Else if `freqDiffValueArr`length is UNDER maxDictSize, then dict length equals `freqDiffValueArr`length
 
                 // Get the number of dict length
-                function getActualDictSize(maxDictSize, valueValue) {
-                    let actualDictSize
-                    if (valueValue.length >= maxDictSize) {
-                        actualDictSize = maxDictSize
-                    } else {
-                        actualDictSize = valueValue.length
-                    }
-                    return actualDictSize
-                }
-                actualDictSize = getActualDictSize(maxDictSize, valueValue)
+                actualDictSize = getActualDictSize(maxDictSize, freqDiffValueArr)
                 console.log('actualDictSize: ', actualDictSize)
 
 
@@ -117,8 +106,8 @@ function base0to52Enc() {
                 // Extract top ${maxDictSize} numerical numbers
                 // `.slice`の 第二引数の終了位置は切り出されないので
                 // ${actualDictSize}個の数値を切り出したい時には [0]...[28]が${actualDictSize}個なので `.slice(0, ${actualDictSize})` となるようにする
-                const valueValueDict = valueValue.slice(0, actualDictSize);
-                console.log('valueValueDict: ', valueValueDict)
+                const freqDiffValueArrDict = freqDiffValueArr.slice(0, actualDictSize);
+                console.log('freqDiffValueArrDict: ', freqDiffValueArrDict)
                 // [] => Dict size is zero
 
 
@@ -134,38 +123,32 @@ function base0to52Enc() {
                 const freqdictMap = new Map();
 
                 // Check length of both array
-                //console.log('valueValueDict.length, alphabetForDict.length: ', valueValueDict.length, alphabetForDict.length)
+                //console.log('freqDiffValueArrDict.length, alphabetForDict.length: ', freqDiffValueArrDict.length, alphabetForDict.length)
 
                 for (let i = 0; i < alphabetForDict.length; i++) {
                     // Mapオブジェクトに キー(頻出数値) と バリュー(一文字置換用アルファベット) のペアを追加する
-                    //console.log('typeof(valueValueDict[i], alphabetForDict[i]), valueValueDict[i], alphabetForDict[i]: ', typeof(valueValueDict[i]), typeof(alphabetForDict[i]), valueValueDict[i], alphabetForDict[i])
+                    //console.log('typeof(freqDiffValueArrDict[i], alphabetForDict[i]), freqDiffValueArrDict[i], alphabetForDict[i]: ', typeof(freqDiffValueArrDict[i]), typeof(alphabetForDict[i]), freqDiffValueArrDict[i], alphabetForDict[i])
                     // number string -2 I
-                    freqdictMap.set(valueValueDict[i], alphabetForDict[i]);
+                    freqdictMap.set(freqDiffValueArrDict[i], alphabetForDict[i]);
                 }
                 console.log('freqdictMap: ', freqdictMap)
                 // Map(0) {size: 0}, when maxDictSize = 0, baseXNumber = 52
                 // Map(29) {-2 => 'x', -1 => 'y', -4 => 'z', -7 => 'A', -3 => 'B', …}
 
 
-                // Generate a encoded string of frequency nums for embedding after diff values decoded
+                // Encode the frequency diff values array as string to embed
 
-                // 頻出数値 を base52Encode して ひとつの文字列にまとめる
-                // 結果が一文字の場合は `.padStart(2, 'a')` で 長さを 2文字 に揃える          / 2703 = ZZ
-                // 結果が三文字の場合は 先頭にアンダースコア `_` をひとつ付ける ( abc => _abc ) / 2704 = baa
-                console.log(base52EncodeForFreqDictValue(2704)) // _bcu
-                console.log(base52EncodeForFreqDictValue(2703)) // _bct
-                console.log(base52EncodeForFreqDictValue(2500)) // Yy
-                console.log(base52EncodeForFreqDictValue(25))   // cT
-                console.log(base52EncodeForFreqDictValue(0))    // cu
-                console.log(base52EncodeForFreqDictValue(1))    // cv
+                // 頻出数値の配列 を base52Encode して ひとつの文字列にまとめる
+                // 結果が一文字の場合は `.padStart(2, 'a')` で 長さを 2文字 に揃える
+                // 結果が三文字の場合は 先頭にアンダースコア `_` をひとつ付ける ( abc => _abc )
 
-                const encodedValueValue = valueValueDict.map((value) => base52EncodeForFreqDictValue(value))
-                const encodedValueValueJoined = encodedValueValue.join('')
-                //                console.log(`${keyValue}, base52 encoded freq dict values length and string: `, encodedValueValueJoined.length, encodedValueValueJoined)
-                console.log(`base52 encoded freq dict values length and string: `, encodedValueValueJoined.length, encodedValueValueJoined)
-                // When baseXnumber: 52, maxDictSize: 0
-                // 000_rel_x1_value, base52 encoded freq dict values length and string:  0 <empty string>
-                totalLengthOfFreqDictValuesEncoded += encodedValueValueJoined.length
+                const freqDiffValueToEmbed = freqDiffValueArrDict.map((value) => base52EncodeForFreqDictValue(value))
+                const freqDiffValueToEmbedJoined = freqDiffValueToEmbed.join('')
+                console.log(`Encoded freq dict values length and string: `,
+                    freqDiffValueToEmbedJoined.length,
+                    freqDiffValueToEmbedJoined
+                )
+                totalLengthOfFreqDictValuesEncoded += freqDiffValueToEmbedJoined.length
 
 
 
@@ -181,7 +164,7 @@ function base0to52Enc() {
                 //console.log('endOfIneligibleForBaseXEncLower: ', endOfIneligibleForBaseXEncLower)       // -1353
                 //console.log('startOfIneligibleForBaseXEncHigher: ', startOfIneligibleForBaseXEncHigher) // 1362
 
-                const valueDiffEncoded = valueDiff.map((diff) => {
+                const diffArrEncoded = diffArr.map((diff) => {
                     // [０－９] の一桁の正の数は そのままにする
                     if (diff >= 0 && diff <= 9) {
                         //console.log('If ([0-9]), typeof(diff) and diff: ', typeof(diff), diff)
@@ -245,18 +228,18 @@ function base0to52Enc() {
                         }
                     }
                 });
-                //console.log('valueDiffEncoded: ', valueDiffEncoded) // (484) [7, 'ln', 'B', 'B', 'D', 'N', 'X', 6, 'nl', 'U', 8, ...
+                //console.log('diffArrEncoded: ', diffArrEncoded) // (484) [7, 'ln', 'B', 'B', 'D', 'N', 'X', 6, 'nl', 'U', 8, ...
 
 
                 // Join the encoded four columns values as a string
-                const diffEncodedJoined = valueDiffEncoded.join('')
+                const diffEncodedJoined = diffArrEncoded.join('')
                 // Merge as `[encoded dict]-[encoded diff]`
-                const mergeEncodedDictAndDiff = encodedValueValueJoined + '-' + diffEncodedJoined
+                const mergeEncodedDictAndDiff = freqDiffValueToEmbedJoined + '-' + diffEncodedJoined
 
                 // Push the whole columns with`-`
                 dictAndDiffEncodedWholeColumns += (mergeEncodedDictAndDiff + '-')
                 // Like `[x1: dict and diff]-[y1: dict and diff]-[x2: dict and diff]-[y2: dict and diff]-`
-                //console.log('dictAndDiffEncodedWholeColumns, divided with `-`: ', dictAndDiffEncodedWholeColumns)
+
             } // End of `for (let [keyByX1y1x2y2, valueByX1y1x2y2] of strokesValuesMapByX1y1x2y2) {`
 
             console.log(`${groupId}, totalLengthOfFreqDictValuesEncoded: `, totalLengthOfFreqDictValuesEncoded)
@@ -265,13 +248,12 @@ function base0to52Enc() {
             dictAndDiffEncodedWholeColumns = dictAndDiffEncodedWholeColumns.slice(0, -2);
             //console.log('dictAndDiffEncodedWholeColumns,  Unnecessaly `-` at end deleted: ', dictAndDiffEncodedWholeColumns)
 
-            // 色ごとの キー で分かれた Mapオブジェクトに 値として x1,y1,x2,y2 を 統合した座標データ文字列を 挿入
+            // groupId の キー で分かれた Mapオブジェクトに 値として x1,y1,x2,y2 を 統合した座標データ文字列を 挿入
             mergedDictAndDiffEncodedMapByGroup.set(groupId, dictAndDiffEncodedWholeColumns)
 
         } // End of `for (let [groupId, aggDataObj] of aggDataMap) {`
         console.log('mergedDictAndDiffEncodedMapByGroup: ', mergedDictAndDiffEncodedMapByGroup)
-        // Map { 000 → "eUeVeSePeTeR ... Map { 000 → "eUeVeSePeTeReKeQeLfpeNeOfheBeEeIeJeMfjflfmftfzebeweyeFeHfxfEeuezeCeGfgfi-7ZKKLQV6_abDt8_aaG23PjNgD_abD_aaCKfHj_aBA_aeAdgj_aAH_aC ...
-
+        // Map(5) {'1' => 'crcscn-120yZ19zy6ZlqyMKlSy1lxz-cr-0lL1Md7lpMElvlWlrzMIlUlqMHz00lP-cpcqct-00z5Z41Zz0031lXy326y-crcscd-MIlxZzylUMAMezME2lMlvMayZ01', '2' => '-0lNM ...
 
 
         //  From agg-data-for-comp
