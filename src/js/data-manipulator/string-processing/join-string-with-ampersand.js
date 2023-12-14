@@ -1,12 +1,12 @@
 // Whole color strings joined with `&`
 
-function joinStrWithAmpersand(encodedStrByColorMap) {
-    // values()メソッドで 各色の文字列 だけを配列で取得
-    const wholeColorString = [...encodedStrByColorMap.values()]
+function joinStrWithAmpersand(encodedStrByGroupMap) {
+    // values()メソッドで 各グループの文字列 だけを配列で取得
+    const wholeGroupString = [...encodedStrByGroupMap.values()]
 
     // Join the whole colors with '&'
-    const wholeColorStrJoined = wholeColorString.join('&')
-    //console.log('wholeColorStrJoined.length: ', wholeColorStrJoined.length)
+    const wholeGroupStrJoined = wholeGroupString.join('&')
+    //console.log('wholeGroupStrJoined.length: ', wholeGroupStrJoined.length)
 
-    return wholeColorStrJoined
+    return wholeGroupStrJoined
 }

@@ -296,8 +296,8 @@ function bruteforce52Enc() {
     // Result
     console.log('currentSmallestByGroup: ', currentSmallestByGroup)
 
-    // Whole color strings joined with `&`
-    const smallestJoined = joinWholeColorStr(currentSmallestByGroup)
+    // Whole group strings joined with `&`
+    const smallestJoined = joinStrWithAmpersand(currentSmallestByGroup)
 
     // Output to textarea
     outputToTextarea(smallestJoined, 'textarea-strokes-values-encoded')

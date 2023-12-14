@@ -5,7 +5,7 @@ function applyUrlCompIfEffective(
     compMethodName,
     valueFor3rdChar) {
 
-    // Encoded string structure: [color]=[1stFlagChar][2ndFlagChar][3rdFlagChar][widthCount]-[dval]
+    // Encoded string structure: [color]=[1stFlagChar][2ndFlagChar]([3rdFlagChar])[widthCount]-[dval]
     // URLCompressor applied to: [widthCount]-[dval]
 
     // Store smaller length strings
