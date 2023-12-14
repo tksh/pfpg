@@ -31,8 +31,7 @@
 // e.g. enc=0w&000=9_eLsiCq2FVu ... qJqwU2&fff=9wiYAu ... iMHPwo-
 
 
-//base0To52Enc
-function base0to52Enc() {
+function bruteforce52Enc() {
     const startTime = performance.now()
 
     // To store the smallest encoded string of each group
@@ -262,7 +261,7 @@ function base0to52Enc() {
             encodedDvalByGroup,
             encodedWidthCountByGroup,
             encodedColorsByGroup,
-            'base0to52-enc',
+            'bruteforce52-enc',
             baseXNumber
         )
         console.log('optimizedEncodedStrokesByGroup: ', optimizedEncodedStrokesByGroup)
@@ -309,7 +308,7 @@ function base0to52Enc() {
     // Show the processing time in html and console
     const endTime = performance.now()
     const elapsedTime = Math.floor(endTime - startTime)
-    showProcessingTime('base0to52Enc()', elapsedTime, 'encoded-strokes-values-time')
+    showProcessingTime('bruteforce52Enc()', elapsedTime, 'encoded-strokes-values-time')
 
 
     // Get final stats of currentSmallestByGroup

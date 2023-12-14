@@ -16,7 +16,7 @@ function chooseSmallerAndAddPrefix(applyCompOrNotBoolean, compressedStr, rawStr,
     } else if (compMethodName === 'bigint-enc') {
         numOf2ndChar = 1
         numOf3rdChar = valueFor3rdChar
-    } else if (compMethodName === 'base0to52-enc') {
+    } else if (compMethodName === 'bruteforce52-enc') {
         numOf2ndChar = 0
         numOf3rdChar = valueFor3rdChar
     }
