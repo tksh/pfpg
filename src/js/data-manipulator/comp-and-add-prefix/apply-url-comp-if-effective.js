@@ -31,7 +31,7 @@ function applyUrlCompIfEffective(
         const widthCountAndDvalURLCompressed = URLCompressor.compress(widthCountAndDval)
 
         // Judge the URLCompressor should be applied or not
-        const applyURLCompressorOrNot = compareLengthOfString(groupId, widthCountAndDval, widthCountAndDvalURLCompressed)
+        const applyURLCompressorOrNot = compareLength(groupId, widthCountAndDval, widthCountAndDvalURLCompressed)
         // console.log('applyURLCompressorOrNot: ', applyURLCompressorOrNot) // true
 
 

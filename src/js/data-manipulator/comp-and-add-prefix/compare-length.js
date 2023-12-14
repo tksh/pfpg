@@ -1,6 +1,6 @@
 // Compare the length of string between before and after URLComp applied
 
-function compareLengthOfString(groupId, before, after) {
+function compareLength(groupId, before, after) {
     if (before.length > after.length) {
         // before の方が長い場合 = URLCompressor が効果的である場合
         console.log(`URLCompressor is effective for group #${groupId}, so should be applied it:`, before.length, '=>', after.length)

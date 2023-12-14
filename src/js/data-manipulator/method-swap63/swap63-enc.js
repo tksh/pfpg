@@ -73,7 +73,7 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
 
 
     // Whole group strings joined with `&`
-    const wholeGroupStrJoined = joinStrWithAmpersand(optimizedEncodedStrokesByGroup)
+    const wholeGroupStrJoined = joinWithAnd(optimizedEncodedStrokesByGroup)
 
 
 

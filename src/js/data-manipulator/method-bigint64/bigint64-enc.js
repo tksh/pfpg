@@ -54,7 +54,7 @@ function bigint64Enc() {
 
 
     // Whole group strings joined with `&`
-    const wholeGroupStrJoined = joinStrWithAmpersand(optimizedEncodedStrokesByGroup)
+    const wholeGroupStrJoined = joinWithAnd(optimizedEncodedStrokesByGroup)
 
 
 
@@ -127,7 +127,7 @@ function bigint64EncByGroup(strokesAttrsMap, digits_of_chunk) {
         }
         // Encode with Base64 URL safe encode
         const joinedDvalsBigInt = BigInt(joinedDvalsStr)
-        const base64EncodedDvalsStr = base64UrlEncForBigInt(joinedDvalsBigInt)
+        const base64EncodedDvalsStr = base64UrlEnc(joinedDvalsBigInt)
 
         encodedStrByGroup.set(groupId, base64EncodedDvalsStr)
     }

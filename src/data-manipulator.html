@@ -20,36 +20,36 @@
     <!-- <script src="./js/data-manipulator/data-io/read-url-params.js"></script> -->
 
     <!-- Base N enc -->
-    <script src="./js/data-manipulator/base-n-enc/generate-alphabets-list.js"></script>
+    <script src="./js/data-manipulator/base-n-enc/generate-alphabets.js"></script>
     <script src="./js/data-manipulator/base-n-enc/base-52-enc.js"></script>
     <script src="./js/data-manipulator/base-n-enc/base-52-dec.js"></script>
-    <script src="./js/data-manipulator/base-n-enc/base-64-url-enc-for-bigint.js"></script>
+    <script src="./js/data-manipulator/base-n-enc/base-64-url-enc.js"></script>
 
     <!-- URLCompressor -->
     <script src="./js/data-manipulator/url-comp-0-1-0/convert.js"></script>
     <script src="./js/data-manipulator/url-comp-0-1-0/url-comp.js"></script>
 
-    <!-- Artwork Data -->
+    <!-- Encode the Artwork Data -->
     <script src="./js/data-manipulator/encode-artwork-data/artwork-data-encode.js"></script>
     <script src="./js/data-manipulator/encode-artwork-data/detect-uint-n.js"></script>
 
-    <!-- Stroke Width Count -->
-    <script src="./js/data-manipulator/width-count/width-count-enc.js"></script>
-    <!-- Compare -->
-    <script src="./js/data-manipulator/compare/compare-length-of-string.js"></script>
+    <!-- Encode the Group Colors -->
+    <script src="./js/data-manipulator/encode-group-colors/colors-hex-enc.js"></script>
+
+    <!-- Encode the Width Count -->
+    <script src="./js/data-manipulator/encode-width-count/width-count-enc.js"></script>
+
     <!-- Convert Color Format -->
     <script src="./js/data-manipulator/convert-color-fromat/normalized-to-hex.js"></script>
     <script src="./js/data-manipulator/convert-color-fromat/hex-shorten.js"></script>
-    <!-- String Processing -->
-    <script src="./js/data-manipulator/string-processing/join-string-with-ampersand.js"></script>
 
-    <!-- Group Colors -->
-    <script src="./js/data-manipulator/group-colors/colors-hex-enc.js"></script>
+    <!-- Processing for Map object -->
+    <script src="./js/data-manipulator/processing-for-map-obj/join-with-and.js"></script>
 
     <!-- Bruteforce52 encoding method -->
     <script src="./js/data-manipulator/method-bruteforce52/bruteforce52-enc.js"></script>
     <script src="./js/data-manipulator/method-bruteforce52/base-x-enc.js"></script>
-    <script src="./js/data-manipulator/method-bruteforce52/get-alphabet.js"></script>
+    <script src="./js/data-manipulator/method-bruteforce52/specific-alphabets.js"></script>
     <script src="./js/data-manipulator/method-bruteforce52/actual-dict-size.js"></script>
 
     <script src="./js/data-manipulator/method-bruteforce52/plus-and-minus.js"></script>
@@ -64,9 +64,10 @@
     <script src="./js/data-manipulator/method-swap63/swap63-dec.js"></script>
 
     <!-- Apply the URLCompressor and add prefix chars into smaller one -->
-    <script src="./js/data-manipulator/comp-and-add-prefix-into-smaller/add-prefix-as-flags.js"></script>
-    <script src="./js/data-manipulator/comp-and-add-prefix-into-smaller/apply-url-comp-if-effective.js"></script>
-    <script src="./js/data-manipulator/comp-and-add-prefix-into-smaller/choose-smaller-and-add-prefix.js"></script>
+    <script src="./js/data-manipulator/comp-and-add-prefix/add-prefix-as-flags.js"></script>
+    <script src="./js/data-manipulator/comp-and-add-prefix/apply-url-comp-if-effective.js"></script>
+    <script src="./js/data-manipulator/comp-and-add-prefix/choose-smaller-and-add-prefix.js"></script>
+    <script src="./js/data-manipulator/comp-and-add-prefix/compare-length.js"></script>
 
 
     <!--
@@ -511,15 +512,15 @@
         <h3>Select: Encoding Methods</h3>
 
         <button onclick="bruteforce52Enc()">Encode via <b>bruteforce52Enc()</b></button>
-        <p>For: UInt[5-14]Portray<br>With: Agg Data for Compression (list_of_width, count_by_width, diff, diff_values_sorted_by_freq and diff_counts_sorted_by_freq)</p>
+        <p>For: UInt[5-14]Portray<br>With: Aggregated Data for Compression (list_of_width, count_by_width, diff, diff_values_sorted_by_freq and diff_counts_sorted_by_freq)</p>
         <br />
 
         <button onclick="bigint64Enc()">Encode via <b>bigint64Enc()</b></button>
-        <p>For: UInt[5-14]Portray<br>With: Strokes Attributes (<b>absolute</b> d values) and Agg Data for Compression (list_of_width and count_by_width)</p>
+        <p>For: UInt[5-14]Portray<br>With: Strokes Attributes (<b>absolute</b> d values) and Aggregated Data for Compression (list_of_width and count_by_width)</p>
         <br />
 
         <button onclick="swap63Enc()">Encode via <b>swap63Enc()</b></button>
-        <p>For: <b>UInt5Portray ONLY</b> (grid size: 31 x 31)<br>With: Strokes Attributes (<b>relative</b> d values) and Agg Data for Compression (list_of_width and count_by_width)</p>
+        <p>For: <b>UInt5Portray ONLY</b> (grid size: 31 x 31)<br>With: Strokes Attributes (<b>relative</b> d values) and Aggregated Data for Compression (list_of_width and count_by_width)</p>
 
 
         <!-- Textarea to output the strokes values encoded -->

@@ -1,32 +1,42 @@
-/////////////// Encode d values diff of rows from jsonl values, //////////////
-
 ////////////////////////////////// Input: //////////////////////////////////
 
-// Diff and Freq dict
+// Aggregated Data for Compression
 
-// From: './jsonl_extracted/%{ARTWORK_ID}_diff_of_dval_rows_and_freq_dict_except_0to9.jsonl'
-
-//  {"000_rel_x1_diff":[7,10,-3,-3,-12,-13,-17,6,54,-47, ...
-//  {"000_rel_x1_value":[-2,-1,-4,-7,-3,-5,-12,-6,-11,19 ...
-//  {"000_rel_x1_count":[23,17,15,13,13,11,9,8,7,7,6,6,6 ...
-// ......
-//  {"fff_abs_y2_diff":[110,17,3,55,-99,-17,-4,-1,16,-1, ...
-//  {"fff_abs_y2_value":[-4,-1,17,-99,-6,-9,110,55,-17,1 ...
-//  {"fff_abs_y2_count":[5,4,2,2,2,2,1,1,1,1,1,1,1,1,1,1 ...
-
-
-// Strokes Info
-
-// From: './jsonl_extracted/%{ARTWORK_ID}_strokes_width_and_amount.jsonl'
-
-// {"000_amount":[24,21,37,66,91,118,127]}
-// {"000_width":[21,13,8,5,3,2,1]}
-// {"fff_amount":[8,43]}
-// {"fff_width":[2,1]}
+// {
+//     "1": {
+//         "list_of_width": [3],
+//         "count_by_width": [19],
+//         "absolute": {
+//                      ...
+//         },
+//         "relative": {
+//             "x1": {
+//                 "diff": [1, 2, 0, -3, -2, 1, 9, -7, -3, 6, -2, -15, -3, 30, -12, -3, 1, -1, -7],
+//                 "diff_values_sorted_by_freq": [-3, -2, -7],
+//                 "diff_counts_sorted_by_freq": [4, 2, 2]
+//             },
+//             "y1": {
+//                 "diff": [0, -26, 1, 17, 7, -17, 18, -5, -4, -13, -3, 26, -8, -15, 24, -3, 0, 0, -18],
+//                 "diff_values_sorted_by_freq": [-3],
+//                 "diff_counts_sorted_by_freq": [2]
+//             },
+//             "x2": {
+//                 "diff": [0, 0, -1, 5, -4, 4, 1, -4, -1, 0, 0, 3, 1, -2, -5, 3, 2, 6, -5],
+//                 "diff_values_sorted_by_freq": [-5, -4, -1],
+//                 "diff_counts_sorted_by_freq": [2, 2, 2]
+//             },
+//             "y2": {
+//                 "diff": [26, -1, -2, -17, -3, -8, 10, 19, -17, 18, 2, -24, -5, 11, -3, -2, 0, 1, -3],
+//                 "diff_values_sorted_by_freq": [-3, -2, -17],
+//                 "diff_counts_sorted_by_freq": [3, 2, 2]
+//             }
+//         }
+//     },
+//     "2": {
+//           ...
 
 ////////////////////////////////// Output: //////////////////////////////////
 
-// To: <textarea> id="textarea-strokes-attrs-encoded"
 // Format: [1st:color]=[1st char: binary flag for URLComp or not][2nd char: baseX number base52 encoded][widthCount(width number, amount base52 encoded, ...)]-[x1:dict]-[x1:diff]-[y1:dict]-[y1:diff]-[x2:dict]-[x2:diff]-[y2:dict]-[y2:diff]&[2nd:color]=...
 // e.g. enc=0w&000=9_eLsiCq2FVu ... qJqwU2&fff=9wiYAu ... iMHPwo-
 
@@ -219,19 +229,18 @@ function bruteforce52Enc() {
                 dictAndDiffEncodedFourColumns.push(mergeEncodedDictAndDiff)
                 // Like: [x1: dict and diff], [y1: dict and diff], [x2: dict and diff], [y2: dict and diff]`
 
-            } // End of `for (let [keyByX1y1x2y2, valueByX1y1x2y2] of strokesValuesMapByX1y1x2y2) {`
-
+            } // End of `for (const key in aggDataObj.relative) { // Loop for x1 to y2`
 
             //console.log('typeof(dictAndDiffEncodedFourColumns): ', typeof(dictAndDiffEncodedFourColumns)) // object
             //console.log('dictAndDiffEncodedFourColumns: ', dictAndDiffEncodedFourColumns)
             // (4) ['crcscn-120yZ19zy6ZlEylvlfy1lLz', 'cr-0LW1lP7lDlplJljlFzltlhlElsz00lc', 'cpcqct-00z5Z41Zz0031lky326y', 'crcscd-ltlLZzylhlllQzlp2LXlJlMyZ01y']
             // x1 に頻出数値が無い場合 hyphen始まりになる (4) ['-0lalO44lHlqlflh75lklJ5lLlg', 'crbR-0260Z0zlrlVz2ZlGlNlIlk', 'cr-lWLWz0lL100001z1z22', 'cqct-1ZlKlNlH130z011Z21z']
 
-            // Join whole columns
+            // Join four columns
             dictAndDiffEncodedFourColumnsJoined = dictAndDiffEncodedFourColumns.join('-')
             console.log('dictAndDiffEncodedFourColumns: ', dictAndDiffEncodedFourColumns)
 
-            // groupId の キー で分かれた Mapオブジェクトに 値として x1,y1,x2,y2 を 統合した座標データ文字列を 挿入
+            // Set encoded [dict]-[diff] into map as value with groupId key
             encodedDvalByGroup.set(groupId, dictAndDiffEncodedFourColumnsJoined)
 
         } // End of `for (let [groupId, aggDataObj] of aggDataMap) {`
@@ -253,42 +262,32 @@ function bruteforce52Enc() {
 
         // Get the group colors(stroke, opacity, stroke-opacity) encoded as 10|6|5|3|1 chars hex
         const encodedColorsByGroup = encodeColors(strokesAttrsMap)
-        console.log(encodedColorsByGroup) // Map(5) {'1' => '0', '2' => '0', '3' => '0', '4' => 'e', '5' => 'f'}
+        //console.log(encodedColorsByGroup) // Map(5) {'1' => '0', '2' => '0', '3' => '0', '4' => 'e', '5' => 'f'}
 
 
         // Choose smaller one between URLComp applied or not, for each group
-        const optimizedEncodedStrokesByGroup = applyUrlCompIfEffective(
+        const optimizedStrByGroup = applyUrlCompIfEffective(
             encodedDvalByGroup,
             encodedWidthCountByGroup,
             encodedColorsByGroup,
             'bruteforce52-enc',
             baseXNumber
         )
-        console.log('optimizedEncodedStrokesByGroup: ', optimizedEncodedStrokesByGroup)
+        console.log('optimizedStrByGroup: ', optimizedStrByGroup)
         //  Map(5) {'1' => '0=129CaIjMCzLAFox3gEVYTdnymbAmwP-UWDCnew3h-Aqsd6rQsPf7nuc97B-Tyl896LIItSqsH-0_igZRCKY265Ta0zzD8-axd0B3NgagFJ2rRrUWcULFyn1IwBi', '2' => '0=129zi ...
 
 
 
-        // Store the smallest for each group
+        // Store the smallest string for each group
 
-        // For first loop, set whole group result value into map
+        // For first loop, init the map with current value
         if (maxDictSize === maxDictSizeStartAt) {
             //console.log('maxDictSize in first loop: ', maxDictSize) // 0
-            currentSmallestByGroup = optimizedEncodedStrokesByGroup
+            currentSmallestByGroup = optimizedStrByGroup
         }
 
-        function storeSmaller(encodeStrByGroup) {
-            for (let [groupId, encodedStr] of encodeStrByGroup) {
-                if (encodedStr.length < currentSmallestByGroup.get(groupId).length) {
-                    // これまでよりも 今回の方がサイズが 小さければ 値を更新する
-                    currentSmallestByGroup.set(groupId, encodedStr)
-                }
-                // これまでよりも 今回の方がサイズが 同じか より大きければ 何もしない
-            }
-            return currentSmallestByGroup
-        }
-        currentSmallestByGroup = storeSmaller(optimizedEncodedStrokesByGroup)
-
+        // For every loop
+        currentSmallestByGroup = storeSmaller(currentSmallestByGroup, optimizedStrByGroup)
 
     } //End of Loop for every baseX values: [0-52]
 
@@ -297,7 +296,7 @@ function bruteforce52Enc() {
     console.log('currentSmallestByGroup: ', currentSmallestByGroup)
 
     // Whole group strings joined with `&`
-    const smallestJoined = joinStrWithAmpersand(currentSmallestByGroup)
+    const smallestJoined = joinWithAnd(currentSmallestByGroup)
 
     // Output to textarea
     outputToTextarea(smallestJoined, 'textarea-strokes-values-encoded')
@@ -331,4 +330,19 @@ function bruteforce52Enc() {
     console.log('encodeMethodChosen (bruteforce52-enc[0], bigint64-enc[1], swap63-enc[2]): ', encodeMethodChosen) // (5) ['0', '0', '0', '0', '0']
     console.log('baseXNumberChosen: ', baseXNumberChosen) // (5) [51, 8, 49, 1, 51]
 
+}
+
+
+
+// Store the smallest length sting for each group
+
+function storeSmaller(currentSmallestByGroup, encodeStrByGroup) {
+    for (let [groupId, encodedStr] of encodeStrByGroup) {
+        if (encodedStr.length < currentSmallestByGroup.get(groupId).length) {
+            // これまでよりも 今回の方がサイズが 小さければ 値を更新する
+            currentSmallestByGroup.set(groupId, encodedStr)
+        }
+        // これまでよりも 今回の方がサイズが 同じか より大きければ 何もしない
+    }
+    return currentSmallestByGroup
 }
