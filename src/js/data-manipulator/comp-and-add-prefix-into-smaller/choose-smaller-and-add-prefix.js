@@ -7,7 +7,7 @@ function chooseSmallerAndAddPrefix(applyCompOrNotBoolean, compressedStr, rawStr,
 
     // Init the flags
     let numOf2ndChar = 0
-    let numOf3rdChar = ""
+    let numOf3rdChar = 0
 
     // Change the flags values as each encode method specific
     if (compMethodName === 'swap63-enc') {
@@ -24,15 +24,15 @@ function chooseSmallerAndAddPrefix(applyCompOrNotBoolean, compressedStr, rawStr,
 
     if (applyCompOrNotBoolean === true) { // Compression applied
         smallerStrWithPrefix = addPrefixAsFlags(compressedStr,
-            1,              // Flag for 1st char as URLComp applied
-            numOf2ndChar,  // Flag for 2nd char as swap63Enc applied
-            numOf3rdChar // No flag needed for 3rd char when swap63Enc applied
+            1,            // Flag for 1st char as URLComp applied
+            numOf2ndChar, // Flag for 2nd char as swap63Enc applied
+            numOf3rdChar  // No flag needed for 3rd char when swap63Enc applied
         )
     } else { // Compression not applied
         smallerStrWithPrefix = addPrefixAsFlags(rawStr,
-            0,              // Flag for 1st char as URLComp not applied
-            numOf2ndChar,  // Flag for 2nd char as swap63Enc applied
-            numOf3rdChar // No flag needed for 3rd char when swap63Enc applied
+            0,            // Flag for 1st char as URLComp not applied
+            numOf2ndChar, // Flag for 2nd char as swap63Enc applied
+            numOf3rdChar  // No flag needed for 3rd char when swap63Enc applied
         )
     }
     return smallerStrWithPrefix

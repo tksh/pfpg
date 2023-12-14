@@ -9,16 +9,15 @@
 function addPrefixAsFlags(inputStr, numOf1stChar, numOf2ndChar, numOf3rdChar) {
     let strWithFlag = inputStr
 
-
     // Add 3rd char
     if (numOf3rdChar === null) {
         // for swap63-enc
-        console.log("The encode method now using is Swap63, Not need to add any char as 3rd flag.")
+        console.log("The encode method now using is Swap63, Not need to add any char as 3rd flag. Encoded value starts at 3rd char")
 
     } else if (numOf2ndChar === 0) {
         // for bruteforce52-enc
-        ase52EncodedChar = base52Encode(numOf3rdChar)
-        strWithFlag = `${ase52EncodedChar}` + strWithFlag
+        base52EncodedChar = base52Encode(numOf3rdChar)
+        strWithFlag = `${base52EncodedChar}` + strWithFlag
 
     } else {
         // for bigint64-enc

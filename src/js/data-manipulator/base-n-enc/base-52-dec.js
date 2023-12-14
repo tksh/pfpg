@@ -1,5 +1,7 @@
 function base52Decode(str) {
-    const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const alphabet = generateAlphabets52()
+    // 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
     let base = alphabet.length;
     let decoded = 0;
 
@@ -11,14 +13,14 @@ function base52Decode(str) {
     return decoded;
 }
 
-//console.log(base52Decode('ca')) // 104
-//console.log(base52Decode('dm')) // 168
-//console.log(base52Decode('dB')) // 183
-//console.log(base52Decode('bO')) // 92
-//console.log(base52Decode('m')) // 12
-//console.log(base52Decode('f')) // 5
-//console.log(base52Decode('L')) // 37
-//console.log(base52Decode('aL')) // 37
+// console.log(base52Decode('ca')) // 104
+// console.log(base52Decode('dm')) // 168
+// console.log(base52Decode('dB')) // 183
+// console.log(base52Decode('bO')) // 92
+// console.log(base52Decode('m')) // 12
+// console.log(base52Decode('f')) // 5
+// console.log(base52Decode('L')) // 37
+// console.log(base52Decode('aL')) // 37
 
 
 
