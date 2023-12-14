@@ -13,7 +13,7 @@ function chooseSmallerAndAddPrefix(applyCompOrNotBoolean, compressedStr, rawStr,
     if (compMethodName === 'swap63-enc') {
         numOf2ndChar = 2
         numOf3rdChar = null
-    } else if (compMethodName === 'bigint-enc') {
+    } else if (compMethodName === 'bigint64-enc') {
         numOf2ndChar = 1
         numOf3rdChar = valueFor3rdChar
     } else if (compMethodName === 'bruteforce52-enc') {

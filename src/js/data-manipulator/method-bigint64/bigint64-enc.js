@@ -1,4 +1,4 @@
-function bigintEnc() {
+function bigint64Enc() {
     const startTime = performance.now()
 
     // Get digits of chunk for padding
@@ -23,9 +23,9 @@ function bigintEnc() {
 
 
 
-    // BigInt encode apply to absolute d values
+    // Bigint64 encode apply to absolute d values
 
-    const encodedDvalByGroup = bigintEncByGroup(strokesAttrsMap, digits_of_chunk)
+    const encodedDvalByGroup = bigint64EncByGroup(strokesAttrsMap, digits_of_chunk)
     //console.log("encodedStrByGroup: ", encodedStrByGroup)
     // Map(5) {'1' => '01040706080719252428301704222622222323000000152005000015000028240011161922080104061008112426242830200824232224312626252321230005242225273122091720232710', '2' => ...
 
@@ -45,7 +45,7 @@ function bigintEnc() {
         encodedDvalByGroup,
         encodedWidthCountByGroup,
         encodedColorsByGroup,
-        'bigint-enc',
+        'bigint64-enc',
         digits_of_chunk
         )
     //console.log('optimizedEncodedStrokesByGroup: ', optimizedEncodedStrokesByGroup)
@@ -68,11 +68,11 @@ function bigintEnc() {
     // Show the processing time in html and console
     const endTime = performance.now()
     const elapsedTime = Math.floor(endTime - startTime)
-    showProcessingTime('bigintEnc()', elapsedTime, 'encoded-strokes-values-time')
+    showProcessingTime('bigint64Enc()', elapsedTime, 'encoded-strokes-values-time')
 }
 
 
-// BigInt encode
+// Bigint64 encode
 
 function getDigitsOfChunk() {
     // Read from textarea as JSON
@@ -95,7 +95,7 @@ function padZero(number, targetLength) {
 
 
 
-function bigintEncByGroup(strokesAttrsMap, digits_of_chunk) {
+function bigint64EncByGroup(strokesAttrsMap, digits_of_chunk) {
     const encodedStrByGroup = new Map();
 
     for ([groupId, attrsObj] of strokesAttrsMap) {
