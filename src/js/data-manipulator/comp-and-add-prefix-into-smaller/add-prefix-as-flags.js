@@ -6,29 +6,41 @@
 //                                           For [0] baseX-enc  => Base X number
 //                                           For [1] bigint-enc => X digits to split into each chunks
 //                                           For [2] swap63-enc => Nothing (Encoded values start at 3rd char)]
-function addPrefixAsFlags(inputStr, numFor1stFlag, numFor2ndFlag, valueFor3rdFlag) {
+function addPrefixAsFlags(inputStr, numOf1stChar, numOf2ndChar, numOf3rdChar) {
     let strWithFlag = inputStr
 
+
     // Add 3rd char
-    if (valueFor3rdFlag === null) {
+    if (numOf3rdChar === null) {
+        // for swap63-enc
         console.log("The encode method now using is Swap63, Not need to add any char as 3rd flag.")
+
+    } else if (numOf2ndChar === 0) {
+        // for base0to52-enc
+        ase52EncodedChar = base52Encode(numOf3rdChar)
+        strWithFlag = `${ase52EncodedChar}` + strWithFlag
+
     } else {
-        strWithFlag = `${valueFor3rdFlag}` + strWithFlag
+        // for bigint-enc
+        strWithFlag = `${numOf3rdChar}` + strWithFlag
     }
+
 
     // Add 2nd char
-    if (numFor2ndFlag >= 3) {
+    if (numOf2ndChar >= 3) {
         console.log("Invalid number for 2nd flag.")
     } else {
-        strWithFlag = `${numFor2ndFlag}` + strWithFlag
+        strWithFlag = `${numOf2ndChar}` + strWithFlag
     }
 
+
     // Add 1st char
-    if (numFor1stFlag >= 2) {
+    if (numOf1stChar >= 2) {
         console.log("Invalid number for 1st flag.")
     } else {
-        strWithFlag = `${numFor1stFlag}` + strWithFlag
+        strWithFlag = `${numOf1stChar}` + strWithFlag
     }
+
 
     return strWithFlag
 }

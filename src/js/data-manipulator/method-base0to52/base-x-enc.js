@@ -1,4 +1,4 @@
-// Generate wholeAlphabet string
+// Generate alphabets52 string
 // アルファベットの文字コードの範囲を定義する
 //const lowerStart = 97; // 'a'の文字コード
 //const lowerEnd = 122; // 'z'の文字コード
@@ -32,8 +32,8 @@ function baseXEnc(numOriginal, baseX) {
     // Add some numbers to shift each number above zero
     let numWithoutMinus = addNumBeforeEncode(numOriginal, baseX)
 
-    const wholeAlphabet = `AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz`
-    const alphabet = wholeAlphabet.substring(0, baseX)
+    const alphabets52 = `AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz`
+    const alphabet = alphabets52.substring(0, baseX)
     let base = alphabet.length;
     let encoded = '';
 

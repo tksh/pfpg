@@ -1,4 +1,9 @@
-function applyUrlCompIfEffective(encodedDvalByGroup, encodedWidthCountByGroup, encodedColorsByGroup) {
+function applyUrlCompIfEffective(
+    encodedDvalByGroup,
+    encodedWidthCountByGroup,
+    encodedColorsByGroup,
+    compMethodName,
+    valueFor3rdChar) {
 
     // Store smaller length strings
     const wholeEncodedValuesByGroup = new Map();
@@ -33,8 +38,8 @@ function applyUrlCompIfEffective(encodedDvalByGroup, encodedWidthCountByGroup, e
             applyURLCompressorOrNot,        // Boolean of apply the compression or not
             widthCountAndDvalURLCompressed, // Compressed string
             widthCountAndDval,              // Raw string
-            'swap63-enc',                   // Encode method name
-            null                            // Value for 3rd char
+            compMethodName,                 // Encode method name
+            valueFor3rdChar                  // Value for 3rd char
         )
 
         console.log('smallerStrWithPrefix: ', smallerStrWithPrefix)

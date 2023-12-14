@@ -35,21 +35,21 @@
 function base0to52Enc() {
     const startTime = performance.now()
 
-    const lengthByBaseXNumber = new Map()
+    // To store the smallest encoded string of each group
+    let currentSmallestByGroup = new Map()
 
-    // For reference: Store the whole results of encoded string using URLCompressor or not
-    const lengthBeforeAndAfterURLComp = new Map();
+    const maxDictSizeStartAt = 0
+    const maxDictSizeEndAt = 52
 
-    // Loop for every baseX values: [0-52]
-    for (let i = 3; i <= 5; i++) { // Test [3-5]
-        //    for (let i = 0; i <= 52; i++) {
+    // Loop for every baseX values from 0 to 52
+    for (let i = maxDictSizeStartAt; i <= maxDictSizeEndAt; i++) {
         const maxDictSize = i
         const baseXNumber = 52 - i
         console.log('maxDictSize: ', maxDictSize) // 0, 1, ... 51, 52
         console.log('baseXNumber: ', baseXNumber) // 52, 51, ... 1, 0
 
 
-        const mergedDictAndDiffEncodedMapByGroup = new Map();
+        const encodedDvalByGroup = new Map()
 
         const aggDataMap = jsonToMapObj(`textarea-agg-data-for-comp-uploaded`)
         for (let [groupId, aggDataObj] of aggDataMap) {
@@ -63,10 +63,7 @@ function base0to52Enc() {
             //    y2: {diff: Array(19), diff_values_sorted_by_freq: Array(3), diff_counts_sorted_by_freq: Array(3)}
             //    [[Prototype]]: Object
 
-            let dictAndDiffEncodedWholeColumns = ''
-
-            // Count the total length of freq dict values encoded
-            let totalLengthOfFreqDictValuesEncoded = 0
+            let dictAndDiffEncodedFourColumns = []
 
             for (const key in aggDataObj.relative) { // Loop for x1 to y2
                 //console.log('key: ', key) // x1
@@ -82,23 +79,15 @@ function base0to52Enc() {
                 //console.log('diffArr: ', diffArr)   // (19) [1, 2, 0, -3, -2, 1, 9, -7, -3, 6, -2, -15, -3, 30, -12, -3, 1, -1, -7]
                 //console.log('freqDiffValueArr: ', freqDiffValueArr) // (3) [-3, -2, -7]
 
-                console.log('diffArr.length:  ', diffArr.length)  // 484
-                console.log('freqDiffValueArr.length: ', freqDiffValueArr.length) // 133
-
-//                // undefinedでない要素だけを抽出
-//                freqDiffValueArrFiltered = freqDiffValueArr.filter((num) => num !== undefined);
-//                console.log('freqDiffValueArrFiltered.length: ', freqDiffValueArrFiltered.length) // 133
-//                console.log('freqDiffValueArrFiltered: ', freqDiffValueArrFiltered) //
-
 
                 // Generate the frequency dictionary
 
+                // length of dictionary:
                 // If      `freqDiffValueArr`length is OVER maxDictSize,  then dict length is maxDictSize
                 // Else if `freqDiffValueArr`length is UNDER maxDictSize, then dict length equals `freqDiffValueArr`length
 
                 // Get the number of dict length
                 actualDictSize = getActualDictSize(maxDictSize, freqDiffValueArr)
-                console.log('actualDictSize: ', actualDictSize)
 
 
                 // Key of freq dict
@@ -108,35 +97,31 @@ function base0to52Enc() {
                 // ${actualDictSize}個の数値を切り出したい時には [0]...[28]が${actualDictSize}個なので `.slice(0, ${actualDictSize})` となるようにする
                 const freqDiffValueArrDict = freqDiffValueArr.slice(0, actualDictSize);
                 console.log('freqDiffValueArrDict: ', freqDiffValueArrDict)
-                // [] => Dict size is zero
+                // [] | If dict size is zero, Empty array will be returned
 
 
                 // Value of freq dict
 
-                const alphabetForDict = getAlphabetForDict(actualDictSize)
-                console.log('alphabetForDict: ', alphabetForDict)
-                // AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz
+                const alphabetsForDict = getAlphabetsForDict(actualDictSize)
+                // From 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 
-                // Set the kv pair into Map()
+                // Set the KV pair into Map()
 
                 const freqdictMap = new Map();
 
-                // Check length of both array
-                //console.log('freqDiffValueArrDict.length, alphabetForDict.length: ', freqDiffValueArrDict.length, alphabetForDict.length)
-
-                for (let i = 0; i < alphabetForDict.length; i++) {
-                    // Mapオブジェクトに キー(頻出数値) と バリュー(一文字置換用アルファベット) のペアを追加する
-                    //console.log('typeof(freqDiffValueArrDict[i], alphabetForDict[i]), freqDiffValueArrDict[i], alphabetForDict[i]: ', typeof(freqDiffValueArrDict[i]), typeof(alphabetForDict[i]), freqDiffValueArrDict[i], alphabetForDict[i])
+                for (let i = 0; i < alphabetsForDict.length; i++) {
+                    // Mapオブジェクトに キー(頻出数値) と バリュー(置換用アルファベット) のペアを追加する
+                    //console.log('typeof(freqDiffValueArrDict[i], alphabetsForDict[i]), freqDiffValueArrDict[i], alphabetsForDict[i]: ', typeof(freqDiffValueArrDict[i]), typeof(alphabetsForDict[i]), freqDiffValueArrDict[i], alphabetsForDict[i])
                     // number string -2 I
-                    freqdictMap.set(freqDiffValueArrDict[i], alphabetForDict[i]);
+                    freqdictMap.set(freqDiffValueArrDict[i], alphabetsForDict[i]);
                 }
                 console.log('freqdictMap: ', freqdictMap)
                 // Map(0) {size: 0}, when maxDictSize = 0, baseXNumber = 52
                 // Map(29) {-2 => 'x', -1 => 'y', -4 => 'z', -7 => 'A', -3 => 'B', …}
 
 
-                // Encode the frequency diff values array as string to embed
+                // Encode the frequency diff values array as a string to embed
 
                 // 頻出数値の配列 を base52Encode して ひとつの文字列にまとめる
                 // 結果が一文字の場合は `.padStart(2, 'a')` で 長さを 2文字 に揃える
@@ -144,11 +129,6 @@ function base0to52Enc() {
 
                 const freqDiffValueToEmbed = freqDiffValueArrDict.map((value) => base52EncodeForFreqDictValue(value))
                 const freqDiffValueToEmbedJoined = freqDiffValueToEmbed.join('')
-                console.log(`Encoded freq dict values length and string: `,
-                    freqDiffValueToEmbedJoined.length,
-                    freqDiffValueToEmbedJoined
-                )
-                totalLengthOfFreqDictValuesEncoded += freqDiffValueToEmbedJoined.length
 
 
 
@@ -233,184 +213,98 @@ function base0to52Enc() {
 
                 // Join the encoded four columns values as a string
                 const diffEncodedJoined = diffArrEncoded.join('')
-                // Merge as `[encoded dict]-[encoded diff]`
+                // Merge with hyphen'-': `[encoded dict]-[encoded diff]`
                 const mergeEncodedDictAndDiff = freqDiffValueToEmbedJoined + '-' + diffEncodedJoined
 
-                // Push the whole columns with`-`
-                dictAndDiffEncodedWholeColumns += (mergeEncodedDictAndDiff + '-')
-                // Like `[x1: dict and diff]-[y1: dict and diff]-[x2: dict and diff]-[y2: dict and diff]-`
+                // Push into whole columns array
+                dictAndDiffEncodedFourColumns.push(mergeEncodedDictAndDiff)
+                // Like: [x1: dict and diff], [y1: dict and diff], [x2: dict and diff], [y2: dict and diff]`
 
             } // End of `for (let [keyByX1y1x2y2, valueByX1y1x2y2] of strokesValuesMapByX1y1x2y2) {`
 
-            console.log(`${groupId}, totalLengthOfFreqDictValuesEncoded: `, totalLengthOfFreqDictValuesEncoded)
 
-            // sliceメソッドを使って 各カラムを `-`区切りで統合した際に生じた 最後の余計な1文字 '-' を削る
-            dictAndDiffEncodedWholeColumns = dictAndDiffEncodedWholeColumns.slice(0, -2);
-            //console.log('dictAndDiffEncodedWholeColumns,  Unnecessaly `-` at end deleted: ', dictAndDiffEncodedWholeColumns)
+            //console.log('typeof(dictAndDiffEncodedFourColumns): ', typeof(dictAndDiffEncodedFourColumns)) // object
+            //console.log('dictAndDiffEncodedFourColumns: ', dictAndDiffEncodedFourColumns)
+            // (4) ['crcscn-120yZ19zy6ZlEylvlfy1lLz', 'cr-0LW1lP7lDlplJljlFzltlhlElsz00lc', 'cpcqct-00z5Z41Zz0031lky326y', 'crcscd-ltlLZzylhlllQzlp2LXlJlMyZ01y']
+            // x1 に頻出数値が無い場合 hyphen始まりになる (4) ['-0lalO44lHlqlflh75lklJ5lLlg', 'crbR-0260Z0zlrlVz2ZlGlNlIlk', 'cr-lWLWz0lL100001z1z22', 'cqct-1ZlKlNlH130z011Z21z']
+
+            // Join whole columns
+            dictAndDiffEncodedFourColumnsJoined = dictAndDiffEncodedFourColumns.join('-')
+            console.log('dictAndDiffEncodedFourColumns: ', dictAndDiffEncodedFourColumns)
 
             // groupId の キー で分かれた Mapオブジェクトに 値として x1,y1,x2,y2 を 統合した座標データ文字列を 挿入
-            mergedDictAndDiffEncodedMapByGroup.set(groupId, dictAndDiffEncodedWholeColumns)
+            encodedDvalByGroup.set(groupId, dictAndDiffEncodedFourColumnsJoined)
 
         } // End of `for (let [groupId, aggDataObj] of aggDataMap) {`
-        console.log('mergedDictAndDiffEncodedMapByGroup: ', mergedDictAndDiffEncodedMapByGroup)
+        console.log('encodedDvalByGroup: ', encodedDvalByGroup)
         // Map(5) {'1' => 'crcscn-120yZ19zy6ZlqyMKlSy1lxz-cr-0lL1Md7lpMElvlWlrzMIlUlqMHz00lP-cpcqct-00z5Z41Zz0031lXy326y-crcscd-MIlxZzylUMAMezME2lMlvMayZ01', '2' => '-0lNM ...
+        // x1からy2まで 全てに頻出数値が無い場合: '5' => '-lmlF3lL10lK--lRLPlp4lk4lj--0lk1lL130--21lL1lk00'}
 
 
-        //  From agg-data-for-comp
+
+        //  Merge with Width Count and Group Colors, Then Compress
+
+        // [Group Colors]=[Width Count]-[Encode Dict and Diff]
 
         // Get the width count (list_of_width and count_by_width) encoded as a string
         const encodedWidthCountByGroup = encodeWidthCount()
 
+        // Read the strokes attributes from .json as Map() grouped by group_id
+        const strokesAttrsMap = jsonToMapObj('textarea-strokes-attrs-uploaded')
 
-        // Store smaller length strings
-        let lengthAndStringArray = [];
-        let strokesValuesByGroupMap = new Map();
-
-
-        // For reference: Comparing the length of Using URLCompressor or not
-        let lengthBeforeURLComp = [];
-        let lengthAfterURLComp = [];
+        // Get the group colors(stroke, opacity, stroke-opacity) encoded as 10|6|5|3|1 chars hex
+        const encodedColorsByGroup = encodeColors(strokesAttrsMap)
+        console.log(encodedColorsByGroup) // Map(5) {'1' => '0', '2' => '0', '3' => '0', '4' => 'e', '5' => 'f'}
 
 
-        for (const [groupId, valueDictAndDiffEncoded] of mergedDictAndDiffEncodedMapByGroup) {
-            //console.log('groupId: ', groupId) // 000, fff
-            //console.log('valueDictAndDiffEncoded: ', valueDictAndDiffEncoded) // lblckwkt ..., ktlcko ...
-            //console.log('widthCountEncodedMapByGroup.get(groupId): ', widthCountEncodedMapByGroup.get(groupId)) // 21b13z8U5bF3cT2eG1gU, 2b1j
-
-            // Get encoded strokes info that have same color as a key
-            const widthCountEncoded = encodedWidthCountByGroup.get(groupId)
-
-            // Join the [strokes info] and [dict]_[diff] with `-` (hyphen)
-            const widthCountAndDictAndDiff = widthCountEncoded + '-' + valueDictAndDiffEncoded
-            // [widthCount]-[x1:dict]-[x1:diff]-[y1:dict]-[y1:diff]-[x2:dict]-[x2:diff]-[y2:dict]_[y2:diff]
-            //console.log(`${groupId} \t | Before URLCompressor: `, widthCountAndDictAndDiff.length)
-
-            // Compress with URLCompressor
-            const widthCountAndDictAndDiffURLCompressed = URLCompressor.compress(widthCountAndDictAndDiff)
-            //console.log(`${groupId} \t | After URLCompressor:  `, widthCountAndDictAndDiffURLCompressed.length)
+        // Choose smaller one between URLComp applied or not, for each group
+        const optimizedEncodedStrokesByGroup = applyUrlCompIfEffective(
+            encodedDvalByGroup,
+            encodedWidthCountByGroup,
+            encodedColorsByGroup,
+            'base0to52-enc',
+            baseXNumber
+        )
+        console.log('optimizedEncodedStrokesByGroup: ', optimizedEncodedStrokesByGroup)
+        //  Map(5) {'1' => '0=129CaIjMCzLAFox3gEVYTdnymbAmwP-UWDCnew3h-Aqsd6rQsPf7nuc97B-Tyl896LIItSqsH-0_igZRCKY265Ta0zzD8-axd0B3NgagFJ2rRrUWcULFyn1IwBi', '2' => '0=129zi ...
 
 
-            // Judge the URLCompressor should be applied or not
-            const applyURLCompressorOrNotByGroup = compareLengthOfString(groupId, widthCountAndDictAndDiff, widthCountAndDictAndDiffURLCompressed)
 
-            // Add 2 chars prefix to smaller size one
-            const strokesValuesWithPrefixByGroup = addEncMethodPrefix2Chars(widthCountAndDictAndDiff, widthCountAndDictAndDiffURLCompressed, applyURLCompressorOrNotByGroup, baseXNumber)
+        // Store the smallest for each group
 
-            // Add color key to format as url params
-            const strokesValuesJoinedAsURLParamsByGroup = groupId + '=' + strokesValuesWithPrefixByGroup
-
-            // Push to array to store whole color stroke groups
-            lengthAndStringArray = [strokesValuesJoinedAsURLParamsByGroup.length, strokesValuesJoinedAsURLParamsByGroup]
-            strokesValuesByGroupMap.set(groupId, lengthAndStringArray)
-
-
-            // For reference: Count the non dynamic compressioned strokes values length
-
-            // Join the hex color code (key) and encoded strokes values (value) with `=` (equal)
-            const joinedAsURLParamsBeforeURLComp = groupId + '=' + widthCountAndDictAndDiff
-            const joinedAsURLParamsAfterURLComp = groupId + '=' + widthCountAndDictAndDiffURLCompressed
-
-            // Push to the array for whole colors, `+ 2` for encode methods prefix length
-            lengthBeforeURLComp.push(joinedAsURLParamsBeforeURLComp.length + 2)
-            lengthAfterURLComp.push(joinedAsURLParamsAfterURLComp.length + 2)
-
-            lengthBeforeAndAfterURLComp.set(`${baseXNumber}-beforeAndAfterURLComp`, [lengthBeforeURLComp, lengthAfterURLComp])
-
-        } // End of for (const [groupId, valueDictAndDiffEncoded] of mergedDictAndDiffEncodedMapByGroup) {
-        //console.log('strokesValuesByGroupMap: ', strokesValuesByGroupMap)
-        // Map { 000 → (2) […], fff → (2) […] }
-
-
-        // Function to add the encoding methods prefix
-
-        // 1st char indicates URLCompressor applied (1) or not (0)
-        // 2nd char indicates What number of BaseX using for strokes diff encoding, that is base52 encoded.
-        // 2nd char is same value if URLComp applied or not.
-
-        function addEncMethodPrefix2Chars(strokesValuesBeforeComp, strokesValuesAfterComp, applyURLCompressorOrNot, baseXNumber) {
-            const baseXNumberEncodedViaBase52 = base52Encode(baseXNumber)
-
-            if (applyURLCompressorOrNot === true) {
-                // Set the encoding methods param as prefix for strokes values
-                return strokesValuesWithEncMethodsPrefix = '1' + baseXNumberEncodedViaBase52 + strokesValuesAfterComp
-            } else {
-                // Set the encoding methods param as prefix for strokes values
-                return strokesValuesWithEncMethodsPrefix = '0' + baseXNumberEncodedViaBase52 + strokesValuesBeforeComp
-            }
+        // For first loop, set whole group result value into map
+        if (maxDictSize === maxDictSizeStartAt) {
+            //console.log('maxDictSize in first loop: ', maxDictSize) // 0
+            currentSmallestByGroup = optimizedEncodedStrokesByGroup
         }
-        lengthByBaseXNumber.set(baseXNumber, strokesValuesByGroupMap)
+
+        function storeSmaller(encodeStrByGroup) {
+            for (let [groupId, encodedStr] of encodeStrByGroup) {
+                if (encodedStr.length < currentSmallestByGroup.get(groupId).length) {
+                    // これまでよりも 今回の方がサイズが 小さければ 値を更新する
+                    currentSmallestByGroup.set(groupId, encodedStr)
+                }
+                // これまでよりも 今回の方がサイズが 同じか より大きければ 何もしない
+            }
+            return currentSmallestByGroup
+        }
+        currentSmallestByGroup = storeSmaller(optimizedEncodedStrokesByGroup)
+
 
     } //End of Loop for every baseX values: [0-52]
 
 
-
-
-    // The whole baseX and colors results
-
-    console.log('lengthByBaseXNumber: ', lengthByBaseXNumber)
-    // Map(53) { 52 → Map(2), 51 → Map(2), 50 → Map(2), 49 → Map(2), 48 → Map(2), 47 → Map(2), 46 → Map(2), 45 → Map(2), 44 → Map(2), 43 → Map(2), … }
-
-    // `lengthByBaseXNumber` contains whole baseXNumber looped results like below.
-    // For url param string, smaller one (URLComp or not) was chosen indivisually about each color.
-    //   Key  : BaseXNumber (size: 53)
-    //   Value: Map()
-    //   e.g.
-    //   Key  : 52
-    //   Value: Map()
-    //            Key  : color code (size: number of colors, e.g. '2' for 000 and fff)
-    //            Value: Array[] [ Number: smaller length (URLComp or not), String: encoded string ]
-    //            e.g.
-    //            Key  : 000
-    //            Value: [ 2811, "000=1ba9_eLsi ... 3P0pg7" ]
-    //            Key  : fff
-    //            Value: [ 318, ""fff=1ba9wi ... WDhaxt-LN" ]
-
-
-
-    // Extract the smallest length combination from whole baseX[0-52] encoding results
-
-    // Get whole color string as array
-
-    let colorKeys = [];
-    for (strokesByGroup of lengthByBaseXNumber.values()) {
-        // keys()メソッドでキーだけを配列で取得
-        colorKeys = [...strokesByGroup.keys()]
-        //console.log('colorKeys; ', colorKeys) // Array [ "000", "fff" ]
-    }
-
-    // Choose smallest strings for each color
-
-    const smallestStringsByGroup = new Map();
-    for (color of colorKeys) {
-        let smallestLength = 9999;
-        for (strokesByGroup of lengthByBaseXNumber.values()) {
-            //console.log(strokesByGroup.get(color))
-            // Array [ 2811, "000=1ba9_eLs ... ]
-            //console.log(strokesByGroup.get(color)[0])
-            // 2811, 2758, ...
-            // 318, 314, ...
-
-            const currentLength = strokesByGroup.get(color)[0]
-
-            if (smallestLength > currentLength) {
-                smallestStringsByGroup.set(color, strokesByGroup.get(color)[1]) // Set the current smallest strings
-                smallestLength = strokesByGroup.get(color)[0] // Set the smallest number for next time comparing
-            }
-        }
-    }
-    console.log('smallestStringsByGroup: ', smallestStringsByGroup)
-    // Map { 000 → "000=1D9_eL ... qJwU8", fff → "fff=1Y9w ... pDjwpqm6" }
+    // Result
+    console.log('currentSmallestByGroup: ', currentSmallestByGroup)
 
     // Whole color strings joined with `&`
-    const wholeGroupStrJoined = joinWholeColorStr(smallestStringsByGroup)
-    console.log('wholeGroupStrJoined: ', wholeGroupStrJoined)
-    // 1=1X9CaIjMCzLAFox3gEVYTdnymbAmwP-UWDCnew3h-Aqsd6rQsPf7nuc97B-Tyl896LIItSqsH-0_igZRCKY265Ta0zzD8-axd0B3NgagFJ2rRrUWcULFyn1IwB&2=1V9z
+    const smallestJoined = joinWholeColorStr(currentSmallestByGroup)
 
     // Output to textarea
-    outputToTextarea(wholeGroupStrJoined, 'textarea-strokes-values-encoded')
+    outputToTextarea(smallestJoined, 'textarea-strokes-values-encoded')
 
     // Show the size of result in html and console
-    showStringSize('Strokes Values', wholeGroupStrJoined, 'encoded-strokes-values-size')
+    showStringSize('Strokes Values', smallestJoined, 'encoded-strokes-values-size')
 
     // Show the processing time in html and console
     const endTime = performance.now()
@@ -418,35 +312,25 @@ function base0to52Enc() {
     showProcessingTime('base0to52Enc()', elapsedTime, 'encoded-strokes-values-time')
 
 
-
-    // For reference:
+    // Get final stats of currentSmallestByGroup
+    const groupKeys = [...currentSmallestByGroup.keys()]
+    const encodedValues = [...currentSmallestByGroup.values()]
+    const flagChars = encodedValues.map((value) => value.split('=')[1].slice(0, 3)) // `=`の直後の 先頭から3文字目までの部分を切り出し
+    const compressionMethodChosen = flagChars.map((value) => value[0])               // 1文字目
+    //const encodeMethodChosen = flagChars.map((value) => value[1])               // 2文字目
+    const baseXNumberChosen = flagChars.map((value) => base52Decode(value[2])) // 3文字目
 
     // Show the encode methods list
+    console.log('////////////////////////')
 
-    const colors = [...smallestStringsByGroup.keys()]
-    const valuesStr = [...smallestStringsByGroup.values()]
-    const encodedString = valuesStr.map((value) => value.split('=')[1].slice(0, 2)) // `=`の直後の 先頭から2文字目までの部分を切り出し
-    const urlcompOrNotChosen = encodedString.map((value) => value[0])              // 1文字目
-    const baseXNumberChosen = encodedString.map((value) => base52Decode(value[1])) // 2文字目
+    console.log('groupKeys: ', groupKeys) //  ['1', '2', '3', '4', '5']
+    //console.log('encodedValues: ', encodedValues) // (5) ['0=10Z9CaIjM0hFnr79M-RQycZuCGl9FiVAIsPJkb1_yGO0qTXC…kMPwqfZoKHnlHcFOXIt17RN8nWJB1RS3s_csHGL423JjS_SwK', '0=10i9 ...
+    //console.log('flagCharsList: ', flagCharsList) // (5) ['10Z', '10i', '10X', '10b', '10Z']
+    console.log('compressionMethodChosen (None[0], URLCompressor[1]): ', compressionMethodChosen) // (5) ['1', '1', '1', '1', '1']
+    //console.log('encodeMethodChosenList: ', encodeMethodChosenList) // (5) ['0', '0', '0', '0', '0']
+    console.log('baseXNumberChosen: ', baseXNumberChosen) // (5) [51, 8, 49, 1, 51]
 
-    for (i in colors) {
-        console.log(`${colors[i]}:\tURLCompresor = ${urlcompOrNotChosen[i]}, BaseX = ${baseXNumberChosen[i]}`)
-    }
-    // 000:	URLCompresor = 1, BaseX = 30
-    // fff:	URLCompresor = 1, BaseX = 49
+    console.log('////////////////////////')
 
 
-    // Show the length of before and after URLComp for every baseX and color
-
-    console.log('lengthBeforeAndAfterURLComp: ', lengthBeforeAndAfterURLComp)
-    // Map(53) { "52-beforeAndAfterURLComp" → (2) […], "51-beforeAndAfterURLComp" → (2) […], ...
-
-    for ([key, value] of lengthBeforeAndAfterURLComp) {
-        console.log(key, value.flat())
-    }
-    // 52-beforeAndAfterURLComp Array(4) [ 3239, 351, 2808, 315 ]
-    // 51-beforeAndAfterURLComp Array(4) [ 3120, 339, 2756, 312 ]
-    // ...
-    // 1-beforeAndAfterURLComp Array(4) [ 2891, 379, 2705, 382 ]
-    // 0-beforeAndAfterURLComp Array(4) [ 2885, 379, 2702, 382 ]
 }

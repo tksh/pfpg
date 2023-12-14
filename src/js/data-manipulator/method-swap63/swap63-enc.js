@@ -52,7 +52,7 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
     //console.log(encodedWidthCountByGroup.get("1")) // 3t
 
 
-    // Get the group colors(stroke, opacity, stroke-opacity) encoded as 3 or 5 or 6 or 10 chars hex
+    // Get the group colors(stroke, opacity, stroke-opacity) encoded as 10|6|5|3|1 chars hex
     const encodedColorsByGroup = encodeColors(strokesAttrsMap)
     //console.log(encodedColorsByGroup) // Map(5) {'1' => '000', '2' => '000', '3' => '000', '4' => 'eee', '5' => 'fff'}
 
@@ -62,7 +62,10 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
     const optimizedEncodedStrokesByGroup = applyUrlCompIfEffective(
         encodedDvalByGroup,
         encodedWidthCountByGroup,
-        encodedColorsByGroup)
+        encodedColorsByGroup,
+        'swap63-enc',
+        null                        // value for 3rd char, swap63-enc needs no 3rd char to encode
+        )
     //console.log('optimizedEncodedStrokesByGroup: ', optimizedEncodedStrokesByGroup)
     // Map { 000 → (2) […] }
     //     0: 000 → Array [ 400, "000=13xbqDCEgLL7jANz5XKXua ... LiAh5KEXgVutC" ]

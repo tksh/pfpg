@@ -36,15 +36,18 @@ function bigintEnc() {
     // Get the width count (list_of_width and count_by_width) encoded as a string
     const encodedWidthCountByGroup = encodeWidthCount()
 
-    // Get the group colors(stroke, opacity, stroke-opacity) encoded as 3 or 5 or 6 or 10 chars hex
+    // Get the group colors(stroke, opacity, stroke-opacity) encoded as 10|6|5|3|1 chars hex
     const encodedColorsByGroup = encodeColors(strokesAttrsMap)
-    //console.log(encodedColorsByGroup) // Map(5) {'1' => '000', '2' => '000', '3' => '000', '4' => 'eee', '5' => 'fff'}
+    console.log(encodedColorsByGroup) // Map(5) {'1' => '0', '2' => '0', '3' => '0', '4' => 'e', '5' => 'f'}
 
     // Choose smaller one between URLComp applied or not, for each group
     const optimizedEncodedStrokesByGroup = applyUrlCompIfEffective(
         encodedDvalByGroup,
         encodedWidthCountByGroup,
-        encodedColorsByGroup)
+        encodedColorsByGroup,
+        'bigint-enc',
+        digits_of_chunk
+        )
     //console.log('optimizedEncodedStrokesByGroup: ', optimizedEncodedStrokesByGroup)
     // Map(5) {'1' => '0=129CaJGsAQK33q3FDaoQNuZs6u8XQW_EYegViBcDQ0gxtk-YqavrFw0V3KXggctKtnLfj_rl3ZzTzitfvmVp-Wz09Um3k4e8YyZ9kGHG0aT', '2' => '0=129ziJH ...
 
