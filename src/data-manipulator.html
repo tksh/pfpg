@@ -45,6 +45,7 @@
 
     <!-- Processing for Map object -->
     <script src="./js/data-manipulator/processing-for-map-obj/join-with-and.js"></script>
+    <script src="./js/data-manipulator/processing-for-map-obj/best-mix-enc.js"></script>
 
     <!-- Bruteforce52 encoding method -->
     <script src="./js/data-manipulator/method-bruteforce52/bruteforce52-enc.js"></script>
@@ -520,7 +521,18 @@
 
         <button onclick="swap63Enc()">Encode via <b>swap63Enc()</b></button>
         <p>For: <b>UInt5Portray ONLY</b> (grid size: 31 x 31)<br>With: Strokes Attributes (<b>relative</b> d values) and Aggregated Data for Compression (list_of_width and count_by_width)</p>
+        <br />
 
+
+        <h3>Try Multipul Encoding Methods and Get Smallest Result By Group</h3>
+
+        <button onclick="bestMixFrom3Methods()">Encode via <b>bestMixFrom3Methods()</b></button>
+        <p>For: UInt<b>[5-14]</b>Portray<br>Methods: bruteforce52Enc(), bigint64Enc() and <b>swap63Enc()</b></p>
+        <br />
+
+        <button onclick="bestMixFrom2Methods()">Encode via <b>bestMixFrom2Methods()</b></button>
+        <p>For: UInt<b>[6-14]</b>Portray<br>Methods: bruteforce52Enc(), bigint64Enc()</p>
+        <br />
 
         <!-- Textarea to output the strokes values encoded -->
         <textarea id="textarea-strokes-values-encoded" class="height-1" placeholder="Strokes Values encoded"></textarea>

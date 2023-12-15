@@ -22,7 +22,7 @@ function showDetailsByGroup(encodingMethodName, nameOfInput, encodedStrByGroupMa
     // Get the stats of encodedStrByGroupMap
     const keys = [...encodedStrByGroupMap.keys()]
     const values = [...encodedStrByGroupMap.values()]
-    const lengthOfValues = values.map((value) => value.length)                    // `=`までの部分を切り出し
+    const lengthOfValues = values.map((value) => value.length)                        // `=`までの部分を切り出し
     const groupColors = values.map((value) => value.split('=')[0])                    // `=`までの部分を切り出し
     const threeCharsAsFlag = values.map((value) => value.split('=')[1].slice(0, 3))   // `=`の直後から3文字目までの部分を切り出し
     const flag1CompressionMethod = threeCharsAsFlag.map((value) => value[0])          // 1文字目
@@ -31,10 +31,10 @@ function showDetailsByGroup(encodingMethodName, nameOfInput, encodedStrByGroupMa
     let flag3ConfigForEnc
     let flag3DescText
     if (encodingMethodName === 'bruteforce52-enc') {
-        flag3ConfigForEnc = threeCharsAsFlag.map((value) => base52Decode(value[2])) // 3文字目
+        flag3ConfigForEnc = threeCharsAsFlag.map((value) => base52Decode(value[2])) // 3文字目を Base52デコードして 表示
         flag3DescText = 'Base X number'
     } else {
-        flag3ConfigForEnc = threeCharsAsFlag.map((value) => value[2])        // 3文字目
+        flag3ConfigForEnc = threeCharsAsFlag.map((value) => value[2])               // 3文字目を そのまま 表示
             if (encodingMethodName === 'bigint64-enc') {
                 flag3DescText = 'Chunk size to zero padded'
             } else if (encodingMethodName === 'swap63-enc') {
