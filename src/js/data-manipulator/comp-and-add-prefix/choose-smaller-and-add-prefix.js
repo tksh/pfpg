@@ -1,7 +1,7 @@
 // 1. Choose smaller size string, compressed or not
 // 2. Add the prefix chars into chosen one
 
-function chooseSmallerAndAddPrefix(applyCompOrNotBoolean, compressedStr, rawStr, compMethodName, valueFor3rdChar) {
+function chooseSmallerAndAddPrefix(applyCompOrNotBoolean, compressedStr, rawStr, encodingMethodName, valueFor3rdChar) {
     // Result string
     let smallerStrWithPrefix = ""
 
@@ -10,13 +10,13 @@ function chooseSmallerAndAddPrefix(applyCompOrNotBoolean, compressedStr, rawStr,
     let numOf3rdChar = 0
 
     // Change the flags values as each encode method specific
-    if (compMethodName === 'swap63-enc') {
+    if (encodingMethodName === 'swap63-enc') {
         numOf2ndChar = 2
         numOf3rdChar = null
-    } else if (compMethodName === 'bigint64-enc') {
+    } else if (encodingMethodName === 'bigint64-enc') {
         numOf2ndChar = 1
         numOf3rdChar = valueFor3rdChar
-    } else if (compMethodName === 'bruteforce52-enc') {
+    } else if (encodingMethodName === 'bruteforce52-enc') {
         numOf2ndChar = 0
         numOf3rdChar = valueFor3rdChar
     }

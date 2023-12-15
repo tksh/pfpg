@@ -57,7 +57,6 @@ function bigint64Enc() {
     const wholeGroupStrJoined = joinWithAnd(optimizedEncodedStrokesByGroup)
 
 
-
     // Output to textarea
     outputToTextarea(wholeGroupStrJoined, 'textarea-strokes-values-encoded')
     // 0=129CaJGsAQK33q3FDaoQNuZs6u8XQW_EYegViBcDQ0gxtk-YqavrFw0V3KXggctKtnLfj_rl3ZzTzitfvmVp-Wz09Um3k4e8YyZ9kGHG0aT&0=129ziJH ...
@@ -69,6 +68,9 @@ function bigint64Enc() {
     const endTime = performance.now()
     const elapsedTime = Math.floor(endTime - startTime)
     showProcessingTime('bigint64Enc()', elapsedTime, 'encoded-strokes-values-time')
+
+    // Show the encoding result of each group in console
+    showDetailsByGroup('bigint64-enc', 'Strokes Values', optimizedEncodedStrokesByGroup)
 }
 
 

@@ -1,7 +1,7 @@
 // Add the chars for flags that indicates encoding method settings
 
 // 1st char(Compression-method):
-//     [0] Raw
+//     [0] None (uncompressed)
 //     [1] URLCompressor
 // 2nd char(Encoding-methods):
 //     [0] bruteforce52-enc

@@ -2,7 +2,7 @@ function applyUrlCompIfEffective(
     encodedDvalByGroup,
     encodedWidthCountByGroup,
     encodedColorsByGroup,
-    compMethodName,
+    encodingMethodName,
     valueFor3rdChar) {
 
     // Encoded string structure: [color]=[1stFlagChar][2ndFlagChar]([3rdFlagChar])[widthCount]-[dval]
@@ -40,7 +40,7 @@ function applyUrlCompIfEffective(
             applyURLCompressorOrNot,        // Boolean of apply the compression or not
             widthCountAndDvalURLCompressed, // Compressed string
             widthCountAndDval,              // Raw string
-            compMethodName,                 // Encode method name
+            encodingMethodName,                 // Encode method name
             valueFor3rdChar                 // Value for 3rd char
         )
         //console.log('smallerStrWithPrefix: ', smallerStrWithPrefix)

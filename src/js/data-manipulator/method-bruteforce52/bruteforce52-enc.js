@@ -292,7 +292,7 @@ function bruteforce52Enc() {
     } //End of Loop for every baseX values: [0-52]
 
 
-    // Result
+    // Result map
     console.log('currentSmallestByGroup: ', currentSmallestByGroup)
 
     // Whole group strings joined with `&`
@@ -309,27 +309,8 @@ function bruteforce52Enc() {
     const elapsedTime = Math.floor(endTime - startTime)
     showProcessingTime('bruteforce52Enc()', elapsedTime, 'encoded-strokes-values-time')
 
-
-    // Get final stats of currentSmallestByGroup
-    const groupKeys = [...currentSmallestByGroup.keys()]
-    const encodedValues = [...currentSmallestByGroup.values()]
-    const groupColors = encodedValues.map((value) => value.split('=')[0]) // `=`までの部分を切り出し
-    const threeCharsAsFlag = encodedValues.map((value) => value.split('=')[1].slice(0, 3)) // `=`の直後から3文字目までの部分を切り出し
-    const compressionMethodChosen = threeCharsAsFlag.map((value) => value[0])              // 1文字目
-    const encodeMethodChosen = threeCharsAsFlag.map((value) => value[1])                   // 2文字目
-    const baseXNumberChosen = threeCharsAsFlag.map((value) => base52Decode(value[2]))      // 3文字目
-
     // Show the encoding result of each group in console
-    console.log('//////////////////////// encoding result of each group ////////////////////////')
-
-    console.log('groupKeys: ', groupKeys) // (5) ['1', '2', '3', '4', '5']
-    console.log('groupColors: ', groupColors) // (5) ['0', '0', '0', 'e', 'f']
-    //console.log('encodedValues: ', encodedValues) // (5) ['0=10Z9CaIjM0hFnr79M-RQycZuCGl9FiVAIsPJkb1_yGO0qTXC…kMPwqfZoKHnlHcFOXIt17RN8nWJB1RS3s_csHGL423JjS_SwK', '0=10i9 ...
-    console.log('threeCharsAsFlag: ', threeCharsAsFlag) // (5) ['10Z', '10i', '10X', '10b', '10Z']
-    console.log('compressionMethodChosen (None[0], URLCompressor[1]): ', compressionMethodChosen) // (5) ['1', '1', '1', '1', '1']
-    console.log('encodeMethodChosen (bruteforce52-enc[0], bigint64-enc[1], swap63-enc[2]): ', encodeMethodChosen) // (5) ['0', '0', '0', '0', '0']
-    console.log('baseXNumberChosen: ', baseXNumberChosen) // (5) [51, 8, 49, 1, 51]
-
+    showDetailsByGroup('bruteforce52-enc', 'Strokes Values', currentSmallestByGroup)
 }
 
 
