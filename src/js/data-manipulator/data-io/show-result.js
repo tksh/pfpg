@@ -22,6 +22,7 @@ function showDetailsByGroup(encodingMethodName, nameOfInput, encodedStrByGroupMa
     // Get the stats of encodedStrByGroupMap
     const keys = [...encodedStrByGroupMap.keys()]
     const values = [...encodedStrByGroupMap.values()]
+    const lengthOfValues = values.map((value) => value.length)                    // `=`までの部分を切り出し
     const groupColors = values.map((value) => value.split('=')[0])                    // `=`までの部分を切り出し
     const threeCharsAsFlag = values.map((value) => value.split('=')[1].slice(0, 3))   // `=`の直後から3文字目までの部分を切り出し
     const flag1CompressionMethod = threeCharsAsFlag.map((value) => value[0])          // 1文字目
@@ -45,6 +46,7 @@ function showDetailsByGroup(encodingMethodName, nameOfInput, encodedStrByGroupMa
     console.log(`//////////////////////// Result of ${nameOfInput} encoding details by group ////////////////////////`)
     console.log('Group key numbers: ', keys) // (5) ['1', '2', '3', '4', '5']
     console.log('Group colors encoded: ', groupColors) // (5) ['0', '0', '0', 'e', 'f']
+    console.log('Length of encoded strings: ', lengthOfValues)
     //console.log('values: ', values) // (5) ['0=10Z9CaIjM0hFnr79M-RQycZuCGl9FiVAIsPJkb1_yGO0qTXC…kMPwqfZoKHnlHcFOXIt17RN8nWJB1RS3s_csHGL423JjS_SwK', '0=10i9 ...
     console.log(' 3 chars as flag: ', threeCharsAsFlag) // (5) ['10Z', '10i', '10X', '10b', '10Z']
     console.log('flag 1, Compression method (None[0], URLCompressor[1]): ', flag1CompressionMethod) // (5) ['1', '1', '1', '1', '1']
