@@ -1,18 +1,25 @@
 // Add the chars for flags that indicates encoding method settings
 
-// 1st char(Encode-type-A): [0] Raw       / [1] URLCompressor
-// 2nd char(Encode-type-B): [0] baseX-enc / [1] bigint64-enc / [2] swap63-enc
-// 3rd char(Config value for Encode-type-B): Base52 encoded char
-//                                           For [0] baseX-enc  => Base X number
-//                                           For [1] bigint64-enc => X digits to split into each chunks
-//                                           For [2] swap63-enc => Nothing (Encoded values start at 3rd char)]
+// 1st char(Compression-method):
+//     [0] Raw
+//     [1] URLCompressor
+// 2nd char(Encoding-methods):
+//     [0] bruteforce52-enc
+//     [1] bigint64-enc
+//     [2] swap63-enc
+// 3rd char(Config value for Encoding-methods):
+//     [char or number]:
+//         [0] bruteforce52-enc => Base X number
+//         [1] bigint64-enc     => X digits to split into each chunks
+//         [2] swap63-enc       => 'n' ('n' means null, skip it when decoding.)
+
 function addPrefixAsFlags(inputStr, numOf1stChar, numOf2ndChar, numOf3rdChar) {
     let strWithFlag = inputStr
 
     // Add 3rd char
     if (numOf3rdChar === null) {
         // for swap63-enc
-        console.log("The encode method now using is Swap63, Not need to add any char as 3rd flag. Encoded value starts at 3rd char")
+        strWithFlag = 'n' + strWithFlag
 
     } else if (numOf2ndChar === 0) {
         // for bruteforce52-enc
