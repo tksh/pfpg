@@ -6,11 +6,11 @@ function bestMixFrom3Methods() {
 
     // Compare and get the smallest one by group
     const firstCompareResult = storeSmaller(bruteforce52Map, bigint64Map)
-    const bestMixResult = storeSmaller(firstCompareResult, swap63Map)
+    const bestMixResultMap = storeSmaller(firstCompareResult, swap63Map)
 
 
     // Whole group strings joined with `&`
-    const smallestJoined = joinWithAnd(bestMixResult)
+    const smallestJoined = joinWithAnd(bestMixResultMap)
 
     // Output to textarea
     outputToTextarea(smallestJoined, 'textarea-strokes-values-encoded')
@@ -18,6 +18,8 @@ function bestMixFrom3Methods() {
     // Show the size of result in html and console
     showStringSize('Strokes Values (Best mix)', smallestJoined, 'encoded-strokes-values-size')
 
+    // Show the details of encoding result by group in console
+    showDetailsByGroup('Strokes Values', bestMixResultMap)
 }
 
 
@@ -27,11 +29,11 @@ function bestMixFrom2sMethods() {
     const bigint64Map = bigint64Enc()
 
     // Compare and get the smallest one by group
-    const bestMixResult = storeSmaller(bruteforce52Map, bigint64Map)
+    const bestMixResultMap = storeSmaller(bruteforce52Map, bigint64Map)
 
 
     // Whole group strings joined with `&`
-    const smallestJoined = joinWithAnd(bestMixResult)
+    const smallestJoined = joinWithAnd(bestMixResultMap)
 
     // Output to textarea
     outputToTextarea(smallestJoined, 'textarea-strokes-values-encoded')
@@ -39,4 +41,6 @@ function bestMixFrom2sMethods() {
     // Show the size of result in html and console
     showStringSize('Strokes Values (Best mix)', smallestJoined, 'encoded-strokes-values-size')
 
+    // Show the details of encoding result by group in console
+    showDetailsByGroup('Strokes Values', bestMixResultMap)
 }

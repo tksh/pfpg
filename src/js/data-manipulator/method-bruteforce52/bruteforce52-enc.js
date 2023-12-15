@@ -310,7 +310,7 @@ function bruteforce52Enc() {
     showProcessingTime('bruteforce52Enc()', elapsedTime, 'encoded-strokes-values-time')
 
     // Show the encoding result of each group in console
-    showDetailsByGroup('bruteforce52-enc', 'Strokes Values', currentSmallestByGroup)
+    showDetailsByGroup('Strokes Values', currentSmallestByGroup)
 
     return currentSmallestByGroup
 }

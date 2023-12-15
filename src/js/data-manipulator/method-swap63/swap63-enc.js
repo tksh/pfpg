@@ -90,7 +90,7 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
     showProcessingTime('swap63Enc()', elapsedTime, 'encoded-strokes-values-time')
 
     // Show the encoding result of each group in console
-    showDetailsByGroup('swap63-enc', 'Strokes Values', optimizedEncodedStrokesByGroup)
+    showDetailsByGroup('Strokes Values', optimizedEncodedStrokesByGroup)
 
     return optimizedEncodedStrokesByGroup
 }

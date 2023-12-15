@@ -70,7 +70,7 @@ function bigint64Enc() {
     showProcessingTime('bigint64Enc()', elapsedTime, 'encoded-strokes-values-time')
 
     // Show the encoding result of each group in console
-    showDetailsByGroup('bigint64-enc', 'Strokes Values', optimizedEncodedStrokesByGroup)
+    showDetailsByGroup('Strokes Values', optimizedEncodedStrokesByGroup)
 
     return optimizedEncodedStrokesByGroup
 }
