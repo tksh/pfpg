@@ -38,6 +38,7 @@ button,                         /* <button> */
 ::file-selector-button,         /* <input type="file"> */
 ::-webkit-file-upload-button {  /* <input type="file"> */
     padding: .7rem;
+    min-height: 4rem;
 }
 
 .height-0 {

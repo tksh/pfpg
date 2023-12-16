@@ -549,7 +549,7 @@
             <h3>3. ⬇ Finished URL Params:</h3>
             <button onclick="mergeArtworkDataAndStrokesValues()">Merge via <b>mergeArtworkDataAndStrokesValues()</b></button>
             <textarea id="textarea-encoded-url-params" class="height-2" placeholder="Encoded URL Params"></textarea>
-            <button onclick="copyTextarea('textarea-encoded-url-params')">Copy to clipboard</button>
+            <button id="button-encoded-url-params" onclick="copyTextarea('textarea-encoded-url-params', 'button-encoded-url-params')">Copy to clipboard</button>
             <p id="encoded-url-params-size"></p>
 
 
@@ -560,7 +560,7 @@
 
             <h3>3. ⬇ Decoded SVG String:</h3>
             <textarea id="textarea-decoded-svg" class="height-2" placeholder="If inputed text at address bar includes the url params like /data-manipulator.html?..., Decoding to SVG is automatically starts when page loaded and result text will export here."></textarea>
-            <button onclick="copyTextarea('textarea-decoded-svg')">Copy to clipboard</button>
+            <button id="button-decoded-svg" onclick="copyTextarea('textarea-decoded-svg', 'button-decoded-svg')">Copy to clipboard</button>
             <p id="encoded-size-compare"></p>
 
         </div>

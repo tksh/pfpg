@@ -23,7 +23,7 @@ function bestMixFrom3Methods() {
 }
 
 
-function bestMixFrom2sMethods() {
+function bestMixFrom2Methods() {
     // Read the result of whole encoding methods
     const bruteforce52Map = bruteforce52Enc()
     const bigint64Map = bigint64Enc()
