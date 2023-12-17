@@ -89,6 +89,90 @@ function hex10To6or5or3or1(hex) {
 
 
 // 引数に省略された16進数の文字列を受け取る
+function hexExpandTo10(hex) {
+    // 文字列の長さが 10 ならば そのまま 返す
+    if (hex.length === 10) {
+        return hex;
+        // 文字列の長さが 6 ならば 2種類の透明度を それぞれ ff(1.0) として 返す
+    } else if (hex.length === 6) {
+        return hex + 'ffff'
+    }
+
+    // 文字列の長さが 3 or 5 ならば 各要素を 2回繰り返す
+    // 結果の長さが 6 ならば 2種類の透明度を それぞれ ff(1.0) として 返す
+    else if (hex.length === 3 || hex.length === 5) {
+        // 文字列を1文字ずつ分割して配列にする
+        let chars = hex.split("");
+        // 配列の各要素を2回繰り返して結合する
+        let expanded = chars.map(char => char.repeat(2)).join("");
+        // 結果を返す
+        if (expanded.length === 6) {
+            return expanded + 'ffff'
+        } else { // length = 10
+            return expanded;
+        }
+    }
+
+    // 文字列の長さが 1 ならば 6回繰り返してから
+    // 2種類の透明度を それぞれ ff(1.0) として 返す
+    else if (hex.length === 1) {
+        return hex.repeat(6) + 'ffff'
+    }
+
+    // 文字列の長さが 1,3,5,6,10 以外の場合は error
+    else {
+        return new Error("Invalid hex string");
+    }
+
+}
+
+// Test
+
+// // 1 => 10
+// console.log(hexExpandTo10("a"));          // "aaaaaaffff"
+// // 3 => 10
+// console.log(hexExpandTo10("123"));        // "112233ffff"
+// // 5 => 10
+// console.log(hexExpandTo10("abcde"));      // "aabbccddee"
+// // 6 => 10
+// console.log(hexExpandTo10("ffffff"));     // ffffffffff
+// // 10 => 10
+// console.log(hexExpandTo10("ffffffeedd")); // ffffffeedd
+// // Invalid
+// console.log(hexExpandTo10("ff"));         // Error: Invalid hex string
+// console.log(hexExpandTo10(""))            // Error: Invalid hex string
+
+
+
+// 10 digits hex string will convert to:
+// [0-5] g_stroke         = 6 digits hex (with '#' prefix),
+// [6-7] g_opacity        = [0-1] number,
+// [8-9] g_stroke-opacity = [0-1] number
+
+// Input : "ffffffffff"
+// Output: group_colors: {g_stroke: '#ffffff', g_opacity: 1, g_stroke-opacity: 1}
+
+function convertColorFrom10Hex(tenDigitsHex) {
+    const groupColors = new Object()
+
+    // Convert
+    const stroke = '#' + tenDigitsHex.slice(0, 6)
+    const opacity = hexToNormalized(tenDigitsHex.slice(6, 8))
+    const strokeOpacity = hexToNormalized(tenDigitsHex.slice(8))
+
+    // Set into Object
+    groupColors["g_stroke"]         = stroke
+    groupColors["g_opacity"]        = opacity
+    groupColors["g_stroke-opacity"] = strokeOpacity
+    return groupColors
+}
+
+
+
+
+
+
+// 引数に省略された16進数の文字列を受け取る
 function expandHex(hex) {
     // 文字列の長さが 6 or 10 ならば そのまま 返す
     if (hex.length === 6 || hex.length === 10) {

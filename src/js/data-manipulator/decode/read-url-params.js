@@ -1,0 +1,94 @@
+readUrlParamsAsMaps()
+function readUrlParamsAsMaps() {
+    // URLSearchParamsオブジェクトを作成
+    const params = new URLSearchParams(window.location.search);
+
+    if (params != 0) { // Do decoding if URL Params exists
+        console.log("test")
+
+        const entries = [...params.entries()]; // entries()メソッドでキーと値のペアを取得
+
+
+        // Get Artwork Data as Map
+        // e.g.: ?202308_001=31x31-9999&
+        const artworkDataMapObj = new Map()
+
+        const artworkParam = entries[0]
+        // (2) ['202308_001', '31x31-9999']
+        // [[Prototype]]: Array(0)
+
+        // Artwork ID
+        const artworkId = artworkParam[0]              // 202308_001
+
+        // Size
+        const gridSize = artworkParam[1].split("-")[0] // 31x31
+        const splitByX = gridSize.split('x')           // (2) ['31', '31']
+        const max = Math.max(...splitByX)              // 255
+        const uintN = getUintN(max)                    // 5 (2 の 何乗か？)
+
+        // Background color
+        const bgColor = artworkParam[1].split("-")[1]  // 9999
+
+
+        // Set into Map
+        artworkDataMapObj.set("artwork_id", artworkId)  // String
+        artworkDataMapObj.set("grid_size", gridSize)    // String
+        artworkDataMapObj.set("uint_n", uintN)          // Number
+        artworkDataMapObj.set("bg_color", bgColor)      // String
+
+        console.log('artworkDataMapObj: ', artworkDataMapObj)
+        // Map(4) {'artwork_id' => '202308_001', 'grid_size' => '31x31', 'uint_n' => 5, 'bg_color' => '9999'}
+
+
+
+        // Get Strokes Values as Map
+        // 2番目([1])以降のストローク情報の key, value を ループで取り出し
+
+        const strokesValuesMapObj = new Map()
+        // key = groupId (seq num)
+        // value = Object[
+        //                "group_colors"  => {
+        //                                 "g_stroke"         => "#000" <String>,
+        //                                 "g_opacity"        => 1 <Number>,
+        //                                 "g_stroke-opacity" => 1 <Number>
+        //                                },
+        //                "three_flags"   => [Char Array],
+        //                widthCount   => {
+        //                                 "list_of_width"  => [Int array],
+        //                                 "count_by_width" => [Int array]
+        //                                },
+        //                encodedDVals => "Encoded_Strings" <String>
+        //               ]
+
+        // const strokesValues = entries[1]
+        // 0=12n9CaKJG9uD ... Uaha
+
+        const groupColors  = new Object()
+        const threeFlags   = []
+        const widthCount   = new Object()
+        const encodedDVals = ''
+
+        const groupIdMap  = new Map()
+        for (let i = 1; i <= entries.length - 1; ++i) { // `1` is first stroke color group
+            const strokeValuesObj = new Object()
+
+            // Group Colors as Object
+            const hex10Chars = hexExpandTo10(entries[i][0])         // 000000ffff
+            const decodedColors = convertColorFrom10Hex(hex10Chars) // Return as Object with 3 elements
+            groupColors["group_colors"] = decodedColors
+            // group_colors: {g_stroke: '#ffffff', g_opacity: 1, g_stroke-opacity: 1}
+
+            // 3 Flags as Array
+            const splitedThreeFlags = entries[i][1].slice(0, 3).split('')   // ['1', '2', 'n']
+            threeFlags["three_flags"] = splitedThreeFlags
+            // three_flags: (3) ['1', '2', 'n']
+
+
+
+
+            groupIdMap.set(i, [groupColors, threeFlags])
+        }
+        console.log("groupIdMap: ", groupIdMap)
+        // return
+    }
+}
