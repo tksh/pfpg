@@ -1,4 +1,5 @@
-// 0から1の範囲に正規化された数値を引数として受け取る関数
+// 0から1の範囲に正規化された数値を引数として受け取り
+// 2桁のHEX文字列として返す関数
 function normalizedToHex(num) {
     // 数値が0から1の範囲にあるかチェックする
     if (num < 0 || num > 1) {
@@ -20,14 +21,3 @@ function normalizedToHex(num) {
 // console.log(normalizedToHex(0.8))  // CC
 // console.log(normalizedToHex(0.01)) // 03
 // console.log(normalizedToHex(0))    // 00
-
-
-function hexToNormalized(hex) {
-    // 16進数を10進数に変換
-    const decimalValue = parseInt(hex, 16);
-    // 0から255の範囲を0から1の範囲に正規化
-    const normalizedValue = decimalValue / 255;
-    // 制度を小数点以下第2位までに調整
-    const normalizedValueFixed = Number(normalizedValue.toFixed(2));
-    return normalizedValueFixed;
-}

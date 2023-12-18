@@ -63,7 +63,7 @@ function readUrlParamsAsMaps() {
 
             // Group Colors as Object
             const hex10Chars = hexExpandTo10(entries[i][0])         // 000000ffff
-            const decodedColorsObj = convertColorFrom10Hex(hex10Chars) // Return as Object with 3 elements
+            const decodedColorsObj = decodeColors(hex10Chars) // Return as Object with 3 elements
             const groupColors = {group_colors: decodedColorsObj}
             // group_colors: {g_stroke: '#ffffff', g_opacity: 1, g_stroke-opacity: 1}
 
