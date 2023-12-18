@@ -1,4 +1,3 @@
-readUrlParamsAsMaps()
 function readUrlParamsAsMaps() {
     // URLSearchParamsオブジェクトを作成
     const params = new URLSearchParams(window.location.search);
@@ -52,43 +51,51 @@ function readUrlParamsAsMaps() {
         //                                 "g_opacity"        => 1 <Number>,
         //                                 "g_stroke-opacity" => 1 <Number>
         //                                },
-        //                "three_flags"   => [Char Array],
-        //                widthCount   => {
-        //                                 "list_of_width"  => [Int array],
-        //                                 "count_by_width" => [Int array]
+        //                three_flags   => [Three Chars Array],
+        //                width_count   => {
+        //                                 "list_of_width" <Number> => "count_by_width" <Number> ...,
         //                                },
-        //                encodedDVals => "Encoded_Strings" <String>
+        //                encoded_dvals => "Encoded_Strings" <String>
         //               ]
 
         // const strokesValues = entries[1]
         // 0=12n9CaKJG9uD ... Uaha
 
-        const groupColors  = new Object()
-        const threeFlags   = []
-        const widthCount   = new Object()
-        const encodedDVals = ''
-
-        const groupIdMap  = new Map()
+        const mapByGroupId  = new Map()
         for (let i = 1; i <= entries.length - 1; ++i) { // `1` is first stroke color group
             const strokeValuesObj = new Object()
 
             // Group Colors as Object
             const hex10Chars = hexExpandTo10(entries[i][0])         // 000000ffff
-            const decodedColors = convertColorFrom10Hex(hex10Chars) // Return as Object with 3 elements
-            groupColors["group_colors"] = decodedColors
+            const decodedColorsObj = convertColorFrom10Hex(hex10Chars) // Return as Object with 3 elements
+            const groupColors = {group_colors: decodedColorsObj}
             // group_colors: {g_stroke: '#ffffff', g_opacity: 1, g_stroke-opacity: 1}
 
             // 3 Flags as Array
             const splitedThreeFlags = entries[i][1].slice(0, 3).split('')   // ['1', '2', 'n']
-            threeFlags["three_flags"] = splitedThreeFlags
+            const threeFlags = {three_flags: splitedThreeFlags}
             // three_flags: (3) ['1', '2', 'n']
 
+            // Width Count as Map
+            let strokesValues = entries[i][1].slice(3)
+            if (Number(splitedThreeFlags[0]) === 1) { // Decomp if URLCompressor applied
+                strokesValues = URLCompressor.expand(strokesValues)
+            }
+            const encodedWidthCount = strokesValues.split('-')[0]
+            const decodedWidthCount = decodeWidthCount(encodedWidthCount)
+            const widthCount = {width_count: decodedWidthCount}
+            // width_count: Map(1) {1 => 7}
+
+            // Encoded d values as String
+            const encodedDvalsStr = strokesValues.split('-')[1]
+            const encodedDVals = {encoded_dvals: encodedDvalsStr}
+            // encoded_dvals: 'HuxwxxuQcuywAwvtutuxxxyxywww'
 
 
-
-            groupIdMap.set(i, [groupColors, threeFlags])
+            // Set into Map by group ID
+            mapByGroupId.set(i, [groupColors, threeFlags, widthCount, encodedDVals])
         }
-        console.log("groupIdMap: ", groupIdMap)
-        // return
-    }
+        return mapByGroupId
+
+    } // End of 'if (params != 0) {'
 }
