@@ -8,6 +8,7 @@ function readUrlParamsAsMaps() {
         const entries = [...params.entries()]; // entries()メソッドでキーと値のペアを取得
 
 
+
         // Get Artwork Data as Map
         // e.g.: ?202308_001=31x31-9999&
         const artworkDataMapObj = new Map()
@@ -35,7 +36,7 @@ function readUrlParamsAsMaps() {
         artworkDataMapObj.set("uint_n", uintN)          // Number
         artworkDataMapObj.set("bg_color", bgColor)      // String
 
-        console.log('artworkDataMapObj: ', artworkDataMapObj)
+        //console.log('artworkDataMapObj: ', artworkDataMapObj)
         // Map(4) {'artwork_id' => '202308_001', 'grid_size' => '31x31', 'uint_n' => 5, 'bg_color' => '9999'}
 
 
@@ -58,12 +59,7 @@ function readUrlParamsAsMaps() {
         //                encoded_dvals => "Encoded_Strings" <String>
         //               ]
 
-        // const strokesValues = entries[1]
-        // 0=12n9CaKJG9uD ... Uaha
-
-        const mapByGroupId  = new Map()
         for (let i = 1; i <= entries.length - 1; ++i) { // `1` is first stroke color group
-            const strokeValuesObj = new Object()
 
             // Group Colors as Object
             const hex10Chars = hexExpandTo10(entries[i][0])         // 000000ffff
@@ -93,9 +89,9 @@ function readUrlParamsAsMaps() {
 
 
             // Set into Map by group ID
-            mapByGroupId.set(i, [groupColors, threeFlags, widthCount, encodedDVals])
+            strokesValuesMapObj.set(i, [groupColors, threeFlags, widthCount, encodedDVals])
         }
-        return mapByGroupId
+        return [artworkDataMapObj, strokesValuesMapObj]
 
     } // End of 'if (params != 0) {'
 }
