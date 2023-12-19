@@ -11,7 +11,7 @@ function readUrlParamsAsMaps() {
 
         // Get Artwork Data as Map
         // e.g.: ?202308_001=31x31-9999&
-        const artworkDataMapObj = new Map()
+        const artworkDataMap = new Map()
 
         const artworkParam = entries[0]
         // (2) ['202308_001', '31x31-9999']
@@ -31,12 +31,12 @@ function readUrlParamsAsMaps() {
 
 
         // Set into Map
-        artworkDataMapObj.set("artwork_id", artworkId)  // String
-        artworkDataMapObj.set("grid_size", gridSize)    // String
-        artworkDataMapObj.set("uint_n", uintN)          // Number
-        artworkDataMapObj.set("bg_color", bgColor)      // String
+        artworkDataMap.set("artwork_id", artworkId)  // String
+        artworkDataMap.set("grid_size", gridSize)    // String
+        artworkDataMap.set("uint_n", uintN)          // Number
+        artworkDataMap.set("bg_color", bgColor)      // String
 
-        //console.log('artworkDataMapObj: ', artworkDataMapObj)
+        //console.log('artworkDataMap: ', artworkDataMap)
         // Map(4) {'artwork_id' => '202308_001', 'grid_size' => '31x31', 'uint_n' => 5, 'bg_color' => '9999'}
 
 
@@ -44,7 +44,7 @@ function readUrlParamsAsMaps() {
         // Get Strokes Values as Map
         // 2番目([1])以降のストローク情報の key, value を ループで取り出し
 
-        const strokesValuesMapObj = new Map()
+        const strokesValuesMap = new Map()
         // key = groupId (seq num)
         // value = Object[
         //                "group_colors"  => {
@@ -64,12 +64,10 @@ function readUrlParamsAsMaps() {
             // Group Colors as Object
             const hex10Chars = hexExpandTo10(entries[i][0])         // 000000ffff
             const decodedColorsObj = decodeColors(hex10Chars) // Return as Object with 3 elements
-            const groupColors = {group_colors: decodedColorsObj}
             // group_colors: {g_stroke: '#ffffff', g_opacity: 1, g_stroke-opacity: 1}
 
             // 3 Flags as Array
             const splitedThreeFlags = entries[i][1].slice(0, 3).split('')   // ['1', '2', 'n']
-            const threeFlags = {three_flags: splitedThreeFlags}
             // three_flags: (3) ['1', '2', 'n']
 
             // Width Count as Map
@@ -78,20 +76,24 @@ function readUrlParamsAsMaps() {
                 strokesValues = URLCompressor.expand(strokesValues)
             }
             const encodedWidthCount = strokesValues.split('-')[0]
-            const decodedWidthCount = decodeWidthCount(encodedWidthCount)
-            const widthCount = {width_count: decodedWidthCount}
+            // Decode the count and width, and generate the firstline and lastline
+            const decodedWidthCount = decodeWidthCountAsObj(encodedWidthCount)
             // width_count: Map(1) {1 => 7}
 
             // Encoded d values as String
             const encodedDvalsStr = strokesValues.split('-')[1]
-            const encodedDVals = {encoded_dvals: encodedDvalsStr}
             // encoded_dvals: 'HuxwxxuQcuywAwvtutuxxxyxywww'
 
 
             // Set into Map by group ID
-            strokesValuesMapObj.set(i, [groupColors, threeFlags, widthCount, encodedDVals])
+            strokesValuesMap.set(i, {
+                group_colors: decodedColorsObj,
+                three_flags: splitedThreeFlags,
+                width_count: decodedWidthCount,
+                encoded_dvals: encodedDvalsStr
+            })
         }
-        return [artworkDataMapObj, strokesValuesMapObj]
+        return [artworkDataMap, strokesValuesMap]
 
     } // End of 'if (params != 0) {'
 }
