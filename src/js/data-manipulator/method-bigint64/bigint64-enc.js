@@ -129,6 +129,9 @@ function bigint64EncByGroup(strokesAttrsMap, digits_of_chunk) {
 
             joinedDvalsStr = joinedDvalsStr + joinedDval
         }
+        console.log("joinedDvalsStr: ", joinedDvalsStr) // x1 + y1 + x2 + y2
+        // 01040706080719252428301704222622222323000000152005000015000028240011161922080104061008112426242830200824232224312626252321230005242225273122091720232710
+
         // Encode with Base64 URL safe encode
         const joinedDvalsBigInt = BigInt(joinedDvalsStr)
         const base64EncodedDvalsStr = base64UrlEnc(joinedDvalsBigInt)

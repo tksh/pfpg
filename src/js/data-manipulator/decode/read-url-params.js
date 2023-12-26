@@ -72,17 +72,27 @@ function readUrlParamsAsMaps() {
 
             // Width Count as Map
             let strokesValues = entries[i][1].slice(3)
+            // console.log("strokesValues(Before decode): ", strokesValues)
+            // 3t-BRY8zuZS6-yuj6xgi-u9utYvXoK0QEXoKySIqr46g3-9HxEs1eG2VMHxerRFrXM3mjZxLkf-wwSvNRnQb88G
+
             if (Number(splitedThreeFlags[0]) === 1) { // Decomp if URLCompressor applied
                 strokesValues = URLCompressor.expand(strokesValues)
             }
             const encodedWidthCount = strokesValues.split('-')[0]
+            //console.log("encodedWidthCount: ", encodedWidthCount) // 3t
+
             // Decode the count and width, and generate the firstline and lastline
             const decodedWidthCount = decodeWidthCountAsObj(encodedWidthCount)
-            // width_count: Map(1) {1 => 7}
+            // width_count: Map(1) {3 => 19}
 
-            // Encoded d values as String
-            const encodedDvalsStr = strokesValues.split('-')[1]
-            // encoded_dvals: 'HuxwxxuQcuywAwvtutuxxxyxywww'
+            // Get the strokes values
+            // Extract an encoded string of whole d values
+            // Not split into x1, y1, x2, y2
+            const encodedDvalsStr = extractAfterFirstHyphen(strokesValues)
+            console.log("encodedDvalsStr: ", encodedDvalsStr)
+            // BRY8zuZS6-yuj6xgi-u9utYvXoK0QEXoKySIqr46g3-9HxEs1eG2VMHxerRFrXM3mjZxLkf-wwSvNRnQb88G
+
+
 
 
             // Set into Map by group ID
