@@ -22,8 +22,30 @@ function decode() {
     const decodedRelDvalsMap = decodeStrokesValues(strokesValuesMap)
     console.log("decodedRelDvalsMap: ", decodedRelDvalsMap)
 
-    generateSvg(artworkDataMap, strokesValuesMap, decodedRelDvalsMap)
 
+    // Decode
+    const svgStr = generateSvg(artworkDataMap, strokesValuesMap, decodedRelDvalsMap)
+
+
+    // Output to textarea
+    outputToTextarea(svgStr, 'textarea-decoded-svg')
+
+    // Compare the data size of URL params and generated SVG
+    const queryString = window.location.search;
+    const compRatio = queryString.length / svgStr.length
+
+    // Show the result in html
+    const resultTextElem = document.getElementById('encoded-size-compare');
+    if (resultTextElem) {
+        const text = `url params size: <b>${queryString.length}</b> characters (bytes)<br>
+        docoded svg size: <b>${svgStr.length}</b> characters (bytes)<br>
+        ${queryString.length} / ${svgStr.length} = <b>${compRatio}</b>`
+        resultTextElem.innerHTML = text
+    }
+
+
+    // Show the size of result in html and console
+    //showStringSize('Decoded SVG from URL Paramas', svgStr, 'textarea-decoded-svg')
 }
 
 
