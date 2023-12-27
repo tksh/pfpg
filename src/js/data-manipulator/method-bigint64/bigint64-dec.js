@@ -1,41 +1,3 @@
-function chunk(array, size) {
-    if (size <= 0 || !Number.isInteger(size)) {
-        throw new Error(
-            `Expected size to be an integer greater than 0 but found ${size}`,
-        );
-    }
-
-    if (array.length === 0) {
-        return [];
-    }
-
-    const ret = Array.from({ length: Math.ceil(array.length / size) });
-    let readIndex = 0;
-    let writeIndex = 0;
-
-    while (readIndex < array.length) {
-        ret[writeIndex] = array.slice(readIndex, readIndex + size);
-
-        writeIndex += 1;
-        readIndex += size;
-    }
-
-    return ret;
-}
-
-// Test
-// const array = [1, 2, 3, 4, 5, 6, 7, 8];
-// const array = ;
-// const size = 3;
-// const result = chunk(array, size);
-// console.log(result); // [[1, 2, 3], [4, 5, 6], [7, 8]]
-// console.log(chunk("357956327150778", size)); ['357', '956', '327', '150', '778']
-// console.log(chunk("01040706080719252428301704222622222323000000152005000015000028240011161922080104061008112426242830200824232224312626252321230005242225273122091720232710", 2));
-// (76) ['01', '04', '07', '06', '08', '07', '19', '25', '24', '28', '30', '17', '04', '22', '26', '22', '22', '23', '23', '00', '00', '00', '15', '20', '05', '00', '00', '15', '00', '00', '28', '24', '00', '11', '16', '19', '22', '08', '01', '04', '06', '10', '08', '11', '24', '26', '24', '28', '30', '20', '08', '24', '23', '22', '24', '31', '26', '26', '25', '23', '21', '23', '00', '05', '24', '22', '25', '27', '31', '22', '09', '17', '20', '23', '27', '10']
-// console.log(chunk("001004007006008007019025024028030017004022026022022023023", 3))
-// (19) ['001', '004', '007', '006', '008', '007', '019', '025', '024', '028', '030', '017', '004', '022', '026', '022', '022', '023', '023']
-
-
 function findNearestMultipleOfFourX(number, multiple) {
     // numberを (multiple*4) で割って切り上げた値に (multiple*4) を掛けると、求める数値になる
     return Math.ceil(number / (multiple * 4)) * (multiple * 4);
@@ -76,3 +38,113 @@ function extractAfterFirstHyphen(str) {
 
     return result
 }
+
+
+
+// 絶対座標データの配列を相対座標データの配列に変換する関数
+
+function absToRel(arr) {
+    // 結果を格納する空の配列を作る
+    let result = [];
+    // 前の要素の x2, y2 を記録する変数を初期化する
+    let prevX2 = 0;
+    let prevY2 = 0;
+    // 引数の配列の要素を一つずつ処理する
+    for (let i = 0; i < arr[0].length; i++) {
+        // 現在の要素の x1, y1, x2, y2 を取り出す
+        let x1 = arr[0][i];
+        let y1 = arr[1][i];
+        let x2 = arr[2][i];
+        let y2 = arr[3][i];
+        // 最初の要素の場合
+        if (i === 0) {
+            // x1, y1 は絶対値をそのまま使う
+            // x2, y2 は x1, y1 からの差分を求める
+            result[0] = [x1, y1, x2 - x1, y2 - y1];
+        } else {
+            // 二つ目以降の要素の場合
+            // x1, y1 は前の要素の x2, y2 からの差分を求める
+            // x2, y2 は現在の要素の x1, y1 からの差分を求める
+            result[0].push(x1 - prevX2, y1 - prevY2, x2 - x1, y2 - y1);
+        }
+        // 前の要素の x2, y2 を更新する
+        prevX2 = x2;
+        prevY2 = y2;
+    }
+    // 結果を x1, y1, x2, y2 ごとに分割する
+    result[1] = result[0].filter((_, index) => index % 4 === 0); // x1
+    result[2] = result[0].filter((_, index) => index % 4 === 1); // y1
+    result[3] = result[0].filter((_, index) => index % 4 === 2); // x2
+    result[4] = result[0].filter((_, index) => index % 4 === 3); // y2
+    // 結果の配列のインデックス 0 を削除する
+    result.shift();
+    // 結果を返す
+    return result;
+}
+
+// Test
+
+// 絶対座標データの配列
+// const absoluteArray = [
+//     [10, 90, 90, 10], // x1
+//     [10, 10, 90, 90], // y1
+//     [90, 90, 10, 10], // x2
+//     [10, 90, 90, 10]  // y2
+// ];
+
+// 関数 absToRel で相対座標データの配列に変換する
+// const relativeArray = absToRel(absoluteArray);
+
+// 結果
+// console.log(relativeArray);
+// (4) [Array(4), Array(4), Array(4), Array(4)]
+//     0: (4) [10, 0, 0, 0]   // x1
+//     1: (4) [10, 0, 0, 0]   // y1
+//     2: (4) [80, 0, -80, 0] // x2
+//     3: (4) [0, 80, 0, -80] // y2
+
+
+
+
+
+// Convert to Javascript from Deno standard library chunk.ts
+
+// https://github.com/denoland/deno_std/blob/main/collections/chunk.ts
+// Copyright 2018-2023 the Deno authors. All rights reserved. MIT license.
+
+function chunk(array, size) {
+    if (size <= 0 || !Number.isInteger(size)) {
+        throw new Error(
+            `Expected size to be an integer greater than 0 but found ${size}`,
+        );
+    }
+
+    if (array.length === 0) {
+        return [];
+    }
+
+    const ret = Array.from({ length: Math.ceil(array.length / size) });
+    let readIndex = 0;
+    let writeIndex = 0;
+
+    while (readIndex < array.length) {
+        ret[writeIndex] = array.slice(readIndex, readIndex + size);
+
+        writeIndex += 1;
+        readIndex += size;
+    }
+
+    return ret;
+}
+
+// Test
+// const array = [1, 2, 3, 4, 5, 6, 7, 8];
+// const array = ;
+// const size = 3;
+// const result = chunk(array, size);
+// console.log(result); // [[1, 2, 3], [4, 5, 6], [7, 8]]
+// console.log(chunk("357956327150778", size)); ['357', '956', '327', '150', '778']
+// console.log(chunk("01040706080719252428301704222622222323000000152005000015000028240011161922080104061008112426242830200824232224312626252321230005242225273122091720232710", 2));
+// (76) ['01', '04', '07', '06', '08', '07', '19', '25', '24', '28', '30', '17', '04', '22', '26', '22', '22', '23', '23', '00', '00', '00', '15', '20', '05', '00', '00', '15', '00', '00', '28', '24', '00', '11', '16', '19', '22', '08', '01', '04', '06', '10', '08', '11', '24', '26', '24', '28', '30', '20', '08', '24', '23', '22', '24', '31', '26', '26', '25', '23', '21', '23', '00', '05', '24', '22', '25', '27', '31', '22', '09', '17', '20', '23', '27', '10']
+// console.log(chunk("001004007006008007019025024028030017004022026022022023023", 3))
+// (19) ['001', '004', '007', '006', '008', '007', '019', '025', '024', '028', '030', '017', '004', '022', '026', '022', '022', '023', '023']
