@@ -32,7 +32,7 @@ function hexExpandTo10(hex) {
 
     // 文字列の長さが 1,3,5,6,10 以外の場合は error
     else {
-        return new Error("Invalid hex string");
+        return new Error("Invalid hex code");
     }
 
 }
@@ -52,3 +52,25 @@ function hexExpandTo10(hex) {
 // // Invalid
 // console.log(hexExpandTo10("ff"));         // Error: Invalid hex string
 // console.log(hexExpandTo10(""))            // Error: Invalid hex string
+
+
+
+function hexExpandTo6(hex) {
+    if (hex.length === 6) {
+        // 文字列の長さが 6 ならば そのまま 返す
+        return hex;
+
+    } else if (hex.length === 3) {
+        // 文字列の長さが 3 ならば 各要素を 2回繰り返す
+
+        // 文字列を1文字ずつ分割して配列にする
+        let chars = hex.split("");
+        // 配列の各要素を2回繰り返して結合する
+        let expanded = chars.map(char => char.repeat(2)).join("");
+        // 結果を返す
+        return expanded;
+    } else {
+        return new Error("Invalid hex code");
+    }
+
+}

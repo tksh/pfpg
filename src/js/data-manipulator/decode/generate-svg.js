@@ -73,7 +73,7 @@ function generateSvg(artworkDataMap, strokesValuesMap, decodedRelDvalsMap) {
 
     for (let [groupId, v] of strokesValuesMap) {
         const dvalsObj = decodedRelDvalsMap.get(groupId)
-        console.log('dvalsObj: ', dvalsObj) // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
+        //console.log('dvalsObj: ', dvalsObj) // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
 
         const widthArr = v.width_count.width
         const firstlineArr = v.width_count.firstline

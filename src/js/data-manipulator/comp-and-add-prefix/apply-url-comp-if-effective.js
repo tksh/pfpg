@@ -14,6 +14,9 @@ function applyUrlCompIfEffective(
     // For JUST comparing between URLComp applied or not
     let lengthBeforeURLComp = [];
     let lengthAfterURLComp = [];
+    // Get number of '&' mark to get correct finished string length
+    const groupCount = encodedDvalByGroup.size
+    const ampersandCount = groupCount - 1 // '&' will added between each groups
 
 
     for (const [groupId, dvalSwap63EncodedStr] of encodedDvalByGroup) {
@@ -70,8 +73,8 @@ function applyUrlCompIfEffective(
     // For JUST comparing between URLComp applied or not
     console.log('Before URLComp (Each group encoded string length): ', lengthBeforeURLComp) // (5) [85, 73, 258, 85, 37]
     console.log('After URLComp  (Each group encoded string length): ', lengthAfterURLComp)  // (5) [84, 70, 206, 73, 34]
-    const totalLengthBefore = lengthBeforeURLComp.reduce((a, b) => a + b, 0)
-    const totalLengthAfter = lengthAfterURLComp.reduce((a, b) => a + b, 0)
+    const totalLengthBefore = lengthBeforeURLComp.reduce((a, b) => a + b, ampersandCount)
+    const totalLengthAfter = lengthAfterURLComp.reduce((a, b) => a + b, ampersandCount)
     console.log('Before URLComp (Total encoded string length): ', totalLengthBefore) // 538
     console.log('After URLComp  (Total encoded string length): ', totalLengthAfter)  // 467
     console.log("Ratio (totalLengthAfter / totalLengthBefore): ", totalLengthAfter / totalLengthBefore) // 0.8680297397769516

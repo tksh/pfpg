@@ -65,7 +65,7 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
         encodedColorsByGroup,
         'swap63-enc',
         null                        // value for 3rd char, swap63-enc needs no 3rd char to encode
-        )
+    )
     //console.log('optimizedEncodedStrokesByGroup: ', optimizedEncodedStrokesByGroup)
     // Map { 000 → (2) […] }
     //     0: 000 → Array [ 400, "000=13xbqDCEgLL7jANz5XKXua ... LiAh5KEXgVutC" ]
@@ -97,9 +97,7 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
 
 
 
-// Swap63 encode
-
-// Get the string of d values encoded as Map
+// Get the encoded string of d values as Map
 function swap63EncByGroup(dictMap, strokesAttrsMap) {
     //console.log(dictMap); // Map(63) {-31 => '0', -30 => '1', -29 => '2', -28 => '3', -27 => '4', …}
 
@@ -117,17 +115,29 @@ function swap63EncByGroup(dictMap, strokesAttrsMap) {
 
         // Swap from number to char
         for (let key in relDvals) {
+            //console.log('key: ', key)  // key: x1, y1, x2, y2
             const dval = relDvals[key]
             //console.log(dval); // (19) [1, 3, 3, 0, -2, -1, 8, 1, -2, 4, 2, -13, -16, 14, 2, -1, 0, -1, -8]
 
-            // オブジェクトのキーとして 変換元の数値を代入し 対応する符号を得て 変数にpushしていく
-            for (let i = 0; i < numberOfPath; i++) {
-                const encodedChar = dictMap.get(dval[i]);
-                dvalsEncodedStr = dvalsEncodedStr + encodedChar
-            }
+            dvalsEncodedStr = dvalsEncodedStr + swap63NumToChar(dval, numberOfPath, dictMap)
         }
 
         encodedStrByGroup.set(groupId, dvalsEncodedStr)
     }
     return encodedStrByGroup
+}
+
+
+
+function swap63NumToChar(dval, numberOfPath, dictMap) {
+
+    let dvalsEncodedStr = ''
+
+    // オブジェクトのキーとして 変換元の数値を代入し 対応する符号を得て 変数にpushしていく
+    for (let i = 0; i < numberOfPath; i++) {
+        const encodedChar = dictMap.get(dval[i]);
+        dvalsEncodedStr = dvalsEncodedStr + encodedChar
+    }
+
+    return dvalsEncodedStr
 }

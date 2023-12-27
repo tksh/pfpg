@@ -11,7 +11,7 @@ function encodeColors(strokesAttrsMap){
         let colorsStr = ""
 
         // Normalize three color values
-        const gStroke = attrsObj.g_stroke.slice(1)                           // Remove '#'
+        const gStroke = hexExpandTo6(attrsObj.g_stroke.slice(1))            // Remove '#'
         const gOpacity = normalizedToHex(attrsObj.g_opacity)                 // Number to Hex
         const gStrokeOpacity = normalizedToHex(attrsObj["g_stroke-opacity"]) // Number to Hex
 
