@@ -4,21 +4,21 @@ function decodeBigint64Enc(encodedDvalsStr) {
                 const decodedDvalsBigint = base64UrlDec(encodedDvalsStr)
                 //console.log("decodedDvalsBigint: ", decodedDvalsBigint)
                 // 10407060807192524283017042226222223230000001520050…232224312626252321230005242225273122091720232710n
-    
+
                 // Convert to String
                 const bigintAsStr = String(decodedDvalsBigint)
                 //console.log("bigintAsStr: ", bigintAsStr)
                 // 1040706080719252428301704222622222323000000152005000015000028240011161922080104061008112426242830200824232224312626252321230005242225273122091720232710
-    
+
                 // Recover the zero padding
                 let originalZeroPaddedStr = ''
-    
+
                 // Number of result string length
                 console.log("bigintAsStr.length: ", bigintAsStr.length) // 151
-    
+
                 // Number of chunks to split
                 const numberOfChunks = Number(v.three_flags[2]) // 2
-    
+
                 // Get the length of original zero padded string
                 const originalPaddedLength = findNearestMultipleOfFourX(bigintAsStr.length, numberOfChunks)
                 console.log("originalPaddedLength: ", originalPaddedLength) // 152
@@ -32,7 +32,7 @@ function decodeBigint64Enc(encodedDvalsStr) {
                 }
                 // console.log("originalZeroPaddedStr: ", originalZeroPaddedStr)
                 // 01040706080719252428301704222622222323000000152005000015000028240011161922080104061008112426242830200824232224312626252321230005242225273122091720232710
-    
+
                 // Split with 4 into each coordinates like x1, y1, x2, y2
                 const splitedDvalsStr = splitStringIntoFour(originalZeroPaddedStr)
                 // Split into chunks
@@ -43,7 +43,7 @@ function decodeBigint64Enc(encodedDvalsStr) {
                 //     1: (19) ['00', '00', '00', '15', '20', '05', '00', '00', '15', '00', '00', '28', '24', '00', '11', '16', '19', '22', '08']
                 //     2: (19) ['01', '04', '06', '10', '08', '11', '24', '26', '24', '28', '30', '20', '08', '24', '23', '22', '24', '31', '26']
                 //     3: (19) ['26', '25', '23', '21', '23', '00', '05', '24', '22', '25', '27', '31', '22', '09', '17', '20', '23', '27', '10']
-    
+
                 // Parse as Number
                 const decodedAbsDvals = chunkedDvalsStr.map(subArray => subArray.map(Number))
                 // console.log("decodedAbsDvals: ", decodedAbsDvals)
@@ -52,7 +52,7 @@ function decodeBigint64Enc(encodedDvalsStr) {
                 //     1: (19) [0, 0, 0, 15, 20, 5, 0, 0, 15, 0, 0, 28, 24, 0, 11, 16, 19, 22, 8]
                 //     2: (19) [1, 4, 6, 10, 8, 11, 24, 26, 24, 28, 30, 20, 8, 24, 23, 22, 24, 31, 26]
                 //     3: (19) [26, 25, 23, 21, 23, 0, 5, 24, 22, 25, 27, 31, 22, 9, 17, 20, 23, 27, 10]length: 4[[Prototype]]: Array(0)
-    
+
                 // Convert from absolute to relative
                 const decodedRelDvals = absToRel(decodedAbsDvals)
                 // console.log("decodedRelDvals: ", decodedRelDvals)
@@ -105,6 +105,7 @@ function splitStringIntoFour(str) {
 function extractAfterFirstHyphen(str) {
     // ハイフンの位置を取得
     const index = str.indexOf("-");
+    console.log("index: ", index)
     // ハイフンの次の位置から末尾までを切り出す
     const result = str.slice(index + 1);
 

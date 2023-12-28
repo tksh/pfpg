@@ -282,8 +282,9 @@ function bruteforce52Enc() {
 
         // For first loop, init the map with current value
         if (maxDictSize === maxDictSizeStartAt) {
-            //console.log('maxDictSize in first loop: ', maxDictSize) // 0
+            console.log('maxDictSize in first loop: ', maxDictSize) // 0
             currentSmallestByGroup = optimizedStrByGroup
+            console.log('currentSmallestByGroup in first loop: ', currentSmallestByGroup)
         }
 
         // For every loop

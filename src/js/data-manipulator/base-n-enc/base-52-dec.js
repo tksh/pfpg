@@ -1,5 +1,7 @@
+// For the number value of freq dict to embed for bruteforce53-enc
+
 function base52Decode(str) {
-    const alphabet = generateAlphabets52()
+    const alphabet = getAlphabets52()
     // 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
     let base = alphabet.length;
@@ -13,14 +15,18 @@ function base52Decode(str) {
     return decoded;
 }
 
-// console.log(base52Decode('ca')) // 104
-// console.log(base52Decode('dm')) // 168
-// console.log(base52Decode('dB')) // 183
-// console.log(base52Decode('bO')) // 92
-// console.log(base52Decode('m')) // 12
-// console.log(base52Decode('f')) // 5
-// console.log(base52Decode('L')) // 37
-// console.log(base52Decode('aL')) // 37
+// console.log(base52Decode('a'))    // 0
+// console.log(base52Decode('b'))    // 1
+// console.log(base52Decode('A'))    // 26
+// console.log(base52Decode('B'))    // 27
+// console.log(base52Decode('Z'))    // 51
+// console.log(base52Decode('ba'))   // 52
+// console.log(base52Decode('ZZ'))   // 2703
+// console.log(base52Decode('baa'))  // 2704
+// console.log(base52Decode('ZZZ'))  // 140607
+// console.log(base52Decode('baaa')) // 140608
+
+
 
 
 
@@ -44,4 +50,3 @@ function base52DecodeForFreqDictValue(str) {
 
     return decoded
 }
-

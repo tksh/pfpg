@@ -1,18 +1,3 @@
-// To encode the number of freq dict values
-
-function base52EncodeForFreqDictValue(num) {
-    const encoded = base52Encode(addNumBeforeEncodeForBase52ForFreqDictValue(num));
-
-    // base52エンコードした結果が3文字の場合、先頭にアンダースコアを追加
-    if (encoded.length === 3) {
-        return '_' + encoded;
-    }
-
-    // それ以外の場合、結果の文字列を二文字に揃える
-    return encoded.padStart(2, 'a');
-}
-
-
 // Add and subtract functions for base52 to encode the freq dict diff values
 
 // For encoding
@@ -45,8 +30,6 @@ function getMostSmallDiffNumberAsAbsForDec() {
     // This number should be add or subtract to freq dict diff values to reduce the minus numbers
     return Math.abs(startOfDiffRange)               // if uintXPortray = 8 =>  1020
 }
-
-
 
 
 // For baseX encoding for diff

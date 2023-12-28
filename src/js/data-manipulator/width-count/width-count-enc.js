@@ -1,8 +1,4 @@
-///// Encode stroke-width and amount into a string from jsonl values /////
-
 ////////////////////////////////// Input: //////////////////////////////////
-
-// From: './jsonl_extracted/%{ARTWORK_ID}_strokes_width_and_amount.jsonl'
 
 // {"000_amount":[24,21,37,66,91,118,127]}
 // {"000_width":[21,13,8,5,3,2,1]}
@@ -21,7 +17,7 @@
 
 
 
-function encodeWidthCount() { //'uint5 or 'uint8'
+function encodeWidthCount() {
     // Read the Aggregated Data for Compression from .json as Map() grouped by group_id
     const aggDataMap = jsonToMapObj(`textarea-agg-data-for-comp-uploaded`)
 
@@ -43,7 +39,7 @@ function encodeWidthCount() { //'uint5 or 'uint8'
         let widthAndCountStr = ""
         for (let i = 0; i < widthArr.length; i++) {
             widthAndCountStr += widthArr[i]
-            widthAndCountStr += base52Encode(countArr[i])
+            widthAndCountStr += base53Encode(countArr[i])
         }
         encodedStrByGroupId.set(groupId, widthAndCountStr)
     }

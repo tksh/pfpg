@@ -38,12 +38,17 @@ function applyUrlCompIfEffective(
         // console.log('applyURLCompressorOrNot: ', applyURLCompressorOrNot) // true
 
 
+        /////// Check
+        console.log('groupId: ', groupId)
+        console.log('(Comp) widthCountAndDvalURLCompressed: ', widthCountAndDvalURLCompressed)
+        console.log('(Raw) widthCountAndDval: ', widthCountAndDval)
+
         // Add prefix chars
         const smallerStrWithPrefix = chooseSmallerAndAddPrefix(
             applyURLCompressorOrNot,        // Boolean of apply the compression or not
             widthCountAndDvalURLCompressed, // Compressed string
             widthCountAndDval,              // Raw string
-            encodingMethodName,                 // Encode method name
+            encodingMethodName,             // Encode method name
             valueFor3rdChar                 // Value for 3rd char
         )
         //console.log('smallerStrWithPrefix: ', smallerStrWithPrefix)

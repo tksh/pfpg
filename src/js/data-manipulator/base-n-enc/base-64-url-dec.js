@@ -25,5 +25,5 @@ function base64UrlDec(str) {
 // console.log(base64UrlDec('CcP')) // 9999n
 // console.log(base64UrlDec('H5yJn8tIS6hWuVfFgdJIY10GsuwXo0w'))
 
-console.log(base64UrlDec('BRY8zuZS6-yuj6xgi-u9utYvXoK0QEXoKySIqr46g3-9HxEs1eG2VMHxerRFrXM3mjZxLkf-wwSvNRnQb88G'))
+// console.log(base64UrlDec('BRY8zuZS6-yuj6xgi-u9utYvXoK0QEXoKySIqr46g3-9HxEs1eG2VMHxerRFrXM3mjZxLkf-wwSvNRnQb88G'))
 // 10407060807192524283017042226222223230000001520050…232224312626252321230005242225273122091720232710n

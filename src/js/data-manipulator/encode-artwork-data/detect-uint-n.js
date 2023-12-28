@@ -1,3 +1,15 @@
+function getUintNPortrayForDec() {
+  const params = new URLSearchParams(window.location.search)
+  const entries = [...params.entries()];         // entries()メソッドでキーと値のペアを取得
+  const artworkParam = entries[0]                // (2) ['202308_001', '31x31-9999']
+  const gridSize = artworkParam[1].split("-")[0] // 31x31
+  const splitByX = gridSize.split('x')           // (2) ['31', '31']
+  const max = Math.max(...splitByX)              // 255
+  const uintN = getUintN(max)                    // 5 (2 の 何乗か？)
+  return uintN
+}
+
+
 function getUintNPortrayForEnc() {
   // Read from textarea
   const rawJson = readTextarea('textarea-artwork-data-uploaded')
@@ -13,8 +25,6 @@ function getUintNPortrayForEnc() {
 
   return uintN
 }
-
-
 
 function getUintN(n) {
   // Add 1 before judging, For 256 => 9, not 256 => 8

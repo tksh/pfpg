@@ -72,14 +72,14 @@ function readUrlParamsAsMaps() {
 
             // Width Count as Map
             let strokesValues = entries[i][1].slice(3)
-            // console.log("strokesValues(Before decode): ", strokesValues)
+            console.log("strokesValues(Before decode): ", strokesValues)
             // 3t-BRY8zuZS6-yuj6xgi-u9utYvXoK0QEXoKySIqr46g3-9HxEs1eG2VMHxerRFrXM3mjZxLkf-wwSvNRnQb88G
 
             if (Number(splitedThreeFlags[0]) === 1) { // Decomp if URLCompressor applied
                 strokesValues = URLCompressor.expand(strokesValues)
             }
             const encodedWidthCount = strokesValues.split('-')[0]
-            //console.log("encodedWidthCount: ", encodedWidthCount) // 3t
+            console.log("encodedWidthCount: ", encodedWidthCount) // 3t
 
             // Decode the count and width, and generate the firstline and lastline
             const decodedWidthCount = decodeWidthCountAsObj(encodedWidthCount)

@@ -1,7 +1,13 @@
 // 1. Choose smaller size string, compressed or not
 // 2. Add the prefix chars into chosen one
 
-function chooseSmallerAndAddPrefix(applyCompOrNotBoolean, compressedStr, rawStr, encodingMethodName, valueFor3rdChar) {
+function chooseSmallerAndAddPrefix(
+    applyCompOrNotBoolean,
+    compressedStr,
+    rawStr,
+    encodingMethodName,
+    valueFor3rdChar
+) {
     // Result string
     let smallerStrWithPrefix = ""
 
@@ -35,5 +41,6 @@ function chooseSmallerAndAddPrefix(applyCompOrNotBoolean, compressedStr, rawStr,
             numOf3rdChar  // No flag needed for 3rd char when swap63Enc applied
         )
     }
+
     return smallerStrWithPrefix
 }

@@ -43,7 +43,7 @@ function showDetailsByGroup(nameOfInput, encodedStrByGroupMap) {
     })
     const flag3ConfigurationValueName = threeCharsAsFlag.map((value, index) => {        // 3rd char value
         if (flag2EncodingMethodName[index] === 'bruteforce52') {
-            return base52Decode(value[2])
+            return base53Decode(value[2])
         } else {
             return value[2]
         }
