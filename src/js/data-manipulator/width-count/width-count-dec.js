@@ -9,9 +9,7 @@
 function decodeWidthCountAsObj(encodedStr) {
 
     // Split the string into alternating numbers and base53 encoded strings
-    // Base53 charList includes '_' underscore but '_' means zero (0) and count zero width group can not be exists
-    // So regex for encoded 'count' is enough for 52 chars like [a-zA-Z] instead of [_a-zA-Z]
-    const parts = encodedStr.match(/\d+|[a-zA-Z]+/g);
+    const parts = encodedStr.match(/\d+|[_a-zA-Z]+/g);
     console.log(parts) // (14) ['1', 'ca', '2', 'dm', '3', 'dB', '5', 'bO', '8', 'm', '13', 'f', '21', 'L']
 
 
