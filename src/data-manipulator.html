@@ -58,14 +58,14 @@
     <script src="./js/data-manipulator/processing-for-map-obj/best-mix-enc.js"></script>
     <script src="./js/data-manipulator/processing-for-map-obj/store-smaller.js"></script>
 
-    <!-- Bruteforce52 encoding method -->
-    <script src="./js/data-manipulator/method-bruteforce52/bruteforce52-enc.js"></script>
-    <script src="./js/data-manipulator/method-bruteforce52/bruteforce52-dec.js"></script>
-    <script src="./js/data-manipulator/method-bruteforce52/base-x-enc.js"></script>
-    <script src="./js/data-manipulator/method-bruteforce52/get-specific-alphabets.js"></script>
-    <script src="./js/data-manipulator/method-bruteforce52/actual-dict-size.js"></script>
+    <!-- Bruteforce53 encoding method -->
+    <script src="./js/data-manipulator/method-bruteforce53/bruteforce53-enc.js"></script>
+    <script src="./js/data-manipulator/method-bruteforce53/bruteforce53-dec.js"></script>
+    <script src="./js/data-manipulator/method-bruteforce53/base-x-enc.js"></script>
+    <script src="./js/data-manipulator/method-bruteforce53/get-specific-alphabets.js"></script>
+    <script src="./js/data-manipulator/method-bruteforce53/actual-dict-size.js"></script>
 
-    <script src="./js/data-manipulator/method-bruteforce52/plus-and-minus.js"></script>
+    <script src="./js/data-manipulator/method-bruteforce53/plus-and-minus.js"></script>
 
     <!-- Bigint64 encoding method -->
     <script src="./js/data-manipulator/method-bigint64/bigint64-enc.js"></script>
@@ -524,7 +524,7 @@
         <!-- Buttons to encode the s:trokes values -->
         <h3>Select: Encoding Methods</h3>
 
-        <button onclick="bruteforce52Enc()">Encode via <b>bruteforce52Enc()</b></button>
+        <button onclick="bruteforce53Enc()">Encode via <b>bruteforce53Enc()</b></button>
         <p>For: UInt[5-14]Portray<br>With: Aggregated Data for Compression (list_of_width, count_by_width, diff, diff_values_sorted_by_freq and diff_counts_sorted_by_freq)</p>
         <br />
 
@@ -540,11 +540,11 @@
         <h3>Try Above Multipul Encoding Methods and Get Smallest Result By Group</h3>
 
         <button onclick="bestMixFrom3Methods()">Encode via <b>bestMixFrom3Methods()</b></button>
-        <p>For: UInt<b>[5-14]</b>Portray<br>Methods: bruteforce52Enc(), bigint64Enc() and <b>swap63Enc()</b></p>
+        <p>For: UInt<b>[5-14]</b>Portray<br>Methods: bruteforce53Enc(), bigint64Enc() and <b>swap63Enc()</b></p>
         <br />
 
         <button onclick="bestMixFrom2Methods()">Encode via <b>bestMixFrom2Methods()</b></button>
-        <p>For: UInt<b>[6-14]</b>Portray<br>Methods: bruteforce52Enc(), bigint64Enc()</p>
+        <p>For: UInt<b>[6-14]</b>Portray<br>Methods: bruteforce53Enc(), bigint64Enc()</p>
         <br />
 
         <!-- Textarea to output the strokes values encoded -->

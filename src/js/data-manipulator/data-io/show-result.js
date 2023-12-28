@@ -34,7 +34,7 @@ function showDetailsByGroup(nameOfInput, encodedStrByGroupMap) {
     })
     const flag2EncodingMethodName = threeCharsAsFlag.map((value) => {                 // 2nd char value
         if (Number(value[1]) === 0) {
-            return 'bruteforce52'
+            return 'bruteforce53'
         } else if (Number(value[1]) === 1) {
             return 'bigint64'
         } else if (Number(value[1]) === 2) {
@@ -42,7 +42,7 @@ function showDetailsByGroup(nameOfInput, encodedStrByGroupMap) {
         }
     })
     const flag3ConfigurationValueName = threeCharsAsFlag.map((value, index) => {        // 3rd char value
-        if (flag2EncodingMethodName[index] === 'bruteforce52') {
+        if (flag2EncodingMethodName[index] === 'bruteforce53') {
             return base53Decode(value[2])
         } else {
             return value[2]
@@ -57,6 +57,6 @@ function showDetailsByGroup(nameOfInput, encodedStrByGroupMap) {
     console.log('3 chars prefix as flag: ', threeCharsAsFlag) // (5) ['10Z', '10i', '10X', '10b', '10Z']
     console.log('flag 1, Compression method name', flag1CompressionMethodName) // (5) 
     console.log('flag 2, Encoding method name', flag2EncodingMethodName) // (5)
-    console.log('flag 3, Configuration value for encoding indicates:\nBase X number for bruteforce52-enc | Chunk size for bigint64-enc | \'n\' (=null, skip it for decoding) for swap63-enc') 
+    console.log('flag 3, Configuration value for encoding indicates:\nBase X number for bruteforce53-enc | Chunk size for bigint64-enc | \'n\' (=null, skip it for decoding) for swap63-enc') 
     console.log('flag 3, Configuration value for encoding', flag3ConfigurationValueName) // (5) 
 }

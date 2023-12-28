@@ -1,11 +1,11 @@
 function bestMixFrom3Methods() {
     // Read the result of whole encoding methods
-    const bruteforce52Map = bruteforce52Enc()
+    const bruteforce53Map = bruteforce53Enc()
     const bigint64Map = bigint64Enc()
     const swap63Map = swap63Enc()
 
     // Compare and get the smallest one by group
-    const firstCompareResult = storeSmaller(bruteforce52Map, bigint64Map)
+    const firstCompareResult = storeSmaller(bruteforce53Map, bigint64Map)
     const bestMixResultMap = storeSmaller(firstCompareResult, swap63Map)
 
 
@@ -25,11 +25,11 @@ function bestMixFrom3Methods() {
 
 function bestMixFrom2Methods() {
     // Read the result of whole encoding methods
-    const bruteforce52Map = bruteforce52Enc()
+    const bruteforce53Map = bruteforce53Enc()
     const bigint64Map = bigint64Enc()
 
     // Compare and get the smallest one by group
-    const bestMixResultMap = storeSmaller(bruteforce52Map, bigint64Map)
+    const bestMixResultMap = storeSmaller(bruteforce53Map, bigint64Map)
 
 
     // Whole group strings joined with `&`

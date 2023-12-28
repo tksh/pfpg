@@ -4,12 +4,12 @@
 //     [0] None (uncompressed)
 //     [1] URLCompressor
 // 2nd char(Encoding-methods):
-//     [0] bruteforce52-enc
+//     [0] bruteforce53-enc
 //     [1] bigint64-enc
 //     [2] swap63-enc
 // 3rd char(Config value for Encoding-methods):
 //     [char or number]:
-//         [0] bruteforce52-enc => Base X number (Base53 encoded)
+//         [0] bruteforce53-enc => Base X number (Base53 encoded)
 //         [1] bigint64-enc     => X digits to split into each chunks
 //         [2] swap63-enc       => 'n' ('n' means null, skip it when decoding.)
 
@@ -22,7 +22,7 @@ function addPrefixAsFlags(inputStr, numOf1stChar, numOf2ndChar, numOf3rdChar) {
         strWithFlag = 'n' + strWithFlag
 
     } else if (numOf2ndChar === 0) {
-        // for bruteforce52-enc
+        // for bruteforce53-enc
         base53EncodedChar = base53Encode(numOf3rdChar)
         strWithFlag = `${base53EncodedChar}` + strWithFlag
 

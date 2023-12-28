@@ -22,7 +22,7 @@ function chooseSmallerAndAddPrefix(
     } else if (encodingMethodName === 'bigint64-enc') {
         numOf2ndChar = 1
         numOf3rdChar = valueFor3rdChar
-    } else if (encodingMethodName === 'bruteforce52-enc') {
+    } else if (encodingMethodName === 'bruteforce53-enc') {
         numOf2ndChar = 0
         numOf3rdChar = valueFor3rdChar
     }

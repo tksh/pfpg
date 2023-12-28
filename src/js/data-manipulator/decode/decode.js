@@ -67,9 +67,9 @@ function decodeStrokesValues(strokesValuesMap) {
         let decodedRelDvals = []
 
         if (v.three_flags[1] === '0') {
-            console.log(`Group ${groupId} has encoded with 'bruteforce52-enc'`)
+            console.log(`Group ${groupId} has encoded with 'bruteforce53-enc'`)
             //console.log("v.encoded_dvals: ", v.encoded_dvals) // ok
-            decodedRelDvals = decodeBruteforce52Enc(v.encoded_dvals, v.three_flags)
+            decodedRelDvals = decodeBruteforce53Enc(v.encoded_dvals, v.three_flags)
 
         } else if (v.three_flags[1] === '1') {
             console.log("This group has encoded with 'bigint64-enc'")
