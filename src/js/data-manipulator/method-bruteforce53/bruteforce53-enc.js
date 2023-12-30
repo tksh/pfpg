@@ -47,16 +47,20 @@ function bruteforce53Enc() {
     // To store the smallest encoded string of each group
     let currentSmallestByGroup = new Map()
 
-    const maxDictSizeStartAt = 0
-    const maxDictSizeEndAt = 52
+    const maxDictSizeStartAt = 43
+    const maxDictSizeEndAt = 43
+    //const maxDictSizeStartAt = 0
+    //const maxDictSizeEndAt = 52
 
     // Loop for every baseX values from 0 to 52
     for (let i = maxDictSizeStartAt; i <= maxDictSizeEndAt; i++) {
         const maxDictSize = i
         const baseXNumber = 52 - i
-        console.log('maxDictSize: ', maxDictSize) // 0, 1, ... 51, 52
-        console.log('baseXNumber: ', baseXNumber) // 52, 51, ... 1, 0
+        console.log('////////////////////////////////// maxDictSize: ', maxDictSize, ' //////////////////////////////////') // 0, 1, ... 51, 52
+        console.log('////////////////////////////////// baseXNumber: ', baseXNumber, ' //////////////////////////////////') // 52, 51, ... 1, 0
 
+        const minimumDiffValue = -getUintNPortrayForEnc().max*4
+        const maxDiffValue = getUintNPortrayForEnc().max*4
 
         const encodedDvalByGroup = new Map()
 
@@ -75,17 +79,17 @@ function bruteforce53Enc() {
             let dictAndDiffEncodedFourColumns = []
 
             for (const key in aggDataObj.relative) { // Loop for x1 to y2
-                //console.log('key: ', key) // x1
+                console.log('//////// Column (key): ', key, '////////')
 
                 // Get the strings as key, and arrays as value
                 //                let keyDiff = ''
                 //                let keyValue = ''
-                ///                let diffArr = []
+                //                let diffArr = []
                 //                let freqDiffValueArr = []
 
                 let diffArr = aggDataObj.relative[key].diff
                 let freqDiffValueArr = aggDataObj.relative[key].diff_values_sorted_by_freq
-                //console.log('diffArr: ', diffArr)   // (19) [1, 2, 0, -3, -2, 1, 9, -7, -3, 6, -2, -15, -3, 30, -12, -3, 1, -1, -7]
+                console.log('diffArr: ', diffArr)   // (19) [1, 2, 0, -3, -2, 1, 9, -7, -3, 6, -2, -15, -3, 30, -12, -3, 1, -1, -7]
                 //console.log('freqDiffValueArr: ', freqDiffValueArr) // (3) [-3, -2, -7]
 
 
@@ -105,7 +109,7 @@ function bruteforce53Enc() {
                 // `.slice`の 第二引数の終了位置は切り出されないので
                 // ${actualDictSize}個の数値を切り出したい時には [0]...[28]が${actualDictSize}個なので `.slice(0, ${actualDictSize})` となるようにする
                 const freqDiffValueArrDict = freqDiffValueArr.slice(0, actualDictSize);
-                console.log('freqDiffValueArrDict: ', freqDiffValueArrDict)
+                //console.log('freqDiffValueArrDict: ', freqDiffValueArrDict)
                 // [] | If dict size is zero, Empty array will be returned
 
 
@@ -121,7 +125,7 @@ function bruteforce53Enc() {
 
                 for (let i = 0; i < alphabetsForDict.length; i++) {
                     // Mapオブジェクトに キー(頻出数値) と バリュー(置換用アルファベット) のペアを追加する
-                    //console.log('typeof(freqDiffValueArrDict[i], alphabetsForDict[i]), freqDiffValueArrDict[i], alphabetsForDict[i]: ', typeof(freqDiffValueArrDict[i]), typeof(alphabetsForDict[i]), freqDiffValueArrDict[i], alphabetsForDict[i])
+                    console.log('typeof(freqDiffValueArrDict[i], alphabetsForDict[i]), freqDiffValueArrDict[i], alphabetsForDict[i]: ', typeof(freqDiffValueArrDict[i]), typeof(alphabetsForDict[i]), freqDiffValueArrDict[i], alphabetsForDict[i])
                     // number string -2 I
                     freqdictMap.set(freqDiffValueArrDict[i], alphabetsForDict[i]);
                 }
@@ -140,29 +144,32 @@ function bruteforce53Enc() {
                 const freqDiffValueToEmbedJoined = freqDiffValueToEmbed.join('')
 
 
-
                 // Encode the diff
 
                 // Get the range to apply the BaseX encoding
-                const startOfBaseXEncTargetBefore0 = 0 - getHalfOfBaseXRange(baseXNumber) // -128
-                const endOfBaseXEncTargetAfter9 = getHalfOfBaseXRange(baseXNumber) + 9 //  137
+                const startOfBaseXEncTargetBefore0 = 0 - getHalfOfBaseXRange(baseXNumber)
+                const endOfBaseXEncTargetAfter9 = getHalfOfBaseXRange(baseXNumber) + 9
+                console.log('the range to apply the baseXEnc: ', startOfBaseXEncTargetBefore0, ' < 0 | 9 < ', endOfBaseXEncTargetAfter9)
+                // -40  < 0 | 9 <  49
 
                 // Get the range to skip the BaseX encoding
-                const endOfIneligibleForBaseXEncLower = startOfBaseXEncTargetBefore0 - 1 // -129
-                const startOfIneligibleForBaseXEncHigher = endOfBaseXEncTargetAfter9 + 1 //  138
-                //console.log('endOfIneligibleForBaseXEncLower: ', endOfIneligibleForBaseXEncLower)       // -1353
-                //console.log('startOfIneligibleForBaseXEncHigher: ', startOfIneligibleForBaseXEncHigher) // 1362
+                const endOfIneligibleForBaseXEncLower = startOfBaseXEncTargetBefore0 - 1
+                const startOfIneligibleForBaseXEncHigher = endOfBaseXEncTargetAfter9 + 1
+                console.log('the range to skip the baseXEnc: ', minimumDiffValue, ' < ', endOfIneligibleForBaseXEncLower, ' | ', startOfIneligibleForBaseXEncHigher, ' < ', maxDiffValue )
+                // -124  <  -41  |  50  <  124
+
 
                 const diffArrEncoded = diffArr.map((diff) => {
-                    // [０－９] の一桁の正の数は そのままにする
+                    // [0-9] の一桁の正の数は そのままにする
                     if (diff >= 0 && diff <= 9) {
-                        //console.log('If ([0-9]), typeof(diff) and diff: ', typeof(diff), diff)
+                        console.log('Value in [0-9]: ', diff)
                         return diff;
                     }
+
                     // 頻出数値Top${maxDictSize} dictArray[index] が存在するかどうかを確認し 存在する場合にのみ `has` でキーを探し
                     // ${maxDictSize}個のアルファベット のどれか一文字に置換
                     else if (freqdictMap.has(diff)) {
-                        //console.log('Else If (diff in dict), typeof(diff), diff and freqdictMap.get(diff): ', typeof(diff), diff, freqdictMap.get(diff))
+                        console.log('diff value in freq dict, diff and freqdictMap.get(diff): ', typeof(diff), diff, freqdictMap.get(diff))
                         return freqdictMap.get(diff);
                     }
 
@@ -187,20 +194,18 @@ function bruteforce53Enc() {
                         if (diff <= endOfIneligibleForBaseXEncLower) {
                             // 負の数なので baseXエンコードできない場合
 
-                            console.log("diffは 小さ過ぎて baseXエンコードの 対象範囲外: ", diff);
-
                             diffEncoded = String(base52Encode(Math.abs(diff))) // Math.absで絶対値に変換して マイナス記号を消す
                             if (diffEncoded.length <= 2) { // Add `__` as prefix for encoded as 2 digits from minus number
                                 diffEncodedWithUnderscorePrefix = '__' + diffEncoded.padStart(2, 'a') // total: 4 (2+2) chars
                             } else if (diffEncoded.length = 3) { // Add `____` as prefix for encoded as 3 chars from minus number
                                 diffEncodedWithUnderscorePrefix = '____' + diffEncoded // total: 7 (4+3) chars
                             }
+
+                            console.log(`${diff} は 小さ過ぎて Base${baseXNumber}Encの 対象範囲外なので base52Encしてから 2|4 個の'_'を prefixとして加える: `, diff, diffEncodedWithUnderscorePrefix);
                             return diffEncodedWithUnderscorePrefix
 
                         } else if (startOfIneligibleForBaseXEncHigher <= diff) {
                             // 大きい正の数で baseXエンコードでは 三桁以上になってしまう場合
-
-                            console.log("diffは 大き過ぎて baseXエンコードの 対象範囲外: ", diff);
 
                             diffEncoded = String(base52Encode(diff))
                             if (diffEncoded.length <= 2) { // Add `_` as prefix for encoded as 2 chars from plus number
@@ -208,16 +213,19 @@ function bruteforce53Enc() {
                             } else if (diffEncoded.length = 3) { // Add `___` as prefix for encoded as 3 chars from plus number
                                 diffEncodedWithUnderscorePrefix = '___' + diffEncoded // total: 6 (3+3) chars
                             }
+                            console.log(`${diff} は 大き過ぎて Base${baseXNumber}Encの 対象範囲外なので base52Encしてから 1|3 個の'_'を prefixとして加える: `, diff, diffEncodedWithUnderscorePrefix);
                             return diffEncodedWithUnderscorePrefix
 
                         } else {
                             // diffが baseXエンコード可能な範囲にある場合
                             // BaseX でアルファベット2文字にエンコード
-                            return baseXEnc(diff, baseXNumber);
+                            const baseXEncoded = baseXEnc(diff, baseXNumber);
+                            console.log(`diffが baseXエンコード可能な範囲にあるので Base${baseXNumber} でアルファベット2文字にエンコード:`, diff, baseXEncoded)
+                            return  baseXEncoded
                         }
                     }
                 });
-                //console.log('diffArrEncoded: ', diffArrEncoded) // (484) [7, 'ln', 'B', 'B', 'D', 'N', 'X', 6, 'nl', 'U', 8, ...
+                console.log('diffArrEncoded: ', diffArrEncoded) // (484) [7, 'ln', 'B', 'B', 'D', 'N', 'X', 6, 'nl', 'U', 8, ...
 
 
                 // Join the encoded four columns values as a string

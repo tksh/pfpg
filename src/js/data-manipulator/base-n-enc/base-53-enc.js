@@ -25,6 +25,7 @@ function base53Encode(num) {
 // console.log('0: ',   base53Encode(0)) // _
 // console.log('1: ',   base53Encode(1)) // a
 // console.log('2: ',   base53Encode(2)) // b
+// console.log('8: ',   base53Encode(8)) // h
 // console.log('50: ', base53Encode(50)) // X
 // console.log('51: ', base53Encode(51)) // Y
 // console.log('52: ', base53Encode(52)) // Z

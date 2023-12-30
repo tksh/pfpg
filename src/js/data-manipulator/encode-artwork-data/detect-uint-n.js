@@ -18,12 +18,14 @@ function getUintNPortrayForEnc() {
   const artworkDataObj = JSON.parse(rawJson)
 
   // Size
-  const grid_size_str = artworkDataObj.grid_size
-  const split_by_x = grid_size_str.split('x')            // (2) ['255', '255']
-  const max = Math.max(...split_by_x)                     // 255
-  const uintN = getUintN(max)                             // 8 (2 の 何乗か？)
+  const gridSizeStr = artworkDataObj.grid_size
+  const splitByX = gridSizeStr.split('x')        // (2) ['255', '255']
+  const max = Math.max(...splitByX)              // 255
+  const uintN = getUintN(max)                    // 8 (2 の 何乗か？)
 
-  return uintN
+  // return uintN
+  const sizesObj = {grid_size_str: gridSizeStr, max:max, uint_n: uintN}
+  return sizesObj
 }
 
 function getUintN(n) {

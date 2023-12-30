@@ -26,7 +26,9 @@ function base52Decode(str) {
 // console.log(base52Decode('ZZZ'))  // 140607
 // console.log(base52Decode('baaa')) // 140608
 
-
+// console.log(base52Decode('aa'))   // 0
+// console.log(base52Decode('aaa'))  // 0
+// console.log(base52Decode('aaaa')) // 0
 
 
 

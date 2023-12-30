@@ -32,7 +32,7 @@ function getAlphabetsForDict(dictSize) {
     const alphabets52 = getAlphabets52()
     // 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-    // 文字列の後ろから dictSize の文字数分を取り出す
+    // 文字列の後方から dictSize の値の分を取り出す
     if (dictSize == 0) {
         console.log('dictSize is 0, return the empty string.')
         return "";
@@ -41,11 +41,34 @@ function getAlphabetsForDict(dictSize) {
         return alphabetsForDict
     }
 }
+// console.log(typeof(getAlphabetsForDict(0))) // string
+// console.log(getAlphabetsForDict(0))  // ""
+// console.log(getAlphabetsForDict(1))  // Z
+// console.log(getAlphabetsForDict(51)) // bcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+// console.log(getAlphabetsForDict(52)) // abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
 
-function getAlphabetForBaseX(baseXNum) {
+function getAlphabetsForBaseX(baseX) {
     const alphabets52 = getAlphabets52()
     // 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-    const alphabetForBaseX = alphabets52.substring(0, baseXNum)
-    return alphabetForBaseX
+    // 文字列の前方から baseX の値の分を取り出す
+    if (baseX == 0) {
+        console.log('baseX is 0, return the empty string.')
+        return "";
+    } else {
+        const alphabetForBaseX = alphabets52.substring(0, baseX)
+        return alphabetForBaseX
+    }
 }
+
+// console.log(typeof(getAlphabetsForBaseX(0))) // string
+// console.log(getAlphabetsForBaseX(0))  //
+// console.log(getAlphabetsForBaseX(1))  // a
+// console.log(getAlphabetsForBaseX(8))  // abcdefgh
+// console.log(getAlphabetsForBaseX(51)) // abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXY
+// console.log(getAlphabetsForBaseX(52)) // abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+
+
+
+

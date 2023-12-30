@@ -20,7 +20,7 @@ function base53Decode(str) {
 // console.log(base53Decode('_')) // 0
 // console.log(base53Decode('a')) // 1
 // console.log(base53Decode('b')) // 2
-// console.log(base53Decode('c')) // 3
+// console.log(base53Decode('h')) // 8
 // console.log(base53Decode('X')) // 50
 // console.log(base53Decode('Y')) // 51
 // console.log(base53Decode('Z')) // 52

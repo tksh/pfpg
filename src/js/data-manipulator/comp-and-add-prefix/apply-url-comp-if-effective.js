@@ -19,7 +19,7 @@ function applyUrlCompIfEffective(
     const ampersandCount = groupCount - 1 // '&' will added between each groups
 
 
-    for (const [groupId, dvalSwap63EncodedStr] of encodedDvalByGroup) {
+    for (const [groupId, dvalEncodedStr] of encodedDvalByGroup) {
 
         // Get encoded width count that have same group_id as a key
         const widthCountEncoded = encodedWidthCountByGroup.get(groupId)
@@ -27,7 +27,7 @@ function applyUrlCompIfEffective(
 
         // Join the [width count] and [swap63 encoded dvals] with `-` (hyphen)
         // [width count]-[x1, y1, x2, y2]
-        const widthCountAndDval = widthCountEncoded + '-' + dvalSwap63EncodedStr
+        const widthCountAndDval = widthCountEncoded + '-' + dvalEncodedStr
 
 
         // Compress with URLCompressor

@@ -31,14 +31,14 @@
 function baseXEnc(numOriginal, baseX) {
     // Add some numbers to shift each number above zero
     let numWithoutMinus = addNumBeforeEncode(numOriginal, baseX)
+    console.log("numOriginal, numWithoutMinus: ", numOriginal, numWithoutMinus)
 
-    const alphabets52 = `AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz`
-    const alphabet = alphabets52.substring(0, baseX)
+    const alphabet = getAlphabetsForBaseX(baseX)
     let base = alphabet.length;
     let encoded = '';
 
     if (numWithoutMinus === 0) {
-        return alphabet[0];
+        return alphabet[0] + alphabet[0];
     }
 
     while (numWithoutMinus) {
@@ -49,23 +49,11 @@ function baseXEnc(numOriginal, baseX) {
 
     // Padded to 2 digits
     if (encoded.length === 1) {
-        console.log("Need to .padStart(2, 'A'): ", encoded)
-        encoded = encoded.padStart(2, 'A')
+        console.log("Need to .padStart(2, 'a'): ", encoded)
+        encoded = encoded.padStart(2, 'a')
     }
     // Check
     //console.log('typeof(numOriginal), numOriginal, addNumBeforeEncode(numOriginal) and encoded(without pad): ', typeof(numOriginal), numOriginal, addNumBeforeEncode(numOriginal), encoded)
 
     return encoded
 }
-
-//console.log(baseXEnc(-255, 23)) // Aa
-//console.log(baseXEnc(-254, 23)) // AB
-//console.log(baseXEnc(-1, 23))   // fB
-//console.log(baseXEnc(0, 23))    // fb
-//console.log(baseXEnc(1, 23))    // fC
-//console.log(baseXEnc(254, 23))  // LC
-//console.log(baseXEnc(255, 23))  // Lc
-//console.log(baseXEnc(271, 23))  // Lk
-//console.log(baseXEnc(272, 23))  // LL
-
-

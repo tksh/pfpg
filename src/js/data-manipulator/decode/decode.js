@@ -69,7 +69,9 @@ function decodeStrokesValues(strokesValuesMap) {
         if (v.three_flags[1] === '0') {
             console.log(`Group ${groupId} has encoded with 'bruteforce53-enc'`)
             //console.log("v.encoded_dvals: ", v.encoded_dvals) // ok
-            decodedRelDvals = decodeBruteforce53Enc(v.encoded_dvals, v.three_flags)
+            decodedDiffDvals = decodeBruteforce53Enc(v.encoded_dvals, v.three_flags)
+            console.log("decodedDiffDvals: ", decodedDiffDvals)
+            decodedRelDvals = decodedDiffDvals.map(column => diffToRel(column))
 
         } else if (v.three_flags[1] === '1') {
             console.log("This group has encoded with 'bigint64-enc'")
@@ -93,6 +95,6 @@ function decodeStrokesValues(strokesValuesMap) {
         })
 
     }
-
+    console.log('decodedRelDvalsMap: ', decodedRelDvalsMap)
     return decodedRelDvalsMap
 }

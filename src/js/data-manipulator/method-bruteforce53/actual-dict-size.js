@@ -7,3 +7,7 @@ function getActualDictSize(maxDictSize, freqDiffValueArr) {
     }
     return actualDictSize
 }
+
+// If there is no freq values([]), always return the '0'
+// console.log(getActualDictSize(0, []))  // 0
+// console.log(getActualDictSize(52, [])) // 0
