@@ -73,16 +73,19 @@ function generateSvg(artworkDataMap, strokesValuesMap, decodedRelDvalsMap) {
 
     for (let [groupId, v] of strokesValuesMap) {
         const dvalsObj = decodedRelDvalsMap.get(groupId)
-        //console.log('dvalsObj: ', dvalsObj) // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
+        console.log('dvalsObj: ', dvalsObj) // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
 
         const widthArr = v.width_count.width
         const firstlineArr = v.width_count.firstline
         const lastlineArr = v.width_count.lastline
 
-        for (let i = 0; i < widthArr.length; i = + 1) {
+        for (let i = 0; i < widthArr.length; i += 1) {
             const width = widthArr[i]
-            const firstline = firstlineArr[i] - 1 // Subtract 1 to convert as index number
-            const lastline = lastlineArr[i] - 1   // Subtract 1 to convert as index number
+            const firstlineIndex = firstlineArr[i] - 1 // Subtract 1 to convert as index number
+            const lastlineIndex = lastlineArr[i] - 1   // Subtract 1 to convert as index number
+
+            //console.log('firstlineArr[i], firstlineIndex: ', firstlineArr[i], firstlineIndex)
+            //console.log('lastlineArr[i], lastlineIndex: ', lastlineArr[i], lastlineIndex)
 
             const pathTagStart = tabSpace.repeat(3) + `<path stroke-width="${width}" d="`
             // '            <path stroke-width="3" d="'
@@ -91,7 +94,7 @@ function generateSvg(artworkDataMap, strokesValuesMap, decodedRelDvalsMap) {
 
             // Generate the path tag d values
             let pathTagDval = ""
-            for (let i = firstline; i < lastline; i += 1) {
+            for (let i = firstlineIndex; i <= lastlineIndex; i += 1) {
                 let eachDval = `m${dvalsObj.x1[i]} ${dvalsObj.y1[i]} ${dvalsObj.x2[i]} ${dvalsObj.y2[i]}`
                 eachDval = eachDval.replace(/ -/g, '-') // Delete unnecesally spaces before the minus mark '-'
                 pathTagDval += eachDval
@@ -103,7 +106,6 @@ function generateSvg(artworkDataMap, strokesValuesMap, decodedRelDvalsMap) {
             // "            <path stroke-width=\"3\" d=\"m1 0 0 26m3-26 0 25m3-25-1 23m0-8 4 6m-2-1 0 3m-1-18 4-5m8 0 5 5m1-5 1 24m-2-9 0 7m4-22 0 25m2-25 0 27m-13 1 3 3m-16-7 4-2m14-22 2 9m2 2-3 6m-1-1 0 4m0-1 2 4m-1-1 8 5\" />"
 
             pathTagsByGroup.set(groupId, eachWidthPathTag)
-
         }
     }
     //console.log('pathTagsByGroup: ', pathTagsByGroup)

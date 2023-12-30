@@ -32,25 +32,22 @@ function decodeBruteforce53Enc(encodedDvalsStr, threeFlagCharsArr) {
     console.log("diffStrByColumns: ", diffStrByColumns)
     // (4) ['120Zml19mJZ6mlmFZmwmgZ1mMmJ', '0MZ1mQ7mEmqmKmkmGZmumimFmtZ00md', '00mM5mk41mkmM0031mlZ326Z', 'mumMmlmEZmimmmRmEmq2mamKmNZml01Z']
 
-    // Get Frec Dict Map from Freq Nums Array
-    const freqdictMapByColumn = freqNumsByColumns.map(eachColumn => freqdictForDec(eachColumn, maxDictSize))
-    console.log('freqdictMapByColumn: ', freqdictMapByColumn)
-    // (4) [Map(1), Map(1), Map(1), Map(1)]
-    //     0: Map(1) {'a' => -3}
-    //     1: Map(1) {'a' => -3}
-    //     2: Map(1) {'a' => -5}
-    //     3: Map(1) {'a' => -3}
-
-    // Decode the diff
+    // Processing for each columns from x1 [0] to y2 [3]
     let decodedDiffColumns = []
-    for (let i = 0; i < 4; i++) { // Processing for x1[0] to y2[3]
+    for (let i = 0; i < 4; i++) {
         //console.log('i: ', i) // 0, 1, 2, 3
         //console.log('freqdictMapByColumn[i]: ', freqdictMapByColumn[i])       // freq dict:   Map(11) { P → -7, p → -12, Q → -11, … }
         //console.log('diffStrByColumns[i], diffStrByColumns[i].length: ', diffStrByColumns[i], diffStrByColumns[i].length) // diff string: 7hARRSXHg6IHgg8hJ23WqUgJIHhFRGMqhLjHF...
 
+        // get freq dict map with actual size
+        const actualDictSize = getActualDictSize(maxDictSize, freqNumsByColumns[i])
+        const freqdictMap = freqdictForDec(freqNumsByColumns[i], actualDictSize)
+
+        // Decode the diff
         const decodedDiffArray = decodeDiffFromStr(
             diffStrByColumns[i],
-            freqdictMapByColumn[i],
+            freqdictMap,
+            // freqdictMapByColumn[i],
             baseX,
             maxDictSize
         )
@@ -58,15 +55,10 @@ function decodeBruteforce53Enc(encodedDvalsStr, threeFlagCharsArr) {
         // Array(484) [ 7, 10, -3, -3, -12, -13, -17, 6, 54, -47, … ]
 
         decodedDiffColumns.push(decodedDiffArray)
-        console.log(`${i} for x1[0],y1[1],x2[2],y2[3] | `, 'decodedDiffColumns: ', decodedDiffColumns)
+        //console.log(`${i} for x1[0],y1[1],x2[2],y2[3] | `, 'decodedDiffColumns: ', decodedDiffColumns)
     }
 
     return decodedDiffColumns
-    // (4) [Array(7), Array(6), Array(7), Array(7)]
-    // 0: (7) [12, -13, 3, -1, 1, 0, -3]
-    // 1: (6) [21, -35, -14, -2, 4, -4]             // 要素の数が合ってない
-    // 2: (7) [0, -2, 1, -1, 1, 3, 0]
-    // 3: (7) [2, 1, -1, 1, -2, 0, 0]
 }
 
 
@@ -97,23 +89,6 @@ function decodeFreqNumArray(diffStr) {
     // (29) [-2, -1, -7, -5, -3, -4, 11, 10, 12, -8, -11, -6, 16, -10, 13, 24, -27, -9, 14, 15, 17, 20, 73, -38, -37, -25, -24, -23, -22]
 }
 
-function getFreqNumDict(numArray, maxDictSize) {
-    // Generate a frequency dictionary for decoding
-
-    // Keys: freq dict
-    // An array of alphabet chars to replace the numerical numbers
-    const alphabetForDict = getAlphabetsForDict(maxDictSize)
-
-    // Set the kv pair into Map()
-    const freqdictMap = new Map();
-
-    for (let i = 0; i < numArray.length; i++) {
-        // Mapオブジェクトに キー(一文字置換用アルファベット) と バリュー(頻出数値) のペアを追加する
-        freqdictMap.set(alphabetForDict[i], numArray[i]);
-    }
-    //console.log('freqdictMap: ', freqdictMap) // Map(11) { P → -7, p → -12, Q → -11, q → -9, R → -8, … }
-    return freqdictMap
-}
 
 function freqdictForDec(numArray, maxDictSize) {
     // Generate the frequency dictionary for decoding
@@ -121,8 +96,13 @@ function freqdictForDec(numArray, maxDictSize) {
     // Key:   freq numbers
     // Value: char from alphabets
 
+    // RSTUVWXYZ from console.log(getAlphabetsForDict(9))
+
     // An array of alphabet chars to replace the numerical numbers
     const alphabetForDict = getAlphabetsForDict(maxDictSize)
+
+    console.log('!!!!!!!!! maxDictSize: ', maxDictSize)
+    console.log('!!!!!!!!! alphabetForDict: ', alphabetForDict)
 
     // Set the kv pair into Map()
     const freqdictMap = new Map();

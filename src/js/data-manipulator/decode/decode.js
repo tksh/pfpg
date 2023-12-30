@@ -72,6 +72,7 @@ function decodeStrokesValues(strokesValuesMap) {
             decodedDiffDvals = decodeBruteforce53Enc(v.encoded_dvals, v.three_flags)
             console.log("decodedDiffDvals: ", decodedDiffDvals)
             decodedRelDvals = decodedDiffDvals.map(column => diffToRel(column))
+            console.log("decodedRelDvals: ", decodedRelDvals)
 
         } else if (v.three_flags[1] === '1') {
             console.log("This group has encoded with 'bigint64-enc'")

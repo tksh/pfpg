@@ -3,9 +3,9 @@
 function decodeDiffFromStr(diffStr, freqdictMap, baseX, maxDictSize) {
     let decodedDiffArray = [];
 
-    //console.log('diffStr: ', diffStr)
-    //console.log('diffStr.length: ', diffStr.length)
-    //console.log('freqdictMap: ', freqdictMap)
+    console.log('diffStr: ', diffStr)
+    console.log('diffStr.length: ', diffStr.length)
+    console.log('freqdictMap: ', freqdictMap)
 
     for (let i = 0; i < diffStr.length; i++) {
         console.log('i, diffStr[i]): ', i, diffStr[i])
