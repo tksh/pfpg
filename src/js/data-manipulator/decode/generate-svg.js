@@ -79,7 +79,7 @@ function generateSvg(artworkDataMap, strokesValuesMap, decodedRelDvalsMap) {
         const firstlineArr = v.width_count.firstline
         const lastlineArr = v.width_count.lastline
 
-        for (let i = 0; i < widthArr.length; i += 1) {
+        for (let i = 0; i < widthArr.length; i++) {
             const width = widthArr[i]
             const firstlineIndex = firstlineArr[i] - 1 // Subtract 1 to convert as index number
             const lastlineIndex = lastlineArr[i] - 1   // Subtract 1 to convert as index number
@@ -94,7 +94,7 @@ function generateSvg(artworkDataMap, strokesValuesMap, decodedRelDvalsMap) {
 
             // Generate the path tag d values
             let pathTagDval = ""
-            for (let i = firstlineIndex; i <= lastlineIndex; i += 1) {
+            for (let i = firstlineIndex; i <= lastlineIndex; i++) {
                 let eachDval = `m${dvalsObj.x1[i]} ${dvalsObj.y1[i]} ${dvalsObj.x2[i]} ${dvalsObj.y2[i]}`
                 eachDval = eachDval.replace(/ -/g, '-') // Delete unnecesally spaces before the minus mark '-'
                 pathTagDval += eachDval
