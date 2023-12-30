@@ -8,11 +8,8 @@ function decodeDiffFromStr(diffStr, freqdictMap, baseX, maxDictSize) {
     console.log('freqdictMap: ', freqdictMap)
 
     for (let i = 0; i < diffStr.length; i++) {
-        console.log('i, diffStr[i]): ', i, diffStr[i])
-        //const isInDictBool = isInDict(diffStr[i], freqdictMap)
-        //console.log('isInDictBool, i, diffStr[i]: ', isInDictBool, i, diffStr[i])
+        //console.log('i, diffStr[i]): ', i, diffStr[i])
 
-        // if (isInDictBool === true) { // freq dict に含まれる ならば 1文字ごとに diffStr[i]をキーにして 対応する数値を得て 配列に格納
         if (isInDict(diffStr[i], freqdictMap)) { // freq dict に含まれる ならば 1文字ごとに diffStr[i]をキーにして 対応する数値を得て 配列に格納
             //console.log(`isInDict = true, diffStr[${i}] => freqdictMap.get(diffStr[${i}]): `, diffStr[i], ' => ', freqdictMap.get(diffStr[i]))
             decodedDiffArray.push(freqdictMap.get(diffStr[i]));
@@ -21,23 +18,18 @@ function decodeDiffFromStr(diffStr, freqdictMap, baseX, maxDictSize) {
             decodedDiffArray.push(parseInt(diffStr[i]));
 
 
-            //for (let i = 0; i < diffStr.length; i++) {
-            //    //if (isInDict(diffStr[i], freqdictMap)) { // freq dict に含まれる ならば 1文字ごとに diffStr[i]をキーにして 対応する数値を得て 配列に格納
-            //    if (isInDictOld(diffStr[i], maxDictSize)) { // freq dict に含まれる ならば 1文字ごとに diffStr[i]をキーにして 対応する数値を得て 配列に格納
-            //        decodedDiffArray.push(freqdictMap.get(diffStr[i]));
-            //
-            //    } else if (isNumber(diffStr[i])) { // 整数[0-9] ならば 1文字ごとに 配列に格納
-            //        decodedDiffArray.push(parseInt(diffStr[i]));
-
-
         } else if (diffStr[i] === '_') {
-            // `_`があれば その次に続く "2文字" を Base52デコードして 配列に格納: `_ab`
-            decodedDiffArray.push(base52Decode((diffStr[i + 1] + diffStr[i + 2])));
-            i += 2; // `i` を `2`増やして `_`の後に続く "2文字" 分を スキップさせる
+
+            if (diffStr[i + 1] !== '_') { // '_' が 一つしか続かない場合
+                // `_`があれば その次に続く "2文字" を Base52デコードして 配列に格納: `_ab`
+                decodedDiffArray.push(base52Decode((diffStr[i + 1] + diffStr[i + 2])));
+                i += 2; // `i` を `2`増やして `_`の後に続く "2文字" 分を スキップさせる
+            }
 
             // `__`があれば その次に続く "2文字" を Base52デコードして 配列に格納: `__ab`
             // 返ってきた 数値には マイナス記号を付ける
-            if (diffStr[i + 1] === '_') {
+            if (diffStr[i + 1] === '_') { // '_' が 一つ目の後に もう一つ続く場合
+                console.log(`${diffStr} は "__"が 付いているので Base52デコードし マイナス記号を付ける`)
                 decodedDiffArray.push(-base52Decode((diffStr[i + 2] + diffStr[i + 3])));
                 i += 3; // `i` を `3`増やして `__`の後に続く "2文字" 分を スキップさせる
             }
