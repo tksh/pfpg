@@ -1,4 +1,4 @@
-// Add and subtract functions for base52 to encode the freq dict diff values
+// Add and subtract functions for base52 to encode the diff values
 
 // For encoding
 function addNumBeforeEncodeForBase52ForFreqDictValue(num) {
@@ -12,12 +12,12 @@ function subtractNumAfterDecodeForBase52ForFreqDictValue(num) {
 
 function getMostSmallDiffNumberAsAbsForEnc() {
     const uintXPortray = getUintNPortrayForEnc().uint_n    // Get uintX from "textarea"
-    const  startOfRelvalue = -(2**uintXPortray) + 1 // if uintXPortray = 8 =>  -255
-    const startOfRelRange  = -(startOfRelvalue*2)   // if uintXPortray = 8 =>  -510
-    const startOfDiffRange = -(startOfRelRange*2)   // if uintXPortray = 8 => -1020
+    const  startOfRelvalue = -(2**uintXPortray) + 1        // if uintXPortray = 8 =>  -255
+    const startOfRelRange  = -(startOfRelvalue*2)          // if uintXPortray = 8 =>  -510
+    const startOfDiffRange = -(startOfRelRange*2)          // if uintXPortray = 8 => -1020
 
     // This number should be add or subtract to freq dict diff values to reduce the minus numbers
-    return Math.abs(startOfDiffRange)               // if uintXPortray = 8 =>  1020
+    return Math.abs(startOfDiffRange)                      // if uintXPortray = 8 =>  1020
 }
 
 

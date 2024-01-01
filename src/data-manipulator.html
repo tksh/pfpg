@@ -4,13 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SVG2PNG4Cre8ivePeop16/data-manipulator</title>
+    <title>pfpg | data-manipulator</title>
 
     <link rel="stylesheet" href="./css/data-manipulator/style.css">
-
-
-    <!-- Decode -->
-    <!-- <script src="./js/data-manipulator/decode/read-url-params.js"></script> -->
 
     <!-- Data IO -->
     <script src="./js/data-manipulator/data-io/select-file.js"></script>
@@ -20,55 +16,47 @@
     <script src="./js/data-manipulator/data-io/merge-as-url-params.js"></script>
     <script src="./js/data-manipulator/data-io/copy-textarea.js"></script>
     <script src="./js/data-manipulator/data-io/show-result.js"></script>
-    <!-- <script src="./js/data-manipulator/data-io/read-url-params.js"></script> -->
 
-    <!-- Base N enc -->
-    <script src="./js/data-manipulator/base-n-enc/get-char-list.js"></script>
-    <script src="./js/data-manipulator/base-n-enc/base-52-enc.js"></script>
-    <script src="./js/data-manipulator/base-n-enc/base-52-dec.js"></script>
-    <script src="./js/data-manipulator/base-n-enc/base-53-enc.js"></script>
-    <script src="./js/data-manipulator/base-n-enc/base-53-dec.js"></script>
-    <script src="./js/data-manipulator/base-n-enc/base-64-url-enc.js"></script>
-    <script src="./js/data-manipulator/base-n-enc/base-64-url-dec.js"></script>
+    <!-- Base N Encodings -->
+    <script src="./js/data-manipulator/base-n-encodings/get-char-list.js"></script>
+    <script src="./js/data-manipulator/base-n-encodings/base-52-enc.js"></script>
+    <script src="./js/data-manipulator/base-n-encodings/base-52-dec.js"></script>
+    <script src="./js/data-manipulator/base-n-encodings/base-53-enc.js"></script>
+    <script src="./js/data-manipulator/base-n-encodings/base-53-dec.js"></script>
+    <script src="./js/data-manipulator/base-n-encodings/base-64-url-enc.js"></script>
+    <script src="./js/data-manipulator/base-n-encodings/base-64-url-dec.js"></script>
 
     <!-- URLCompressor -->
-    <script src="./js/data-manipulator/url-comp-0-1-0/convert.js"></script>
     <script src="./js/data-manipulator/url-comp-0-1-0/url-comp.js"></script>
 
-    <!-- Encode the Artwork Data -->
-    <script src="./js/data-manipulator/encode-artwork-data/artwork-data-encode.js"></script>
-    <script src="./js/data-manipulator/encode-artwork-data/detect-uint-n.js"></script>
+    <!-- Artwork Data -->
+    <script src="./js/data-manipulator/artwork-data/artwork-data-enc.js"></script>
+    <script src="./js/data-manipulator/artwork-data/detect-uint-n.js"></script>
 
-    <!-- Convert Color Format -->
+    <!-- Color Formatter -->
     <script src="./js/data-manipulator/color-formatter/normalized-to-hex.js"></script>
     <script src="./js/data-manipulator/color-formatter/normalized-from-hex.js"></script>
     <script src="./js/data-manipulator/color-formatter/hex-shorten.js"></script>
     <script src="./js/data-manipulator/color-formatter/hex-expand.js"></script>
 
-    <!-- Encode the Group Colors -->
+    <!-- Group Colors -->
     <script src="./js/data-manipulator/group-colors/colors-enc.js"></script>
     <script src="./js/data-manipulator/group-colors/colors-dec.js"></script>
 
-    <!-- Encode the Width Count -->
+    <!-- Width Count -->
     <script src="./js/data-manipulator/width-count/width-count-enc.js"></script>
     <script src="./js/data-manipulator/width-count/width-count-dec.js"></script>
-
-    <!-- Processing for Map object -->
-    <script src="./js/data-manipulator/processing-for-map-obj/join-with-and.js"></script>
-    <script src="./js/data-manipulator/processing-for-map-obj/best-mix-enc.js"></script>
-    <script src="./js/data-manipulator/processing-for-map-obj/store-smaller.js"></script>
 
     <!-- Bruteforce53 encoding method -->
     <script src="./js/data-manipulator/method-bruteforce53/bruteforce53-enc.js"></script>
     <script src="./js/data-manipulator/method-bruteforce53/bruteforce53-dec.js"></script>
     <script src="./js/data-manipulator/method-bruteforce53/base-x-enc.js"></script>
     <script src="./js/data-manipulator/method-bruteforce53/base-x-dec.js"></script>
-    <script src="./js/data-manipulator/method-bruteforce53/get-specific-alphabets.js"></script>
+    <script src="./js/data-manipulator/method-bruteforce53/specific-alphabets.js"></script>
     <script src="./js/data-manipulator/method-bruteforce53/actual-dict-size.js"></script>
     <script src="./js/data-manipulator/method-bruteforce53/decode-diff.js"></script>
     <script src="./js/data-manipulator/method-bruteforce53/diff-to-rel.js"></script>
-
-    <script src="./js/data-manipulator/method-bruteforce53/plus-and-minus.js"></script>
+    <script src="./js/data-manipulator/method-bruteforce53/add-and-subtract.js"></script>
 
     <!-- Bigint64 encoding method -->
     <script src="./js/data-manipulator/method-bigint64/bigint64-enc.js"></script>
@@ -79,33 +67,21 @@
     <script src="./js/data-manipulator/method-swap63/swap63-enc.js"></script>
     <script src="./js/data-manipulator/method-swap63/swap63-dec.js"></script>
 
+    <!-- Processing for Map object -->
+    <script src="./js/data-manipulator/processing-for-map-obj/join-with-and.js"></script>
+    <script src="./js/data-manipulator/processing-for-map-obj/best-mix-enc.js"></script>
+    <script src="./js/data-manipulator/processing-for-map-obj/store-smaller.js"></script>
+
     <!-- Apply the URLCompressor and add prefix chars into smaller one -->
     <script src="./js/data-manipulator/comp-and-add-prefix/add-prefix-as-flags.js"></script>
     <script src="./js/data-manipulator/comp-and-add-prefix/apply-url-comp-if-effective.js"></script>
     <script src="./js/data-manipulator/comp-and-add-prefix/choose-smaller-and-add-prefix.js"></script>
     <script src="./js/data-manipulator/comp-and-add-prefix/compare-length.js"></script>
 
-
-    <!--
-    <script src="./js/data-manipulator/for-uint-5-portray/extract-d-values.js"></script>
-    <script src="./js/data-manipulator/for-uint-5-portray/generate-swap63-dict.js"></script>
-    <script src="./js/data-manipulator/for-uint-5-portray/swap63-encode.js"></script>
-    <script src="./js/data-manipulator/for-uint-5-portray/swap63-decode.js"></script> -->
-
-    <!-- For Uint[6-14]Portray -->
-    <!-- <script src="./js/data-manipulator/for-uint-6-to-14-portray/base-x-encode.js"></script>
-    <script src="./js/data-manipulator/for-uint-6-to-14-portray/base-x-decode.js"></script>
-    <script src="./js/data-manipulator/for-uint-6-to-14-portray/mixed-encode.js"></script>
-    <script src="./js/data-manipulator/for-uint-6-to-14-portray/mixed-decode.js"></script>
-    <script src="./js/data-manipulator/for-uint-6-to-14-portray/base52-encode.js"></script>
-    <script src="./js/data-manipulator/for-uint-6-to-14-portray/base52-decode.js"></script>
-    <script src="./js/data-manipulator/for-uint-6-to-14-portray/plus-and-minus.js"></script>
-    <script src="./js/data-manipulator/for-uint-6-to-14-portray/get-alphabet.js"></script> -->
-
-    <!-- Test: Bigint64 Encoding -->
-    <!-- <script src="./js/data-manipulator/for-uint-6-to-14-portray/base64-bigint64-encode.js"></script>
-    <script src="./js/data-manipulator/for-uint-6-to-14-portray/base64-urlsafe-encode.js"></script>
-    <script src="./js/data-manipulator/for-uint-6-to-14-portray/base64-urlsafe-decode.js"></script> -->
+    <!-- Decode from URL Params -->
+    <script src="./js/data-manipulator/decode/read-url-params.js"></script>
+    <script src="./js/data-manipulator/decode/generate-svg.js"></script>
+    <script defer src="./js/data-manipulator/decode/decode.js"></script>
 
 </head>
 
@@ -557,37 +533,28 @@
         <p id="encoded-strokes-values-time"></p>
 
 
-        </div>
-        <div class="bg-2 pad">
-            <h2>Merge the Encoded Artwork Data and Strokes Values</h2>
+    </div>
+    <div class="bg-2 pad">
+        <h2>Merge the Encoded Artwork Data and Strokes Values</h2>
 
-            <h3>3. ⬇ Finished URL Params:</h3>
-            <button onclick="mergeArtworkDataAndStrokesValues()">Merge via <b>mergeArtworkDataAndStrokesValues()</b></button>
-            <textarea id="textarea-encoded-url-params" class="height-2" placeholder="Encoded URL Params"></textarea>
-            <button id="button-encoded-url-params" onclick="copyTextarea('textarea-encoded-url-params', 'button-encoded-url-params')">Copy to clipboard</button>
-            <p id="encoded-url-params-size"></p>
-
-
-        </div>
-        <br>
-        <div class="bg-3 pad">
-            <h2>Decode the URL Params</h2>
-
-            <h3>3. ⬇ Decoded SVG String:</h3>
-            <textarea id="textarea-decoded-svg" class="height-2" placeholder="If inputed text at address bar includes the url params like /data-manipulator.html?..., Decoding to SVG is automatically starts when page loaded and result text will export here."></textarea>
-            <button id="button-decoded-svg" onclick="copyTextarea('textarea-decoded-svg', 'button-decoded-svg')">Copy to clipboard</button>
-            <p id="encoded-size-compare"></p>
-
-        </div>
+        <h3>3. ⬇ Finished URL Params:</h3>
+        <button onclick="mergeArtworkDataAndStrokesValues()">Merge via <b>mergeArtworkDataAndStrokesValues()</b></button>
+        <textarea id="textarea-encoded-url-params" class="height-2" placeholder="Encoded URL Params"></textarea>
+        <button id="button-encoded-url-params" onclick="copyTextarea('textarea-encoded-url-params', 'button-encoded-url-params')">Copy to clipboard</button>
+        <p id="encoded-url-params-size"></p>
 
 
-        <!-- Script to decode / HTMLドキュメントが読み込まれてから実行しないとエラーになる -->
-        <!-- Decode from URL Params -->
-        <!-- <script src="./js/data-manipulator/common/decode.js"></script> -->
-        <script src="./js/data-manipulator/decode/read-url-params.js"></script>
-        <script src="./js/data-manipulator/decode/generate-svg.js"></script>
-        <script src="./js/data-manipulator/decode/decode.js"></script>
+    </div>
+    <br>
+    <div class="bg-3 pad">
+        <h2>Decode the URL Params</h2>
 
+        <h3>3. ⬇ Decoded SVG String:</h3>
+        <textarea id="textarea-decoded-svg" class="height-2" placeholder="If inputed text at address bar includes the url params like /data-manipulator.html?..., Decoding to SVG is automatically starts when page loaded and result text will export here."></textarea>
+        <button id="button-decoded-svg" onclick="copyTextarea('textarea-decoded-svg', 'button-decoded-svg')">Copy to clipboard</button>
+        <p id="encoded-size-compare"></p>
+
+    </div>
 </body>
 
 </html>

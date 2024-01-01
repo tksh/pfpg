@@ -586,7 +586,7 @@ const URLCompressor=(()=>{
       expandedStr=str;
     } // if
     return expandedStr;
-  } // expand      
+  } // expand
 
   return {
     compress  :compress,

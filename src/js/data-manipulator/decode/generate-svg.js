@@ -148,12 +148,6 @@ function generateSvg(artworkDataMap, strokesValuesMap, decodedRelDvalsMap) {
 }
 
 
-
-
-
-
-
-
 function getViewBoxValue(gridSize) {
     width = gridSize.split('x')[0]
     height = gridSize.split('x')[1]

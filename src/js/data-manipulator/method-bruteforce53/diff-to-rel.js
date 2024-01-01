@@ -21,7 +21,5 @@ function diffToRel(diffArray) {
             originalArray.push(original);
         }
     });
-
-    //console.log('originalArray: ', originalArray)
     return originalArray;
 }

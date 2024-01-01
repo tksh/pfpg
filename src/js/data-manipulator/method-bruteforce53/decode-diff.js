@@ -1,11 +1,11 @@
 // Functions to decode the diff
 
-function decodeDiffFromStr(diffStr, freqdictMap, baseX, maxDictSize) {
+function decodeDiffFromStr(diffStr, freqdictMap, baseX) {
     let decodedDiffArray = [];
 
-    console.log('diffStr: ', diffStr)
-    console.log('diffStr.length: ', diffStr.length)
-    console.log('freqdictMap: ', freqdictMap)
+    //console.log('diffStr: ', diffStr)
+    //console.log('diffStr.length: ', diffStr.length)
+    //console.log('freqdictMap: ', freqdictMap)
 
     for (let i = 0; i < diffStr.length; i++) {
         //console.log('i, diffStr[i]): ', i, diffStr[i])
@@ -50,13 +50,10 @@ function decodeDiffFromStr(diffStr, freqdictMap, baseX, maxDictSize) {
 
         } else { // 残りは BaseXでエンコードされた 小文字2文字ずつ のみなので 2文字ずつ baseXDec()して 配列に格納
             const toBaseXDecode = diffStr[i] + diffStr[i + 1];
-            //console.log(`${diffStr[i] + diffStr[i + 1]} is decoding with baseX`) // hA
-            //console.log('baseXDec(toBaseXDecode, baseX): ', baseXDec(toBaseXDecode, baseX)) // 10
             decodedDiffArray.push(baseXDec(toBaseXDecode, baseX));
-            i++; // `i` を `1`増やして 次の2文字目の文字分を スキップさせる
+            i++; // `i` を `1`増やして 2文字目の文字分を 次のループで スキップさせる
         }
     }
-
     return decodedDiffArray
 }
 
@@ -66,7 +63,7 @@ function decodeDiffFromStr(diffStr, freqdictMap, baseX, maxDictSize) {
 function isInDict(str, freqdictMap) {
     // 判定用文字列
     // Mapオブジェクトのキーのみを 配列として取り出し 区切り無しでjoinして ひとつの文字列にする
-    const dictionary = Array.from(freqdictMap.keys()).join('')
+    const dictionary = [...freqdictMap.keys()].join('');
 
     // 文字が辞書用文字列に含まれているかどうかを判定する
     // 含まれている場合は true を返す

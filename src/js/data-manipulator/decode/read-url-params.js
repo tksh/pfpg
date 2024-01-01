@@ -3,11 +3,8 @@ function readUrlParamsAsMaps() {
     const params = new URLSearchParams(window.location.search);
 
     if (params != 0) { // Do decoding if URL Params exists
-        console.log("test")
 
         const entries = [...params.entries()]; // entries()メソッドでキーと値のペアを取得
-
-
 
         // Get Artwork Data as Map
         // e.g.: ?202308_001=31x31-9999&
@@ -94,7 +91,6 @@ function readUrlParamsAsMaps() {
             const encodedDvalsStr = extractAfterFirstHyphen(strokesValues)
             console.log("encodedDvalsStr: ", encodedDvalsStr)
             // BRY8zuZS6-yuj6xgi-u9utYvXoK0QEXoKySIqr46g3-9HxEs1eG2VMHxerRFrXM3mjZxLkf-wwSvNRnQb88G
-
 
 
 

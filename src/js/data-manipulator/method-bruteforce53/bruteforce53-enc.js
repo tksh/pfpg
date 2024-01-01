@@ -47,10 +47,8 @@ function bruteforce53Enc() {
     // To store the smallest encoded string of each group
     let currentSmallestByGroup = new Map()
 
-    const maxDictSizeStartAt = 43
-    const maxDictSizeEndAt = 43
-    //const maxDictSizeStartAt = 0
-    //const maxDictSizeEndAt = 52
+    const maxDictSizeStartAt = 0
+    const maxDictSizeEndAt = 52
 
     // Loop for every baseX values from 0 to 52
     for (let i = maxDictSizeStartAt; i <= maxDictSizeEndAt; i++) {
