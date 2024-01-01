@@ -1,0 +1,273 @@
+html {
+    box-sizing: border-box;
+    background-color: var(--color-bg);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+
+    min-height: 100dvh;
+    /* ビューポートの高さいっぱいに拡張 */
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.displayNone {
+    display: none;
+}
+
+
+.opts {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.opts-cell {
+    padding-left: 2rem;
+    min-width: 16rem;
+}
+
+.opts-cell,
+legend {
+    padding-right: 1rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+
+fieldset {
+    margin: 0 1rem;
+    border-color: var(--color-fieldset-border);
+}
+
+legend {
+    font-size: 0.9rem;
+    padding-left: 1rem;
+}
+
+
+/* 横幅いっぱいに広げてから 左右に 1rem 余白を取る */
+hr {
+    /* デフォルトの枠線を消す */
+    border: none;
+    /* 上側だけに実線を引く */
+    border-top: solid 1px var(--color-info-bg-and-hr);
+    margin: 0 1rem;
+}
+
+main {
+    flex-grow: 1;
+}
+
+/* For div id="input-and-output" */
+#input-and-output {
+    display: flex;
+    flex-direction: row;
+
+    /* main要素が残りの高さいっぱいに拡張 */
+    flex-grow: 1;
+}
+
+.header-info {
+    width: 100%;
+}
+
+#svg-info,
+#png-info {
+    font-size: 1rem;
+    /* margin: .5rem 0; margin を使うと 計算したheightよりも 実際の長さが長くなってしまうので 使わない */
+    text-align: center;
+    color: var(--color-info-text);
+    background-color: var(--color-info-bg-and-hr);
+
+    border-radius: 0.25rem 0.25rem 0rem 0rem;
+}
+
+/* For #input and #output */
+.cell {
+    padding: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+/* Boxes for png and svg */
+#img-box,
+#textarea-box {
+    width: 100%;
+    aspect-ratio: 1/1;
+    display: flex;
+    padding: 2rem;
+
+    /* ブロックレベル要素を中央揃えにする */
+    margin: 0 auto;
+}
+
+/* PNG image */
+div#img-box img {
+    width: 100%;
+}
+
+.fit-to-display-area {
+    image-rendering: pixelated;
+}
+
+.actual-image-size {
+    width: 100%;
+    height: fit-content;
+    object-fit: none;
+}
+
+.checker {
+    background-size: 1rem 1rem;
+    background-image: repeating-conic-gradient(from 0deg,
+            var(--color-checker) 0deg 90deg,
+            var(--color-checker-trans) 90deg 180deg);
+    background-repeat: repeat;
+}
+
+/* SVG text area */
+#input-svg {
+    width: 100%;
+    aspect-ratio: 1/1;
+    resize: none;
+
+    /* font settings */
+    font-size: .9rem;
+    line-height: 1.3;
+}
+
+input,
+textarea,
+select {
+    color: var(--color-text-input);
+    background-color: var(--color-input-textarea-select);
+    padding-left: 0.5rem;
+    border: none;
+}
+
+input[type="range"] {
+    min-width: 16rem;
+
+    /* スライダーを親要素のフォントサイズの0.25倍下にずらす */
+    vertical-align: -0.25rem;
+
+    /* これ無しだとスタイルがほぼ全く反映されない */
+    /* -webkit-appearance: none; */
+
+    /* スライダーの幅 */
+    /* height: 0.25rem; */
+
+    /* background-color: red; */
+}
+
+#preference,
+figcaption,
+summary,
+legend,
+label,
+button,
+dt,
+dd,
+p {
+    color: var(--color-text);
+}
+
+dd {
+    padding-left: 1rem;
+}
+
+dt,
+details {
+    padding-top: 0.5rem;
+}
+
+.addPaddingTop {
+    padding-top: 0.5rem;
+}
+
+.addPaddingBottom {
+    padding-bottom: 0.5rem;
+}
+
+button {
+    padding: 0 1rem;
+    background-color: var(--color-button-bg);
+    border-color: var(--color-button-border);
+    min-width: 70%;
+}
+
+.download-button {
+    text-align: center;
+    width: 100%;
+}
+
+/* Footer */
+footer {
+    padding: 1rem 1rem;
+}
+
+.footer-info {
+    font-size: 0.9rem;
+    padding: 1rem;
+}
+
+a {
+    color: var(--color-text);
+    text-decoration: underline;
+}
+
+/* Samples */
+div#samples img {
+    padding: 1rem;
+}
+
+div#samples .finished-and-reference {
+    display: flex;
+}
+
+div#samples figure {
+    display: inline;
+}
+
+@media screen and (max-width: 512px) {
+
+    #textarea-box,
+    #img-box {
+        width: 100%;
+        height: auto;
+    }
+
+    #input-and-output {
+        flex-direction: column;
+        /* width: 100%; */
+    }
+
+    .opts {
+        flex-direction: column;
+    }
+
+    #png-info,
+    #svg-info {
+        font-size: 0.9rem;
+    }
+
+    .opts-cell {
+        padding-left: 1rem;
+    }
+
+    legend {
+        padding-left: 0.5rem;
+    }
+}

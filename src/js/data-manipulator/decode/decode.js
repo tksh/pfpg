@@ -1,7 +1,39 @@
 // Decode from URL Params to SVG
-decode()
 
-function decode() {
+// index: 'input-svg'
+// data-manipulator: 'textarea-decoded-svg'
+function getFileName() {
+  // 現在のURLを取得する
+  let url = window.location.href;
+  // '/'と'.html'に囲まれた最短の文字列を抽出する
+  let match = url.match(/\/([\-a-z]*)\.html/);
+  // 配列の2番目の要素がマッチした文字列になる
+  console.log('match: ', match)
+  // Array(2)
+  //     0: "/index.html"
+  //     1: "index"
+  // or
+  //     0: "/data-manipulator.html"
+  //     1: "data-manipulator"
+
+  return match[1];
+}
+console.log('getFileName(): ', getFileName())
+
+function getTextareaId(htmlFilename) {
+    if (htmlFilename === 'index') {
+        return 'input-svg'
+    } else if (htmlFilename === 'data-manipulator') {
+        return 'textarea-decoded-svg'
+    }
+}
+const svgOutputTextAreaId = getTextareaId(getFileName())
+console.log('svgOutputTextAreaId: ', svgOutputTextAreaId)
+//'input-svg' or 'textarea-decoded-svg'
+
+decode(svgOutputTextAreaId)
+
+function decode(outputTextareaId) {
     const urlParamsAsTwoMaps = readUrlParamsAsMaps()
 
     // Extract the values
@@ -39,7 +71,7 @@ function decode() {
     const svgStr = generateSvg(artworkDataMap, strokesValuesMap, decodedRelDvalsMap)
 
     // Output to textarea
-    outputToTextarea(svgStr, 'textarea-decoded-svg')
+    outputToTextarea(svgStr, outputTextareaId)
 
     // Compare the data size of URL params and generated SVG
     const queryString = window.location.search;
@@ -68,11 +100,8 @@ function decodeStrokesValues(strokesValuesMap) {
 
         if (v.three_flags[1] === '0') {
             console.log(`Group ${groupId} has encoded with 'bruteforce53-enc'`)
-            //console.log("v.encoded_dvals: ", v.encoded_dvals) // ok
             decodedDiffDvals = decodeBruteforce53Enc(v.encoded_dvals, v.three_flags)
-            console.log("decodedDiffDvals: ", decodedDiffDvals)
             decodedRelDvals = decodedDiffDvals.map(column => diffToRel(column))
-            console.log("decodedRelDvals: ", decodedRelDvals)
 
         } else if (v.three_flags[1] === '1') {
             console.log("This group has encoded with 'bigint64-enc'")
