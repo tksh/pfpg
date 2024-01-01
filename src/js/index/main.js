@@ -1,5 +1,7 @@
 (async function () {
-    await resvg.initWasm(fetch('../wasm/index_bg_20230424.wasm'))
+//    await resvg.initWasm(fetch('../wasm/index_bg_20230424.wasm')) // netlify
+//    await resvg.initWasm(fetch('../src/wasm/index_bg_20230424.wasm')) // local
+    await resvg.initWasm(fetch('./src/wasm/index_bg.wasm')) // local
     const output = document.getElementById('output')
     const svgElement = document.querySelector('#input-svg') // Select <textarea id="input-svg" ...
     const inputSVG = svgElement.value.trim() // `.trim()` = 文字列の両端の空白を削除
