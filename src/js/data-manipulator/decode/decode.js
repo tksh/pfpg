@@ -1,35 +1,28 @@
 // Decode from URL Params to SVG
 
+// Get the SVG output textarea ID from URL for argument for decode()
 // index: 'input-svg'
 // data-manipulator: 'textarea-decoded-svg'
-function getFileName() {
-  // 現在のURLを取得する
-  let url = window.location.href;
-  // '/'と'.html'に囲まれた最短の文字列を抽出する
-  let match = url.match(/\/([\-a-z]*)\.html/);
-  // 配列の2番目の要素がマッチした文字列になる
-  console.log('match: ', match)
-  // Array(2)
-  //     0: "/index.html"
-  //     1: "index"
-  // or
-  //     0: "/data-manipulator.html"
-  //     1: "data-manipulator"
 
-  return match[1];
+function isDataManipulator() {
+    // 現在のURLを取得する
+    const url = window.location.href;
+    const target = 'data-manipulator'
+    // url: 検索対象の文字列
+    // target: 検索したい文字列
+    return url.includes(target);
 }
-console.log('getFileName(): ', getFileName())
 
-function getTextareaId(htmlFilename) {
-    if (htmlFilename === 'index') {
-        return 'input-svg'
-    } else if (htmlFilename === 'data-manipulator') {
+function getTextareaId(isDataManipulatorBool) {
+    if (isDataManipulatorBool === true) { // data-manipulator.html
         return 'textarea-decoded-svg'
+    } else {                              // index.html
+        return 'input-svg'
     }
 }
-const svgOutputTextAreaId = getTextareaId(getFileName())
-console.log('svgOutputTextAreaId: ', svgOutputTextAreaId)
-//'input-svg' or 'textarea-decoded-svg'
+const svgOutputTextAreaId = getTextareaId(isDataManipulator())
+
+
 
 decode(svgOutputTextAreaId)
 
