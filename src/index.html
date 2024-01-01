@@ -7,26 +7,36 @@
     <title>pfpg</title>
     <link rel="stylesheet" href="./css/index/style.css">
     <link rel="stylesheet" href="./css/index/color.css">
-  
-  
+
+
     <!-- resvg-js -->
     <link rel="preload" as="fetch" type="application/wasm" href="./wasm/index_bg_20230424.wasm" crossorigin>
     <script defer src="./js/index/index.min.js"></script>
 
 
-  <!-- JS for index.html -->
-  <script defer src="./js/index/jscolor.min.js"></script>
-  <script defer src="./js/index/sync-number-and-range.js"></script>
-  <script defer src="./js/index/view-scale.js"></script>
-  <script defer src="./js/index/checker-pattern.js"></script>
-  <script defer src="./js/index/color-theme.js"></script>
-  <script defer src="./js/index/shapes-to-trim.js"></script>
-  <script defer src="./js/index/math-functions.js"></script>
-  <script defer src="./js/index/download.js"></script>
-  <script defer src="./js/index/color-code-converters.js"></script>
-  <script defer src="./js/index/transparency-scope.js"></script>
-  <script defer src="./js/index/multipul-stroke-colors.js"></script>
-  <script defer src="./js/index/count-svg-size.js"></script>
+    <!-- JS for index.html -->
+    <script defer src="./js/index/jscolor.min.js"></script>
+    <script defer src="./js/index/sync-number-and-range.js"></script>
+    <script defer src="./js/index/view-scale.js"></script>
+    <script defer src="./js/index/checker-pattern.js"></script>
+    <script defer src="./js/index/color-theme.js"></script>
+    <script defer src="./js/index/shapes-to-trim.js"></script>
+    <script defer src="./js/index/math-functions.js"></script>
+    <script defer src="./js/index/download.js"></script>
+    <script defer src="./js/index/color-code-converters.js"></script>
+    <script defer src="./js/index/transparency-scope.js"></script>
+    <script defer src="./js/index/multipul-stroke-colors.js"></script>
+    <script defer src="./js/index/count-svg-size.js"></script>
+
+    <!-- Generate the stroke color pickers from decoded SVG -->
+    <script defer src="./js/index/generate-stroke-color-picker-tags.js"></script>
+    <!-- Set defaults value for some selectors in preference area read from decoded SVG -->
+    <script defer src="./js/index/set-defaults-for-preference.js"></script>
+    <!-- Eventlisteners for preferences, and force to apply the values like width-and-height:256, transparency-scope:whole-group as defaults -->
+    <script defer src="./js/index/main.js"></script>
+    <!-- Adjust the height of whole components to fit to display height -->
+    <script defer src="./js/index/img-box-sizing.js"></script>
+
 
     <!-- Data IO -->
     <script src="./js/data-manipulator/data-io/select-file.js"></script>
@@ -108,166 +118,166 @@
 
 <body>
     <header>
-      <div id="preference" class="opts">
+        <div id="preference" class="opts">
 
-        <fieldset class="opts">
-          <legend>Preference</legend>
+            <fieldset class="opts">
+                <legend>Preference</legend>
 
-          <!-- Color-picker: Background color (via resvg) | Disabled -->
-          <div class="displayNone">
-            <div class="opts-cell">
-              <label for="background-color-picker">Background color:</label>
-              <input value="#FFFFFF00" data-jscolor="{}" id="background-color-picker" class="input-color" autocomplete="off">
-            </div>
-          </div>
+                <!-- Color-picker: Background color (via resvg) | Disabled -->
+                <div class="displayNone">
+                    <div class="opts-cell">
+                        <label for="background-color-picker">Background color:</label>
+                        <input value="#FFFFFF00" data-jscolor="{}" id="background-color-picker" class="input-color" autocomplete="off">
+                    </div>
+                </div>
 
-          <!-- Color-picker: Stroke colors (dynamic generated) -->
-          <div id="multipul-stroke-color-pickers" class="opts"></div>
-
-
-          <!-- Transparency scope -->
-          <div class="displayNone">
-            <div class="opts-cell">
-              <label for="transparency-scope">Transparency scope: </label>
-              <select name="transparency-scope" id="transparency-scope" autocomplete="off">
-                <option value="whole-group" selected>Whole-group</option>
-                <option value="per-stroke">Per-stroke</option>
-              </select>
-            </div>
-          </div>
+                <!-- Color-picker: Stroke colors (dynamic generated) -->
+                <div id="multipul-stroke-color-pickers" class="opts"></div>
 
 
-          <!-- Color-picker: Stroke color (static, for mono color stroke svg) | Disabled-->
-          <div class="displayNone">
-            <div class="opts-cell">
-              <!-- <fieldset> -->
-              <!-- <legend>Colors:</legend> -->
-              <label for="stroke-color-picker">Stroke color:</label>
-              <input value="#000000FF" style="width: 9rem;" data-jscolor="{}" id="stroke-color-picker" class="input-color add-margin-bottom" autocomplete="off">
-              <!-- </fieldset> -->
-            </div>
-          </div>
-
-          <!-- Color-picker: Background color -->
-          <div>
-            <div class="opts-cell">
-              <label for="rect-color-picker">Background color:</label>
-              <input value="#FFF9" style="width: 9rem;" data-jscolor="{}" id="rect-color-picker" class="input-color" autocomplete="off">
-            </div>
-          </div>
+                <!-- Transparency scope -->
+                <div class="displayNone">
+                    <div class="opts-cell">
+                        <label for="transparency-scope">Transparency scope: </label>
+                        <select name="transparency-scope" id="transparency-scope" autocomplete="off">
+                            <option value="whole-group" selected>Whole-group</option>
+                            <option value="per-stroke">Per-stroke</option>
+                        </select>
+                    </div>
+                </div>
 
 
-          <!-- Crop by BBox | Disabled -->
-          <div class="displayNone">
-            <div class="opts-cell">
-              <label for="crop-by-bbox">Crop by BBox:</label>
-              <input type="checkbox" name="crop-by-bbox" id="crop-by-bbox" autocomplete="off">
-            </div>
-          </div>
+                <!-- Color-picker: Stroke color (static, for mono color stroke svg) | Disabled-->
+                <div class="displayNone">
+                    <div class="opts-cell">
+                        <!-- <fieldset> -->
+                        <!-- <legend>Colors:</legend> -->
+                        <label for="stroke-color-picker">Stroke color:</label>
+                        <input value="#000000FF" style="width: 9rem;" data-jscolor="{}" id="stroke-color-picker" class="input-color add-margin-bottom" autocomplete="off">
+                        <!-- </fieldset> -->
+                    </div>
+                </div>
+
+                <!-- Color-picker: Background color -->
+                <div>
+                    <div class="opts-cell">
+                        <label for="rect-color-picker">Background color:</label>
+                        <input value="#FFF9" style="width: 9rem;" data-jscolor="{}" id="rect-color-picker" class="input-color" autocomplete="off">
+                    </div>
+                </div>
 
 
-          <!-- Shapes to trim -->
-          <div>
-            <div class="opts-cell">
-              <label for="shapes-to-trim">Shapes to trim: </label>
-              <select name="shapes-to-trim" id="shapes-to-trim" autocomplete="off">
-                <option value="square" selected>Square</option>
-                <option value="circle">Circle</option>
-                <option value="squircle">Squircle</option>
-                <option value="squircleSlimmed">Squircle, slimmed</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Two option <select> for 'Squircle, slimmed' -->
-          <div id="width-narrowness-div" class="displayNone">
-            <div class="opts-cell">
-              <label for="width-narrowness">- Width narrowness: </label>
-              <select name="width-narrowness" id="width-narrowness" autocomplete="off">
-                <option value="0">0</option>
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="15" selected>15</option>
-                <option value="20">20</option>
-                <option value="25">25</option>
-                <option value="30">30</option>
-              </select>
-            </div>
-          </div>
-
-          <div id="top-heavy-ratio-div" class="displayNone">
-            <div class="opts-cell">
-              <label for="top-heavy-ratio">- Top-heavy ratio: </label>
-              <select name="top-heavy-ratio" id="top-heavy-ratio" autocomplete="off">
-                <option value="-3">-3</option>
-                <option value="-2">-2</option>
-                <option value="-1">-1</option>
-                <option value="0">0</option>
-                <option value="1" selected>1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </select>
-            </div>
-          </div>
+                <!-- Crop by BBox | Disabled -->
+                <div class="displayNone">
+                    <div class="opts-cell">
+                        <label for="crop-by-bbox">Crop by BBox:</label>
+                        <input type="checkbox" name="crop-by-bbox" id="crop-by-bbox" autocomplete="off">
+                    </div>
+                </div>
 
 
-          <!-- Anti-aliasing -->
-          <div>
-            <div class="opts-cell">
-              <label for="shape-rendering">Anti-aliasing: </label>
-              <select name="shape-rendering" id="shape-rendering" autocomplete="off">
-                <option value="geometricPrecision">On (geometricPrecision)</option>
-                <option value="crispEdges" selected>Off (crispEdges)</option>
-              </select>
-            </div>
-          </div>
+                <!-- Shapes to trim -->
+                <div>
+                    <div class="opts-cell">
+                        <label for="shapes-to-trim">Shapes to trim: </label>
+                        <select name="shapes-to-trim" id="shapes-to-trim" autocomplete="off">
+                            <option value="square" selected>Square</option>
+                            <option value="circle">Circle</option>
+                            <option value="squircle">Squircle</option>
+                            <option value="squircleSlimmed">Squircle, slimmed</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Two option <select> for 'Squircle, slimmed' -->
+                <div id="width-narrowness-div" class="displayNone">
+                    <div class="opts-cell">
+                        <label for="width-narrowness">- Width narrowness: </label>
+                        <select name="width-narrowness" id="width-narrowness" autocomplete="off">
+                            <option value="0">0</option>
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15" selected>15</option>
+                            <option value="20">20</option>
+                            <option value="25">25</option>
+                            <option value="30">30</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="top-heavy-ratio-div" class="displayNone">
+                    <div class="opts-cell">
+                        <label for="top-heavy-ratio">- Top-heavy ratio: </label>
+                        <select name="top-heavy-ratio" id="top-heavy-ratio" autocomplete="off">
+                            <option value="-3">-3</option>
+                            <option value="-2">-2</option>
+                            <option value="-1">-1</option>
+                            <option value="0">0</option>
+                            <option value="1" selected>1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div>
+                </div>
 
 
-          <!-- Width and height -->
-          <div>
-            <div class="opts-cell">
-              <label for="png-size-number">Width and height:</label>
-              <input type="number" id="png-size-number" name="png-size-number" class="input-size" style="width: 4rem;" min="1" max="4096" value="256" autocomplete="off" oninput="syncWidthNum(this)">px
-              <input type="range" id="png-size-range" name="png-size-range" min="16" max="512" step="16" autocomplete="off" oninput="syncWidthNum(this)">
-            </div>
-          </div>
+                <!-- Anti-aliasing -->
+                <div>
+                    <div class="opts-cell">
+                        <label for="shape-rendering">Anti-aliasing: </label>
+                        <select name="shape-rendering" id="shape-rendering" autocomplete="off">
+                            <option value="geometricPrecision">On (geometricPrecision)</option>
+                            <option value="crispEdges" selected>Off (crispEdges)</option>
+                        </select>
+                    </div>
+                </div>
 
 
-        </fieldset>
+                <!-- Width and height -->
+                <div>
+                    <div class="opts-cell">
+                        <label for="png-size-number">Width and height:</label>
+                        <input type="number" id="png-size-number" name="png-size-number" class="input-size" style="width: 4rem;" min="1" max="4096" value="256" autocomplete="off" oninput="syncWidthNum(this)">px
+                        <input type="range" id="png-size-range" name="png-size-range" min="16" max="512" step="16" autocomplete="off" oninput="syncWidthNum(this)">
+                    </div>
+                </div>
 
-      </div> <!-- End of <div class="opts"> -->
+
+            </fieldset>
+
+        </div> <!-- End of <div class="opts"> -->
     </header>
 
 
 
 
     <main>
-      <div id="input-and-output">
+        <div id="input-and-output">
 
-        <div id="output" class="cell"> <!-- Output PNG -->
+            <div id="output" class="cell"> <!-- Output PNG -->
 
-          <div class="header-info">
-            <div id="png-info" class="info">png-info text sample</div>
-          </div>
+                <div class="header-info">
+                    <div id="png-info" class="info">png-info text sample</div>
+                </div>
 
-          <div id="img-box">
-            <img id="img" class="checker fit-to-display-area" alt="Output PNG" />
-          </div> <!-- End of img-box -->
-          <div class="download-button">
-            <button id="png-download-button" onclick="downloadPng()">Download as PNG</button>
-          </div>
+                <div id="img-box">
+                    <img id="img" class="checker fit-to-display-area" alt="Output PNG" />
+                </div> <!-- End of img-box -->
+                <div class="download-button">
+                    <button id="png-download-button" onclick="downloadPng()">Download as PNG</button>
+                </div>
 
-        </div> <!-- End of Output PNG cell -->
+            </div> <!-- End of Output PNG cell -->
 
-        <div id="input" class="cell"> <!-- Input SVG cell -->
+            <div id="input" class="cell"> <!-- Input SVG cell -->
 
-          <div class="header-info">
-            <div id="svg-info" class="info">svg-info text sample</div>
-          </div>
+                <div class="header-info">
+                    <div id="svg-info" class="info">svg-info text sample</div>
+                </div>
 
-          <!-- svgElement -->
-          <div id="textarea-box">
-            <textarea id="input-svg" name="input-svg" rows="7" placeholder="Enter the svg string"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" shape-rendering="geometricPrecision">
+                <!-- svgElement -->
+                <div id="textarea-box">
+                    <textarea id="input-svg" name="input-svg" rows="7" placeholder="Enter the svg string"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" shape-rendering="geometricPrecision">
       <title>202304_001</title>
       <g clip-path="url(#clipShape)">
           <rect width="100%" height="100%" fill="#fff9" />
@@ -281,90 +291,90 @@
           </clipPath>
       </defs>
   </svg></textarea>
-            <!-- End of svgElement -->
+                    <!-- End of svgElement -->
 
-          </div><!-- End of div textarea-box -->
-          <div class="download-button">
-            <button id="svg-download-button" onclick="downloadSvg()">Download as SVG</button>
-          </div>
+                </div><!-- End of div textarea-box -->
+                <div class="download-button">
+                    <button id="svg-download-button" onclick="downloadSvg()">Download as SVG</button>
+                </div>
 
-        </div> <!-- End of Input SVG cell -->
+            </div> <!-- End of Input SVG cell -->
 
-      </div> <!-- End of input-and-output box -->
+        </div> <!-- End of input-and-output box -->
     </main>
 
     <hr>
 
     <footer>
-      <div id="settings" class="opts addPaddingTop">
+        <div id="settings" class="opts addPaddingTop">
 
-        <fieldset class="opts">
-          <legend>View settings</legend>
+            <fieldset class="opts">
+                <legend>View settings</legend>
 
-          <!-- View scale -->
-          <div>
-            <div class="opts-cell">
-              <label for="view-scale">Scale: </label>
-              <select name="view-scale" id="view-scale" autocomplete="off">
-                <option value="fit" selected>Fit to display area</option>
-                <option value="actual">Actual image size</option>
-              </select>
-            </div>
-          </div>
+                <!-- View scale -->
+                <div>
+                    <div class="opts-cell">
+                        <label for="view-scale">Scale: </label>
+                        <select name="view-scale" id="view-scale" autocomplete="off">
+                            <option value="fit" selected>Fit to display area</option>
+                            <option value="actual">Actual image size</option>
+                        </select>
+                    </div>
+                </div>
 
-          <!-- Checker -->
-          <div>
-            <div class="opts-cell">
-              <label for="checker-pattern">Checker: </label>
-              <select name="checker-pattern" id="checker-pattern" autocomplete="off">
-                <option value="on" selected>On</option>
-                <option value="off">Off</option>
-              </select>
-            </div>
-          </div>
+                <!-- Checker -->
+                <div>
+                    <div class="opts-cell">
+                        <label for="checker-pattern">Checker: </label>
+                        <select name="checker-pattern" id="checker-pattern" autocomplete="off">
+                            <option value="on" selected>On</option>
+                            <option value="off">Off</option>
+                        </select>
+                    </div>
+                </div>
 
-          <!-- Theme -->
-          <div>
-            <div class="opts-cell">
-              <label for="color-theme">Theme: </label>
-              <select name="color-theme" id="color-theme" autocomplete="off">
-                <option value="white">White</option>
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
-                <option value="black" selected>Black</option>
-              </select>
-            </div>
-          </div>
-        </fieldset>
+                <!-- Theme -->
+                <div>
+                    <div class="opts-cell">
+                        <label for="color-theme">Theme: </label>
+                        <select name="color-theme" id="color-theme" autocomplete="off">
+                            <option value="white">White</option>
+                            <option value="light">Light</option>
+                            <option value="dark">Dark</option>
+                            <option value="black" selected>Black</option>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
 
-      </div><!-- End of <div id="settings"> -->
+        </div><!-- End of <div id="settings"> -->
 
-      <div class="footer-info">
-        <p id="last-redering-time">Test footer</p>
-        <!-- <p class="text-align-right"><a href="https://github.com/tksh" title="tksh on GitHub">> about</a></p> -->
-        <details>
-          <summary>About this website</summary>
-          <dl>
-            <dt>Title:</dt>
-            <dd>pfpg</dd>
-            <dt>Description:</dt>
-            <dd>A custom pfp generator for specific svg artwork that made with <a href="https://github.com/tksh/uintnportray" title="tksh on GitHub">UIntNPortray</a> ruleset</dd>
-            <dt>Creator:</dt>
-            <!-- <dt>Creator of the website and the artwork:</dt> -->
-            <dd><a href="https://github.com/tksh" title="tksh on GitHub">SAITO Takashi</a></dd>
-            <dt>License:</dt>
-            <dd>Some licence info</dd>
-            <dt>Made with:</dt>
-            <dd><a href="ttps://github.com/yisibl/resvg-js" title="GitHub - yisibl/resvg-js: A high-performance SVG renderer and toolkit, powered by Rust based resvg and napi-rs.">resvg-js (MPL 2.0 license)</a></dd>
-            <dd><a href="ttps://synapse.kyoto/lib/url-comp/page001.html" title="URLCompressorライブラリ(1) - しなぷすのハード製作記">URLCompressor (MIT license)</a></dd>
-            <dd><a href="ttps://jscolor.com/" title="jscolor: JavaScript Color picker with Opacity (alpha channel)">jscolor (Commercial license)</a></dd>
-          </dl>
-        </details>
+        <div class="footer-info">
+            <p id="last-redering-time">Test footer</p>
+            <!-- <p class="text-align-right"><a href="https://github.com/tksh" title="tksh on GitHub">> about</a></p> -->
+            <details>
+                <summary>About this website</summary>
+                <dl>
+                    <dt>Title:</dt>
+                    <dd>pfpg</dd>
+                    <dt>Description:</dt>
+                    <dd>A custom pfp generator for specific svg artwork that made with <a href="https://github.com/tksh/uintnportray" title="tksh on GitHub">UIntNPortray</a> ruleset</dd>
+                    <dt>Creator:</dt>
+                    <!-- <dt>Creator of the website and the artwork:</dt> -->
+                    <dd><a href="https://github.com/tksh" title="tksh on GitHub">SAITO Takashi</a></dd>
+                    <dt>License:</dt>
+                    <dd>Some licence info</dd>
+                    <dt>Made with:</dt>
+                    <dd><a href="ttps://github.com/yisibl/resvg-js" title="GitHub - yisibl/resvg-js: A high-performance SVG renderer and toolkit, powered by Rust based resvg and napi-rs.">resvg-js (MPL 2.0 license)</a></dd>
+                    <dd><a href="ttps://synapse.kyoto/lib/url-comp/page001.html" title="URLCompressorライブラリ(1) - しなぷすのハード製作記">URLCompressor (MIT license)</a></dd>
+                    <dd><a href="ttps://jscolor.com/" title="jscolor: JavaScript Color picker with Opacity (alpha channel)">jscolor (Commercial license)</a></dd>
+                </dl>
+            </details>
 
 
 
-      </div> <!-- End of <div class="footer-info"> -->
+        </div> <!-- End of <div class="footer-info"> -->
 
     </footer>
 
-  </body>
+</body>
