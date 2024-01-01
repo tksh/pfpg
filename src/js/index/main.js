@@ -367,7 +367,7 @@
             console.log('colorPickerId: ', colorPickerId) // multipul-stroke-color-pickers-0
 
             const colorPickerElement = document.querySelector(`#${colorPickerId}`);
-            //console.log('colorPickerElement: ', colorPickerElement)
+            console.log('i, colorPickerElement: ', i, colorPickerElement)
             // <input id="multipul-stroke-color-pickers-0" class="input-color add-margin-bottom" value="#000" style="width: 9rem;" data-jscolor="{}" autocomplete="off">
             // <input id="multipul-stroke-color-pickers-1" class="input-color add-margin-bottom" value="#eee" style="width: 9rem;" data-jscolor="{}" autocomplete="off">
             // <input id="multipul-stroke-color-pickers-2" class="input-color add-margin-bottom" value="#fff" style="width: 9rem;" data-jscolor="{}" autocomplete="off">
@@ -375,7 +375,7 @@
             colorPickerElement.addEventListener('change', function (event) {
                 const hexCode = event.target.value; // カラーピッカーの値を取得
                 if (!hexCode) return;
-                //console.log('g stroke color value is ', value) // #D6EE4B
+                console.log('g stroke color value is ', value) // #D6EE4B
 
                 // Force to convert as 8 digits hex
                 const hexCodeEightDigits = mergeOpacityAndExtended(hexCode)
@@ -460,6 +460,7 @@
 
     // Add multipul event listener for whole stroke colors
     const numberOfColorPickers = getNumberOfStrokeGroups(getInputSvg())
+    //console.log('numberOfColorPickers: ', numberOfColorPickers) // 5
     addEventListenerForAllStrokeColorPickers(numberOfColorPickers)
 
     // Get the number of stroke colors to add multipul event listener

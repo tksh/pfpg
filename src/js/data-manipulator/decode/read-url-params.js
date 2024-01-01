@@ -105,4 +105,7 @@ function readUrlParamsAsMaps() {
         return [artworkDataMap, strokesValuesMap]
 
     } // End of 'if (params != 0) {'
+    else {
+        return null
+    }
 }

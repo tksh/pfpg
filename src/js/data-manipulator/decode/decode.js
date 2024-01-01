@@ -29,55 +29,63 @@ decode(svgOutputTextAreaId)
 function decode(outputTextareaId) {
     const urlParamsAsTwoMaps = readUrlParamsAsMaps()
 
-    // Extract the values
-    const artworkDataMap = urlParamsAsTwoMaps[0]
-    // console.log("artworkDataMap: ", artworkDataMap)
-    // Map(4) {'artwork_id' => '202308_001', 'grid_size' => '31x31', 'uint_n' => 5, 'bg_color' => '9999'}
+    if (urlParamsAsTwoMaps != null) {
 
-    const strokesValuesMap = urlParamsAsTwoMaps[1]
-    // console.log("strokesValuesMap: ", strokesValuesMap)
-    // Map(5) {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
-    // key  : Group ID (seq num)
-    // value: Object
-    //            group_colors  : Object {g_stroke: '#000000', g_opacity: 1, g_stroke-opacity: 1}
-    //            {three_flags  : Array(3)}
-    //            {width_count  : Map(1)}
-    //            {encoded_dvals: 'wyyvtuDwtzxifJxuvunv56nudvqm96wo9xuuucvvuzvzAwvvvyzxsvxDyVUSByqATCUWytEBzzAx'}
+        // Extract the values
+        const artworkDataMap = urlParamsAsTwoMaps[0]
+        // console.log("artworkDataMap: ", artworkDataMap)
+        // Map(4) {'artwork_id' => '202308_001', 'grid_size' => '31x31', 'uint_n' => 5, 'bg_color' => '9999'}
 
-    const decodedRelDvalsMap = decodeStrokesValues(strokesValuesMap)
-    //console.log("decodedRelDvalsMap: ", decodedRelDvalsMap)
-    // Map(5) {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
-    // [[Entries]]
-    //     0: {1 => Object}
-    //         key: 1
-    //         value: x1: (19) [1, 3, 3, 0, -2, -1, 8, 1, -2, 4, 2, -13, -16, 14, 2, -1, 0, -1, -8]
-    //                x2: (19) [0, 0, -1, 4, 0, 4, 5, 1, 0, 0, 0, 3, 4, 2, -3, 0, 2, 8, 3]
-    //                y1: (19) [0, -26, -25, -8, -1, -18, 0, -5, -9, -22, -25, 1, -7, -22, 2, -1, -1, -1, -19]
-    //                y2: (19) [26, 25, 23, 6, 3, -5, 5, 24, 7, 25, 27, 3, -2, 9, 6, 4, 4, 5, 2]
-    //     1: {2 => Object}
-    //         key: 2
-    // ...
+        const strokesValuesMap = urlParamsAsTwoMaps[1]
+        // console.log("strokesValuesMap: ", strokesValuesMap)
+        // Map(5) {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
+        // key  : Group ID (seq num)
+        // value: Object
+        //            group_colors  : Object {g_stroke: '#000000', g_opacity: 1, g_stroke-opacity: 1}
+        //            {three_flags  : Array(3)}
+        //            {width_count  : Map(1)}
+        //            {encoded_dvals: 'wyyvtuDwtzxifJxuvunv56nudvqm96wo9xuuucvvuzvzAwvvvyzxsvxDyVUSByqATCUWytEBzzAx'}
+
+        const decodedRelDvalsMap = decodeStrokesValues(strokesValuesMap)
+        //console.log("decodedRelDvalsMap: ", decodedRelDvalsMap)
+        // Map(5) {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
+        // [[Entries]]
+        //     0: {1 => Object}
+        //         key: 1
+        //         value: x1: (19) [1, 3, 3, 0, -2, -1, 8, 1, -2, 4, 2, -13, -16, 14, 2, -1, 0, -1, -8]
+        //                x2: (19) [0, 0, -1, 4, 0, 4, 5, 1, 0, 0, 0, 3, 4, 2, -3, 0, 2, 8, 3]
+        //                y1: (19) [0, -26, -25, -8, -1, -18, 0, -5, -9, -22, -25, 1, -7, -22, 2, -1, -1, -1, -19]
+        //                y2: (19) [26, 25, 23, 6, 3, -5, 5, 24, 7, 25, 27, 3, -2, 9, 6, 4, 4, 5, 2]
+        //     1: {2 => Object}
+        //         key: 2
+        // ...
 
 
-    // Generate SVG string
+        // Generate SVG string
 
-    const svgStr = generateSvg(artworkDataMap, strokesValuesMap, decodedRelDvalsMap)
+        const svgStr = generateSvg(artworkDataMap, strokesValuesMap, decodedRelDvalsMap)
 
-    // Output to textarea
-    outputToTextarea(svgStr, outputTextareaId)
+        // Output to textarea
+        outputToTextarea(svgStr, outputTextareaId)
 
-    // Compare the data size of URL params and generated SVG
-    const queryString = window.location.search;
-    const compRatio = queryString.length / svgStr.length
+        // Compare the data size of URL params and generated SVG
+        const queryString = window.location.search;
+        const compRatio = queryString.length / svgStr.length
 
-    // Show the result in html
-    const resultTextElem = document.getElementById('encoded-size-compare');
-    if (resultTextElem) {
-        const text = `url params size: <b>${queryString.length}</b> characters (bytes)<br>
+        // Show the result in html
+        const resultTextElem = document.getElementById('encoded-size-compare');
+        if (resultTextElem) {
+            const text = `url params size: <b>${queryString.length}</b> characters (bytes)<br>
         docoded svg size: <b>${svgStr.length}</b> characters (bytes)<br>
         ${queryString.length} / ${svgStr.length} = <b>${compRatio}</b>`
-        resultTextElem.innerHTML = text
+            resultTextElem.innerHTML = text
+        }
+
+    } else {
+        // Stop decoding when urlParamsAsTwoMaps = null
+        console.log('There is no url params to decode.')
     }
+
 }
 
 
