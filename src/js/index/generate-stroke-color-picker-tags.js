@@ -121,7 +121,7 @@ function splitOpacityAndExtended(hexCodeInput, opacityValueInput, strokeOpacityV
 
     if (hexcode.length === 3) {
         hexcode = '#' + hexcode.split("").map((char) => char.repeat(2)).join(""); // 文字列の各文字を2回繰り返して結合する
-        return [undefined, hexcode.toUpperCase(), undefined]
+        return [undefined, hexcode.toUpperCase(), opacityValueInput, strokeOpacityValueInput]
 // 入力されるhex色情報は 3|6 だけでいい？ 下記のような透明度情報込みの 4|8 hex表現をサポートする必要があるかどうか 要検討
 
     } else if (hexcode.length === 8) {
@@ -144,7 +144,8 @@ function splitOpacityAndExtended(hexCodeInput, opacityValueInput, strokeOpacityV
 // console.log(splitOpacityAndExtended('#000000'))   // Array(3) [ undefined, "#000000", undefined ]
 // console.log(splitOpacityAndExtended('#00000000')) // Array(3) [ undefined, "#000000", 0 ]
 
-
+console.log(splitOpacityAndExtended('#fff'))  // (3) [undefined, '#FFFFFF', undefined]
+console.log(splitOpacityAndExtended('#ffffff')) // (4) [undefined, '#FFFFFF', undefined, undefined]
 // Generated tags
 
 // <!-- Color-picker: Stroke color for group 0 -->

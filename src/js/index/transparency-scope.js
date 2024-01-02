@@ -1,7 +1,5 @@
 function generateSvgInStyleOfSelectedScope(selectedTransScope, inputSVG) {
 
-    //// RegEx pattern to capture <g stroke="#000000" opacity="0.4"> or <g stroke="#000000FF">
-    //// stroke属性と opacity属性が有っても無くても <g>全体を抽出する
     // RegEx pattern to capture <g stroke="#000000" opacity="0.4" stroke-opacity="1"> or <g stroke="#000000" opacity="0.4"> or <g stroke="#000000">
     // stroke属性, opacity属性, stroke-opacity属性 が有っても無くても <g>全体を抽出する
     const pattern = /<g stroke=.*>/g;
@@ -9,8 +7,6 @@ function generateSvgInStyleOfSelectedScope(selectedTransScope, inputSVG) {
     // パターンにマッチする部分全てを配列に追加
     const currentScopeGroupElem = inputSVG.match(pattern); // matchメソッドで配列を返す
     console.log('currentScopeGroupElem: ', currentScopeGroupElem)
-    //// opacityが無い場合: Array(3) [ '<g stroke="#000">', '<g stroke="#eee">', '<g stroke="#fff">' ]
-    //// opacityが有る場合: Array(3) [ '<g stroke="#000" opacity="0.4">', '<g stroke="#eee" opacity="0.4">', '<g stroke="#fff" opacity="0.4">' ]
     // opacity, stroke-opacity が有る場合:
     //    0: "<g stroke=\"#000000\" opacity=\"1\" stroke-opacity=\"1\">"
     //    1: "<g stroke=\"#000000\" opacity=\"1\" stroke-opacity=\"1\">"
@@ -29,11 +25,6 @@ function generateSvgInStyleOfSelectedScope(selectedTransScope, inputSVG) {
         return matches2
     });
     console.log(`matches2: `, matches2);
-    //// Array(3) [ (3) […], (3) […], (3) […] ]
-    ////   0: Array(3) [ '<g stroke="#000">', "#000", undefined ]
-    ////   1: Array(3) [ '<g stroke="#eee">', "#eee", undefined ]
-    ////   2: Array(3) [ '<g stroke="#fff">', "#fff", undefined ]
-
     // matches2: [1]=stroke, [2]=opacity, [3]=stroke-opacity
     // 0: (4) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '#000000', '1', '1', index: 0, input: '<g stroke="#000000" opacity="1" stroke-opacity="1">', groups: undefined]
     // 1: (4) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '#000000', '1', '1', index: 0, input: '<g stroke="#000000" opacity="1" stroke-opacity="1">', groups: undefined]
@@ -55,15 +46,12 @@ function generateSvgInStyleOfSelectedScope(selectedTransScope, inputSVG) {
 
 // 選択されたscope ('whole-group' or 'per-stroke') に合わせて それぞれの <g>タグを生成する
 function generateGroupElemInStyleOfSelectedScope(scope, matches) {
-    console.log('matches: ', matches) // Array(3) [ undefined, "#FF882A", 1 ]
+    console.log('matches: ', matches) // Array(3) [ undefined, "#FF882A", 1, 1 ]
 
     if (scope === 'whole-group') { // with 'opacity'
 
-//        const color = splitOpacityAndExtended(matches[1], matches[2])
         const color = splitOpacityAndExtended(matches[1], matches[2], matches[3]) // stroke, opacity, stroke-opacity
         console.log('color: ', color)
-//        // Array(3) [ undefined, (透明度の無い'#'付きのHex7文字), (透明度の数値 or undefined) ]
-//        //      (3) [undefined, '#000000', '1']
         // Array(3) [ undefined, (透明度の無い'#'付きのHex7文字), (opacity の数値 or undefined), (stroke-opacity の数値 or undefined) ]
         //      (3) [undefined, '#000000', '1', '1']
         const opacity = color[2] !== undefined ? color[2] : "1"; // opacity が明示的に指定されていない場合は1.0とみなす
@@ -71,14 +59,6 @@ function generateGroupElemInStyleOfSelectedScope(scope, matches) {
         const newScopeGroupElem = `<g stroke="${color[1]}" opacity="${opacity}" stroke-opacity="${strokeOpacity}">`
         console.log('newScopeGroupElem: ', newScopeGroupElem) // <g stroke="#000000" opacity="1">
         return newScopeGroupElem
-
-
-        // const color = splitOpacityAndExtended(matches[1], matches[2])
-        // console.log('color; ', color) // Array(3) [ undefined, (透明度の無い'#'付きのHex7文字), (透明度の数値 or undefined) ]
-        // const opacity = color[2] !== undefined ? color[2] : "1"; // opacityが明示的に指定されていない場合は1.0とみなす
-        // const newScopeGroupElem = `<g stroke="${color[1]}" opacity="${opacity}">`
-        // console.log('newScopeGroupElem: ', newScopeGroupElem) // <g stroke="#000000" opacity="1">
-        // return newScopeGroupElem
 
     } else if (scope === 'per-stroke') { // without 'opacity' but opacity values are convert into hex 7,8 chars
 
