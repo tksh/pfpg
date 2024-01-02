@@ -59,12 +59,26 @@ function generateGroupElemInStyleOfSelectedScope(scope, matches) {
 
     if (scope === 'whole-group') { // with 'opacity'
 
-        const color = splitOpacityAndExtended(matches[1], matches[2])
-        console.log('color; ', color) // Array(3) [ undefined, (透明度の無い'#'付きのHex7文字), (透明度の数値 or undefined) ]
-        const opacity = color[2] !== undefined ? color[2] : "1"; // opacityが明示的に指定されていない場合は1.0とみなす
-        const newScopeGroupElem = `<g stroke="${color[1]}" opacity="${opacity}">`
+//        const color = splitOpacityAndExtended(matches[1], matches[2])
+        const color = splitOpacityAndExtended(matches[1], matches[2], matches[3]) // stroke, opacity, stroke-opacity
+        console.log('color: ', color)
+//        // Array(3) [ undefined, (透明度の無い'#'付きのHex7文字), (透明度の数値 or undefined) ]
+//        //      (3) [undefined, '#000000', '1']
+        // Array(3) [ undefined, (透明度の無い'#'付きのHex7文字), (opacity の数値 or undefined), (stroke-opacity の数値 or undefined) ]
+        //      (3) [undefined, '#000000', '1', '1']
+        const opacity = color[2] !== undefined ? color[2] : "1"; // opacity が明示的に指定されていない場合は1.0とみなす
+        const strokeOpacity = color[3] !== undefined ? color[3] : "1"; // strokeOpacity が明示的に指定されていない場合は1.0とみなす
+        const newScopeGroupElem = `<g stroke="${color[1]}" opacity="${opacity}" stroke-opacity="${strokeOpacity}">`
         console.log('newScopeGroupElem: ', newScopeGroupElem) // <g stroke="#000000" opacity="1">
         return newScopeGroupElem
+
+
+        // const color = splitOpacityAndExtended(matches[1], matches[2])
+        // console.log('color; ', color) // Array(3) [ undefined, (透明度の無い'#'付きのHex7文字), (透明度の数値 or undefined) ]
+        // const opacity = color[2] !== undefined ? color[2] : "1"; // opacityが明示的に指定されていない場合は1.0とみなす
+        // const newScopeGroupElem = `<g stroke="${color[1]}" opacity="${opacity}">`
+        // console.log('newScopeGroupElem: ', newScopeGroupElem) // <g stroke="#000000" opacity="1">
+        // return newScopeGroupElem
 
     } else if (scope === 'per-stroke') { // without 'opacity' but opacity values are convert into hex 7,8 chars
 
