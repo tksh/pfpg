@@ -44,21 +44,13 @@ function replaceAtIndex(inputString, regexPattern, replacement, index) {
     return replacedString;
 }
 
-//// Test
-//
-//const inputString = "apple banana cherry apple";
-//const regexPattern = /apple/g; // "apple" にマッチする正規表現
-//const replacement = "orange"; // 置き換える文字列
-//const indexToReplace = 1; // 置き換えたいインデックス (2番目[1]の apple を置き換える)
-//
-//const result = replaceAtIndex(inputString, regexPattern, replacement, indexToReplace);
-//console.log(result);
-//// apple banana cherry orange
-
-
-
-//
-
-//function forceToEightDigits() {
-//
-//}
+// // Test
+// 
+// const inputString = "apple banana cherry apple";
+// const regexPattern = /apple/g; // "apple" にマッチする正規表現
+// const replacement = "orange"; // 置き換える文字列
+// const indexToReplace = 1; // 置き換えたいインデックス (2番目[1]の apple を置き換える)
+// 
+// const result = replaceAtIndex(inputString, regexPattern, replacement, indexToReplace);
+// console.log(result);
+// // apple banana cherry orange
