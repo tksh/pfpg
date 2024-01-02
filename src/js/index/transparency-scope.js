@@ -1,20 +1,25 @@
 function generateSvgInStyleOfSelectedScope(selectedTransScope, inputSVG) {
 
-    // RegEx pattern to capture <g stroke="#000000" opacity="0.4"> or <g stroke="#000000FF">
-    // stroke属性と opacity属性が有っても無くても <g>全体を抽出する
+    //// RegEx pattern to capture <g stroke="#000000" opacity="0.4"> or <g stroke="#000000FF">
+    //// stroke属性と opacity属性が有っても無くても <g>全体を抽出する
+    // RegEx pattern to capture <g stroke="#000000" opacity="0.4" stroke-opacity="1"> or <g stroke="#000000" opacity="0.4"> or <g stroke="#000000">
+    // stroke属性, opacity属性, stroke-opacity属性 が有っても無くても <g>全体を抽出する
     const pattern = /<g stroke=.*>/g;
 
     // パターンにマッチする部分全てを配列に追加
     const currentScopeGroupElem = inputSVG.match(pattern); // matchメソッドで配列を返す
     console.log('currentScopeGroupElem: ', currentScopeGroupElem)
-    // opacityが無い場合: Array(3) [ '<g stroke="#000">', '<g stroke="#eee">', '<g stroke="#fff">' ]
-    // opacityが有る場合: Array(3) [ '<g stroke="#000" opacity="0.4">', '<g stroke="#eee" opacity="0.4">', '<g stroke="#fff" opacity="0.4">' ]
-
+    //// opacityが無い場合: Array(3) [ '<g stroke="#000">', '<g stroke="#eee">', '<g stroke="#fff">' ]
+    //// opacityが有る場合: Array(3) [ '<g stroke="#000" opacity="0.4">', '<g stroke="#eee" opacity="0.4">', '<g stroke="#fff" opacity="0.4">' ]
+    // opacity, stroke-opacity が有る場合:
+    //    0: "<g stroke=\"#000000\" opacity=\"1\" stroke-opacity=\"1\">"
+    //    1: "<g stroke=\"#000000\" opacity=\"1\" stroke-opacity=\"1\">"
 
     const matches2 = currentScopeGroupElem.map((elem) => {
         //console.log('elem: ', elem) // '<g stroke="#000">' or `<g stroke="#000" opacity="0.4">`
         //const pattern2 = /stroke="([^"]+)"\s*(?:opacity="([^"]+)")?/g;
-        const pattern2 = /<g stroke="([^"]+)"\s*(?:opacity="([^"]+)")?\s*>/g;
+        //const pattern2 = /<g stroke="([^"]+)"\s*(?:opacity="([^"]+)")?\s*>/g;
+        const pattern2 = /<g stroke="([^"]+)"\s*(?:opacity="([^"]+)")?\s*(?:stroke-opacity="([^"]+)")?\s*>/g;
         const matches2 = pattern2.exec(elem); // exec メソッドでマッチする部分を探す
         console.log(`matches2: `, matches2);
         // opacityが無い場合: Array(3) [ 'stroke="#000"', "#000", undefined ]
@@ -24,10 +29,14 @@ function generateSvgInStyleOfSelectedScope(selectedTransScope, inputSVG) {
         return matches2
     });
     console.log(`matches2: `, matches2);
-    // Array(3) [ (3) […], (3) […], (3) […] ]
-    //   0: Array(3) [ '<g stroke="#000">', "#000", undefined ]
-    //   1: Array(3) [ '<g stroke="#eee">', "#eee", undefined ]
-    //   2: Array(3) [ '<g stroke="#fff">', "#fff", undefined ]
+    //// Array(3) [ (3) […], (3) […], (3) […] ]
+    ////   0: Array(3) [ '<g stroke="#000">', "#000", undefined ]
+    ////   1: Array(3) [ '<g stroke="#eee">', "#eee", undefined ]
+    ////   2: Array(3) [ '<g stroke="#fff">', "#fff", undefined ]
+
+    // matches2: [1]=stroke, [2]=opacity, [3]=stroke-opacity
+    // 0: (4) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '#000000', '1', '1', index: 0, input: '<g stroke="#000000" opacity="1" stroke-opacity="1">', groups: undefined]
+    // 1: (4) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '#000000', '1', '1', index: 0, input: '<g stroke="#000000" opacity="1" stroke-opacity="1">', groups: undefined]
 
     // 選択された scope ('whole-group' or 'per-stroke') に合わせて それぞれの <g>タグを生成する
     const newScopeGroupElemArray = matches2.map(
