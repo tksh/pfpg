@@ -9,28 +9,28 @@ function setDefaultsForPreference() {
     setDefaultForRectColorPicker(inpuSVG)
     setDefaultForAntialiasSelector(inpuSVG)
     setDefaultForWidth(inpuSVG)
-    setDefaultForTransparencyScopeSelector(inpuSVG)
+//    setDefaultForTransparencyScopeSelector(inpuSVG)
 
 
     // Functions to set default value that detect from input svg
 
-    function setDefaultForTransparencyScopeSelector(inpuSVG) {
-
-        // Check first <g> element has 'opacity' or not
-        const pattern = /<g stroke="([^"]+)"\s*(?:opacity="([^"]+)")?\s*>/;
-        const matches = pattern.exec(inpuSVG); // exec メソッドでマッチする部分を探す
-        console.log(`matches: `, matches); // Array(3) [ '<g stroke="#000">', "#000", undefined ]
-
-        // Set default transparency scope
-        const transparencyScopeSelectorElement = document.getElementById('transparency-scope')
-        if (matches[2] === undefined) {
-            transparencyScopeSelectorElement.value = 'per-stroke'
-            console.log(`Default transparency scope value is "per-stroke"`)
-        } else {
-            transparencyScopeSelectorElement.value = 'whole-group'
-            console.log(`Default transparency scope value is "whole-group"`)
-        }
-    }
+//    function setDefaultForTransparencyScopeSelector(inpuSVG) {
+//
+//        // Check first <g> element has 'opacity' or not
+//        const pattern = /<g stroke="([^"]+)"\s*(?:opacity="([^"]+)")?\s*>/;
+//        const matches = pattern.exec(inpuSVG); // exec メソッドでマッチする部分を探す
+//        console.log(`matches: `, matches); // Array(3) [ '<g stroke="#000">', "#000", undefined ]
+//
+//        // Set default transparency scope
+//        const transparencyScopeSelectorElement = document.getElementById('transparency-scope')
+//        if (matches[2] === undefined) {
+//            transparencyScopeSelectorElement.value = 'per-stroke'
+//            console.log(`Default transparency scope value is "per-stroke"`)
+//        } else {
+//            transparencyScopeSelectorElement.value = 'whole-group'
+//            console.log(`Default transparency scope value is "whole-group"`)
+//        }
+//    }
 
     // Color-picker: Background color (background rect color)
     function setDefaultForRectColorPicker(inpuSVG) {
