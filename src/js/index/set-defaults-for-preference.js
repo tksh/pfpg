@@ -55,6 +55,7 @@ function setDefaultsForPreference() {
         const inputElement = document.getElementById("rect-color-picker");
         // input要素のvalue属性に新しい値を設定
         inputElement.value = eightDigitsHex;
+        // The specified value "#99999999" does not conform to the required format.  The format is "#rrggbb" where rr, gg, bb are two-digit hexadecimal numbers.
 
         console.log(`Default background color value is "${eightDigitsHex}"`)
     }
