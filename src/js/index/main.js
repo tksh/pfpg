@@ -373,9 +373,14 @@
             // <input id="multipul-stroke-color-pickers-2" class="input-color add-margin-bottom" value="#fff" style="width: 9rem;" data-jscolor="{}" autocomplete="off">
 
             colorPickerElement.addEventListener('change', function (event) {
+                console.log('/////// colorPickerElement.addEventListener ///////')
                 const hexCode = event.target.value; // カラーピッカーの値を取得
+                console.log('hexCode: ', hexCode) // #82EE86FF
+
                 if (!hexCode) return;
-                console.log('g stroke color value is ', value) // #D6EE4B
+
+                ////console.log('g stroke color value is ', value) // #D6EE4B
+                //// Uncaught ReferenceError: value is not defined
 
                 // Force to convert as 8 digits hex
                 const hexCodeEightDigits = mergeOpacityAndExtended(hexCode)
@@ -388,26 +393,26 @@
 
                 // 現在の <textarea>の要素を取得
                 const svgElement = document.getElementById("input-svg");
-//                // 'input-svg' <textarea> の value属性を 取得
-//                const inputSVG = svgElement.value;
-//
-//                // RegEx pattern to capture <g stroke="#000000" opacity="0.4">
-//                // stroke属性と opacity属性が有っても無くても <g>全体を抽出する
-//                const pattern = /<g stroke=.*>/g;
-//
-//                // パターンにマッチする部分全てをを配列に追加
-//                const currentScopeGroupElemArray = inputSVG.match(pattern); // matchメソッドで配列を返す
-//                console.log('currentScopeGroupElemArray: ', currentScopeGroupElemArray)
-//                // opacityが無い場合: Array(3) [ '<g stroke="#000">', '<g stroke="#eee">', '<g stroke="#fff">' ]
-//                // opacityが有る場合: Array(3) [ '<g stroke="#000" opacity="0.4">', '<g stroke="#eee" opacity="0.4">', '<g stroke="#fff" opacity="0.4">' ]
-//
-//                // 'groupId' を インデックスナンバーとして 変更された色の <g>のみを 抽出
-//                const changedIdCurrentScopeGroupElem = currentScopeGroupElemArray[groupId]
-//
-//
-//                // 正規表現パターンを作成
-//                const pattern_2 = /<g stroke="([^"]+)"\s*(?:opacity="([^"]+)")?\s*>/g;
-//                //console.log('pattern(for stroke color): ', pattern) // /g stroke="[^"]*"/g
+                // 'input-svg' <textarea> の value属性を 取得
+                const inputSVG = svgElement.value;
+
+                // RegEx pattern to capture <g stroke="#000000" opacity="0.4">
+                // stroke属性と opacity属性が有っても無くても <g>全体を抽出する
+                const pattern = /<g stroke=.*>/g;
+
+                // パターンにマッチする部分全てをを配列に追加
+                const currentScopeGroupElemArray = inputSVG.match(pattern); // matchメソッドで配列を返す
+                console.log('currentScopeGroupElemArray: ', currentScopeGroupElemArray)
+                // opacityが無い場合: Array(3) [ '<g stroke="#000">', '<g stroke="#eee">', '<g stroke="#fff">' ]
+                // opacityが有る場合: Array(3) [ '<g stroke="#000" opacity="0.4">', '<g stroke="#eee" opacity="0.4">', '<g stroke="#fff" opacity="0.4">' ]
+
+                // 'groupId' を インデックスナンバーとして 変更された色の <g>のみを 抽出
+                const changedIdCurrentScopeGroupElem = currentScopeGroupElemArray[groupId]
+
+
+                // 正規表現パターンを作成
+                const pattern_2 = /<g stroke="([^"]+)"\s*(?:opacity="([^"]+)")?\s*>/g;
+                //console.log('pattern(for stroke color): ', pattern) // /g stroke="[^"]*"/g
 //
 //                // Get the current status of transparency-scope
 //                const matches_2 = pattern_2.exec(changedIdCurrentScopeGroupElem); // exec メソッドでマッチする部分を探す
@@ -419,13 +424,15 @@
 //                //   もし opacityが無い場合(per-stroke) には インデックス[2] の 'opacity'の数値 が 'undefined' になる
 //                //   そうでなければ whole-group と判断できる
 //                let currentTransScope = "";
-//                let valueAsMatchesStructure = []; // [1] が hex, [2] が opacity の値
+                let valueAsMatchesStructure = []; // [1] が hex, [2] が opacity の値
 //                if (matches_2[2] === undefined) {
 //                    console.log('"Opacity=" not found')
 //                    currentTransScope = 'per-stroke'
 //
-//                    valueAsMatchesStructure[0] = undefined;
-//                    valueAsMatchesStructure[1] = hexCodeEightDigits;  // hex 8 digits // #FF6F25FF
+                    valueAsMatchesStructure[0] = undefined;
+                    valueAsMatchesStructure[1] = hexCodeEightDigits; // hex 8 digits like #FF6F25FF
+                    valueAsMatchesStructure[2] = 1;                   // opacity like 1 or 0.1
+                    valueAsMatchesStructure[3] = 1;                  // stroke-opacity like 1 or 0.1
 //                    // [2]は 何も指定しなければ 'undefined'になる
 //
 //                } else {
@@ -437,19 +444,21 @@
 //                    valueAsMatchesStructure[2] = splitHexAndOpacity(hexCodeEightDigits.slice(1))[2]; // opacity value [0-1]
 //                }
 //                console.log('currentTransScope: ', currentTransScope) // 'whole-group' or 'per-stroke'
-//                console.log('valueAsMatchesStructure: ', valueAsMatchesStructure) // Array(3) [ undefined, "#FF882A", 1 ]
-//
-//
-//                // 選択された scope ('whole-group' or 'per-stroke') に合わせて それぞれの <g>タグを生成する
-//                newChangedIdCurrentScopeGroupElem = generateGroupElemInStyleOfSelectedScope(currentTransScope, valueAsMatchesStructure)
-//                console.log('newChangedIdCurrentScopeGroupElem: ', newChangedIdCurrentScopeGroupElem)
-//
-//                // Replace
-//                // function replaceAtIndex(inputString, regexPattern, replacement, index)
-//                const updatedSVG = replaceAtIndex(inputSVG, pattern, newChangedIdCurrentScopeGroupElem, groupId)
-//
-//                // 'input-svg' <textarea> の value属性を 更新
-//                svgElement.value = updatedSVG;
+                console.log('valueAsMatchesStructure: ', valueAsMatchesStructure) // Array(3) [ undefined, "#FF882A", 1 ]
+
+
+                // 選択された scope ('whole-group' or 'per-stroke') に合わせて それぞれの <g>タグを生成する
+                newChangedIdCurrentScopeGroupElem = generateGroupElem(valueAsMatchesStructure)
+                // newChangedIdCurrentScopeGroupElem = generateGroupElemInStyleOfSelectedScope(currentTransScope, valueAsMatchesStructure)
+                console.log('newChangedIdCurrentScopeGroupElem: ', newChangedIdCurrentScopeGroupElem)
+                // <g stroke="#FF7523" opacity="1" stroke-opacity="1">
+
+                // Replace
+                // function replaceAtIndex(inputString, regexPattern, replacement, index)
+                const updatedSVG = replaceAtIndex(inputSVG, pattern, newChangedIdCurrentScopeGroupElem, groupId)
+
+                // 'input-svg' <textarea> の value属性を 更新
+                svgElement.value = updatedSVG;
 
                 // convertSvg関数を呼び出す
                 convertSvg({ target: svgElement });

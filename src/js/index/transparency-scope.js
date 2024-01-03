@@ -71,6 +71,22 @@
 //}
 
 
+// <g>タグを生成する
+function generateGroupElem(matches) {
+    console.log('matches: ', matches) // Array(3) [ undefined, "#FF882A", 1, 1 ]
+
+        const color = splitOpacityAndExtended(matches[1], matches[2], matches[3]) // stroke, opacity, stroke-opacity
+        console.log('color: ', color)
+        // Array(3) [ undefined, (透明度の無い'#'付きのHex7文字), (opacity の数値 or undefined), (stroke-opacity の数値 or undefined) ]
+        //      (3) [undefined, '#000000', '1', '1']
+        const opacity = color[2] !== undefined ? color[2] : "1"; // opacity が明示的に指定されていない場合は1.0とみなす
+        const strokeOpacity = color[3] !== undefined ? color[3] : "1"; // strokeOpacity が明示的に指定されていない場合は1.0とみなす
+        const newScopeGroupElem = `<g stroke="${color[1]}" opacity="${opacity}" stroke-opacity="${strokeOpacity}">`
+        console.log('newScopeGroupElem: ', newScopeGroupElem) // <g stroke="#000000" opacity="1">
+        return newScopeGroupElem
+}
+
+
 //// 新しい Transparency scope の <g stroke ...> を 現在のSVG文字列全体から探して 置換する
 //function replacePlaceholders(input, replacements) {
 //    let resultString = input;

@@ -112,6 +112,10 @@ function mergeOpacityAndExtended(hexCodeInput, opacityValueInput) {
     //    return eightToFourOrThree(hexWithHash) // shorten if could before return
     return hexWithHash // shorten if could before return
 }
+// console.log(mergeOpacityAndExtended('#000', 1))      // #000000FF
+// console.log(mergeOpacityAndExtended('#000000', 1))   // #000000FF
+// console.log(mergeOpacityAndExtended('#000000', 1.0)) // #000000FF
+
 
 // Split the hex and opacity, and extended if in short style
 // For: transparency-scope = whole-group
