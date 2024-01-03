@@ -1,6 +1,6 @@
 (async function () {
-//    await resvg.initWasm(fetch('../wasm/index_bg_20230424.wasm')) // netlify
-//    await resvg.initWasm(fetch('../src/wasm/index_bg_20230424.wasm')) // local
+    //    await resvg.initWasm(fetch('../wasm/index_bg_20230424.wasm')) // netlify
+    //    await resvg.initWasm(fetch('../src/wasm/index_bg_20230424.wasm')) // local
     await resvg.initWasm(fetch('./src/wasm/index_bg.wasm')) // local
     const output = document.getElementById('output')
     const svgElement = document.querySelector('#input-svg') // Select <textarea id="input-svg" ...
@@ -414,11 +414,11 @@
                 let valueAsMatchesStructure = []; // [1] が hex, [2] が opacity の値
 
                 valueAsMatchesStructure[0] = undefined;
-                    valueAsMatchesStructure[1] = hexCodeEightDigits; // hex 8 digits like #FF6F25FF
-                    valueAsMatchesStructure[2] = 1;                   // opacity like 1 or 0.1
-                    valueAsMatchesStructure[3] = 1;                  // stroke-opacity like 1 or 0.1
+                valueAsMatchesStructure[1] = hexCodeEightDigits; // hex 8 digits like #FF6F25FF
+                valueAsMatchesStructure[2] = 1;                   // opacity like 1 or 0.1
+                valueAsMatchesStructure[3] = 1;                  // stroke-opacity like 1 or 0.1
 
-                    console.log('valueAsMatchesStructure: ', valueAsMatchesStructure) // Array(3) [ undefined, "#FF882A", 1 ]
+                console.log('valueAsMatchesStructure: ', valueAsMatchesStructure) // Array(3) [ undefined, "#FF882A", 1 ]
 
 
                 // 更新された <g>タグを生成する
@@ -441,27 +441,28 @@
     }
 
     //////////////////////////////////////////////////////////////////////////
-    ////////////////////////// Group 'opacity' [n] ///////////////////////////
+    /////////////// Group 'opacity' and 'stroke-opaciity' [n] ////////////////
 
-    function addEventListenerForOpacityInputs(numberOfColorPickers) {
+    function addEventListenerForOpacityInputs(numberOfColorPickers, attrName) {
 
-        // `group-colors-opacity-N` カラーピッカータグの変更を監視
+        // id `group-colors-${attrName}-N` の要素の変更を監視
         for (let i = 0; i < numberOfColorPickers; i++) {
-            const elementId = `group-colors-opacity-${i}`;
-            //console.log('elementId: ', elementId) // group-colors-opacity-0
+            const elementId = `group-colors-${attrName}-${i}`;
+            //console.log('elementId: ', elementId) // group-colors-${attrName}-0
 
             const element = document.querySelector(`#${elementId}`);
-            //console.log('i, element: ', i, element) // 0 <input type=​"number" min=​"0" max=​"1" step=​"0.1" value=​"1" id=​"group-colors-opacity-0">​
+            //console.log('i, element: ', i, element) // 0 <input type=​"number" min=​"0" max=​"1" step=​"0.1" value=​"1" id=​"group-colors-${attrName}-0">​
 
             element.addEventListener('change', function (event) {
-                console.log('/////// Event changed for opacity ///////')
-                const inputValue = event.target.value; // opacity input の値を取得
+
+                console.log(`/////// Event changed for ${attrName} ///////`)
+                const inputValue = event.target.value;  // ${attrName} input の値を取得
                 console.log('inputValue: ', inputValue) // [0-1] Number
 
                 if (!inputValue) return;
 
                 // elementId最後の idの数値のみ を抽出して 変更されたグループの indexナンバー を特定
-                const groupId = elementId.replace('group-colors-opacity-', '');
+                const groupId = elementId.replace(`group-colors-${attrName}-`, '');
                 //console.log('groupId: ', groupId)                 // like '0', '1', '2' ...
                 //console.log('typeof(groupId): ', typeof(groupId)) // string
 
@@ -487,12 +488,25 @@
 
 
                 // Generate the array like regex 'matche' object with input value
-                const valueAsMatchesStructure = [
-                    undefined,     // [0] = undefined
-                    stroke,        // [1] = value of stroke
-                    inputValue,    // [2] = value of opacity
-                    strokeOpacity  // [3] = value of stroke-opacity
-                ]
+                let valueAsMatchesStructure = [];
+
+                if (attrName === 'opacity') {
+
+                    valueAsMatchesStructure = [
+                        undefined,     // [0] = undefined
+                        stroke,        // [1] = value of stroke
+                        inputValue,    // [2] = value of opacity
+                        strokeOpacity  // [3] = value of stroke-opacity
+                    ]
+                } else if (attrName === 'stroke-opacity') {
+
+                    valueAsMatchesStructure = [
+                        undefined,     // [0] = undefined
+                        stroke,        // [1] = value of stroke
+                        opacity,       // [2] = value of opacity
+                        inputValue     // [3] = value of stroke-opacity
+                    ]
+                }
                 console.log('valueAsMatchesStructure: ', valueAsMatchesStructure)
                 // (4) [undefined, '#FF0000', '0.8', '1']
 
@@ -515,6 +529,8 @@
         }
     }
 
+    /////////////// Group 'opacity' and 'stroke-opaciity' [n] ////////////////
+    //////////////////////////////////////////////////////////////////////////
 
 
 
@@ -522,8 +538,8 @@
     const numberOfColorPickers = getNumberOfStrokeGroups(getInputSvg())
     //console.log('numberOfColorPickers: ', numberOfColorPickers) // 5
     addEventListenerForAllStrokeColorPickers(numberOfColorPickers)
-    addEventListenerForOpacityInputs(numberOfColorPickers)
-    //addEventListenerForAllStrokeOpacityInputs(numberOfColorPickers)
+    addEventListenerForOpacityInputs(numberOfColorPickers, 'opacity')
+    addEventListenerForOpacityInputs(numberOfColorPickers, 'stroke-opacity')
 
     // Get the number of stroke colors to add multipul event listener
     function getNumberOfStrokeGroups(inputSVG) {
@@ -545,28 +561,28 @@
     //////////////////////////////////////////////////////////////////////////
 
 
-//    //////////////////////////////////////////////////////////////////////////
-//    /////////////////////////// Transparency scope ///////////////////////////
-//    const transparencyScopeSelectorElement = document.getElementById('transparency-scope')
-//
-//    // changeイベントを設定
-//    transparencyScopeSelectorElement.addEventListener("change", () => {
-//        // 選択された値を取得
-//        const selectedTransScope = transparencyScopeSelectorElement.value;
-//        console.log('selectedTransScope:', selectedTransScope) // whole-group | per-stroke
-//
-//        // whole-group | per-stroke に応じて生成された<g>要素 を含む新しいSVG文字列を 取得
-//        const updatedSVG = generateSvgInStyleOfSelectedScope(selectedTransScope, inputSVG)
-//
-//        // 'input-svg' <textarea> の value属性を 更新
-//        svgElement.value = updatedSVG;
-//
-//        // convertSvg関数を呼び出す
-//        convertSvg({ target: svgElement });
-//
-//    });
-//    /////////////////////////// Transparency scope ///////////////////////////
-//    //////////////////////////////////////////////////////////////////////////
+    //    //////////////////////////////////////////////////////////////////////////
+    //    /////////////////////////// Transparency scope ///////////////////////////
+    //    const transparencyScopeSelectorElement = document.getElementById('transparency-scope')
+    //
+    //    // changeイベントを設定
+    //    transparencyScopeSelectorElement.addEventListener("change", () => {
+    //        // 選択された値を取得
+    //        const selectedTransScope = transparencyScopeSelectorElement.value;
+    //        console.log('selectedTransScope:', selectedTransScope) // whole-group | per-stroke
+    //
+    //        // whole-group | per-stroke に応じて生成された<g>要素 を含む新しいSVG文字列を 取得
+    //        const updatedSVG = generateSvgInStyleOfSelectedScope(selectedTransScope, inputSVG)
+    //
+    //        // 'input-svg' <textarea> の value属性を 更新
+    //        svgElement.value = updatedSVG;
+    //
+    //        // convertSvg関数を呼び出す
+    //        convertSvg({ target: svgElement });
+    //
+    //    });
+    //    /////////////////////////// Transparency scope ///////////////////////////
+    //    //////////////////////////////////////////////////////////////////////////
 
 
     //////////////////////////////////////////////////////////////////////////
@@ -659,16 +675,16 @@
     // // The half of `<input type="range" max="512">` is 256
     setPngSize(256);
 
-//    const setTransScope = (value) => {
-//        // Force to apply the 'whole-group' style as transparency scope to generate <g> tags
-//        defaultTransScope = value
-//        const updatedSVG = generateSvgInStyleOfSelectedScope(defaultTransScope, inputSVG)
-//        svgElement.value = updatedSVG;
-//        convertSvg({ target: svgElement });
-//        transparencyScopeSelectorElement.value = value
-//        console.log(`Set 'Transparency scope' value as "${value}"`)
-//    }
-//    setTransScope('whole-group')
+    //    const setTransScope = (value) => {
+    //        // Force to apply the 'whole-group' style as transparency scope to generate <g> tags
+    //        defaultTransScope = value
+    //        const updatedSVG = generateSvgInStyleOfSelectedScope(defaultTransScope, inputSVG)
+    //        svgElement.value = updatedSVG;
+    //        convertSvg({ target: svgElement });
+    //        transparencyScopeSelectorElement.value = value
+    //        console.log(`Set 'Transparency scope' value as "${value}"`)
+    //    }
+    //    setTransScope('whole-group')
 
     countSvgSize()
 
