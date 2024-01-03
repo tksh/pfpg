@@ -32,6 +32,11 @@ body {
     flex-wrap: wrap;
 }
 
+.opts-cell-for-strokes {
+    padding-left: 2.5rem;
+    min-width: 16rem;
+}
+
 .opts-cell {
     padding-left: 2rem;
     min-width: 16rem;

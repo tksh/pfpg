@@ -18,9 +18,14 @@ function generateStrokeColorPickerTags() {
         const html = `
     <!-- Color-picker: Stroke color for group ${i} -->
     <div>
-      <div class="opts-cell">
-        <label for="multipul-stroke-color-pickers-${i}">Stroke color [${i + 1}]:</label>
-        <input value="${hexCode[i]}" style="width: 9rem;" data-jscolor="{alpha: true}" id="multipul-stroke-color-pickers-${i}" class="input-color add-margin-bottom" autocomplete="off">
+      <div class="opts-cell-for-strokes">
+        <label for="multipul-stroke-color-pickers-${i}">Group [${i + 1}]:</label>
+        <input value="${hexCode[i]}" style="width: 9rem;" data-jscolor="{alpha: false}" id="multipul-stroke-color-pickers-${i}" class="input-color add-margin-bottom" autocomplete="off">
+
+        <input type="number" min="0" max="1" step="0.1" value="0.5" id="multipul-stroke-color-pickers-opacity-${i}">
+
+        <input type="number" min="0" max="1" step="0.1" value="0.5" id="multipul-stroke-color-pickers-stroke-opacity-${i}">
+
       </div>
     </div>`;
 
