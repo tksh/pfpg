@@ -354,8 +354,6 @@
     //////////////////////////////////////////////////////////////////////////
     ///////////////////////////// Stroke color [n] /////////////////////////////
 
-    // todo: whole-color の時に 色を変更すると上手く動かない
-
     // Color-picker: for multipul stroke colors
 
     function addEventListenerForAllStrokeColorPickers(numberOfColorPickers) {
@@ -413,43 +411,18 @@
                 // 正規表現パターンを作成
                 const pattern_2 = /<g stroke="([^"]+)"\s*(?:opacity="([^"]+)")?\s*>/g;
                 //console.log('pattern(for stroke color): ', pattern) // /g stroke="[^"]*"/g
-//
-//                // Get the current status of transparency-scope
-//                const matches_2 = pattern_2.exec(changedIdCurrentScopeGroupElem); // exec メソッドでマッチする部分を探す
-//                console.log('matches_2: ', matches_2)
-//                // opacityが無い場合: [ '<g stroke="#000">', "#000", undefined ]
-//                // opacityが有る場合: [ '<g stroke="#000000FF" opacity="1.0">', "#000000FF", "1.0" ]
-//
-//                // これによって 現在の状態が whole-group or per-stroke のどちらかが分かる
-//                //   もし opacityが無い場合(per-stroke) には インデックス[2] の 'opacity'の数値 が 'undefined' になる
-//                //   そうでなければ whole-group と判断できる
-//                let currentTransScope = "";
                 let valueAsMatchesStructure = []; // [1] が hex, [2] が opacity の値
-//                if (matches_2[2] === undefined) {
-//                    console.log('"Opacity=" not found')
-//                    currentTransScope = 'per-stroke'
-//
-                    valueAsMatchesStructure[0] = undefined;
+
+                valueAsMatchesStructure[0] = undefined;
                     valueAsMatchesStructure[1] = hexCodeEightDigits; // hex 8 digits like #FF6F25FF
                     valueAsMatchesStructure[2] = 1;                   // opacity like 1 or 0.1
                     valueAsMatchesStructure[3] = 1;                  // stroke-opacity like 1 or 0.1
-//                    // [2]は 何も指定しなければ 'undefined'になる
-//
-//                } else {
-//                    currentTransScope = 'whole-group'
-//
-//                    valueAsMatchesStructure[0] = undefined;
-//                    console.log('splitHexAndOpacity(hexCodeEightDigits)[1]: ', splitHexAndOpacity(hexCodeEightDigits)[1]) // ##FF6F2
-//                    valueAsMatchesStructure[1] = splitHexAndOpacity(hexCodeEightDigits.slice(1))[1]; // hex without opacity, and '#' remove with '.slice(1)'
-//                    valueAsMatchesStructure[2] = splitHexAndOpacity(hexCodeEightDigits.slice(1))[2]; // opacity value [0-1]
-//                }
-//                console.log('currentTransScope: ', currentTransScope) // 'whole-group' or 'per-stroke'
-                console.log('valueAsMatchesStructure: ', valueAsMatchesStructure) // Array(3) [ undefined, "#FF882A", 1 ]
+
+                    console.log('valueAsMatchesStructure: ', valueAsMatchesStructure) // Array(3) [ undefined, "#FF882A", 1 ]
 
 
-                // 選択された scope ('whole-group' or 'per-stroke') に合わせて それぞれの <g>タグを生成する
+                // 更新された <g>タグを生成する
                 newChangedIdCurrentScopeGroupElem = generateGroupElem(valueAsMatchesStructure)
-                // newChangedIdCurrentScopeGroupElem = generateGroupElemInStyleOfSelectedScope(currentTransScope, valueAsMatchesStructure)
                 console.log('newChangedIdCurrentScopeGroupElem: ', newChangedIdCurrentScopeGroupElem)
                 // <g stroke="#FF7523" opacity="1" stroke-opacity="1">
 
@@ -467,10 +440,90 @@
         }
     }
 
+    //////////////////////////////////////////////////////////////////////////
+    ////////////////////////// Group 'opacity' [n] ///////////////////////////
+
+    function addEventListenerForOpacityInputs(numberOfColorPickers) {
+
+        // `group-colors-opacity-N` カラーピッカータグの変更を監視
+        for (let i = 0; i < numberOfColorPickers; i++) {
+            const elementId = `group-colors-opacity-${i}`;
+            //console.log('elementId: ', elementId) // group-colors-opacity-0
+
+            const element = document.querySelector(`#${elementId}`);
+            //console.log('i, element: ', i, element) // 0 <input type=​"number" min=​"0" max=​"1" step=​"0.1" value=​"1" id=​"group-colors-opacity-0">​
+
+            element.addEventListener('change', function (event) {
+                console.log('/////// Event changed for opacity ///////')
+                const inputValue = event.target.value; // opacity input の値を取得
+                console.log('inputValue: ', inputValue) // [0-1] Number
+
+                if (!inputValue) return;
+
+                // elementId最後の idの数値のみ を抽出して 変更されたグループの indexナンバー を特定
+                const groupId = elementId.replace('group-colors-opacity-', '');
+                //console.log('groupId: ', groupId)                 // like '0', '1', '2' ...
+                //console.log('typeof(groupId): ', typeof(groupId)) // string
+
+                // Get current SVG string intextarea
+                const currentSVG = getInputSvg()
+
+                // RegEx pattern to capture '<g stroke="#000000" opacity="1" stroke-opacity="1">'
+                const pattern = /<g stroke=.*>/g;
+
+                const matches = currentSVG.match(pattern); // matchメソッドで配列を返す
+                // console.log('matches: ', matches)
+                // (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
+
+                // RegEx patterns to extract group color value
+                strokePattern = /(#.*?)"/; // ハッシュマークと その次のダブルクォーテーションの あいだの 最短の文字列
+                opacityPattern = /\sopacity="(.*?)"/;
+                strokeOpacityPattern = /stroke-opacity="(.*?)"/;
+
+                // Get group color value
+                stroke = hexExpandTo6(matches[i].match(strokePattern)[1]) // 6 digits hex
+                opacity = matches[i].match(opacityPattern)[1]             // [0-1] number
+                strokeOpacity = matches[i].match(strokeOpacityPattern)[1] // [0-1] number
+
+
+                // Generate the array like regex 'matche' object with input value
+                const valueAsMatchesStructure = [
+                    undefined,     // [0] = undefined
+                    stroke,        // [1] = value of stroke
+                    inputValue,    // [2] = value of opacity
+                    strokeOpacity  // [3] = value of stroke-opacity
+                ]
+                console.log('valueAsMatchesStructure: ', valueAsMatchesStructure)
+                // (4) [undefined, '#FF0000', '0.8', '1']
+
+                // 更新された <g>タグを生成する
+                changedGroupElem = generateGroupElem(valueAsMatchesStructure)
+                console.log('changedGroupElem: ', changedGroupElem)
+                // <g stroke="#FF7523" opacity="1" stroke-opacity="1">
+
+
+                // Replace <g>
+                // function replaceAtIndex(inputString, regexPattern, replacement, index)
+                const updatedSVG = replaceAtIndex(currentSVG, pattern, changedGroupElem, groupId)
+
+                // Refresh the SVG string in <textarea>
+                svgElement.value = updatedSVG;
+
+                // Re-rendering the image
+                convertSvg({ target: svgElement });
+            });
+        }
+    }
+
+
+
+
     // Add multipul event listener for whole stroke colors
     const numberOfColorPickers = getNumberOfStrokeGroups(getInputSvg())
     //console.log('numberOfColorPickers: ', numberOfColorPickers) // 5
     addEventListenerForAllStrokeColorPickers(numberOfColorPickers)
+    addEventListenerForOpacityInputs(numberOfColorPickers)
+    //addEventListenerForAllStrokeOpacityInputs(numberOfColorPickers)
 
     // Get the number of stroke colors to add multipul event listener
     function getNumberOfStrokeGroups(inputSVG) {

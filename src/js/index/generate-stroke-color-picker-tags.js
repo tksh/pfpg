@@ -21,12 +21,13 @@ function generateStrokeColorPickerTags() {
     <!-- Color-picker: Stroke color for group ${i} -->
     <div>
       <div class="opts-cell-for-strokes">
+
         <label for="multipul-stroke-color-pickers-${i}">Group [${i + 1}]:</label>
-        <input value="${stroke[i]}" style="width: 9rem;" data-jscolor="{alpha: false}" id="multipul-stroke-color-pickers-${i}" class="input-color add-margin-bottom" autocomplete="off">
+        <input value="${stroke[i]}" style="width: 9rem;" data-jscolor="{}" id="multipul-stroke-color-pickers-${i}" class="input-color add-margin-bottom" autocomplete="off">
 
-        <input type="number" min="0" max="1" step="0.1" value="${opacity[i]}" id="multipul-stroke-color-pickers-opacity-${i}">
+        <input type="number" min="0" max="1" step="0.1" value="${opacity[i]}" id="group-colors-opacity-${i}">
 
-        <input type="number" min="0" max="1" step="0.1" value="${strokeOpacity[i]}" id="multipul-stroke-color-pickers-stroke-opacity-${i}">
+        <input type="number" min="0" max="1" step="0.1" value="${strokeOpacity[i]}" id="group-colors-stroke-opacity-${i}">
 
       </div>
     </div>`;
@@ -101,8 +102,8 @@ function getStrokesColors() {
         opacityArray.push(opacity)
         strokeOpacityArray.push(strokeOpacity)
     }
-    // strokeHexArray:  (5) ['#000000', '#000000', '#000000', '#eeeeee', '#ffffff']
-    // opacityArray:  (5) ['1', '1', '1', '1', '1']
+    // strokeHexArray:      (5) ['#000000', '#000000', '#000000', '#eeeeee', '#ffffff']
+    // opacityArray:        (5) ['1', '1', '1', '1', '1']
     // strokeOpacityArray:  (5) ['1', '1', '1', '1', '1']
 
     return [numberOfColorPickers, strokeHexArray, opacityArray, strokeOpacityArray] // [Number, Array[], Array[], Array[]]
@@ -113,7 +114,7 @@ function hexExpandTo6(hexcodeWithHash) {
     if (hexcode.length === 3) {
         const repeatTo6 = hexcode.split("").map((char) => char.repeat(2)).join(""); // 文字列の各文字を2回繰り返して結合する
         return "#" + repeatTo6
-    } else { // = 6 digits
+    } else { // 6 digits
         return "#" + hexcode
     }
 }
