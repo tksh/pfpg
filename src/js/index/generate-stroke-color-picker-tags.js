@@ -22,8 +22,8 @@ function generateStrokeColorPickerTags() {
     <div>
       <div class="opts-cell-for-strokes">
 
-        <label for="multipul-stroke-color-pickers-${i}">Group [${i + 1}]:</label>
-        <input value="${stroke[i]}" style="width: 9rem;" data-jscolor="{}" id="multipul-stroke-color-pickers-${i}" class="input-color add-margin-bottom" autocomplete="off">
+        <label for="group-colors-stroke-${i}">Group [${i + 1}]:</label>
+        <input value="${stroke[i]}" style="width: 9rem;" data-jscolor="{}" id="group-colors-stroke-${i}" class="input-color add-margin-bottom" autocomplete="off">
 
         <input type="number" min="0" max="1" step="0.1" value="${opacity[i]}" id="group-colors-opacity-${i}">
 
@@ -37,7 +37,7 @@ function generateStrokeColorPickerTags() {
     }
 
     // 配列の要素を改行で結合して出力
-    document.getElementById("multipul-stroke-color-pickers").innerHTML = colorPickers.join("\n");
+    document.getElementById("group-colors-stroke").innerHTML = colorPickers.join("\n");
     console.log(`${numberOfColorPickers} stroke color picker tags has generated and inserted.`)
 
     return numberOfColorPickers
@@ -191,23 +191,23 @@ function splitOpacityAndExtended(hexCodeInput, opacityValueInput, strokeOpacityV
 // <!-- Color-picker: Stroke color for group 0 -->
 // <div>
 //   <div class="opts-cell">
-//     <label for="multipul-stroke-color-pickers-0">Stroke color [1]:</label>
-//     <input value="#000000ff" style="width: 9rem; background-image: linear-gradient(to right, rgba(81, 4, 255, 0.54) 0%, rgba(81, 4, 255, 0.54) 30px, rgba(0, 0, 0, 0) 31px, rgba(0, 0, 0, 0) 100%), url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAYAAAB3AH1ZAAAAU0lEQVRIS2OcOXPmfwY84OzZs/ikGYyNjfHK49KfkpLCsG3btuWMow4YDYHREBjwEEhLS8NbDpCbz2GFAy79Tk5ODEuXLl3OOOqA0RAYDYGBDgEA8m6qcb3sNVEAAAAASUVORK5CYII=&quot;) !important; background-position: left top, left top !important; background-size: auto, 32px 16px !important; background-repeat: repeat-y, repeat-y !important; background-origin: padding-box, padding-box !important; padding-left: 40px !important;" data-jscolor="{}" id="multipul-stroke-color-pickers-0" class="input-color add-margin-bottom jscolor" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-current-color="#5104FF8B">
+//     <label for="group-colors-stroke-0">Stroke color [1]:</label>
+//     <input value="#000000ff" style="width: 9rem; background-image: linear-gradient(to right, rgba(81, 4, 255, 0.54) 0%, rgba(81, 4, 255, 0.54) 30px, rgba(0, 0, 0, 0) 31px, rgba(0, 0, 0, 0) 100%), url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAYAAAB3AH1ZAAAAU0lEQVRIS2OcOXPmfwY84OzZs/ikGYyNjfHK49KfkpLCsG3btuWMow4YDYHREBjwEEhLS8NbDpCbz2GFAy79Tk5ODEuXLl3OOOqA0RAYDYGBDgEA8m6qcb3sNVEAAAAASUVORK5CYII=&quot;) !important; background-position: left top, left top !important; background-size: auto, 32px 16px !important; background-repeat: repeat-y, repeat-y !important; background-origin: padding-box, padding-box !important; padding-left: 40px !important;" data-jscolor="{}" id="group-colors-stroke-0" class="input-color add-margin-bottom jscolor" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-current-color="#5104FF8B">
 //   </div>
 // </div>
 //
 // <!-- Color-picker: Stroke color for group 1 -->
 // <div>
 //   <div class="opts-cell">
-//     <label for="multipul-stroke-color-pickers-1">Stroke color [2]:</label>
-//     <input value="#eeeeeeff" style="width: 9rem; background-image: linear-gradient(to right, rgb(238, 238, 238) 0%, rgb(238, 238, 238) 30px, rgba(0, 0, 0, 0) 31px, rgba(0, 0, 0, 0) 100%), url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAYAAAB3AH1ZAAAAU0lEQVRIS2OcOXPmfwY84OzZs/ikGYyNjfHK49KfkpLCsG3btuWMow4YDYHREBjwEEhLS8NbDpCbz2GFAy79Tk5ODEuXLl3OOOqA0RAYDYGBDgEA8m6qcb3sNVEAAAAASUVORK5CYII=&quot;) !important; background-position: left top, left top !important; background-size: auto, 32px 16px !important; background-repeat: repeat-y, repeat-y !important; background-origin: padding-box, padding-box !important; padding-left: 40px !important;" data-jscolor="{}" id="multipul-stroke-color-pickers-1" class="input-color add-margin-bottom jscolor" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-current-color="#EEEEEEFF">
+//     <label for="group-colors-stroke-1">Stroke color [2]:</label>
+//     <input value="#eeeeeeff" style="width: 9rem; background-image: linear-gradient(to right, rgb(238, 238, 238) 0%, rgb(238, 238, 238) 30px, rgba(0, 0, 0, 0) 31px, rgba(0, 0, 0, 0) 100%), url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAYAAAB3AH1ZAAAAU0lEQVRIS2OcOXPmfwY84OzZs/ikGYyNjfHK49KfkpLCsG3btuWMow4YDYHREBjwEEhLS8NbDpCbz2GFAy79Tk5ODEuXLl3OOOqA0RAYDYGBDgEA8m6qcb3sNVEAAAAASUVORK5CYII=&quot;) !important; background-position: left top, left top !important; background-size: auto, 32px 16px !important; background-repeat: repeat-y, repeat-y !important; background-origin: padding-box, padding-box !important; padding-left: 40px !important;" data-jscolor="{}" id="group-colors-stroke-1" class="input-color add-margin-bottom jscolor" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-current-color="#EEEEEEFF">
 //   </div>
 // </div>
 //
 // <!-- Color-picker: Stroke color for group 2 -->
 // <div>
 //   <div class="opts-cell">
-//     <label for="multipul-stroke-color-pickers-2">Stroke color [3]:</label>
-//     <input value="#ffffffff" style="width: 9rem; background-image: linear-gradient(to right, rgb(255, 255, 255) 0%, rgb(255, 255, 255) 30px, rgba(0, 0, 0, 0) 31px, rgba(0, 0, 0, 0) 100%), url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAYAAAB3AH1ZAAAAU0lEQVRIS2OcOXPmfwY84OzZs/ikGYyNjfHK49KfkpLCsG3btuWMow4YDYHREBjwEEhLS8NbDpCbz2GFAy79Tk5ODEuXLl3OOOqA0RAYDYGBDgEA8m6qcb3sNVEAAAAASUVORK5CYII=&quot;) !important; background-position: left top, left top !important; background-size: auto, 32px 16px !important; background-repeat: repeat-y, repeat-y !important; background-origin: padding-box, padding-box !important; padding-left: 40px !important;" data-jscolor="{}" id="multipul-stroke-color-pickers-2" class="input-color add-margin-bottom jscolor" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-current-color="#FFFFFFFF">
+//     <label for="group-colors-stroke-2">Stroke color [3]:</label>
+//     <input value="#ffffffff" style="width: 9rem; background-image: linear-gradient(to right, rgb(255, 255, 255) 0%, rgb(255, 255, 255) 30px, rgba(0, 0, 0, 0) 31px, rgba(0, 0, 0, 0) 100%), url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAYAAAB3AH1ZAAAAU0lEQVRIS2OcOXPmfwY84OzZs/ikGYyNjfHK49KfkpLCsG3btuWMow4YDYHREBjwEEhLS8NbDpCbz2GFAy79Tk5ODEuXLl3OOOqA0RAYDYGBDgEA8m6qcb3sNVEAAAAASUVORK5CYII=&quot;) !important; background-position: left top, left top !important; background-size: auto, 32px 16px !important; background-repeat: repeat-y, repeat-y !important; background-origin: padding-box, padding-box !important; padding-left: 40px !important;" data-jscolor="{}" id="group-colors-stroke-2" class="input-color add-margin-bottom jscolor" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-current-color="#FFFFFFFF">
 //   </div>
 // </div>
