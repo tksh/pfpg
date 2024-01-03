@@ -1,3 +1,16 @@
+// Convert from 3|6 digits hex to 6 digits
+function hexExpandTo6(hexcodeWithHash) {
+    let hexcode = hexcodeWithHash.slice(1); // `#`記号 を除く文字列を取得
+    if (hexcode.length === 3) {
+        const repeatTo6 = hexcode.split("").map((char) => char.repeat(2)).join(""); // 文字列の各文字を2回繰り返して結合する
+        return "#" + repeatTo6
+    } else { // 6 digits
+        return "#" + hexcode
+    }
+}
+
+
+
 // 8桁のhexコードを受け取り、省略形に変換する関数
 function eightToFourOrThree(hex) {
     // hexが8桁でない場合はエラーを返す

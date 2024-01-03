@@ -429,7 +429,7 @@
                 // (4) [undefined, '#FF0000', '0.8', '1']
 
                 // 更新された <g>タグを生成する
-                changedGroupElem = generateGroupElem(valueAsMatchesStructure)
+                changedGroupElem = generateGroupColorsSvgTags(valueAsMatchesStructure)
                 console.log('changedGroupElem: ', changedGroupElem)
                 // <g stroke="#FF7523" opacity="1" stroke-opacity="1">
 
@@ -469,32 +469,6 @@
 
     ////////// Group 'stroke', 'opacity' and 'stroke-opaciity' [n] ///////////
     //////////////////////////////////////////////////////////////////////////
-
-
-
-
-    //    //////////////////////////////////////////////////////////////////////////
-    //    /////////////////////////// Transparency scope ///////////////////////////
-    //    const transparencyScopeSelectorElement = document.getElementById('transparency-scope')
-    //
-    //    // changeイベントを設定
-    //    transparencyScopeSelectorElement.addEventListener("change", () => {
-    //        // 選択された値を取得
-    //        const selectedTransScope = transparencyScopeSelectorElement.value;
-    //        console.log('selectedTransScope:', selectedTransScope) // whole-group | per-stroke
-    //
-    //        // whole-group | per-stroke に応じて生成された<g>要素 を含む新しいSVG文字列を 取得
-    //        const updatedSVG = generateSvgInStyleOfSelectedScope(selectedTransScope, inputSVG)
-    //
-    //        // 'input-svg' <textarea> の value属性を 更新
-    //        svgElement.value = updatedSVG;
-    //
-    //        // convertSvg関数を呼び出す
-    //        convertSvg({ target: svgElement });
-    //
-    //    });
-    //    /////////////////////////// Transparency scope ///////////////////////////
-    //    //////////////////////////////////////////////////////////////////////////
 
 
     //////////////////////////////////////////////////////////////////////////
@@ -586,17 +560,6 @@
     // // Force to apply the '256' as PNG rendering size
     // // The half of `<input type="range" max="512">` is 256
     setPngSize(256);
-
-    //    const setTransScope = (value) => {
-    //        // Force to apply the 'whole-group' style as transparency scope to generate <g> tags
-    //        defaultTransScope = value
-    //        const updatedSVG = generateSvgInStyleOfSelectedScope(defaultTransScope, inputSVG)
-    //        svgElement.value = updatedSVG;
-    //        convertSvg({ target: svgElement });
-    //        transparencyScopeSelectorElement.value = value
-    //        console.log(`Set 'Transparency scope' value as "${value}"`)
-    //    }
-    //    setTransScope('whole-group')
 
     countSvgSize()
 
