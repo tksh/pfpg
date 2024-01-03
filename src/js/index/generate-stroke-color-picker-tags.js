@@ -3,9 +3,11 @@ generateStrokeColorPickerTags()
 
 function generateStrokeColorPickerTags() {
 
-    const numberOfColorPickersAndHexCodeArray = getStrokesColors();
-    const numberOfColorPickers = numberOfColorPickersAndHexCodeArray[0]
-    const hexCode = numberOfColorPickersAndHexCodeArray[1]
+    const numberOfColorPickersAndColorsArrays = getStrokesColors();
+    const numberOfColorPickers = numberOfColorPickersAndColorsArrays[0]
+    const stroke = numberOfColorPickersAndColorsArrays[1]
+    const opacity = numberOfColorPickersAndColorsArrays[2]
+    const strokeOpacity = numberOfColorPickersAndColorsArrays[3]
 
     // Generate the tags
 
@@ -13,18 +15,18 @@ function generateStrokeColorPickerTags() {
     const colorPickers = [];
     // マッチした部分の数だけ繰り返す
     for (let i = 0; i < numberOfColorPickers; i++) {
-        console.log('hexCode[i]; ', hexCode[i])
+        console.log('stroke[i]; ', stroke[i])
         // カラーピッカータグのHTMLを作成
         const html = `
     <!-- Color-picker: Stroke color for group ${i} -->
     <div>
       <div class="opts-cell-for-strokes">
         <label for="multipul-stroke-color-pickers-${i}">Group [${i + 1}]:</label>
-        <input value="${hexCode[i]}" style="width: 9rem;" data-jscolor="{alpha: false}" id="multipul-stroke-color-pickers-${i}" class="input-color add-margin-bottom" autocomplete="off">
+        <input value="${stroke[i]}" style="width: 9rem;" data-jscolor="{alpha: false}" id="multipul-stroke-color-pickers-${i}" class="input-color add-margin-bottom" autocomplete="off">
 
-        <input type="number" min="0" max="1" step="0.1" value="0.5" id="multipul-stroke-color-pickers-opacity-${i}">
+        <input type="number" min="0" max="1" step="0.1" value="${opacity[i]}" id="multipul-stroke-color-pickers-opacity-${i}">
 
-        <input type="number" min="0" max="1" step="0.1" value="0.5" id="multipul-stroke-color-pickers-stroke-opacity-${i}">
+        <input type="number" min="0" max="1" step="0.1" value="${strokeOpacity[i]}" id="multipul-stroke-color-pickers-stroke-opacity-${i}">
 
       </div>
     </div>`;
@@ -49,44 +51,72 @@ function getStrokesColors() {
 
     // SVGのテキストを取得
     const inputSVG = getInputSvg()
+
     // 正規表現パターンを作成
-    const pattern = /g stroke="[^"]*"/g; // g stroke="..." にマッチするパターン
+    const pattern = /<g stroke=.*">/g; // g stroke="..." にマッチするパターン
+
     // パターンにマッチする部分をすべて探す
     const matches = inputSVG.match(pattern); // matchメソッドで配列を返す
-    console.log('matches(g stroke="#XXX"): ', matches) // Array(3) [ 'g stroke="#000"', 'g stroke="#eee"', 'g stroke="#fff"' ]
+    // console.log('matches: ', matches)
+    // (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
+
     // マッチした部分の数を取得
     const numberOfColorPickers = matches.length; // 配列の長さでマッチした部分の数を得る
-    console.log('numberOfColorPickers: ', numberOfColorPickers) // 3
-
+    // console.log('numberOfColorPickers: ', numberOfColorPickers) // 5 (Number)
 
 
     // Get each color as hex code
+    // カラーピッカー生成時に 初期値として設定するために マッチした部分の内容から各カラー情報の値を 取り出し
 
-    // カラーピッカー生成時に 初期値として設定するために マッチした部分の内容からカラーコードのみを 取り出し
+    let strokeHexArray = [];
+    let opacityArray = [];
+    let strokeOpacityArray = [];
 
-    let hexCodeArray = [];
     for (let i = 0; i < matches.length; i++) {
         //console.log(`stroke-${i}`, matches[i]); // 配列の要素でマッチした部分の内容を得る
         // stroke-0 g stroke="#000"
         // stroke-1 g stroke="#eee"
         // stroke-2 g stroke="#fff"
 
-        // Extract hex code
-        extractHexPattern = /(#.*)"/; // ハッシュマークと その次のダブルクォーテーションの あいだの文字列を 種類に関係なくキャプチャする
-        const extractHexMatche = matches[i].match(extractHexPattern);
-        //console.log('extractHexMatche(hex color code): ', extractHexMatche[1])
-        // #000
-        // #eee
-        // #fff
+        // Extract hex code of 'stroke'
+        strokePattern = /(#.*?)"/; // ハッシュマークと その次のダブルクォーテーションの あいだの 最短の文字列
+        const strokeMatche = matches[i].match(strokePattern);
+        // console.log('strokeMatche: ', strokeMatche)
+        // (2) ['#000000"', '#000000', index: 11, input: '<g stroke="#000000" opacity="1" stroke-opacity="1">', groups: undefined]
+        // console.log('strokeMatche[1]: ', strokeMatche[1])
+        // #000000
 
-        eachHexCode = extractHexMatche[1]
+        // Extract two opacity values
+        opacityPattern = /\sopacity="(.*?)"/;
+        strokeOpacityPattern = /stroke-opacity="(.*?)"/;
+        const opacityMatche = matches[i].match(opacityPattern);
+        const strokeOpacityMatche = matches[i].match(strokeOpacityPattern);
 
-        hexCodeArray.push(mergeOpacityAndExtended(eachHexCode))
+
+        stroke = hexExpandTo6(strokeMatche[1]) // 6 digits hex
+        opacity = opacityMatche[1]             // [0-1] number
+        strokeOpacity = strokeOpacityMatche[1] // [0-1] number
+
+        strokeHexArray.push(stroke)
+        opacityArray.push(opacity)
+        strokeOpacityArray.push(strokeOpacity)
     }
-    console.log('hexCodeArray: ', hexCodeArray) //  // Array(3) [ "#000000ff", "#eeeeeeff", "#ffffffff" ]
-    return [numberOfColorPickers, hexCodeArray] // [Number, Array[]]
+    // strokeHexArray:  (5) ['#000000', '#000000', '#000000', '#eeeeee', '#ffffff']
+    // opacityArray:  (5) ['1', '1', '1', '1', '1']
+    // strokeOpacityArray:  (5) ['1', '1', '1', '1', '1']
+
+    return [numberOfColorPickers, strokeHexArray, opacityArray, strokeOpacityArray] // [Number, Array[], Array[], Array[]]
 }
 
+function hexExpandTo6(hexcodeWithHash) {
+    let hexcode = hexcodeWithHash.slice(1); // `#`記号 を除く文字列を取得
+    if (hexcode.length === 3) {
+        const repeatTo6 = hexcode.split("").map((char) => char.repeat(2)).join(""); // 文字列の各文字を2回繰り返して結合する
+        return "#" + repeatTo6
+    } else { // = 6 digits
+        return "#" + hexcode
+    }
+}
 
 // Merge the hex and opacity, and extended if in short style
 // For: transparency-scope = per-stroke
@@ -153,8 +183,8 @@ function splitOpacityAndExtended(hexCodeInput, opacityValueInput, strokeOpacityV
 // console.log(splitOpacityAndExtended('#000000'))   // Array(3) [ undefined, "#000000", undefined ]
 // console.log(splitOpacityAndExtended('#00000000')) // Array(3) [ undefined, "#000000", 0 ]
 
-console.log(splitOpacityAndExtended('#fff'))  // (3) [undefined, '#FFFFFF', undefined]
-console.log(splitOpacityAndExtended('#ffffff')) // (4) [undefined, '#FFFFFF', undefined, undefined]
+// console.log(splitOpacityAndExtended('#fff'))  // (3) [undefined, '#FFFFFF', undefined]
+// console.log(splitOpacityAndExtended('#ffffff')) // (4) [undefined, '#FFFFFF', undefined, undefined]
 // Generated tags
 
 // <!-- Color-picker: Stroke color for group 0 -->
