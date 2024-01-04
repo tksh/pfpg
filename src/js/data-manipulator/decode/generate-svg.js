@@ -1,10 +1,10 @@
 /////// 0. Get the artwork data
-/////// 1. Generate the header tags (before <path> tags)
-/////// 2. Generate the strokes tags
-/////// 2.1 Generate the <g>> tags
-/////// 2.2 Generate the <path> tags as relative or absolute
+/////// 1. Header and other (exclude <g> and <path>) tags
+/////// 2. Strokes tags ( <g> and <path> )
+/////// 2.1 Generate the <g> tags
+/////// 2.2 Generate the <path> tags (as relative or absolute by isRelOrAbsBool)
 /////// 2.3 Merge the <g> and <path> tags
-/////// 3. Merge and join the whole SVG tags
+/////// 3. Join the whole tags
 
 
 function generateSvg(isRelOrAbsBool, artworkDataMap, strokesValuesMap, decodedRelDvalsMap, decodedAbsDvalsMap) {
@@ -18,24 +18,33 @@ function generateSvg(isRelOrAbsBool, artworkDataMap, strokesValuesMap, decodedRe
     const tabSpace = '    ' // Four spaces
 
 
-    // Generate the header and other (exclude <g> and <path>) tags
+    // Header and other (exclude <g> and <path>) tags
     const tagsBeforeStrokes = generateTagsBeforeStrokes(tabSpace, viewboxValue, artworkIdValue, rectFillValue)
     const tagsAfterStrokes = generateTagsAfterStrokes(tabSpace)
 
 
     // Strokes tags ( <g> and <path> )
 
-    // Generate the open and close <g> tags
+    // Generate the <g> tags
     const gTagOpenByGroup = generateGTagOpenByGroup(tabSpace, strokesValuesMap)
     const gTagCloseByGroup = generateGTagCloseByGroup(tabSpace, strokesValuesMap)
 
+    // Generate the <path> tags (as relative or absolute by isRelOrAbsBool)
+    const pathTagsByGroup = generatePathTags(
+        isRelOrAbsBool,
+        tabSpace,
+        strokesValuesMap,
+        decodedRelDvalsMap,
+        decodedAbsDvalsMap
+    )
 
-    // Generate the <path> tags as relative or absolute
-    const pathTagsByGroup = generatePathTags(isRelOrAbsBool, tabSpace, strokesValuesMap, decodedRelDvalsMap, decodedAbsDvalsMap)
-
-
-    // Merge the <g> tags and <path> tags
-    const strokesTags = mergeGAndPathTags(strokesValuesMap, gTagOpenByGroup, pathTagsByGroup, gTagCloseByGroup)
+    // Merge the <g> and <path> tags
+    const strokesTags = mergeGAndPathTags(
+        strokesValuesMap,
+        gTagOpenByGroup,
+        pathTagsByGroup,
+        gTagCloseByGroup
+    )
 
     // Relative:
     // console.log('strokesTags: ', strokesTags)
@@ -56,12 +65,10 @@ function generateSvg(isRelOrAbsBool, artworkDataMap, strokesValuesMap, decodedRe
     // 14: "        </g>"
 
 
-    // Merge and join the whole SVG tags to return
+    // Join the whole tags
     const wholeSvgTags = [...tagsBeforeStrokes, ...strokesTags, ...tagsAfterStrokes]
     return wholeSvgTags.join('\n')
 }
-
-
 
 
 
