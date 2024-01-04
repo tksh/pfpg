@@ -63,7 +63,8 @@ function decodeBigint64Enc(encodedDvalsStr) {
                 //     3: (19) [26, 25, 23, 6, 3, -5, 5, 24, 7, 25, 27, 3, -2, 9, 6, 4, 4, 5, 2]
                 // length: 4
 
-                return decodedRelDvals
+//                return decodedRelDvals
+                return {relative:decodedRelDvals, absolute:decodedAbsDvals}
 }
 
 

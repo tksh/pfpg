@@ -4,7 +4,7 @@
 // index: 'input-svg'
 // data-manipulator: 'textarea-decoded-svg'
 
-function isDataManipulator() {
+function isDataManipulatorOrIndex() {
     // 現在のURLを取得する
     const url = window.location.href;
     const target = 'data-manipulator'
@@ -12,21 +12,22 @@ function isDataManipulator() {
     // target: 検索したい文字列
     return url.includes(target);
 }
+const isDataManipulatorOrIndexBool = isDataManipulatorOrIndex()
 
-function getTextareaId(isDataManipulatorBool) {
-    if (isDataManipulatorBool === true) { // data-manipulator.html
-        return 'textarea-decoded-svg'
+function getTextareaId(isDataManipulatorOrIndexBool) {
+    if (isDataManipulatorOrIndexBool === true) { // data-manipulator.html
+        return 'textarea-decoded-svg-as'
     } else {                              // index.html
         return 'input-svg'
     }
 }
-const svgOutputTextAreaId = getTextareaId(isDataManipulator())
+const svgOutputTextAreaId = getTextareaId(isDataManipulatorOrIndexBool)
 
 
 
-decode(svgOutputTextAreaId)
+decode(isRelOrAbsBool = true, isDataManipulatorOrIndexBool, svgOutputTextAreaId)
 
-function decode(outputTextareaId) {
+function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) {
     const urlParamsAsTwoMaps = readUrlParamsAsMaps()
 
     if (urlParamsAsTwoMaps != null) {
@@ -46,7 +47,11 @@ function decode(outputTextareaId) {
         //            {width_count  : Map(1)}
         //            {encoded_dvals: 'wyyvtuDwtzxifJxuvunv56nudvqm96wo9xuuucvvuzvzAwvvvyzxsvxDyVUSByqATCUWytEBzzAx'}
 
-        const decodedRelDvalsMap = decodeStrokesValues(strokesValuesMap)
+
+        const decodedAbsAndRelDvalsMapObj = decodeStrokesValues(strokesValuesMap)
+
+        const decodedRelDvalsMap = decodedAbsAndRelDvalsMapObj.absolute
+        const decodedAbsDvalsMap = decodedAbsAndRelDvalsMapObj.relative
         //console.log("decodedRelDvalsMap: ", decodedRelDvalsMap)
         // Map(5) {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
         // [[Entries]]
@@ -61,12 +66,16 @@ function decode(outputTextareaId) {
         // ...
 
 
+
         // Generate SVG string
 
-        const svgStr = generateSvg(artworkDataMap, strokesValuesMap, decodedRelDvalsMap)
+        const svgStr = generateSvg(isRelOrAbsBool, artworkDataMap, strokesValuesMap, decodedRelDvalsMap, decodedAbsDvalsMap)
 
         // Output to textarea
-        outputToTextarea(svgStr, outputTextareaId)
+        const specificOutputTextareaId = getSpecificOutputTextareaId(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId)
+
+        outputToTextarea(svgStr, specificOutputTextareaId)
+
 
         // Compare the data size of URL params and generated SVG
         const queryString = window.location.search;
@@ -91,12 +100,14 @@ function decode(outputTextareaId) {
 
 
 function decodeStrokesValues(strokesValuesMap) {
+    const decodedAbsDvalsMap = new Map()
     const decodedRelDvalsMap = new Map()
 
     for ([groupId, v] of strokesValuesMap) {
         // console.log("v.encoded_dvals: ", v.encoded_dvals) // "x1 + y1 + x2 + y2"
         // H5yJn8tIS6hWuVfFgdJIY10GsuwXo0w
 
+        let decodedAbsDvals = []
         let decodedRelDvals = []
 
         if (v.three_flags[1] === '0') {
@@ -106,7 +117,9 @@ function decodeStrokesValues(strokesValuesMap) {
 
         } else if (v.three_flags[1] === '1') {
             console.log("This group has encoded with 'bigint64-enc'")
-            decodedRelDvals = decodeBigint64Enc(v.encoded_dvals)
+            decodedAbsAndRelDvalsObj = decodeBigint64Enc(v.encoded_dvals)
+            decodedAbsDvals = decodedAbsAndRelDvalsObj.absolute
+            decodedRelDvals = decodedAbsAndRelDvalsObj.relative
 
         } else if (v.three_flags[1] === '2') {
             console.log("This group has encoded with 'swap63-enc'")
@@ -117,6 +130,13 @@ function decodeStrokesValues(strokesValuesMap) {
         }
 
         // Set into Map
+        decodedAbsDvalsMap.set(
+            groupId, {
+            x1: decodedAbsDvals[0],
+            y1: decodedAbsDvals[1],
+            x2: decodedAbsDvals[2],
+            y2: decodedAbsDvals[3],
+        })
         decodedRelDvalsMap.set(
             groupId, {
             x1: decodedRelDvals[0],
@@ -126,6 +146,22 @@ function decodeStrokesValues(strokesValuesMap) {
         })
 
     }
+    console.log('decodedAbsDvalsMap: ', decodedAbsDvalsMap)
     console.log('decodedRelDvalsMap: ', decodedRelDvalsMap)
-    return decodedRelDvalsMap
+    return { absolute: decodedAbsDvalsMap, relative: decodedRelDvalsMap }
 }
+
+
+function getSpecificOutputTextareaId(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) {
+
+    if (isDataManipulatorOrIndexBool === true) {          // page: data-manipulator.html
+        if (isRelOrAbsBool === true) {                       // path style: relative
+            return `${outputTextareaId}-rel`
+        } else if (isRelOrAbsBool === false) {               // path style: absolute
+            return `${outputTextareaId}-abs`
+        }
+    } else if (isDataManipulatorOrIndexBool === false) { // page: index.html
+    }
+}
+
+
