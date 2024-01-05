@@ -91,6 +91,9 @@ function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) 
 
         // Output to textarea
         const specificOutputTextareaId = getSpecificOutputTextareaId(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId)
+        // console.log("specificOutputTextareaId: ", specificOutputTextareaId)
+        // index.html: 'input-svg'
+        // data-manipulator.html: 'textarea-decoded-svg-as-rel' | 'textarea-decoded-svg-as-abs'
 
         outputToTextarea(svgStr, specificOutputTextareaId)
 

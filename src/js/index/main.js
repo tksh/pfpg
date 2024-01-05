@@ -174,6 +174,63 @@
 
 
     //////////////////////////////////////////////////////////////////////////
+    /////////////////////////////// Path-mode ////////////////////////////////
+
+    // <select>要素を取得
+    const selectOfPathMode = document.getElementById("path-mode");
+
+    // changeイベントを設定
+    selectOfPathMode.addEventListener("change", () => {
+        // 現在の設定の値を保存しておく
+        const oldPathModeSvgStr = getInputSvg()
+
+        // shape-rendering
+        const patternShapeRendering = /shape-rendering="[^"]*"/g;
+        const matchOfShapeRendering = oldPathModeSvgStr.match(patternShapeRendering) // Array(0) "shape-rendering=\"crispEdges\""
+        const valueOfShapeRendering = matchOfShapeRendering[0]
+        // Backgroun color (include opacity)
+        const patternBgRectFill = /<rect width="100%" height="100%" fill="[^"]*"/g
+        const matchOfBgRectFill = oldPathModeSvgStr.match(patternBgRectFill)
+        const valueOfBgRectFill = matchOfBgRectFill[0]
+        // Shapes to trim
+        const patternShapesToTrim = /<clipPath id="clipShape">[^>]*>/g;
+        const matchOfShapesToTrim = oldPathModeSvgStr.match(patternShapesToTrim)
+        const valueOfShapesToTrim = matchOfShapesToTrim[0]
+
+
+        // 選択された値を取得
+        const value = selectOfPathMode.value;
+        //console.log('selectOfPathMode value is', value) // relative | absolute
+
+        // 選択された path-mode で URL Params から デコードし直す
+        if (value === 'relative') {
+            console.log('Path mode: Relative and merged')
+            decode(isRelOrAbsBool = true, isDataManipulatorOrIndexBool, svgOutputTextAreaId)
+        } else if (value === 'absolute') {
+            console.log('Path mode: Absolute and separated')
+            decode(isRelOrAbsBool = false, isDataManipulatorOrIndexBool, svgOutputTextAreaId)
+        }
+        // <textarea>のvalue属性を デコードし直した 新しいSVG文字列に更新する
+        let newPathModeSvgStr = getInputSvg();
+
+
+        // デコードし直す前に 保存しておいた 設定の値を 元に戻す
+        newPathModeSvgStr = newPathModeSvgStr.replace(patternShapeRendering, valueOfShapeRendering);
+        newPathModeSvgStr = newPathModeSvgStr.replace(patternBgRectFill, valueOfBgRectFill);
+        newPathModeSvgStr = newPathModeSvgStr.replace(patternShapesToTrim, valueOfShapesToTrim);
+
+        // 設定の値を 元に戻した 新しいSVG文字列を textarea に挿入する
+        const svgElement = document.querySelector('#input-svg')
+        svgElement.value = newPathModeSvgStr;
+
+        // convertSvg関数を呼び出す
+        convertSvg({ target: svgElement });
+    });
+    /////////////////////////////// Path-mode ////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+
+
+    //////////////////////////////////////////////////////////////////////////
     ///////////////////////////// Anti-aliasing /////////////////////////////
 
     // <select>要素を取得
@@ -203,7 +260,7 @@
 
 
     //////////////////////////////////////////////////////////////////////////
-    ///////////////////////////// Shape to trim /////////////////////////////
+    ///////////////////////////// Shapes to trim /////////////////////////////
 
     // セレクターの要素を取得
     const selectOfClipPathShape = document.getElementById('shapes-to-trim');
@@ -312,7 +369,7 @@
         // convertSvg関数を呼び出す
         convertSvg({ target: svgElement });
     });
-    ///////////////////////////// Shape to trim /////////////////////////////
+    ///////////////////////////// Shapes to trim /////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
 

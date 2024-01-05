@@ -123,6 +123,17 @@
             <fieldset class="opts">
                 <legend>Preference</legend>
 
+                <!-- Path style -->
+                <div>
+                    <div class="opts-cell">
+                        <label for="path-mode">Path mode: </label>
+                        <select name="path-mode" id="path-mode" autocomplete="off">
+                            <option value="relative" selected>Relative and merged ('stroke-opacity' will effects per strokes group)</option>
+                            <option value="absolute">Absolute and separated ('stroke-opacity' will effects per stroke)</option>
+                        </select>
+                    </div>
+                </div>
+
                 <!-- Color-picker: Background color (via resvg) | Disabled -->
                 <div class="displayNone">
                     <div class="opts-cell">
