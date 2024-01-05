@@ -25,8 +25,10 @@ const svgOutputTextAreaId = getTextareaId(isDataManipulatorOrIndexBool)
 
 
 
-decode(isRelOrAbsBool = true, isDataManipulatorOrIndexBool, svgOutputTextAreaId)  // relative and merged
 decode(isRelOrAbsBool = false, isDataManipulatorOrIndexBool, svgOutputTextAreaId) // absolute and separated
+decode(isRelOrAbsBool = true, isDataManipulatorOrIndexBool, svgOutputTextAreaId)  // relative and merged
+// 'isDataManipulatorOrIndexBool = true' will export the generated svg into each textarea
+
 
 function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) {
     const urlParamsAsTwoMaps = readUrlParamsAsMaps()
@@ -177,6 +179,7 @@ function getSpecificOutputTextareaId(isRelOrAbsBool, isDataManipulatorOrIndexBoo
             return `${outputTextareaId}-abs`
         }
     } else if (isDataManipulatorOrIndexBool === false) { // page: index.html
+        return outputTextareaId
     }
 }
 

@@ -38,7 +38,7 @@ function generateGroupColorsHtmlTags() {
     <div>
       <div class="opts-cell-for-strokes">
 
-        <label for="group-colors-stroke-${i}">Group [${i + 1}]:</label>
+        <label for="group-colors-stroke-${i}">group ${i + 1}:</label>
         <input value="${stroke[i]}" style="width: 9rem;" data-jscolor="{}" id="group-colors-stroke-${i}" class="input-color add-margin-bottom" autocomplete="off">
 
         <input type="number" min="0" max="1" step="0.1" value="${opacity[i]}" id="group-colors-opacity-${i}">
