@@ -124,15 +124,18 @@
                 <legend>Preference</legend>
 
                 <!-- Path style -->
-                <div>
+                <div class="opts">
                     <div class="opts-cell">
                         <label for="path-mode">Path mode: </label>
                         <select name="path-mode" id="path-mode" autocomplete="off">
-                            <option value="relative" selected>Relative and merged ('stroke-opacity' will effects per strokes group)</option>
-                            <option value="absolute">Absolute and separated ('stroke-opacity' will effects per stroke)</option>
+                            <option value="relative" selected>Relative and merged</option>
+                            <option value="absolute">Absolute and separated</option>
                         </select>
                     </div>
                 </div>
+                <!-- ('stroke-opacity' will effects per strokes group) -->
+                <!-- ('stroke-opacity' will effects per stroke) -->
+                <!-- <br> -->
 
                 <!-- Color-picker: Background color (via resvg) | Disabled -->
                 <div class="displayNone">
