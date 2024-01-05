@@ -1,7 +1,7 @@
 /////// 0. Get the artwork data
 /////// 1. Header and other (exclude <g> and <path>) tags
 /////// 2. Strokes tags ( <g> and <path> )
-/////// 2.1 Generate the <g> tags
+/////// 2.1 Generate the <g>> tags
 /////// 2.2 Generate the <path> tags (as relative or absolute by isRelOrAbsBool)
 /////// 2.3 Merge the <g> and <path> tags
 /////// 3. Join the whole tags
@@ -25,7 +25,7 @@ function generateSvg(isRelOrAbsBool, artworkDataMap, strokesValuesMap, decodedRe
 
     // Strokes tags ( <g> and <path> )
 
-    // Generate the <g> tags
+    // Generate the open and close <g> tags
     const gTagOpenByGroup = generateGTagOpenByGroup(tabSpace, strokesValuesMap)
     const gTagCloseByGroup = generateGTagCloseByGroup(tabSpace, strokesValuesMap)
 
@@ -38,7 +38,7 @@ function generateSvg(isRelOrAbsBool, artworkDataMap, strokesValuesMap, decodedRe
         decodedAbsDvalsMap
     )
 
-    // Merge the <g> and <path> tags
+    // Merge the <g> tags and <path> tags
     const strokesTags = mergeGAndPathTags(
         strokesValuesMap,
         gTagOpenByGroup,
@@ -80,11 +80,11 @@ function generateRelPathTags(tabSpace, strokesValuesMap, decodedRelDvalsMap) {
         const dvalsObj = decodedRelDvalsMap.get(groupId)
         console.log('dvalsObj: ', dvalsObj) // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
 
-        const widthArr = v.width_count.width
+        const widthArr = v.width_count.width // list of stroke-width
         const firstlineArr = v.width_count.firstline
         const lastlineArr = v.width_count.lastline
 
-        for (let i = 0; i < widthArr.length; i++) {
+        for (let i = 0; i < widthArr.length; i++) { // loop for each stroke-width
             const width = widthArr[i]
             const firstlineIndex = firstlineArr[i] - 1 // Subtract 1 to convert as index number
             const lastlineIndex = lastlineArr[i] - 1   // Subtract 1 to convert as index number
@@ -125,12 +125,54 @@ function generateRelPathTags(tabSpace, strokesValuesMap, decodedRelDvalsMap) {
 
 
 
-function generateAbsPathTags(strokesValuesMap) {
+function generateAbsPathTags(tabSpace, strokesValuesMap, decodedAbsDvalsMap) {
 
     const absPathTagsByGroup = new Map()
 
-}
+    for (let [groupId, v] of strokesValuesMap) {
+        const dvalsObj = decodedAbsDvalsMap.get(groupId)
+        console.log('dvalsObj: ', dvalsObj) // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
 
+        const widthArr = v.width_count.width // list of stroke-width
+        const firstlineArr = v.width_count.firstline
+        const lastlineArr = v.width_count.lastline
+
+        let eachGroupTags = [] // Group has one or more number of stroke-width
+
+        for (let i = 0; i < widthArr.length; i++) { // loop for each stroke-width
+            const width = widthArr[i]
+            const firstlineIndex = firstlineArr[i] - 1 // Subtract 1 to convert as index number
+            const lastlineIndex = lastlineArr[i] - 1   // Subtract 1 to convert as index number
+
+            //console.log('firstlineArr[i], firstlineIndex: ', firstlineArr[i], firstlineIndex)
+            //console.log('lastlineArr[i], lastlineIndex: ', lastlineArr[i], lastlineIndex)
+
+            const widthGTagStart = tabSpace.repeat(3) + `<g stroke-width="${width}">`
+            // '            <g stroke-width="3">'
+            const widthGTagEnd = tabSpace.repeat(3) + '</g>'
+            // '            </g>'
+
+            // Generate the path tags with d values
+            let eachWidthTags = [widthGTagStart]
+            for (let i = firstlineIndex; i <= lastlineIndex; i++) {
+                let pathTag = tabSpace.repeat(4) + `<path d="M ${dvalsObj.x1[i]} ${dvalsObj.y1[i]} L ${dvalsObj.x2[i]} ${dvalsObj.y2[i]}" />`
+                eachWidthTags.push(pathTag)
+            }
+            eachWidthTags.push(widthGTagEnd)
+
+            // Push into same group array after joined
+            eachGroupTags.push(eachWidthTags.join('\n'))
+        }
+
+        // Set with group ID after joined
+        const eachGroupTagsJoined = eachGroupTags.join('\n')
+        absPathTagsByGroup.set(groupId, eachGroupTagsJoined)
+    }
+    // console.log('absPathTagsByGroup: ', absPathTagsByGroup)
+    // Map(5) {1 => '            <g stroke-width="3">\n                <path d="M 1 0 L 1 26" />\n ...
+
+    return absPathTagsByGroup
+}
 
 
 

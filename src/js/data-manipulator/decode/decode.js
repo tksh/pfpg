@@ -25,7 +25,8 @@ const svgOutputTextAreaId = getTextareaId(isDataManipulatorOrIndexBool)
 
 
 
-decode(isRelOrAbsBool = true, isDataManipulatorOrIndexBool, svgOutputTextAreaId)
+decode(isRelOrAbsBool = true, isDataManipulatorOrIndexBool, svgOutputTextAreaId)  // relative and merged
+decode(isRelOrAbsBool = false, isDataManipulatorOrIndexBool, svgOutputTextAreaId) // absolute and separated
 
 function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) {
     const urlParamsAsTwoMaps = readUrlParamsAsMaps()
@@ -50,8 +51,9 @@ function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) 
 
         const decodedAbsAndRelDvalsMapObj = decodeStrokesValues(strokesValuesMap)
 
-        const decodedRelDvalsMap = decodedAbsAndRelDvalsMapObj.absolute
-        const decodedAbsDvalsMap = decodedAbsAndRelDvalsMapObj.relative
+        const decodedRelDvalsMap = decodedAbsAndRelDvalsMapObj.relative
+        const decodedAbsDvalsMap = decodedAbsAndRelDvalsMapObj.absolute
+
         //console.log("decodedRelDvalsMap: ", decodedRelDvalsMap)
         // Map(5) {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
         // [[Entries]]
@@ -65,6 +67,20 @@ function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) 
         //         key: 2
         // ...
 
+        //console.log("decodedAbsDvalsMap: ", decodedAbsDvalsMap)
+        // Map(5) {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
+        // [[Entries]]
+        //     0: {1 => Object}
+        //         key: 1
+        //         value:
+        //             x1: (19) [1, 4, 7, 6, 8, 7, 19, 25, 24, 28, 30, 17, 4, 22, 26, 22, 22, 23, 23]
+        //             x2: (19) [1, 4, 6, 10, 8, 11, 24, 26, 24, 28, 30, 20, 8, 24, 23, 22, 24, 31, 26]
+        //             y1: (19) [0, 0, 0, 15, 20, 5, 0, 0, 15, 0, 0, 28, 24, 0, 11, 16, 19, 22, 8]
+        //             y2: (19) [26, 25, 23, 21, 23, 0, 5, 24, 22, 25, 27, 31, 22, 9, 17, 20, 23, 27, 10]
+        //         [[Prototype]]: Object
+        //     1: {2 => Object}
+        //         key: 2
+        // ...
 
 
         // Generate SVG string
