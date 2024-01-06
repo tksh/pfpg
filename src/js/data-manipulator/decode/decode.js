@@ -151,6 +151,7 @@ function decodeStrokesValues(strokesValuesMap) {
             console.log(`Group ${groupId} has encoded with 'bruteforce53-enc'`)
             decodedDiffDvals = decodeBruteforce53Enc(v.encoded_dvals, v.three_flags)
             decodedRelDvals = decodedDiffDvals.map(column => diffToRel(column))
+            decodedAbsDvals = relToAbs(decodedRelDvals)
 
         } else if (v.three_flags[1] === '1') {
             console.log("This group has encoded with 'bigint64-enc'")
@@ -161,6 +162,7 @@ function decodeStrokesValues(strokesValuesMap) {
         } else if (v.three_flags[1] === '2') {
             console.log("This group has encoded with 'swap63-enc'")
             decodedRelDvals = decodeSwap63Enc(v.encoded_dvals)
+            decodedAbsDvals = relToAbs(decodedRelDvals)
 
         } else {
             console.log('Error! This group has unknown flag for encoding method.')
