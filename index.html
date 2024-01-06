@@ -28,15 +28,6 @@
     <script defer src="./src/js/index/replace-at-index.js"></script>
     <script defer src="./src/js/index/count-svg-size.js"></script>
 
-    <!-- Generate the group strokes color tags for HTML and SVG -->
-    <script defer src="./src/js/index/group-colors.js"></script>
-    <!-- Set defaults value for some selectors in preference area read from decoded SVG -->
-    <script defer src="./src/js/index/set-defaults-for-preference.js"></script>
-    <!-- Eventlisteners for preferences, and force to apply the values like width-and-height:256, transparency-scope:whole-group as defaults -->
-    <script defer src="./src/js/index/main.js"></script>
-    <!-- Adjust the height of whole components to fit to display height -->
-    <script defer src="./src/js/index/img-box-sizing.js"></script>
-
 
     <!-- Data IO -->
     <script src="./src/js/data-manipulator/data-io/select-file.js"></script>
@@ -110,13 +101,32 @@
 
     <!-- Decode from URL Params -->
     <script src="./src/js/data-manipulator/decode/read-url-params.js"></script>
+    <script src="./src/js/data-manipulator/decode/parse-str-as-url-params.js"></script>
     <script src="./src/js/data-manipulator/decode/generate-svg.js"></script>
     <script defer src="./src/js/data-manipulator/decode/decode.js"></script>
+
+    <!-- Generate the group strokes color tags for HTML and SVG -->
+    <script defer src="./src/js/index/group-colors.js"></script>
+    <!-- Set defaults value for some selectors in preference area read from decoded SVG -->
+    <script defer src="./src/js/index/set-defaults-for-preference.js"></script>
+    <!-- Eventlisteners for preferences, and force to apply the values like width-and-height:256, transparency-scope:whole-group as defaults -->
+    <script defer src="./src/js/index/main.js"></script>
+    <!-- Adjust the height of whole components to fit to display height -->
+    <script defer src="./src/js/index/img-box-sizing.js"></script>
+
 
 </head>
 
 
 <body>
+    <!-- Sample artwork encoded string of 2023_001, bruteforce53 encoded -->
+    <!-- <script type="text/plain" id="sample-artwrok-encoded-string">?202308_001=31x31-9999&0=10Y9CSIjM0hFn0qrg-RJkDWLROrn0O4DC-Tn8ByWt2FEcQVgmhbipoBva1MaH0sRfPC87mH6Xb43lEzyiuFnFYim5qG-NrEA6o5b2ftqDjKcUbkvBPpYE&0=10h9z6K7aRG1ePjlqHkklYKUEMEjGkNSz9U-PuBXfRw2WKVoIxKAjGQqxINvD-5-euxHLWATXsCg0h2I_O0nh6YXFTE891ME4&0=10W9hkhadFgzFpMPaCAgWFtWK9NpTQLkaRJyXTsAbFEc2Go9qJSLPJGy0GMRId7I_f0LShEhwr0FEhmdIZNBvHzOm2qxbsis0VGhHpleGr45ooMAoDSsos2KuhByNU7fm1E5XFyDCSL69x9XezOczD7MUUZvTpv21R5CCwroh-BBQ5wiFWtiCY-SirXjqnuykkGsGYXH8UeM2DsD9aRwk7nYQuV9HNjIdurlSOuQkyPU2nSsxYj1OVCJzcg3hlk0tJq7Y9B61&e=10Z9iSK1btqjNLbHSDcCCyxwQw46Z2u6lsVs1JWpJnOoQ-K_a47g6rOP5VDRrhnamKpXE_ttV2RTjt55gZ-3juoD_E9MUkCMjatQHZL6k8N&f=10Y9gyKycX8MI1Y9A9KXmJiccEDRpsw2JzIzNnnn3AhkNfP</script> -->
+
+    <!-- Sample artwork encoded string of 2023_001, bigint64 encoded -->
+    <script type="text/plain" id="sample-artwrok-encoded-string">?202308_001=31x31-9999&0=0123s-BRY8zuZS6-yuj6xgi-u9utYvXoK0QEXoKySIqr46g3-9HxEs1eG2VMHxerRFrXM3mjZxLkf-wwSvNRnQb88G&0=0122p-CJNsRklvkwYxrs6txMfVvJHZ8Ju9_Vp5Bael9ZGyGj7zteRw9_pdfcwHpisNQz-IwJ_cPp&0=0121ai-Iwrvkr3_lR_u1UqWVQ2tkW6fw90lQO0_6Xv54WjbYRfC7POPRddqsvUR6T5keNGKFmjJYjpMxj4eI7aCN4RUR-saVRnTrPNQD0xEjKzskYV7t2PXsX9iab5zvhkdizKJXxCdjv6Tp_VQuZ8TfudMbQrK5G82SjkFxKBc1bg__H8H2D6IN1zW-lLEOUrIlJljwwtv1uGLMIrDseBGyW0v1425Xjmul33y1yOY8DSoB6gOQxBoFUwOo0DBXVmDaa7sHQi_0orwrXegQBf-Ho&e=0121s-ROAcB1VDi-Lkv5UDN5cXI7Vdk9L3cy2gI6-80djD_WO6AiEu-CbtbqH7a9w-OlAmNJxAHXBFLCSjC1Z5esCV&f=0121g-H5yJn8tIS6hWuVfFgdJIY10GsuwXo0w</script>
+
+    <div></div>
+
     <header>
         <div id="preference" class="opts">
 
@@ -319,32 +329,8 @@
 
                 <!-- svgElement -->
                 <div id="textarea-box">
-                    <textarea id="input-svg" name="input-svg" rows="7" placeholder="Enter the svg string"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" shape-rendering="crispEdges">
-                        <title>202308_001</title>
-                        <defs>
-                            <clipPath id="clipShape">
-                                <rect width="100%" height="100%" />
-                            </clipPath>
-                        </defs>
-                        <g clip-path="url(#clipShape)">
-                            <rect width="100%" height="100%" fill="#9999" />
-                            <g stroke="#000000" opacity="1" stroke-opacity="1">
-                                <path stroke-width="3" d="m1 0 0 26m3-26 0 25m3-25-1 23m0-8 4 6m-2-1 0 3m-1-18 4-5m8 0 5 5m1-5 1 24m-2-9 0 7m4-22 0 25m2-25 0 27m-13 1 3 3m-16-7 4-2m14-22 2 9m2 2-3 6m-1-1 0 4m0-1 2 4m-1-1 8 5m-8-19 3 2" />
-                            </g>
-                            <g stroke="#000000" opacity="1" stroke-opacity="1">
-                                <path stroke-width="2" d="m0 0 31 1m-22 2 5-3m-7 8 2-6m-3 8 2 7m1 5 1-2m-8 5 2-1m12-24 2 2m0-2 2 2m-8 27 2 1m-1-2 2 1m4 0 3 2m2-3 0 3m-3-14 1-1m2-1-2 1m1-8 0 2m-9-10 2 1" />
-                            </g>
-                            <g stroke="#000000" opacity="1" stroke-opacity="1">
-                                <path stroke-width="1" d="m1 26-1 1m7-20 1 4m-1-6 1 4m-1 3 1-3m4 14 3 3m-1-1 3 2m-3 0 1 0m-1 1 1 2m0-2 0 2m2-2-1 3m2-4 2 3m-4-1 2-2m2-4-1 2m-1 0 0 1m2 1 3 2m-2-4 3 3m0-5-4 7m5-6-3 7m4-6-2 6m3-5-1 5m3-5-1 5m3-3-2 3m-4-2 1 2m0-4 2 4m0-3 3 3m-17-11 2 2m-1-1 2 3m-1 0 1 2m-4-9 2 3m0-4 1 2m-3-1 3-2m-2 3 2-1m-2 2 2 0m2-9-3 5m2-3 1 2m-6-5 2 4m-1-2 2 3m-2-4-2 4m1-1 0 1m0 0 3 0m-3-2 2 2m0-4 4 0m-2 1 1-2m-2 1 2-3m-2 1 2-3m-1 0 2-3m-4 6 1-1m-6 3 1 1m3-9 2 1m-1-2 5 4m-2-4 3 3m-4 0 2 3m-3-1 2 4m-5 8 2 0m-2 2 4 1m-2-1 3-2m-3 0 3-2m5-5 1 2m-2 1 1-2m0-1 1 0m-21 17 2 3m6-1 4-2" />
-                            </g>
-                            <g stroke="#eeeeee" opacity="1" stroke-opacity="1">
-                                <path stroke-width="1" d="m14 6-5 2m0-2 5-2m-4 0 2-1m-1 6 0 1m2-1 2-1m-7 2 2-2m-1 4 1 4m1-1 1 0m-1 2 1 0m1 5 2 3m0-14 1 1m-6 12 0 5m1-3 1 2m-12 0 2 2m2-2 3 2m-1-3 3 2m0-3 1 1m0 2 3-2m5 0 2-2" />
-                            </g>
-                            <g stroke="#ffffff" opacity="1" stroke-opacity="1">
-                                <path stroke-width="1" d="m12 21 0 2m-1-19-2 3m2-1-1 2m1 3-2 3m2 1-1 1m2 5 2 1m-1 1 2 1" />
-                            </g>
-                        </g>
-                    </svg></textarea>
+                    <textarea id="input-svg" name="input-svg" rows="7" placeholder="Enter the svg string">
+                    </textarea>
                     <!-- End of svgElement -->
 
                 </div><!-- End of div textarea-box -->

@@ -31,16 +31,18 @@ decode(isRelOrAbsBool = true, isDataManipulatorOrIndexBool, svgOutputTextAreaId)
 
 
 function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) {
-    const urlParamsAsTwoMaps = readUrlParamsAsMaps()
+    const urlParamsAsTwoMaps = readUrlParamsAsMaps(isDataManipulatorOrIndexBool)
 
     if (urlParamsAsTwoMaps != null) {
 
         // Extract the values
-        const artworkDataMap = urlParamsAsTwoMaps[0]
+        ////const artworkDataMap = urlParamsAsTwoMaps[0]
+        const artworkDataMap = urlParamsAsTwoMaps.artwork_data
         // console.log("artworkDataMap: ", artworkDataMap)
         // Map(4) {'artwork_id' => '202308_001', 'grid_size' => '31x31', 'uint_n' => 5, 'bg_color' => '9999'}
 
-        const strokesValuesMap = urlParamsAsTwoMaps[1]
+////        const strokesValuesMap = urlParamsAsTwoMaps[1]
+        const strokesValuesMap = urlParamsAsTwoMaps.strokes_values
         // console.log("strokesValuesMap: ", strokesValuesMap)
         // Map(5) {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
         // key  : Group ID (seq num)
@@ -114,6 +116,20 @@ function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) 
     } else {
         // Stop decoding when urlParamsAsTwoMaps = null
         console.log('There is no url params to decode.')
+
+        if (isDataManipulatorOrIndexBool === false) {
+            console.log('Read a SVG string from input-svg textarea.')
+            // <textarea>の要素を取得
+            const svgElement = document.querySelector('#input-svg') // Select <textarea id="input-svg" ...
+
+            // <textarea>のvalue属性を取得
+            const svgStr = svgElement.value.trim() // `.trim()` = 文字列の両端の空白を削除
+
+            // Get textarea ID
+            const specificOutputTextareaId = getSpecificOutputTextareaId(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId)
+
+            outputToTextarea(svgStr, specificOutputTextareaId)
+        }
     }
 
 }

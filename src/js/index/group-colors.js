@@ -18,6 +18,7 @@ function generateGroupColorsSvgTags(matches) {
 generateGroupColorsHtmlTags()
 
 function generateGroupColorsHtmlTags() {
+    console.log('generateGroupColorsHtmlTags() now started.')
 
     const numberOfColorPickersAndColorsArrays = getStrokesColors();
     const numberOfColorPickers = numberOfColorPickersAndColorsArrays[0]
