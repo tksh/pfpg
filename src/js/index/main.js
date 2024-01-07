@@ -184,8 +184,8 @@
         // 現在の設定の値を保存しておく
         const oldPathModeSvgStr = getInputSvg()
 
-        // shape-rendering
-        const patternShapeRendering = /shape-rendering="[^"]*"/g;
+        // Anti-aliasing (shape-rendering)
+        const patternShapeRendering = /shape-rendering="[^"]*"/g
         const matchOfShapeRendering = oldPathModeSvgStr.match(patternShapeRendering) // Array(0) "shape-rendering=\"crispEdges\""
         const valueOfShapeRendering = matchOfShapeRendering[0]
         // Backgroun color (include opacity)
@@ -193,9 +193,12 @@
         const matchOfBgRectFill = oldPathModeSvgStr.match(patternBgRectFill)
         const valueOfBgRectFill = matchOfBgRectFill[0]
         // Shapes to trim
-        const patternShapesToTrim = /<clipPath id="clipShape">[^>]*>/g;
+        const patternShapesToTrim = /<clipPath id="clipShape">[^>]*>/g
         const matchOfShapesToTrim = oldPathModeSvgStr.match(patternShapesToTrim)
         const valueOfShapesToTrim = matchOfShapesToTrim[0]
+        // Group colors
+        const patternGroupColors = /<g stroke=[^>]*>/g
+        const matchOfGroupColors = oldPathModeSvgStr.match(patternGroupColors) // (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="# ...
 
 
         // 選択された値を取得
@@ -218,6 +221,12 @@
         newPathModeSvgStr = newPathModeSvgStr.replace(patternShapeRendering, valueOfShapeRendering);
         newPathModeSvgStr = newPathModeSvgStr.replace(patternBgRectFill, valueOfBgRectFill);
         newPathModeSvgStr = newPathModeSvgStr.replace(patternShapesToTrim, valueOfShapesToTrim);
+        // Group colors
+        for (groupId = 0; groupId < matchOfGroupColors.length; groupId++) {
+            const valueOfGroupColors = matchOfGroupColors[groupId]
+            newPathModeSvgStr = replaceAtIndex(newPathModeSvgStr, patternGroupColors, valueOfGroupColors, groupId)
+        }
+
 
         // 設定の値を 元に戻した 新しいSVG文字列を textarea に挿入する
         const svgElement = document.querySelector('#input-svg')
