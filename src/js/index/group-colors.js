@@ -63,16 +63,11 @@ function generateGroupColorsHtmlTags() {
 
 function getStrokesColors() {
 
-    // Find whole stroke color groups
+    // Find whole group colors elements
 
-    // SVGのテキストを取得
-    const inputSVG = getInputSvg()
-
-    // 正規表現パターンを作成
-    const pattern = /<g stroke=.*">/g; // g stroke="..." にマッチするパターン
-
-    // パターンにマッチする部分をすべて探す
-    const matches = inputSVG.match(pattern); // matchメソッドで配列を返す
+    // Get the matches for <g> from current SVG string in textarea
+    const currentSVG = getInputSvg()
+    const matches = regexMatchesOfGroupColors(currentSVG)
     // console.log('matches: ', matches)
     // (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
 
@@ -83,36 +78,17 @@ function getStrokesColors() {
 
     // Get each color as hex code
     // カラーピッカー生成時に 初期値として設定するために マッチした部分の内容から各カラー情報の値を 取り出し
-
     let strokeHexArray = [];
     let opacityArray = [];
     let strokeOpacityArray = [];
 
-    for (let i = 0; i < matches.length; i++) {
-        //console.log(`stroke-${i}`, matches[i]); // 配列の要素でマッチした部分の内容を得る
-        // stroke-0 g stroke="#000"
-        // stroke-1 g stroke="#eee"
-        // stroke-2 g stroke="#fff"
+    for (let i = 0; i < matches.length; i++) { // i = group ID
+        // Get three group colors value
+        const stroke = hexExpandTo6(getStroke(matches[i]))       // 6 digits hex (with hash mark)
+        const opacity =             getOpacity(matches[i])       // [0-1] number
+        const strokeOpacity =       getStrokeOpacity(matches[i]) // [0-1] number
 
-        // Extract hex code of 'stroke'
-        strokePattern = /(#.*?)"/; // ハッシュマークと その次のダブルクォーテーションの あいだの 最短の文字列
-        const strokeMatche = matches[i].match(strokePattern);
-        // console.log('strokeMatche: ', strokeMatche)
-        // (2) ['#000000"', '#000000', index: 11, input: '<g stroke="#000000" opacity="1" stroke-opacity="1">', groups: undefined]
-        // console.log('strokeMatche[1]: ', strokeMatche[1])
-        // #000000
-
-        // Extract two opacity values
-        opacityPattern = /\sopacity="(.*?)"/;
-        strokeOpacityPattern = /stroke-opacity="(.*?)"/;
-        const opacityMatche = matches[i].match(opacityPattern);
-        const strokeOpacityMatche = matches[i].match(strokeOpacityPattern);
-
-
-        stroke = hexExpandTo6(strokeMatche[1]) // 6 digits hex
-        opacity = opacityMatche[1]             // [0-1] number
-        strokeOpacity = strokeOpacityMatche[1] // [0-1] number
-
+        // Set into each array
         strokeHexArray.push(stroke)
         opacityArray.push(opacity)
         strokeOpacityArray.push(strokeOpacity)
@@ -124,3 +100,28 @@ function getStrokesColors() {
     return [numberOfColorPickers, strokeHexArray, opacityArray, strokeOpacityArray] // [Number, Array[], Array[], Array[]]
 }
 
+// Get the values from group colors <g> element string
+// like '<g stroke="#000000" opacity="1" stroke-opacity="1">'
+function regexMatchesOfGroupColors(inputSvg) {
+    const pattern = /<g stroke=[^>]*>/g;
+    const matches = inputSvg.match(pattern); // matchメソッドで配列を返す
+    // console.log('matches: ', matches)
+    // (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
+    return matches
+}
+// Get each attrs values
+function getStroke(inputStr) {
+    const pattern = /(#.*?)"/
+    const matches = inputStr.match(pattern)
+    return matches[1]
+}
+function getOpacity(inputStr) {
+    const pattern = /\sopacity="(.*?)"/
+    const matches = inputStr.match(pattern)
+    return matches[1]
+}
+function getStrokeOpacity(inputStr) {
+    const pattern = /stroke-opacity="(.*?)"/
+    const matches = inputStr.match(pattern)
+    return matches[1]
+}

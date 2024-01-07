@@ -442,25 +442,16 @@
                 //console.log('groupId: ', groupId)                 // like '0', '1', '2' ...
                 //console.log('typeof(groupId): ', typeof(groupId)) // string
 
-                // Get current SVG string intextarea
+                // Get the matches for <g> from current SVG string in textarea
                 const currentSVG = getInputSvg()
-
-                // RegEx pattern to capture '<g stroke="#000000" opacity="1" stroke-opacity="1">'
-                const pattern = /<g stroke=.*>/g;
-
-                const matches = currentSVG.match(pattern); // matchメソッドで配列を返す
+                const matches = regexMatchesOfGroupColors(currentSVG)
                 // console.log('matches: ', matches)
                 // (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
 
-                // RegEx patterns to extract group color value
-                strokePattern = /(#.*?)"/; // ハッシュマークと その次のダブルクォーテーションの あいだの 最短の文字列
-                opacityPattern = /\sopacity="(.*?)"/;
-                strokeOpacityPattern = /stroke-opacity="(.*?)"/;
-
-                // Get group color value
-                stroke = hexExpandTo6(matches[i].match(strokePattern)[1]) // 6 digits hex
-                opacity = matches[i].match(opacityPattern)[1]             // [0-1] number
-                strokeOpacity = matches[i].match(strokeOpacityPattern)[1] // [0-1] number
+                // Get three group colors value
+                const stroke = hexExpandTo6(getStroke(matches[i]))       // 6 digits hex (with hash mark)
+                const opacity             = getOpacity(matches[i])       // [0-1] number
+                const strokeOpacity       = getStrokeOpacity(matches[i]) // [0-1] number
 
 
                 // Generate the array like regex 'matche' object with input value
@@ -500,8 +491,8 @@
                 // <g stroke="#FF7523" opacity="1" stroke-opacity="1">
 
 
-                // Replace <g>
-                // function replaceAtIndex(inputString, regexPattern, replacement, index)
+                // Replace the changed <g> elements via group ID
+                const pattern = /<g stroke=[^>]*>/g;
                 const updatedSVG = replaceAtIndex(currentSVG, pattern, changedGroupElem, groupId)
 
                 // Refresh the SVG string in <textarea>
