@@ -85,8 +85,8 @@ function getStrokesColors() {
     for (let i = 0; i < matches.length; i++) { // i = group ID
         // Get three group colors value
         const stroke = hexExpandTo6(getStroke(matches[i]))       // 6 digits hex (with hash mark)
-        const opacity =             getOpacity(matches[i])       // [0-1] number
-        const strokeOpacity =       getStrokeOpacity(matches[i]) // [0-1] number
+        const opacity = getOpacity(matches[i])       // [0-1] number
+        const strokeOpacity = getStrokeOpacity(matches[i]) // [0-1] number
 
         // Set into each array
         strokeHexArray.push(stroke)
@@ -124,4 +124,19 @@ function getStrokeOpacity(inputStr) {
     const pattern = /stroke-opacity="(.*?)"/
     const matches = inputStr.match(pattern)
     return matches[1]
+}
+
+
+// Get the number of stroke colors to add multipul event listener
+// via addEventListenerForGroupColorsInputs()
+function getNumberOfStrokeGroups(inputSVG) {
+    // 正規表現パターンを作成
+    const pattern = /g stroke="[^"]*"/g; // g stroke="..." にマッチするパターン
+    // パターンにマッチする部分をすべて探す
+    const matches = inputSVG.match(pattern); // matchメソッドで配列を返す
+    console.log('matches(g stroke="#XXX"): ', matches) // Array(3) [ 'g stroke="#000"', 'g stroke="#eee"', 'g stroke="#fff"' ]
+    // マッチした部分の数を取得
+    const numberOfColorPickers = matches.length; // 配列の長さでマッチした部分の数を得る
+    console.log('typeof(numberOfColorPickers): ', typeof (numberOfColorPickers)) // number
+    return numberOfColorPickers
 }

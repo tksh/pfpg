@@ -273,8 +273,7 @@
 
     // セレクターの要素を取得
     const selectOfClipPathShape = document.getElementById('shapes-to-trim');
-    //console.log('selectOfClipPathShape is ', selectOfClipPathShape);
-    //console.log('selectOfClipPathShape.length is ', selectOfClipPathShape.length); // 3
+    console.log('selectOfClipPathShape.length is ', selectOfClipPathShape.length); // 4
 
 
     // 'shapes-to-trim' changeイベントリスナーを設定
@@ -506,23 +505,9 @@
 
     // Add multipul event listener for whole stroke colors
     const numberOfColorPickers = getNumberOfStrokeGroups(getInputSvg())
-    //console.log('numberOfColorPickers: ', numberOfColorPickers) // 5
     addEventListenerForGroupColorsInputs(numberOfColorPickers, 'stroke')
     addEventListenerForGroupColorsInputs(numberOfColorPickers, 'opacity')
     addEventListenerForGroupColorsInputs(numberOfColorPickers, 'stroke-opacity')
-
-    // Get the number of stroke colors to add multipul event listener
-    function getNumberOfStrokeGroups(inputSVG) {
-        // 正規表現パターンを作成
-        const pattern = /g stroke="[^"]*"/g; // g stroke="..." にマッチするパターン
-        // パターンにマッチする部分をすべて探す
-        const matches = inputSVG.match(pattern); // matchメソッドで配列を返す
-        console.log('matches(g stroke="#XXX"): ', matches) // Array(3) [ 'g stroke="#000"', 'g stroke="#eee"', 'g stroke="#fff"' ]
-        // マッチした部分の数を取得
-        const numberOfColorPickers = matches.length; // 配列の長さでマッチした部分の数を得る
-        console.log('numberOfColorPickers: ', numberOfColorPickers) // 3
-        return numberOfColorPickers
-    }
 
     ////////// Group 'stroke', 'opacity' and 'stroke-opaciity' [n] ///////////
     //////////////////////////////////////////////////////////////////////////
@@ -592,11 +577,12 @@
 
     pngSizeElementViaNumber.addEventListener('change', pngSizeElement); // change value via png-size-number
     pngSizeElementViaRange.addEventListener('change', pngSizeElement); // change value via png-size-range
+
     //////////////////////////// Width and height ////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
 
-    // Initialize the 'Width and height' and 'Transparency scope'
+    // Initialize the 'Width and height'
 
     const setPngSize = (value) => { // 直接数値を指定するため 上のサイズ変更用関数から 引数 を event から value に変更
         //const value = event.target.value // disableして 直接引数の数値を value とする
