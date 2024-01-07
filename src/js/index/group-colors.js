@@ -61,6 +61,108 @@ function generateGroupColorsHtmlTags() {
 }
 
 
+// Generate the strokes group color input HTML elements
+generateGroupColorsHtmlElems()
+
+function generateGroupColorsHtmlElems() {
+    console.log('generateGroupColorsHtmlElems() now started.')
+
+    const numberOfColorPickersAndColorsArrays = getStrokesColors();
+    const numberOfColorPickers = numberOfColorPickersAndColorsArrays[0]
+    const stroke = numberOfColorPickersAndColorsArrays[1]
+    const opacity = numberOfColorPickersAndColorsArrays[2]
+    const strokeOpacity = numberOfColorPickersAndColorsArrays[3]
+
+    // 挿入先のdiv要素を取得
+    const groupColorsDivElem = document.getElementById("group-colors-input-and-select");
+
+    // Generate the elements
+
+    // カラーピッカータグを格納する配列を作成
+    //    const colorPickers = [];
+    // マッチした部分の数だけ繰り返す
+    for (let i = 0; i < numberOfColorPickers; i++) {
+        console.log('stroke[i]; ', stroke[i])
+
+        // // ブラウザ固有の標準カラーピッカーを作成
+        // // label要素を作成
+        // const labelElement = document.createElement("label");
+        // labelElement.name = `group-colors-stroke-${i}`;
+        // labelElement.textContent = `group ${i + 1}:`;
+        // // input要素を作成
+        // const inputElement = document.createElement("input");
+        // inputElement.type = 'color';
+        // inputElement.name = `group-colors-stroke-${i}`;
+        // inputElement.id = `group-colors-stroke-${i}`;
+        // inputElement.value = `${stroke[i]}`;
+        // // select要素をdiv要素の子として追加
+        // groupColorsDivElem.appendChild(labelElement)
+        // groupColorsDivElem.appendChild(inputElement)
+
+        // jscolor カラーピッカーを作成
+        // label要素を作成
+        const labelElement = document.createElement("label");
+        labelElement.name = `group-colors-stroke-${i}`;
+        labelElement.textContent = `group ${i + 1}:`;
+        // input要素を作成
+        const inputElement = document.createElement("input");
+        inputElement.dataset.jscolor = '{}';
+        // inputElement.setAttribute("data-jscolor", "{}");   // also work
+        // inputElement.dataset.jscolor = JSON.stringify({}); // also work
+        inputElement.style = 'width: 6.5rem; margin-left: 0.5rem';
+        inputElement.class = 'input-color add-margin-bottom';
+        inputElement.autocomplete = "off";
+        inputElement.id = `group-colors-stroke-${i}`;
+        inputElement.value = `${stroke[i]}`;
+        // select要素をdiv要素の子として追加
+        groupColorsDivElem.appendChild(labelElement)
+        groupColorsDivElem.appendChild(inputElement)
+
+
+        // Generate <select> elements for opacity and stroke-opacity
+        const opacitySelectElem = generateOpacityElements('opacity', opacity[i])
+        const strokeOpacitySelectElem = generateOpacityElements('stroke-opacity', strokeOpacity[i])
+
+        function generateOpacityElements(attrName, attrValue) {
+            // 選択肢となる数値のリストを作成
+            let values = [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0];
+
+            // 現在の値を設定
+            let currentValue = attrValue;
+
+            // 現在の値に最も近い値を見つけ出す
+            let closestValue = values.reduce((prev, curr) => Math.abs(curr - currentValue) < Math.abs(prev - currentValue) ? curr : prev);
+
+            // select要素を作成
+            let selectElement = document.createElement("select");
+            selectElement.name = `group-colors-${attrName}-${i}`;
+            selectElement.id = `group-colors-${attrName}-${i}`;
+
+            // 各選択肢を作成し、それぞれにvalue属性を設定
+            values.forEach((value) => {
+                let optionElement = document.createElement("option");
+                optionElement.value = value;
+                optionElement.text = value;
+
+                // 現在の値に最も近い値に対応するオプションに 'selected' 属性を設定
+                if (value === closestValue) {
+                    optionElement.setAttribute('selected', 'selected');
+                }
+
+                selectElement.appendChild(optionElement);
+            });
+            return selectElement
+        }
+
+        groupColorsDivElem.appendChild(opacitySelectElem)
+        groupColorsDivElem.appendChild(strokeOpacitySelectElem)
+
+    }
+
+    return numberOfColorPickers
+}
+
+
 function getStrokesColors() {
 
     // Find whole group colors elements
