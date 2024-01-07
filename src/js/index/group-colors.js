@@ -74,7 +74,7 @@ function generateGroupColorsHtmlElems() {
     const strokeOpacity = numberOfColorPickersAndColorsArrays[3]
 
     // 挿入先のdiv要素を取得
-    const groupColorsDivElem = document.getElementById("group-colors-input-and-select");
+    const groupColorsDiv = document.getElementById("group-colors-input-and-select");
 
     // Generate the elements
 
@@ -82,7 +82,13 @@ function generateGroupColorsHtmlElems() {
     //    const colorPickers = [];
     // マッチした部分の数だけ繰り返す
     for (let i = 0; i < numberOfColorPickers; i++) {
-        console.log('stroke[i]; ', stroke[i])
+
+        // 新しいdiv要素を作成
+        const div = document.createElement('div');
+        const optsCellDiv = document.createElement('div');
+        // クラスを追加
+        optsCellDiv.classList.add('opts-cell-for-strokes');
+
 
         // // ブラウザ固有の標準カラーピッカーを作成
         // // label要素を作成
@@ -96,27 +102,28 @@ function generateGroupColorsHtmlElems() {
         // inputElement.id = `group-colors-stroke-${i}`;
         // inputElement.value = `${stroke[i]}`;
         // // select要素をdiv要素の子として追加
-        // groupColorsDivElem.appendChild(labelElement)
-        // groupColorsDivElem.appendChild(inputElement)
+        // groupColorsDiv.appendChild(labelElement)
+        // groupColorsDiv.appendChild(inputElement)
 
         // jscolor カラーピッカーを作成
         // label要素を作成
         const labelElement = document.createElement("label");
         labelElement.name = `group-colors-stroke-${i}`;
         labelElement.textContent = `group ${i + 1}:`;
+        labelElement.style = 'margin-right: 0.5rem;';
         // input要素を作成
         const inputElement = document.createElement("input");
         inputElement.dataset.jscolor = '{}';
         // inputElement.setAttribute("data-jscolor", "{}");   // also work
         // inputElement.dataset.jscolor = JSON.stringify({}); // also work
-        inputElement.style = 'width: 6.5rem; margin-left: 0.5rem';
+        inputElement.style = 'width: 6.5rem;';
         inputElement.class = 'input-color add-margin-bottom';
         inputElement.autocomplete = "off";
         inputElement.id = `group-colors-stroke-${i}`;
         inputElement.value = `${stroke[i]}`;
         // select要素をdiv要素の子として追加
-        groupColorsDivElem.appendChild(labelElement)
-        groupColorsDivElem.appendChild(inputElement)
+        optsCellDiv.appendChild(labelElement)
+        optsCellDiv.appendChild(inputElement)
 
 
         // Generate <select> elements for opacity and stroke-opacity
@@ -154,11 +161,12 @@ function generateGroupColorsHtmlElems() {
             return selectElement
         }
 
-        groupColorsDivElem.appendChild(opacitySelectElem)
-        groupColorsDivElem.appendChild(strokeOpacitySelectElem)
+        optsCellDiv.appendChild(opacitySelectElem)
+        optsCellDiv.appendChild(strokeOpacitySelectElem)
 
+        div.appendChild(optsCellDiv)
+        groupColorsDiv.appendChild(div)
     }
-
     return numberOfColorPickers
 }
 
