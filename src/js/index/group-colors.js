@@ -15,23 +15,23 @@ function generateGroupColorsSvgTags(matches) {
 
 
 // Generate the strokes group color input HTML tags
-generateGroupColorsHtmlTags()
+//generateGroupColorsHtmlTags()
 
 function generateGroupColorsHtmlTags() {
     console.log('generateGroupColorsHtmlTags() now started.')
 
-    const numberOfColorPickersAndColorsArrays = getStrokesColors();
-    const numberOfColorPickers = numberOfColorPickersAndColorsArrays[0]
-    const stroke = numberOfColorPickersAndColorsArrays[1]
-    const opacity = numberOfColorPickersAndColorsArrays[2]
-    const strokeOpacity = numberOfColorPickersAndColorsArrays[3]
+    const groupColorsValues = getGroupColors();
+    const numberOfGroups = groupColorsValues.number_of_groups
+    const stroke = groupColorsValues.stroke_array
+    const opacity = groupColorsValues.opacity_array
+    const strokeOpacity = groupColorsValues.stroke_opacity_array
 
     // Generate the tags
 
     // カラーピッカータグを格納する配列を作成
     const colorPickers = [];
     // マッチした部分の数だけ繰り返す
-    for (let i = 0; i < numberOfColorPickers; i++) {
+    for (let i = 0; i < numberOfGroups; i++) {
         console.log('stroke[i]; ', stroke[i])
         // カラーピッカータグのHTMLを作成
         const html = `
@@ -55,9 +55,9 @@ function generateGroupColorsHtmlTags() {
 
     // 配列の要素を改行で結合して出力
     document.getElementById("group-colors-stroke").innerHTML = colorPickers.join("\n");
-    console.log(`${numberOfColorPickers} stroke color picker tags has generated and inserted.`)
+    console.log(`${numberOfGroups} stroke color picker tags has generated and inserted.`)
 
-    return numberOfColorPickers
+    return numberOfGroups
 }
 
 
@@ -67,11 +67,11 @@ generateGroupColorsHtmlElems()
 function generateGroupColorsHtmlElems() {
     console.log('generateGroupColorsHtmlElems() now started.')
 
-    const numberOfColorPickersAndColorsArrays = getStrokesColors();
-    const numberOfColorPickers = numberOfColorPickersAndColorsArrays[0]
-    const stroke = numberOfColorPickersAndColorsArrays[1]
-    const opacity = numberOfColorPickersAndColorsArrays[2]
-    const strokeOpacity = numberOfColorPickersAndColorsArrays[3]
+    const groupColorsValues = getGroupColors();
+    const numberOfGroups = groupColorsValues.number_of_groups
+    const stroke = groupColorsValues.stroke_array
+    const opacity = groupColorsValues.opacity_array
+    const strokeOpacity = groupColorsValues.stroke_opacity_array
 
     // 挿入先のdiv要素を取得
     const groupColorsDiv = document.getElementById("group-colors-input-and-select");
@@ -81,7 +81,7 @@ function generateGroupColorsHtmlElems() {
     // カラーピッカータグを格納する配列を作成
     //    const colorPickers = [];
     // マッチした部分の数だけ繰り返す
-    for (let i = 0; i < numberOfColorPickers; i++) {
+    for (let i = 0; i < numberOfGroups; i++) {
 
         // 新しいdiv要素を作成
         const div = document.createElement('div');
@@ -108,7 +108,7 @@ function generateGroupColorsHtmlElems() {
         // jscolor カラーピッカーを作成
         // label要素を作成
         const labelElement = document.createElement("label");
-        labelElement.name = `group-colors-stroke-${i}`;
+        labelElement.setAttribute('for', `group-colors-stroke-${i}`);
         labelElement.textContent = `group ${i + 1}:`;
         labelElement.style = 'margin-right: 0.5rem;';
         // input要素を作成
@@ -116,7 +116,7 @@ function generateGroupColorsHtmlElems() {
         inputElement.dataset.jscolor = '{}';
         // inputElement.setAttribute("data-jscolor", "{}");   // also work
         // inputElement.dataset.jscolor = JSON.stringify({}); // also work
-        inputElement.style = 'width: 6.5rem;';
+        inputElement.style = 'width: 6.5rem; margin-right: 0.2rem;';
         inputElement.class = 'input-color add-margin-bottom';
         inputElement.autocomplete = "off";
         inputElement.id = `group-colors-stroke-${i}`;
@@ -144,6 +144,7 @@ function generateGroupColorsHtmlElems() {
             let selectElement = document.createElement("select");
             selectElement.name = `group-colors-${attrName}-${i}`;
             selectElement.id = `group-colors-${attrName}-${i}`;
+            selectElement.style = 'margin-right: 0.2rem;';
 
             // 各選択肢を作成し、それぞれにvalue属性を設定
             values.forEach((value) => {
@@ -167,11 +168,11 @@ function generateGroupColorsHtmlElems() {
         div.appendChild(optsCellDiv)
         groupColorsDiv.appendChild(div)
     }
-    return numberOfColorPickers
+    return numberOfGroups
 }
 
 
-function getStrokesColors() {
+function getGroupColors() {
 
     // Find whole group colors elements
 
@@ -182,13 +183,13 @@ function getStrokesColors() {
     // (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
 
     // マッチした部分の数を取得
-    const numberOfColorPickers = matches.length; // 配列の長さでマッチした部分の数を得る
-    // console.log('numberOfColorPickers: ', numberOfColorPickers) // 5 (Number)
+    const numberOfGroups = matches.length; // 配列の長さでマッチした部分の数を得る
+    // console.log('numberOfGroups: ', numberOfGroups) // 5 (Number)
 
 
     // Get each color as hex code
     // カラーピッカー生成時に 初期値として設定するために マッチした部分の内容から各カラー情報の値を 取り出し
-    let strokeHexArray = [];
+    let strokeArray = [];
     let opacityArray = [];
     let strokeOpacityArray = [];
 
@@ -199,15 +200,20 @@ function getStrokesColors() {
         const strokeOpacity = getStrokeOpacity(matches[i]) // [0-1] number
 
         // Set into each array
-        strokeHexArray.push(stroke)
+        strokeArray.push(stroke)
         opacityArray.push(opacity)
         strokeOpacityArray.push(strokeOpacity)
     }
-    // strokeHexArray:      (5) ['#000000', '#000000', '#000000', '#eeeeee', '#ffffff']
+    // strokeArray:         (5) ['#000000', '#000000', '#000000', '#eeeeee', '#ffffff']
     // opacityArray:        (5) ['1', '1', '1', '1', '1']
     // strokeOpacityArray:  (5) ['1', '1', '1', '1', '1']
 
-    return [numberOfColorPickers, strokeHexArray, opacityArray, strokeOpacityArray] // [Number, Array[], Array[], Array[]]
+    return {
+        number_of_groups: numberOfGroups,        // Number
+        stroke_array: strokeArray,               // Array
+        opacity_array: opacityArray,             // Array
+        stroke_opacity_array: strokeOpacityArray // Array
+    }
 }
 
 // Get the values from group colors <g> element string
@@ -239,14 +245,14 @@ function getStrokeOpacity(inputStr) {
 
 // Get the number of stroke colors to add multipul event listener
 // via addEventListenerForGroupColorsInputs()
-function getNumberOfStrokeGroups(inputSVG) {
+function getNumberOfGroups(inputSVG) {
     // 正規表現パターンを作成
     const pattern = /g stroke="[^"]*"/g; // g stroke="..." にマッチするパターン
     // パターンにマッチする部分をすべて探す
     const matches = inputSVG.match(pattern); // matchメソッドで配列を返す
     console.log('matches(g stroke="#XXX"): ', matches) // Array(3) [ 'g stroke="#000"', 'g stroke="#eee"', 'g stroke="#fff"' ]
     // マッチした部分の数を取得
-    const numberOfColorPickers = matches.length; // 配列の長さでマッチした部分の数を得る
-    console.log('typeof(numberOfColorPickers): ', typeof (numberOfColorPickers)) // number
-    return numberOfColorPickers
+    const numberOfGroups = matches.length; // 配列の長さでマッチした部分の数を得る
+    console.log('typeof(numberOfGroups): ', typeof (numberOfGroups)) // number
+    return numberOfGroups
 }

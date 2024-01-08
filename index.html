@@ -27,6 +27,7 @@
     <script defer src="./src/js/index/color-formatter.js"></script>
     <script defer src="./src/js/index/replace-at-index.js"></script>
     <script defer src="./src/js/index/count-svg-size.js"></script>
+    <script defer src="./src/js/index/view-settings/opacity-steps.js"></script>
 
 
     <!-- Data IO -->
@@ -137,6 +138,27 @@
             <fieldset class="opts">
                 <legend>Preference</legend>
 
+                <!-- Color-picker: Background color (via resvg) | Disabled -->
+                <div class="displayNone">
+                    <div class="opts-cell">
+                        <label for="background-color-picker">Background color:</label>
+                        <input value="#FFFFFF00" data-jscolor="{}" id="background-color-picker" class="input-color" autocomplete="off">
+                    </div>
+                </div>
+
+                <!-- Color-picker: Stroke colors (dynamic generated) -->
+                    <div id="multipul-stroke-color-desc" class="opts">
+                        <div class="opts-cell">
+                            <p>Colors of strokes group: [stroke], [opacity], [stroke-opacity]</p>
+                        </div>
+                    </div>
+                    <!-- <div id="group-colors-stroke" class="opts"></div> -->
+
+                <!-- <div class="opts"> -->
+                <div id="group-colors-input-and-select" class="opts"></div>
+                <!-- </div> -->
+
+
                 <!-- Path style -->
                 <div class="opts">
                     <div class="opts-cell">
@@ -151,39 +173,6 @@
                 <!-- ('stroke-opacity' will effects per stroke) -->
                 <!-- <br> -->
 
-                <!-- Color-picker: Background color (via resvg) | Disabled -->
-                <div class="displayNone">
-                    <div class="opts-cell">
-                        <label for="background-color-picker">Background color:</label>
-                        <input value="#FFFFFF00" data-jscolor="{}" id="background-color-picker" class="input-color" autocomplete="off">
-                    </div>
-                </div>
-
-                <!-- Color-picker: Stroke colors (dynamic generated) -->
-                <div class="displayNone">
-                    <div id="multipul-stroke-color-desc" class="opts">
-                        <div class="opts-cell">
-                            <p>Colors of strokes group: [stroke], [opacity], [stroke-opacity]</p>
-                        </div>
-                    </div>
-                    <div id="group-colors-stroke" class="opts"></div>
-                </div>
-
-                <!-- <div class="opts"> -->
-                <div id="group-colors-input-and-select" class="opts"></div>
-                <!-- </div> -->
-
-
-                <!-- Color-picker: Stroke color (static, for mono color stroke svg) | Disabled-->
-                <div class="displayNone">
-                    <div class="opts-cell">
-                        <!-- <fieldset> -->
-                        <!-- <legend>Colors:</legend> -->
-                        <label for="stroke-color-picker">Stroke color:</label>
-                        <input value="#000000FF" style="width: 9rem;" data-jscolor="{}" id="stroke-color-picker" class="input-color add-margin-bottom" autocomplete="off">
-                        <!-- </fieldset> -->
-                    </div>
-                </div>
 
                 <!-- Color-picker: Background color -->
                 <div>
@@ -383,6 +372,19 @@
                         </select>
                     </div>
                 </div>
+
+                <!-- Opacity steps -->
+                <div>
+                    <div class="opts-cell">
+                        <label for="opacity-steps">Opacity steps: </label>
+                        <select name="opacity-steps" id="opacity-steps" autocomplete="off">
+                            <option value="0.04">0.04</option>
+                            <option value="0.1" selected>0.1</option>
+                            <option value="0.2">0.2</option>
+                        </select>
+                    </div>
+                </div>
+
             </fieldset>
 
         </div><!-- End of <div id="settings"> -->
