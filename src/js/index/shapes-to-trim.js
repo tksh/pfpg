@@ -1,4 +1,4 @@
-// For generating the shapes to trim
+// For generating the shape to trim
 
 // Get the grid size
 function getGridSize() {

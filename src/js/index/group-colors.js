@@ -70,7 +70,7 @@ function generateGroupColorsHtmlElems(step) {
         // label要素を作成
         const labelElement = document.createElement("label");
         labelElement.setAttribute('for', `group-colors-stroke-${i}`);
-        labelElement.textContent = `group ${i + 1}:`;
+        labelElement.textContent = `${i + 1}:`;
         labelElement.classList.add('stroke');
 
         // input要素を作成
@@ -102,8 +102,6 @@ function generateGroupColorsHtmlElems(step) {
 
 
 function generateOpacityElements(i, step, attrName, attrValue) {
-    // 選択肢となる数値のリストを作成
-    // let values = [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0];
 
     // 選択肢となる数値のリストを作成
     values = valuesByStep(step)

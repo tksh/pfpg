@@ -15,17 +15,17 @@
     <!-- JS for index.html -->
     <script defer src="./src/js/index/jscolor.min.js"></script>
     <script defer src="./src/js/index/sync-number-and-range.js"></script>
-    <script defer src="./src/js/index/view-scale.js"></script>
-    <script defer src="./src/js/index/checker-pattern.js"></script>
-    <script defer src="./src/js/index/color-theme.js"></script>
-    <script defer src="./src/js/index/shapes-to-trim.js"></script>
+    <script defer src="./src/js/index/shape-to-trim.js"></script>
     <script defer src="./src/js/index/math-functions.js"></script>
     <script defer src="./src/js/index/download.js"></script>
     <script defer src="./src/js/index/color-formatter-hex-to-hex.js"></script>
     <script defer src="./src/js/index/color-formatter.js"></script>
     <script defer src="./src/js/index/replace-at-index.js"></script>
     <script defer src="./src/js/index/count-svg-size.js"></script>
-    <script defer src="./src/js/index/view-settings/opacity-steps.js"></script>
+    <script defer src="./src/js/index/interface-settings/view-scale.js"></script>
+    <script defer src="./src/js/index/interface-settings/checker-pattern.js"></script>
+    <script defer src="./src/js/index/interface-settings/color-theme.js"></script>
+    <script defer src="./src/js/index/interface-settings/opacity-steps.js"></script>
 
 
     <!-- Data IO -->
@@ -107,8 +107,8 @@
 
     <!-- Generate the group strokes color tags for HTML and SVG -->
     <script defer src="./src/js/index/group-colors.js"></script>
-    <!-- Set defaults value for some selectors in preference area read from decoded SVG -->
-    <script defer src="./src/js/index/set-defaults-for-preference.js"></script>
+    <!-- Set defaults value for some selectors in artwork customization area read from decoded SVG -->
+    <script defer src="./src/js/index/set-defaults.js"></script>
     <!-- Eventlisteners for preferences, and force to apply the values like width-and-height:256, transparency-scope:whole-group as defaults -->
     <script defer src="./src/js/index/main.js"></script>
     <!-- Adjust the height of whole components to fit to display height -->
@@ -130,15 +130,15 @@
     <div></div>
 
     <header>
-        <div id="preference" class="opts">
+        <div id="artwork-customization" class="opts">
 
             <fieldset class="opts">
-                <legend>Preference</legend>
+                <legend>Artwork customization</legend>
 
                 <!-- Color-picker: Stroke colors (dynamic generated) -->
                 <div id="multipul-stroke-color-desc" class="opts">
                     <div class="opts-cell">
-                        <p>Colors of strokes group: [stroke], [opacity], [stroke-opacity]</p>
+                        <p>Color attributes (stroke, opacity, stroke-opacity) for strokes group:</p>
                     </div>
                 </div>
 
@@ -202,11 +202,11 @@
                 </div>
 
 
-                <!-- Shapes to trim -->
+                <!-- Shape to trim -->
                 <div>
                     <div class="opts-cell">
-                        <label for="shapes-to-trim">Shapes to trim: </label>
-                        <select name="shapes-to-trim" id="shapes-to-trim" autocomplete="off">
+                        <label for="shape-to-trim">Shape to trim: </label>
+                        <select name="shape-to-trim" id="shape-to-trim" autocomplete="off">
                             <option value="square" selected>Square</option>
                             <option value="circle">Circle</option>
                             <option value="squircle">Squircle</option>
@@ -320,10 +320,10 @@
     <hr>
 
     <footer>
-        <div id="settings" class="opts addPaddingTop">
+        <div id="interface-settings" class="opts addPaddingTop">
 
             <fieldset class="opts">
-                <legend>View settings</legend>
+                <legend>Interface settings</legend>
 
                 <!-- View scale -->
                 <div>
@@ -374,7 +374,7 @@
 
             </fieldset>
 
-        </div><!-- End of <div id="settings"> -->
+        </div><!-- End of <div id="interface-settings"> -->
 
         <div class="footer-info">
             <p id="last-redering-time">Test footer</p>

@@ -101,16 +101,16 @@ function getCurrentStatus() {
         antiAliasing = 'off';
     }
 
-    // shapes to trim
-    const shapesToTrimSelect = document.getElementById('shapes-to-trim')
-    //console.log(shapesToTrimSelect)
-    const shapesToTrim = shapesToTrimSelect.value; // 要素の値は文字列として扱われる
-    console.log('shapesToTrim: ', shapesToTrim)
+    // shape to trim
+    const shapeToTrimSelect = document.getElementById('shape-to-trim')
+    //console.log(shapeToTrimSelect)
+    const shapeToTrim = shapeToTrimSelect.value; // 要素の値は文字列として扱われる
+    console.log('shapeToTrim: ', shapeToTrim)
 
 
 
-    // 'shapes to trim' に 'squircleSlimmed' が 適用されている場合だけ ふたつのオプションの値を取得し それを含むファイル名を生成する
-    if (shapesToTrim === 'squircleSlimmed') {
+    // 'shape to trim' に 'squircleSlimmed' が 適用されている場合だけ ふたつのオプションの値を取得し それを含むファイル名を生成する
+    if (shapeToTrim === 'squircleSlimmed') {
 
         // Two options for squircle, slimmed
         const selectWidthNarrowness = document.getElementById('width-narrowness');
@@ -119,13 +119,13 @@ function getCurrentStatus() {
         const topHeavyRatio = selectTopHeavyRatio.value;
 
         // Merge the all values of status, with two options
-        return `strokeColor_${hexCodeStringArrayJoined}-bgColor_${rectColor}-trimmedShape_${shapesToTrim}_${widthNrrowness}_${topHeavyRatio}-antiAlias_${antiAliasing}`
+        return `strokeColor_${hexCodeStringArrayJoined}-bgColor_${rectColor}-trimmedShape_${shapeToTrim}_${widthNrrowness}_${topHeavyRatio}-antiAlias_${antiAliasing}`
 
     }
 
 
     // Merge the all values of status
-    return `strokeColor_${hexCodeStringArrayJoined}-bgColor_${rectColor}-trimmedShape_${shapesToTrim}-antiAlias_${antiAliasing}`
+    return `strokeColor_${hexCodeStringArrayJoined}-bgColor_${rectColor}-trimmedShape_${shapeToTrim}-antiAlias_${antiAliasing}`
 
 }
 

@@ -192,10 +192,10 @@
         const patternBgRectFill = /<rect width="100%" height="100%" fill="[^"]*"/g
         const matchOfBgRectFill = oldPathModeSvgStr.match(patternBgRectFill)
         const valueOfBgRectFill = matchOfBgRectFill[0]
-        // Shapes to trim
-        const patternShapesToTrim = /<clipPath id="clipShape">[^>]*>/g
-        const matchOfShapesToTrim = oldPathModeSvgStr.match(patternShapesToTrim)
-        const valueOfShapesToTrim = matchOfShapesToTrim[0]
+        // Shape to trim
+        const patternShapeToTrim = /<clipPath id="clipShape">[^>]*>/g
+        const matchOfShapeToTrim = oldPathModeSvgStr.match(patternShapeToTrim)
+        const valueOfShapeToTrim = matchOfShapeToTrim[0]
         // Group colors
         const patternGroupColors = /<g stroke=[^>]*>/g
         const matchOfGroupColors = oldPathModeSvgStr.match(patternGroupColors) // (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="# ...
@@ -220,7 +220,7 @@
         // デコードし直す前に 保存しておいた 設定の値を 元に戻す
         newPathModeSvgStr = newPathModeSvgStr.replace(patternShapeRendering, valueOfShapeRendering);
         newPathModeSvgStr = newPathModeSvgStr.replace(patternBgRectFill, valueOfBgRectFill);
-        newPathModeSvgStr = newPathModeSvgStr.replace(patternShapesToTrim, valueOfShapesToTrim);
+        newPathModeSvgStr = newPathModeSvgStr.replace(patternShapeToTrim, valueOfShapeToTrim);
         // Group colors
         for (groupId = 0; groupId < matchOfGroupColors.length; groupId++) {
             const valueOfGroupColors = matchOfGroupColors[groupId]
@@ -272,14 +272,14 @@
     ///////////////////////////// Shapes to trim /////////////////////////////
 
     // セレクターの要素を取得
-    const selectOfClipPathShape = document.getElementById('shapes-to-trim');
+    const selectOfClipPathShape = document.getElementById('shape-to-trim');
     console.log('selectOfClipPathShape.length is ', selectOfClipPathShape.length); // 4
 
 
-    // 'shapes-to-trim' changeイベントリスナーを設定
+    // 'shape-to-trim' changeイベントリスナーを設定
     selectOfClipPathShape.addEventListener("change", () => {
 
-        // 選択された 'shapes-to-trim' の値を取得
+        // 選択された 'shape-to-trim' の値を取得
         const value = selectOfClipPathShape.value;
         //console.log('selectOfClipShape value is ', value) // square|circle|squircle|squircleSlimmed
 
