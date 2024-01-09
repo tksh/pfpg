@@ -297,7 +297,10 @@ div#samples figure {
     }
 
     .opts-cell {
-        padding-left: 1rem;
+        padding-left: 1rem; /* default: 2rem; */
+    }
+    .opts-cell-for-group-colors {
+        padding-left: 1.5rem /* default: 2.5rem; */
     }
 
     legend {
