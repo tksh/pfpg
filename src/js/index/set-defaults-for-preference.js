@@ -7,7 +7,7 @@ function setDefaultsForPreference() {
     const inpuSVG = getInputSvg()
 
     setDefaultForRectColorPicker(inpuSVG)
-    setDefaultForAntialiasSelector(inpuSVG)
+    setDefaultForAntiAliasSelector(inpuSVG)
     setDefaultForWidth(inpuSVG)
 //    setDefaultForTransparencyScopeSelector(inpuSVG)
 
@@ -62,7 +62,7 @@ function setDefaultsForPreference() {
 
 
     // Selector: Anti-aliasing (On (geometricPrecision) or Off (crispEdges))
-    function setDefaultForAntialiasSelector(inpuSVG) {
+    function setDefaultForAntiAliasSelector(inpuSVG) {
 
         // Get the 'shape-rendering' attr value
         // 正規表現パターンを作成

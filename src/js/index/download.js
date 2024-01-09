@@ -78,7 +78,7 @@ function getCurrentStatus() {
     console.log('strokeColor: ', strokeColor)
 
     // multipul strokesc olors
-    const numberOfGroupsAndHexCodeArray = getGroupColors();
+    const numberOfGroupsAndHexCodeArray = getGroupColorsValues();
     const hexCodeArray = numberOfGroupsAndHexCodeArray.stroke_array
     // const hexCodeArray = numberOfGroupsAndHexCodeArray[1]
     const hexCodeStringArrayWithoutHash = hexCodeArray.map((eachColorStr) => eightToFourOrThree(eachColorStr).slice(1).toUpperCase());

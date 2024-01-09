@@ -1,3 +1,5 @@
+// SVG
+
 // <g>タグを生成する
 function generateGroupColorsSvgTags(matches) {
     console.log('matches: ', matches) // (4) [undefined, '#4E8D09', '0.6', '1']
@@ -13,61 +15,19 @@ function generateGroupColorsSvgTags(matches) {
 }
 
 
-
-// Generate the strokes group color input HTML tags
-//generateGroupColorsHtmlTags()
-
-function generateGroupColorsHtmlTags() {
-    console.log('generateGroupColorsHtmlTags() now started.')
-
-    const groupColorsValues = getGroupColors();
-    const numberOfGroups = groupColorsValues.number_of_groups
-    const stroke = groupColorsValues.stroke_array
-    const opacity = groupColorsValues.opacity_array
-    const strokeOpacity = groupColorsValues.stroke_opacity_array
-
-    // Generate the tags
-
-    // カラーピッカータグを格納する配列を作成
-    const colorPickers = [];
-    // マッチした部分の数だけ繰り返す
-    for (let i = 0; i < numberOfGroups; i++) {
-        console.log('stroke[i]; ', stroke[i])
-        // カラーピッカータグのHTMLを作成
-        const html = `
-    <!-- Color-picker: Stroke color for group ${i} -->
-    <div>
-      <div class="opts-cell-for-strokes">
-
-        <label for="group-colors-stroke-${i}">group ${i + 1}:</label>
-        <input value="${stroke[i]}" style="width: 9rem;" data-jscolor="{}" id="group-colors-stroke-${i}" class="input-color add-margin-bottom" autocomplete="off">
-
-        <input type="number" min="0" max="1" step="0.1" value="${opacity[i]}" id="group-colors-opacity-${i}">
-
-        <input type="number" min="0" max="1" step="0.1" value="${strokeOpacity[i]}" id="group-colors-stroke-opacity-${i}">
-
-      </div>
-    </div>`;
-
-        // 配列に追加
-        colorPickers.push(html);
-    }
-
-    // 配列の要素を改行で結合して出力
-    document.getElementById("group-colors-stroke").innerHTML = colorPickers.join("\n");
-    console.log(`${numberOfGroups} stroke color picker tags has generated and inserted.`)
-
-    return numberOfGroups
-}
-
+// HTML
 
 // Generate the strokes group color input HTML elements
-generateGroupColorsHtmlElems()
+function getOpacityStepsValue() {
+    const selectOfOpacitySteps = document.getElementById("opacity-steps");
+    return Number(selectOfOpacitySteps.value)
+}
+generateGroupColorsHtmlElems(getOpacityStepsValue())
 
-function generateGroupColorsHtmlElems() {
-    console.log('generateGroupColorsHtmlElems() now started.')
+function generateGroupColorsHtmlElems(step) {
+    console.log(`generateGroupColorsHtmlElems() now started. (Opacity step = ${step})`)
 
-    const groupColorsValues = getGroupColors();
+    const groupColorsValues = getGroupColorsValues();
     const numberOfGroups = groupColorsValues.number_of_groups
     const stroke = groupColorsValues.stroke_array
     const opacity = groupColorsValues.opacity_array
@@ -76,18 +36,18 @@ function generateGroupColorsHtmlElems() {
     // 挿入先のdiv要素を取得
     const groupColorsDiv = document.getElementById("group-colors-input-and-select");
 
-    // Generate the elements
+    // Delete current whole child nodes
+    // let element = document.getElementById("idOfParent");
+    while (groupColorsDiv.firstChild) {
+        groupColorsDiv.removeChild(groupColorsDiv.firstChild);
+    }
 
-    // カラーピッカータグを格納する配列を作成
-    //    const colorPickers = [];
     // マッチした部分の数だけ繰り返す
     for (let i = 0; i < numberOfGroups; i++) {
 
-        // 新しいdiv要素を作成
-        const div = document.createElement('div');
         const optsCellDiv = document.createElement('div');
         // クラスを追加
-        optsCellDiv.classList.add('opts-cell-for-strokes');
+        optsCellDiv.classList.add('opts-cell-for-group-colors');
 
 
         // // ブラウザ固有の標準カラーピッカーを作成
@@ -106,73 +66,167 @@ function generateGroupColorsHtmlElems() {
         // groupColorsDiv.appendChild(inputElement)
 
         // jscolor カラーピッカーを作成
+
         // label要素を作成
         const labelElement = document.createElement("label");
         labelElement.setAttribute('for', `group-colors-stroke-${i}`);
         labelElement.textContent = `group ${i + 1}:`;
         labelElement.style = 'margin-right: 0.5rem;';
+
         // input要素を作成
         const inputElement = document.createElement("input");
-        inputElement.dataset.jscolor = '{}';
-        // inputElement.setAttribute("data-jscolor", "{}");   // also work
-        // inputElement.dataset.jscolor = JSON.stringify({}); // also work
-        inputElement.style = 'width: 6.5rem; margin-right: 0.2rem;';
-        inputElement.class = 'input-color add-margin-bottom';
+        inputElement.style = 'width: 7rem; margin-right: 0.2rem;';
+        inputElement.classList.add('input-color');
+        inputElement.classList.add('add-margin-bottom');
         inputElement.autocomplete = "off";
         inputElement.id = `group-colors-stroke-${i}`;
-        inputElement.value = `${stroke[i]}`;
-        // select要素をdiv要素の子として追加
+        inputElement.setAttribute('value', `${stroke[i]}`);
+        inputElement.setAttribute("data-jscolor", "{}");
+
+        // label, input要素を div要素の子として追加
         optsCellDiv.appendChild(labelElement)
         optsCellDiv.appendChild(inputElement)
 
 
         // Generate <select> elements for opacity and stroke-opacity
-        const opacitySelectElem = generateOpacityElements('opacity', opacity[i])
-        const strokeOpacitySelectElem = generateOpacityElements('stroke-opacity', strokeOpacity[i])
-
-        function generateOpacityElements(attrName, attrValue) {
-            // 選択肢となる数値のリストを作成
-            let values = [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0];
-
-            // 現在の値を設定
-            let currentValue = attrValue;
-
-            // 現在の値に最も近い値を見つけ出す
-            let closestValue = values.reduce((prev, curr) => Math.abs(curr - currentValue) < Math.abs(prev - currentValue) ? curr : prev);
-
-            // select要素を作成
-            let selectElement = document.createElement("select");
-            selectElement.name = `group-colors-${attrName}-${i}`;
-            selectElement.id = `group-colors-${attrName}-${i}`;
-            selectElement.style = 'margin-right: 0.2rem;';
-
-            // 各選択肢を作成し、それぞれにvalue属性を設定
-            values.forEach((value) => {
-                let optionElement = document.createElement("option");
-                optionElement.value = value;
-                optionElement.text = value;
-
-                // 現在の値に最も近い値に対応するオプションに 'selected' 属性を設定
-                if (value === closestValue) {
-                    optionElement.setAttribute('selected', 'selected');
-                }
-
-                selectElement.appendChild(optionElement);
-            });
-            return selectElement
-        }
-
+        const opacitySelectElem = generateOpacityElements(i, step, 'opacity', opacity[i])
+        const strokeOpacitySelectElem = generateOpacityElements(i, step, 'stroke-opacity', strokeOpacity[i])
+        console.log('opacitySelectElem: ', opacitySelectElem)
+        console.log('strokeOpacitySelectElem: ', strokeOpacitySelectElem)
         optsCellDiv.appendChild(opacitySelectElem)
         optsCellDiv.appendChild(strokeOpacitySelectElem)
 
-        div.appendChild(optsCellDiv)
-        groupColorsDiv.appendChild(div)
+        groupColorsDiv.appendChild(optsCellDiv)
     }
     return numberOfGroups
 }
 
 
-function getGroupColors() {
+
+function generateOpacityElements(i, step, attrName, attrValue) {
+    // 選択肢となる数値のリストを作成
+    // let values = [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0];
+
+    // 選択肢となる数値のリストを作成
+    values = valuesByStep(step)
+    console.log('values: ', values)
+    // 0.04 => // (26) ['0.00', '0.04', '0.08', '0.12', '0.16', '0.20', '0.24', '0.28', '0.32', '0.36', '0.40', '0.44', '0.48', '0.52', '0.56', '0.60', '0.64', '0.68', '0.72', '0.76', '0.80', '0.84', '0.88', '0.92', '0.96', '1.00']
+    // 0.1  => // (11) ['0.0', '0.1', '0.2', '0.3', '0.4', '0.5', '0.6', '0.7', '0.8', '0.9', '1.0']
+    // 0.2  => //  (6) ['0.0', '0.2', '0.4', '0.6', '0.8', '1.0']
+
+    // 現在の値を設定
+    let currentValue = attrValue;
+
+    // 現在の値に最も近い値を見つけ出す
+    let closestValue = values.reduce((prev, curr) => Math.abs(curr - currentValue) < Math.abs(prev - currentValue) ? curr : prev);
+
+    // select要素を作成
+    let selectElement = document.createElement("select");
+    selectElement.name = `group-colors-${attrName}-${i}`;
+    selectElement.id = `group-colors-${attrName}-${i}`;
+    selectElement.style = 'margin-right: 0.2rem; width: 4rem;';
+
+    // 各選択肢を作成し、それぞれにvalue属性を設定
+    values.forEach((value) => {
+        let optionElement = document.createElement("option");
+        optionElement.value = value;
+        optionElement.text = value;
+
+        // 現在の値に最も近い値に対応するオプションに 'selected' 属性を設定
+        if (value === closestValue) {
+            optionElement.setAttribute('selected', 'selected');
+        }
+
+        selectElement.appendChild(optionElement);
+    });
+    return selectElement
+}
+
+
+
+function changeOpacitySelectOptionsAsNewStep(step) {
+
+    const groupColorsValues = getGroupColorsValues();
+    const numberOfGroups = groupColorsValues.number_of_groups
+    const opacity = groupColorsValues.opacity_array
+    const strokeOpacity = groupColorsValues.stroke_opacity_array
+
+    // group colors の数だけ繰り返す
+    for (let i = 0; i < numberOfGroups; i++) {
+        // 新しい step の <option>に 置き換える
+        // selected は 減殺選ばれている値に一番近いものに 変更する
+        replaceToNewStepOptions(i, step, 'opacity', opacity)
+        replaceToNewStepOptions(i, step, 'stroke-opacity', strokeOpacity)
+    }
+}
+
+function replaceToNewStepOptions(i, step, attrName, attrValueArray) {
+
+    // Get the elem to append the new <option>
+    const selectElement = document.getElementById(`group-colors-${attrName}-${i}`);
+
+    // Delete current whole child <option> nodes
+    while (selectElement.firstChild) {
+        selectElement.removeChild(selectElement.firstChild);
+    }
+
+
+    // Add new <option>
+
+    // 選択肢となる数値のリストを作成
+    values = valuesByStep(step)
+    console.log('values: ', values)
+    // 0.04 => // (26) ['0.00', '0.04', '0.08', '0.12', '0.16', '0.20', '0.24', '0.28', '0.32', '0.36', '0.40', '0.44', '0.48', '0.52', '0.56', '0.60', '0.64', '0.68', '0.72', '0.76', '0.80', '0.84', '0.88', '0.92', '0.96', '1.00']
+    // 0.1  => // (11) ['0.0', '0.1', '0.2', '0.3', '0.4', '0.5', '0.6', '0.7', '0.8', '0.9', '1.0']
+    // 0.2  => //  (6) ['0.0', '0.2', '0.4', '0.6', '0.8', '1.0']
+
+    // 現在の値を設定
+    let currentValue = attrValueArray[i]
+
+    // 現在の値に最も近い値を見つけ出す
+    let closestValue = values.reduce((prev, curr) => Math.abs(curr - currentValue) < Math.abs(prev - currentValue) ? curr : prev);
+
+    // 各選択肢を作成し、それぞれにvalue属性を設定
+    values.forEach((value) => {
+        let optionElement = document.createElement("option");
+        optionElement.value = value;
+        optionElement.text = value;
+
+        // 現在の値に最も近い値に対応するオプションに 'selected' 属性を設定
+        if (value === closestValue) {
+            optionElement.setAttribute('selected', 'selected');
+        }
+
+        selectElement.appendChild(optionElement);
+    });
+}
+
+
+function valuesByStep(step) {
+    let values = [];
+    if (step === 0.04) {
+        // 0から100までの整数を4の間隔で配列に格納
+        for (let i = 0; i <= 100; i += 4) {
+            // 整数を100で割って小数に戻す
+            values.push((i / 100).toFixed(2));
+        }
+    } else { // step = 0.1|0.2
+        for (let i = 0; i <= 1; i += parseFloat(step)) {
+            values.push(i.toFixed(1));
+        }
+    }
+    return values.reverse() // 一番上に表示される選びやすい<option>が 0 ではなく 1 になるように 逆順にする
+}
+// console.log(valuesByStep(0.04))
+// console.log(valuesByStep(0.1))
+// console.log(valuesByStep(0.2))
+// (26) ['1.00', '0.96', '0.92', '0.88', '0.84', '0.80', '0.76', '0.72', '0.68', '0.64', '0.60', '0.56', '0.52', '0.48', '0.44', '0.40', '0.36', '0.32', '0.28', '0.24', '0.20', '0.16', '0.12', '0.08', '0.04', '0.00']
+// (11) ['1.0', '0.9', '0.8', '0.7', '0.6', '0.5', '0.4', '0.3', '0.2', '0.1', '0.0']
+//  (6) ['1.0', '0.8', '0.6', '0.4', '0.2', '0.0']
+
+
+function getGroupColorsValues() {
+    console.log(`getGroupColorsValues now started.`)
 
     // Find whole group colors elements
 
@@ -208,6 +262,10 @@ function getGroupColors() {
     // opacityArray:        (5) ['1', '1', '1', '1', '1']
     // strokeOpacityArray:  (5) ['1', '1', '1', '1', '1']
 
+    console.log('strokeArray: ', strokeArray)
+    console.log('opacityArray: ', opacityArray)
+    console.log('strokeOpacityArray: ', strokeOpacityArray)
+
     return {
         number_of_groups: numberOfGroups,        // Number
         stroke_array: strokeArray,               // Array
@@ -232,13 +290,17 @@ function getStroke(inputStr) {
     return matches[1]
 }
 function getOpacity(inputStr) {
-    const pattern = /\sopacity="(.*?)"/
+    const pattern = /\sopacity="([^"]*)"/
+    // const pattern = /\sopacity="(.*?)"/
     const matches = inputStr.match(pattern)
+    console.log('matches[1]: ', matches[1])
     return matches[1]
 }
 function getStrokeOpacity(inputStr) {
-    const pattern = /stroke-opacity="(.*?)"/
+    // const pattern = /stroke-opacity="(.*?)"/
+    const pattern = /stroke-opacity="([^"]*)"/
     const matches = inputStr.match(pattern)
+    console.log('matches[1]: ', matches[1])
     return matches[1]
 }
 
