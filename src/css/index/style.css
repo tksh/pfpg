@@ -161,6 +161,15 @@ select {
     padding-left: 0.5rem;
     border: none;
 }
+select.opacity {
+    margin-right: 2px;
+    width: 4rem;
+}
+
+input[data-jscolor="{}"] {
+    margin-right: 2px;
+    border: 1px solid var(--color-picker-border);
+}
 
 input[type="range"] {
     min-width: 16rem;

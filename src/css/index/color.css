@@ -13,6 +13,7 @@
     --color-input-textarea-select: #eee6;
     --color-button-bg: #eee3;
     --color-button-border: #ccc9;
+    --color-picker-border: #ccc9;
 }
 
 /* Same color as above `:root` */
@@ -28,6 +29,7 @@
     --color-input-textarea-select: #eee6 !important;
     --color-button-bg: #eee3 !important;
     --color-button-border: #ccc9 !important;
+    --color-picker-border: #ccc9 !important;
 }
 
 
@@ -44,6 +46,7 @@
         --color-input-textarea-select: #eee6;
         --color-button-bg: #6663;
         --color-button-border: #ccc3;
+        --color-picker-border: #666
     }
 }
 
@@ -60,6 +63,7 @@
     --color-input-textarea-select: #eee6;
     --color-button-bg: #6663;
     --color-button-border: #ccc3;
+    --color-picker-border: #666;
 }
 
 
@@ -75,6 +79,7 @@
     --color-input-textarea-select: #2226;
     --color-button-bg: #6663;
     --color-button-border: #ccc3;
+    --color-picker-border: #ccc3;
 }
 
 [data-theme='white'] {
@@ -89,4 +94,5 @@
     --color-input-textarea-select: #eee6;
     --color-button-bg: #eee3;
     --color-button-border: #ccc9;
+    --color-picker-border: #ccc9;
 }

@@ -75,9 +75,9 @@ function generateGroupColorsHtmlElems(step) {
 
         // input要素を作成
         const inputElement = document.createElement("input");
-        inputElement.style = 'width: 7rem; margin-right: 0.2rem;';
-        inputElement.classList.add('input-color');
-        inputElement.classList.add('add-margin-bottom');
+        inputElement.style = 'width: 7rem;';
+        //inputElement.classList.add('input-color');
+        //inputElement.classList.add('add-margin-bottom');
         inputElement.autocomplete = "off";
         inputElement.id = `group-colors-stroke-${i}`;
         inputElement.setAttribute('value', `${stroke[i]}`);
@@ -124,7 +124,8 @@ function generateOpacityElements(i, step, attrName, attrValue) {
     let selectElement = document.createElement("select");
     selectElement.name = `group-colors-${attrName}-${i}`;
     selectElement.id = `group-colors-${attrName}-${i}`;
-    selectElement.style = 'margin-right: 0.2rem; width: 4rem;';
+    selectElement.classList.add('opacity');
+    // selectElement.style = 'margin-right: 0.2rem; width: 4rem;';
 
     // 各選択肢を作成し、それぞれにvalue属性を設定
     values.forEach((value) => {
