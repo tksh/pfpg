@@ -161,14 +161,33 @@ select {
     padding-left: 0.5rem;
     border: none;
 }
+
+/* 'opacity', 'stroke-opacity' */
 select.opacity {
     margin-right: 2px;
     width: 4rem;
 }
 
+/* 'stroke' */
 input[data-jscolor="{}"] {
     margin-right: 2px;
     border: 1px solid var(--color-picker-border);
+}
+input.stroke {
+    width: 7rem;
+}
+label.stroke {
+    margin-right: 0.5rem
+}
+
+/* Background color */
+input.bgcolor {
+    width: 8.5rem;
+}
+
+/* Width and height */
+input.width-and-height {
+    width: 4rem;
 }
 
 input[type="range"] {
