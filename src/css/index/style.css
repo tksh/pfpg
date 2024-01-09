@@ -205,7 +205,7 @@ input[type="range"] {
     /* background-color: red; */
 }
 
-#preference,
+#artwork-customization,
 figcaption,
 summary,
 legend,
@@ -229,9 +229,11 @@ details {
 .addPaddingTop {
     padding-top: 0.5rem;
 }
-
 .addPaddingBottom {
     padding-bottom: 0.5rem;
+}
+.addPaddingLeft {
+    padding-left: 2px;
 }
 
 button {
