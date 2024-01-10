@@ -261,7 +261,7 @@
                 <div>
                     <div class="opts-cell">
                         <label for="png-size-number">Width and height:</label>
-                        <input type="number" id="png-size-number" name="png-size-number" class="width-and-height" min="1" max="4096" value="256" autocomplete="off" oninput="syncWidthNum(this)"><span class="addPaddingLeft">px</span>
+                        <input type="number" id="png-size-number" name="png-size-number" class="width-and-height" min="1" value="256" autocomplete="off" oninput="syncWidthNum(this)"><span class="addPaddingLeft">px</span>
                         <input type="range" id="png-size-range" name="png-size-range" min="16" max="512" step="16" autocomplete="off" oninput="syncWidthNum(this)">
                     </div>
                 </div>
@@ -380,13 +380,14 @@
             <details>
                 <summary>Tips for customization</summary>
                 <dl>
-                    <dt>The difference made by 'Path mode'</dt>
+                    <dt>The difference made by <i>Path mode</i></dt>
                     <dd>- <i>Relative and merged</i>: 'stroke-opacity' affects the whole strokes <b>group</b></dd>
                     <dd>- <i>Absolute and separated</i>: 'stroke-opacity' affects the appearance of each <b>stroke</b></dd>
                 </dl>
                 <dl>
-                    <dt>Maximum rendering size</dt>
-                    <dd></dd>
+                    <dt>Maximum rendering size for <i>Width and height</i></dt>
+                    <dd>The slider allows you to set the size up to 512 pixels, but you can type in a larger number manually into the box.</dd>
+                    <dd>(Note: Larger sizes will exponentially increase the rendering time)</dd>
                 </dl>
 
             </details>
@@ -397,13 +398,13 @@
                     <dt>Title:</dt>
                     <dd>pfpg</dd>
                     <dt>Description:</dt>
-                    <dd>A custom pfp generator for specific svg artwork that made with <a href="https://github.com/tksh/uintnportray" title="tksh on GitHub">UIntNPortray</a> ruleset</dd>
+                    <dd>A custom pfp generator for a specific svg artwork that was made with the <a href=“https://github.com/tksh/uintnportray” title=“tksh on GitHub”>UIntNPortray</a> ruleset.</dd>
                     <dt>Creator:</dt>
                     <!-- <dt>Creator of the website and the artwork:</dt> -->
                     <dd><a href="https://github.com/tksh" title="tksh on GitHub">SAITO Takashi</a></dd>
                     <dt>License:</dt>
                     <dd>Some licence info</dd>
-                    <dt>Made with:</dt>
+                    <dt>Libraries:</dt>
                     <dd><a href="ttps://github.com/yisibl/resvg-js" title="GitHub - yisibl/resvg-js: A high-performance SVG renderer and toolkit, powered by Rust based resvg and napi-rs.">resvg-js (MPL 2.0 license)</a></dd>
                     <dd><a href="ttps://synapse.kyoto/lib/url-comp/page001.html" title="URLCompressorライブラリ(1) - しなぷすのハード製作記">URLCompressor (MIT license)</a></dd>
                     <dd><a href="ttps://jscolor.com/" title="jscolor: JavaScript Color picker with Opacity (alpha channel)">jscolor (Commercial license)</a></dd>
