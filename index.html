@@ -219,9 +219,17 @@
                         <label for="width-narrowness">- Width narrowness: </label>
                         <select name="width-narrowness" id="width-narrowness" autocomplete="off">
                             <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
                             <option value="5">5</option>
-                            <option value="10">10</option>
-                            <option value="15" selected>15</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10" selected>10</option>
+                            <option value="15">15</option>
                             <option value="20">20</option>
                             <option value="25">25</option>
                             <option value="30">30</option>
@@ -233,13 +241,13 @@
                     <div class="opts-cell">
                         <label for="top-heavy-ratio">- Top-heavy ratio: </label>
                         <select name="top-heavy-ratio" id="top-heavy-ratio" autocomplete="off">
-                            <option value="-3">-3</option>
-                            <option value="-2">-2</option>
-                            <option value="-1">-1</option>
-                            <option value="0">0</option>
-                            <option value="1" selected>1</option>
-                            <option value="2">2</option>
                             <option value="3">3</option>
+                            <option value="2">2</option>
+                            <option value="1" selected>1</option>
+                            <option value="0">0</option>
+                            <option value="-1">-1</option>
+                            <option value="-2">-2</option>
+                            <option value="-3">-3</option>
                         </select>
                     </div>
                 </div>
@@ -272,7 +280,11 @@
         </div> <!-- End of <div class="opts"> -->
     </header>
 
-
+<!-- 警告モーダルダイアログ -->
+<!-- <dialog id="warning-dialog" open>
+    <p id="warning-message"></p>
+    <button id="close-button" type="button">閉じる</button>
+  </dialog> -->
 
 
     <main>
@@ -398,16 +410,16 @@
                     <dt>Title:</dt>
                     <dd>pfpg</dd>
                     <dt>Description:</dt>
-                    <dd>A custom pfp generator for a specific svg artwork that was made with the <a href=“https://github.com/tksh/uintnportray” title=“tksh on GitHub”>UIntNPortray</a> ruleset.</dd>
+                    <dd>A custom <b>p</b>ro<b>f</b>ile <b>p</b>icture <b>g</b>enerator for a specific svg artwork that was made with the <a href="https://github.com/tksh/uint-n-portray" title="tksh/uint-n-portray: A subset of SVG for creating simple and efficient vector drawings">UIntNPortray</a> ruleset.</dd>
                     <dt>Creator:</dt>
                     <!-- <dt>Creator of the website and the artwork:</dt> -->
-                    <dd><a href="https://github.com/tksh" title="tksh on GitHub">SAITO Takashi</a></dd>
+                    <dd><a href="https://github.com/tksh" title="tksh on GitHub">SAITO Takashi (tksh)</a></dd>
                     <dt>License:</dt>
-                    <dd>Some licence info</dd>
+                    <dd><a href="https://www.mozilla.org/en-US/MPL/2.0/" title="Mozilla Public License, version 2.0">MPL 2.0 license</a></dd>
                     <dt>Libraries:</dt>
-                    <dd><a href="ttps://github.com/yisibl/resvg-js" title="GitHub - yisibl/resvg-js: A high-performance SVG renderer and toolkit, powered by Rust based resvg and napi-rs.">resvg-js (MPL 2.0 license)</a></dd>
-                    <dd><a href="ttps://synapse.kyoto/lib/url-comp/page001.html" title="URLCompressorライブラリ(1) - しなぷすのハード製作記">URLCompressor (MIT license)</a></dd>
-                    <dd><a href="ttps://jscolor.com/" title="jscolor: JavaScript Color picker with Opacity (alpha channel)">jscolor (Commercial license)</a></dd>
+                    <dd><a href="https://github.com/yisibl/resvg-js" title="GitHub - yisibl/resvg-js: A high-performance SVG renderer and toolkit, powered by Rust based resvg and napi-rs.">resvg-js (MPL 2.0 license)</a></dd>
+                    <dd><a href="https://synapse.kyoto/lib/url-comp/page001.html" title="URLCompressorライブラリ(1) - しなぷすのハード製作記">URLCompressor (MIT license)</a></dd>
+                    <dd><a href="https://jscolor.com/" title="jscolor: JavaScript Color picker with Opacity (alpha channel)">jscolor (GNU GPL v3 license (for open source use))</a></dd>
                 </dl>
             </details>
 

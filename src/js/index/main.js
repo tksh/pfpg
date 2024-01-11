@@ -449,8 +449,8 @@
 
                 // Get three group colors value
                 const stroke = hexExpandTo6(getStroke(matches[i]))       // 6 digits hex (with hash mark)
-                const opacity             = getOpacity(matches[i])       // [0-1] number
-                const strokeOpacity       = getStrokeOpacity(matches[i]) // [0-1] number
+                const opacity = getOpacity(matches[i])       // [0-1] number
+                const strokeOpacity = getStrokeOpacity(matches[i]) // [0-1] number
 
 
                 // Generate the array like regex 'matche' object with input value
@@ -578,6 +578,13 @@
     pngSizeElementViaNumber.addEventListener('change', pngSizeElement); // change value via png-size-number
     pngSizeElementViaRange.addEventListener('change', pngSizeElement); // change value via png-size-range
 
+    // Constraint validation
+    const numberInput = document.getElementById("png-size-number");
+    // 入力値が変更されたときの処理
+    numberInput.addEventListener("change", () => {
+        // 入力値の妥当性を報告する
+        numberInput.reportValidity();
+    });
     //////////////////////////// Width and height ////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 

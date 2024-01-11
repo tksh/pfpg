@@ -29,10 +29,10 @@ function adjustBox() {
     const mainRect = mainElem.getBoundingClientRect();
     console.log('main: ', mainRect.width, mainRect.height);
 
-    // <div id="preference">
-    const preferenceElem = document.getElementById('preference');
-    const preferenceRect = preferenceElem.getBoundingClientRect();
-    console.log('preference: ', preferenceRect.width, preferenceRect.height);
+    // <div id="artwork-customization">
+    const artworkCustomizationElem = document.getElementById('artwork-customization');
+    const artworkCustomizationRect = artworkCustomizationElem.getBoundingClientRect();
+    console.log('artwork-customization: ', artworkCustomizationRect.width, artworkCustomizationRect.height);
 
 
     // <div id="input-and-output">
@@ -90,10 +90,10 @@ function adjustBox() {
     console.log('downloadButtonRectPng: ', downloadButtonRectPng.width, downloadButtonRectPng.height);
     console.log('downloadButtonRectSvg: ', downloadButtonRectSvg.width, downloadButtonRectSvg.height);
 
-    // <div id="settings">
-    const settingsElem = document.getElementById('settings');
-    const settingsRect = settingsElem.getBoundingClientRect();
-    console.log('settings: ', settingsRect.width, settingsRect.height);
+    // <div id="interface-settings">
+    const interfaceSettingsElem = document.getElementById('interface-settings');
+    const interfaceSettingsRect = interfaceSettingsElem.getBoundingClientRect();
+    console.log('settings: ', interfaceSettingsRect.width, interfaceSettingsRect.height);
 
     // <footer>
     const footerElem = document.querySelector('footer');
