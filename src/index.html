@@ -5,114 +5,115 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>pfpg</title>
-    <link rel="stylesheet" href="./src/css/index/style.css">
-    <link rel="stylesheet" href="./src/css/index/color.css">
+    <link rel="stylesheet" href="./css/index/style.css">
+    <link rel="stylesheet" href="./css/index/color.css">
 
     <!-- resvg-js -->
-    <link rel="preload" as="fetch" type="application/wasm" href="./src/wasm/index_bg_20230424.wasm" crossorigin>
-    <script defer src="./src/js/index/index.min.js"></script>
+    <!-- <link rel="preload" as="fetch" type="application/wasm" href="./wasm/index_bg_20230424.wasm" crossorigin> -->
+    <link rel="preload" as="fetch" type="application/wasm" href="./wasm/index_bg_20230424.wasm" crossorigin>
+    <script defer src="./js/index/index.min.js"></script>
 
     <!-- JS for index.html -->
-    <script defer src="./src/js/index/jscolor.min.js"></script>
-    <script defer src="./src/js/index/sync-number-and-range.js"></script>
-    <script defer src="./src/js/index/shape-to-trim.js"></script>
-    <script defer src="./src/js/index/math-functions.js"></script>
-    <script defer src="./src/js/index/download.js"></script>
-    <script defer src="./src/js/index/color-formatter-hex-to-hex.js"></script>
-    <script defer src="./src/js/index/color-formatter.js"></script>
-    <script defer src="./src/js/index/replace-at-index.js"></script>
-    <script defer src="./src/js/index/count-svg-size.js"></script>
-    <script defer src="./src/js/index/interface-settings/view-scale.js"></script>
-    <script defer src="./src/js/index/interface-settings/checker-pattern.js"></script>
-    <script defer src="./src/js/index/interface-settings/color-theme.js"></script>
-    <script defer src="./src/js/index/interface-settings/opacity-steps.js"></script>
+    <script defer src="./js/index/jscolor.min.js"></script>
+    <script defer src="./js/index/sync-number-and-range.js"></script>
+    <script defer src="./js/index/shape-to-trim.js"></script>
+    <script defer src="./js/index/math-functions.js"></script>
+    <script defer src="./js/index/download.js"></script>
+    <script defer src="./js/index/color-formatter-hex-to-hex.js"></script>
+    <script defer src="./js/index/color-formatter.js"></script>
+    <script defer src="./js/index/replace-at-index.js"></script>
+    <script defer src="./js/index/count-svg-size.js"></script>
+    <script defer src="./js/index/interface-settings/view-scale.js"></script>
+    <script defer src="./js/index/interface-settings/checker-pattern.js"></script>
+    <script defer src="./js/index/interface-settings/color-theme.js"></script>
+    <script defer src="./js/index/interface-settings/opacity-steps.js"></script>
 
 
     <!-- Data IO -->
-    <script src="./src/js/data-manipulator/data-io/select-file.js"></script>
-    <script src="./src/js/data-manipulator/data-io/read-textarea.js"></script>
-    <script src="./src/js/data-manipulator/data-io/output-to-textarea.js"></script>
-    <script src="./src/js/data-manipulator/data-io/json-to-map-obj.js"></script>
-    <script src="./src/js/data-manipulator/data-io/merge-as-url-params.js"></script>
-    <script src="./src/js/data-manipulator/data-io/copy-textarea.js"></script>
-    <script src="./src/js/data-manipulator/data-io/show-result.js"></script>
+    <script src="./js/data-manipulator/data-io/select-file.js"></script>
+    <script src="./js/data-manipulator/data-io/read-textarea.js"></script>
+    <script src="./js/data-manipulator/data-io/output-to-textarea.js"></script>
+    <script src="./js/data-manipulator/data-io/json-to-map-obj.js"></script>
+    <script src="./js/data-manipulator/data-io/merge-as-url-params.js"></script>
+    <script src="./js/data-manipulator/data-io/copy-textarea.js"></script>
+    <script src="./js/data-manipulator/data-io/show-result.js"></script>
 
     <!-- Base N Encodings -->
-    <script src="./src/js/data-manipulator/base-n-encodings/get-char-list.js"></script>
-    <script src="./src/js/data-manipulator/base-n-encodings/base-52-enc.js"></script>
-    <script src="./src/js/data-manipulator/base-n-encodings/base-52-dec.js"></script>
-    <script src="./src/js/data-manipulator/base-n-encodings/base-53-enc.js"></script>
-    <script src="./src/js/data-manipulator/base-n-encodings/base-53-dec.js"></script>
-    <script src="./src/js/data-manipulator/base-n-encodings/base-64-url-enc.js"></script>
-    <script src="./src/js/data-manipulator/base-n-encodings/base-64-url-dec.js"></script>
+    <script src="./js/data-manipulator/base-n-encodings/get-char-list.js"></script>
+    <script src="./js/data-manipulator/base-n-encodings/base-52-enc.js"></script>
+    <script src="./js/data-manipulator/base-n-encodings/base-52-dec.js"></script>
+    <script src="./js/data-manipulator/base-n-encodings/base-53-enc.js"></script>
+    <script src="./js/data-manipulator/base-n-encodings/base-53-dec.js"></script>
+    <script src="./js/data-manipulator/base-n-encodings/base-64-url-enc.js"></script>
+    <script src="./js/data-manipulator/base-n-encodings/base-64-url-dec.js"></script>
 
     <!-- URLCompressor -->
-    <script src="./src/js/data-manipulator/url-comp-0-1-0/url-comp.js"></script>
+    <script src="./js/data-manipulator/url-comp-0-1-0/url-comp.js"></script>
 
     <!-- Artwork Data -->
-    <script src="./src/js/data-manipulator/artwork-data/artwork-data-enc.js"></script>
-    <script src="./src/js/data-manipulator/artwork-data/detect-uint-n.js"></script>
+    <script src="./js/data-manipulator/artwork-data/artwork-data-enc.js"></script>
+    <script src="./js/data-manipulator/artwork-data/detect-uint-n.js"></script>
 
     <!-- Color Formatter -->
-    <script src="./src/js/data-manipulator/color-formatter/normalized-to-hex.js"></script>
-    <script src="./src/js/data-manipulator/color-formatter/normalized-from-hex.js"></script>
-    <script src="./src/js/data-manipulator/color-formatter/hex-shorten.js"></script>
-    <script src="./src/js/data-manipulator/color-formatter/hex-expand.js"></script>
+    <script src="./js/data-manipulator/color-formatter/normalized-to-hex.js"></script>
+    <script src="./js/data-manipulator/color-formatter/normalized-from-hex.js"></script>
+    <script src="./js/data-manipulator/color-formatter/hex-shorten.js"></script>
+    <script src="./js/data-manipulator/color-formatter/hex-expand.js"></script>
 
     <!-- Group Colors -->
-    <!-- <script src="./src/js/data-manipulator/group-colors/colors-enc.js"></script> -->
-    <script src="./src/js/data-manipulator/group-colors/colors-dec.js"></script>
+    <!-- <script src="./js/data-manipulator/group-colors/colors-enc.js"></script> -->
+    <script src="./js/data-manipulator/group-colors/colors-dec.js"></script>
 
     <!-- Width Count -->
-    <!-- <script src="./src/js/data-manipulator/width-count/width-count-enc.js"></script> -->
-    <script src="./src/js/data-manipulator/width-count/width-count-dec.js"></script>
+    <!-- <script src="./js/data-manipulator/width-count/width-count-enc.js"></script> -->
+    <script src="./js/data-manipulator/width-count/width-count-dec.js"></script>
 
     <!-- Bruteforce53 encoding method -->
-    <script src="./src/js/data-manipulator/method-bruteforce53/bruteforce53-enc.js"></script>
-    <script src="./src/js/data-manipulator/method-bruteforce53/bruteforce53-dec.js"></script>
-    <!-- <script src="./src/js/data-manipulator/method-bruteforce53/base-x-enc.js"></script> -->
-    <script src="./src/js/data-manipulator/method-bruteforce53/base-x-dec.js"></script>
-    <script src="./src/js/data-manipulator/method-bruteforce53/specific-alphabets.js"></script>
-    <script src="./src/js/data-manipulator/method-bruteforce53/actual-dict-size.js"></script>
-    <script src="./src/js/data-manipulator/method-bruteforce53/decode-diff.js"></script>
-    <script src="./src/js/data-manipulator/method-bruteforce53/diff-to-rel.js"></script>
-    <script src="./src/js/data-manipulator/method-bruteforce53/add-and-subtract.js"></script>
+    <script src="./js/data-manipulator/method-bruteforce53/bruteforce53-enc.js"></script>
+    <script src="./js/data-manipulator/method-bruteforce53/bruteforce53-dec.js"></script>
+    <!-- <script src="./js/data-manipulator/method-bruteforce53/base-x-enc.js"></script> -->
+    <script src="./js/data-manipulator/method-bruteforce53/base-x-dec.js"></script>
+    <script src="./js/data-manipulator/method-bruteforce53/specific-alphabets.js"></script>
+    <script src="./js/data-manipulator/method-bruteforce53/actual-dict-size.js"></script>
+    <script src="./js/data-manipulator/method-bruteforce53/decode-diff.js"></script>
+    <script src="./js/data-manipulator/method-bruteforce53/diff-to-rel.js"></script>
+    <script src="./js/data-manipulator/method-bruteforce53/add-and-subtract.js"></script>
 
     <!-- Bigint64 encoding method -->
-    <script src="./src/js/data-manipulator/method-bigint64/bigint64-enc.js"></script>
-    <script src="./src/js/data-manipulator/method-bigint64/bigint64-dec.js"></script>
+    <script src="./js/data-manipulator/method-bigint64/bigint64-enc.js"></script>
+    <script src="./js/data-manipulator/method-bigint64/bigint64-dec.js"></script>
 
     <!-- Swap63 encoding method -->
-    <script src="./src/js/data-manipulator/method-swap63/swap63-dict.js"></script>
-    <!-- <script src="./src/js/data-manipulator/method-swap63/swap63-enc.js"></script> -->
-    <script src="./src/js/data-manipulator/method-swap63/swap63-dec.js"></script>
+    <script src="./js/data-manipulator/method-swap63/swap63-dict.js"></script>
+    <!-- <script src="./js/data-manipulator/method-swap63/swap63-enc.js"></script> -->
+    <script src="./js/data-manipulator/method-swap63/swap63-dec.js"></script>
 
     <!-- Processing for Map object -->
-    <script src="./src/js/data-manipulator/processing-for-map-obj/join-with-and.js"></script>
-    <script src="./src/js/data-manipulator/processing-for-map-obj/best-mix-enc.js"></script>
-    <script src="./src/js/data-manipulator/processing-for-map-obj/store-smaller.js"></script>
+    <script src="./js/data-manipulator/processing-for-map-obj/join-with-and.js"></script>
+    <script src="./js/data-manipulator/processing-for-map-obj/best-mix-enc.js"></script>
+    <script src="./js/data-manipulator/processing-for-map-obj/store-smaller.js"></script>
 
     <!-- Apply the URLCompressor and add prefix chars into smaller one -->
-    <script src="./src/js/data-manipulator/comp-and-add-prefix/add-prefix-as-flags.js"></script>
-    <script src="./src/js/data-manipulator/comp-and-add-prefix/apply-url-comp-if-effective.js"></script>
-    <script src="./src/js/data-manipulator/comp-and-add-prefix/choose-smaller-and-add-prefix.js"></script>
-    <script src="./src/js/data-manipulator/comp-and-add-prefix/compare-length.js"></script>
+    <script src="./js/data-manipulator/comp-and-add-prefix/add-prefix-as-flags.js"></script>
+    <script src="./js/data-manipulator/comp-and-add-prefix/apply-url-comp-if-effective.js"></script>
+    <script src="./js/data-manipulator/comp-and-add-prefix/choose-smaller-and-add-prefix.js"></script>
+    <script src="./js/data-manipulator/comp-and-add-prefix/compare-length.js"></script>
 
     <!-- Decode from URL Params -->
-    <script src="./src/js/data-manipulator/decode/read-url-params.js"></script>
-    <script src="./src/js/data-manipulator/decode/parse-str-as-url-params.js"></script>
-    <script src="./src/js/data-manipulator/decode/generate-svg.js"></script>
-    <script src="./src/js/data-manipulator/decode/rel-to-abs.js"></script>
-    <script defer src="./src/js/data-manipulator/decode/decode.js"></script>
+    <script src="./js/data-manipulator/decode/read-url-params.js"></script>
+    <script src="./js/data-manipulator/decode/parse-str-as-url-params.js"></script>
+    <script src="./js/data-manipulator/decode/generate-svg.js"></script>
+    <script src="./js/data-manipulator/decode/rel-to-abs.js"></script>
+    <script defer src="./js/data-manipulator/decode/decode.js"></script>
 
     <!-- Generate the group strokes color tags for HTML and SVG -->
-    <script defer src="./src/js/index/group-colors.js"></script>
+    <script defer src="./js/index/group-colors.js"></script>
     <!-- Set defaults value for some selectors in artwork customization area read from decoded SVG -->
-    <script defer src="./src/js/index/set-defaults.js"></script>
+    <script defer src="./js/index/set-defaults.js"></script>
     <!-- Eventlisteners for preferences, and force to apply the values like width-and-height:256, transparency-scope:whole-group as defaults -->
-    <script defer src="./src/js/index/main.js"></script>
+    <script defer src="./js/index/main.js"></script>
     <!-- Adjust the height of whole components to fit to display height -->
-    <script defer src="./src/js/index/img-box-sizing.js"></script>
+    <script defer src="./js/index/img-box-sizing.js"></script>
 
 </head>
 
