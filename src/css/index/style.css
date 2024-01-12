@@ -73,12 +73,10 @@ main {
     flex-grow: 1;
 }
 
-/* For div id="input-and-output" */
 #input-and-output {
     display: flex;
     flex-direction: row;
 
-    /* main要素が残りの高さいっぱいに拡張 */
     flex-grow: 1;
 }
 
@@ -89,7 +87,6 @@ main {
 #svg-info,
 #png-info {
     font-size: 1rem;
-    /* margin: .5rem 0; margin を使うと 計算したheightよりも 実際の長さが長くなってしまうので 使わない */
     text-align: center;
     color: var(--color-info-text);
     background-color: var(--color-info-bg-and-hr);
@@ -189,20 +186,11 @@ input.bgcolor {
 input.width-and-height {
     width: 4rem;
 }
-
 input[type="range"] {
     min-width: 16rem;
 
     /* スライダーを親要素のフォントサイズの0.25倍下にずらす */
     vertical-align: -0.25rem;
-
-    /* これ無しだとスタイルがほぼ全く反映されない */
-    /* -webkit-appearance: none; */
-
-    /* スライダーの幅 */
-    /* height: 0.25rem; */
-
-    /* background-color: red; */
 }
 
 #artwork-customization,

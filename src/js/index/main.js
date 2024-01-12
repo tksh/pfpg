@@ -1,7 +1,4 @@
 (async function () {
-    //    await resvg.initWasm(fetch('../wasm/index_bg_20230424.wasm')) // netlify
-    //    await resvg.initWasm(fetch('../src/wasm/index_bg_20230424.wasm')) // local
-    // await resvg.initWasm(fetch('./src/wasm/index_bg.wasm')) // Path that relative from index.html
     await resvg.initWasm(fetch('./wasm/index_bg.wasm')) // Path that relative from index.html
     const output = document.getElementById('output')
     const svgElement = document.querySelector('#input-svg') // Select <textarea id="input-svg" ...
@@ -86,6 +83,7 @@
         events.forEach(e => element.addEventListener(e, handler))
     }
 
+
     // addMultipleEventListener(svgElement, ['change', 'keyup', 'paste'], function (event) {
     //   const inputSVG = event.target.value.trim()
     //   const hasCrop = cropElement.checked
@@ -93,9 +91,10 @@
     //   svg2png(inputSVG, resvgOpts, hasCrop)
     // })
 
-    // 上のテキスト編集イベントごとに変換処理が走る部分を ラジオボックスの更新でもそれが走る用に 下記のように書き換え
-    // `convertSvg` という名前を関数に付けておいて ラジオボタンでテキストコンテンツを更新した直後に
-    // `convertSvg({ target: svgElement });` で呼び出す
+    // 上記のSVGテキストエリアの編集イベントごとに PNGへの変換処理が呼び出される部分を
+    // <input>や<select>などの選択要素からの更新でも それが呼び出される用に 下記のように変更
+    // `convertSvg` という関数を作り 選択要素からSVGテキストエリアを更新した直後に
+    // `convertSvg({ target: svgElement });` として呼び出す
 
 
     // svg2png関数を呼び出す関数を定義
@@ -104,7 +103,6 @@
         // HTML要素を取得
         const pngDownloadButtonElement = document.getElementById("png-download-button");
         const lastRenderingTimeElement = document.getElementById("last-redering-time");
-        //console.log('pngDownloadButtonElement: ', lastRenderingTimeElement)
 
         // Update .innerHtml
         async function updateRenderingStatus(text, element) {
@@ -170,7 +168,7 @@
             });
     };
 
-    // テキストを編集するたびに変換処理が走る関数を設定
+    // テキストを編集するたびに変換処理が呼び出される関数を設定
     addMultipleEventListener(svgElement, ['change', 'keyup', 'paste'], convertSvg);
 
 
@@ -525,14 +523,10 @@
         // console.log('event.target.value: ', event.target.value) // #60D7FF
 
         // Get the selected color via '.jscolor.toHEXAString()' instead of above '.value' method
-
-        // Get the selected color in hex (with alphachannel) format
-        //const hexColor = event.target.jscolor.toHEXString();
-        //console.log("Selected color (Hex): " + hexColor); // #C9FF7E
         const hexaColor = event.target.jscolor.toHEXAString();
         const hexaColorShorten = eightToFourOrThree(hexaColor);
-        console.log("Selected color (HexA): " + hexaColor); // #C9FF7EFF
-        console.log("Selected color (HexA, shorten): " + hexaColorShorten); // #C9FF7EFF
+        console.log("Selected color (HexA): " + hexaColor); // #FFFFFF99
+        console.log("Selected color (HexA, shorten): " + hexaColorShorten); // #FFF9
 
 
         // SVGのテキストを取得
@@ -541,9 +535,7 @@
         const pattern = /<rect width="100%" height="100%" fill="[^"]*"/g; // <<rect width="100%" height="100%" fill="#fff9"> is default background rect color
         // 正規表現でマッチした部分を書き換える
         const updatedSVG = inputSVG.replace(pattern, `<rect width="100%" height="100%" fill="${hexaColorShorten}"`);
-        //console.log('updatedSVG(background rect color); ', updatedSVG)
         // <textarea>のvalue属性を更新する
-        //console.log('textarea(for bg rect): ', textarea)
         svgElement.value = updatedSVG;
         // convertSvg関数を呼び出す
         convertSvg({ target: svgElement });
