@@ -35,11 +35,6 @@
 //     "2": {
 //           ...
 
-////////////////////////////////// Output: //////////////////////////////////
-
-// Format: [1st:color]=[1st char: binary flag for URLComp or not][2nd char: baseX number base52 encoded][widthCount(width number, amount base52 encoded, ...)]-[x1:dict]-[x1:diff]-[y1:dict]-[y1:diff]-[x2:dict]-[x2:diff]-[y2:dict]-[y2:diff]&[2nd:color]=...
-// e.g. enc=0w&000=9_eLsiCq2FVu ... qJqwU2&fff=9wiYAu ... iMHPwo-
-
 
 function bruteforce53Enc() {
     const startTime = performance.now()

@@ -1,12 +1,6 @@
 // Relative な d value (-31 to 31) の 数値 を
 // 63個の キー ([0,1,2..9,a,b,c..z,A,B,C...Z,_]) の 文字列 に 置き換える
 
-////////////////////////////////// Output: //////////////////////////////////
-
-// Format: [1st group colors]=[1st char][2nd char][width count encoded]-[x1 encoded][y1 encoded][x2 encoded][y2 encoded]&[2nd group colors]=...
-// e.g. 000=129CaKJG9uDH6Ub8FA_44xqpELIDubncH66-6LAeIn74oUwF1I_W8g-tWyUdjEaFTpKSmXLj1CUhUaha&000=129ziKOkaP8myCQ4EBznmZp2zqRtASHCnLgULFSIs1qwA4wKBtYQuGf1gRP00BIScd&000=129hs5bAsvfxmrAHkI-1TvVM1BPu2F0SwA62QxTrqQnBSFhkMwk3rplTElFsdYa8u0fN1za1q8rITDQ2hOYUk2_FBGrTBiUPgN-dSDNjaC9lObDxTrljDtmJD3UeQNreGOynsFA5VyMFe-Dg5hw-J5OfTNzxNXvvy7dVAcvTyQIKjkEzDPzw1TQwtzJkEPSG1_OF46qmpC&eee=129iaIRDFvcu0ldUIBY5rOUPAtwVAQza8pvqZyCHTrCSo71OFPMs7aaEwPTmrIYq1wFdm&fff=129g6IVCHsyEPtAV4bRErsc8vl2CA0
-
-
 function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getSwap63Chars())) {
     const startTime = performance.now()
 

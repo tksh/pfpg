@@ -1,29 +1,9 @@
-////////////////////////////////// Input: //////////////////////////////////
-
-// {"000_amount":[24,21,37,66,91,118,127]}
-// {"000_width":[21,13,8,5,3,2,1]}
-// {"fff_amount":[8,43]}
-// {"fff_width":[2,1]}
-
-
-////////////////////////////////// Output: //////////////////////////////////
-
-// Map { 000 → "21y13v8L5bo3bN2co1cx", fff → "2b1j" }
-//     size: 2
-//     <entries>
-//         0: 000 → "21y13v8L5bo3bN2co1cx"
-//         1: fff → "2i1R"
-//     <prototype>: Map.prototype { … }
-
-
-
 function encodeWidthCount() {
     // Read the Aggregated Data for Compression from .json as Map() grouped by group_id
     const aggDataMap = jsonToMapObj(`textarea-agg-data-for-comp-uploaded`)
 
     const encodedStrByGroupId = new Map()
 
-    // Test
     // for ([groupId, aggDataObj] of aggDataMap) {
     //     console.log(groupId)                   // 1
     //     console.log(aggDataObj)                // {list_of_width: Array(1), count_by_width: Array(1), absolute: {…}, relative: {…}}
