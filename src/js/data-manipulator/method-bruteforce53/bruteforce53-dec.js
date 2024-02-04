@@ -65,17 +65,17 @@ function decodeFreqNumArray(diffStr) {
     // '_' アンダースコアは それを含む 4文字
     // その他 (小文字の連なり)は 2文字ずつ
 
-    const splited = diffStr.match(/(_.{3})|(.{2})/g); // 2 or 4文字ずつ取り出す
-    console.log('splited: ', splited) // 頻出数値が無い column の場合には 'splited:  null' となる
+    const splitted = diffStr.match(/(_.{3})|(.{2})/g); // 2 or 4文字ずつ取り出す
+    console.log('splitted: ', splitted) // 頻出数値が無い column の場合には 'splitted:  null' となる
 
     // regex test
     //const strTEST = 'abcd_efg_hij_klmnopqrstu'
-    //const splitedTEST = strTEST.match(/(_.{3})|(.{2})/g);
-    //console.log('splitedTEST: ', splitedTEST)
+    //const splittedTEST = strTEST.match(/(_.{3})|(.{2})/g);
+    //console.log('splittedTEST: ', splittedTEST)
     //Array(9) [ "ab", "cd", "_efg", "_hij", "_klm", "no", "pq", "rs", "tu" ]
 
-    if (splited !== null) {
-        return splited.map(twoChars => base52DecodeForFreqDictValue(twoChars))
+    if (splitted !== null) {
+        return splitted.map(twoChars => base52DecodeForFreqDictValue(twoChars))
     } else {
         return [] // 頻出数値が無い column の場合には 空の配列を 返す
     }

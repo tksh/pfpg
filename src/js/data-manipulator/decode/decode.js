@@ -108,7 +108,7 @@ function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) 
         const resultTextElem = document.getElementById('encoded-size-compare');
         if (resultTextElem) {
             const text = `url params size: <b>${queryString.length}</b> characters (bytes)<br>
-        docoded svg size: <b>${svgStr.length}</b> characters (bytes)<br>
+        decoded svg size: <b>${svgStr.length}</b> characters (bytes)<br>
         ${queryString.length} / ${svgStr.length} = <b>${compRatio}</b>`
             resultTextElem.innerHTML = text
         }

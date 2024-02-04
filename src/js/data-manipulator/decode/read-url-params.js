@@ -12,7 +12,7 @@ function readUrlParamsAsMaps(isDataManipulatorOrIndexBool) {
         // No URL params in index.html
         // Decode the string that stored in index.html for sample
         if (isDataManipulatorOrIndexBool === false) {
-            const sampleArtworkEncodedStr = document.getElementById("sample-artwrok-encoded-string").textContent
+            const sampleArtworkEncodedStr = document.getElementById("sample-artwork-encoded-string").textContent
             const paramsArray = parseStrAsUrlParams(sampleArtworkEncodedStr)
             return decodeAsTwoMaps(paramsArray)
 
@@ -88,7 +88,7 @@ function decodeAsTwoMaps(paramsArray) {
         // group_colors: {g_stroke: '#ffffff', g_opacity: 1, g_stroke-opacity: 1}
 
         // 3 Flags as Array
-        const splitedThreeFlags = paramsArray[i][1].slice(0, 3).split('')   // ['1', '2', 'n']
+        const splittedThreeFlags = paramsArray[i][1].slice(0, 3).split('')   // ['1', '2', 'n']
         // three_flags: (3) ['1', '2', 'n']
 
         // Width Count as Map
@@ -96,7 +96,7 @@ function decodeAsTwoMaps(paramsArray) {
         //console.log("strokesValues(Before URLComp expand): ", strokesValues)
         // 3t-BRY8zuZS6-yuj6xgi-u9utYvXoK0QEXoKySIqr46g3-9HxEs1eG2VMHxerRFrXM3mjZxLkf-wwSvNRnQb88G
 
-        if (Number(splitedThreeFlags[0]) === 1) { // Decomp if URLCompressor applied
+        if (Number(splittedThreeFlags[0]) === 1) { // Decomp if URLCompressor applied
             strokesValues = URLCompressor.expand(strokesValues)
         }
 
@@ -121,7 +121,7 @@ function decodeAsTwoMaps(paramsArray) {
         // Set into Map by group ID
         strokesValuesMap.set(i, {
             group_colors: decodedColorsObj,
-            three_flags: splitedThreeFlags,
+            three_flags: splittedThreeFlags,
             width_count: decodedWidthCount,
             encoded_dvals: encodedDvalsStr
         })

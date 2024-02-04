@@ -34,9 +34,9 @@ function decodeBigint64Enc(encodedDvalsStr) {
                 // 01040706080719252428301704222622222323000000152005000015000028240011161922080104061008112426242830200824232224312626252321230005242225273122091720232710
 
                 // Split with 4 into each coordinates like x1, y1, x2, y2
-                const splitedDvalsStr = splitStringIntoFour(originalZeroPaddedStr)
+                const splittedDvalsStr = splitStringIntoFour(originalZeroPaddedStr)
                 // Split into chunks
-                const chunkedDvalsStr = splitedDvalsStr.map(str => chunk(str, numberOfChunks))
+                const chunkedDvalsStr = splittedDvalsStr.map(str => chunk(str, numberOfChunks))
                 // console.log("chunkedDvalsStr: ", chunkedDvalsStr)
                 // (4) [Array(19), Array(19), Array(19), Array(19)]
                 //     0: (19) ['01', '04', '07', '06', '08', '07', '19', '25', '24', '28', '30', '17', '04', '22', '26', '22', '22', '23', '23']

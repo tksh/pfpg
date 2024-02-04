@@ -7,7 +7,7 @@ function storeSmaller(currentSmallestByGroup, encodeStrByGroup) {
             console.log('Check: これまでよりも 今回の方がサイズが 小さい / groupId, encodedStr: ', groupId, encodedStr)
             currentSmallestByGroup.set(groupId, encodedStr)
         }
-        // これまでよりも 今回の方がサイズが 同じか より大きければ 何もしない
+        // これまでよりも 今回の方が サイズが 同じか より大きければ 何もしない
     }
     return currentSmallestByGroup
 }

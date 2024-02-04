@@ -43,7 +43,7 @@ function decodeWidthCountAsObj(encodedStr) {
     //console.log('lastlineArray: ', lastlineArray)
 
 
-    // Retunr as Object
+    // Return as Object
     return {
         count: countArray,         // <Number>
         firstline: firstlineArray, // <Number>

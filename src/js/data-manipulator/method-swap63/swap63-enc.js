@@ -1,5 +1,4 @@
-// Relative な d value (-31 to 31) の 数値 を
-// 63個の キー ([0,1,2..9,a,b,c..z,A,B,C...Z,_]) の 文字列 に 置き換える
+// Replace a number of relative d values (-31 to 31) with a char of 63 keys ([0,1,2…9,a,b,c…z,A,B,C…Z,_])
 
 function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getSwap63Chars())) {
     const startTime = performance.now()
@@ -99,8 +98,8 @@ function swap63EncByGroup(dictMap, strokesAttrsMap) {
 
     for ([groupId, attrsObj] of strokesAttrsMap) {
 
-        // 変換後の文字列を入れる変数
-        let dvalsEncodedStr = ""; // x1, y1, x2, y2, joined witout spaces
+        // A variable to store the encoded string of d values
+        let dvalsEncodedStr = ""; // x1, y1, x2, y2, joined without spaces
 
         // relative d values array in obj, x1 to y2
         const relDvals = attrsObj.d.relative
@@ -127,7 +126,7 @@ function swap63NumToChar(dval, numberOfPath, dictMap) {
 
     let dvalsEncodedStr = ''
 
-    // オブジェクトのキーとして 変換元の数値を代入し 対応する符号を得て 変数にpushしていく
+    // Use the original d value as an index to look up a character from the keys list and append it to the symbol string variable
     for (let i = 0; i < numberOfPath; i++) {
         const encodedChar = dictMap.get(dval[i]);
         dvalsEncodedStr = dvalsEncodedStr + encodedChar

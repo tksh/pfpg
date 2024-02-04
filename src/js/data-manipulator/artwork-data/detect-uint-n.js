@@ -10,7 +10,7 @@ function getUintNPortrayForDec() {
     artworkParam = paramsArray[0]                // (2) ['202308_001', '31x31-9999']
 
   } else if (isDataManipulatorOrIndexBool === false) { // No URL Params at index.html, Get the encoded string from '<script type="text/plain"> with id
-    const sampleArtworkEncodedStr = document.getElementById("sample-artwrok-encoded-string").textContent
+    const sampleArtworkEncodedStr = document.getElementById("sample-artwork-encoded-string").textContent
     const paramsArray = parseStrAsUrlParams(sampleArtworkEncodedStr)
     artworkParam = paramsArray[0]
 

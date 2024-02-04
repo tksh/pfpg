@@ -111,7 +111,7 @@ function bigint64EncByGroup(strokesAttrsMap, digits_of_chunk) {
 
 
         // Pad and join
-        let joinedDvalsStr = ""; // x1, y1, x2, y2, joined witout spaces
+        let joinedDvalsStr = ""; // x1, y1, x2, y2, joined without spaces
 
         for (let key in absDvals) {
             const dval = absDvals[key]
