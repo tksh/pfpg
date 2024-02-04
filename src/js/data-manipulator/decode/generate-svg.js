@@ -1,35 +1,80 @@
-/////// 0. Get the artwork data
-/////// 1. Header and other (exclude <g> and <path>) tags
-/////// 2. Strokes tags ( <g> and <path> )
-/////// 2.1 Generate the <g>> tags
-/////// 2.2 Generate the <path> tags (as relative or absolute by isRelOrAbsBool)
-/////// 2.3 Merge the <g> and <path> tags
-/////// 3. Join the whole tags
+// Output SVG string like:
+
+// In relative and merged style
+
+// <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" shape-rendering="crispEdges">
+//     <title>202308_001</title>
+//     <defs>
+//         <clipPath id="clipShape">
+//             <rect width="100%" height="100%" />
+//         </clipPath>
+//     </defs>
+//     <g clip-path="url(#clipShape)">
+//         <rect width="100%" height="100%" fill="#9999" />
+//         <g stroke="#000000" opacity="1" stroke-opacity="1">
+//             <g stroke-width="3">
+//                 <path d="m1 0 0 26m3-26 0 25m3-25-1 ... 8 5m-8-19 3 2" />
+//             </g>
+//         </g>
+//         <g stroke="#000000" opacity="1" stroke-opacity="1">
+//             <g stroke-width="2">
+//             ...
+//                 <path d="m12 21 0 2m-1-19-2 3m2-1-1 2m1 3-2 3m2 1-1 1m2 5 2 1m-1 1 2 1" />
+//             </g>
+//         </g>
+//     </g>
+// </svg>
+
+
+// In absolute and separate style
+
+// <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" shape-rendering="crispEdges">
+//     <title>202308_001</title>
+//     <defs>
+//         <clipPath id="clipShape">
+//             <rect width="100%" height="100%" />
+//         </clipPath>
+//     </defs>
+//     <g clip-path="url(#clipShape)">
+//         <rect width="100%" height="100%" fill="#9999" />
+//         <g stroke="#000000" opacity="1" stroke-opacity="1">
+//             <g stroke-width="3">
+//                 <path d="M 1 0 L 1 26" />
+//                 <path d="M 4 0 L 4 25" />
+//                 ...
+//                 <path d="M 12 21 L 14 22" />
+//                 <path d="M 13 23 L 15 24" />
+//             </g>
+//         </g>
+//     </g>
+// </svg>
+
+
 
 
 function generateSvg(isRelOrAbsBool, artworkDataMap, strokesValuesMap, decodedRelDvalsMap, decodedAbsDvalsMap) {
 
     // Read the values from Artwork Data
-    const viewboxValue = getViewBoxValue(artworkDataMap.get('grid_size')) // '0 0 31 31'
-    const artworkIdValue = artworkDataMap.get("artwork_id")               // '202308_001'
-    const rectFillValue = artworkDataMap.get("bg_color")                  // '9999'
+    const viewboxValue = getViewBoxValue(artworkDataMap.get('grid_size')) // e.g. '0 0 31 31'
+    const artworkIdValue = artworkDataMap.get("artwork_id")               // e.g. '202308_001'
+    const rectFillValue = artworkDataMap.get("bg_color")                  // e.g. '9999'
 
     // Set the tab size
     const tabSpace = '    ' // Four spaces
 
 
-    // Header and other (exclude <g> and <path>) tags
+    // Generate tags except stroke tags
     const tagsBeforeStrokes = generateTagsBeforeStrokes(tabSpace, viewboxValue, artworkIdValue, rectFillValue)
     const tagsAfterStrokes = generateTagsAfterStrokes(tabSpace)
 
 
-    // Strokes tags ( <g> and <path> )
+    // Strokes tags ( group-id-<g> and <path> )
 
-    // Generate the open and close <g> tags
+    // Generate the open and close group-id-<g> tags
     const gTagOpenByGroup = generateGTagOpenByGroup(tabSpace, strokesValuesMap)
     const gTagCloseByGroup = generateGTagCloseByGroup(tabSpace, strokesValuesMap)
 
-    // Generate the <path> tags (as relative or absolute by isRelOrAbsBool)
+    // Generate the <path> tags (as relative or absolute, switched by isRelOrAbsBool)
     const pathTagsByGroup = generatePathTags(
         isRelOrAbsBool,
         tabSpace,
@@ -38,32 +83,13 @@ function generateSvg(isRelOrAbsBool, artworkDataMap, strokesValuesMap, decodedRe
         decodedAbsDvalsMap
     )
 
-    // Merge the <g> tags and <path> tags
+    // Merge the group-id-<g> tags and <path> tags
     const strokesTags = mergeGAndPathTags(
         strokesValuesMap,
         gTagOpenByGroup,
         pathTagsByGroup,
         gTagCloseByGroup
     )
-
-    // Relative:
-    // console.log('strokesTags: ', strokesTags)
-    //  0: "        <g stroke=\"#000000\" opacity=\"1\" stroke-opacity=\"1\">"
-    //  1: "            <path stroke-width=\"3\" d=\"m1 0 0 26m3-26 0 25m3-25-1 23m0-8 4 6m ...
-    //  2: "        </g>"
-    //  3: "        <g stroke=\"#000000\" opacity=\"1\" stroke-opacity=\"1\">"
-    //  4: "            <path stroke-width=\"2\" d=\"m0 0 31 1m-22 2 5-3m-7 8 2-6m-3 8 2 7m ...
-    //  5: "        </g>"
-    //  6: "        <g stroke=\"#000000\" opacity=\"1\" stroke-opacity=\"1\">"
-    //  7: "            <path stroke-width=\"1\" d=\"m1 26-1 1m7-20 1 4m-1-6 1 4m-1 3 1-3m4 ...
-    //  8: "        </g>"
-    //  9: "        <g stroke=\"#eeeeee\" opacity=\"1\" stroke-opacity=\"1\">"
-    // 10: "            <path stroke-width=\"1\" d=\"m14 6-5 2m0-2 5-2m-4 0 2-1m-1 6 0 1m2 ...
-    // 11: "        </g>"
-    // 12: "        <g stroke=\"#ffffff\" opacity=\"1\" stroke-opacity=\"1\">"
-    // 13: "            <path stroke-width=\"1\" d=\"m12 21 0 2m-1-19-2 3m2-1-1 2m1 3-2 3m ...
-    // 14: "        </g>"
-
 
     // Join the whole tags
     const wholeSvgTags = [...tagsBeforeStrokes, ...strokesTags, ...tagsAfterStrokes]
@@ -90,9 +116,6 @@ function generateRelPathTags(tabSpace, strokesValuesMap, decodedRelDvalsMap) {
             const width = widthArr[i]
             const firstlineIndex = firstlineArr[i] - 1 // Subtract 1 to convert as index number
             const lastlineIndex = lastlineArr[i] - 1   // Subtract 1 to convert as index number
-
-            //console.log('firstlineArr[i], firstlineIndex: ', firstlineArr[i], firstlineIndex)
-            //console.log('lastlineArr[i], lastlineIndex: ', lastlineArr[i], lastlineIndex)
 
             const widthGTagStart = tabSpace.repeat(3) + `<g stroke-width="${width}">`
             // '            <g stroke-width="3">'
@@ -130,15 +153,17 @@ function generateRelPathTags(tabSpace, strokesValuesMap, decodedRelDvalsMap) {
         const eachGroupTagsJoined = eachGroupTags.join('\n')
         relPathTagsByGroup.set(groupId, eachGroupTagsJoined)
     }
-    //console.log('relPathTagsByGroup: ', relPathTagsByGroup)
-    // 0: {1 => "            <path stroke-width=\"3\" d=\"m1 0 0 26m3-26 0 25m3-25-1 2 ... m-1-1 8 5\" />"}
-    // 1: {2 => "            <path stroke-width=\"2\" d=\"m0 0 31 1m-22 2 5-3m-7 8 2-6 ... m1-8 0 2\" />"}
-    // 2: {3 => "            <path stroke-width=\"1\" d=\"m1 26-1 1m7-20 1 4m-1-6 1 4m ... m21 17 2 3\" />"}
-    // 3: {4 => "            <path stroke-width=\"1\" d=\"m14 6-5 2m0-2 5-2m-4 0 2-1m- ... m0 2 3-2\" />"}
-    // 4: {5 => "            <path stroke-width=\"1\" d=\"m12 21 0 2m-1-19-2 3m2-1-1 2 ... m2 5 2 1\" />"}
+    // console.log('relPathTagsByGroup: ', relPathTagsByGroup)
+    // Map(5) { 
+    //     1 => '            <g stroke-width="3">\n                <path d="m1 0 0 26m3 ... " />\n            </g>'
+    //     2 => '            <g stroke-width="2">\n                <path d="m0 0 31 1m- ... " />\n            </g>'
+    //     3 => '            <g stroke-width="1">\n                <path d="m1 26-1 1m7 ... " />\n            </g>'
+    //     4 => '            <g stroke-width="1">\n                <path d="m14 6-5 2m0 ... " />\n            </g>'
+    //     5 => '            <g stroke-width="1">\n                <path d="m12 21 0 2m ... " />\n            </g>'
+    // }
+
     return relPathTagsByGroup
 }
-
 
 
 
@@ -160,9 +185,6 @@ function generateAbsPathTags(tabSpace, strokesValuesMap, decodedAbsDvalsMap) {
             const width = widthArr[i]
             const firstlineIndex = firstlineArr[i] - 1 // Subtract 1 to convert as index number
             const lastlineIndex = lastlineArr[i] - 1   // Subtract 1 to convert as index number
-
-            //console.log('firstlineArr[i], firstlineIndex: ', firstlineArr[i], firstlineIndex)
-            //console.log('lastlineArr[i], lastlineIndex: ', lastlineArr[i], lastlineIndex)
 
             const widthGTagStart = tabSpace.repeat(3) + `<g stroke-width="${width}">`
             // '            <g stroke-width="3">'
@@ -188,8 +210,14 @@ function generateAbsPathTags(tabSpace, strokesValuesMap, decodedAbsDvalsMap) {
         const eachGroupTagsJoined = eachGroupTags.join('\n')
         absPathTagsByGroup.set(groupId, eachGroupTagsJoined)
     }
-    // console.log('absPathTagsByGroup: ', absPathTagsByGroup)
-    // Map(5) {1 => '            <g stroke-width="3">\n                <path d="M 1 0 L 1 26" />\n ...
+    console.log('absPathTagsByGroup: ', absPathTagsByGroup)
+    // Map(5) {
+    //     1 => '            <g stroke-width="3">\n                <path d="M 1 0 L 1 26" />\n                <path d="M 4 0  ... " />\n            </g>',
+    //     2 => '            <g stroke-width="2">\n                <path d="M 0 0 L 31 1" />\n                <path d="M 9 3  ... " />\n            </g>',
+    //     3 => '            <g stroke-width="1">\n                <path d="M 1 26 L 0 27" />\n                <path d="M 7 7 ... " />\n            </g>',
+    //     4 => '            <g stroke-width="1">\n                <path d="M 14 6 L 9 8" />\n                <path d="M 9 6  ... " />\n            </g>',
+    //     5 => '            <g stroke-width="1">\n                <path d="M 12 21 L 12 23" />\n                <path d="M 1 ... " />\n            </g>',
+    // }
 
     return absPathTagsByGroup
 }
