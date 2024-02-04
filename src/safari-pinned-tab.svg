@@ -5,8 +5,7 @@
     }
     @media (prefers-color-scheme: dark) {
       path {
-        stroke: #fff;
-        opacity: 0.5;
+        stroke: #ccc;
       }
     }
 </style>
