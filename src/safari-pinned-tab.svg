@@ -1,21 +1,3 @@
 <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-<style>
-    path {
-      stroke: #000; <!-- for light mode -->
-    }
-    @media (prefers-color-scheme: dark) {
-      path {
-        stroke: #ccc;
-      }
-    }
-</style>
-    <g fill="none" stroke-width="2" stroke-linecap="butt">
-        <path d="M2,2c0,0 5,-2 5,2c0,3 -5,3 -5,3" />
-        <path d="M8,5l5,1" />
-        <path d="M8,8c2,-8 7,-8 7,-4" />
-        <path d="M4,8c0,0 3,-1 3,2c0,3 -3,2 -3,2" />
-        <path d="M14,9c0,0 0,-2 -2,-2c-2,0 -3,4 -2,5c2,2 4,-3 4,-3c0,0 -1,3 -3,5c-1,1 -4,1 -4,-1" />
-        <path d="M2,2l-1,9" />
-        <path d="M4,8l-1,6" />
-    </g>
+    <path fill="none" stroke="black" stroke-width="2" stroke-linecap="butt" d="M2 2s5-2 5 2c0 3-5 3-5 3M8 5l5 1M8 8c2-8 7-8 7-4M4 8s3-1 3 2-3 2-3 2M14 9s0-2-2-2-3 4-2 5c2 2 4-3 4-3s-1 3-3 5c-1 1-4 1-4-1M2 2l-1 9M4 8l-1 6" />
 </svg>
