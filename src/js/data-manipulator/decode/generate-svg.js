@@ -84,6 +84,8 @@ function generateRelPathTags(tabSpace, strokesValuesMap, decodedRelDvalsMap) {
         const firstlineArr = v.width_count.firstline
         const lastlineArr = v.width_count.lastline
 
+        let eachGroupTags = [] // Group has one or more number of stroke-width
+
         for (let i = 0; i < widthArr.length; i++) { // loop for each stroke-width
             const width = widthArr[i]
             const firstlineIndex = firstlineArr[i] - 1 // Subtract 1 to convert as index number
@@ -92,26 +94,41 @@ function generateRelPathTags(tabSpace, strokesValuesMap, decodedRelDvalsMap) {
             //console.log('firstlineArr[i], firstlineIndex: ', firstlineArr[i], firstlineIndex)
             //console.log('lastlineArr[i], lastlineIndex: ', lastlineArr[i], lastlineIndex)
 
-            const pathTagStart = tabSpace.repeat(3) + `<path stroke-width="${width}" d="`
-            // '            <path stroke-width="3" d="'
+            const widthGTagStart = tabSpace.repeat(3) + `<g stroke-width="${width}">`
+            // '            <g stroke-width="3">'
+            const widthGTagEnd = tabSpace.repeat(3) + '</g>'
+            // '            </g>'
+
+            const pathTagStart = tabSpace.repeat(4) + `<path d="`
+            // '                <path d="'
             const pathTagEnd = '" />'
             // '" />'
 
-            // Generate the path tag d values
+            // Start width g tag
+            let eachWidthTags = [widthGTagStart]
+
+            // Generate the path tags with d values
             let pathTagDval = ""
             for (let i = firstlineIndex; i <= lastlineIndex; i++) {
                 let eachDval = `m${dvalsObj.x1[i]} ${dvalsObj.y1[i]} ${dvalsObj.x2[i]} ${dvalsObj.y2[i]}`
-                eachDval = eachDval.replace(/ -/g, '-') // Delete unnecesally spaces before the minus mark '-'
+                eachDval = eachDval.replace(/ -/g, '-') // Delete unnecessary spaces before the minus mark '-'
                 pathTagDval += eachDval
             }
-
             // Join the whole <path> tags
-            eachWidthPathTag = pathTagStart + pathTagDval + pathTagEnd
-            //console.log('eachWidthPathTag: ', eachWidthPathTag)
-            // "            <path stroke-width=\"3\" d=\"m1 0 0 26m3-26 0 25m3-25-1 23m0-8 4 6m-2-1 0 3m-1-18 4-5m8 0 5 5m1-5 1 24m-2-9 0 7m4-22 0 25m2-25 0 27m-13 1 3 3m-16-7 4-2m14-22 2 9m2 2-3 6m-1-1 0 4m0-1 2 4m-1-1 8 5\" />"
+            pathTag = pathTagStart + pathTagDval + pathTagEnd
+            //console.log('pathTag: ', pathTag)
+            // "                <path d=\"m1 0 0 26m3-26 0 25m3-25-1 23m0-8 4 6m-2-1 0 3m-1-18 4-5m8 0 5 5m1-5 1 24m-2-9 0 7m4-22 0 25m2-25 0 27m-13 1 3 3m-16-7 4-2m14-22 2 9m2 2-3 6m-1-1 0 4m0-1 2 4m-1-1 8 5\" />"
+            eachWidthTags.push(pathTag)
 
-            relPathTagsByGroup.set(groupId, eachWidthPathTag)
+            // End width g tag
+            eachWidthTags.push(widthGTagEnd)
+
+            // Push into same group array after joined
+            eachGroupTags.push(eachWidthTags.join('\n'))
         }
+        // Set with group ID after joined
+        const eachGroupTagsJoined = eachGroupTags.join('\n')
+        relPathTagsByGroup.set(groupId, eachGroupTagsJoined)
     }
     //console.log('relPathTagsByGroup: ', relPathTagsByGroup)
     // 0: {1 => "            <path stroke-width=\"3\" d=\"m1 0 0 26m3-26 0 25m3-25-1 2 ... m-1-1 8 5\" />"}
@@ -152,18 +169,21 @@ function generateAbsPathTags(tabSpace, strokesValuesMap, decodedAbsDvalsMap) {
             const widthGTagEnd = tabSpace.repeat(3) + '</g>'
             // '            </g>'
 
-            // Generate the path tags with d values
+            // Start width g tag
             let eachWidthTags = [widthGTagStart]
+
+            // Generate the path tags with d values
             for (let i = firstlineIndex; i <= lastlineIndex; i++) {
                 let pathTag = tabSpace.repeat(4) + `<path d="M ${dvalsObj.x1[i]} ${dvalsObj.y1[i]} L ${dvalsObj.x2[i]} ${dvalsObj.y2[i]}" />`
                 eachWidthTags.push(pathTag)
             }
+
+            // End width g tag
             eachWidthTags.push(widthGTagEnd)
 
             // Push into same group array after joined
             eachGroupTags.push(eachWidthTags.join('\n'))
         }
-
         // Set with group ID after joined
         const eachGroupTagsJoined = eachGroupTags.join('\n')
         absPathTagsByGroup.set(groupId, eachGroupTagsJoined)
