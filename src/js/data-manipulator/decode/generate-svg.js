@@ -110,48 +110,39 @@ function generateRelPathTags(tabSpace, strokesValuesMap, decodedRelDvalsMap) {
         const firstlineArr = v.width_count.firstline
         const lastlineArr = v.width_count.lastline
 
-        let eachGroupTags = [] // Group has one or more number of stroke-width
+        let pathTagUnderGroup = [] // Group has one or more number of stroke-width
 
         for (let i = 0; i < widthArr.length; i++) { // loop for each stroke-width
             const width = widthArr[i]
             const firstlineIndex = firstlineArr[i] - 1 // Subtract 1 to convert as index number
             const lastlineIndex = lastlineArr[i] - 1   // Subtract 1 to convert as index number
 
-            const widthGTagStart = tabSpace.repeat(3) + `<g stroke-width="${width}">`
-            // '            <g stroke-width="3">'
-            const widthGTagEnd = tabSpace.repeat(3) + '</g>'
-            // '            </g>'
 
-            const pathTagStart = tabSpace.repeat(4) + `<path d="`
-            // '                <path d="'
-            const pathTagEnd = '" />'
-            // '" />'
+            // Open and close <path> tag
+            const pathTagOpenWithWidth = tabSpace.repeat(3) + `<path stroke-width="${width}" d="`
+            // e.g. '            <path stroke-width="3" d="'
+            const pathTagClose = '" />'
+            // e.g. '" />'
 
-            // Start width g tag
-            let eachWidthTags = [widthGTagStart]
-
-            // Generate the path tags with d values
+            // d values for <path> tag
             let pathTagDval = ""
             for (let i = firstlineIndex; i <= lastlineIndex; i++) {
                 let eachDval = `m${dvalsObj.x1[i]} ${dvalsObj.y1[i]} ${dvalsObj.x2[i]} ${dvalsObj.y2[i]}`
                 eachDval = eachDval.replace(/ -/g, '-') // Delete unnecessary spaces before the minus mark '-'
                 pathTagDval += eachDval
             }
-            // Join the whole <path> tags
-            pathTag = pathTagStart + pathTagDval + pathTagEnd
-            //console.log('pathTag: ', pathTag)
-            // "                <path d=\"m1 0 0 26m3-26 0 25m3-25-1 23m0-8 4 6m-2-1 0 3m-1-18 4-5m8 0 5 5m1-5 1 24m-2-9 0 7m4-22 0 25m2-25 0 27m-13 1 3 3m-16-7 4-2m14-22 2 9m2 2-3 6m-1-1 0 4m0-1 2 4m-1-1 8 5\" />"
-            eachWidthTags.push(pathTag)
 
-            // End width g tag
-            eachWidthTags.push(widthGTagEnd)
+            // Join the whole <path> tag parts
+            pathTag = pathTagOpenWithWidth + pathTagDval + pathTagClose
+            // e.g. "                <path stroke-width="3" d=\"m1 0 0 26m3-26 0 25m ... m0-1 2 4m-1-1 8 5\" />"
 
-            // Push into same group array after joined
-            eachGroupTags.push(eachWidthTags.join('\n'))
+            // Push the <path> tag string into same color group array
+            pathTagUnderGroup.push(pathTag)
+            // pathTagUnderGroup.push(pathTag.join('\n'))
         }
-        // Set with group ID after joined
-        const eachGroupTagsJoined = eachGroupTags.join('\n')
-        relPathTagsByGroup.set(groupId, eachGroupTagsJoined)
+        // Set whole tags string that under same color group as value with group ID key
+        const wholeTagsUnderGroup = pathTagUnderGroup.join('\n')
+        relPathTagsByGroup.set(groupId, wholeTagsUnderGroup)
     }
     // console.log('relPathTagsByGroup: ', relPathTagsByGroup)
     // Map(5) { 
@@ -179,46 +170,51 @@ function generateAbsPathTags(tabSpace, strokesValuesMap, decodedAbsDvalsMap) {
         const firstlineArr = v.width_count.firstline
         const lastlineArr = v.width_count.lastline
 
-        let eachGroupTags = [] // Group has one or more number of stroke-width
+        let gAndPathTagsUnderGroup = [] // Group has one or more number of stroke-width
 
         for (let i = 0; i < widthArr.length; i++) { // loop for each stroke-width
             const width = widthArr[i]
             const firstlineIndex = firstlineArr[i] - 1 // Subtract 1 to convert as index number
             const lastlineIndex = lastlineArr[i] - 1   // Subtract 1 to convert as index number
 
-            const widthGTagStart = tabSpace.repeat(3) + `<g stroke-width="${width}">`
-            // '            <g stroke-width="3">'
-            const widthGTagEnd = tabSpace.repeat(3) + '</g>'
-            // '            </g>'
+            // Generate open and close <g> tags
+            const widthGTagOpen = tabSpace.repeat(3) + `<g stroke-width="${width}">`
+            // e.g. '            <g stroke-width="3">'
+            const widthGTagClose = tabSpace.repeat(3) + '</g>'
+            // e.g. '            </g>'
 
-            // Start width g tag
-            let eachWidthTags = [widthGTagStart]
+            // Define the array with open <g> tag
+            let eachWidthTags = [widthGTagOpen]
 
-            // Generate the path tags with d values
+            // Generate to append the separated <path> tags with d values
             for (let i = firstlineIndex; i <= lastlineIndex; i++) {
-                let pathTag = tabSpace.repeat(4) + `<path d="M ${dvalsObj.x1[i]} ${dvalsObj.y1[i]} L ${dvalsObj.x2[i]} ${dvalsObj.y2[i]}" />`
-                eachWidthTags.push(pathTag)
+                let pathTag =
+
+                    tabSpace.repeat(4) +
+                    `<path d="M ${dvalsObj.x1[i]} ${dvalsObj.y1[i]} L ${dvalsObj.x2[i]} ${dvalsObj.y2[i]}" />`
+                    // e.g. <path d="M 1 0 L 1 26" />
+
+                    eachWidthTags.push(pathTag)
             }
 
-            // End width g tag
-            eachWidthTags.push(widthGTagEnd)
+            // Push the close <g> tag
+            eachWidthTags.push(widthGTagClose)
 
-            // Push into same group array after joined
-            eachGroupTags.push(eachWidthTags.join('\n'))
+            // Push the <g> and <path> tags as joined string into same color group array
+            gAndPathTagsUnderGroup.push(eachWidthTags.join('\n'))
         }
-        // Set with group ID after joined
-        const eachGroupTagsJoined = eachGroupTags.join('\n')
-        absPathTagsByGroup.set(groupId, eachGroupTagsJoined)
+        // Set whole tags string that under same color group as value with group ID key
+        const wholeTagsUnderGroup = gAndPathTagsUnderGroup.join('\n')
+        absPathTagsByGroup.set(groupId, wholeTagsUnderGroup)
     }
     console.log('absPathTagsByGroup: ', absPathTagsByGroup)
     // Map(5) {
-    //     1 => '            <g stroke-width="3">\n                <path d="M 1 0 L 1 26" />\n                <path d="M 4 0  ... " />\n            </g>',
-    //     2 => '            <g stroke-width="2">\n                <path d="M 0 0 L 31 1" />\n                <path d="M 9 3  ... " />\n            </g>',
-    //     3 => '            <g stroke-width="1">\n                <path d="M 1 26 L 0 27" />\n                <path d="M 7 7 ... " />\n            </g>',
-    //     4 => '            <g stroke-width="1">\n                <path d="M 14 6 L 9 8" />\n                <path d="M 9 6  ... " />\n            </g>',
-    //     5 => '            <g stroke-width="1">\n                <path d="M 12 21 L 12 23" />\n                <path d="M 1 ... " />\n            </g>',
+    //     1 => '            <path stroke-width="3" d="M 1 0 L 1 26" />\n                <path d="M 4 0  ... " />\n            </g>',
+    //     2 => '            <path stroke-width="2" d="M 0 0 L 31 1" />\n                <path d="M 9 3  ... " />\n            </g>',
+    //     3 => '            <path stroke-width="1" d="M 1 26 L 0 27" />\n                <path d="M 7 7 ... " />\n            </g>',
+    //     4 => '            <path stroke-width="1" d="M 14 6 L 9 8" />\n                <path d="M 9 6  ... " />\n            </g>',
+    //     5 => '            <path stroke-width="1" d="M 12 21 L 12 23" />\n                <path d="M 1 ... " />\n            </g>',
     // }
-
     return absPathTagsByGroup
 }
 
