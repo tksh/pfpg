@@ -21,6 +21,7 @@
     <script src="./js/data-manipulator/data-io/merge-as-url-params.js"></script>
     <script src="./js/data-manipulator/data-io/copy-textarea.js"></script>
     <script src="./js/data-manipulator/data-io/show-result.js"></script>
+    <script src="./js/data-manipulator/data-io/download.js"></script>
 
     <!-- Base N Encodings -->
     <script src="./js/data-manipulator/base-n-encodings/get-char-list.js"></script>
@@ -545,7 +546,12 @@
         <h3>3. ⬇ Finished URL Params:</h3>
         <button onclick="mergeArtworkDataAndStrokesValues()">Merge via <b>mergeArtworkDataAndStrokesValues()</b></button>
         <textarea id="textarea-encoded-url-params" class="height-2" placeholder="Encoded URL Params"></textarea>
+
+        <!-- Button to copy -->
         <button id="button-encoded-url-params" onclick="copyTextarea('textarea-encoded-url-params', 'button-encoded-url-params')">Copy to clipboard</button>
+        <!-- Button to download as .txt -->
+        <button id="button-to-download-url-params" onclick="downloadUrlParamsAsTxt('textarea-encoded-url-params')">Download as .txt</button>
+
         <p id="encoded-url-params-size"></p>
 
 

@@ -151,11 +151,11 @@ function downloadSvg() {
     const gridSizeWxH = getGridSizeWxH()
 
     // current status
-    const currenSstatus = getCurrentStatus()
+    const currentStatus = getCurrentStatus()
 
 
     // Set the filename
-    link.download = `${artworkId}-${gridSizeWxH}-${currenSstatus}.svg`;
+    link.download = `${artworkId}-${gridSizeWxH}-${currentStatus}.svg`;
 
     link.click();
 }
@@ -190,11 +190,11 @@ function downloadPng() {
     const pixelSize = getPixelSizeWxH()
 
     // current status
-    const currenSstatus = getCurrentStatus()
+    const currentStatus = getCurrentStatus()
 
 
     // Set the filename
-    link.download = `${artworkId}-${pixelSize}px-${currenSstatus}.png`;
+    link.download = `${artworkId}-${pixelSize}px-${currentStatus}.png`;
 
     link.click();
 }
