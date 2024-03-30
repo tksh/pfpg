@@ -21,6 +21,7 @@ file_server .
 - [URLCompressor](https://synapse.kyoto/lib/url-comp/page001.html) (MIT license)
 - [jscolor](https://jscolor.com/) (GNU GPL v3 license ([for open source use](https://jscolor.com/download/#open-source-license)))
 - [Deno standard library](https://github.com/denoland/deno_std) (MIT license), ported to JS
+- [numcodecs.js](https://github.com/manzt/numcodecs.js) (MIT license)
 
 ## License
 
