@@ -1,18 +1,65 @@
 // function to download encoded url params string
-// as `000_0000_31x31.txt` and `000_0000_31x31.txt.zstd`
+// as `000_0000_31x31.txt` and `000_0000_31x31.txt.zst`
 
 
-// function getInputSvg() {
+import Zstd from 'https://cdn.skypack.dev/numcodecs/zstd';
 
-//     // <textarea>の要素を取得
-//     const svgElement = document.querySelector('#input-svg') // Select <textarea id="input-svg" ...
+// Define the downloadUrlParamsAsTxt function in the same scope as the onclick event handler
+document.getElementById('button-to-download-url-params-as-txt-zstd').onclick = function() {
+    downloadUrlParamsAsTxtZstd('textarea-encoded-url-params');
+  };
 
-//     // <textarea>のvalue属性を取得
-//     return svgElement.value.trim() // `.trim()` = 文字列の両端の空白を削除
+// Zstandard compressed before download
 
-// }
+async function downloadUrlParamsAsTxtZstd(textareaId) { // ('textarea-encoded-url-params')
+
+    const codec = new Zstd()
+
+    // Get the text content from textarea
+    const textContent = document.getElementById(textareaId).value;
+
+    // Convert the input string to a Uint8Array
+    const inputArray = new TextEncoder().encode(textContent);
+    console.log('inputArray: ', inputArray);     // e.g.: Uint8Array(488) [ 63, 50, 48, 50, 51, 48, 56, 95, 48, 48, … ]
+
+    // Encode with Zstandard
+    const encoded = await codec.encode(inputArray);
+    console.log('encoded: ', encoded);           // e.g.:Uint8Array(415) [ 40, 181, 47, 253, 96, 232, 0, 173, 12, 0, … ]
+
+    // Convert the Uint8Array to a Blob
+    const blob = new Blob([encoded], { type: 'application/zstd' });
+    console.log('typeof(blob): ', typeof(blob)); // object
+    console.log('blob: ', blob);                 // e.g.: Blob { size: 415, type: "application/zstd" }
+
+    // Convert the Blob to a ObjectURL
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+
+
+    // Generate a the filename
+
+    const idAndSize = getIdAndSize() // Map obj returned
+
+    // artwork id
+    const artworkId = idAndSize.get('id')
+
+    // grid size
+    const gridSizeWxH = idAndSize.get('size')
+
+    // Set the filename
+    link.download = `${artworkId}_${gridSizeWxH}.txt.zst`;
+
+
+    // Click to download
+    link.click();
+}
+
+
+
 
 // Get the artwork ID and gird size string
+
 function getIdAndSize() {
 
     // Read from textarea
@@ -45,6 +92,7 @@ function getIdAndSize() {
 }
 
 
+
 // Download as TXT
 
 function downloadUrlParamsAsTxt(textareaId) { // ('textarea-encoded-url-params')
@@ -52,6 +100,8 @@ function downloadUrlParamsAsTxt(textareaId) { // ('textarea-encoded-url-params')
     // Get text content from textarea
     const textContent = document.getElementById(textareaId).value;
     const blob = new Blob([textContent], { type: 'text/plain' });
+    console.log('typeof(blob): ', typeof(blob)); // object
+    console.log('blob: ', blob);                 // Blob { size: 488, type: "text/plain" }
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
@@ -74,9 +124,9 @@ function downloadUrlParamsAsTxt(textareaId) { // ('textarea-encoded-url-params')
     // Click to download
     link.click();
 }
-// Result:
-// 106 chars
-// 202304_001-strokeColor_B90000E2-backgroundColor_44FF2A99-trimmedShape_squircleSlimmed-antiAliasing_Off.svg
 
-
+// Define the downloadUrlParamsAsTxt function in the same scope as the onclick event handler
+document.getElementById('button-to-download-url-params-as-txt').onclick = function() {
+    downloadUrlParamsAsTxt('textarea-encoded-url-params');
+  };
 
