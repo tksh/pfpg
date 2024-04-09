@@ -11,8 +11,12 @@
     <link rel="manifest" href="/site.webmanifest">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 
+    <!-- CSS -->
     <link rel="stylesheet" href="./css/index/style.css">
     <link rel="stylesheet" href="./css/index/color.css">
+    <link rel="stylesheet" href="./css/index/tabs.css">
+
+    <!-- JS -->
 
     <!-- resvg-js -->
     <!-- <link rel="preload" as="fetch" type="application/wasm" href="./wasm/index_bg_20230424.wasm" crossorigin> -->
@@ -33,6 +37,7 @@
     <script defer src="./js/index/interface-settings/checker-pattern.js"></script>
     <script defer src="./js/index/interface-settings/color-theme.js"></script>
     <script defer src="./js/index/interface-settings/opacity-steps.js"></script>
+    <script defer src="./js/index/tabs.js"></script>
 
 
     <!-- Data IO -->
@@ -116,7 +121,7 @@
     <script defer src="./js/index/group-colors.js"></script>
     <!-- Set defaults value for some selectors in artwork customization area read from decoded SVG -->
     <script defer src="./js/index/set-defaults.js"></script>
-    <!-- Eventlisteners for preferences, and force to apply the values like width-and-height:256, transparency-scope:whole-group as defaults -->
+    <!-- EventListeners for preferences, and force to apply the values like width-and-height:256, transparency-scope:whole-group as defaults -->
     <script defer src="./js/index/main.js"></script>
     <!-- Adjust the height of whole components to fit to display height -->
     <script defer src="./js/index/img-box-sizing.js"></script>
@@ -134,48 +139,81 @@
     <!-- Sample artwork encoded string of 2023_001, swap63 encoded -->
     <!-- <script type="text/plain" id="sample-artwork-encoded-string">?202308_001=31x31-9999&0=12n9CSKJG9ua2z1CBZPLxra5-CvnYpRmZ1CMbriX9FT7BYKkCdAHrcMUS1ggzJIsLnHxGs6VnKNnisdC3&0=12n9z6KOkaP8myCQ4EBznmZp2zqRtASHCnLgULFSIs1qwA4wKBtYQuFnTHGzTQHSpy&0=12n9hkhbAsvfxmrAHkI-1TvVM1BPu2F0SwA62QxTrqQnBSFhkMwk3rplTGooCEca8u0fN1za1q8rITDQ2hSmFLNfxQRq0wYlC4DvoUgzf2gvZS2w8U6LYw7ZiQ91HkDa4ljsq7BQOV8jBXvg4OYXvieTn0zc8TV778u3VQHL0v99qjkEzDPzw1TAwtzJkEPSG1_OF46qmpC&e=12n9iSIRDFvcu0ldUIBY5rOUPAsLCoBG7XFRwH_iUvaEDRwGKlQl25uJcYHoVqyGgscBQu&f=12n9gyIVCHsyEPtAV4bRErsc8vl2CA0</script> -->
 
-    <div></div>
+    <!-- <div></div> -->
 
-    <header>
-        <div id="artwork-customization" class="opts">
 
-            <fieldset class="opts">
-                <legend>Artwork customization</legend>
+    <div class="tabs">
+        <button class="tab" data-tab="Tab1" onclick="openTab(event, 'Tab1')">Tab 1</button>
+        <button class="tab" data-tab="Tab2" onclick="openTab(event, 'Tab2')">Tab 2</button>
+        <button class="tab" data-tab="Tab3" onclick="openTab(event, 'Tab3')">Tab 3</button>
+        <button class="tab" data-tab="Tab4" onclick="openTab(event, 'Tab4')">Tab 4</button>
+    </div>
 
-                <!-- Color-picker: Stroke colors (dynamic generated) -->
-                <div id="multipul-stroke-color-desc" class="opts">
-                    <div class="opts-cell">
-                        <p>Color attributes (stroke, opacity, stroke-opacity) for strokes group:</p>
-                    </div>
+    <div id="Tab1" class="tabcontent">
+        <h3>Tab 1</h3>
+        <p>Content for Tab 1.</p>
+    </div>
+
+    <div id="Tab2" class="tabcontent">
+        <h3>Tab 2</h3>
+        <p>Content for Tab 2.</p>
+    </div>
+
+    <div id="Tab3" class="tabcontent">
+        <h3>Tab 3</h3>
+        <p>Content for Tab 3.</p>
+    </div>
+
+    <div id="Tab4" class="tabcontent">
+        <h3>Tab 4</h3>
+        <p>Content for Tab 4.</p>
+    </div>
+    <!-- Add more tab contents as needed -->
+
+
+
+
+
+
+    <div id="artwork-customization" class="opts">
+
+        <fieldset class="opts">
+            <legend>Artwork customization</legend>
+
+            <!-- Color-picker: Stroke colors (dynamic generated) -->
+            <div id="multipul-stroke-color-desc" class="opts">
+                <div class="opts-cell">
+                    <p>Color attributes (stroke, opacity, stroke-opacity) for strokes group:</p>
                 </div>
+            </div>
 
-                <!-- <div class="opts"> -->
-                <div id="group-colors-input-and-select" class="opts"></div>
-                <!-- </div> -->
+            <!-- <div class="opts"> -->
+            <div id="group-colors-input-and-select" class="opts"></div>
+            <!-- </div> -->
 
 
-                <!-- Path style -->
-                <div class="opts">
-                    <div class="opts-cell">
-                        <label for="path-mode">Path mode: </label>
-                        <select name="path-mode" id="path-mode" autocomplete="off">
-                            <option value="relative" selected>Relative and merged</option>
-                            <option value="absolute">Absolute and separated</option>
-                        </select>
-                    </div>
+            <!-- Path style -->
+            <div class="opts">
+                <div class="opts-cell">
+                    <label for="path-mode">Path mode: </label>
+                    <select name="path-mode" id="path-mode" autocomplete="off">
+                        <option value="relative" selected>Relative and merged</option>
+                        <option value="absolute">Absolute and separated</option>
+                    </select>
                 </div>
+            </div>
 
 
-                <!-- Color-picker: Background color -->
-                <div>
-                    <div class="opts-cell">
-                        <label for="rect-color-picker">Background color:</label>
-                        <input value="#FFF9" data-jscolor="{}" id="rect-color-picker" class="bgcolor" autocomplete="off">
-                    </div>
+            <!-- Color-picker: Background color -->
+            <div>
+                <div class="opts-cell">
+                    <label for="rect-color-picker">Background color:</label>
+                    <input value="#FFF9" data-jscolor="{}" id="rect-color-picker" class="bgcolor" autocomplete="off">
                 </div>
+            </div>
 
-                <!-- Color-picker: Background color (Browser default color picker) -->
-                <!-- <div>
+            <!-- Color-picker: Background color (Browser default color picker) -->
+            <!-- <div>
                     <div class="opts-cell">
                         <label for="rect-color-picker">Background color:</label>
                         <input value="#FFF9" style="width: 9rem;" type="color" id="rect-color-picker" autocomplete="off">
@@ -198,93 +236,93 @@
                 </div> -->
 
 
-                <!-- Crop by BBox | Disabled -->
-                <div class="displayNone">
-                    <div class="opts-cell">
-                        <label for="crop-by-bbox">Crop by BBox:</label>
-                        <input type="checkbox" name="crop-by-bbox" id="crop-by-bbox" autocomplete="off">
-                    </div>
+            <!-- Crop by BBox | Disabled -->
+            <div class="displayNone">
+                <div class="opts-cell">
+                    <label for="crop-by-bbox">Crop by BBox:</label>
+                    <input type="checkbox" name="crop-by-bbox" id="crop-by-bbox" autocomplete="off">
                 </div>
+            </div>
 
 
-                <!-- Shape to trim -->
-                <div>
-                    <div class="opts-cell">
-                        <label for="shape-to-trim">Shape to trim: </label>
-                        <select name="shape-to-trim" id="shape-to-trim" autocomplete="off">
-                            <option value="square" selected>Square</option>
-                            <option value="circle">Circle</option>
-                            <option value="squircle">Squircle</option>
-                            <option value="squircleSlimmed">Squircle, slimmed</option>
-                        </select>
-                    </div>
+            <!-- Shape to trim -->
+            <div>
+                <div class="opts-cell">
+                    <label for="shape-to-trim">Shape to trim: </label>
+                    <select name="shape-to-trim" id="shape-to-trim" autocomplete="off">
+                        <option value="square" selected>Square</option>
+                        <option value="circle">Circle</option>
+                        <option value="squircle">Squircle</option>
+                        <option value="squircleSlimmed">Squircle, slimmed</option>
+                    </select>
                 </div>
+            </div>
 
-                <!-- Two option <select> for 'Squircle, slimmed' -->
-                <div id="width-narrowness-div" class="displayNone">
-                    <div class="opts-cell">
-                        <label for="width-narrowness">- Width narrowness: </label>
-                        <select name="width-narrowness" id="width-narrowness" autocomplete="off">
-                            <option value="0">0</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10" selected>10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="25">25</option>
-                            <option value="30">30</option>
-                        </select>
-                    </div>
+            <!-- Two option <select> for 'Squircle, slimmed' -->
+            <div id="width-narrowness-div" class="displayNone">
+                <div class="opts-cell">
+                    <label for="width-narrowness">- Width narrowness: </label>
+                    <select name="width-narrowness" id="width-narrowness" autocomplete="off">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10" selected>10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                        <option value="25">25</option>
+                        <option value="30">30</option>
+                    </select>
                 </div>
+            </div>
 
-                <div id="top-heavy-ratio-div" class="displayNone">
-                    <div class="opts-cell">
-                        <label for="top-heavy-ratio">- Top-heavy ratio: </label>
-                        <select name="top-heavy-ratio" id="top-heavy-ratio" autocomplete="off">
-                            <option value="3">3</option>
-                            <option value="2">2</option>
-                            <option value="1" selected>1</option>
-                            <option value="0">0</option>
-                            <option value="-1">-1</option>
-                            <option value="-2">-2</option>
-                            <option value="-3">-3</option>
-                        </select>
-                    </div>
+            <div id="top-heavy-ratio-div" class="displayNone">
+                <div class="opts-cell">
+                    <label for="top-heavy-ratio">- Top-heavy ratio: </label>
+                    <select name="top-heavy-ratio" id="top-heavy-ratio" autocomplete="off">
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1" selected>1</option>
+                        <option value="0">0</option>
+                        <option value="-1">-1</option>
+                        <option value="-2">-2</option>
+                        <option value="-3">-3</option>
+                    </select>
                 </div>
+            </div>
 
 
-                <!-- Anti-aliasing -->
-                <div>
-                    <div class="opts-cell">
-                        <label for="shape-rendering">Anti-aliasing: </label>
-                        <select name="shape-rendering" id="shape-rendering" autocomplete="off">
-                            <option value="geometricPrecision">On (geometricPrecision)</option>
-                            <option value="crispEdges" selected>Off (crispEdges)</option>
-                        </select>
-                    </div>
+            <!-- Anti-aliasing -->
+            <div>
+                <div class="opts-cell">
+                    <label for="shape-rendering">Anti-aliasing: </label>
+                    <select name="shape-rendering" id="shape-rendering" autocomplete="off">
+                        <option value="geometricPrecision">On (geometricPrecision)</option>
+                        <option value="crispEdges" selected>Off (crispEdges)</option>
+                    </select>
                 </div>
+            </div>
 
 
-                <!-- Width and height -->
-                <div>
-                    <div class="opts-cell">
-                        <label for="png-size-number">Width and height:</label>
-                        <input type="number" id="png-size-number" name="png-size-number" class="width-and-height" min="1" value="256" autocomplete="off" oninput="syncWidthNum(this)"><span class="add-padding-left">px</span>
-                        <input type="range" id="png-size-range" name="png-size-range" min="16" max="512" step="16" autocomplete="off" oninput="syncWidthNum(this)">
-                    </div>
+            <!-- Width and height -->
+            <div>
+                <div class="opts-cell">
+                    <label for="png-size-number">Width and height:</label>
+                    <input type="number" id="png-size-number" name="png-size-number" class="width-and-height" min="1" value="256" autocomplete="off" oninput="syncWidthNum(this)"><span class="add-padding-left">px</span>
+                    <input type="range" id="png-size-range" name="png-size-range" min="16" max="512" step="16" autocomplete="off" oninput="syncWidthNum(this)">
                 </div>
+            </div>
 
 
-            </fieldset>
+        </fieldset>
 
-        </div> <!-- End of <div class="opts"> -->
+    </div> <!-- End of <div class="opts"> -->
     </header>
 
     <!-- 警告モーダルダイアログ -->
@@ -438,5 +476,6 @@
         </div> <!-- End of <div class="footer-info"> -->
 
     </footer>
+
 
 </body>
