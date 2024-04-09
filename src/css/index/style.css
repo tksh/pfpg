@@ -214,13 +214,10 @@ details {
     padding-top: 0.5rem;
 }
 
-.addPaddingTop {
+.add-padding-top {
     padding-top: 0.5rem;
 }
-.addPaddingBottom {
-    padding-bottom: 0.5rem;
-}
-.addPaddingLeft {
+.add-padding-left {
     padding-left: 2px;
 }
 
@@ -245,6 +242,10 @@ footer {
     font-size: 0.9rem;
     padding: 1rem;
     line-height: 1.6
+}
+
+.text-align-center {
+    text-align: center;
 }
 
 a {
