@@ -70,7 +70,7 @@ function downloadUrlParamsAsTxt(textareaId) { // ('textarea-encoded-url-params')
     // Get artwork ID and size
     const idAndSizeStr = getIdAndSize()
     // Set the filename
-    link.download = `${idAndSizeStr}.txt.zst`;
+    link.download = `${idAndSizeStr}.txt`;
 
 
     // Download
