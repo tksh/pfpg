@@ -9,6 +9,8 @@ body {
 
     min-height: 100dvh;
     /* ビューポートの高さいっぱいに拡張 */
+
+    margin-top: .5rem;
 }
 
 *,
@@ -39,7 +41,7 @@ body {
 }
 
 .opts-cell {
-    background-color: aquamarine;
+    /* background-color: aquamarine; */
     padding-left: 2rem;
     margin-top: 1rem;
     min-width: 16rem;

@@ -9,7 +9,7 @@
 
 
 .tabs {
-    background-color: burlywood;
+    /* background-color: burlywood; */
     width: 100%;
     /* display: flex; */
     /* overflow-x: auto; */
@@ -18,19 +18,20 @@
 }
 
 .tab {
-    background-color: #f1f1f1;
+    border-radius: 0.25rem 0.25rem 0rem 0rem;
+    opacity: 0.7;
     border: none;
     outline: none;
     cursor: pointer;
-    padding: 14px 16px;
+    /* padding: 14px 16px; */
     transition: 0.3s;
-    font-size: 17px;
+    font-size: 0.9rem;
     flex: 0 1 auto;
     /* This makes each tab size to its content */
     width: auto;
     /* Ensure width is auto */
-    /* min-width: 100px; */
-    min-width: 50px;
+    min-width: 100px;
+    /* min-width: 50px; */
     /* Set a minimum width */
     max-width: 200px;
     /* Set a maximum width */
@@ -38,19 +39,29 @@
     /* Prevent tabs from shrinking */
     box-sizing: initial;
     /* Ensure box model calculations are correct */
-    margin-right: 10px;
+    /* margin-right: 10px; */
+    margin: 0;
+    padding: .5rem 0;
     /* Adds some space between tabs */
+    background-color: var(--color-button-bg);
 }
 
 .tabcontent {
+    width: 100%;
     display: none;
-    /* padding: 6px 12px; */
-    border-top: none;
+    /* padding: 0 10rem; */
+    border-top: solid;
+    border-left: solid;
+    border-width: 1px;
+    border-color: var(--color-button-border);
+    /* background-color: blue; */
 }
 
 
 .tab.active {
-    background-color: pink;
+    opacity: 1;
+    /* color: var(--color-checker); */
+    background-color: var(--color-button-border);
     /* Change to your preferred color */
     /* Alternatively, use a linear gradient for a subtle effect */
     /* background-image: linear-gradient(rgb(255 255 255/15%) 0 0); */
@@ -58,9 +69,15 @@
 
 
 @media screen and (max-width: 512px) {
+
+    .tabs {
+        /* background-color: greenyellow; */
+        text-align: center;
+    }
+
     .tab {
-        width: 25%;
-        padding: 0px;
-        margin: 0px;
+        width: 23%;
+        min-width: 50px;
+        margin: 0;
     }
 }
