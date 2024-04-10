@@ -26,8 +26,9 @@ body {
     display: none;
 }
 
-
 .opts {
+    /* width: 300px; */
+    /* background-color: beige; */
     display: flex;
     flex-wrap: wrap;
 }
@@ -38,7 +39,9 @@ body {
 }
 
 .opts-cell {
+    background-color: aquamarine;
     padding-left: 2rem;
+    margin-top: 1rem;
     min-width: 16rem;
 }
 
@@ -51,7 +54,8 @@ legend {
 
 fieldset {
     margin: 0 1rem;
-    border-color: var(--color-fieldset-border);
+    /* border-color: var(--color-fieldset-border); */
+    border-style: none;
 }
 
 legend {
@@ -168,6 +172,7 @@ select.opacity {
 /* 'stroke' */
 input[data-jscolor="{}"] {
     margin-right: 2px;
+    margin-top: 1rem;
     border: 1px solid var(--color-picker-border);
 }
 input.stroke {
@@ -179,11 +184,12 @@ label.stroke {
 
 /* Background color */
 input.bgcolor {
+    margin-top: 0;
     width: 8.5rem;
 }
 
 /* Width and height */
-input.width-and-height {
+input.width-size {
     width: 4rem;
 }
 input[type="range"] {

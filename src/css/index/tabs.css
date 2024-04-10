@@ -1,9 +1,23 @@
+.tabs-container {
+    /* background-color: chartreuse; */
+    /* overflow-x: auto;
+    white-space: nowrap; */
+    width: auto;
+    /* width: 100%; */
+    /* margin: 0 3rem */
+}
+
+
 .tabs {
-    display: flex;
-    overflow-x: auto; /* Enable horizontal scrolling if tabs overflow */
-   }
-   
-   .tab {
+    background-color: burlywood;
+    width: 100%;
+    /* display: flex; */
+    /* overflow-x: auto; */
+    /* white-space: nowrap; */
+    /* Enable horizontal scrolling if tabs overflow */
+}
+
+.tab {
     background-color: #f1f1f1;
     border: none;
     outline: none;
@@ -11,25 +25,42 @@
     padding: 14px 16px;
     transition: 0.3s;
     font-size: 17px;
-    flex: 0 1 auto; /* This makes each tab size to its content */
-    width: auto; /* Ensure width is auto */
-    min-width: 100px; /* Set a minimum width */
-    max-width: 200px; /* Set a maximum width */
-    flex-shrink: 0; /* Prevent tabs from shrinking */
-    box-sizing: initial; /* Ensure box model calculations are correct */
-    margin-right: 10px; /* Adds some space between tabs */
-   }
-   
-   .tabcontent {
-    display: none;
-    padding: 6px 12px;
-    border-top: none;
-   }
-   
+    flex: 0 1 auto;
+    /* This makes each tab size to its content */
+    width: auto;
+    /* Ensure width is auto */
+    /* min-width: 100px; */
+    min-width: 50px;
+    /* Set a minimum width */
+    max-width: 200px;
+    /* Set a maximum width */
+    flex-shrink: 0;
+    /* Prevent tabs from shrinking */
+    box-sizing: initial;
+    /* Ensure box model calculations are correct */
+    margin-right: 10px;
+    /* Adds some space between tabs */
+}
 
-   .tab.active {
-    background-color: pink; /* Change to your preferred color */
+.tabcontent {
+    display: none;
+    /* padding: 6px 12px; */
+    border-top: none;
+}
+
+
+.tab.active {
+    background-color: pink;
+    /* Change to your preferred color */
     /* Alternatively, use a linear gradient for a subtle effect */
     /* background-image: linear-gradient(rgb(255 255 255/15%) 0 0); */
-   }
-   
+}
+
+
+@media screen and (max-width: 512px) {
+    .tab {
+        width: 25%;
+        padding: 0px;
+        margin: 0px;
+    }
+}
