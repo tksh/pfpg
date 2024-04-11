@@ -154,7 +154,7 @@
             </div>
 
 
-            <div id="Tab1" class="tabcontent">
+            <div id="Tab1" class="tabcontent"> <!-- Line -->
 
                 <!-- Color-picker: Stroke colors (Generated dynamically) -->
                 <div id="multipul-stroke-color-desc" class="opts">
@@ -190,7 +190,7 @@
             </div>
 
 
-            <div id="Tab2" class="tabcontent">
+            <div id="Tab2" class="tabcontent"> <!-- Canvas -->
 
                 <!-- Color-picker: Backdrop color -->
                 <div class="opts">
@@ -255,7 +255,7 @@
             </div>
 
 
-            <div id="Tab3" class="tabcontent">
+            <div id="Tab3" class="tabcontent"> <!-- Render -->
 
                 <!-- Anti-aliasing -->
                 <div class="opts">
@@ -269,7 +269,7 @@
                 </div>
 
                 <!-- Width pixel size -->
-                <div>
+                <div class="opts">
                     <div class="opts-cell">
                         <label for="png-size-number">Width pixel size:</label>
                         <input type="number" id="png-size-number" name="png-size-number" class="width-size" min="1" value="256" autocomplete="off" oninput="syncWidthNum(this)"><span class="add-padding-left"></span>
@@ -277,10 +277,18 @@
                     </div>
                 </div>
 
+                <!-- Last rendering time -->
+                <div class="opts">
+                    <div class="opts-cell">
+                        <p id="last-redering-time"></p>
+                    </div>
+                </div>
+
+
             </div>
 
 
-            <div id="Tab4" class="tabcontent">
+            <div id="Tab4" class="tabcontent"> <!-- UI -->
 
                 <!-- View scale -->
                 <div class="opts">
@@ -335,7 +343,7 @@
 
 
 
-    <main>
+    <main class="add-padding-bottom">
         <div id="input-and-output">
 
             <div id="output" class="cell"> <!-- Output PNG -->
@@ -380,8 +388,6 @@
     <footer>
 
         <div class="footer-info">
-            <p id="last-redering-time"></p>
-            <!-- <p class="text-align-right"><a href="https://github.com/tksh" title="tksh on GitHub">> about</a></p> -->
             <details>
                 <summary>Tips for customization</summary>
                 <dl>
@@ -390,7 +396,7 @@
                     <dd>- <i>Absolute and separated</i>: 'stroke-opacity' affects the appearance of each stroke</dd>
                 </dl>
                 <dl>
-                    <dt>Maximum rendering size for <i>Width and height</i></dt>
+                    <dt>Maximum rendering size for <i>Width pixel size</i></dt>
                     <dd>The slider allows you to set the size up to 512 pixels, but you can type in a larger number manually into the box.</dd>
                     <dd>(Note: Larger sizes will exponentially increase the rendering time)</dd>
                 </dl>
@@ -398,13 +404,13 @@
             </details>
 
             <details>
-                <summary>About this website</summary>
+                <summary>About</summary>
                 <dl>
                     <dt>Title:</dt>
                     <dd>pfpg</dd>
                     <dt>Description:</dt>
                     <dd>A custom <b>p</b>ro<b>f</b>ile <b>p</b>icture <b>g</b>enerator for a specific svg artwork that was made with the <a href="https://github.com/tksh/uint-n-portray" title="tksh/uint-n-portray: A subset of SVG for creating simple and efficient vector drawings">UIntNPortray</a> ruleset.</dd>
-                    <dt>Creator:</dt>
+                    <dt>Creator (both artwork and website):</dt>
                     <!-- <dt>Creator of the website and artwork:</dt> -->
                     <dd><a href="https://github.com/tksh" title="tksh on GitHub">SAITO Takashi (tksh)</a></dd>
                     <dt>Source:</dt>
