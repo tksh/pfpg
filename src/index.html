@@ -272,7 +272,7 @@
                 <div class="opts">
                     <div class="opts-cell">
                         <label for="png-size-number">Width pixel size:</label>
-                        <input type="number" id="png-size-number" name="png-size-number" class="width-size" min="1" value="256" autocomplete="off" oninput="syncWidthNum(this)"><span class="add-padding-left"></span>
+                        <input type="number" id="png-size-number" name="png-size-number" class="width-size" min="1" value="256" autocomplete="off" oninput="syncWidthNum(this)"><span class="padding-left"></span>
                         <input type="range" id="png-size-range" name="png-size-range" min="16" max="512" step="16" autocomplete="off" oninput="syncWidthNum(this)">
                     </div>
                 </div>
@@ -343,7 +343,7 @@
 
 
 
-    <main class="add-padding-bottom">
+    <main class="padding-bottom">
         <div id="input-and-output">
 
             <div id="output" class="cell"> <!-- Output PNG -->
@@ -393,22 +393,34 @@
                 <summary>Usage</summary>
                 <dl>
                     <dt>Basic workflow:</dt>
-                    <dd>1. <b>Import</b>: Start by importing the artwork data from a URL that includes a <a href="https://en.wikipedia.org/wiki/Query_string" title="Query string - Wikipedia">query string</a> encoding.</dd>
-                    <dd>2. <b>Customization</b>: Customize your artwork freely using the options available under each category tab.</dd>
-                    <dd>3. <b>Export</b>: Save your final artwork as either a  <a href="https://en.wikipedia.org/wiki/PNG" title="PNG - Wikipedia">PNG</a> (raster) or <a href="https://en.wikipedia.org/wiki/SVG" title="SVG - Wikipedia">SVG</a> (vector) image format.</dd>
+                    <dd>
+                        <ol>
+                            <li><b>Import</b>: Start by importing the artwork data from a URL that includes a <a href="https://en.wikipedia.org/wiki/Query_string" title="Query string - Wikipedia">query string</a> encoding.</li>
+                            <li><b>Customization</b>: Customize your artwork freely using the options available under each category tab.</li>
+                            <li><b>Export</b>: Save your final artwork as either a <a href="https://en.wikipedia.org/wiki/PNG" title="PNG - Wikipedia">PNG</a> (raster) or <a href="https://en.wikipedia.org/wiki/SVG" title="SVG - Wikipedia">SVG</a> (vector) image format.</li>
+                        </ol>
+                    </dd>
                 </dl>
                 <dl>
                     <dt>Tips for customization:</dt>
-                </dl>
-                <dl>
-                    <dt>The difference made by <i>Path mode</i> option (in <i>Line</i> tab)</dt>
-                    <dd>- <i>Relative and merged</i>: 'stroke-opacity' affects the whole strokes group.</dd>
-                    <dd>- <i>Absolute and separated</i>: 'stroke-opacity' affects the appearance of each stroke.</dd>
-                </dl>
-                <dl>
-                    <dt>Maximum rendering size for <i>Width pixel size</i> option (in <i>Render</i> tab)</dt>
-                    <dd>The slider allows you to set the size up to 512 pixels, but you can type in a larger number manually into the box.</dd>
-                    <dd>(Note: Larger sizes will exponentially increase the rendering time)</dd>
+                    <dd class="padding-left-for-dd">
+
+                        <dl>
+                            <dt>The difference made by <i>Path mode</i> option (in <i>Line</i> tab)</dt>
+                            <dd>
+                                <ul>
+                                    <li><i>Relative and merged</i>: 'stroke-opacity' affects the whole strokes group.</li>
+                                    <li><i>Absolute and separated</i>: 'stroke-opacity' affects the appearance of each stroke.</li>
+                                </ul>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>Maximum rendering size for <i>Width pixel size</i> option (in <i>Render</i> tab)</dt>
+                            <dd>The slider allows you to set the size up to 512 pixels, but you can type in a larger number manually into the box.</dd>
+                            <dd>(Note: Larger sizes will exponentially increase the rendering time)</dd>
+                        </dl>
+
+                    </dd>
                 </dl>
             </details>
 
@@ -417,7 +429,7 @@
                 <dl>
                     <dt>Title:</dt>
                     <dd>pfpg</dd>
-                    <dt>Description:</dt>
+                    <dt>Overview:</dt>
                     <dd>A custom <b>p</b>ro<b>f</b>ile <b>p</b>icture <b>g</b>enerator for a specific svg artwork that was made with the <a href="https://github.com/tksh/uint-n-portray" title="tksh/uint-n-portray: A subset of SVG for creating simple and efficient vector drawings">UIntNPortray</a> ruleset.</dd>
                     <dt>Creator (both artwork and website):</dt>
                     <!-- <dt>Creator of the website and artwork:</dt> -->
@@ -435,7 +447,7 @@
                 </dl>
             </details>
 
-            <p class="text-align-center add-padding-top">© 2023-present, SAITO Takashi (tksh)</p>
+            <p class="text-align-center padding-top">© 2023-present, SAITO Takashi (tksh)</p>
         </div> <!-- End of <div class="footer-info"> -->
 
     </footer>

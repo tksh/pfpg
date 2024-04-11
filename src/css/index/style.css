@@ -215,22 +215,29 @@ p {
     color: var(--color-text);
 }
 
-dd {
-    padding: 0.25rem 0.5rem 0.25rem 1.75rem;
-}
-
-dt {
-    padding: 1.3rem 0.5rem 0.25rem 1rem;
-}
 details {
     padding: 1rem 0;
 }
+dd {
+    padding: 0.25rem 0.5rem 0.25rem 1rem;
+}
+dt {
+    padding: 1.3rem 0.5rem 0.25rem 0;
+}
 
-.add-padding-top {
+ol, ul {
+    padding-left: 1rem;
+}
+
+.padding-top {
     padding-top: 2rem;
 }
-.add-padding-left {
+.padding-left {
     padding-left: 2px;
+}
+
+.padding-left-for-dd {
+    padding-left: 1rem;
 }
 
 button {
