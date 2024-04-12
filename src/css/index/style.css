@@ -222,7 +222,7 @@ dd {
     padding: 0.25rem 0.5rem 0.25rem 1rem;
 }
 dt {
-    padding: 1.3rem 0.5rem 0.25rem 0;
+    padding: 1.5rem 0.5rem 0.25rem 0;
 }
 
 ol, ul {
@@ -230,6 +230,9 @@ ol, ul {
 }
 
 .padding-top {
+    padding-top: 1.5rem;
+}
+.padding-top-2 {
     padding-top: 2rem;
 }
 .padding-left {
