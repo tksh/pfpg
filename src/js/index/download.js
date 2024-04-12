@@ -70,26 +70,21 @@ function getPixelSizeWxH() {
 // Get the current preference status
 function getCurrentStatus() {
 
-    // stroke color
-    const strokeColorInput = document.getElementById('stroke-color-picker')
-    //console.log(strokeColorInput)
-    const strokeColorWithHashsymbol = strokeColorInput.value; // 要素の値は文字列として扱われる
-    const strokeColor = strokeColorWithHashsymbol.substring(1) // 先頭の `#` を削除
-    console.log('strokeColor: ', strokeColor)
+    // Lines group color array
 
-    // multipul strokesc olors
+    // stroke
     const numberOfGroupsAndHexCodeArray = getGroupColorsValues();
     const hexCodeArray = numberOfGroupsAndHexCodeArray.stroke_array
-    // const hexCodeArray = numberOfGroupsAndHexCodeArray[1]
     const hexCodeStringArrayWithoutHash = hexCodeArray.map((eachColorStr) => eightToFourOrThree(eachColorStr).slice(1).toUpperCase());
+    console.log('hexCodeStringArrayWithoutHash: ', hexCodeStringArrayWithoutHash) // Array(5) [ "000", "000", "000", "EEE", "FFF" ]
     const hexCodeStringArrayJoined = hexCodeStringArrayWithoutHash.join('_')
 
     // background color
     const rectColorInput = document.getElementById('rect-color-picker')
     //console.log(rectColorInput)
-    const rectColorWithHashsymbol = rectColorInput.value; // 要素の値は文字列として扱われる
-    const rectColorWithHashsymbolShorten = eightToFourOrThree(rectColorWithHashsymbol); // 同じ値が連続していれば4桁に省略し さらに 最後が'F'or'f'なら削除し3桁にする
-    const rectColor = rectColorWithHashsymbolShorten.substring(1).toUpperCase() // 先頭の `#` を削除
+    const rectColorWithHash = rectColorInput.value; // 要素の値は文字列として扱われる
+    const rectColorWithHashShorten = eightToFourOrThree(rectColorWithHash); // 同じ値が連続していれば4桁に省略し さらに 最後が'F'or'f'なら削除し3桁にする
+    const rectColor = rectColorWithHashShorten.substring(1).toUpperCase() // 先頭の `#` を削除
     console.log('rectColor: ', rectColor)
 
     // antiAliasing
@@ -101,12 +96,11 @@ function getCurrentStatus() {
         antiAliasing = 'off';
     }
 
-    // shape to trim
+    // Shape to trim
     const shapeToTrimSelect = document.getElementById('shape-to-trim')
     //console.log(shapeToTrimSelect)
     const shapeToTrim = shapeToTrimSelect.value; // 要素の値は文字列として扱われる
     console.log('shapeToTrim: ', shapeToTrim)
-
 
 
     // 'shape to trim' に 'squircleSlimmed' が 適用されている場合だけ ふたつのオプションの値を取得し それを含むファイル名を生成する
