@@ -59,3 +59,43 @@ function eightToFourOrThree(hex) {
 // console.log(eightToFourOrThree("#AABBCC")); // #ABC
 // console.log(eightToFourOrThree("#112233")); // #123
 // console.log(eightToFourOrThree("#123456")); // #123456
+
+
+// 10桁のhexコードを受け取り、省略形に変換する関数
+function tenToTenOrFive(hex) {
+
+    // 省略形に変換できるかどうかを判定するフラグ
+    let canShorten = true;
+    // 省略形に変換した結果を格納する変数
+    let result = "";
+    // hexの各2桁ごとにループ
+    for (let i = 0; i < hex.length; i += 2) {
+        // 2桁が同じであれば、1桁だけresultに追加する
+        if (hex[i] === hex[i + 1]) {
+            result += hex[i];
+        } else {
+            // 2桁が異なれば、省略形に変換できないと判定し、ループを抜ける
+            canShorten = false;
+            break;
+        }
+    }
+
+    // 省略形に変換できた場合はresultを返す
+    if (canShorten) {
+        return result;
+    } else {
+        // 省略形に変換できなかった場合は元のhexを返す
+        return hex;
+    }
+}
+
+// console.log(tenToTenOrFive("aabbccffff")) // abcff
+// console.log(tenToTenOrFive("AABBCCFFFF")) // ABCFF
+// console.log(tenToTenOrFive("112233ffff")) // 123ff
+// console.log(tenToTenOrFive("112233ee00")) // 123e0
+// console.log(tenToTenOrFive("123456ffff")) // 123456ffff
+
+
+
+
+

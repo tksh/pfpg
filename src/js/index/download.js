@@ -73,11 +73,34 @@ function getCurrentStatus() {
     // Lines group color array
 
     // stroke
-    const numberOfGroupsAndHexCodeArray = getGroupColorsValues();
-    const hexCodeArray = numberOfGroupsAndHexCodeArray.stroke_array
-    const hexCodeStringArrayWithoutHash = hexCodeArray.map((eachColorStr) => eightToFourOrThree(eachColorStr).slice(1).toUpperCase());
-    console.log('hexCodeStringArrayWithoutHash: ', hexCodeStringArrayWithoutHash) // Array(5) [ "000", "000", "000", "EEE", "FFF" ]
-    const hexCodeStringArrayJoined = hexCodeStringArrayWithoutHash.join('_')
+    const numberOfGroupsAndColorsValueArray = getGroupColorsValues();
+    const stArray = numberOfGroupsAndColorsValueArray.stroke_array
+    const opArray = numberOfGroupsAndColorsValueArray.opacity_array
+    const soArray = numberOfGroupsAndColorsValueArray.stroke_opacity_array
+    console.log(stArray) // Type: String | e.g.: Array(5) [ "#97FF6E", "#000000", "#8ACAFF", "#eeeeee", "#ffffff" ]
+    console.log(opArray) // Type: String | e.g.: Array(5) [ "0.5", "1", "1", "1", "1" ]
+    console.log(soArray) // Type: String | e.g.: Array(5) [ "1", "0.8", "1", "1", "1" ]
+
+    const stHexArray = stArray.map((colorValueStr) => colorValueStr.slice(1).toUpperCase()); // Delete '#'
+    const opHexArray = opArray.map((colorValueStr) => normalizedToHex(Number(colorValueStr)).toUpperCase());
+    const soHexArray = soArray.map((colorValueStr) => normalizedToHex(Number(colorValueStr)).toUpperCase());
+    console.log(stHexArray) // 6 chars hex | e.g.: Array(5) [ "97FF6E", "000000", "8ACAFF", "EEEEEE", "FFFFFF" ]
+    console.log(opHexArray) // 2 chars hex | e.g.: Array(5) [ "80", "FF", "FF", "FF", "FF" ]
+    console.log(soHexArray) // 2 chars hex | e.g.: Array(5) [ "FF", "CC", "FF", "FF", "FF" ]
+
+    // Join as 5(3+1+1) or 10(6+2+2) chars hex string
+    // 'stroke' (3|6) + 'opacity' (1|2) + 'stroke-opacity' (1|2)
+
+    // Merging the arrays (10 chars hex):
+    const mergedHexArray = stHexArray.map((item, index) => item + opHexArray[index] + soHexArray[index])
+
+    // Reducing into half length if all hex pairs are duplicated.
+    const optimizedHexArray = mergedHexArray.map(tenCharsHex => tenToTenOrFive(tenCharsHex))
+
+    // Join with underscore '_'
+    const groupColorsHexString = optimizedHexArray.join('_')
+    console.log('groupColorsHexString: ', groupColorsHexString) // e.g.: "FCFF4280FF_000FC_8F52FFFFFF_EEEFF_FFFFF"
+
 
     // background color
     const rectColorInput = document.getElementById('rect-color-picker')
@@ -109,17 +132,17 @@ function getCurrentStatus() {
         // Two options for squircle, slimmed
         const selectWidthNarrowness = document.getElementById('width-narrowness');
         const selectTopHeavyRatio = document.getElementById('top-heavy-ratio');
-        const widthNrrowness = selectWidthNarrowness.value;
+        const widthNarrowness = selectWidthNarrowness.value;
         const topHeavyRatio = selectTopHeavyRatio.value;
 
         // Merge the all values of status, with two options
-        return `strokeColor_${hexCodeStringArrayJoined}-bgColor_${rectColor}-trimmedShape_${shapeToTrim}_${widthNrrowness}_${topHeavyRatio}-antiAlias_${antiAliasing}`
+        return `groupColors_${groupColorsHexString}-bgColor_${rectColor}-trimmedShape_${shapeToTrim}_${widthNarrowness}_${topHeavyRatio}-antiAlias_${antiAliasing}`
 
     }
 
 
     // Merge the all values of status
-    return `strokeColor_${hexCodeStringArrayJoined}-bgColor_${rectColor}-trimmedShape_${shapeToTrim}-antiAlias_${antiAliasing}`
+    return `groupColors_${groupColorsHexString}-bgColor_${rectColor}-trimmedShape_${shapeToTrim}-antiAlias_${antiAliasing}`
 
 }
 

@@ -1,4 +1,4 @@
-// Convet the strokes group color format
+// Convert the strokes group color format
 
 // For Converting from Per-stroke to whole-group
 // '#'無しの hexを受け取って 'matches'の構造と同じ 3つの要素の配列 で返す
@@ -31,6 +31,7 @@ function splitHexAndOpacity(hexColor) {
 
 // 0から1の範囲に正規化された数値を引数として受け取る関数
 function normalizedToHex(num) {
+    console.log("num: ", num)
     // 数値が0から1の範囲にあるかチェックする
     if (num < 0 || num > 1) {
         // 範囲外であればエラーを返す
