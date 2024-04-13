@@ -1,23 +1,3 @@
-// セレクトメニューの要素を取得
-const selectOfOpacitySteps = document.getElementById("opacity-steps");
-console.log('selectOfOpacitySteps.length is ', selectOfOpacitySteps.length); // 3
-
-// changeイベントを設定
-selectOfOpacitySteps.addEventListener("change", () => {
-
-    // 選択されたセレクトメニューの値を取得
-    const step = Number(selectOfOpacitySteps.value);
-    console.log('selectOfOpacitySteps.value: ', typeof (step), step); // number, 0.04|0.1|0.2
-
-    // 新しいセレクトメニューに更新
-    changeOpacitySelectOptionsAsNewStep(step)
-
-    // 新しいセレクトメニューへの更新で選ばれた そのstepでの 一番近い値の表示と
-    // 元々の 'input-svg' のSVGの色情報がずれてしまうので 新しいセレクトメニューでの現在の値を取得して
-    // 新しい <g stroke=" ... > 部分のSVG文字列を生成して置き換える
-    updateSvgForNewStep()
-});
-
 
 
 function changeOpacitySelectOptionsAsNewStep(step) {
@@ -147,6 +127,5 @@ function updateSvgForNewStep() {
         svgElement.value = updatedSVG;
 
     }
-    // Re-rendering the image from new step opacity value SVG
-    convertSvg({ target: svgElement });
+
 }

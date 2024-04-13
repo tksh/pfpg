@@ -10,6 +10,9 @@
     async function svg2png(inputSVG, opts, hasCrop) {
 
         const svg = inputSVG ? inputSVG : svgElement.value.trim()
+        // inputSVG が真（例えば、文字列が空でない、nullでないなど）であれば、その値を svg 変数に代入します。
+        // inputSVG が偽（例えば、nullや空文字列）であれば、svgElement.value.trim() の結果を svg 変数に代入します。ここで、svgElement.value はおそらくHTML要素の値を取得し、trim() メソッドはその値の前後の空白を削除します。
+        // したがって、このコードは inputSVG が提供されている場合はそれを使用し、そうでない場合は svgElement から取得した値を使用して、その後空白を削除した状態を svg 変数に代入します。
 
         if (!svg) {
             alert('SVG is empty')
@@ -92,17 +95,17 @@
     // })
 
     // 上記のSVGテキストエリアの編集イベントごとに PNGへの変換処理が呼び出される部分を
-    // <input>や<select>などの選択要素からの更新でも それが呼び出される用に 下記のように変更
+    // <input>や<select>などの選択要素からの更新でも それが呼び出されるように 下記の通りに変更した
     // `convertSvg` という関数を作り 選択要素からSVGテキストエリアを更新した直後に
     // `convertSvg({ target: svgElement });` として呼び出す
 
 
     // svg2png関数を呼び出す関数を定義
     const convertSvg = async (event) => {
-        countSvgSize()
+
         // HTML要素を取得
         const pngDownloadButtonElement = document.getElementById("png-download-button");
-        const lastRenderingTimeElement = document.getElementById("last-redering-time");
+        const lastRenderingTimeElement = document.getElementById("last-rendering-time");
 
         // Update .innerHtml
         async function updateRenderingStatus(text, element) {
@@ -151,7 +154,7 @@
                     }
                 }, 0); // 0ミリ秒後に実行
             });
-        }
+        } // End of 'async function measureSvg2PngPerformance(inputSVG, opts, hasCrop) {'
 
         const inputSVG = event.target.value.trim()
         const hasCrop = cropElement.checked
@@ -159,6 +162,8 @@
 
         measureSvg2PngPerformance(inputSVG, resvgOpts, hasCrop)
             .then((result) => {
+                //console.log('result: ', result); // undefined
+
                 // 処理結果を利用する
                 console.log('svg2png processing has completed.');
 
@@ -166,7 +171,9 @@
             .catch((error) => {
                 console.error('An error occurred during the processing of svg2png:', error);
             });
-    };
+
+        countSvgSize()
+    }; // End of 'const convertSvg = async (event) => {'
 
     // テキストを編集するたびに変換処理が呼び出される関数を設定
     addMultipleEventListener(svgElement, ['change', 'keyup', 'paste'], convertSvg);
@@ -187,7 +194,7 @@
         const patternShapeRendering = /shape-rendering="[^"]*"/g
         const matchOfShapeRendering = oldPathModeSvgStr.match(patternShapeRendering) // Array(0) "shape-rendering=\"crispEdges\""
         const valueOfShapeRendering = matchOfShapeRendering[0]
-        // Backgroun color (include opacity)
+        // Background color (include opacity)
         const patternBgRectFill = /<rect width="100%" height="100%" fill="[^"]*"/g
         const matchOfBgRectFill = oldPathModeSvgStr.match(patternBgRectFill)
         const valueOfBgRectFill = matchOfBgRectFill[0]
@@ -235,6 +242,35 @@
         convertSvg({ target: svgElement });
     });
     /////////////////////////////// Path-mode ////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+
+
+    //////////////////////////////////////////////////////////////////////////
+    ////////////////////////////// Opacity steps /////////////////////////////
+
+    // セレクトメニューの要素を取得
+    const selectOfOpacitySteps = document.getElementById("opacity-steps");
+
+    // changeイベントを設定
+    selectOfOpacitySteps.addEventListener("change", () => {
+
+        // 選択されたセレクトメニューの値を取得
+        const step = Number(selectOfOpacitySteps.value);
+        console.log('selectOfOpacitySteps.value: ', typeof (step), step); // number, 0.04|0.1|0.2
+
+        // 新しいセレクトメニューに更新
+        changeOpacitySelectOptionsAsNewStep(step)
+
+        // 新しいセレクトメニューへの更新で選ばれた そのstepでの 一番近い値の表示と
+        // 元々の 'input-svg' のSVGの色情報がずれてしまうので 新しいセレクトメニューでの現在の値を取得して
+        // 新しい <g stroke=" ... > 部分のSVG文字列を生成して置き換える
+        updateSvgForNewStep()
+
+        // Re-rendering the image from new step opacity value SVG
+        convertSvg({ target: svgElement });
+    });
+
+    ////////////////////////////// Opacity steps /////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
 
@@ -399,7 +435,7 @@
 
 
     //////////////////////////////////////////////////////////////////////////
-    /////////////////////////// Background colors ///////////////////////////
+    /////////////////////////// Background color ///////////////////////////
 
     // // Color-picker: Background color (via resvg original)
     // backgroundColorPickerElement.addEventListener('change', function (event) {
@@ -410,12 +446,12 @@
     //   console.log('resvgOpts.background value is ' + resvgOpts.background) // resvgOpts.background value is #87FF634C
     //   svg2png(null, resvgOpts, hasCrop)
     // })
-    /////////////////////////// Background colors ///////////////////////////
+    /////////////////////////// Background color ///////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
 
     //////////////////////////////////////////////////////////////////////////
-    ////////// Group 'stroke', 'opacity' and 'stroke-opaciity' [n] ///////////
+    ////////// Group 'stroke', 'opacity' and 'stroke-opacity' [n] ///////////
 
     function addEventListenerForGroupColorsInputs(numberOfGroups, attrName) {
 
@@ -502,22 +538,22 @@
         }
     }
 
-    // Add multipul event listener for whole stroke colors
+    // Add multiple event listener for whole stroke colors
     const numberOfGroups = getNumberOfGroups(getInputSvg())
     addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke')
     addEventListenerForGroupColorsInputs(numberOfGroups, 'opacity')
     addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke-opacity')
 
-    ////////// Group 'stroke', 'opacity' and 'stroke-opaciity' [n] ///////////
+    ////////// Group 'stroke', 'opacity' and 'stroke-opacity' [n] ///////////
     //////////////////////////////////////////////////////////////////////////
 
 
     //////////////////////////////////////////////////////////////////////////
-    /////////////////////////// Background colors ///////////////////////////
+    /////////////////////////// Backdrop color ///////////////////////////
 
     const rectColorPickerElement = document.querySelector('#rect-color-picker')
 
-    // Color-picker: Background color (background rect color)
+    // Color-picker: Backdrop color (background rect color)
     rectColorPickerElement.addEventListener('change', function (event) {
 
         // console.log('event.target.value: ', event.target.value) // #60D7FF
@@ -540,12 +576,12 @@
         // convertSvg関数を呼び出す
         convertSvg({ target: svgElement });
     })
-    /////////////////////////// Background colors ///////////////////////////
+    /////////////////////////// Backdrop color ///////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
 
     //////////////////////////////////////////////////////////////////////////
-    //////////////////////////// Width and height ////////////////////////////
+    //////////////////////////// Width pixel size ////////////////////////////
 
     const pngSizeElementViaNumber = document.querySelector('#png-size-number')
     const pngSizeElementViaRange = document.querySelector('#png-size-range')
@@ -578,32 +614,35 @@
         // 入力値の妥当性を報告する
         numberInput.reportValidity();
     });
-    //////////////////////////// Width and height ////////////////////////////
+    //////////////////////////// Width pixel size ////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
 
-    // Initialize the 'Width and height'
+    // Initialize the 'Width pixel size'
 
     const setPngSize = (value) => { // 直接数値を指定するため 上のサイズ変更用関数から 引数 を event から value に変更
         //const value = event.target.value // disableして 直接引数の数値を value とする
-        const hasCrop = cropElement.checked
+        //const hasCrop = cropElement.checked
 
+        // 引数(value)の値で svg2png() の第二引数となる resvgOpts オブジェクトを新しく作る
         Object.assign(resvgOpts, {
             fitTo: {
                 mode: 'width',
                 value: parseInt(value, 10), // parseInt(string, radix= 10 進数)
             }
         })
-        svg2png(null, resvgOpts, hasCrop)
 
         // Set the width number of input area with argument value
         pngSizeElementViaNumber.value = value;
-        console.log(`Set 'Width and height' value as "${value}"`)
+        pngSizeElementViaRange.value = value;
+        console.log(`Set 'Width pixel size' initial value as "${value}"`)
     }
+
     // // Force to apply the '256' as PNG rendering size
     // // The half of `<input type="range" max="512">` is 256
     setPngSize(256);
 
-    countSvgSize()
+    // First PNG rendering
+    convertSvg({ target: svgElement })
 
 })(); // `(async function () {` の 即時実行関数
