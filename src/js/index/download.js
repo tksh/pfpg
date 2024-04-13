@@ -71,8 +71,7 @@ function getPixelSizeWxH() {
 function getCurrentStatus() {
 
     // Lines group color array
-
-    // stroke
+    // stroke, opacity, stroke-opacity
     const numberOfGroupsAndColorsValueArray = getGroupColorsValues();
     const stArray = numberOfGroupsAndColorsValueArray.stroke_array
     const opArray = numberOfGroupsAndColorsValueArray.opacity_array
@@ -95,6 +94,7 @@ function getCurrentStatus() {
     const mergedHexArray = stHexArray.map((item, index) => item + opHexArray[index] + soHexArray[index])
 
     // Reducing into half length if all hex pairs are duplicated.
+    // And deleting for "F" (in 5 chars hex) or "FF" (in 10 chars hex) at last.
     const optimizedHexArray = mergedHexArray.map(tenCharsHex => tryDeleteFs(tenToTenOrFive(tenCharsHex)))
 
     // Join with underscore '_'
@@ -102,7 +102,12 @@ function getCurrentStatus() {
     console.log('groupColorsHexString: ', groupColorsHexString) // e.g.: "FCFF4280FF_000FC_8F52FFFFFF_EEEFF_FFFFF"
 
 
-    // background color
+    // Path mode
+    const pathModeSelect = document.getElementById('path-mode')
+    const pathMode = pathModeSelect.value.slice(0, 3) // 'relative' => 'rel', 'absolute' => 'abs'
+
+
+    // Backdrop color
     const rectColorInput = document.getElementById('rect-color-picker')
     //console.log(rectColorInput)
     const rectColorWithHash = rectColorInput.value; // 要素の値は文字列として扱われる
@@ -110,40 +115,34 @@ function getCurrentStatus() {
     const rectColor = rectColorWithHashShorten.substring(1).toUpperCase() // 先頭の `#` を削除
     console.log('rectColor: ', rectColor)
 
-    // antiAliasing
+
+    // Anti-aliasing (shapeRendering)
     const antiAliasingSelect = document.getElementById('shape-rendering')
-    let antiAliasing;
-    if (antiAliasingSelect.value === 'geometricPrecision') {
-        antiAliasing = 'on';
-    } else if (antiAliasingSelect.value === 'crispEdges') {
-        antiAliasing = 'off';
-    }
+    const shapeRendering = antiAliasingSelect.value
+
 
     // Shape to trim
     const shapeToTrimSelect = document.getElementById('shape-to-trim')
     //console.log(shapeToTrimSelect)
-    const shapeToTrim = shapeToTrimSelect.value; // 要素の値は文字列として扱われる
+    let shapeToTrim = shapeToTrimSelect.value; // 要素の値は文字列として扱われる
     console.log('shapeToTrim: ', shapeToTrim)
 
-
-    // 'shape to trim' に 'squircleSlimmed' が 適用されている場合だけ ふたつのオプションの値を取得し それを含むファイル名を生成する
+    // 'Shape to trim' に 'squircleSlimmed' が 適用されている場合だけ ふたつのオプションの値を取得し それを含むファイル名を生成する
     if (shapeToTrim === 'squircleSlimmed') {
 
-        // Two options for squircle, slimmed
+        // Two options for 'Squircle, slimmed'
         const selectWidthNarrowness = document.getElementById('width-narrowness');
         const selectTopHeavyRatio = document.getElementById('top-heavy-ratio');
         const widthNarrowness = selectWidthNarrowness.value;
         const topHeavyRatio = selectTopHeavyRatio.value;
 
-        // Merge the all values of status, with two options
-        return `groupColors_${groupColorsHexString}-bgColor_${rectColor}-trimmedShape_${shapeToTrim}_${widthNarrowness}_${topHeavyRatio}-antiAlias_${antiAliasing}`
-
+        // Merge with two option values
+        shapeToTrim = `squircleSlimmed_${widthNarrowness}_${topHeavyRatio}`
     }
 
 
     // Merge the all values of status
-    return `groupColors_${groupColorsHexString}-bgColor_${rectColor}-trimmedShape_${shapeToTrim}-antiAlias_${antiAliasing}`
-
+    return `g_${groupColorsHexString}-p_${pathMode}-b_${rectColor}-t_${shapeToTrim}-r_${shapeRendering}`
 }
 
 
@@ -176,9 +175,7 @@ function downloadSvg() {
 
     link.click();
 }
-// Result:
-// 106 chars
-// 202304_001-strokeColor_B90000E2-backgroundColor_44FF2A99-trimmedShape_squircleSlimmed-antiAliasing_Off.svg
+// e.g.: 202308_001-31x31-g_000_000_000_EEE_FFF-p_abs-b_9999-t_square-r_crispEdges.svg
 
 
 
@@ -215,7 +212,5 @@ function downloadPng() {
 
     link.click();
 }
-// Result:
-// 95 chars
-// 202304_001-255x255px-strokeColor_000000FF-bgColor_FFFFFF99-trimmedShape_squircleSlimmed-antiAlias_Off.svg
+// e.g.: 202308_001-256x256px-g_000_000_000_EEE_FFF-p_abs-b_9999-t_square-r_crispEdges.png
 
