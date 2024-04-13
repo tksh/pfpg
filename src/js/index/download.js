@@ -95,7 +95,7 @@ function getCurrentStatus() {
     const mergedHexArray = stHexArray.map((item, index) => item + opHexArray[index] + soHexArray[index])
 
     // Reducing into half length if all hex pairs are duplicated.
-    const optimizedHexArray = mergedHexArray.map(tenCharsHex => tenToTenOrFive(tenCharsHex))
+    const optimizedHexArray = mergedHexArray.map(tenCharsHex => tryDeleteFs(tenToTenOrFive(tenCharsHex)))
 
     // Join with underscore '_'
     const groupColorsHexString = optimizedHexArray.join('_')

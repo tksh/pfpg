@@ -61,6 +61,9 @@ function eightToFourOrThree(hex) {
 // console.log(eightToFourOrThree("#123456")); // #123456
 
 
+
+// For lines group attributes
+
 // 10桁のhexコードを受け取り、省略形に変換する関数
 function tenToTenOrFive(hex) {
 
@@ -94,6 +97,69 @@ function tenToTenOrFive(hex) {
 // console.log(tenToTenOrFive("112233ffff")) // 123ff
 // console.log(tenToTenOrFive("112233ee00")) // 123e0
 // console.log(tenToTenOrFive("123456ffff")) // 123456ffff
+
+function tryDeleteFs(hex) { // Input 10 or 5 chars hex
+
+    hex = hex.toUpperCase()
+
+    // 10 => 6
+    if (hex.length === 10) {
+        if (hex.slice(-4) === "FFFF") {
+            return hex.slice(0, 6)
+        } else {
+            return hex
+        }
+    }
+
+    // 5 => 3 (hex.length === 5)
+    else {
+        if (hex.slice(-2) === "FF") {
+            return hex.slice(0, 3)
+        } else {
+            return hex
+        }
+    }
+}
+
+// console.log(tryDeleteFs("abcff"))      // ABC
+// console.log(tryDeleteFs("ABCFF"))      // ABC
+// console.log(tryDeleteFs("abcde"))      // ABCDE
+// console.log(tryDeleteFs("12345"))      // 12345
+// console.log(tryDeleteFs("123456ffff")) // 123456
+// console.log(tryDeleteFs("123456abff")) // 123456ABFF
+
+
+
+// For backdrop color
+// but currently using 'eightToFourOrThree()' instead of this.
+
+//function tryDeleteF(hex) { // Input 8 or 4 chars hex
+//
+//    hex = hex.toUpperCase()
+//
+//    // 8 => 6
+//    if (hex.length === 8) {
+//        if (hex.slice(-4) === "FF") {
+//            return hex.slice(0, 6)
+//        } else {
+//            return hex
+//        }
+//    }
+//
+//    // 4 => 3  (hex.length === 4)
+//    else {
+//        if (hex.slice(-2) === "F") {
+//            return hex.slice(0, 3)
+//        } else {
+//            return hex
+//        }
+//    }
+//}
+// console.log(tryDeleteFs("abcf"))     // ABCF
+// console.log(tryDeleteFs("ABCF"))     // ABCF
+// console.log(tryDeleteFs("abcd"))     // ABCD
+// console.log(tryDeleteFs("123456ff")) // 123
+// console.log(tryDeleteFs("123456ab")) // 123456AB
 
 
 
