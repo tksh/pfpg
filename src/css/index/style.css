@@ -260,6 +260,10 @@ footer {
     padding: 1rem;
 }
 
+.font-size-small {
+    font-size: 0.8rem;
+}
+
 .footer-info {
     font-size: 0.9rem;
     padding: 1rem;
