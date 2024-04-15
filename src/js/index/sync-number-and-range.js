@@ -1,4 +1,4 @@
-// `Width:` value sync between `number` and `range`
+// `Width pixel size:` value sync between `number` and `range`
 const syncWidthNum = (element) => {
   const id = element.id; // 入力された要素のidを取得
   const value = element.value; // 入力された要素の値を取得
@@ -7,7 +7,7 @@ const syncWidthNum = (element) => {
   target.value = value; // 対応する要素の値を入力された要素の値と同じにする
 }
 
-// Adjust `Width:` value by step
+// Adjust `Width pixel size:` value by step with '-' or '+' buttons
 const adjustWidthNum = (step) => {
   const rangeInput = document.getElementById("png-size-range");
   const numberInput = document.getElementById("png-size-number");
@@ -17,5 +17,7 @@ const adjustWidthNum = (step) => {
       rangeInput.value = newValue;
       numberInput.value = newValue;
       syncWidthNum(rangeInput); // 同期を強制的に行う
+      return newValue // 新しい値を返す
   }
+  return null // 範囲外の場合はnullを返す
 }

@@ -407,7 +407,7 @@
         // Replace the path of shape to trim
         const inputSVG = getInputSvg()
         const updatedSVG = inputSVG.replace(patternForClipPathShape, `<clipPath id="clipShape">\n            ${shapePathOfSquircleSlimmed}\n        <\/clipPath>`);
-        // 'inpu-svg' <textarea> の value属性を 更新する
+        // 'input-svg' <textarea> の value属性を 更新する
         svgElement.value = updatedSVG;
         // convertSvg関数を呼び出す
         convertSvg({ target: svgElement });
@@ -583,8 +583,8 @@
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////// Width pixel size ////////////////////////////
 
-    const pngSizeElementViaNumber = document.querySelector('#png-size-number')
-    const pngSizeElementViaRange = document.querySelector('#png-size-range')
+    const pngSizeChangeViaNumber = document.querySelector('#png-size-number')
+    const pngSizeChangeViaRange = document.querySelector('#png-size-range')
 
     // png-size-number, png-size-range のどちらによって 数値が変更されても この処理がされる
     const pngSizeElement = (event) => {
@@ -604,8 +604,8 @@
         convertSvg({ target: svgElement });
     }
 
-    pngSizeElementViaNumber.addEventListener('change', pngSizeElement); // change value via png-size-number
-    pngSizeElementViaRange.addEventListener('change', pngSizeElement); // change value via png-size-range
+    pngSizeChangeViaNumber.addEventListener('change', pngSizeElement); // change value via png-size-number
+    pngSizeChangeViaRange.addEventListener('change', pngSizeElement); // change value via png-size-range
 
     // Constraint validation
     const numberInput = document.getElementById("png-size-number");
@@ -614,6 +614,34 @@
         // 入力値の妥当性を報告する
         numberInput.reportValidity();
     });
+
+
+    // '-' or '+' ボタンクリック時の共通処理を行う関数
+    const handleButtonClick = (step) => {
+        const newValue = adjustWidthNum(step);
+
+        if (newValue !== null) { // 返り値がnullでなければ PNGレンダリング処理を行う
+            console.log("New value of 'Width pixel size':", newValue);
+
+            // ボタンで変更された結果のサイズ(newValue)の値で svg2png() の第二引数となる resvgOpts オブジェクトを新しく作る
+            Object.assign(resvgOpts, {
+                fitTo: {
+                    mode: 'width',
+                    value: newValue,
+                }
+            });
+
+            convertSvg({ target: svgElement });
+        }
+    };
+
+    // ボタンのクリックイベントに対して共通処理を呼び出す
+    const pngSizeDecButton = document.querySelector('#width-size-dec');
+    const pngSizeIncButton = document.querySelector('#width-size-inc');
+
+    pngSizeDecButton.addEventListener('click', () => handleButtonClick(-1));
+    pngSizeIncButton.addEventListener('click', () => handleButtonClick(1));
+
     //////////////////////////// Width pixel size ////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
@@ -633,8 +661,8 @@
         })
 
         // Set the width number of input area with argument value
-        pngSizeElementViaNumber.value = value;
-        pngSizeElementViaRange.value = value;
+        pngSizeChangeViaNumber.value = value;
+        pngSizeChangeViaRange.value = value;
         console.log(`Set 'Width pixel size' initial value as "${value}"`)
     }
 
