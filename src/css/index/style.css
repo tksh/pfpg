@@ -179,28 +179,45 @@ input[data-jscolor="{}"] {
     margin-top: 1rem;
     border: 1px solid var(--color-picker-border);
 }
+
 input.stroke {
     width: 7rem;
 }
+
 label.stroke {
     margin-right: 0.5rem
 }
 
-/* Background color */
-input.bgcolor {
+/* Backdrop color */
+input.bg-color {
     margin-top: 0;
     width: 8.5rem;
 }
 
-/* Width and height */
-input.width-size {
+/* Width pixel size */
+input#png-size-number {
     width: 4rem;
 }
+
 input[type="range"] {
     min-width: 16rem;
 
-    /* スライダーを親要素のフォントサイズの0.25倍下にずらす */
-    vertical-align: -0.25rem;
+    /* スライダーを親要素のフォントサイズの0.3倍下にずらす */
+    vertical-align: -0.3rem;
+}
+
+button#width-size-dec,
+button#width-size-inc {
+    width: 1rem
+}
+
+button#width-size-dec {
+    margin-left: 1rem
+        /*
+        同じ数値が 以下の二通りに機能する
+         - PC画面用には 数値入力ボックスとの余白
+         - モバイル画面用には その上の数値入力項目に対するインデント
+        */
 }
 
 #artwork-customization,
@@ -218,23 +235,28 @@ p {
 details {
     padding: 1rem 0;
 }
+
 dd {
     padding: 0.25rem 0.5rem 0.25rem 1rem;
 }
+
 dt {
     padding: 1.5rem 0.5rem 0.25rem 0;
 }
 
-ol, ul {
+ol,
+ul {
     padding-left: 1rem;
 }
 
 .padding-top {
     padding-top: 1.5rem;
 }
+
 .padding-top-2 {
     padding-top: 2rem;
 }
+
 .padding-left {
     padding-left: 2px;
 }
@@ -244,9 +266,13 @@ ol, ul {
 }
 
 button {
-    padding: 0 1rem;
     background-color: var(--color-button-bg);
     border-color: var(--color-button-border);
+}
+
+button#png-download-button,
+button#svg-download-button {
+    padding: 0 1rem;
     min-width: 70%;
 }
 
@@ -292,6 +318,12 @@ div#samples figure {
     display: inline;
 }
 
+
+.flex-direction-column {
+    display: flex;
+    /* Flexboxを使用, 要素を横並びに配置*/
+}
+
 @media screen and (max-width: 512px) {
 
     #textarea-box,
@@ -314,12 +346,44 @@ div#samples figure {
         font-size: 0.9rem;
     }
 
-    .opts-cell {
-        padding-left: 1rem; /* default: 2rem; */
-    }
     .opts-cell-for-group-colors {
-        padding-left: 1.5rem /* default: 2.5rem; */
+        padding-left: 1.5rem
+            /* default: 2.5rem; */
     }
+
+    .opts-cell {
+        padding-left: 1rem;
+        /* default: 2rem; */
+    }
+
+
+    /* >>> 'Width pixel size' - buttons and input[range] */
+
+    .flex-direction-column {
+        flex-direction: column; /* 子要素を縦に並べる */
+    }
+    .buttons-and-range {
+        width: 100%;
+        padding-top: .5rem;
+    }
+    #png-size-range {
+        min-width: calc(100% - 5.5rem);
+    }
+    .flex-direction-column .display-inline-block {
+        display: inline-block;
+    }
+
+    .flex-direction-column button#width-size-dec { /* 左側のボタン '-' */
+        margin-right: 0.5rem;
+        /* 右側に余白を追加 - タッチ操作しやすいように モバイルの時に より大きく余白を作る*/
+    }
+    .flex-direction-column button#width-size-inc { /* 右側のボタン '+' */
+        margin-left: 0.5rem;
+        /* 左側に余白を追加 - タッチ操作しやすいように モバイルの時に より大きく余白を作る*/
+    }
+
+    /* <<< 'Width pixel size' - buttons and input[range] */
+
 
     legend {
         padding-left: 0.5rem;

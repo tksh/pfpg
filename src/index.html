@@ -196,7 +196,7 @@
                 <div class="opts">
                     <div class="opts-cell">
                         <label for="rect-color-picker">Backdrop color:</label>
-                        <input value="#FFF9" data-jscolor="{}" id="rect-color-picker" class="bgcolor" autocomplete="off">
+                        <input value="#FFF9" data-jscolor="{}" id="rect-color-picker" class="bg-color" autocomplete="off">
                     </div>
                 </div>
 
@@ -270,10 +270,16 @@
 
                 <!-- Width pixel size -->
                 <div class="opts">
-                    <div class="opts-cell">
-                        <label for="png-size-number">Width pixel size:</label>
-                        <input type="number" id="png-size-number" name="png-size-number" class="width-size" min="1" value="256" autocomplete="off" oninput="syncWidthNum(this)"><span class="padding-left"></span>
-                        <input type="range" id="png-size-range" name="png-size-range" min="16" max="512" step="16" autocomplete="off" oninput="syncWidthNum(this)">
+                    <div class="opts-cell flex-direction-column">
+                        <div class="display-inline-block">
+                            <label for="png-size-number">Width pixel size:</label>
+                            <input type="number" id="png-size-number" name="png-size-number" class="width-size" min="1" value="256" autocomplete="off" oninput="syncWidthNum(this)">
+                        </div>
+                        <div class="display-inline-block buttons-and-range">
+                            <button type="button" id="width-size-dec" onclick="adjustWidthNum(-1)">-</button>
+                            <input type="range" id="png-size-range" name="png-size-range" min="16" max="512" step="16" autocomplete="off" oninput="syncWidthNum(this)">
+                            <button type="button" id="width-size-inc" onclick="adjustWidthNum(1)">+</button>
+                        </div>
                     </div>
                 </div>
 
