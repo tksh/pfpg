@@ -208,7 +208,7 @@ input[type="range"] {
 
 button#width-size-dec,
 button#width-size-inc {
-    width: 1rem
+    width: 1.25rem
 }
 
 button#width-size-dec {
@@ -367,7 +367,7 @@ div#samples figure {
         padding-top: .5rem;
     }
     #png-size-range {
-        min-width: calc(100% - 5.5rem);
+        min-width: calc(100% - 6rem);
     }
     .flex-direction-column .display-inline-block {
         display: inline-block;
