@@ -319,17 +319,21 @@
         //console.log('selectOfClipShape value is ', value) // square|circle|squircle|squircleSlimmed
 
 
-        // `squircleSlimmed`が 選ばれた時だけ表示される 2つの オプション選択用の <select>要素を 取得
-        const optionDivWidthNarrowness = document.getElementById('width-narrowness-div');
-        const optionDivTopHeavyRatio = document.getElementById('top-heavy-ratio-div');
+        // `squircleSlimmed`が 選ばれた時だけ表示される
+        // 2つのオプション選択用の<select>要素 と 横幅クロップ用の<label>&<input>要素 を取得
+        const divWidthNarrowness = document.getElementById('width-narrowness-div');
+        const divTopHeavyRatio = document.getElementById('top-heavy-ratio-div');
+        const divCropSideMargins = document.getElementById('crop-side-margins-div');
 
-        // 選択されたオプションによって2つのオプション<select>を表示または非表示にする
+        // 選択されたオプションによって 2つの<select> と 1つの<label>&<input> を 表示または非表示にする
         if (value === 'squircleSlimmed') {
-            optionDivWidthNarrowness.style.display = 'inline'; // 表示
-            optionDivTopHeavyRatio.style.display = 'inline'; // 表示
+            divWidthNarrowness.style.display = 'inline'; // 表示
+            divTopHeavyRatio.style.display = 'inline';   // 表示
+            divCropSideMargins.style.display = 'inline'; // 表示
         } else {
-            optionDivWidthNarrowness.style.display = 'none'; // 非表示
-            optionDivTopHeavyRatio.style.display = 'none'; // 非表示
+            divWidthNarrowness.style.display = 'none'; // 非表示
+            divTopHeavyRatio.style.display = 'none';   // 非表示
+            divCropSideMargins.style.display = 'none'; // 非表示
         }
 
 
@@ -383,7 +387,7 @@
         // Replace the path of shape to trim
         const inputSVG = getInputSvg()
         const updatedSVG = inputSVG.replace(patternForClipPathShape, `<clipPath id="clipShape">\n            ${shapePathOfSquircleSlimmed}\n        <\/clipPath>`);
-        // 'inpu-svg' <textarea> の value属性を 更新する
+        // 'input-svg' <textarea> の value属性を 更新する
         svgElement.value = updatedSVG;
         // convertSvg関数を呼び出す
         convertSvg({ target: svgElement });
@@ -577,6 +581,13 @@
         convertSvg({ target: svgElement });
     })
     /////////////////////////// Backdrop color ///////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+
+
+    //////////////////////////////////////////////////////////////////////////
+    ////////////////////////// Crop the side spaces //////////////////////////
+
+    ////////////////////////// Crop the side spaces //////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
 

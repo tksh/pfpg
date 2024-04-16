@@ -1,0 +1,76 @@
+// 画像をロードする
+function loadImage(url, callback) {
+    var img = new Image();
+    img.onload = function () {
+        callback(img);
+    };
+    img.src = url;
+}
+
+
+// 画像の左右の透明な余白をクロップする
+function cropTransparentEdges(img) {
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.drawImage(img, 0, 0);
+
+    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    var data = imageData.data;
+
+    var left = 0, right = img.width;
+    var i, j;
+
+    // 左側の余白を検出
+    leftEdge: for (i = 0; i < img.width; i++) {
+        for (j = 0; j < img.height; j++) {
+            if (data[(j * img.width + i) * 4 + 3] !== 0) {
+                left = i;
+                break leftEdge;
+            }
+        }
+    }
+
+    // 右側の余白を検出
+    rightEdge: for (i = img.width - 1; i >= left; i--) {
+        for (j = 0; j < img.height; j++) {
+            if (data[(j * img.width + i) * 4 + 3] !== 0) {
+                right = i;
+                break rightEdge;
+            }
+        }
+    }
+
+    // クロップされた領域を新しいcanvasに描画
+    var width = right - left;
+    var croppedCanvas = document.createElement('canvas');
+    var croppedCtx = croppedCanvas.getContext('2d');
+
+    croppedCanvas.width = width;
+    croppedCanvas.height = img.height;
+    croppedCtx.putImageData(ctx.getImageData(left, 0, width, img.height), 0, 0);
+
+    return croppedCanvas;
+}
+
+
+// チェックボックスの状態が変わったときに呼ばれる関数
+function onCheckboxChanged(event) {
+    if (event.target.checked) {
+        // チェックボックスがチェックされた場合、クロップ処理を実行
+        var imgElement = document.getElementById('img');
+        loadImage(imgElement.src, function (img) {
+            var croppedCanvas = cropTransparentEdges(img);
+            // クロップされた画像を表示する
+            imgElement.src = croppedCanvas.toDataURL();
+        });
+    } else {
+        // チェックボックスがチェックされていない場合、何もしない
+    }
+}
+
+// チェックボックス要素にイベントリスナーを追加
+var checkbox = document.getElementById('crop-side-margins');
+checkbox.addEventListener('change', onCheckboxChanged);

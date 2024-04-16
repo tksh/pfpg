@@ -126,6 +126,8 @@
     <!-- Adjust the height of whole components to fit to display height -->
     <script defer src="./js/index/img-box-sizing.js"></script>
 
+    <script defer src="./js/index/crop-via-canvas.js"></script>
+
 </head>
 
 
@@ -252,6 +254,16 @@
                     </div>
                 </div>
 
+                <!-- Crop side margins (using Canvas API) -->
+                <div id="crop-side-margins-div" class="displayNone">
+                    <div class="opts">
+                        <div class="opts-cell">
+                            <label for="crop-side-margins">- Crop side margins:</label>
+                            <input type="checkbox" name="crop-side-margins" id="crop-side-margins" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
 
@@ -346,7 +358,6 @@
 
 
     </header>
-
 
 
     <main class="padding-bottom">

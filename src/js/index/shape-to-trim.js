@@ -3,8 +3,8 @@
 // Get the grid size
 function getGridSize() {
     const patternToGetGridsizeFromViewbox = /viewBox="\d+\s+\d+\s+\d+\s+(\d+)"/; // viewBox属性の値から最後の数字を抽出する正規表現
-    const matchs = patternToGetGridsizeFromViewbox.exec(getInputSvg()); // // 正規表現パターンと文字列を照合, 結果を配列として返す
-    const gridSize = matchs[1]
+    const matches = patternToGetGridsizeFromViewbox.exec(getInputSvg()); // // 正規表現パターンと文字列を照合, 結果を配列として返す
+    const gridSize = matches[1]
     //console.log('gridSize: ', gridSize) // 配列の 0番目には全体のマッチ結果, 1番目にはグルーピングした部分 // 255
     return gridSize
 }
