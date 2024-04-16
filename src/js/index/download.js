@@ -102,7 +102,8 @@ function getCurrentStatus() {
 
     // Path mode
     const pathModeSelect = document.getElementById('path-mode')
-    const pathMode = pathModeSelect.value.slice(0, 3) // 'relative' => 'rel', 'absolute' => 'abs'
+    const pathMode = pathModeSelect.value.slice(0, 3) + pathModeSelect.value.slice(8, 11)
+    //  'relativeMerged' | 'absoluteSeparated' => 'relMer' | 'absSep'
 
 
     // Backdrop color
