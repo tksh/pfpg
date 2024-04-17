@@ -3,6 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- from playground -->
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>pfpg</title>
 
@@ -20,8 +23,9 @@
 
     <!-- resvg-js -->
     <!-- <link rel="preload" as="fetch" type="application/wasm" href="./wasm/index_bg_20230424.wasm" crossorigin> -->
-    <link rel="preload" as="fetch" type="application/wasm" href="./wasm/index_bg_20230424.wasm" crossorigin>
-    <script defer src="./js/index/index.min.js"></script>
+    <link rel="preload" as="fetch" type="application/wasm" href="./wasm/index_bg.2.6.2.wasm" crossorigin>
+    <!-- <script defer src="./js/index/index.min.js"></script> -->
+    <script src="./js/index/index.2.6.2.min.js"></script>
 
     <!-- JS for index.html -->
     <script defer src="./js/index/jscolor.min.js"></script>
@@ -126,7 +130,9 @@
     <!-- Adjust the height of whole components to fit to display height -->
     <script defer src="./js/index/img-box-sizing.js"></script>
 
-    <script defer src="./js/index/crop-via-canvas.js"></script>
+    <script defer src="./js/index/crop-via-checkbox.js"></script>
+    <script defer src="./js/index/crop-for-png.js"></script>
+    <script defer src="./js/index/crop-for-svg.js"></script>
 
 </head>
 
@@ -254,7 +260,7 @@
                     </div>
                 </div>
 
-                <!-- Crop side margins (using Canvas API) -->
+                <!-- Crop side margins (Both PNG and SVG) -->
                 <div id="crop-side-margins-div" class="displayNone">
                     <div class="opts">
                         <div class="opts-cell">

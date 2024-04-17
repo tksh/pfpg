@@ -55,22 +55,3 @@ function cropTransparentEdges(img) {
     return croppedCanvas;
 }
 
-
-// チェックボックスの状態が変わったときに呼ばれる関数
-function onCheckboxChanged(event) {
-    if (event.target.checked) {
-        // チェックボックスがチェックされた場合、クロップ処理を実行
-        var imgElement = document.getElementById('img');
-        loadImage(imgElement.src, function (img) {
-            var croppedCanvas = cropTransparentEdges(img);
-            // クロップされた画像を表示する
-            imgElement.src = croppedCanvas.toDataURL();
-        });
-    } else {
-        // チェックボックスがチェックされていない場合、何もしない
-    }
-}
-
-// チェックボックス要素にイベントリスナーを追加
-var checkbox = document.getElementById('crop-side-margins');
-checkbox.addEventListener('change', onCheckboxChanged);

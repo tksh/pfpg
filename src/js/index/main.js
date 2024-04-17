@@ -1,18 +1,85 @@
+const INIT_INPUT_SVG_STRING = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0.775 0 29.45 31" shape-rendering="crispEdges">
+<title>202308_001</title>
+<defs>
+    <clipPath id="clipShape">
+        <path d="M 1.55,15.5Q 1.24,0 15.5,0T 29.45,15.5 15.5,31 1.55,15.5" />
+    </clipPath>
+</defs>
+<g clip-path="url(#clipShape)">
+    <rect width="100%" height="100%" fill="#9999" />
+    <g stroke="#000000" opacity="1" stroke-opacity="1">
+        <path stroke-width="3" d="m1 0 0 26m3-26 0 25m3-25-1 23m0-8 4 6m-2-1 0 3m-1-18 4-5m8 0 5 5m1-5 1 24m-2-9 0 7m4-22 0 25m2-25 0 27m-13 1 3 3m-16-7 4-2m14-22 2 9m2 2-3 6m-1-1 0 4m0-1 2 4m-1-1 8 5m-8-19 3 2" />
+    </g>
+    <g stroke="#000000" opacity="1" stroke-opacity="1">
+        <path stroke-width="2" d="m0 0 31 1m-22 2 5-3m-7 8 2-6m-3 8 2 7m1 5 1-2m-8 5 2-1m12-24 2 2m0-2 2 2m-8 27 2 1m-1-2 2 1m4 0 3 2m2-3 0 3m-3-14 1-1m2-1-2 1m1-8 0 2m-9-10 2 1" />
+    </g>
+    <g stroke="#000000" opacity="1" stroke-opacity="1">
+        <path stroke-width="1" d="m1 26-1 1m7-20 1 4m-1-6 1 4m-1 3 1-3m4 14 3 3m-1-1 3 2m-3 0 1 0m-1 1 1 2m0-2 0 2m2-2-1 3m2-4 2 3m-4-1 2-2m2-4-1 2m-1 0 0 1m2 1 3 2m-2-4 3 3m0-5-4 7m5-6-3 7m4-6-2 6m3-5-1 5m3-5-1 5m3-3-2 3m-4-2 1 2m0-4 2 4m0-3 3 3m-17-11 2 2m-1-1 2 3m-1 0 1 2m-4-9 2 3m0-4 1 2m-3-1 3-2m-2 3 2-1m-2 2 2 0m2-9-3 5m2-3 1 2m-6-5 2 4m-1-2 2 3m-2-4-2 4m1-1 0 1m0 0 3 0m-3-2 2 2m0-4 4 0m-2 1 1-2m-2 1 2-3m-2 1 2-3m-1 0 2-3m-4 6 1-1m-6 3 1 1m3-9 2 1m-1-2 5 4m-2-4 3 3m-4 0 2 3m-3-1 2 4m-5 8 2 0m-2 2 4 1m-2-1 3-2m-3 0 3-2m5-5 1 2m-2 1 1-2m0-1 1 0m-21 17 2 3m6-1 4-2" />
+    </g>
+    <g stroke="#eeeeee" opacity="1" stroke-opacity="1">
+        <path stroke-width="1" d="m14 6-5 2m0-2 5-2m-4 0 2-1m-1 6 0 1m2-1 2-1m-7 2 2-2m-1 4 1 4m1-1 1 0m-1 2 1 0m1 5 2 3m0-14 1 1m-6 12 0 5m1-3 1 2m-12 0 2 2m2-2 3 2m-1-3 3 2m0-3 1 1m0 2 3-2m5 0 2-2" />
+    </g>
+    <g stroke="#ffffff" opacity="1" stroke-opacity="1">
+        <path stroke-width="1" d="m12 21 0 2m-1-19-2 3m2-1-1 2m1 3-2 3m2 1-1 1m2 5 2 1m-1 1 2 1" />
+    </g>
+</g>
+</svg>`
+
+let SVG_STRING = ''
+
+
+async function getFontBuffer() {
+    if (fetchFontLock) return
+
+    fetchFontLock = true
+    const controller = new AbortController()
+    const signal = controller.signal
+    setTimeout(() => controller.abort(), 3000) // Cancel the fetch request
+
+    try {
+      const t = performance.now()
+      const font = await fetch(fontFile)
+
+      if (!font.ok) return
+
+      const data = await font.arrayBuffer()
+      const buffer = new Uint8Array(data)
+      fetchFontLock = false
+      console.info('✨ 字体请求用时:', performance.now() - t + 'ms')
+      return {
+        buffer,
+        family_name: 'Source Han Serif CN Light',
+      }
+    } catch (error) {
+      return console.error('fetch font error', error)
+    }
+  }
+
 (async function () {
-    await resvg.initWasm(fetch('./wasm/index_bg.wasm')) // Path that relative from index.html
+    await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm')) // Path that relative from index.html
     const output = document.getElementById('output')
-    const svgElement = document.querySelector('#input-svg') // Select <textarea id="input-svg" ...
-    const inputSVG = svgElement.value.trim() // `.trim()` = 文字列の両端の空白を削除
-    //console.log('inputSVG: ', inputSVG)
-    let resvgOpts = {}
-    //await svg2png(inputSVG, resvgOpts)
+    const svgInputElement = document.querySelector('#input-svg') // Select <textarea id="input-svg" ...
+    svgInputElement.value = INIT_INPUT_SVG_STRING
+    console.log('svgInputElement: ', svgInputElement)
 
-    async function svg2png(inputSVG, opts, hasCrop) {
+    // let resvgOpts = {}
+    const inputSvgElement = new DOMParser().parseFromString(INIT_INPUT_SVG_STRING, 'image/svg+xml').documentElement
+    let resvgOpts = {
+        font: {},
+        fitTo: {
+          mode: 'zoom',
+          value: 2,
+        },
+      }
 
-        const svg = inputSVG ? inputSVG : svgElement.value.trim()
-        // inputSVG が真（例えば、文字列が空でない、nullでないなど）であれば、その値を svg 変数に代入します。
-        // inputSVG が偽（例えば、nullや空文字列）であれば、svgElement.value.trim() の結果を svg 変数に代入します。ここで、svgElement.value はおそらくHTML要素の値を取得し、trim() メソッドはその値の前後の空白を削除します。
-        // したがって、このコードは inputSVG が提供されている場合はそれを使用し、そうでない場合は svgElement から取得した値を使用して、その後空白を削除した状態を svg 変数に代入します。
+    //await svg2png(svgString, resvgOpts)
+
+    async function svg2png(svgString, opts, hasCrop) {
+
+        const svg = svgString ? svgString : svgInputElement.value.trim()
+        // svgString が真（例えば、文字列が空でない、nullでないなど）であれば、その値を svg 変数に代入します。
+        // svgString が偽（例えば、nullや空文字列）であれば、svgInputElement.value.trim() の結果を svg 変数に代入します。ここで、svgInputElement.value はおそらくHTML要素の値を取得し、trim() メソッドはその値の前後の空白を削除します。
+        // したがって、このコードは svgString が提供されている場合はそれを使用し、そうでない場合は svgInputElement から取得した値を使用して、その後空白を削除した状態を svg 変数に代入します。
 
         if (!svg) {
             alert('SVG is empty')
@@ -79,7 +146,7 @@
         pngDownloadButtonElement.innerHTML = pngDownloadSizeText
 
     }
-    // The end of `async function svg2png(inputSVG, opts, hasCrop) {`
+    // The end of `async function svg2png(svgString, opts, hasCrop) {`
 
 
     function addMultipleEventListener(element, events, handler) {
@@ -87,17 +154,17 @@
     }
 
 
-    // addMultipleEventListener(svgElement, ['change', 'keyup', 'paste'], function (event) {
-    //   const inputSVG = event.target.value.trim()
+    // addMultipleEventListener(svgInputElement, ['change', 'keyup', 'paste'], function (event) {
+    //   const svgString = event.target.value.trim()
     //   const hasCrop = cropElement.checked
-    //   if (!inputSVG) return
-    //   svg2png(inputSVG, resvgOpts, hasCrop)
+    //   if (!svgString) return
+    //   svg2png(svgString, resvgOpts, hasCrop)
     // })
 
     // 上記のSVGテキストエリアの編集イベントごとに PNGへの変換処理が呼び出される部分を
     // <input>や<select>などの選択要素からの更新でも それが呼び出されるように 下記の通りに変更した
     // `convertSvg` という関数を作り 選択要素からSVGテキストエリアを更新した直後に
-    // `convertSvg({ target: svgElement });` として呼び出す
+    // `convertSvg({ target: svgInputElement });` として呼び出す
 
 
     // svg2png関数を呼び出す関数を定義
@@ -118,7 +185,7 @@
             });
         }
 
-        async function measureSvg2PngPerformance(inputSVG, opts, hasCrop) {
+        async function measureSvg2PngPerformance(svgString, opts, hasCrop) {
             // 処理中メッセージを表示
             await updateRenderingStatus("Now rendering ...<br> Please wait a moment :)", pngDownloadButtonElement);
 
@@ -130,7 +197,7 @@
 
                     try {
                         // svg2png関数を呼び出す
-                        const result = await svg2png(inputSVG, opts, hasCrop);
+                        const result = await svg2png(svgString, opts, hasCrop);
 
                         // 終了時刻を記録
                         const endTime = performance.now();
@@ -154,13 +221,13 @@
                     }
                 }, 0); // 0ミリ秒後に実行
             });
-        } // End of 'async function measureSvg2PngPerformance(inputSVG, opts, hasCrop) {'
+        } // End of 'async function measureSvg2PngPerformance(svgString, opts, hasCrop) {'
 
-        const inputSVG = event.target.value.trim()
+        const svgString = event.target.value.trim()
         const hasCrop = cropElement.checked
-        if (!inputSVG) return
+        if (!svgString) return
 
-        measureSvg2PngPerformance(inputSVG, resvgOpts, hasCrop)
+        measureSvg2PngPerformance(svgString, resvgOpts, hasCrop)
             .then((result) => {
                 //console.log('result: ', result); // undefined
 
@@ -176,7 +243,7 @@
     }; // End of 'const convertSvg = async (event) => {'
 
     // テキストを編集するたびに変換処理が呼び出される関数を設定
-    addMultipleEventListener(svgElement, ['change', 'keyup', 'paste'], convertSvg);
+    addMultipleEventListener(svgInputElement, ['change', 'keyup', 'paste'], convertSvg);
 
 
     //////////////////////////////////////////////////////////////////////////
@@ -235,11 +302,11 @@
 
 
         // 設定の値を 元に戻した 新しいSVG文字列を textarea に挿入する
-        const svgElement = document.querySelector('#input-svg')
-        svgElement.value = newPathModeSvgStr;
+        const svgInputElement = document.querySelector('#input-svg')
+        svgInputElement.value = newPathModeSvgStr;
 
         // convertSvg関数を呼び出す
-        convertSvg({ target: svgElement });
+        convertSvg({ target: svgInputElement });
     });
     /////////////////////////////// Path-mode ////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -267,7 +334,7 @@
         updateSvgForNewStep()
 
         // Re-rendering the image from new step opacity value SVG
-        convertSvg({ target: svgElement });
+        convertSvg({ target: svgInputElement });
     });
 
     ////////////////////////////// Opacity steps /////////////////////////////
@@ -288,16 +355,16 @@
         const value = selectOfShapeRendering.value;
         //console.log('selectOfShapeRendering value is', value) // geometricPrecision | crispEdges
         // <textarea>のvalue属性を取得
-        const inputSVG = svgElement.value;
+        const svgString = svgInputElement.value;
 
         // 正規表現パターンを作成
         const patternForShapeRendering = /shape-rendering="[^"]*"/g;
         // 正規表現でマッチした部分を書き換える
-        const updatedSVG = inputSVG.replace(patternForShapeRendering, `shape-rendering="${value}"`);
+        const updatedSVG = svgString.replace(patternForShapeRendering, `shape-rendering="${value}"`);
         // <textarea>のvalue属性を更新する
-        svgElement.value = updatedSVG;
+        svgInputElement.value = updatedSVG;
         // convertSvg関数を呼び出す
-        convertSvg({ target: svgElement });
+        convertSvg({ target: svgInputElement });
     });
     ///////////////////////////// Anti-aliasing /////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -338,7 +405,7 @@
 
 
         // Get SVG string from textarea
-        const inputSVG = getInputSvg()
+        const svgString = getInputSvg()
 
         // Get the grid size
         const gridSize = getGridSize()
@@ -358,11 +425,11 @@
         // <path d="M 10.2,127.5Q 7.65,0 127.5,0T 244.8,127.5 127.5,255 10.2,127.5" />
 
         // Get the new svg string with selected shape path
-        const updatedSVG = svgWithNewShapeToTrim(value, inputSVG, shapePathOfSquircle, shapePathOfSquircleSlimmed)
+        const updatedSVG = svgWithNewShapeToTrim(value, svgString, shapePathOfSquircle, shapePathOfSquircleSlimmed)
         // <textarea>のvalue属性を更新する
-        svgElement.value = updatedSVG;
+        svgInputElement.value = updatedSVG;
         // convertSvg関数を呼び出す
-        convertSvg({ target: svgElement });
+        convertSvg({ target: svgInputElement });
     });
     // The end of `selectOfClipPathShape.addEventListener("change", () => {`
 
@@ -385,12 +452,12 @@
         // cliPathとして使う かたち のパス文字列 を 取得する正規表現パターン
         const patternForClipPathShape = /<clipPath id="clipShape">\n.*\n.*<\/clipPath>/g;
         // Replace the path of shape to trim
-        const inputSVG = getInputSvg()
-        const updatedSVG = inputSVG.replace(patternForClipPathShape, `<clipPath id="clipShape">\n            ${shapePathOfSquircleSlimmed}\n        <\/clipPath>`);
+        const svgString = getInputSvg()
+        const updatedSVG = svgString.replace(patternForClipPathShape, `<clipPath id="clipShape">\n            ${shapePathOfSquircleSlimmed}\n        <\/clipPath>`);
         // 'input-svg' <textarea> の value属性を 更新する
-        svgElement.value = updatedSVG;
+        svgInputElement.value = updatedSVG;
         // convertSvg関数を呼び出す
-        convertSvg({ target: svgElement });
+        convertSvg({ target: svgInputElement });
     });
 
     // Top-heavy ratio
@@ -409,12 +476,12 @@
         // cliPathとして使う かたち のパス文字列 を 取得する正規表現パターン
         const patternForClipPathShape = /<clipPath id="clipShape">\n.*\n.*<\/clipPath>/g;
         // Replace the path of shape to trim
-        const inputSVG = getInputSvg()
-        const updatedSVG = inputSVG.replace(patternForClipPathShape, `<clipPath id="clipShape">\n            ${shapePathOfSquircleSlimmed}\n        <\/clipPath>`);
+        const svgString = getInputSvg()
+        const updatedSVG = svgString.replace(patternForClipPathShape, `<clipPath id="clipShape">\n            ${shapePathOfSquircleSlimmed}\n        <\/clipPath>`);
         // 'input-svg' <textarea> の value属性を 更新する
-        svgElement.value = updatedSVG;
+        svgInputElement.value = updatedSVG;
         // convertSvg関数を呼び出す
-        convertSvg({ target: svgElement });
+        convertSvg({ target: svgInputElement });
     });
     ///////////////////////////// Shapes to trim /////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -534,10 +601,10 @@
                 const updatedSVG = replaceAtIndex(currentSVG, pattern, changedGroupElem, groupId)
 
                 // Refresh the SVG string in <textarea>
-                svgElement.value = updatedSVG;
+                svgInputElement.value = updatedSVG;
 
                 // Re-rendering the image
-                convertSvg({ target: svgElement });
+                convertSvg({ target: svgInputElement });
             });
         }
     }
@@ -570,15 +637,16 @@
 
 
         // SVGのテキストを取得
-        const inputSVG = getInputSvg()
+        const svgString = getInputSvg()
         // 正規表現パターンを作成
         const pattern = /<rect width="100%" height="100%" fill="[^"]*"/g; // <<rect width="100%" height="100%" fill="#fff9"> is default background rect color
         // 正規表現でマッチした部分を書き換える
-        const updatedSVG = inputSVG.replace(pattern, `<rect width="100%" height="100%" fill="${hexaColorShorten}"`);
+        const updatedSVG = svgString.replace(pattern, `<rect width="100%" height="100%" fill="${hexaColorShorten}"`);
         // <textarea>のvalue属性を更新する
-        svgElement.value = updatedSVG;
+        svgInputElement.value = updatedSVG;
+
         // convertSvg関数を呼び出す
-        convertSvg({ target: svgElement });
+        //convertSvg({ target: svgInputElement });
     })
     /////////////////////////// Backdrop color ///////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -587,6 +655,26 @@
     //////////////////////////////////////////////////////////////////////////
     ////////////////////////// Crop the side spaces //////////////////////////
 
+    // チェックボックス要素にイベントリスナーを追加
+const checkbox = document.getElementById('crop-side-margins');
+checkbox.addEventListener('change', onCropCheckboxChanged);
+
+async function convertSvgToPng() {
+    // SVG から PNG への変換処理
+    convertSvg({ target: svgInputElement });
+}
+
+// チェックボックスの状態が変わったときに呼ばれる関数
+async function onCropCheckboxChanged(event) {
+    if (event.target.checked) {
+        // チェックボックスがチェックされた場合、クロップ処理を実行
+        await cropSvg();         // 1. Crop the SVG
+        await convertSvgToPng(); // 2. Convert from SVG to PNG
+        //await cropPng();         // 3. Crop the PNG
+    } else {
+        // チェックボックスがチェックされていない場合、何もしない
+    }
+}
     ////////////////////////// Crop the side spaces //////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
@@ -606,13 +694,13 @@
         // 変更されたサイズ(value)の値で svg2png() の第二引数となる resvgOpts オブジェクトを新しく作る
         Object.assign(resvgOpts, {
             fitTo: {
-                mode: 'width',
+                mode: 'height',
                 value: parseInt(value, 10), // parseInt(string, radix= 10 進数)
             }
         })
 
         // convertSvg関数を呼び出す
-        convertSvg({ target: svgElement });
+        convertSvg({ target: svgInputElement });
     }
 
     pngSizeChangeViaNumber.addEventListener('change', pngSizeElement); // change value via png-size-number
@@ -637,12 +725,12 @@
             // ボタンで変更された結果のサイズ(newValue)の値で svg2png() の第二引数となる resvgOpts オブジェクトを新しく作る
             Object.assign(resvgOpts, {
                 fitTo: {
-                    mode: 'width',
+                    mode: 'height',
                     value: newValue,
                 }
             });
 
-            convertSvg({ target: svgElement });
+            convertSvg({ target: svgInputElement });
         }
     };
 
@@ -666,7 +754,7 @@
         // 引数(value)の値で svg2png() の第二引数となる resvgOpts オブジェクトを新しく作る
         Object.assign(resvgOpts, {
             fitTo: {
-                mode: 'width',
+                mode: 'height',
                 value: parseInt(value, 10), // parseInt(string, radix= 10 進数)
             }
         })
@@ -682,6 +770,6 @@
     setPngSize(256);
 
     // First PNG rendering
-    convertSvg({ target: svgElement })
+    convertSvg({ target: svgInputElement })
 
 })(); // `(async function () {` の 即時実行関数

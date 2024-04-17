@@ -30,13 +30,18 @@ function getGridSizeWxH() {
     // Set the regex to match the grid size inside the viewBox attr
     // e.g. viewBox="0 0 31 31", viewBox="0 0 255 255"
     // スペースとダブルクォートに挟まれた 数字の一回以上の繰り返し にマッチ, 数字部分のみをグルーピング
-    const patternForGridSize = /viewBox="\d+ \d+ (\d+) (\d+)"/
+    //const patternForGridSize = /viewBox="([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)"/
+    // const patternForGridSize = /viewBox="\d+ \d+ (\d+) (\d+)"/
+
+    const viewBoxStr = getViewBoxStr(inputSVG)
+    const viewBoxValues = extractViewBoxValues(viewBoxStr)
+    //console.log('viewBoxValues: ', viewBoxValues)     // Object { x: 0, y: 0, w: 31, h: 31 }
 
     // Assign the content of the <title> tag to a variable
-    const matchesGridSize = patternForGridSize.exec(inputSVG) // 配列の 0番目には全体のマッチ結果, 1番目以降にはグルーピングした部分
+    //const matchesGridSize = patternForGridSize.exec(inputSVG) // 配列の 0番目には全体のマッチ結果, 1番目以降にはグルーピングした部分
 
-    const gridSizeWidth = matchesGridSize[1]
-    const gridSizeHeight = matchesGridSize[2]
+    const gridSizeWidth = viewBoxValues.w
+    const gridSizeHeight = viewBoxValues.h
     const gridSizeWxH = `${gridSizeWidth}x${gridSizeHeight}`
     //console.log('gridSizeWxH is ', gridSizeWxH)
 
