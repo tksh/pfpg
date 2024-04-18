@@ -39,8 +39,9 @@ function cropTransparentEdges(img) {
     // 右側の余白を検出
     rightEdge: for (i = img.width - 1; i >= left; i--) {
         for (j = 0; j < img.height; j++) {
-            if (data[(j * img.width + i) * 4 + 3] !== 0) {
-                right = i;
+            // Adjust the condition to allow for a small deviation from the exact edge
+            if (data[(j * img.width + i) * 4 + 3] !== 0 && i < img.width - 1) {
+                right = i + 1; // Add 1 to include the last non-transparent pixel
                 break rightEdge;
             }
         }
