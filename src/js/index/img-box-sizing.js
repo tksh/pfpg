@@ -29,10 +29,10 @@ function adjustBox() {
     const mainRect = mainElem.getBoundingClientRect();
     console.log('main: ', mainRect.width, mainRect.height);
 
-    // <div id="artwork-customization">
-    const artworkCustomizationElem = document.getElementById('artwork-customization');
-    const artworkCustomizationRect = artworkCustomizationElem.getBoundingClientRect();
-    console.log('artwork-customization: ', artworkCustomizationRect.width, artworkCustomizationRect.height);
+    // <div id="customization">
+    const customizationElem = document.getElementById('customization');
+    const customizationRect = customizationElem.getBoundingClientRect();
+    console.log('customization: ', customizationRect.width, customizationRect.height);
 
 
     // <div id="input-and-output">
@@ -89,11 +89,6 @@ function adjustBox() {
     const downloadButtonRectSvg = downloadButtonElemSvg.getBoundingClientRect();
     console.log('downloadButtonRectPng: ', downloadButtonRectPng.width, downloadButtonRectPng.height);
     console.log('downloadButtonRectSvg: ', downloadButtonRectSvg.width, downloadButtonRectSvg.height);
-
-    // <div id="interface-settings">
-    const interfaceSettingsElem = document.getElementById('interface-settings');
-    const interfaceSettingsRect = interfaceSettingsElem.getBoundingClientRect();
-    console.log('settings: ', interfaceSettingsRect.width, interfaceSettingsRect.height);
 
     // <footer>
     const footerElem = document.querySelector('footer');
