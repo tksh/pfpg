@@ -17,6 +17,9 @@ function cropTransparentEdges(img) {
     canvas.height = img.height;
     ctx.drawImage(img, 0, 0);
 
+    console.log('canvas.width: ', canvas.width)   //// 256
+    console.log('canvas.height: ', canvas.height) //// 256
+
     var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     var data = imageData.data;
 
@@ -51,6 +54,10 @@ function cropTransparentEdges(img) {
     croppedCanvas.width = width;
     croppedCanvas.height = img.height;
     croppedCtx.putImageData(ctx.getImageData(left, 0, width, img.height), 0, 0);
+
+    console.log('croppedCanvas.width: ', croppedCanvas.width)   //// 229
+    console.log('croppedCanvas.height: ', croppedCanvas.height) //// 256
+    console.log('croppedCanvas: ', croppedCanvas)               //// <canvas width="229" height="256">
 
     return croppedCanvas;
 }

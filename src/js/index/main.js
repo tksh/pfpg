@@ -37,29 +37,29 @@ async function getFontBuffer() {
     setTimeout(() => controller.abort(), 3000) // Cancel the fetch request
 
     try {
-      const t = performance.now()
-      const font = await fetch(fontFile)
+        const t = performance.now()
+        const font = await fetch(fontFile)
 
-      if (!font.ok) return
+        if (!font.ok) return
 
-      const data = await font.arrayBuffer()
-      const buffer = new Uint8Array(data)
-      fetchFontLock = false
-      console.info('✨ 字体请求用时:', performance.now() - t + 'ms')
-      return {
-        buffer,
-        family_name: 'Source Han Serif CN Light',
-      }
+        const data = await font.arrayBuffer()
+        const buffer = new Uint8Array(data)
+        fetchFontLock = false
+        console.info('✨ 字体请求用时:', performance.now() - t + 'ms')
+        return {
+            buffer,
+            family_name: 'Source Han Serif CN Light',
+        }
     } catch (error) {
-      return console.error('fetch font error', error)
+        return console.error('fetch font error', error)
     }
-  }
+}
 
 (async function () {
     await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm')) // Path that relative from index.html
     const output = document.getElementById('output')
     const svgInputElement = document.querySelector('#input-svg') // Select <textarea id="input-svg" ...
-    svgInputElement.value = INIT_INPUT_SVG_STRING
+    // svgInputElement.value = INIT_INPUT_SVG_STRING // Un-comment to force to use `INIT_INPUT_SVG_STRING` for testing
     console.log('svgInputElement: ', svgInputElement)
 
     // let resvgOpts = {}
@@ -67,14 +67,15 @@ async function getFontBuffer() {
     let resvgOpts = {
         font: {},
         fitTo: {
-          mode: 'zoom',
-          value: 2,
+            mode: 'zoom',
+            value: 2,
         },
-      }
+    }
 
     //await svg2png(svgString, resvgOpts)
 
     async function svg2png(svgString, opts, hasCrop) {
+        console.log('svgString (below of "svg2png"): ', svgString)
 
         const svg = svgString ? svgString : svgInputElement.value.trim()
         // svgString が真（例えば、文字列が空でない、nullでないなど）であれば、その値を svg 変数に代入します。
@@ -164,11 +165,18 @@ async function getFontBuffer() {
     // 上記のSVGテキストエリアの編集イベントごとに PNGへの変換処理が呼び出される部分を
     // <input>や<select>などの選択要素からの更新でも それが呼び出されるように 下記の通りに変更した
     // `convertSvg` という関数を作り 選択要素からSVGテキストエリアを更新した直後に
-    // `convertSvg({ target: svgInputElement });` として呼び出す
+    // `convertSvg(svgInputElement.value.trim())` として呼び出す
 
 
     // svg2png関数を呼び出す関数を定義
-    const convertSvg = async (event) => {
+    const convertSvg = async (svgString) => {
+    // const convertSvg = async (event) => {
+        console.log('svgString: ', svgString)
+        //// console.log('event: ', event)
+        //// Object { target: textarea#input-svg }
+        ////   target: <textarea id="input-svg" name="input-svg" rows="7" placeholder="Enter the svg string">
+        ////   id: "input-svg"
+        ////   value: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" shape-ren
 
         // HTML要素を取得
         const pngDownloadButtonElement = document.getElementById("png-download-button");
@@ -223,13 +231,13 @@ async function getFontBuffer() {
             });
         } // End of 'async function measureSvg2PngPerformance(svgString, opts, hasCrop) {'
 
-        const svgString = event.target.value.trim()
+        //// const svgString = event.target.value.trim()
         const hasCrop = cropElement.checked
         if (!svgString) return
 
         measureSvg2PngPerformance(svgString, resvgOpts, hasCrop)
             .then((result) => {
-                //console.log('result: ', result); // undefined
+                console.log('result: ', result); // undefined
 
                 // 処理結果を利用する
                 console.log('svg2png processing has completed.');
@@ -306,7 +314,8 @@ async function getFontBuffer() {
         svgInputElement.value = newPathModeSvgStr;
 
         // convertSvg関数を呼び出す
-        convertSvg({ target: svgInputElement });
+        ////convertSvg({ target: svgInputElement }); //// Old
+        convertSvg(svgInputElement.value.trim()) //// New
     });
     /////////////////////////////// Path-mode ////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -334,7 +343,7 @@ async function getFontBuffer() {
         updateSvgForNewStep()
 
         // Re-rendering the image from new step opacity value SVG
-        convertSvg({ target: svgInputElement });
+        convertSvg(svgInputElement.value.trim())
     });
 
     ////////////////////////////// Opacity steps /////////////////////////////
@@ -364,7 +373,7 @@ async function getFontBuffer() {
         // <textarea>のvalue属性を更新する
         svgInputElement.value = updatedSVG;
         // convertSvg関数を呼び出す
-        convertSvg({ target: svgInputElement });
+        convertSvg(svgInputElement.value.trim())
     });
     ///////////////////////////// Anti-aliasing /////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -429,7 +438,7 @@ async function getFontBuffer() {
         // <textarea>のvalue属性を更新する
         svgInputElement.value = updatedSVG;
         // convertSvg関数を呼び出す
-        convertSvg({ target: svgInputElement });
+        convertSvg(svgInputElement.value.trim())
     });
     // The end of `selectOfClipPathShape.addEventListener("change", () => {`
 
@@ -457,7 +466,7 @@ async function getFontBuffer() {
         // 'input-svg' <textarea> の value属性を 更新する
         svgInputElement.value = updatedSVG;
         // convertSvg関数を呼び出す
-        convertSvg({ target: svgInputElement });
+        convertSvg(svgInputElement.value.trim())
     });
 
     // Top-heavy ratio
@@ -481,7 +490,7 @@ async function getFontBuffer() {
         // 'input-svg' <textarea> の value属性を 更新する
         svgInputElement.value = updatedSVG;
         // convertSvg関数を呼び出す
-        convertSvg({ target: svgInputElement });
+        convertSvg(svgInputElement.value.trim())
     });
     ///////////////////////////// Shapes to trim /////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -604,7 +613,7 @@ async function getFontBuffer() {
                 svgInputElement.value = updatedSVG;
 
                 // Re-rendering the image
-                convertSvg({ target: svgInputElement });
+                convertSvg(svgInputElement.value.trim())
             });
         }
     }
@@ -646,7 +655,7 @@ async function getFontBuffer() {
         svgInputElement.value = updatedSVG;
 
         // convertSvg関数を呼び出す
-        //convertSvg({ target: svgInputElement });
+        //convertSvg(svgInputElement.value.trim())
     })
     /////////////////////////// Backdrop color ///////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -655,26 +664,30 @@ async function getFontBuffer() {
     //////////////////////////////////////////////////////////////////////////
     ////////////////////////// Crop the side spaces //////////////////////////
 
-    // チェックボックス要素にイベントリスナーを追加
-const checkbox = document.getElementById('crop-side-margins');
-checkbox.addEventListener('change', onCropCheckboxChanged);
+    // Crop チェックボックス要素にイベントリスナーを追加
+    const checkbox = document.getElementById('crop-side-margins');
+    checkbox.addEventListener('change', onCropCheckboxChanged);
 
-async function convertSvgToPng() {
-    // SVG から PNG への変換処理
-    convertSvg({ target: svgInputElement });
-}
-
-// チェックボックスの状態が変わったときに呼ばれる関数
-async function onCropCheckboxChanged(event) {
-    if (event.target.checked) {
-        // チェックボックスがチェックされた場合、クロップ処理を実行
-        await cropSvg();         // 1. Crop the SVG
-        await convertSvgToPng(); // 2. Convert from SVG to PNG
-        //await cropPng();         // 3. Crop the PNG
-    } else {
-        // チェックボックスがチェックされていない場合、何もしない
+    async function convertSvgToPng() {
+        console.log('Start of "function convertSvgToPng()".')
+        // SVG から PNG への変換処理
+        convertSvg(svgInputElement.value.trim())
     }
-}
+    async function testConsoleLog() {
+        console.log('End of "function onCropCheckboxChanged()".')
+    }
+    // Crop チェックボックスの状態が変わったときに呼ばれる関数
+    async function onCropCheckboxChanged(event) {
+        if (event.target.checked) {
+            // チェックボックスがチェックされた場合、クロップ処理を実行
+            //await cropSvg();         // 1. Crop the SVG
+            //await convertSvgToPng(); // 2. Convert from SVG to PNG
+            await cropPng();         // 3. Crop the PNG
+            await testConsoleLog();
+        } else {
+            // チェックボックスがチェックされていない場合、何もしない
+        }
+    }
     ////////////////////////// Crop the side spaces //////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
@@ -700,7 +713,7 @@ async function onCropCheckboxChanged(event) {
         })
 
         // convertSvg関数を呼び出す
-        convertSvg({ target: svgInputElement });
+        convertSvg(svgInputElement.value.trim())
     }
 
     pngSizeChangeViaNumber.addEventListener('change', pngSizeElement); // change value via png-size-number
@@ -730,7 +743,7 @@ async function onCropCheckboxChanged(event) {
                 }
             });
 
-            convertSvg({ target: svgInputElement });
+            convertSvg(svgInputElement.value.trim())
         }
     };
 
@@ -770,6 +783,6 @@ async function onCropCheckboxChanged(event) {
     setPngSize(256);
 
     // First PNG rendering
-    convertSvg({ target: svgInputElement })
+    convertSvg(svgInputElement.value.trim())
 
 })(); // `(async function () {` の 即時実行関数
