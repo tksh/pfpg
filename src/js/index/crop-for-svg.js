@@ -19,6 +19,8 @@ function viewboxSlimmed() {
     const patternForViewboxStr = /viewBox="([^"]+)"/; // viewBox属性を抽出する正規表現
     const updatedSVG = svgString.replace(patternForViewboxStr, newViewboxString);
     svgElement.value = updatedSVG
+
+    return updatedSVG
 }
 
 

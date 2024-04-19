@@ -663,40 +663,30 @@ async function getFontBuffer() {
         svgInputElement.value = updatedSVG;
 
         // convertSvg関数を呼び出す
-        //convertSvg(svgInputElement.value.trim())
+        convertSvg(svgInputElement.value.trim())
     })
     /////////////////////////// Backdrop color ///////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
 
     //////////////////////////////////////////////////////////////////////////
-    ////////////////////////// Crop the side spaces //////////////////////////
+    ////////////////////////// Crop side margins //////////////////////////
 
     // Crop チェックボックス要素にイベントリスナーを追加
     const checkbox = document.getElementById('crop-side-margins');
     checkbox.addEventListener('change', onCropCheckboxChanged);
 
-    async function convertSvgToPng() {
-        console.log('Start of "function convertSvgToPng()".')
-        // SVG から PNG への変換処理
-        convertSvg(svgInputElement.value.trim())
-    }
-    async function testConsoleLog() {
-        console.log('End of "function onCropCheckboxChanged()".')
-    }
     // Crop チェックボックスの状態が変わったときに呼ばれる関数
-    async function onCropCheckboxChanged(event) {
+    function onCropCheckboxChanged(event) {
         if (event.target.checked) {
             // チェックボックスがチェックされた場合、クロップ処理を実行
-            await cropSvg();         // 1. Crop the SVG
-            await convertSvgToPng(); // 2. Convert from SVG to PNG
-            //await cropPng();         // 3. Crop the PNG
-            //await testConsoleLog();
+            const updatedSVG = viewboxSlimmed(); // 1. Crop the SVG, Replace the textarea content
+            convertSvg(updatedSVG);              // 2. Rasterize to PNG, Replace the img-box content
         } else {
             // チェックボックスがチェックされていない場合、何もしない
         }
     }
-    ////////////////////////// Crop the side spaces //////////////////////////
+    ////////////////////////// Crop side margins //////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
 
