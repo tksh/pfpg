@@ -133,6 +133,7 @@ div#img-box img {
 
 .fit-to-display-area {
     image-rendering: pixelated;
+    width: 100%;
 }
 
 .actual-image-size {
@@ -222,7 +223,7 @@ button#width-size-dec {
         */
 }
 
-#artwork-customization,
+#customization,
 figcaption,
 summary,
 legend,
