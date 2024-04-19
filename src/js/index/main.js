@@ -87,7 +87,15 @@ async function getFontBuffer() {
             return
         }
         const resvgJS = new resvg.Resvg(svg, opts)
-        document.querySelector('#svg-info').textContent = 'Source SVG grid size: ' + resvgJS.width + ' x ' + resvgJS.height
+
+        // resvg-js default outputs the w and h size as integer
+        // document.querySelector('#svg-info').textContent = 'Source SVG grid size: ' + resvgJS.width + ' x ' + resvgJS.height
+
+        // Outputs the viewBox size as float
+        const viewboxStr = getViewboxStr(svgString)
+        const viewboxValues = extractViewboxValues(viewboxStr)
+        //console.log('viewboxValues: ', viewboxValues)     // Object { x: 0, y: 0, w: 31, h: 31 }
+        document.querySelector('#svg-info').textContent = 'Source SVG viewBox size: ' + viewboxValues.w + ' x ' + viewboxValues.h
 
         // SVG内に含まれる外部リンクの画像を取得して解決する
         const resolved = await Promise.all(
@@ -131,7 +139,7 @@ async function getFontBuffer() {
 
         // console.log('Simplified svg string: \n', resvgJS.toString()) // Micro SVG strings <svg>...</svg>
 
-        document.querySelector('#png-info').textContent = 'Rendered PNG image size: ' + pngData.width + ' x ' + pngData.height + ' px'
+        document.querySelector('#png-info').textContent = 'Rendered PNG pixel size: ' + pngData.width + ' x ' + pngData.height + ' px'
 
 
         // PNGファイルサイズを ダウンロードボタンに 表示する

@@ -5,23 +5,20 @@ function viewboxSlimmed() {
 
     const viewboxStr = getViewboxStr(svgString)
     const viewboxValues = extractViewboxValues(viewboxStr)
-    //console.log('viewboxValues: ', viewboxValues)     // Object { x: 0, y: 0, w: 31, h: 31 }
-    //console.log('viewboxValues.x: ', viewboxValues.x) // 0
-    //console.log('viewboxValues.w: ', viewboxValues.w) // 31
+    console.log('viewboxValues: ', viewboxValues)     // Object { x: 0, y: 0, w: 31, h: 31 }
 
     const slimmedWidthValues = getSlimmedViewboxXW(svgString)
-    //console.log('slimmedWidthValues.x: ', slimmedWidthValues.x) // e.g.: 0.775
-    //console.log('slimmedWidthValues.w: ', slimmedWidthValues.w) // e.g.: 29.45
+    //console.log('slimmedWidthValues.x: ', slimmedWidthValues.x) // e.g.: 1.55
+    //console.log('slimmedWidthValues.w: ', slimmedWidthValues.w) // e.g.: 27.9
 
     // Generate new string
     const newViewboxString = `viewBox="${slimmedWidthValues.x} ${viewboxValues.y} ${slimmedWidthValues.w} ${viewboxValues.h}"`
-    console.log('newViewboxString: ', newViewboxString) // e.g.: viewBox="0.775 0 29.45 31"
+    //console.log('newViewboxString: ', newViewboxString) // e.g.: viewBox="1.55 0 27.9 31"
 
     // Replace the textarea value with new string
     const patternForViewboxStr = /viewBox="([^"]+)"/; // viewBox属性を抽出する正規表現
     const updatedSVG = svgString.replace(patternForViewboxStr, newViewboxString);
     svgElement.value = updatedSVG
-
 }
 
 
