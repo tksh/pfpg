@@ -11,7 +11,7 @@ function loadImage(url, callback) {
 // 画像の左右の透明な余白をクロップする
 function cropTransparentEdges(img) {
     var canvas = document.createElement('canvas');
-    var ctx = canvas.getContext('2d');
+    var ctx = canvas.getContext('2d', { willReadFrequently: true });
 
     canvas.width = img.width;
     canvas.height = img.height;
@@ -49,6 +49,10 @@ function cropTransparentEdges(img) {
 
     // クロップされた領域を新しいcanvasに描画
     var width = right - left;
+    //console.log('right: ', right) // 243
+    //console.log('left: ', left)   //  13
+    //console.log('width: ', width) // 230
+
     var croppedCanvas = document.createElement('canvas');
     var croppedCtx = croppedCanvas.getContext('2d');
 

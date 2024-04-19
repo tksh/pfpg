@@ -681,9 +681,9 @@ async function getFontBuffer() {
         if (event.target.checked) {
             // チェックボックスがチェックされた場合、クロップ処理を実行
             await cropSvg();         // 1. Crop the SVG
-            //await convertSvgToPng(); // 2. Convert from SVG to PNG
-            await cropPng();         // 3. Crop the PNG
-            await testConsoleLog();
+            await convertSvgToPng(); // 2. Convert from SVG to PNG
+            //await cropPng();         // 3. Crop the PNG
+            //await testConsoleLog();
         } else {
             // チェックボックスがチェックされていない場合、何もしない
         }

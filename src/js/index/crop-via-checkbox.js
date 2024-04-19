@@ -1,6 +1,6 @@
 async function cropSvg() {
     // SVG のクロップ処理
-    viewBoxSlimmed();
+    viewboxSlimmed();
 }
 
 

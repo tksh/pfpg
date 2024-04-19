@@ -129,6 +129,7 @@ main {
 /* PNG image */
 div#img-box img {
     height: 100%;
+    width: auto;
 }
 
 .fit-to-display-area {
