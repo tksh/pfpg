@@ -116,6 +116,7 @@ main {
 #img-box,
 #textarea-box {
     width: 100%;
+    max-width: 100%;
     aspect-ratio: 1/1;
     display: flex;
     padding: 2rem;
