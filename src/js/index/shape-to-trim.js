@@ -1,17 +1,17 @@
 // For generating the shape to trim
 
 // Get the grid size
-function getGridSize() {
-    const patternToGetGridsizeFromViewbox = /viewBox="\d+\s+\d+\s+\d+\s+(\d+)"/; // viewBox属性の値から最後の数字を抽出する正規表現
-    const matches = patternToGetGridsizeFromViewbox.exec(getInputSvg()); // // 正規表現パターンと文字列を照合, 結果を配列として返す
+function getGridSize(svgString) {
+    const patternToGetGridsizeFromViewbox = /viewBox=".*\s+([\d\.]+)"/; // viewBox属性の値から最後の数字を抽出する正規表現
+    const matches = patternToGetGridsizeFromViewbox.exec(svgString); // // 正規表現パターンと文字列を照合, 結果を配列として返す
     const gridSize = matches[1]
     //console.log('gridSize: ', gridSize) // 配列の 0番目には全体のマッチ結果, 1番目にはグルーピングした部分 // 255
     return gridSize
 }
 
 // Get center (the half of grid size)
-function getCenter() {
-    const gridSize = getGridSize()
+function getCenter(gridSize) {
+    // const gridSize = getGridSize(svgString)
     const center = roundToTwoDecimals(gridSize / 2)
     return center
 }
@@ -21,21 +21,39 @@ function getCenter() {
 // Width narrowness
 function getWidthNarrowness() {
     const selectWidthNarrowness = document.getElementById('width-narrowness');
+    console.log('typeof(getWidthNarrowness): ', typeof(selectWidthNarrowness))
     return selectWidthNarrowness.value;
 }
 
 // Top-heavy ratio
 function getTopHeavyRatio() {
     const selectTopHeavyRatio = document.getElementById('top-heavy-ratio');
+    console.log('typeof(getTopHeavyRatio): ', typeof(selectTopHeavyRatio))
     return selectTopHeavyRatio.value;
 }
 
+// 'Crop side margins' checked or not
+function getCropCheckboxState() {
+    const cropCheckbox = document.getElementById('crop-side-margins')
+
+    // チェックボックスがチェックされているかどうかを確認
+    if (cropCheckbox.checked) {
+        console.log('"Crop side margins: " checkbox has checked');
+        return true
+    } else {
+        console.log('"Crop side margins: " checkbox has un-checked');
+        return false
+    }
+}
+
+
 // Generate the path string of Squircle, slimmed
-function generateClipPathShapeOfSquircleSlimmed(widthNarrowness, topHeavyRatio) {
+function generateClipPathShapeOfSquircleSlimmed(svgString, widthNarrowness, topHeavyRatio) {
+    // function generateClipPathShapeOfSquircleSlimmed(widthNarrowness, topHeavyRatio) {
     console.log('widthNarrowness, topHeavyRatio: ', widthNarrowness, topHeavyRatio)
 
-    const gridSize = getGridSize();
-    const center = getCenter();
+    const gridSize = getGridSize(svgString);
+    const center = getCenter(gridSize);
 
     // generate the path of squircle slimmed
     const eachSideWidthForNarrowing = ((gridSize / 100) * (widthNarrowness / 2))
@@ -51,30 +69,50 @@ function generateClipPathShapeOfSquircleSlimmed(widthNarrowness, topHeavyRatio) 
 
 
 // Replace the path string with new selected shape one
-function svgWithNewShapeToTrim(shape, inputSVG, shapePathOfSquircle, shapePathOfSquircleSlimmed) {
-    let updatedSVG;
+function svgWithNewShapeClippath(shape, svgString, shapePathOfSquircle, shapePathOfSquircleSlimmed) {
+
+    let updatedSvgString = svgString
+
+    // Update <clipPath>
 
     // cliPathとして使う かたち のパス文字列 を 取得する正規表現パターン
     const patternForClipPathShape = /<clipPath id="clipShape">\n.*\n.*<\/clipPath>/g;
 
     if (shape == 'square') {
         console.log('Selected shape is ', shape)
-        // 正規表現でマッチした部分を書き換える
-        updatedSVG = inputSVG.replace(patternForClipPathShape, '<clipPath id="clipShape">\n            <rect width="100%" height="100%" />\n        <\/clipPath>');
-        //console.log('updatedSVG is ', updatedSVG)
+        updatedSvgString = svgString.replace(patternForClipPathShape, '<clipPath id="clipShape">\n            <rect width="100%" height="100%" />\n        <\/clipPath>');
     } else if (shape == 'circle') {
         console.log('Selected shape is ', shape)
-        updatedSVG = inputSVG.replace(patternForClipPathShape, '<clipPath id="clipShape">\n            <circle cx="50%" cy="50%" r="50%" />\n        <\/clipPath>');
-        //console.log('updatedSVG is ', updatedSVG)
+        updatedSvgString = svgString.replace(patternForClipPathShape, '<clipPath id="clipShape">\n            <circle cx="50%" cy="50%" r="50%" />\n        <\/clipPath>');
     } else if (shape == 'squircle') {
         console.log('Selected shape is ', shape)
-        updatedSVG = inputSVG.replace(patternForClipPathShape, `<clipPath id="clipShape">\n            ${shapePathOfSquircle}\n        <\/clipPath>`);
-        //console.log('updatedSVG is ', updatedSVG)
+        updatedSvgString = svgString.replace(patternForClipPathShape, `<clipPath id="clipShape">\n            ${shapePathOfSquircle}\n        <\/clipPath>`);
     } else if (shape == 'squircleSlimmed') {
         console.log('Selected shape is ', shape)
-        updatedSVG = inputSVG.replace(patternForClipPathShape, `<clipPath id="clipShape">\n            ${shapePathOfSquircleSlimmed}\n        <\/clipPath>`);
-        //console.log('updatedSVG is ', updatedSVG)
+        updatedSvgString = svgString.replace(patternForClipPathShape, `<clipPath id="clipShape">\n            ${shapePathOfSquircleSlimmed}\n        <\/clipPath>`);
     }
 
-    return updatedSVG
+    return updatedSvgString
+}
+
+
+function svgWithNewShapeViewbox(shape, svg) {
+
+    // Update 'viewBox'
+
+    // Get back original 'viewBox' value when
+    // 1. the shapes excepts 'squircleSlimmed' selected, or
+    // 2. 'squircleSlimmed' and not checked for 'Crop side margins' checkbox
+
+    const hasCropSideMargins = getCropCheckboxState() // boolean, true=cropped[checked], false=un-cropped[!checked]
+    console.log('hasCropSideMargins: ', hasCropSideMargins)
+
+    if (shape == 'squircleSlimmed' && hasCropSideMargins == true) {
+        return svg.string
+    } else { // shape == 'square | circle | squircle'
+        console.log(`"viewBox" value will be replaced to original size, \n
+                      because selected shape is ${shape}, and hasCropSideMargins is ${hasCropSideMargins}`)
+        return viewboxUnSlimmed(svg)
+    }
+
 }

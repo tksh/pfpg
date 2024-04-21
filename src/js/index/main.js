@@ -75,7 +75,7 @@ async function getFontBuffer() {
     //await svg2png(svgString, resvgOpts)
 
     async function svg2png(svgString, opts, hasCrop) {
-        console.log('svgString (below of "svg2png"): ', svgString)
+        //console.log('svgString (below of "svg2png"): ', svgString)
 
         const svg = svgString ? svgString : svgInputElement.value.trim()
         // svgString が真（例えば、文字列が空でない、nullでないなど）であれば、その値を svg 変数に代入します。
@@ -178,13 +178,7 @@ async function getFontBuffer() {
 
     // svg2png関数を呼び出す関数を定義
     const convertSvg = async (svgString) => {
-    // const convertSvg = async (event) => {
-        console.log('svgString: ', svgString)
-        //// console.log('event: ', event)
-        //// Object { target: textarea#input-svg }
-        ////   target: <textarea id="input-svg" name="input-svg" rows="7" placeholder="Enter the svg string">
-        ////   id: "input-svg"
-        ////   value: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" shape-ren
+        //console.log('svgString: ', svgString)
 
         // HTML要素を取得
         const pngDownloadButtonElement = document.getElementById("png-download-button");
@@ -377,9 +371,9 @@ async function getFontBuffer() {
         // 正規表現パターンを作成
         const patternForShapeRendering = /shape-rendering="[^"]*"/g;
         // 正規表現でマッチした部分を書き換える
-        const updatedSVG = svgString.replace(patternForShapeRendering, `shape-rendering="${value}"`);
+        const updatedSvg = svgString.replace(patternForShapeRendering, `shape-rendering="${value}"`);
         // <textarea>のvalue属性を更新する
-        svgInputElement.value = updatedSVG;
+        svgInputElement.value = updatedSvg;
         // convertSvg関数を呼び出す
         convertSvg(svgInputElement.value.trim())
     });
@@ -399,8 +393,8 @@ async function getFontBuffer() {
     selectOfClipPathShape.addEventListener("change", () => {
 
         // 選択された 'shape-to-trim' の値を取得
-        const value = selectOfClipPathShape.value;
-        //console.log('selectOfClipShape value is ', value) // square|circle|squircle|squircleSlimmed
+        const shape = selectOfClipPathShape.value;
+        //console.log('selectOfClipShape shape is ', shape) // square|circle|squircle|squircleSlimmed
 
 
         // `squircleSlimmed`が 選ばれた時だけ表示される
@@ -410,7 +404,7 @@ async function getFontBuffer() {
         const divCropSideMargins = document.getElementById('crop-side-margins-div');
 
         // 選択されたオプションによって 2つの<select> と 1つの<label>&<input> を 表示または非表示にする
-        if (value === 'squircleSlimmed') {
+        if (shape === 'squircleSlimmed') {
             divWidthNarrowness.style.display = 'inline'; // 表示
             divTopHeavyRatio.style.display = 'inline';   // 表示
             divCropSideMargins.style.display = 'inline'; // 表示
@@ -421,11 +415,13 @@ async function getFontBuffer() {
         }
 
 
-        // Get SVG string from textarea
-        const svgString = getInputSvg()
+        // Get the SVG textarea element and string
+        const svgElemAndStr = getSvgElementAndString()
+        const svgString = svgElemAndStr.string
+        const svgElement = svgElemAndStr.element
 
         // Get the grid size
-        const gridSize = getGridSize()
+        const gridSize = getGridSize(svgString)
 
         // Generate the 'Squircle' shape path
         const center = roundToTwoDecimals(gridSize / 2)
@@ -437,16 +433,22 @@ async function getFontBuffer() {
         // Generate the 'Squircle, slimmed' shape path
         const widthNarrowness = getWidthNarrowness()
         const topHeavyRatio = getTopHeavyRatio()
-        const shapePathOfSquircleSlimmed = generateClipPathShapeOfSquircleSlimmed(widthNarrowness, topHeavyRatio)
+        const shapePathOfSquircleSlimmed = generateClipPathShapeOfSquircleSlimmed(svgString, widthNarrowness, topHeavyRatio)
         //console.log('shapePathOfSquircleSlimmed:', shapePathOfSquircleSlimmed)
         // <path d="M 10.2,127.5Q 7.65,0 127.5,0T 244.8,127.5 127.5,255 10.2,127.5" />
 
         // Get the new svg string with selected shape path
-        const updatedSVG = svgWithNewShapeToTrim(value, svgString, shapePathOfSquircle, shapePathOfSquircleSlimmed)
+        const pathUpdatedSvg = svgWithNewShapeClippath(shape, svgString, shapePathOfSquircle, shapePathOfSquircleSlimmed)
+        const svgElemAndUpdatedStr = { element: svgElemAndStr.element, string: pathUpdatedSvg }
+        console.log('svgElemAndUpdatedStr: ', svgElemAndUpdatedStr)
+
+        ////const hasCropSideMargins = getCropCheckboxState() // boolean, true=cropped[checked], false=un-cropped[!checked]
+        const viewboxUpdatedString = svgWithNewShapeViewbox(shape, svgElemAndUpdatedStr)
+        console.log('viewboxUpdatedString: ', viewboxUpdatedString)
         // <textarea>のvalue属性を更新する
-        svgInputElement.value = updatedSVG;
+        svgElement.value = viewboxUpdatedString;
         // convertSvg関数を呼び出す
-        convertSvg(svgInputElement.value.trim())
+        convertSvg(viewboxUpdatedString)
     });
     // The end of `selectOfClipPathShape.addEventListener("change", () => {`
 
@@ -464,17 +466,24 @@ async function getFontBuffer() {
         // もう片方の オプションの値を取得
         const topHeavyRatio = getTopHeavyRatio()
 
+        // Get the SVG textarea element and string
+        const svgElemAndStr = getSvgElementAndString()
+        const svgString = svgElemAndStr.string
+        const svgElement = svgElemAndStr.element
+
         // 'Squircle, slimmed'のパスを生成
-        const shapePathOfSquircleSlimmed = generateClipPathShapeOfSquircleSlimmed(selectedValue, topHeavyRatio)
+        const shapePathOfSquircleSlimmed = generateClipPathShapeOfSquircleSlimmed(svgString, selectedValue, topHeavyRatio)
         // cliPathとして使う かたち のパス文字列 を 取得する正規表現パターン
         const patternForClipPathShape = /<clipPath id="clipShape">\n.*\n.*<\/clipPath>/g;
         // Replace the path of shape to trim
-        const svgString = getInputSvg()
-        const updatedSVG = svgString.replace(patternForClipPathShape, `<clipPath id="clipShape">\n            ${shapePathOfSquircleSlimmed}\n        <\/clipPath>`);
-        // 'input-svg' <textarea> の value属性を 更新する
-        svgInputElement.value = updatedSVG;
+        const pathUpdatedSvg = svgString.replace(patternForClipPathShape, `<clipPath id="clipShape">\n            ${shapePathOfSquircleSlimmed}\n        <\/clipPath>`);
+        const svgElemAndUpdatedStr = { element: svgElemAndStr.element, string: pathUpdatedSvg}
+        const shape = 'squircleSlimmed'
+        const viewboxUpdatedString = svgWithNewShapeViewbox(shape, svgElemAndUpdatedStr)
+        // <textarea>のvalue属性を更新する
+        svgElement.value = viewboxUpdatedString;
         // convertSvg関数を呼び出す
-        convertSvg(svgInputElement.value.trim())
+        convertSvg(viewboxUpdatedString)
     });
 
     // Top-heavy ratio
@@ -488,17 +497,24 @@ async function getFontBuffer() {
         // もう片方の オプションの値を取得
         const widthNarrowness = getWidthNarrowness()
 
+        // Get the SVG textarea element and string
+        const svgElemAndStr = getSvgElementAndString()
+        const svgString = svgElemAndStr.string
+        const svgElement = svgElemAndStr.element
+
         // 'Squircle, slimmed'のパスを生成
-        const shapePathOfSquircleSlimmed = generateClipPathShapeOfSquircleSlimmed(widthNarrowness, selectedValue)
+        const shapePathOfSquircleSlimmed = generateClipPathShapeOfSquircleSlimmed(svgString, widthNarrowness, selectedValue)
         // cliPathとして使う かたち のパス文字列 を 取得する正規表現パターン
         const patternForClipPathShape = /<clipPath id="clipShape">\n.*\n.*<\/clipPath>/g;
         // Replace the path of shape to trim
-        const svgString = getInputSvg()
-        const updatedSVG = svgString.replace(patternForClipPathShape, `<clipPath id="clipShape">\n            ${shapePathOfSquircleSlimmed}\n        <\/clipPath>`);
-        // 'input-svg' <textarea> の value属性を 更新する
-        svgInputElement.value = updatedSVG;
+        const pathUpdatedSvg = svgString.replace(patternForClipPathShape, `<clipPath id="clipShape">\n            ${shapePathOfSquircleSlimmed}\n        <\/clipPath>`);
+        const svgElemAndUpdatedStr = { element: svgElemAndStr.element, string: pathUpdatedSvg}
+        const shape = 'squircleSlimmed'
+        const viewboxUpdatedString = svgWithNewShapeViewbox(shape, svgElemAndUpdatedStr)
+        // <textarea>のvalue属性を更新する
+        svgElement.value = viewboxUpdatedString;
         // convertSvg関数を呼び出す
-        convertSvg(svgInputElement.value.trim())
+        convertSvg(viewboxUpdatedString)
     });
     ///////////////////////////// Shapes to trim /////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -615,10 +631,10 @@ async function getFontBuffer() {
 
                 // Replace the changed <g> elements via group ID
                 const pattern = /<g stroke=[^>]*>/g;
-                const updatedSVG = replaceAtIndex(currentSVG, pattern, changedGroupElem, groupId)
+                const updatedSvg = replaceAtIndex(currentSVG, pattern, changedGroupElem, groupId)
 
                 // Refresh the SVG string in <textarea>
-                svgInputElement.value = updatedSVG;
+                svgInputElement.value = updatedSvg;
 
                 // Re-rendering the image
                 convertSvg(svgInputElement.value.trim())
@@ -658,9 +674,9 @@ async function getFontBuffer() {
         // 正規表現パターンを作成
         const pattern = /<rect width="100%" height="100%" fill="[^"]*"/g; // <<rect width="100%" height="100%" fill="#fff9"> is default background rect color
         // 正規表現でマッチした部分を書き換える
-        const updatedSVG = svgString.replace(pattern, `<rect width="100%" height="100%" fill="${hexaColorShorten}"`);
+        const updatedSvg = svgString.replace(pattern, `<rect width="100%" height="100%" fill="${hexaColorShorten}"`);
         // <textarea>のvalue属性を更新する
-        svgInputElement.value = updatedSVG;
+        svgInputElement.value = updatedSvg;
 
         // convertSvg関数を呼び出す
         convertSvg(svgInputElement.value.trim())
@@ -680,10 +696,16 @@ async function getFontBuffer() {
     function onCropCheckboxChanged(event) {
         if (event.target.checked) {
             // チェックボックスがチェックされた場合、クロップ処理を実行
-            const updatedSVG = viewboxSlimmed(); // 1. Crop the SVG, Replace the textarea content
-            convertSvg(updatedSVG);              // 2. Rasterize to PNG, Replace the img-box content
+            console.log('Check the `Crop side margins: ` checkbox.')
+            const svgElemAndStr = getSvgElementAndString()
+            const updatedSvg = viewboxSlimmed(svgElemAndStr); // 1. Crop the SVG, Replace the textarea content.
+            convertSvg(updatedSvg);              // 2. Rasterize to PNG, Replace the img-box content.
         } else {
-            // チェックボックスがチェックされていない場合、何もしない
+            // チェックボックスが外れた場合、元のデータと同じ矩形のサイズに戻す
+            console.log('Un-check the `Crop side margins: ` checkbox.')
+            const svgElemAndStr = getSvgElementAndString()
+            const updatedSvg = viewboxUnSlimmed(svgElemAndStr); // 1. Un-Crop the SVG, Replace the textarea content.
+            convertSvg(updatedSvg);                // 2. Rasterize to PNG, Replace the img-box content.
         }
     }
     ////////////////////////// Crop side margins //////////////////////////

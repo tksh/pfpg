@@ -1,24 +1,20 @@
 // Change the viewBox size fit to Squircle, slimmed
-function viewboxSlimmed() {
-    const svgElement = document.querySelector('#input-svg')
-    const svgString = svgElement.value.trim() // <textarea>のvalue属性を取得, `.trim()` => 文字列の両端の空白を削除
-
-    const viewboxStr = getViewboxStr(svgString)
+function viewboxSlimmed(svg) {
+    const viewboxStr = getViewboxStr(svg.string)
     const viewboxValues = extractViewboxValues(viewboxStr)
-    console.log('viewboxValues: ', viewboxValues)     // Object { x: 0, y: 0, w: 31, h: 31 }
 
-    const slimmedWidthValues = getSlimmedViewboxXW(svgString)
+    const slimmedWidthValues = getSlimmedViewboxXW(svg.string)
     //console.log('slimmedWidthValues.x: ', slimmedWidthValues.x) // e.g.: 1.55
     //console.log('slimmedWidthValues.w: ', slimmedWidthValues.w) // e.g.: 27.9
 
     // Generate new string
     const newViewboxString = `viewBox="${slimmedWidthValues.x} ${viewboxValues.y} ${slimmedWidthValues.w} ${viewboxValues.h}"`
-    //console.log('newViewboxString: ', newViewboxString) // e.g.: viewBox="1.55 0 27.9 31"
+    console.log('newViewboxString: ', newViewboxString) // e.g.: viewBox="1.55 0 27.9 31"
 
     // Replace the textarea value with new string
     const patternForViewboxStr = /viewBox="([^"]+)"/; // viewBox属性を抽出する正規表現
-    const updatedSVG = svgString.replace(patternForViewboxStr, newViewboxString);
-    svgElement.value = updatedSVG
+    const updatedSVG = svg.string.replace(patternForViewboxStr, newViewboxString);
+    svg.element.value = updatedSVG
 
     return updatedSVG
 }
@@ -35,6 +31,15 @@ function getViewboxStr(svgString) {
     //const vieBoxValueStr = matches[1]  // e.g.: 0 0 31 31
 
     return viewboxStr
+}
+
+function getSvgElementAndString() {
+    const svgElement = document.querySelector('#input-svg')
+    const svgString = svgElement.value.trim() // <textarea>のvalue属性を取得, `.trim()` => 文字列の両端の空白を削除
+    return {
+        element: svgElement,
+        string: svgString
+    }
 }
 
 // Get the slimmed width size and 'x' position (= same number as how much reduced each sides)
@@ -77,5 +82,27 @@ function extractViewboxValues(viewBoxString) {
 
 /////// When un-check the checkbox, Get back the viewBox as square ///////
 
-function viewboxUnSlimmed() {
+function viewboxUnSlimmed(svg) {
+    console.log('svg: ', svg)
+    //console.log('svg.string: ', svg.string)
+    //console.log('svg.element: ', svg.element)
+
+    // Read original artwork data from url params
+    const isDataManipulatorOrIndexBool = false
+    const urlParamsAsTwoMaps = readUrlParamsAsMaps(isDataManipulatorOrIndexBool)
+    const artworkDataMap = urlParamsAsTwoMaps.artwork_data
+    // e.g.: Map(4) {'artwork_id' => '202308_001', 'grid_size' => '31x31', 'uint_n' => 5, 'bg_color' => '9999'}
+
+    const gridSize = artworkDataMap.get('grid_size') // e.g: '31x31'
+    const splitByX = gridSize.split('x')             // e.g.: '31', '31'
+
+    // Generate new string with original viewBox size
+    const originalViewboxString = `viewBox="0 0 ${splitByX[0]} ${splitByX[1]}"` // e.g.: viewBox="0 0 31 31"
+
+    // Replace the textarea value with new string
+    const patternForViewboxStr = /viewBox="([^"]+)"/
+    const updatedSVG = svg.string.replace(patternForViewboxStr, originalViewboxString)
+    svg.element.value = updatedSVG
+
+    return updatedSVG
 }
