@@ -51,10 +51,10 @@ function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) 
         //            {encoded_dvals: 'wyyvtuDwtzxifJxuvunv56nudvqm96wo9xuuucvvuzvzAwvvvyzxsvxDyVUSByqATCUWytEBzzAx'}
 
 
-        const decodedAbsAndRelDvalsMapObj = decodeStrokesValues(strokesValuesMap)
+        const decodedAbsAndRelDvalsMaps = decodeStrokesValues(strokesValuesMap)
 
-        const decodedRelDvalsMap = decodedAbsAndRelDvalsMapObj.relative
-        const decodedAbsDvalsMap = decodedAbsAndRelDvalsMapObj.absolute
+        const decodedRelDvalsMap = decodedAbsAndRelDvalsMaps.get('relative')
+        const decodedAbsDvalsMap = decodedAbsAndRelDvalsMaps.get('absolute')
 
         //console.log("decodedRelDvalsMap: ", decodedRelDvalsMap)
         // Map(5) {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
@@ -185,9 +185,13 @@ function decodeStrokesValues(strokesValuesMap) {
         })
 
     }
-    console.log('decodedAbsDvalsMap: ', decodedAbsDvalsMap)
-    console.log('decodedRelDvalsMap: ', decodedRelDvalsMap)
-    return { absolute: decodedAbsDvalsMap, relative: decodedRelDvalsMap }
+    //console.log('decodedAbsDvalsMap: ', decodedAbsDvalsMap)
+    //console.log('decodedRelDvalsMap: ', decodedRelDvalsMap)
+
+    return new Map([
+        ['absolute', decodedAbsDvalsMap],
+        ['relative', decodedRelDvalsMap]
+    ])
 }
 
 
