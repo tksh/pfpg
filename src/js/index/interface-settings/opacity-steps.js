@@ -105,7 +105,7 @@ function updateSvgForNewStep() {
         const strokeOpacity = strokeOpacityElement.value
 
 
-        // Generate the array like regex 'matche' object with input value
+        // Generate the array like regex 'match' object with input value
         const valueAsMatchesStructure = [
             undefined,    // [0] = undefined
             stroke,       // [1] = value of stroke

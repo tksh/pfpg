@@ -31,7 +31,7 @@ function viewboxSlimmed(svg) {
     //console.log('slimmedWidthValues.w: ', slimmedWidthValues.w) // e.g.: 27.9
 
     // Generate new string
-    const newViewboxString = `viewBox="${slimmedWidthValues.x} ${viewboxValues.y} ${slimmedWidthValues.w} ${viewboxValues.h}"`
+    const newViewboxString = `viewBox="${slimmedWidthValues.x} ${viewboxValues.get('y')} ${slimmedWidthValues.w} ${viewboxValues.get('h')}"`
     console.log('newViewboxString: ', newViewboxString) // e.g.: viewBox="1.55 0 27.9 31"
 
     // Replace the textarea value with new string
@@ -70,7 +70,7 @@ function getSlimmedViewboxXW(svgString) {
     }
 }
 
-// Get viewBox four numbers as Object
+// Get viewBox four numbers as Map object
 function extractViewboxValues(viewBoxString) {
     // Use a regular expression to match the four numbers in the viewBox string
     const match = viewBoxString.match(/viewBox="([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)"/);
@@ -78,12 +78,12 @@ function extractViewboxValues(viewBoxString) {
     // Check if the match was successful
     if (match && match.length === 5) {
         // Extract the four numbers and return them as an object
-        return {
-            x: parseFloat(match[1]),
-            y: parseFloat(match[2]),
-            w: parseFloat(match[3]),
-            h: parseFloat(match[4])
-        };
+        return new Map([
+            ['x', parseFloat(match[1])],
+            ['y', parseFloat(match[2])],
+            ['w', parseFloat(match[3])],
+            ['h', parseFloat(match[4])]
+        ]);
     } else {
         // Return null or throw an error if the match was not successful
         return null;

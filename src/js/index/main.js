@@ -93,9 +93,8 @@ async function getFontBuffer() {
 
         // Outputs the viewBox size as float
         const viewboxStr = getViewboxStr(svgString)
-        const viewboxValues = extractViewboxValues(viewboxStr)
-        //console.log('viewboxValues: ', viewboxValues)     // Object { x: 0, y: 0, w: 31, h: 31 }
-        document.querySelector('#svg-info').textContent = 'Source SVG viewBox size: ' + viewboxValues.w + ' x ' + viewboxValues.h
+        const viewboxValues = extractViewboxValues(viewboxStr) // e.g: Map(4) {'x' => 0, 'y' => 0, 'w' => 31, 'h' => 31}
+        document.querySelector('#svg-info').textContent = 'Source SVG viewBox size: ' + viewboxValues.get('w') + ' x ' + viewboxValues.get('h')
 
         // SVG内に含まれる外部リンクの画像を取得して解決する
         const resolved = await Promise.all(

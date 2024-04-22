@@ -46,14 +46,13 @@ function getGridSizeWxH() {
     // const patternForGridSize = /viewBox="\d+ \d+ (\d+) (\d+)"/
 
     const viewboxStr = getViewboxStr(inputSVG)
-    const viewboxValues = extractViewboxValues(viewboxStr)
-    //console.log('viewboxValues: ', viewboxValues)     // Object { x: 0, y: 0, w: 31, h: 31 }
+    const viewboxValues = extractViewboxValues(viewboxStr) // e.g: Map(4) {'x' => 0, 'y' => 0, 'w' => 31, 'h' => 31}
 
     // Assign the content of the <title> tag to a variable
     //const matchesGridSize = patternForGridSize.exec(inputSVG) // 配列の 0番目には全体のマッチ結果, 1番目以降にはグルーピングした部分
 
-    const gridSizeWidth = viewboxValues.w
-    const gridSizeHeight = viewboxValues.h
+    const gridSizeWidth = viewboxValues.get('w')
+    const gridSizeHeight = viewboxValues.get('h')
     const gridSizeWxH = `${gridSizeWidth}x${gridSizeHeight}`
     //console.log('gridSizeWxH is ', gridSizeWxH)
 
