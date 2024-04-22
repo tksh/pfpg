@@ -1,5 +1,3 @@
-
-
 function changeOpacitySelectOptionsAsNewStep(step) {
 
     const groupColorsValues = getGroupColorsValues();
@@ -123,8 +121,8 @@ function updateSvgForNewStep() {
         const updatedSVG = replaceAtIndex(currentSVG, pattern, changedGroupElem, groupId)
 
         // Refresh the SVG string in <textarea>
-        const svgElement = document.querySelector('#input-svg')
-        svgElement.value = updatedSVG;
+        const svgTextarea = document.querySelector('#input-svg')
+        svgTextarea.value = updatedSVG;
 
     }
 

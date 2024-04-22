@@ -120,10 +120,10 @@ function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) 
         if (isDataManipulatorOrIndexBool === false) {
             console.log('Read a SVG string from input-svg textarea.')
             // <textarea>の要素を取得
-            const svgElement = document.querySelector('#input-svg') // Select <textarea id="input-svg" ...
+            const svgTextarea = document.querySelector('#input-svg') // Select <textarea id="input-svg" ...
 
             // <textarea>のvalue属性を取得
-            const svgStr = svgElement.value.trim() // `.trim()` = 文字列の両端の空白を削除
+            const svgStr = svgTextarea.value.trim() // `.trim()` = 文字列の両端の空白を削除
 
             // Get textarea ID
             const specificOutputTextareaId = getSpecificOutputTextareaId(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId)

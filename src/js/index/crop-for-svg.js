@@ -22,11 +22,11 @@ function svgWithNewShapeViewbox(shape, hasCropSideMargins, svg) {
 
 // Change the viewBox size fit to Squircle, slimmed.
 // And textarea replaced as it.
-function viewboxSlimmed(svg) {
-    const viewboxStr = getViewboxStr(svg.string)
+function viewboxSlimmed(svgTextareaAndString) {
+    const viewboxStr = getViewboxStr(svgTextareaAndString.get('string'))
     const viewboxValues = extractViewboxValues(viewboxStr)
 
-    const slimmedWidthValues = getSlimmedViewboxXW(svg.string)
+    const slimmedWidthValues = getSlimmedViewboxXW(svgTextareaAndString.get('string'))
     //console.log('slimmedWidthValues.x: ', slimmedWidthValues.x) // e.g.: 1.55
     //console.log('slimmedWidthValues.w: ', slimmedWidthValues.w) // e.g.: 27.9
 
@@ -36,8 +36,8 @@ function viewboxSlimmed(svg) {
 
     // Replace the textarea value with new string
     const patternForViewboxStr = /viewBox="([^"]+)"/; // viewBox属性を抽出する正規表現
-    const updatedSVG = svg.string.replace(patternForViewboxStr, newViewboxString);
-    svg.element.value = updatedSVG
+    const updatedSVG = svgTextareaAndString.get('string').replace(patternForViewboxStr, newViewboxString);
+    svgTextareaAndString.get('element').value = updatedSVG
 
     return updatedSVG
 }
@@ -95,8 +95,8 @@ function extractViewboxValues(viewBoxString) {
 
 /////// When un-check the checkbox, Get back the viewBox as square ///////
 
-function viewboxUnSlimmed(svg) {
-    console.log('svg: ', svg)
+function viewboxUnSlimmed(svgTextareaAndString) {
+    console.log('svgTextareaAndString: ', svgTextareaAndString)
     //console.log('svg.string: ', svg.string)
     //console.log('svg.element: ', svg.element)
 
@@ -114,8 +114,8 @@ function viewboxUnSlimmed(svg) {
 
     // Replace the textarea value with new string
     const patternForViewboxStr = /viewBox="([^"]+)"/
-    const updatedSVG = svg.string.replace(patternForViewboxStr, originalViewboxString)
-    svg.element.value = updatedSVG
+    const updatedSVG = svgTextareaAndString.get('string').replace(patternForViewboxStr, originalViewboxString)
+    svgTextareaAndString.get('element').value = updatedSVG
 
     return updatedSVG
 }
