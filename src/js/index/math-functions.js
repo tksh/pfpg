@@ -12,3 +12,13 @@ function roundToTwoDecimals(num) {
 function roundToOneDecimal(num) {
     return Math.round(num * 10) / 10;
 }
+
+
+// Delete '.00' if could after round to two decimal places.
+// For simplify the viewBox value like case of 'Squircle, slimmed' and 'Width narrowness: 0'
+//   - Before: viewBox="0.00 0 31.00 31"
+//   - After : viewBox="0 0 31 31"
+function toFixedTrimmed(num) {
+    return num.toFixed(2).replace(/\.00$/, '');
+}
+

@@ -33,7 +33,7 @@ function getTopHeavyRatio() {
 }
 
 // 'Crop side margins' checked or not
-function getCropCheckboxState() {
+function getBoolOfCropSideMargins() {
     const cropCheckbox = document.getElementById('crop-side-margins')
 
     // チェックボックスがチェックされているかどうかを確認
@@ -63,8 +63,7 @@ function generateClipPathShapeOfSquircleSlimmed(svgString, widthNarrowness, topH
     //console.log('right: ', right)
     const topInflationAmount = roundToTwoDecimals(left - ((gridSize / 100) * topHeavyRatio))
     //console.log('topInflationAmount: ', topInflationAmount)
-    const shapePathOfSquircleSlimmed = `<path d="M ${left},${center}Q ${topInflationAmount},0 ${center},0T ${right},${center} ${center},${gridSize} ${left},${center}" />`
-    return shapePathOfSquircleSlimmed;
+    return `<path d="M ${left},${center}Q ${topInflationAmount},0 ${center},0T ${right},${center} ${center},${gridSize} ${left},${center}" />`
 }
 
 
@@ -93,26 +92,4 @@ function svgWithNewShapeClippath(shape, svgString, shapePathOfSquircle, shapePat
     }
 
     return updatedSvgString
-}
-
-
-function svgWithNewShapeViewbox(shape, svg) {
-
-    // Update 'viewBox'
-
-    // Get back original 'viewBox' value when
-    // 1. the shapes excepts 'squircleSlimmed' selected, or
-    // 2. 'squircleSlimmed' and not checked for 'Crop side margins' checkbox
-
-    const hasCropSideMargins = getCropCheckboxState() // boolean, true=cropped[checked], false=un-cropped[!checked]
-    console.log('hasCropSideMargins: ', hasCropSideMargins)
-
-    if (shape == 'squircleSlimmed' && hasCropSideMargins == true) {
-        return svg.string
-    } else { // shape == 'square | circle | squircle'
-        console.log(`"viewBox" value will be replaced to original size, \n
-                      because selected shape is ${shape}, and hasCropSideMargins is ${hasCropSideMargins}`)
-        return viewboxUnSlimmed(svg)
-    }
-
 }

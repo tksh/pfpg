@@ -9,6 +9,18 @@ function getInputSvg() {
 
 }
 
+// Get the <textarea> element and string value of SVG
+function getSvgElementAndString() {
+    const svgElement = document.querySelector('#input-svg')
+    const svgString = svgElement.value.trim() // <textarea>のvalue属性を取得, `.trim()` => 文字列の両端の空白を削除
+    return {
+        element: svgElement,
+        string: svgString
+    }
+}
+
+
+
 // Get the artwork ID
 function getArtworkId() {
     const inputSVG = getInputSvg()

@@ -1,4 +1,27 @@
-// Change the viewBox size fit to Squircle, slimmed
+// Argument SVG is a set of element and string as object
+// Returned SVG is a just string only
+function svgWithNewShapeViewbox(shape, hasCropSideMargins, svg) {
+
+    // Update 'viewBox'
+
+    // Get back original 'viewBox' value when
+    // 1. the shapes excepts 'squircleSlimmed' selected, or
+    // 2. 'squircleSlimmed' and not checked for 'Crop side margins' checkbox
+
+    console.log('hasCropSideMargins: ', hasCropSideMargins) // boolean, true=cropped[checked], false=un-cropped[!checked]
+
+    if (shape == 'squircleSlimmed' && hasCropSideMargins == true) {
+        return viewboxSlimmed(svg)
+    } else { // shape == 'square | circle | squircle'
+        console.log(`"viewBox" value will be replaced to original size, \n
+                      because selected shape is ${shape}, and hasCropSideMargins is ${hasCropSideMargins}`)
+        return viewboxUnSlimmed(svg)
+    }
+
+}
+
+// Change the viewBox size fit to Squircle, slimmed.
+// And textarea replaced as it.
 function viewboxSlimmed(svg) {
     const viewboxStr = getViewboxStr(svg.string)
     const viewboxValues = extractViewboxValues(viewboxStr)
@@ -33,15 +56,6 @@ function getViewboxStr(svgString) {
     return viewboxStr
 }
 
-function getSvgElementAndString() {
-    const svgElement = document.querySelector('#input-svg')
-    const svgString = svgElement.value.trim() // <textarea>のvalue属性を取得, `.trim()` => 文字列の両端の空白を削除
-    return {
-        element: svgElement,
-        string: svgString
-    }
-}
-
 // Get the slimmed width size and 'x' position (= same number as how much reduced each sides)
 function getSlimmedViewboxXW(svgString) {
     const patternToGetSquircleSlimmedPathStr = /<path d="M ([\d\.]+),.*Q.*T ([\d\.]+),/; // viewBox属性を抽出する正規表現
@@ -51,11 +65,12 @@ function getSlimmedViewboxXW(svgString) {
     //console.log('matches[2]: ', matches[2]) // e.g.: 29.45
 
     return {
-        x: matches[1],                                 // viewBox start position | e.g.: 1.55
-        w: String(parseFloat(matches[2] - matches[1])) // new viewBox width size | e.g.: 27.9 (= 29.45 - 1.55)
+        x: toFixedTrimmed(parseFloat(matches[1])),             // viewBox start position | e.g.: 1.55
+        w: toFixedTrimmed(parseFloat(matches[2] - matches[1])) // new viewBox width size | e.g.: 27.9 (= 29.45 - 1.55)
     }
 }
 
+// Get viewBox four numbers as Object
 function extractViewboxValues(viewBoxString) {
     // Use a regular expression to match the four numbers in the viewBox string
     const match = viewBoxString.match(/viewBox="([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)"/);
@@ -75,8 +90,6 @@ function extractViewboxValues(viewBoxString) {
     }
 }
 // e.g.: 'viewBox="2.325 0 26.35 31"' => Object { x: 2.325, y: 0, w: 26.35, h: 31 }
-
-
 
 
 

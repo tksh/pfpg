@@ -264,60 +264,83 @@ async function getFontBuffer() {
 
     // changeイベントを設定
     selectOfPathMode.addEventListener("change", () => {
+
         // 現在の設定の値を保存しておく
-        const oldPathModeSvgStr = getInputSvg()
+        // Get the SVG textarea element and string
+        const svgElemAndStr = getSvgElementAndString()
+        const currentPathModeSvgStr = svgElemAndStr.string
+        const svgElement = svgElemAndStr.element
+        //const currentPathModeSvgStr = getInputSvg()
+
+
+        // Line tab
+
+        // Group colors
+        const patternGroupColors = /<g stroke=[^>]*>/g
+        const matchOfGroupColors = currentPathModeSvgStr.match(patternGroupColors) // (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="# ...
+
+        // Opacity steps の選択肢の値は svgのコンテンツではなく UIのみに関わるので 保存しておいて元に戻す 必要はない
+
+
+        // Canvas tab
+
+        // Background color (include opacity)
+        const patternBgRectFill = /<rect width="100%" height="100%" fill="[^"]*"/g
+        const matchOfBgRectFill = currentPathModeSvgStr.match(patternBgRectFill)
+        const valueOfBgRectFill = matchOfBgRectFill[0] // Hex string
+        // Shape to trim
+        const patternShapeToTrim = /<clipPath id="clipShape">[^>]*>/g
+        const matchOfShapeToTrim = currentPathModeSvgStr.match(patternShapeToTrim)
+        const valueOfShapeToTrim = matchOfShapeToTrim[0] // 'square' | 'circle' | 'squircle' | 'squircle, slimmed'
+        // Squircle, slimmed options
+        // - Width narrowness
+        const selectWidthNarrowness = document.getElementById('width-narrowness');
+        const valueOfSelectWidthNarrowness = selectWidthNarrowness.value; // 0-10, 15, 20, 25, 30
+        // - Top-heavy ratio
+        const selectTopHeavyRatio = document.getElementById('top-heavy-ratio');
+        const valueOfTopHeavyRatio = selectTopHeavyRatio.value;
+        // - Crop side margins
+        const hasCropSideMargins = getBoolOfCropSideMargins() // boolean, true=cropped[checked], false=un-cropped[!checked]
+
+        const patternViewbox = /viewBox="[^"]+"/; // viewBox属性を抽出する正規表現
+        const matchOfViewbox = currentPathModeSvgStr.match(patternViewbox)
+        const valueOfViewbox = matchOfViewbox[0] // e.g.: viewBox="1.55 0 27.9 31"
+
+
+        // Render tab
 
         // Anti-aliasing (shape-rendering)
         const patternShapeRendering = /shape-rendering="[^"]*"/g
-        const matchOfShapeRendering = oldPathModeSvgStr.match(patternShapeRendering) // Array(0) "shape-rendering=\"crispEdges\""
-        const valueOfShapeRendering = matchOfShapeRendering[0]
-        // Background color (include opacity)
-        const patternBgRectFill = /<rect width="100%" height="100%" fill="[^"]*"/g
-        const matchOfBgRectFill = oldPathModeSvgStr.match(patternBgRectFill)
-        const valueOfBgRectFill = matchOfBgRectFill[0]
-        // Shape to trim
-        const patternShapeToTrim = /<clipPath id="clipShape">[^>]*>/g
-        const matchOfShapeToTrim = oldPathModeSvgStr.match(patternShapeToTrim)
-        const valueOfShapeToTrim = matchOfShapeToTrim[0]
-        // Group colors
-        const patternGroupColors = /<g stroke=[^>]*>/g
-        const matchOfGroupColors = oldPathModeSvgStr.match(patternGroupColors) // (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="# ...
+        const matchOfShapeRendering = currentPathModeSvgStr.match(patternShapeRendering)
+        const valueOfShapeRendering = matchOfShapeRendering[0] // 'geometricPrecision' | 'crispEdges'
 
 
-        // 選択された値を取得
-        const value = selectOfPathMode.value;
-        //console.log('selectOfPathMode value is', value) // relative | absolute
 
-        // 選択された path-mode で URL Params から デコードし直す
-        if (value === 'relative') {
-            console.log('Path mode: Relative and merged')
-            decode(isRelOrAbsBool = true, isDataManipulatorOrIndexBool, svgOutputTextAreaId)
-        } else if (value === 'absolute') {
-            console.log('Path mode: Absolute and separated')
-            decode(isRelOrAbsBool = false, isDataManipulatorOrIndexBool, svgOutputTextAreaId)
-        }
-        // <textarea>のvalue属性を デコードし直した 新しいSVG文字列に更新する
-        let newPathModeSvgStr = getInputSvg();
+        // 選択された 'Path mode'の値を 取得
+        const valueOfPathMode = selectOfPathMode.value; // relativeMerged | absoluteSeparated
+
+        // Get new 'Path mode' styled svg string, decode from url params
+        const newPathModeSvgStr = decodeAsSelectedPathMode(valueOfPathMode)
 
 
-        // デコードし直す前に 保存しておいた 設定の値を 元に戻す
-        newPathModeSvgStr = newPathModeSvgStr.replace(patternShapeRendering, valueOfShapeRendering);
-        newPathModeSvgStr = newPathModeSvgStr.replace(patternBgRectFill, valueOfBgRectFill);
-        newPathModeSvgStr = newPathModeSvgStr.replace(patternShapeToTrim, valueOfShapeToTrim);
-        // Group colors
-        for (groupId = 0; groupId < matchOfGroupColors.length; groupId++) {
-            const valueOfGroupColors = matchOfGroupColors[groupId]
-            newPathModeSvgStr = replaceAtIndex(newPathModeSvgStr, patternGroupColors, valueOfGroupColors, groupId)
-        }
+        // レンダリングし直す前に 保存しておいた 設定の値を 元に戻す
+
+        // Anti-alias, Backdrop color, Shape to trim, viewBox
+        const recoverShapeRendering = recoverCurrentOptionValue(newPathModeSvgStr, patternShapeRendering, valueOfShapeRendering);
+        const recoverBgRectFill     = recoverCurrentOptionValue(recoverShapeRendering, patternBgRectFill, valueOfBgRectFill);
+        const recoverShapeToTrim    = recoverCurrentOptionValue(recoverBgRectFill, patternShapeToTrim, valueOfShapeToTrim);
+        const recoverViewbox        = recoverCurrentOptionValue(recoverShapeToTrim, patternViewbox, valueOfViewbox);
+
+        // Group colors (stroke, opacity, stroke-opacity)
+        const recoverGroupColors = recoverCurrentGroupColorsValues(recoverViewbox, patternGroupColors, matchOfGroupColors)
 
 
-        // 設定の値を 元に戻した 新しいSVG文字列を textarea に挿入する
-        const svgInputElement = document.querySelector('#input-svg')
-        svgInputElement.value = newPathModeSvgStr;
+        const finishedNewPathModeSvgStr = recoverGroupColors
+        // 設定の値を 元に戻した 新しいSVG文字列を <textarea>のvalue属性 に挿入し更新する
+        svgElement.value = finishedNewPathModeSvgStr
 
         // convertSvg関数を呼び出す
-        ////convertSvg({ target: svgInputElement }); //// Old
-        convertSvg(svgInputElement.value.trim()) //// New
+        convertSvg(finishedNewPathModeSvgStr)
     });
     /////////////////////////////// Path-mode ////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -364,7 +387,7 @@ async function getFontBuffer() {
     selectOfShapeRendering.addEventListener("change", () => {
         // 選択された値を取得
         const value = selectOfShapeRendering.value;
-        //console.log('selectOfShapeRendering value is', value) // geometricPrecision | crispEdges
+        //console.log('selectOfShapeRendering value is', value) // 'geometricPrecision' | 'crispEdges'
         // <textarea>のvalue属性を取得
         const svgString = svgInputElement.value;
 
@@ -442,8 +465,8 @@ async function getFontBuffer() {
         const svgElemAndUpdatedStr = { element: svgElemAndStr.element, string: pathUpdatedSvg }
         console.log('svgElemAndUpdatedStr: ', svgElemAndUpdatedStr)
 
-        ////const hasCropSideMargins = getCropCheckboxState() // boolean, true=cropped[checked], false=un-cropped[!checked]
-        const viewboxUpdatedString = svgWithNewShapeViewbox(shape, svgElemAndUpdatedStr)
+        const hasCropSideMargins = getBoolOfCropSideMargins() // boolean, true=cropped[checked], false=un-cropped[!checked]
+        const viewboxUpdatedString = svgWithNewShapeViewbox(shape, hasCropSideMargins, svgElemAndUpdatedStr)
         console.log('viewboxUpdatedString: ', viewboxUpdatedString)
         // <textarea>のvalue属性を更新する
         svgElement.value = viewboxUpdatedString;
@@ -477,9 +500,10 @@ async function getFontBuffer() {
         const patternForClipPathShape = /<clipPath id="clipShape">\n.*\n.*<\/clipPath>/g;
         // Replace the path of shape to trim
         const pathUpdatedSvg = svgString.replace(patternForClipPathShape, `<clipPath id="clipShape">\n            ${shapePathOfSquircleSlimmed}\n        <\/clipPath>`);
-        const svgElemAndUpdatedStr = { element: svgElemAndStr.element, string: pathUpdatedSvg}
+        const svgElemAndUpdatedStr = { element: svgElemAndStr.element, string: pathUpdatedSvg }
         const shape = 'squircleSlimmed'
-        const viewboxUpdatedString = svgWithNewShapeViewbox(shape, svgElemAndUpdatedStr)
+        const hasCropSideMargins = getBoolOfCropSideMargins() // boolean, true=cropped[checked], false=un-cropped[!checked]
+        const viewboxUpdatedString = svgWithNewShapeViewbox(shape, hasCropSideMargins, svgElemAndUpdatedStr)
         // <textarea>のvalue属性を更新する
         svgElement.value = viewboxUpdatedString;
         // convertSvg関数を呼び出す
@@ -508,9 +532,10 @@ async function getFontBuffer() {
         const patternForClipPathShape = /<clipPath id="clipShape">\n.*\n.*<\/clipPath>/g;
         // Replace the path of shape to trim
         const pathUpdatedSvg = svgString.replace(patternForClipPathShape, `<clipPath id="clipShape">\n            ${shapePathOfSquircleSlimmed}\n        <\/clipPath>`);
-        const svgElemAndUpdatedStr = { element: svgElemAndStr.element, string: pathUpdatedSvg}
+        const svgElemAndUpdatedStr = { element: svgElemAndStr.element, string: pathUpdatedSvg }
         const shape = 'squircleSlimmed'
-        const viewboxUpdatedString = svgWithNewShapeViewbox(shape, svgElemAndUpdatedStr)
+        const hasCropSideMargins = getBoolOfCropSideMargins() // boolean, true=cropped[checked], false=un-cropped[!checked]
+        const viewboxUpdatedString = svgWithNewShapeViewbox(shape, hasCropSideMargins, svgElemAndUpdatedStr)
         // <textarea>のvalue属性を更新する
         svgElement.value = viewboxUpdatedString;
         // convertSvg関数を呼び出す
@@ -699,13 +724,13 @@ async function getFontBuffer() {
             console.log('Check the `Crop side margins: ` checkbox.')
             const svgElemAndStr = getSvgElementAndString()
             const updatedSvg = viewboxSlimmed(svgElemAndStr); // 1. Crop the SVG, Replace the textarea content.
-            convertSvg(updatedSvg);              // 2. Rasterize to PNG, Replace the img-box content.
+            convertSvg(updatedSvg);                           // 2. Rasterize to PNG, Replace the img-box content.
         } else {
             // チェックボックスが外れた場合、元のデータと同じ矩形のサイズに戻す
             console.log('Un-check the `Crop side margins: ` checkbox.')
             const svgElemAndStr = getSvgElementAndString()
             const updatedSvg = viewboxUnSlimmed(svgElemAndStr); // 1. Un-Crop the SVG, Replace the textarea content.
-            convertSvg(updatedSvg);                // 2. Rasterize to PNG, Replace the img-box content.
+            convertSvg(updatedSvg);                             // 2. Rasterize to PNG, Replace the img-box content.
         }
     }
     ////////////////////////// Crop side margins //////////////////////////

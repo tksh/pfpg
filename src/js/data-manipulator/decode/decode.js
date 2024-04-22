@@ -36,12 +36,10 @@ function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) 
     if (urlParamsAsTwoMaps != null) {
 
         // Extract the values
-        ////const artworkDataMap = urlParamsAsTwoMaps[0]
         const artworkDataMap = urlParamsAsTwoMaps.artwork_data
         // console.log("artworkDataMap: ", artworkDataMap)
         // Map(4) {'artwork_id' => '202308_001', 'grid_size' => '31x31', 'uint_n' => 5, 'bg_color' => '9999'}
 
-////        const strokesValuesMap = urlParamsAsTwoMaps[1]
         const strokesValuesMap = urlParamsAsTwoMaps.strokes_values
         // console.log("strokesValuesMap: ", strokesValuesMap)
         // Map(5) {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
@@ -112,6 +110,8 @@ function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) 
         ${queryString.length} / ${svgStr.length} = <b>${compRatio}</b>`
             resultTextElem.innerHTML = text
         }
+
+        return svgStr
 
     } else {
         // Stop decoding when urlParamsAsTwoMaps = null
