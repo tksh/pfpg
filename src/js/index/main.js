@@ -410,22 +410,14 @@ async function getFontBuffer() {
 
 
         // `squircleSlimmed`が 選ばれた時だけ表示される
-        // 2つのオプション選択用の<select>要素 と 横幅クロップ用の<label>&<input>要素 を取得
-        const divWidthNarrowness = document.getElementById('width-narrowness-div');
-        const divTopHeavyRatio = document.getElementById('top-heavy-ratio-div');
-        const divCropSideMargins = document.getElementById('crop-side-margins-div');
+        // 2つのオプション選択用の<select>要素 と 横幅クロップ用の<label>&<input>要素 を取得し 表示または非表示にする
+        const elementsToToggle = ['width-narrowness-div', 'top-heavy-ratio-div', 'crop-side-margins-div'];
 
-        // 選択されたオプションによって 2つの<select> と 1つの<label>&<input> を 表示または非表示にする
         if (shape === 'squircleSlimmed') {
-            divWidthNarrowness.style.display = 'inline'; // 表示
-            divTopHeavyRatio.style.display = 'inline';   // 表示
-            divCropSideMargins.style.display = 'inline'; // 表示
+            toggleDisplay(elementsToToggle, 'inline');
         } else {
-            divWidthNarrowness.style.display = 'none'; // 非表示
-            divTopHeavyRatio.style.display = 'none';   // 非表示
-            divCropSideMargins.style.display = 'none'; // 非表示
+            toggleDisplay(elementsToToggle, 'none');
         }
-
 
         // Get the SVG textarea element and string
         const svgTextareaAndString = getSvgTextareaAndString()
@@ -553,7 +545,7 @@ async function getFontBuffer() {
 
 
     //////////////////////////////////////////////////////////////////////////
-    /////////////////////////// Background color ///////////////////////////
+    //////////////////////////// Background color ////////////////////////////
 
     // // Color-picker: Background color (via resvg original)
     // backgroundColorPickerElement.addEventListener('change', function (event) {
@@ -564,12 +556,12 @@ async function getFontBuffer() {
     //   console.log('resvgOpts.background value is ' + resvgOpts.background) // resvgOpts.background value is #87FF634C
     //   svg2png(null, resvgOpts, hasCrop)
     // })
-    /////////////////////////// Background color ///////////////////////////
+    //////////////////////////// Background color ////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
 
     //////////////////////////////////////////////////////////////////////////
-    ////////// Group 'stroke', 'opacity' and 'stroke-opacity' [n] ///////////
+    /////////// Group 'stroke', 'opacity' and 'stroke-opacity' [n] ///////////
 
     function addEventListenerForGroupColorsInputs(numberOfGroups, attrName) {
 
@@ -662,12 +654,12 @@ async function getFontBuffer() {
     addEventListenerForGroupColorsInputs(numberOfGroups, 'opacity')
     addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke-opacity')
 
-    ////////// Group 'stroke', 'opacity' and 'stroke-opacity' [n] ///////////
+    /////////// Group 'stroke', 'opacity' and 'stroke-opacity' [n] ///////////
     //////////////////////////////////////////////////////////////////////////
 
 
     //////////////////////////////////////////////////////////////////////////
-    /////////////////////////// Backdrop color ///////////////////////////
+    ///////////////////////////// Backdrop color /////////////////////////////
 
     const rectColorPickerElement = document.querySelector('#rect-color-picker')
 
@@ -695,12 +687,12 @@ async function getFontBuffer() {
         // convertSvg関数を呼び出す
         convertSvg(svgInputElement.value.trim())
     })
-    /////////////////////////// Backdrop color ///////////////////////////
+    ///////////////////////////// Backdrop color /////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
 
     //////////////////////////////////////////////////////////////////////////
-    ////////////////////////// Crop side margins //////////////////////////
+    //////////////////////////// Crop side margins ///////////////////////////
 
     // Crop チェックボックス要素にイベントリスナーを追加
     const checkbox = document.getElementById('crop-side-margins');
@@ -722,7 +714,7 @@ async function getFontBuffer() {
             convertSvg(updatedSvg);                                    // 2. Rasterize to PNG, Replace the img-box content.
         }
     }
-    ////////////////////////// Crop side margins //////////////////////////
+    //////////////////////////// Crop side margins ///////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
 

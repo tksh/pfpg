@@ -93,3 +93,11 @@ function svgWithNewShapeClippath(shape, svgString, shapePathOfSquircle, shapePat
 
     return updatedSvgString
 }
+
+
+// Function to toggle display of elements
+function toggleDisplay(elements, display) {
+    elements.forEach(element => {
+        document.getElementById(element).style.display = display;
+    });
+}
