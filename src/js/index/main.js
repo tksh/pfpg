@@ -57,25 +57,13 @@ async function getFontBuffer() {
 
 (async function () {
     await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm')) // Path that relative from index.html
-    const output = document.getElementById('output')
     const svgInputElement = document.querySelector('#input-svg') // Select <textarea id="input-svg" ...
-    // svgInputElement.value = INIT_INPUT_SVG_STRING // Un-comment to force to use `INIT_INPUT_SVG_STRING` for testing
-    console.log('svgInputElement: ', svgInputElement)
+    console.log('/////svgInputElement: ', svgInputElement)
+    console.log('/////svgInputElement.value.trim(): ', svgInputElement.value.trim())
 
-    // let resvgOpts = {}
-    const inputSvgElement = new DOMParser().parseFromString(INIT_INPUT_SVG_STRING, 'image/svg+xml').documentElement
-    let resvgOpts = {
-        font: {},
-        fitTo: {
-            mode: 'zoom',
-            value: 2,
-        },
-    }
-
-    //await svg2png(svgString, resvgOpts)
+    let resvgOpts = {}
 
     async function svg2png(svgString, opts, hasCrop) {
-        //console.log('svgString (below of "svg2png"): ', svgString)
 
         const svg = svgString ? svgString : svgInputElement.value.trim()
         // svgString が真（例えば、文字列が空でない、nullでないなど）であれば、その値を svg 変数に代入します。
@@ -91,7 +79,7 @@ async function getFontBuffer() {
         // resvg-js default outputs the w and h size as integer
         // document.querySelector('#svg-info').textContent = 'Source SVG grid size: ' + resvgJS.width + ' x ' + resvgJS.height
 
-        // Outputs the viewBox size as float
+        // Outputs the viewBox size as float to indicate at #svg-info <textarea>
         const viewboxStr = getViewboxStr(svgString)
         const viewboxValues = extractViewboxValues(viewboxStr) // e.g: Map(4) {'x' => 0, 'y' => 0, 'w' => 31, 'h' => 31}
         document.querySelector('#svg-info').textContent = 'Source SVG viewBox size: ' + viewboxValues.get('w') + ' x ' + viewboxValues.get('h')
@@ -116,13 +104,13 @@ async function getFontBuffer() {
             }
         }
 
-        // Crop
+        // Crop by BBox (Un-used)
         const innerBBox = resvgJS.innerBBox()
         const bbox = resvgJS.getBBox()
         console.log('SVG innerBBox: ', innerBBox)
         console.log('SVG getBBox: ', bbox)
         if (hasCrop && bbox) resvgJS.cropByBBox(bbox)
-        //renderingStatusElement.textContent = 'Now rendering ..'
+
         // Render
         const pngData = resvgJS.render()
         const pngBuffer = pngData.asPng()
@@ -153,13 +141,8 @@ async function getFontBuffer() {
 
         pngDownloadButtonElement.innerHTML = pngDownloadSizeText
 
-    }
-    // The end of `async function svg2png(svgString, opts, hasCrop) {`
+    } // The end of `async function svg2png(svgString, opts, hasCrop) {`
 
-
-    function addMultipleEventListener(element, events, handler) {
-        events.forEach(e => element.addEventListener(e, handler))
-    }
 
 
     // addMultipleEventListener(svgInputElement, ['change', 'keyup', 'paste'], function (event) {
@@ -175,9 +158,21 @@ async function getFontBuffer() {
     // `convertSvg(svgInputElement.value.trim())` として呼び出す
 
 
+    //////////////////////////////////////////////////////////////////////////
+    ////////////////////////////// Crop by BBox //////////////////////////////
+
+    const cropElement = document.querySelector('#crop-by-bbox') // original cropping function checkbox, now disabled
+    cropElement.addEventListener('change', function (event) {
+        const hasCrop = event.target.checked
+        svg2png(null, resvgOpts, hasCrop)
+    })
+    ////////////////////////////// Crop by BBox //////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+
+
+
     // svg2png関数を呼び出す関数を定義
-    const convertSvg = async (svgString) => {
-        //console.log('svgString: ', svgString)
+    const convertSvg = async (event) => {
 
         // HTML要素を取得
         const pngDownloadButtonElement = document.getElementById("png-download-button");
@@ -232,7 +227,11 @@ async function getFontBuffer() {
             });
         } // End of 'async function measureSvg2PngPerformance(svgString, opts, hasCrop) {'
 
-        //// const svgString = event.target.value.trim()
+        console.log('|||||||||||||||||||||||||||||||||||||||||||||||event: ', event)
+        console.log('|||||||||||||||||||||||||||||||||||||||||||||||event.target: ', event.target)
+        console.log('|||||||||||||||||||||||||||||||||||||||||||||||event.target.value: ', event.target.value)
+        const svgString = event.target.value
+        // const svgString = event.target.value.trim()
         const hasCrop = cropElement.checked
         if (!svgString) return
 
@@ -251,18 +250,18 @@ async function getFontBuffer() {
         countSvgSize()
     }; // End of 'const convertSvg = async (event) => {'
 
-    // テキストを編集するたびに変換処理が呼び出される関数を設定
+    // <textarea>のSVGテキストを編集するたびに変換処理が呼び出される関数を設定
+    function addMultipleEventListener(element, events, handler) {
+        events.forEach(e => element.addEventListener(e, handler))
+    }
     addMultipleEventListener(svgInputElement, ['change', 'keyup', 'paste'], convertSvg);
 
 
     //////////////////////////////////////////////////////////////////////////
-    /////////////////////////////// Path-mode ////////////////////////////////
+    /////////////////////////////// Path mode ////////////////////////////////
 
-    // <select>要素を取得
-    const selectOfPathMode = document.getElementById("path-mode");
-
-    // changeイベントを設定
-    selectOfPathMode.addEventListener("change", () => {
+    //  Event listeners for 'Path mode' selection changes
+    document.getElementById("path-mode").addEventListener("change", () => {
 
         // 現在の設定の値を保存しておく
         // Get the SVG textarea element and string
@@ -306,7 +305,7 @@ async function getFontBuffer() {
 
 
         // 選択された 'Path mode'の値を 取得
-        const valueOfPathMode = selectOfPathMode.value; // relativeMerged | absoluteSeparated
+        const valueOfPathMode = document.getElementById("path-mode").value; // relativeMerged | absoluteSeparated
 
         // Get new 'Path mode' styled svg string, decode from url params
         const newPathModeSvgStr = decodeAsSelectedPathMode(valueOfPathMode)
@@ -316,48 +315,46 @@ async function getFontBuffer() {
 
         // Anti-alias, Backdrop color, Shape to trim, viewBox
         const recoverShapeRendering = recoverCurrentOptionValue(newPathModeSvgStr, patternShapeRendering, valueOfShapeRendering);
-        const recoverBgRectFill     = recoverCurrentOptionValue(recoverShapeRendering, patternBgRectFill, valueOfBgRectFill);
-        const recoverShapeToTrim    = recoverCurrentOptionValue(recoverBgRectFill, patternShapeToTrim, valueOfShapeToTrim);
-        const recoverViewbox        = recoverCurrentOptionValue(recoverShapeToTrim, patternViewbox, valueOfViewbox);
+        const recoverBgRectFill = recoverCurrentOptionValue(recoverShapeRendering, patternBgRectFill, valueOfBgRectFill);
+        const recoverShapeToTrim = recoverCurrentOptionValue(recoverBgRectFill, patternShapeToTrim, valueOfShapeToTrim);
+        const recoverViewbox = recoverCurrentOptionValue(recoverShapeToTrim, patternViewbox, valueOfViewbox);
 
         // Group colors (stroke, opacity, stroke-opacity)
         const recoverGroupColors = recoverCurrentGroupColorsValues(recoverViewbox, patternGroupColors, matchOfGroupColors)
 
 
-        const finishedNewPathModeSvgStr = recoverGroupColors
-        // 設定の値を 元に戻した 新しいSVG文字列を <textarea>のvalue属性 に挿入し更新する
-        svgTextarea.value = finishedNewPathModeSvgStr
+        // 保存しておいた設定の値を 全て元に戻した 最終的な新しいSVG文字列を <textarea>のvalue属性に挿入する
+        svgTextarea.value = recoverGroupColors
 
         // convertSvg関数を呼び出す
-        convertSvg(finishedNewPathModeSvgStr)
+        convertSvg({ target: { value: recoverGroupColors } })
+        // convertSvg({ target: recoverGroupColors })
+        // convertSvg(recoverGroupColors)
     });
-    /////////////////////////////// Path-mode ////////////////////////////////
+
+    /////////////////////////////// Path mode ////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
 
     //////////////////////////////////////////////////////////////////////////
     ////////////////////////////// Opacity steps /////////////////////////////
 
-    // セレクトメニューの要素を取得
-    const selectOfOpacitySteps = document.getElementById("opacity-steps");
-
-    // changeイベントを設定
-    selectOfOpacitySteps.addEventListener("change", () => {
+    // Event listeners for 'Opacity steps' value changes
+    document.getElementById("opacity-steps").addEventListener("change", () => {
 
         // 選択されたセレクトメニューの値を取得
-        const step = Number(selectOfOpacitySteps.value);
-        console.log('selectOfOpacitySteps.value: ', typeof (step), step); // number, 0.04|0.1|0.2
+        const step = Number(document.getElementById("opacity-steps").value); // 0.04 | 0.1 | 0.2
 
         // 新しいセレクトメニューに更新
         changeOpacitySelectOptionsAsNewStep(step)
 
-        // 新しいセレクトメニューへの更新で選ばれた そのstepでの 一番近い値の表示と
-        // 元々の 'input-svg' のSVGの色情報がずれてしまうので 新しいセレクトメニューでの現在の値を取得して
-        // 新しい <g stroke=" ... > 部分のSVG文字列を生成して置き換える
-        updateSvgForNewStep()
+        // 新しいセレクトメニューへの更新で選ばれた そのstepでの 一番近い値の表示と 元々のSVGの色情報がずれてしまうので
+        // 新しいセレクトメニューでの値を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
+        const updatedSvg = updateSvgForNewStep()
 
-        // Re-rendering the image from new step opacity value SVG
-        convertSvg(svgInputElement.value.trim())
+        // Render the image via SVG with new step opacity value
+        // convertSvg(updatedSvg)
+        convertSvg({ target: { value: updatedSvg } })
     });
 
     ////////////////////////////// Opacity steps /////////////////////////////
@@ -365,18 +362,12 @@ async function getFontBuffer() {
 
 
     //////////////////////////////////////////////////////////////////////////
-    ///////////////////////////// Anti-aliasing /////////////////////////////
+    ////////////////////////////// Anti-aliasing /////////////////////////////
 
-    // <select>要素を取得
-    const selectOfShapeRendering = document.getElementById("shape-rendering");
-    //console.log('selectOfShapeRendering is ', selectOfShapeRendering);
-    //console.log('selectOfShapeRendering.length is ', selectOfShapeRendering.length); // 2
-
-    // changeイベントを設定
-    selectOfShapeRendering.addEventListener("change", () => {
+    // Event listeners for 'shape-rendering' type changes
+    document.getElementById("shape-rendering").addEventListener("change", () => {
         // 選択された値を取得
-        const value = selectOfShapeRendering.value;
-        //console.log('selectOfShapeRendering value is', value) // 'geometricPrecision' | 'crispEdges'
+        const value = document.getElementById("shape-rendering").value; // 'geometricPrecision' | 'crispEdges'
         // <textarea>のvalue属性を取得
         const svgString = svgInputElement.value;
 
@@ -387,29 +378,33 @@ async function getFontBuffer() {
         // <textarea>のvalue属性を更新する
         svgInputElement.value = updatedSvg;
         // convertSvg関数を呼び出す
-        convertSvg(svgInputElement.value.trim())
+        convertSvg({ target: { value: updatedSvg } })
     });
-    ///////////////////////////// Anti-aliasing /////////////////////////////
+    ////////////////////////////// Anti-aliasing /////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
 
     //////////////////////////////////////////////////////////////////////////
     ///////////////////////////// Shapes to trim /////////////////////////////
 
-    // セレクターの要素を取得
-    const selectOfClipPathShape = document.getElementById('shape-to-trim');
-    console.log('selectOfClipPathShape.length is ', selectOfClipPathShape.length); // 4
+    document.getElementById('width-narrowness').addEventListener('change', () => {
+        const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvgTextareaAndString());
+        convertSvg({ target: { value: updatedSvg } })
+    });
+
+    document.getElementById('top-heavy-ratio').addEventListener('change', () => {
+        const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvgTextareaAndString());
+        convertSvg({ target: { value: updatedSvg } })
+    });
 
 
     // 'shape-to-trim' changeイベントリスナーを設定
-    selectOfClipPathShape.addEventListener("change", () => {
+    document.getElementById('shape-to-trim').addEventListener("change", () => {
 
-        // 選択された 'shape-to-trim' の値を取得
-        const shape = selectOfClipPathShape.value;
-        //console.log('selectOfClipShape shape is ', shape) // square|circle|squircle|squircleSlimmed
+        // 選択された値を取得
+        const shape = document.getElementById('shape-to-trim').value; // square|circle|squircle|squircleSlimmed
 
-
-        // `squircleSlimmed`が 選ばれた時だけ表示される
+        // 'squircleSlimmed'が 選ばれた時だけ表示される
         // 2つのオプション選択用の<select>要素 と 横幅クロップ用の<label>&<input>要素 を取得し 表示または非表示にする
         const elementsToToggle = ['width-narrowness-div', 'top-heavy-ratio-div', 'crop-side-margins-div'];
 
@@ -419,129 +414,18 @@ async function getFontBuffer() {
             toggleDisplay(elementsToToggle, 'none');
         }
 
-        // Get the SVG textarea element and string
-        const svgTextareaAndString = getSvgTextareaAndString()
-        const svgString = svgTextareaAndString.get('string')
-        const svgTextarea = svgTextareaAndString.get('element')
+        const updatedSvg = updateSvgWithSelectedShapePath(shape, getSvgTextareaAndString());
+        convertSvg({ target: { value: updatedSvg } })
 
-        // Get the grid size
-        const gridSize = getGridSize(svgString)
-
-        // Generate the 'Squircle' shape path
-        const center = roundToTwoDecimals(gridSize / 2)
-        //console.log('center: ', center)
-        const shapePathOfSquircle = `<path d="M 0,${center}Q 0,0 ${center},0T ${gridSize},${center} ${center},${gridSize} 0,${center}" />`
-        //console.log('shapePathOfSquircle is ', shapePathOfSquircle)
-        // <path d="M 0,15.5Q 0,0 15.5,0T 31,15.5 15.5,31 0,15.5" />
-
-        // Generate the 'Squircle, slimmed' shape path
-        const widthNarrowness = getWidthNarrowness()
-        const topHeavyRatio = getTopHeavyRatio()
-        const shapePathOfSquircleSlimmed = generateClipPathShapeOfSquircleSlimmed(svgString, widthNarrowness, topHeavyRatio)
-        //console.log('shapePathOfSquircleSlimmed:', shapePathOfSquircleSlimmed)
-        // <path d="M 10.2,127.5Q 7.65,0 127.5,0T 244.8,127.5 127.5,255 10.2,127.5" />
-
-        // Get the new svg string with selected shape path
-        const pathUpdatedSvg = svgWithNewShapeClippath(shape, svgString, shapePathOfSquircle, shapePathOfSquircleSlimmed)
-        const svgTextareaAndUpdatedString = new Map([['element', svgTextareaAndString.get('element')], ['string', pathUpdatedSvg]])
-        console.log('svgTextareaAndUpdatedString: ', svgTextareaAndUpdatedString)
-
-        const hasCropSideMargins = getBoolOfCropSideMargins() // boolean, true=cropped[checked], false=un-cropped[!checked]
-        const viewboxUpdatedString = svgWithNewShapeViewbox(shape, hasCropSideMargins, svgTextareaAndUpdatedString)
-        console.log('viewboxUpdatedString: ', viewboxUpdatedString)
-        // <textarea>のvalue属性を更新する
-        svgTextarea.value = viewboxUpdatedString;
-        // convertSvg関数を呼び出す
-        convertSvg(viewboxUpdatedString)
-    });
-    // The end of `selectOfClipPathShape.addEventListener("change", () => {`
-
-
-    // Two option <select> for 'Squircle, slimmed'
-
-    // Width narrowness
-    // changeイベントリスナーを設定
-    const selectWidthNarrowness = document.getElementById('width-narrowness');
-    selectWidthNarrowness.addEventListener("change", () => {
-        // 選択された<select>の値を取得
-        const selectedValue = selectWidthNarrowness.value;
-        console.log('selectedValue(Width narrowness): ', selectedValue)
-
-        // もう片方の オプションの値を取得
-        const topHeavyRatio = getTopHeavyRatio()
-
-        // Get the SVG textarea element and string
-        const svgTextareaAndString = getSvgTextareaAndString()
-        const svgString = svgTextareaAndString.get('string')
-        const svgTextarea = svgTextareaAndString.get('element')
-
-        // 'Squircle, slimmed'のパスを生成
-        const shapePathOfSquircleSlimmed = generateClipPathShapeOfSquircleSlimmed(svgString, selectedValue, topHeavyRatio)
-        // cliPathとして使う かたち のパス文字列 を 取得する正規表現パターン
-        const patternForClipPathShape = /<clipPath id="clipShape">\n.*\n.*<\/clipPath>/g;
-        // Replace the path of shape to trim
-        const pathUpdatedSvg = svgString.replace(patternForClipPathShape, `<clipPath id="clipShape">\n            ${shapePathOfSquircleSlimmed}\n        <\/clipPath>`);
-        const svgTextareaAndUpdatedString = new Map([['element', svgTextareaAndString.get('element')], ['string', pathUpdatedSvg]])
-        const shape = 'squircleSlimmed'
-        const hasCropSideMargins = getBoolOfCropSideMargins() // boolean, true=cropped[checked], false=un-cropped[!checked]
-        const viewboxUpdatedString = svgWithNewShapeViewbox(shape, hasCropSideMargins, svgTextareaAndUpdatedString)
-        // <textarea>のvalue属性を更新する
-        svgTextarea.value = viewboxUpdatedString;
-        // convertSvg関数を呼び出す
-        convertSvg(viewboxUpdatedString)
-    });
-
-    // Top-heavy ratio
-    // changeイベントリスナーを設定
-    const selectTopHeavyRatio = document.getElementById('top-heavy-ratio');
-    selectTopHeavyRatio.addEventListener("change", () => {
-        // 選択された<select>の値を取得
-        const selectedValue = selectTopHeavyRatio.value;
-        console.log('selectedValue(Top-heavy ratio): ', selectedValue)
-
-        // もう片方の オプションの値を取得
-        const widthNarrowness = getWidthNarrowness()
-
-        // Get the SVG textarea element and string
-        const svgTextareaAndString = getSvgTextareaAndString()
-        const svgString = svgTextareaAndString.get('string')
-        const svgTextarea = svgTextareaAndString.get('element')
-
-        // 'Squircle, slimmed'のパスを生成
-        const shapePathOfSquircleSlimmed = generateClipPathShapeOfSquircleSlimmed(svgString, widthNarrowness, selectedValue)
-        // cliPathとして使う かたち のパス文字列 を 取得する正規表現パターン
-        const patternForClipPathShape = /<clipPath id="clipShape">\n.*\n.*<\/clipPath>/g;
-        // Replace the path of shape to trim
-        const pathUpdatedSvg = svgString.replace(patternForClipPathShape, `<clipPath id="clipShape">\n            ${shapePathOfSquircleSlimmed}\n        <\/clipPath>`);
-        const svgTextareaAndUpdatedString = new Map([['element', svgTextareaAndString.get('element')], ['string', pathUpdatedSvg]])
-        const shape = 'squircleSlimmed'
-        const hasCropSideMargins = getBoolOfCropSideMargins() // boolean, true=cropped[checked], false=un-cropped[!checked]
-        const viewboxUpdatedString = svgWithNewShapeViewbox(shape, hasCropSideMargins, svgTextareaAndUpdatedString)
-        // <textarea>のvalue属性を更新する
-        svgTextarea.value = viewboxUpdatedString;
-        // convertSvg関数を呼び出す
-        convertSvg(viewboxUpdatedString)
     });
     ///////////////////////////// Shapes to trim /////////////////////////////
     //////////////////////////////////////////////////////////////////////////
-
 
 
     // Unused Query Selectors for bg(rect), width(number, range), crop-by-bbox
 
     // const backgroundColorPickerElement = document.querySelector('#background-color-picker') // original bg color picker, now disabled
     // const strokeColorPickerElement = document.querySelector('#stroke-color-picker') // original mono color picker, now disabled
-    const cropElement = document.querySelector('#crop-by-bbox') // original cropping function checkbox, now disabled
-
-    //////////////////////////////////////////////////////////////////////////
-    ////////////////////////////// Crop by BBox //////////////////////////////
-
-    cropElement.addEventListener('change', function (event) {
-        const hasCrop = event.target.checked
-        svg2png(null, resvgOpts, hasCrop)
-    })
-    ////////////////////////////// Crop by BBox //////////////////////////////
-    //////////////////////////////////////////////////////////////////////////
 
 
     //////////////////////////////////////////////////////////////////////////
@@ -643,7 +527,7 @@ async function getFontBuffer() {
                 svgInputElement.value = updatedSvg;
 
                 // Re-rendering the image
-                convertSvg(svgInputElement.value.trim())
+                convertSvg({ target: { value: updatedSvg } })
             });
         }
     }
@@ -661,31 +545,29 @@ async function getFontBuffer() {
     //////////////////////////////////////////////////////////////////////////
     ///////////////////////////// Backdrop color /////////////////////////////
 
-    const rectColorPickerElement = document.querySelector('#rect-color-picker')
-
     // Color-picker: Backdrop color (background rect color)
-    rectColorPickerElement.addEventListener('change', function (event) {
+    document.querySelector('#rect-color-picker').addEventListener('change', (event) => {
 
-        // console.log('event.target.value: ', event.target.value) // #60D7FF
+        // console.log('event.target.value: ', event.target.value) // e.g: #60D7FF
 
-        // Get the selected color via '.jscolor.toHEXAString()' instead of above '.value' method
+        // e.g: Get the selected color via '.jscolor.toHEXAString()' instead of above '.value' method
         const hexaColor = event.target.jscolor.toHEXAString();
         const hexaColorShorten = eightToFourOrThree(hexaColor);
-        console.log("Selected color (HexA): " + hexaColor); // #FFFFFF99
-        console.log("Selected color (HexA, shorten): " + hexaColorShorten); // #FFF9
+        console.log("Selected color (HexA): " + hexaColor); // e.g: #FFFFFF99
+        console.log("Selected color (HexA, shorten): " + hexaColorShorten); // e.g: #FFF9
 
 
-        // SVGのテキストを取得
-        const svgString = getInputSvg()
+        // SVGの <textarea>要素と テキストを 取得
+        const svgTextareaAndString = getSvgTextareaAndString()
         // 正規表現パターンを作成
-        const pattern = /<rect width="100%" height="100%" fill="[^"]*"/g; // <<rect width="100%" height="100%" fill="#fff9"> is default background rect color
+        const pattern = /<rect width="100%" height="100%" fill="[^"]*"/g;
         // 正規表現でマッチした部分を書き換える
-        const updatedSvg = svgString.replace(pattern, `<rect width="100%" height="100%" fill="${hexaColorShorten}"`);
+        const updatedSvg = svgTextareaAndString.get('string').replace(pattern, `<rect width="100%" height="100%" fill="${hexaColorShorten}"`);
         // <textarea>のvalue属性を更新する
-        svgInputElement.value = updatedSvg;
+        svgTextareaAndString.get('element').value = updatedSvg;
 
         // convertSvg関数を呼び出す
-        convertSvg(svgInputElement.value.trim())
+        convertSvg({ target: { value: updatedSvg } })
     })
     ///////////////////////////// Backdrop color /////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -694,26 +576,22 @@ async function getFontBuffer() {
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////// Crop side margins ///////////////////////////
 
-    // Crop チェックボックス要素にイベントリスナーを追加
-    const checkbox = document.getElementById('crop-side-margins');
-    checkbox.addEventListener('change', onCropCheckboxChanged);
-
-    // Crop チェックボックスの状態が変わったときに呼ばれる関数
-    function onCropCheckboxChanged(event) {
+    // Event listener for 'Crop side margins' checkbox state changes
+    document.getElementById('crop-side-margins').addEventListener('change', (event) => {
         if (event.target.checked) {
             // チェックボックスがチェックされた場合、クロップ処理を実行
-            console.log('Check the `Crop side margins: ` checkbox.')
+            console.log('Crop side margins: [x]')
             const svgTextareaAndString = getSvgTextareaAndString()
             const updatedSvg = viewboxSlimmed(svgTextareaAndString); // 1. Crop the SVG, Replace the textarea content.
-            convertSvg(updatedSvg);                                  // 2. Rasterize to PNG, Replace the img-box content.
+            convertSvg({ target: { value: updatedSvg } })
         } else {
             // チェックボックスが外れた場合、元のデータと同じ矩形のサイズに戻す
-            console.log('Un-check the `Crop side margins: ` checkbox.')
+            console.log('Crop side margins: [ ]')
             const svgTextareaAndString = getSvgTextareaAndString()
             const updatedSvg = viewboxUnSlimmed(svgTextareaAndString); // 1. Un-Crop the SVG, Replace the textarea content.
-            convertSvg(updatedSvg);                                    // 2. Rasterize to PNG, Replace the img-box content.
+            convertSvg({ target: { value: updatedSvg } })
         }
-    }
+    });
     //////////////////////////// Crop side margins ///////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
@@ -721,74 +599,48 @@ async function getFontBuffer() {
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////// Width pixel size ////////////////////////////
 
-    const pngSizeChangeViaNumber = document.querySelector('#png-size-number')
-    const pngSizeChangeViaRange = document.querySelector('#png-size-range')
-
-    // png-size-number, png-size-range のどちらによって 数値が変更されても この処理がされる
-    const pngSizeElement = (event) => {
-        // 変更された pngSizeElement の値を取得
-        const value = event.target.value;
-        console.log('value:', value)
-
-        // 変更されたサイズ(value)の値で svg2png() の第二引数となる resvgOpts オブジェクトを新しく作る
+    // Function to update resvgOpts and convert SVG
+    const updateAndConvert = (value) => {
+        console.log("New value of 'Width pixel size':", value);
         Object.assign(resvgOpts, {
             fitTo: {
                 mode: 'height',
-                value: parseInt(value, 10), // parseInt(string, radix= 10 進数)
+                value: parseInt(value, 10),
             }
-        })
+        });
+        convertSvg({ target: { value: svgInputElement.value.trim() } })
+    };
 
-        // convertSvg関数を呼び出す
-        convertSvg(svgInputElement.value.trim())
-    }
+    // Event listener for both png-size-number and png-size-range
+    const pngSizeElement = (event) => {
+        updateAndConvert(event.target.value);
+    };
 
-    pngSizeChangeViaNumber.addEventListener('change', pngSizeElement); // change value via png-size-number
-    pngSizeChangeViaRange.addEventListener('change', pngSizeElement); // change value via png-size-range
+    // Attach event listeners
+    document.querySelector('#png-size-number').addEventListener('change', pngSizeElement);
+    document.querySelector('#png-size-range').addEventListener('change', pngSizeElement);
 
-    // Constraint validation
-    const numberInput = document.getElementById("png-size-number");
-    // 入力値が変更されたときの処理
-    numberInput.addEventListener("change", () => {
-        // 入力値の妥当性を報告する
-        numberInput.reportValidity();
-    });
-
-
-    // '-' or '+' ボタンクリック時の共通処理を行う関数
+    // Function to handle button clicks
     const handleButtonClick = (step) => {
-        const newValue = adjustWidthNum(step);
-
-        if (newValue !== null) { // 返り値がnullでなければ PNGレンダリング処理を行う
-            console.log("New value of 'Width pixel size':", newValue);
-
-            // ボタンで変更された結果のサイズ(newValue)の値で svg2png() の第二引数となる resvgOpts オブジェクトを新しく作る
-            Object.assign(resvgOpts, {
-                fitTo: {
-                    mode: 'height',
-                    value: newValue,
-                }
-            });
-
-            convertSvg(svgInputElement.value.trim())
+        const value = adjustWidthNum(step);
+        if (value !== null) {
+            updateAndConvert(value);
         }
     };
 
-    // ボタンのクリックイベントに対して共通処理を呼び出す
-    const pngSizeDecButton = document.querySelector('#width-size-dec');
-    const pngSizeIncButton = document.querySelector('#width-size-inc');
+    // Attach event listeners to buttons
+    document.querySelector('#width-size-dec').addEventListener('click', () => handleButtonClick(-1));
+    document.querySelector('#width-size-inc').addEventListener('click', () => handleButtonClick(1));
 
-    pngSizeDecButton.addEventListener('click', () => handleButtonClick(-1));
-    pngSizeIncButton.addEventListener('click', () => handleButtonClick(1));
 
     //////////////////////////// Width pixel size ////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
 
-    // Initialize the 'Width pixel size'
+    // Initialize the 'Width pixel size' as 256
 
     const setPngSize = (value) => { // 直接数値を指定するため 上のサイズ変更用関数から 引数 を event から value に変更
-        //const value = event.target.value // disableして 直接引数の数値を value とする
-        //const hasCrop = cropElement.checked
+        //const value = event.target.value // を disableして 直接 引数の数値を value とする
 
         // 引数(value)の値で svg2png() の第二引数となる resvgOpts オブジェクトを新しく作る
         Object.assign(resvgOpts, {
@@ -799,16 +651,18 @@ async function getFontBuffer() {
         })
 
         // Set the width number of input area with argument value
-        pngSizeChangeViaNumber.value = value;
-        pngSizeChangeViaRange.value = value;
+        document.querySelector('#png-size-number').value = value;
+        document.querySelector('#png-size-range').value = value;
         console.log(`Set 'Width pixel size' initial value as "${value}"`)
     }
 
-    // // Force to apply the '256' as PNG rendering size
-    // // The half of `<input type="range" max="512">` is 256
+    // Force to apply the '256' as PNG rendering size
+    // The half of `<input type="range" max="512">` is 256
     setPngSize(256);
 
     // First PNG rendering
-    convertSvg(svgInputElement.value.trim())
+    // convertSvg(svgInputElement.value.trim())
+    convertSvg({ target: { value: svgInputElement.value.trim() } })
+
 
 })(); // `(async function () {` の 即時実行関数

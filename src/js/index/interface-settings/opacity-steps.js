@@ -14,6 +14,7 @@ function changeOpacitySelectOptionsAsNewStep(step) {
     }
 }
 
+
 function replaceToNewStepOptions(i, step, attrName, attrValueArray) {
 
     // Get the elem to append the new <option>
@@ -81,10 +82,13 @@ function valuesByStep(step) {
 
 function updateSvgForNewStep() {
 
-    // Get current SVG string and number of groups
-    const numberOfGroups = getNumberOfGroups(getInputSvg())
+    // Read current SVG string from <textarea>
+    let svgString = getInputSvg()
 
-    // Extract the values from HTML elements
+    // Get current SVG string and number of groups
+    const numberOfGroups = getNumberOfGroups(svgString)
+
+    // Loop by group ID: Extract the values from UI tab HTML elements => Replace the <textarea> string
     for (let groupId = 0; groupId < numberOfGroups; groupId++) {
 
         // Get 'stroke' value
@@ -102,7 +106,6 @@ function updateSvgForNewStep() {
         const strokeOpacityElement = document.getElementById(`${strokeOpacityElementId}`)
         const strokeOpacity = strokeOpacityElement.value
 
-
         // Generate the array like regex 'match' object with input value
         const valueAsMatchesStructure = [
             undefined,    // [0] = undefined
@@ -115,15 +118,13 @@ function updateSvgForNewStep() {
         changedGroupElem = generateGroupColorsSvgTags(valueAsMatchesStructure)
 
         // Replace the <g> elements via group ID
-        const pattern = /<g stroke=[^>]*>/g;
-        const currentSvgElement = document.querySelector('#input-svg')
-        const currentSVG = currentSvgElement.value
-        const updatedSVG = replaceAtIndex(currentSVG, pattern, changedGroupElem, groupId)
-
-        // Refresh the SVG string in <textarea>
-        const svgTextarea = document.querySelector('#input-svg')
-        svgTextarea.value = updatedSVG;
-
+        const pattern = /<g stroke=[^>]*>/g
+        svgString = replaceAtIndex(svgString, pattern, changedGroupElem, groupId)
     }
 
+    // Refresh the SVG string in <textarea>
+    const svgTextarea = document.querySelector('#input-svg')
+    svgTextarea.value = svgString
+
+    return svgString
 }

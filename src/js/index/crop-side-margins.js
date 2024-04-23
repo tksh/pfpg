@@ -1,4 +1,4 @@
-// Argument SVG is a set of element and string as object
+// Argument SVG is a set of element and string as Map object
 // Returned SVG is a just string only
 function svgWithNewShapeViewbox(shape, hasCropSideMargins, svg) {
 
@@ -27,8 +27,8 @@ function viewboxSlimmed(svgTextareaAndString) {
     const viewboxValues = extractViewboxValues(viewboxStr)
 
     const slimmedWidthValues = getSlimmedViewboxXW(svgTextareaAndString.get('string'))
-    //console.log('slimmedWidthValues.x: ', slimmedWidthValues.x) // e.g.: 1.55
-    //console.log('slimmedWidthValues.w: ', slimmedWidthValues.w) // e.g.: 27.9
+    //console.log('slimmedWidthValues.get('x'): ', slimmedWidthValues.get('x')) // e.g.: 1.55
+    //console.log('slimmedWidthValues.get('w'): ', slimmedWidthValues.get('w')) // e.g.: 27.9
 
     // Generate new string
     const newViewboxString = `viewBox="${slimmedWidthValues.x} ${viewboxValues.get('y')} ${slimmedWidthValues.w} ${viewboxValues.get('h')}"`
@@ -77,7 +77,7 @@ function extractViewboxValues(viewBoxString) {
 
     // Check if the match was successful
     if (match && match.length === 5) {
-        // Extract the four numbers and return them as an object
+        // Extract the four numbers and return them as an Map object
         return new Map([
             ['x', parseFloat(match[1])],
             ['y', parseFloat(match[2])],
@@ -97,8 +97,6 @@ function extractViewboxValues(viewBoxString) {
 
 function viewboxUnSlimmed(svgTextareaAndString) {
     console.log('svgTextareaAndString: ', svgTextareaAndString)
-    //console.log('svg.string: ', svg.string)
-    //console.log('svg.element: ', svg.element)
 
     // Read original artwork data from url params
     const isDataManipulatorOrIndexBool = false

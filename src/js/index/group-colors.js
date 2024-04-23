@@ -6,8 +6,8 @@ function generateGroupColorsSvgTags(matches) {
 
     const color = splitOpacityAndExtended(matches[1], matches[2], matches[3]) // stroke, opacity, stroke-opacity
     // console.log('color: ', color) // (4) [undefined, '#4E8D09', '0.6', '1']
-    const opacity = color[2] !== undefined ? color[2] : "1";       // opacity が明示的に指定されていない場合は1.0とみなす
-    const strokeOpacity = color[3] !== undefined ? color[3] : "1"; // strokeOpacity が明示的に指定されていない場合は1.0とみなす
+    const opacity = color[2] !== undefined ? color[2] : "1";       // opacity が明示的に指定されていない場合は 1.0 とみなす
+    const strokeOpacity = color[3] !== undefined ? color[3] : "1"; // strokeOpacity が明示的に指定されていない場合は 1.0 とみなす
     const groupElem = `<g stroke="${color[1]}" opacity="${opacity}" stroke-opacity="${strokeOpacity}">`
 
     console.log('groupElem: ', groupElem) // <g stroke="#4E8D09" opacity="0.6" stroke-opacity="1">

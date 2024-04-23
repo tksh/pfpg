@@ -21,14 +21,14 @@ function getCenter(gridSize) {
 // Width narrowness
 function getWidthNarrowness() {
     const selectWidthNarrowness = document.getElementById('width-narrowness');
-    console.log('typeof(getWidthNarrowness): ', typeof(selectWidthNarrowness))
+    console.log('typeof(getWidthNarrowness): ', typeof (selectWidthNarrowness))
     return selectWidthNarrowness.value;
 }
 
 // Top-heavy ratio
 function getTopHeavyRatio() {
     const selectTopHeavyRatio = document.getElementById('top-heavy-ratio');
-    console.log('typeof(getTopHeavyRatio): ', typeof(selectTopHeavyRatio))
+    console.log('typeof(getTopHeavyRatio): ', typeof (selectTopHeavyRatio))
     return selectTopHeavyRatio.value;
 }
 
@@ -100,4 +100,36 @@ function toggleDisplay(elements, display) {
     elements.forEach(element => {
         document.getElementById(element).style.display = display;
     });
+}
+
+
+// Update SVG with selected shape path
+function updateSvgWithSelectedShapePath(shape, svgTextareaAndString) {
+    const svgString = svgTextareaAndString.get('string');
+    const svgTextarea = svgTextareaAndString.get('element');
+
+    // Params for generating the 'Squircle' and 'Squircle, slimmed' shape path
+    const gridSize = getGridSize(svgString)
+    const center = roundToTwoDecimals(gridSize / 2)
+
+    // Generate new shape path to trim
+    const shapePath = shape === 'squircleSlimmed'
+        ? generateClipPathShapeOfSquircleSlimmed(svgString, getWidthNarrowness(), getTopHeavyRatio())
+        : shape === 'square'
+            ? `<path d="M 0,0 L ${gridSize},0 L ${gridSize},${gridSize} L 0,${gridSize} Z" />`
+            : shape === 'circle'
+                ? `<circle cx="${gridSize / 2}" cy="${gridSize / 2}" r="${gridSize / 2}" />`
+                : `<path d="M 0,${center}Q 0,0 ${center},0T ${gridSize},${center} ${center},${gridSize} 0,${center}" />`; // shape === 'squircle'
+
+    // Replace to new shape <clipPath>
+    const patternForClipPathShape = /<clipPath id="clipShape">\n.*\n.*<\/clipPath>/g;
+    const pathUpdatedSvg = svgString.replace(patternForClipPathShape, `<clipPath id="clipShape">\n\t\t${shapePath}\n\t</clipPath>`);
+    svgTextareaAndString.set('string', pathUpdatedSvg);
+
+    // Update the <textarea>
+    const hasCropSideMargins = getBoolOfCropSideMargins();
+    const viewboxUpdatedString = svgWithNewShapeViewbox(shape, hasCropSideMargins, svgTextareaAndString);
+    svgTextarea.value = viewboxUpdatedString;
+
+    return viewboxUpdatedString // Return the string to render with 'convertSvg(svgString)' at main.js
 }
