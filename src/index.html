@@ -125,11 +125,11 @@
     <script src="./js/data-manipulator/decode/rel-to-abs.js"></script>
     <script defer src="./js/data-manipulator/decode/decode.js"></script>
 
-    <!-- Generate the group strokes color tags for HTML and SVG -->
+    <!-- Generate the group colors tags for HTML and SVG -->
     <script defer src="./js/index/group-colors.js"></script>
     <!-- Set defaults value for some selectors in artwork customization area read from decoded SVG -->
     <script defer src="./js/index/set-defaults.js"></script>
-    <!-- EventListeners for preferences, and force to apply the values like width-size:256, transparency-scope:whole-group as defaults -->
+    <!-- EventListeners for preferences, and force to apply the values like width-size=256 as defaults -->
     <script defer src="./js/index/main.js"></script>
     <!-- Adjust the height of whole components to fit to display height -->
     <script defer src="./js/index/img-box-sizing.js"></script>
@@ -154,7 +154,6 @@
         <div id="customization" class="opts">
 
             <fieldset class="tabs-container opts">
-                <!-- <legend>Customization</legend> -->
 
                 <div class="tabs">
                     <button class="tab" data-tab="tab-1" onclick="openTab(event, 'tab-1')">Line</button>
@@ -166,15 +165,15 @@
 
                 <div id="tab-1" class="tab-content"> <!-- Line -->
 
-                    <!-- Color-picker: Stroke colors (Generated dynamically) -->
-                    <div id="multipul-stroke-color-desc" class="opts">
+                    <!-- Color-pickers for group colors (Generated dynamically) -->
+                    <div id="multiple-stroke-color-desc" class="opts">
                         <div class="opts-cell">
                             <p><i>stroke</i>, <i>opacity</i>, <i>stroke-opacity</i> for lines group:</p>
                         </div>
                     </div>
                     <div id="group-colors-input-and-select" class="opts"></div>
 
-                    <!-- Path style -->
+                    <!-- Path mode -->
                     <div class="opts">
                         <div class="opts-cell">
                             <label for="path-mode">Path mode: </label>
@@ -202,7 +201,7 @@
 
                 <div id="tab-2" class="tab-content"> <!-- Canvas -->
 
-                    <!-- Color-picker: Base color -->
+                    <!-- Color-picker for base color -->
                     <div class="opts">
                         <div class="opts-cell">
                             <label for="base-rect-color-picker">Base color:</label>
@@ -223,7 +222,9 @@
                         </div>
                     </div>
 
-                    <!-- Two option <select> for 'Squircle, slimmed' -->
+                    <!-- Three options for 'Squircle, slimmed' -->
+
+                    <!-- Width narrowness -->
                     <div id="width-narrowness-div" class="displayNone">
                         <div class="opts-cell">
                             <label for="width-narrowness">- Width narrowness: </label>
@@ -247,6 +248,7 @@
                         </div>
                     </div>
 
+                    <!-- Top-heavy ratio -->
                     <div id="top-heavy-ratio-div" class="displayNone">
                         <div class="opts-cell">
                             <label for="top-heavy-ratio">- Top-heavy ratio: </label>
@@ -262,7 +264,7 @@
                         </div>
                     </div>
 
-                    <!-- Crop side margins (Both PNG and SVG) -->
+                    <!-- Crop side margins (Both applied to PNG and SVG) -->
                     <div id="crop-side-margins-div" class="displayNone">
                         <div class="opts">
                             <div class="opts-cell">
@@ -309,7 +311,6 @@
                             <p id="last-rendering-time" class="font-size-small"></p>
                         </div>
                     </div>
-
 
                 </div>
 

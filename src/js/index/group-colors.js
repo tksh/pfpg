@@ -2,15 +2,15 @@
 
 // <g>タグを生成する
 function generateGroupColorsSvgTags(matches) {
-    console.log('matches: ', matches) // (4) [undefined, '#4E8D09', '0.6', '1']
+    console.log('matches: ', matches) // e.g.: (4) [undefined, '#4E8D09', '0.6', '1']
 
     const color = splitOpacityAndExtended(matches[1], matches[2], matches[3]) // stroke, opacity, stroke-opacity
-    // console.log('color: ', color) // (4) [undefined, '#4E8D09', '0.6', '1']
+    // console.log('color: ', color) // e.g.: (4) [undefined, '#4E8D09', '0.6', '1']
     const opacity = color[2] !== undefined ? color[2] : "1";       // opacity が明示的に指定されていない場合は 1.0 とみなす
     const strokeOpacity = color[3] !== undefined ? color[3] : "1"; // strokeOpacity が明示的に指定されていない場合は 1.0 とみなす
     const groupElem = `<g stroke="${color[1]}" opacity="${opacity}" stroke-opacity="${strokeOpacity}">`
 
-    console.log('groupElem: ', groupElem) // <g stroke="#4E8D09" opacity="0.6" stroke-opacity="1">
+    console.log('groupElem: ', groupElem) // e.g.: <g stroke="#4E8D09" opacity="0.6" stroke-opacity="1">
     return groupElem
 }
 
@@ -22,10 +22,10 @@ function getOpacityStepsValue() {
     const selectOfOpacitySteps = document.getElementById("opacity-steps");
     return Number(selectOfOpacitySteps.value)
 }
-generateGroupColorsHtmlElems(getOpacityStepsValue())
+generateGroupColorsHtmlElements(getOpacityStepsValue())
 
-function generateGroupColorsHtmlElems(step) {
-    console.log(`generateGroupColorsHtmlElems() now started. (Opacity step = ${step})`)
+function generateGroupColorsHtmlElements(step) {
+    console.log(`generateGroupColorsHtmlElements() now started. (Opacity step = ${step})`)
 
     const groupColorsValues = getGroupColorsValues();
     const numberOfGroups = groupColorsValues.number_of_groups
@@ -37,7 +37,6 @@ function generateGroupColorsHtmlElems(step) {
     const groupColorsDiv = document.getElementById("group-colors-input-and-select");
 
     // Delete current whole child nodes
-    // let element = document.getElementById("idOfParent");
     while (groupColorsDiv.firstChild) {
         groupColorsDiv.removeChild(groupColorsDiv.firstChild);
     }
@@ -48,22 +47,6 @@ function generateGroupColorsHtmlElems(step) {
         const optsCellDiv = document.createElement('div');
         // クラスを追加
         optsCellDiv.classList.add('opts-cell-for-group-colors');
-
-
-        // // ブラウザ固有の標準カラーピッカーを作成
-        // // label要素を作成
-        // const labelElement = document.createElement("label");
-        // labelElement.name = `group-colors-stroke-${i}`;
-        // labelElement.textContent = `group ${i + 1}:`;
-        // // input要素を作成
-        // const inputElement = document.createElement("input");
-        // inputElement.type = 'color';
-        // inputElement.name = `group-colors-stroke-${i}`;
-        // inputElement.id = `group-colors-stroke-${i}`;
-        // inputElement.value = `${stroke[i]}`;
-        // // select要素をdiv要素の子として追加
-        // groupColorsDiv.appendChild(labelElement)
-        // groupColorsDiv.appendChild(inputElement)
 
         // jscolor カラーピッカーを作成
 
@@ -148,7 +131,7 @@ function getGroupColorsValues() {
     const currentSVG = getInputSvg()
     const matches = regexMatchesOfGroupColors(currentSVG)
     // console.log('matches: ', matches)
-    // (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
+    // e.g.: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
 
     // マッチした部分の数を取得
     const numberOfGroups = matches.length; // 配列の長さでマッチした部分の数を得る
@@ -189,12 +172,11 @@ function getGroupColorsValues() {
 }
 
 // Get the values from group colors <g> element string
-// like '<g stroke="#000000" opacity="1" stroke-opacity="1">'
 function regexMatchesOfGroupColors(inputSvg) {
     const pattern = /<g stroke=[^>]*>/g;
     const matches = inputSvg.match(pattern); // matchメソッドで配列を返す
     // console.log('matches: ', matches)
-    // (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
+    // e.g.: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
     return matches
 }
 // Get each attrs values
@@ -205,13 +187,11 @@ function getStroke(inputStr) {
 }
 function getOpacity(inputStr) {
     const pattern = /\sopacity="([^"]*)"/
-    // const pattern = /\sopacity="(.*?)"/
     const matches = inputStr.match(pattern)
     console.log('matches[1]: ', matches[1])
     return matches[1]
 }
 function getStrokeOpacity(inputStr) {
-    // const pattern = /stroke-opacity="(.*?)"/
     const pattern = /stroke-opacity="([^"]*)"/
     const matches = inputStr.match(pattern)
     console.log('matches[1]: ', matches[1])
@@ -219,7 +199,7 @@ function getStrokeOpacity(inputStr) {
 }
 
 
-// Get the number of stroke colors to add multipul event listener
+// Get the number of stroke colors to add multiple event listener
 // via addEventListenerForGroupColorsInputs()
 function getNumberOfGroups(inputSVG) {
     // 正規表現パターンを作成
