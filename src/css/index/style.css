@@ -372,18 +372,18 @@ div#samples figure {
         padding-top: .5rem;
     }
     #png-size-range {
-        min-width: calc(100% - 6rem);
+        min-width: calc(100% - 7rem);
     }
     .flex-direction-column .display-inline-block {
         display: inline-block;
     }
 
     .flex-direction-column button#width-size-dec { /* 左側のボタン '-' */
-        margin-right: 0.5rem;
+        margin-right: 1rem;
         /* 右側に余白を追加 - タッチ操作しやすいように モバイルの時に より大きく余白を作る*/
     }
     .flex-direction-column button#width-size-inc { /* 右側のボタン '+' */
-        margin-left: 0.5rem;
+        margin-left: 1rem;
         /* 左側に余白を追加 - タッチ操作しやすいように モバイルの時に より大きく余白を作る*/
     }
 
