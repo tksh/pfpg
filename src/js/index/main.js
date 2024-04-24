@@ -27,7 +27,7 @@
         const viewboxValues = extractViewboxValues(viewboxStr) // e.g: Map(4) {'x' => 0, 'y' => 0, 'w' => 31, 'h' => 31}
         document.querySelector('#svg-info').textContent = 'Source SVG viewBox size: ' + viewboxValues.get('w') + ' x ' + viewboxValues.get('h')
 
-        // SVG内に含まれる外部リンクの画像を取得して解決する
+        // SVG内に含まれる外部リンクの画像を取得して解決する (Un-used)
         const resolved = await Promise.all(
             resvgJS.imagesToResolve().map(async (url) => {
                 console.log('image url', url)
@@ -70,21 +70,17 @@
         // Outputs the Micro SVG (usvg) strings
         // console.log('Simplified svg string: \n', resvgJS.toString()) // <svg>...</svg>
 
-        document.querySelector('#png-info').textContent = 'Rendered PNG pixel size: ' + pngData.width + ' x ' + pngData.height + ' px'
 
+        // PNGピクセルサイズを <div id="png-info">要素に 表示する
+        document.querySelector('#png-info').textContent = `Rendered PNG pixel size: ${pngData.width} x ${pngData.height} px`
 
         // PNGファイルサイズを ダウンロードボタンに 表示する
 
-        // button要素を取得
-        const pngDownloadButtonElement = document.getElementById("png-download-button");
-
-        // 挿入したいタグを含めたテキスト
-        // 改行を `Download as PNG ` の直後にする
+        // 挿入したいタグを含めたテキスト (改行を 'Download as PNG' の直後にする)
         const pngDownloadSizeText = `Download as PNG<br>(size: ${pngSizeAsKb} kb / ${pngSize} bytes)`
-        //console.log('pngDownloadSizeText: ', pngDownloadSizeText)
 
-        pngDownloadButtonElement.innerHTML = pngDownloadSizeText
-
+        // button要素 を取得し innerHTML を変更する
+        document.getElementById("png-download-button").innerHTML = pngDownloadSizeText
     }
 
 
@@ -98,34 +94,24 @@
 
     // 上記のSVGテキストエリアの編集イベントごとに PNGへの変換処理が呼び出される部分を
     // <input>や<select>などの選択要素からの更新でも それが呼び出されるように 下記の通りに変更した
-    // `convertSvg` という関数を作り 選択要素からSVGテキストエリアを更新した直後に
-    // `convertSvg({ target: { value: updatedSvg } })` として呼び出す
+    // 'executeSvg2png' という関数を作り 選択要素からSVGテキストエリアを更新した直後に
+    // 'executeSvg2png({ target: { value: updatedSvg } })' として呼び出す
     // 'svgInputElement' に対してSVG文字列を取得する際の 'event.target.value' と同じオブジェクト構造にする
 
 
     // svg2png関数を呼び出す関数を定義
-    const convertSvg = async (event) => {
+    const executeSvg2png = async (event) => {
 
         // HTML要素を取得
         const pngDownloadButtonElement = document.getElementById("png-download-button");
-        const lastRenderingTimeElement = document.getElementById("last-rendering-time");
+        const lastRenderingTimeElement = document.getElementById("last-rendering-time"); // at 'Render' tab
 
-        // Update .innerHtml
-        async function updateRenderingStatus(text, element) {
-            return new Promise((resolve) => {
-                // メッセージを更新し、次のフレームで反映させる
-                element.innerHTML = text;
-                requestAnimationFrame(() => {
-                    resolve();
-                });
-            });
-        }
-
-        async function measureSvg2PngPerformance(svgString, opts, hasCrop) {
+        // Processing from SVG to PNG and measuring the time
+        async function measureSvg2pngTime(svgString, opts, hasCrop) {
             // 処理中メッセージを表示
             await updateRenderingStatus("Now rendering ...<br> Please wait a moment :)", pngDownloadButtonElement);
 
-            // setTimeoutを使用して非同期処理を実行
+            // setTimeoutを使用して 非同期処理を実行
             return new Promise((resolve, reject) => {
                 setTimeout(async () => {
                     // 開始時刻を記録
@@ -149,6 +135,7 @@
 
                         // 処理結果を返す
                         resolve(result);
+
                     } catch (error) {
                         // エラー処理
                         console.error('An error occurred during the processing of svg2png:', error);
@@ -159,14 +146,11 @@
             });
         }
 
-        console.log('|||||||||||||||||||||||||||||||||||||||||||||||event: ', event)
-        console.log('|||||||||||||||||||||||||||||||||||||||||||||||event.target: ', event.target)
-        console.log('|||||||||||||||||||||||||||||||||||||||||||||||event.target.value: ', event.target.value)
         const svgString = event.target.value.trim()
         const hasCrop = cropElement.checked
         if (!svgString) return
 
-        measureSvg2PngPerformance(svgString, resvgOpts, hasCrop)
+        measureSvg2pngTime(svgString, resvgOpts, hasCrop)
             .then((result) => {
                 console.log('result: ', result); // undefined
 
@@ -189,7 +173,7 @@
     function addMultipleEventListener(element, events, handler) {
         events.forEach(e => element.addEventListener(e, handler))
     }
-    addMultipleEventListener(svgInputElement, ['change', 'keyup', 'paste'], convertSvg);
+    addMultipleEventListener(svgInputElement, ['change', 'keyup', 'paste'], executeSvg2png);
 
     //////////////////////////////// textarea ////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -287,7 +271,7 @@
                 svgInputElement.value = updatedSvg;
 
                 // Rendering the PNG image
-                convertSvg({ target: { value: updatedSvg } })
+                executeSvg2png({ target: { value: updatedSvg } })
             });
         }
     }
@@ -313,7 +297,8 @@
 
         // Group colors
         const patternGroupColors = /<g stroke=[^>]*>/g
-        const matchOfGroupColors = currentPathModeSvgStr.match(patternGroupColors) // (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="# ...
+        const matchOfGroupColors = currentPathModeSvgStr.match(patternGroupColors)
+        // e.g.: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="# ...
 
         // Opacity steps の選択肢の値は svgのコンテンツではなく UIのみに関わるので 保存しておいて元に戻す 必要はない
 
@@ -365,10 +350,10 @@
         // 保存しておいた設定の値を 全て元に戻した 最終的な新しいSVG文字列を <textarea>のvalue属性に挿入する
         svgTextarea.value = recoverGroupColors
 
-        // convertSvg関数を呼び出す
-        convertSvg({ target: { value: recoverGroupColors } })
-        // convertSvg({ target: recoverGroupColors })
-        // convertSvg(recoverGroupColors)
+        // executeSvg2png関数を呼び出す
+        executeSvg2png({ target: { value: recoverGroupColors } })
+        // executeSvg2png({ target: recoverGroupColors })
+        // executeSvg2png(recoverGroupColors)
     });
 
     /////////////////////////////// Path mode ////////////////////////////////
@@ -387,13 +372,13 @@
         // 新しいセレクトメニューに更新
         changeOpacitySelectOptionsAsNewStep(step)
 
-        // 新しいセレクトメニューへの更新で選ばれた そのstepでの 一番近い値の表示と 元々のSVGの色情報がずれてしまうので
+        // 新しいセレクトメニューへの更新で選ばれた その step での 一番近い値の表示と 元々のSVGの色情報が ずれてしまうので
         // 新しいセレクトメニューでの値を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
         const updatedSvg = updateSvgForNewStep()
 
         // Render the image via SVG with new step opacity value
-        // convertSvg(updatedSvg)
-        convertSvg({ target: { value: updatedSvg } })
+        // executeSvg2png(updatedSvg)
+        executeSvg2png({ target: { value: updatedSvg } })
     });
 
     ////////////////////////////// Opacity steps /////////////////////////////
@@ -427,8 +412,8 @@
         // <textarea>のvalue属性を更新する
         svgTextareaAndString.get('element').value = updatedSvg;
 
-        // convertSvg関数を呼び出す
-        convertSvg({ target: { value: updatedSvg } })
+        // executeSvg2png関数を呼び出す
+        executeSvg2png({ target: { value: updatedSvg } })
     })
     /////////////////////////////// Base color ///////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -439,12 +424,12 @@
 
     document.getElementById('width-narrowness').addEventListener('change', () => {
         const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvgTextareaAndString());
-        convertSvg({ target: { value: updatedSvg } })
+        executeSvg2png({ target: { value: updatedSvg } })
     });
 
     document.getElementById('top-heavy-ratio').addEventListener('change', () => {
         const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvgTextareaAndString());
-        convertSvg({ target: { value: updatedSvg } })
+        executeSvg2png({ target: { value: updatedSvg } })
     });
 
 
@@ -465,7 +450,7 @@
         }
 
         const updatedSvg = updateSvgWithSelectedShapePath(shape, getSvgTextareaAndString());
-        convertSvg({ target: { value: updatedSvg } })
+        executeSvg2png({ target: { value: updatedSvg } })
 
     });
     ///////////////////////////// Shapes to trim /////////////////////////////
@@ -482,13 +467,13 @@
             console.log('Crop side margins: [x]')
             const svgTextareaAndString = getSvgTextareaAndString()
             const updatedSvg = viewboxSlimmed(svgTextareaAndString); // 1. Crop the SVG, Replace the textarea content.
-            convertSvg({ target: { value: updatedSvg } })
+            executeSvg2png({ target: { value: updatedSvg } })
         } else {
             // チェックボックスが外れた場合、元のデータと同じ矩形のサイズに戻す
             console.log('Crop side margins: [ ]')
             const svgTextareaAndString = getSvgTextareaAndString()
             const updatedSvg = viewboxUnSlimmed(svgTextareaAndString); // 1. Un-Crop the SVG, Replace the textarea content.
-            convertSvg({ target: { value: updatedSvg } })
+            executeSvg2png({ target: { value: updatedSvg } })
         }
     });
     //////////////////////////// Crop side margins ///////////////////////////
@@ -514,8 +499,8 @@
         const updatedSvg = svgString.replace(patternForShapeRendering, `shape-rendering="${value}"`);
         // <textarea>のvalue属性を更新する
         svgInputElement.value = updatedSvg;
-        // convertSvg関数を呼び出す
-        convertSvg({ target: { value: updatedSvg } })
+        // executeSvg2png関数を呼び出す
+        executeSvg2png({ target: { value: updatedSvg } })
     });
 
     ////////////////////////////// Anti-aliasing /////////////////////////////
@@ -534,7 +519,7 @@
                 value: parseInt(value, 10),
             }
         });
-        convertSvg({ target: { value: svgInputElement.value.trim() } })
+        executeSvg2png({ target: { value: svgInputElement.value.trim() } })
     };
 
     // Event listener for both png-size-number and png-size-range
@@ -625,8 +610,8 @@
     setPngSize(256);
 
     // Initial PNG rendering
-    // convertSvg(svgInputElement.value.trim())
-    convertSvg({ target: { value: svgInputElement.value.trim() } })
+    // executeSvg2png(svgInputElement.value.trim())
+    executeSvg2png({ target: { value: svgInputElement.value.trim() } })
 
 
 })(); // `(async function () {` の 即時実行関数
