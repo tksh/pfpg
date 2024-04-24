@@ -1,30 +1,3 @@
-async function getFontBuffer() {
-    if (fetchFontLock) return
-
-    fetchFontLock = true
-    const controller = new AbortController()
-    const signal = controller.signal
-    setTimeout(() => controller.abort(), 3000) // Cancel the fetch request
-
-    try {
-        const t = performance.now()
-        const font = await fetch(fontFile)
-
-        if (!font.ok) return
-
-        const data = await font.arrayBuffer()
-        const buffer = new Uint8Array(data)
-        fetchFontLock = false
-        console.info('✨ 字体请求用时:', performance.now() - t + 'ms')
-        return {
-            buffer,
-            family_name: 'Source Han Serif CN Light',
-        }
-    } catch (error) {
-        return console.error('fetch font error', error)
-    }
-}
-
 (async function () {
     await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm')) // Path that relative from index.html
     const svgInputElement = document.querySelector('#input-svg') // Select <textarea id="input-svg" ...
