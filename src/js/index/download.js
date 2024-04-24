@@ -5,14 +5,14 @@ function getInputSvg() {
     const svgTextarea = document.querySelector('#input-svg') // Select <textarea id="input-svg" ...
 
     // <textarea>のvalue属性を取得
-    return svgTextarea.value.trim() // `.trim()` = 文字列の両端の空白を削除
+    return svgTextarea.value.trim() // '.trim()' = 文字列の両端の空白を削除
 
 }
 
 // Get the <textarea> element and string value of SVG
 function getSvgTextareaAndString() {
     const svgTextarea = document.querySelector('#input-svg')
-    const svgString = svgTextarea.value.trim() // <textarea>のvalue属性を取得, `.trim()` => 文字列の両端の空白を削除
+    const svgString = svgTextarea.value.trim() // <textarea>のvalue属性を取得, '.trim()' => 文字列の両端の空白を削除
     return new Map([
         ['element', svgTextarea],
         ['string', svgString]

@@ -1,89 +1,9 @@
 (async function () {
     await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm')) // Path that relative from index.html
-    const svgInputElement = document.querySelector('#input-svg') // Select <textarea id="input-svg" ...
-    console.log('/////svgInputElement: ', svgInputElement)
-    console.log('/////svgInputElement.value.trim(): ', svgInputElement.value.trim())
+    const svgInputElement = document.querySelector('#input-svg') // <textarea id="input-svg" ... >
+    //console.log('svgInputElement.value.trim(): ', svgInputElement.value.trim()) // <svg xmlns="http://www.w3.org/2000/svg" ... </svg>
 
     let resvgOpts = {}
-
-    async function svg2png(svgString, opts, hasCrop) {
-
-        const svg = svgString ? svgString : svgInputElement.value.trim()
-        // svgString が真（例えば、文字列が空でない、nullでないなど）であれば、その値を svg 変数に代入します。
-        // svgString が偽（例えば、nullや空文字列）であれば、svgInputElement.value.trim() の結果を svg 変数に代入します。ここで、svgInputElement.value はおそらくHTML要素の値を取得し、trim() メソッドはその値の前後の空白を削除します。
-        // したがって、このコードは svgString が提供されている場合はそれを使用し、そうでない場合は svgInputElement から取得した値を使用して、その後空白を削除した状態を svg 変数に代入します。
-
-        if (!svg) {
-            alert('SVG is empty')
-            return
-        }
-        const resvgJS = new resvg.Resvg(svg, opts)
-
-        // resvg-js default outputs the w and h size as integer
-        // document.querySelector('#svg-info').textContent = 'Source SVG grid size: ' + resvgJS.width + ' x ' + resvgJS.height
-
-        // Outputs the viewBox size as float to indicate at #svg-info <textarea>
-        const viewboxStr = getViewboxStr(svgString)
-        const viewboxValues = extractViewboxValues(viewboxStr) // e.g: Map(4) {'x' => 0, 'y' => 0, 'w' => 31, 'h' => 31}
-        document.querySelector('#svg-info').textContent = 'Source SVG viewBox size: ' + viewboxValues.get('w') + ' x ' + viewboxValues.get('h')
-
-        // SVG内に含まれる外部リンクの画像を取得して解決する (Un-used)
-        const resolved = await Promise.all(
-            resvgJS.imagesToResolve().map(async (url) => {
-                console.log('image url', url)
-                const img = await fetch(url)
-                const buffer = await img.arrayBuffer()
-                // const MIME = img.headers.get('Content-Type')
-                return {
-                    url,
-                    buffer: new Uint8Array(buffer),
-                }
-            }),
-        )
-        if (resolved.length > 0) {
-            for (const result of resolved) {
-                const { url, buffer } = result
-                resvgJS.resolveImage(url, buffer)
-            }
-        }
-
-        // Crop by BBox (Un-used)
-        const innerBBox = resvgJS.innerBBox()
-        const bbox = resvgJS.getBBox()
-        console.log('SVG innerBBox: ', innerBBox)
-        console.log('SVG getBBox: ', bbox)
-        if (hasCrop && bbox) resvgJS.cropByBBox(bbox)
-
-        // Render
-        const pngData = resvgJS.render()
-        const pngBuffer = pngData.asPng()
-
-        // PNGデータの長さ（バイト数）を取得
-        const pngSize = pngBuffer.length;
-        const pngSizeAsKb = roundToOneDecimal(pngSize / 1024)
-
-        // Create a blob and its url
-        document.querySelector('#output img').src = URL.createObjectURL(
-            new Blob([pngBuffer], { type: 'image/png' })
-        )
-
-        // Outputs the Micro SVG (usvg) strings
-        // console.log('Simplified svg string: \n', resvgJS.toString()) // <svg>...</svg>
-
-
-        // PNGピクセルサイズを <div id="png-info">要素に 表示する
-        document.querySelector('#png-info').textContent = `Rendered PNG pixel size: ${pngData.width} x ${pngData.height} px`
-
-        // PNGファイルサイズを ダウンロードボタンに 表示する
-
-        // 挿入したいタグを含めたテキスト (改行を 'Download as PNG' の直後にする)
-        const pngDownloadSizeText = `Download as PNG<br>(size: ${pngSizeAsKb} kb / ${pngSize} bytes)`
-
-        // button要素 を取得し innerHTML を変更する
-        document.getElementById("png-download-button").innerHTML = pngDownloadSizeText
-    }
-
-
 
     // addMultipleEventListener(svgInputElement, ['change', 'keyup', 'paste'], function (event) {
     //   const svgString = event.target.value.trim()
@@ -93,64 +13,28 @@
     // })
 
     // 上記のSVGテキストエリアの編集イベントごとに PNGへの変換処理が呼び出される部分を
-    // <input>や<select>などの選択要素からの更新でも それが呼び出されるように 下記の通りに変更した
+    // <input>や<select>などの 追加された選択要素からの更新でも それが呼び出されるように 下記の通りに変更した
     // 'executeSvg2png' という関数を作り 選択要素からSVGテキストエリアを更新した直後に
     // 'executeSvg2png({ target: { value: updatedSvg } })' として呼び出す
     // 'svgInputElement' に対してSVG文字列を取得する際の 'event.target.value' と同じオブジェクト構造にする
 
 
-    // svg2png関数を呼び出す関数を定義
+    // svg2png関数を呼び出し 処理時間を計測する 関数を定義
     const executeSvg2png = async (event) => {
 
-        // HTML要素を取得
-        const pngDownloadButtonElement = document.getElementById("png-download-button");
-        const lastRenderingTimeElement = document.getElementById("last-rendering-time"); // at 'Render' tab
+        // 処理時間を表示する HTML要素を 取得
+        const renderingStatusElements = new Map([
+            ['pngDownloadButton', document.getElementById("png-download-button")], // <button> at below of output image
+            ['lastRenderingTimeP', document.getElementById("last-rendering-time")] // <p> at bottom of 'Render' tab
+        ])
 
-        // Processing from SVG to PNG and measuring the time
-        async function measureSvg2pngTime(svgString, opts, hasCrop) {
-            // 処理中メッセージを表示
-            await updateRenderingStatus("Now rendering ...<br> Please wait a moment :)", pngDownloadButtonElement);
-
-            // setTimeoutを使用して 非同期処理を実行
-            return new Promise((resolve, reject) => {
-                setTimeout(async () => {
-                    // 開始時刻を記録
-                    const startTime = performance.now();
-
-                    try {
-                        // svg2png関数を呼び出す
-                        const result = await svg2png(svgString, opts, hasCrop);
-
-                        // 終了時刻を記録
-                        const endTime = performance.now();
-
-                        // 処理時間を計算
-                        const elapsedTime = Math.floor(endTime - startTime);
-
-                        // 処理時間をコンソールに出力
-                        console.log(`Rendering time: ${elapsedTime} ms`);
-
-                        // 処理完了メッセージを表示
-                        await updateRenderingStatus(`Last rendering time: ${elapsedTime} ms`, lastRenderingTimeElement);
-
-                        // 処理結果を返す
-                        resolve(result);
-
-                    } catch (error) {
-                        // エラー処理
-                        console.error('An error occurred during the processing of svg2png:', error);
-                        await updateRenderingStatus("An error occurred", pngDownloadButtonElement);
-                        reject(error);
-                    }
-                }, 0); // 0ミリ秒後に実行
-            });
-        }
-
-        const svgString = event.target.value.trim()
-        const hasCrop = cropElement.checked
+        // Arguments for rendering
+        const svgString = event.target.value.trim() // SVG文字列 / '.trim()' = 文字列の両端の空白を削除
+        const hasCrop = cropElement.checked         // 'Crop by BBox' チェックボックスがチェックされている場合は trueを チェックされていない場合は falseを 返す
         if (!svgString) return
 
-        measureSvg2pngTime(svgString, resvgOpts, hasCrop)
+        // Processing from SVG to PNG and measuring the time
+        measureSvg2pngTime(svgString, resvgOpts, hasCrop, renderingStatusElements)
             .then((result) => {
                 console.log('result: ', result); // undefined
 
@@ -162,7 +46,8 @@
                 console.error('An error occurred during the processing of svg2png:', error);
             });
 
-        countSvgSize()
+        // SVGファイルサイズを ダウンロードボタンに 表示する
+        countSvgSize(svgString)
     };
 
 
@@ -591,7 +476,7 @@
     const setPngSize = (value) => { // 直接数値を指定するため 上のサイズ変更用関数から 引数 を event から value に変更
         //const value = event.target.value // を disableして 直接 引数の数値を value とする
 
-        // 引数(value)の値で svg2png() の第二引数となる resvgOpts オブジェクトを新しく作る
+        // 引数(value)の値で svg2png() の第二引数となる resvgOpts オブジェクトを新しく更新する
         Object.assign(resvgOpts, {
             fitTo: {
                 mode: 'height',
@@ -612,6 +497,5 @@
     // Initial PNG rendering
     // executeSvg2png(svgInputElement.value.trim())
     executeSvg2png({ target: { value: svgInputElement.value.trim() } })
-
 
 })(); // `(async function () {` の 即時実行関数

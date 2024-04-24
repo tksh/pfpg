@@ -123,7 +123,7 @@ function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) 
             const svgTextarea = document.querySelector('#input-svg') // Select <textarea id="input-svg" ...
 
             // <textarea>のvalue属性を取得
-            const svgStr = svgTextarea.value.trim() // `.trim()` = 文字列の両端の空白を削除
+            const svgStr = svgTextarea.value.trim() // '.trim()' = 文字列の両端の空白を削除
 
             // Get textarea ID
             const specificOutputTextareaId = getSpecificOutputTextareaId(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId)
