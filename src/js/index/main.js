@@ -67,7 +67,8 @@
             new Blob([pngBuffer], { type: 'image/png' })
         )
 
-        // console.log('Simplified svg string: \n', resvgJS.toString()) // Micro SVG strings <svg>...</svg>
+        // Outputs the Micro SVG (usvg) strings
+        // console.log('Simplified svg string: \n', resvgJS.toString()) // <svg>...</svg>
 
         document.querySelector('#png-info').textContent = 'Rendered PNG pixel size: ' + pngData.width + ' x ' + pngData.height + ' px'
 
@@ -84,7 +85,7 @@
 
         pngDownloadButtonElement.innerHTML = pngDownloadSizeText
 
-    } // The end of `async function svg2png(svgString, opts, hasCrop) {`
+    }
 
 
 
@@ -98,20 +99,8 @@
     // 上記のSVGテキストエリアの編集イベントごとに PNGへの変換処理が呼び出される部分を
     // <input>や<select>などの選択要素からの更新でも それが呼び出されるように 下記の通りに変更した
     // `convertSvg` という関数を作り 選択要素からSVGテキストエリアを更新した直後に
-    // `convertSvg(svgInputElement.value.trim())` として呼び出す
-
-
-    //////////////////////////////////////////////////////////////////////////
-    ////////////////////////////// Crop by BBox //////////////////////////////
-
-    const cropElement = document.querySelector('#crop-by-bbox') // original cropping function checkbox, now disabled
-    cropElement.addEventListener('change', function (event) {
-        const hasCrop = event.target.checked
-        svg2png(null, resvgOpts, hasCrop)
-    })
-    ////////////////////////////// Crop by BBox //////////////////////////////
-    //////////////////////////////////////////////////////////////////////////
-
+    // `convertSvg({ target: { value: updatedSvg } })` として呼び出す
+    // 'svgInputElement' に対してSVG文字列を取得する際の 'event.target.value' と同じオブジェクト構造にする
 
 
     // svg2png関数を呼び出す関数を定義
@@ -168,13 +157,12 @@
                     }
                 }, 0); // 0ミリ秒後に実行
             });
-        } // End of 'async function measureSvg2PngPerformance(svgString, opts, hasCrop) {'
+        }
 
         console.log('|||||||||||||||||||||||||||||||||||||||||||||||event: ', event)
         console.log('|||||||||||||||||||||||||||||||||||||||||||||||event.target: ', event.target)
         console.log('|||||||||||||||||||||||||||||||||||||||||||||||event.target.value: ', event.target.value)
-        const svgString = event.target.value
-        // const svgString = event.target.value.trim()
+        const svgString = event.target.value.trim()
         const hasCrop = cropElement.checked
         if (!svgString) return
 
@@ -191,13 +179,121 @@
             });
 
         countSvgSize()
-    }; // End of 'const convertSvg = async (event) => {'
+    };
+
+
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////// textarea ////////////////////////////////
 
     // <textarea>のSVGテキストを編集するたびに変換処理が呼び出される関数を設定
     function addMultipleEventListener(element, events, handler) {
         events.forEach(e => element.addEventListener(e, handler))
     }
     addMultipleEventListener(svgInputElement, ['change', 'keyup', 'paste'], convertSvg);
+
+    //////////////////////////////// textarea ////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+
+
+
+
+    // Options for 'Line' tab /////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////
+    ///////// Group colors: 'stroke', 'opacity' and 'stroke-opacity' /////////
+
+    // Add multiple event listener for whole stroke colors
+    const numberOfGroups = getNumberOfGroups(getInputSvg())
+    addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke')
+    addEventListenerForGroupColorsInputs(numberOfGroups, 'opacity')
+    addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke-opacity')
+
+    function addEventListenerForGroupColorsInputs(numberOfGroups, attrName) {
+
+        // id `group-colors-${attrName}-N` の要素の変更を監視
+        for (let i = 0; i < numberOfGroups; i++) {
+            const elementId = `group-colors-${attrName}-${i}`;
+            console.log('elementId: ', elementId) // group-colors-${attrName}-0
+
+            const element = document.querySelector(`#${elementId}`);
+            console.log('i, element: ', i, element) // 0 <input type=​"number" min=​"0" max=​"1" step=​"0.1" value=​"1" id=​"group-colors-${attrName}-0">​
+
+            element.addEventListener('change', function (event) {
+
+                const inputValue = event.target.value;  // 'attrName' の input値を 取得
+                console.log(`'${attrName}' changes to ${inputValue}`)
+
+                if (!inputValue) return;
+
+                // elementId最後の idの数値のみ を抽出して 変更されたグループの indexナンバー を特定
+                const groupId = elementId.replace(`group-colors-${attrName}-`, '');
+                //console.log('groupId: ', groupId)                 // e.g: '0', '1', '2' ...
+                //console.log('typeof(groupId): ', typeof(groupId)) // string
+
+                // Get the matches for <g> from current SVG string in textarea
+                const currentSVG = getInputSvg()
+                const matches = regexMatchesOfGroupColors(currentSVG)
+                // console.log('matches: ', matches)
+                // e.g: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
+
+                // Get three group colors value
+                const stroke = hexExpandTo6(getStroke(matches[i])) // 6 digits hex (with hash mark)
+                const opacity = getOpacity(matches[i])             // [0-1] number
+                const strokeOpacity = getStrokeOpacity(matches[i]) // [0-1] number
+
+
+                // Generate the array with input value, as structure like regex 'match' object
+                let valueAsMatchesStructure = [];
+
+                if (attrName === 'stroke') {
+
+                    valueAsMatchesStructure = [
+                        undefined,     // [0] = undefined
+                        inputValue,    // [1] = value of stroke
+                        opacity,       // [2] = value of opacity
+                        strokeOpacity  // [3] = value of stroke-opacity
+                    ]
+                } else if (attrName === 'opacity') {
+
+                    valueAsMatchesStructure = [
+                        undefined,     // [0] = undefined
+                        stroke,        // [1] = value of stroke
+                        inputValue,    // [2] = value of opacity
+                        strokeOpacity  // [3] = value of stroke-opacity
+                    ]
+                } else if (attrName === 'stroke-opacity') {
+
+                    valueAsMatchesStructure = [
+                        undefined,     // [0] = undefined
+                        stroke,        // [1] = value of stroke
+                        opacity,       // [2] = value of opacity
+                        inputValue     // [3] = value of stroke-opacity
+                    ]
+                }
+                console.log('valueAsMatchesStructure: ', valueAsMatchesStructure)
+                // e.g: (4) [undefined, '#FF0000', '0.8', '1']
+
+                // 更新された <g>タグを生成する
+                changedGroupElem = generateGroupColorsSvgTags(valueAsMatchesStructure)
+                console.log('changedGroupElem: ', changedGroupElem)
+                // e.g: <g stroke="#FF7523" opacity="1" stroke-opacity="1">
+
+
+                // Replace the changed <g> elements via group ID
+                const pattern = /<g stroke=[^>]*>/g;
+                const updatedSvg = replaceAtIndex(currentSVG, pattern, changedGroupElem, groupId)
+
+                // Refresh the SVG string in <textarea>
+                svgInputElement.value = updatedSvg;
+
+                // Rendering the PNG image
+                convertSvg({ target: { value: updatedSvg } })
+            });
+        }
+    }
+
+    ///////// Group colors: 'stroke', 'opacity' and 'stroke-opacity' /////////
+    //////////////////////////////////////////////////////////////////////////
 
 
     //////////////////////////////////////////////////////////////////////////
@@ -304,26 +400,37 @@
     //////////////////////////////////////////////////////////////////////////
 
 
+
+    // Options for 'Canvas' tab ///////////////////////////////////////////////////////////////////////////
+
     //////////////////////////////////////////////////////////////////////////
-    ////////////////////////////// Anti-aliasing /////////////////////////////
+    /////////////////////////////// Base color ///////////////////////////////
 
-    // Event listeners for 'shape-rendering' type changes
-    document.getElementById("shape-rendering").addEventListener("change", () => {
-        // 選択された値を取得
-        const value = document.getElementById("shape-rendering").value; // 'geometricPrecision' | 'crispEdges'
-        // <textarea>のvalue属性を取得
-        const svgString = svgInputElement.value;
+    // Color-picker: Base color (base rect fill color)
+    document.querySelector('#base-rect-color-picker').addEventListener('change', (event) => {
 
+        // console.log('event.target.value: ', event.target.value) // e.g: #60D7FF
+
+        // e.g: Get the selected color via '.jscolor.toHEXAString()' instead of above '.value' method
+        const hexaColor = event.target.jscolor.toHEXAString();
+        const hexaColorShorten = eightToFourOrThree(hexaColor);
+        console.log("Selected color (HexA): " + hexaColor); // e.g: #FFFFFF99
+        console.log("Selected color (HexA, shorten): " + hexaColorShorten); // e.g: #FFF9
+
+
+        // SVGの <textarea>要素と テキストを 取得
+        const svgTextareaAndString = getSvgTextareaAndString()
         // 正規表現パターンを作成
-        const patternForShapeRendering = /shape-rendering="[^"]*"/g;
+        const pattern = /<rect width="100%" height="100%" fill="[^"]*"/g;
         // 正規表現でマッチした部分を書き換える
-        const updatedSvg = svgString.replace(patternForShapeRendering, `shape-rendering="${value}"`);
+        const updatedSvg = svgTextareaAndString.get('string').replace(pattern, `<rect width="100%" height="100%" fill="${hexaColorShorten}"`);
         // <textarea>のvalue属性を更新する
-        svgInputElement.value = updatedSvg;
+        svgTextareaAndString.get('element').value = updatedSvg;
+
         // convertSvg関数を呼び出す
         convertSvg({ target: { value: updatedSvg } })
-    });
-    ////////////////////////////// Anti-aliasing /////////////////////////////
+    })
+    /////////////////////////////// Base color ///////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
 
@@ -365,157 +472,6 @@
     //////////////////////////////////////////////////////////////////////////
 
 
-    // Unused Query Selectors for bg(rect), width(number, range), crop-by-bbox
-
-    // const backgroundColorPickerElement = document.querySelector('#background-color-picker') // original bg color picker, now disabled
-    // const strokeColorPickerElement = document.querySelector('#stroke-color-picker') // original mono color picker, now disabled
-
-
-    //////////////////////////////////////////////////////////////////////////
-    //////////////////////////// Background color ////////////////////////////
-
-    // // Color-picker: Background color (via resvg original)
-    // backgroundColorPickerElement.addEventListener('change', function (event) {
-    //   const value = event.target.value // get value from color picker
-    //   const hasCrop = cropElement.checked
-    //   if (!value) return
-    //   resvgOpts.background = value
-    //   console.log('resvgOpts.background value is ' + resvgOpts.background) // resvgOpts.background value is #87FF634C
-    //   svg2png(null, resvgOpts, hasCrop)
-    // })
-
-    //////////////////////////// Background color ////////////////////////////
-    //////////////////////////////////////////////////////////////////////////
-
-
-    //////////////////////////////////////////////////////////////////////////
-    /////////// Group 'stroke', 'opacity' and 'stroke-opacity' [n] ///////////
-
-    // Add multiple event listener for whole stroke colors
-    const numberOfGroups = getNumberOfGroups(getInputSvg())
-    addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke')
-    addEventListenerForGroupColorsInputs(numberOfGroups, 'opacity')
-    addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke-opacity')
-
-    function addEventListenerForGroupColorsInputs(numberOfGroups, attrName) {
-
-        // id `group-colors-${attrName}-N` の要素の変更を監視
-        for (let i = 0; i < numberOfGroups; i++) {
-            const elementId = `group-colors-${attrName}-${i}`;
-            console.log('elementId: ', elementId) // group-colors-${attrName}-0
-
-            const element = document.querySelector(`#${elementId}`);
-            console.log('i, element: ', i, element) // 0 <input type=​"number" min=​"0" max=​"1" step=​"0.1" value=​"1" id=​"group-colors-${attrName}-0">​
-
-            element.addEventListener('change', function (event) {
-
-                const inputValue = event.target.value;  // 'attrName' の input値を 取得
-                console.log(`'${attrName}' changes to ${inputValue}`)
-
-                if (!inputValue) return;
-
-                // elementId最後の idの数値のみ を抽出して 変更されたグループの indexナンバー を特定
-                const groupId = elementId.replace(`group-colors-${attrName}-`, '');
-                //console.log('groupId: ', groupId)                 // e.g: '0', '1', '2' ...
-                //console.log('typeof(groupId): ', typeof(groupId)) // string
-
-                // Get the matches for <g> from current SVG string in textarea
-                const currentSVG = getInputSvg()
-                const matches = regexMatchesOfGroupColors(currentSVG)
-                // console.log('matches: ', matches)
-                // e.g: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
-
-                // Get three group colors value
-                const stroke = hexExpandTo6(getStroke(matches[i])) // 6 digits hex (with hash mark)
-                const opacity = getOpacity(matches[i])             // [0-1] number
-                const strokeOpacity = getStrokeOpacity(matches[i]) // [0-1] number
-
-
-                // Generate the array with input value, as structure like regex 'match' object
-                let valueAsMatchesStructure = [];
-
-                if (attrName === 'stroke') {
-
-                    valueAsMatchesStructure = [
-                        undefined,     // [0] = undefined
-                        inputValue,    // [1] = value of stroke
-                        opacity,       // [2] = value of opacity
-                        strokeOpacity  // [3] = value of stroke-opacity
-                    ]
-                } else if (attrName === 'opacity') {
-
-                    valueAsMatchesStructure = [
-                        undefined,     // [0] = undefined
-                        stroke,        // [1] = value of stroke
-                        inputValue,    // [2] = value of opacity
-                        strokeOpacity  // [3] = value of stroke-opacity
-                    ]
-                } else if (attrName === 'stroke-opacity') {
-
-                    valueAsMatchesStructure = [
-                        undefined,     // [0] = undefined
-                        stroke,        // [1] = value of stroke
-                        opacity,       // [2] = value of opacity
-                        inputValue     // [3] = value of stroke-opacity
-                    ]
-                }
-                console.log('valueAsMatchesStructure: ', valueAsMatchesStructure)
-                // e.g: (4) [undefined, '#FF0000', '0.8', '1']
-
-                // 更新された <g>タグを生成する
-                changedGroupElem = generateGroupColorsSvgTags(valueAsMatchesStructure)
-                console.log('changedGroupElem: ', changedGroupElem)
-                // e.g: <g stroke="#FF7523" opacity="1" stroke-opacity="1">
-
-
-                // Replace the changed <g> elements via group ID
-                const pattern = /<g stroke=[^>]*>/g;
-                const updatedSvg = replaceAtIndex(currentSVG, pattern, changedGroupElem, groupId)
-
-                // Refresh the SVG string in <textarea>
-                svgInputElement.value = updatedSvg;
-
-                // Rendering the PNG image
-                convertSvg({ target: { value: updatedSvg } })
-            });
-        }
-    }
-
-    /////////// Group 'stroke', 'opacity' and 'stroke-opacity' [n] ///////////
-    //////////////////////////////////////////////////////////////////////////
-
-
-    //////////////////////////////////////////////////////////////////////////
-    ///////////////////////////// Base color /////////////////////////////
-
-    // Color-picker: Base color (base rect fill color)
-    document.querySelector('#base-rect-color-picker').addEventListener('change', (event) => {
-
-        // console.log('event.target.value: ', event.target.value) // e.g: #60D7FF
-
-        // e.g: Get the selected color via '.jscolor.toHEXAString()' instead of above '.value' method
-        const hexaColor = event.target.jscolor.toHEXAString();
-        const hexaColorShorten = eightToFourOrThree(hexaColor);
-        console.log("Selected color (HexA): " + hexaColor); // e.g: #FFFFFF99
-        console.log("Selected color (HexA, shorten): " + hexaColorShorten); // e.g: #FFF9
-
-
-        // SVGの <textarea>要素と テキストを 取得
-        const svgTextareaAndString = getSvgTextareaAndString()
-        // 正規表現パターンを作成
-        const pattern = /<rect width="100%" height="100%" fill="[^"]*"/g;
-        // 正規表現でマッチした部分を書き換える
-        const updatedSvg = svgTextareaAndString.get('string').replace(pattern, `<rect width="100%" height="100%" fill="${hexaColorShorten}"`);
-        // <textarea>のvalue属性を更新する
-        svgTextareaAndString.get('element').value = updatedSvg;
-
-        // convertSvg関数を呼び出す
-        convertSvg({ target: { value: updatedSvg } })
-    })
-    ///////////////////////////// Base color /////////////////////////////
-    //////////////////////////////////////////////////////////////////////////
-
-
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////// Crop side margins ///////////////////////////
 
@@ -536,6 +492,33 @@
         }
     });
     //////////////////////////// Crop side margins ///////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+
+
+
+    // Options for 'Render' tab ///////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////
+    ////////////////////////////// Anti-aliasing /////////////////////////////
+
+    // Event listeners for 'shape-rendering' type changes
+    document.getElementById("shape-rendering").addEventListener("change", () => {
+        // 選択された値を取得
+        const value = document.getElementById("shape-rendering").value; // 'geometricPrecision' | 'crispEdges'
+        // <textarea>のvalue属性を取得
+        const svgString = svgInputElement.value;
+
+        // 正規表現パターンを作成
+        const patternForShapeRendering = /shape-rendering="[^"]*"/g;
+        // 正規表現でマッチした部分を書き換える
+        const updatedSvg = svgString.replace(patternForShapeRendering, `shape-rendering="${value}"`);
+        // <textarea>のvalue属性を更新する
+        svgInputElement.value = updatedSvg;
+        // convertSvg関数を呼び出す
+        convertSvg({ target: { value: updatedSvg } })
+    });
+
+    ////////////////////////////// Anti-aliasing /////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
 
@@ -575,9 +558,47 @@
     document.querySelector('#width-size-dec').addEventListener('click', () => handleButtonClick(-1));
     document.querySelector('#width-size-inc').addEventListener('click', () => handleButtonClick(1));
 
-
     //////////////////////////// Width pixel size ////////////////////////////
     //////////////////////////////////////////////////////////////////////////
+
+
+
+
+    // Disabled options ///////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////
+    ////////////////////////////// Crop by BBox //////////////////////////////
+
+    // resvg-js playground original cropping function checkbox
+
+    const cropElement = document.querySelector('#crop-by-bbox')
+    cropElement.addEventListener('change', function (event) {
+        const hasCrop = event.target.checked
+        svg2png(null, resvgOpts, hasCrop)
+    })
+
+    ////////////////////////////// Crop by BBox //////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+
+
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////// Change background ///////////////////////////
+
+    // resvg-js playground original background color picker
+
+    // const backgroundColorPickerElement = document.querySelector('#background-color-picker')
+    // backgroundColorPickerElement.addEventListener('change', function (event) {
+    //   const value = event.target.value
+    //   const hasCrop = cropElement.checked
+    //   if (!value) return
+    //   resvgOpts.background = value
+    //   console.log('resvgOpts.background value is ' + resvgOpts.background) // e.g.: resvgOpts.background value is #87FF634C
+    //   svg2png(null, resvgOpts, hasCrop)
+    // })
+
+    //////////////////////////// Change background ///////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+
 
 
     // Initialize the 'Width pixel size' as 256
@@ -603,7 +624,7 @@
     // The half of `<input type="range" max="512">` is 256
     setPngSize(256);
 
-    // First PNG rendering
+    // Initial PNG rendering
     // convertSvg(svgInputElement.value.trim())
     convertSvg({ target: { value: svgInputElement.value.trim() } })
 
