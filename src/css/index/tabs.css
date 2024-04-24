@@ -1,20 +1,9 @@
 .tabs-container {
-    /* background-color: chartreuse; */
-    /* overflow-x: auto;
-    white-space: nowrap; */
     width: auto;
-    /* width: 100%; */
-    /* margin: 0 3rem */
 }
 
-
 .tabs {
-    /* background-color: burlywood; */
     width: 100%;
-    /* display: flex; */
-    /* overflow-x: auto; */
-    /* white-space: nowrap; */
-    /* Enable horizontal scrolling if tabs overflow */
 }
 
 .tab {
@@ -23,7 +12,6 @@
     border: none;
     outline: none;
     cursor: pointer;
-    /* padding: 14px 16px; */
     transition: 0.3s;
     font-size: 0.9rem;
     flex: 0 1 auto;
@@ -31,7 +19,6 @@
     width: auto;
     /* Ensure width is auto */
     min-width: 100px;
-    /* min-width: 50px; */
     /* Set a minimum width */
     max-width: 200px;
     /* Set a maximum width */
@@ -39,28 +26,24 @@
     /* Prevent tabs from shrinking */
     box-sizing: initial;
     /* Ensure box model calculations are correct */
-    /* margin-right: 10px; */
     margin: 0;
     padding: .5rem 0;
     /* Adds some space between tabs */
     background-color: var(--color-button-bg);
 }
 
-.tabcontent {
+.tab-content {
     width: 100%;
     display: none;
-    /* padding: 0 10rem; */
     border-top: solid;
     border-left: solid;
     border-width: 1px;
     border-color: var(--color-button-border);
-    /* background-color: blue; */
 }
 
 
 .tab.active {
     opacity: 1;
-    /* color: var(--color-checker); */
     background-color: var(--color-button-border);
     /* Change to your preferred color */
     /* Alternatively, use a linear gradient for a subtle effect */
@@ -80,4 +63,5 @@
         min-width: 50px;
         margin: 0;
     }
+
 }

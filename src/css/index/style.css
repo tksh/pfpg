@@ -29,8 +29,6 @@ body {
 }
 
 .opts {
-    /* width: 300px; */
-    /* background-color: beige; */
     display: flex;
     flex-wrap: wrap;
 }
@@ -41,7 +39,6 @@ body {
 }
 
 .opts-cell {
-    /* background-color: aquamarine; */
     padding-left: 2rem;
     margin-top: 1rem;
     min-width: 16rem;
