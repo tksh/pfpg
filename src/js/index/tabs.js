@@ -1,22 +1,23 @@
 function openTab(evt, tabName) {
-    var i, tab-content, tablinks;
-    tab-content = document.getElementsByClassName("tab-content");
-    for (i = 0; i < tab-content.length; i++) {
-        tab-content[i].style.display = "none";
+    const tabContent = document.getElementsByClassName("tab-content");
+    const tabLinks = document.getElementsByClassName("tab");
+
+    for (let i = 0; i < tabContent.length; i++) {
+        tabContent[i].style.display = "none";
     }
-    tablinks = document.getElementsByClassName("tab");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
+
+    for (let i = 0; i < tabLinks.length; i++) {
+        tabLinks[i].className = tabLinks[i].className.replace(" active", "");
     }
 
     document.getElementById(tabName).style.display = "block";
+
     if (evt) {
         evt.currentTarget.classList.add("active"); // Add 'active' class to the clicked tab
     } else {
         // If no event, then it's the initial load, so manually set the first tab link as active
-        console.log("document.querySelector('.tab'): ", document.querySelector('.tablinks')) //null
+        console.log("document.querySelector('.tab'): ", document.querySelector('.tabLinks')) //null
         document.querySelector('.tab').classList.add('active');
-
     }
 }
 
@@ -26,8 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Add the 'active' class to the first tab
     document.querySelector('.tab').classList.add('active');
-    // <button class="tab active" data-tab="Tab1" onclick="openTab(event, 'Tab1')">
 
     // Open the first tab
-    openTab(null, 'Tab1');
+    openTab(null, 'tab-1');
 });

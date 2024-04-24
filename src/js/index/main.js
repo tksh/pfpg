@@ -1,33 +1,3 @@
-const INIT_INPUT_SVG_STRING = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0.775 0 29.45 31" shape-rendering="crispEdges">
-<title>202308_001</title>
-<defs>
-    <clipPath id="clipShape">
-        <path d="M 1.55,15.5Q 1.24,0 15.5,0T 29.45,15.5 15.5,31 1.55,15.5" />
-    </clipPath>
-</defs>
-<g clip-path="url(#clipShape)">
-    <rect width="100%" height="100%" fill="#9999" />
-    <g stroke="#000000" opacity="1" stroke-opacity="1">
-        <path stroke-width="3" d="m1 0 0 26m3-26 0 25m3-25-1 23m0-8 4 6m-2-1 0 3m-1-18 4-5m8 0 5 5m1-5 1 24m-2-9 0 7m4-22 0 25m2-25 0 27m-13 1 3 3m-16-7 4-2m14-22 2 9m2 2-3 6m-1-1 0 4m0-1 2 4m-1-1 8 5m-8-19 3 2" />
-    </g>
-    <g stroke="#000000" opacity="1" stroke-opacity="1">
-        <path stroke-width="2" d="m0 0 31 1m-22 2 5-3m-7 8 2-6m-3 8 2 7m1 5 1-2m-8 5 2-1m12-24 2 2m0-2 2 2m-8 27 2 1m-1-2 2 1m4 0 3 2m2-3 0 3m-3-14 1-1m2-1-2 1m1-8 0 2m-9-10 2 1" />
-    </g>
-    <g stroke="#000000" opacity="1" stroke-opacity="1">
-        <path stroke-width="1" d="m1 26-1 1m7-20 1 4m-1-6 1 4m-1 3 1-3m4 14 3 3m-1-1 3 2m-3 0 1 0m-1 1 1 2m0-2 0 2m2-2-1 3m2-4 2 3m-4-1 2-2m2-4-1 2m-1 0 0 1m2 1 3 2m-2-4 3 3m0-5-4 7m5-6-3 7m4-6-2 6m3-5-1 5m3-5-1 5m3-3-2 3m-4-2 1 2m0-4 2 4m0-3 3 3m-17-11 2 2m-1-1 2 3m-1 0 1 2m-4-9 2 3m0-4 1 2m-3-1 3-2m-2 3 2-1m-2 2 2 0m2-9-3 5m2-3 1 2m-6-5 2 4m-1-2 2 3m-2-4-2 4m1-1 0 1m0 0 3 0m-3-2 2 2m0-4 4 0m-2 1 1-2m-2 1 2-3m-2 1 2-3m-1 0 2-3m-4 6 1-1m-6 3 1 1m3-9 2 1m-1-2 5 4m-2-4 3 3m-4 0 2 3m-3-1 2 4m-5 8 2 0m-2 2 4 1m-2-1 3-2m-3 0 3-2m5-5 1 2m-2 1 1-2m0-1 1 0m-21 17 2 3m6-1 4-2" />
-    </g>
-    <g stroke="#eeeeee" opacity="1" stroke-opacity="1">
-        <path stroke-width="1" d="m14 6-5 2m0-2 5-2m-4 0 2-1m-1 6 0 1m2-1 2-1m-7 2 2-2m-1 4 1 4m1-1 1 0m-1 2 1 0m1 5 2 3m0-14 1 1m-6 12 0 5m1-3 1 2m-12 0 2 2m2-2 3 2m-1-3 3 2m0-3 1 1m0 2 3-2m5 0 2-2" />
-    </g>
-    <g stroke="#ffffff" opacity="1" stroke-opacity="1">
-        <path stroke-width="1" d="m12 21 0 2m-1-19-2 3m2-1-1 2m1 3-2 3m2 1-1 1m2 5 2 1m-1 1 2 1" />
-    </g>
-</g>
-</svg>`
-
-let SVG_STRING = ''
-
-
 async function getFontBuffer() {
     if (fetchFontLock) return
 
