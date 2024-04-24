@@ -281,16 +281,16 @@ async function getFontBuffer() {
 
         // Canvas tab
 
-        // Background color (include opacity)
-        const patternBgRectFill = /<rect width="100%" height="100%" fill="[^"]*"/g
-        const matchOfBgRectFill = currentPathModeSvgStr.match(patternBgRectFill)
-        const valueOfBgRectFill = matchOfBgRectFill[0] // Hex string
+        // Base color (include opacity)
+        const patternBaseRectFill = /<rect width="100%" height="100%" fill="[^"]*"/g
+        const matchOfBaseRectFill = currentPathModeSvgStr.match(patternBaseRectFill)
+        const valueOfBaseRectFill = matchOfBaseRectFill[0] // Hex string
         // Shape to trim
         const patternShapeToTrim = /<clipPath id="clipShape">[^>]*>/g
         const matchOfShapeToTrim = currentPathModeSvgStr.match(patternShapeToTrim)
         const valueOfShapeToTrim = matchOfShapeToTrim[0] // 'square' | 'circle' | 'squircle' | 'squircle, slimmed'
         // viewBox (for 'Crop side margins' checked.)
-        const patternViewbox = /viewBox="[^"]+"/; // viewBox属性を抽出する正規表現
+        const patternViewbox = /viewBox="[^"]*"/; // viewBox属性を抽出する正規表現
         const matchOfViewbox = currentPathModeSvgStr.match(patternViewbox)
         const valueOfViewbox = matchOfViewbox[0] // e.g.: viewBox="1.55 0 27.9 31"
 
@@ -305,7 +305,7 @@ async function getFontBuffer() {
 
 
         // 選択された 'Path mode'の値を 取得
-        const valueOfPathMode = document.getElementById("path-mode").value; // relativeMerged | absoluteSeparated
+        const valueOfPathMode = document.getElementById("path-mode").value; // 'relativeMerged' | 'absoluteSeparated'
 
         // Get new 'Path mode' styled svg string, decode from url params
         const newPathModeSvgStr = decodeAsSelectedPathMode(valueOfPathMode)
@@ -313,10 +313,10 @@ async function getFontBuffer() {
 
         // レンダリングし直す前に 保存しておいた 設定の値を 元に戻す
 
-        // Anti-alias, Backdrop color, Shape to trim, viewBox
+        // Anti-alias, Base color, Shape to trim, viewBox
         const recoverShapeRendering = recoverCurrentOptionValue(newPathModeSvgStr, patternShapeRendering, valueOfShapeRendering);
-        const recoverBgRectFill = recoverCurrentOptionValue(recoverShapeRendering, patternBgRectFill, valueOfBgRectFill);
-        const recoverShapeToTrim = recoverCurrentOptionValue(recoverBgRectFill, patternShapeToTrim, valueOfShapeToTrim);
+        const recoverBaseRectFill = recoverCurrentOptionValue(recoverShapeRendering, patternBaseRectFill, valueOfBaseRectFill);
+        const recoverShapeToTrim = recoverCurrentOptionValue(recoverBaseRectFill, patternShapeToTrim, valueOfShapeToTrim);
         const recoverViewbox = recoverCurrentOptionValue(recoverShapeToTrim, patternViewbox, valueOfViewbox);
 
         // Group colors (stroke, opacity, stroke-opacity)
@@ -440,12 +440,19 @@ async function getFontBuffer() {
     //   console.log('resvgOpts.background value is ' + resvgOpts.background) // resvgOpts.background value is #87FF634C
     //   svg2png(null, resvgOpts, hasCrop)
     // })
+
     //////////////////////////// Background color ////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
 
     //////////////////////////////////////////////////////////////////////////
     /////////// Group 'stroke', 'opacity' and 'stroke-opacity' [n] ///////////
+
+    // Add multiple event listener for whole stroke colors
+    const numberOfGroups = getNumberOfGroups(getInputSvg())
+    addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke')
+    addEventListenerForGroupColorsInputs(numberOfGroups, 'opacity')
+    addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke-opacity')
 
     function addEventListenerForGroupColorsInputs(numberOfGroups, attrName) {
 
@@ -459,30 +466,29 @@ async function getFontBuffer() {
 
             element.addEventListener('change', function (event) {
 
-                console.log(`/////// Event changed for '${attrName}' ///////`)
-                const inputValue = event.target.value;  // ${attrName} input の値を取得
-                console.log('inputValue: ', inputValue) // [0-1] Number
+                const inputValue = event.target.value;  // 'attrName' の input値を 取得
+                console.log(`'${attrName}' changes to ${inputValue}`)
 
                 if (!inputValue) return;
 
                 // elementId最後の idの数値のみ を抽出して 変更されたグループの indexナンバー を特定
                 const groupId = elementId.replace(`group-colors-${attrName}-`, '');
-                //console.log('groupId: ', groupId)                 // like '0', '1', '2' ...
+                //console.log('groupId: ', groupId)                 // e.g: '0', '1', '2' ...
                 //console.log('typeof(groupId): ', typeof(groupId)) // string
 
                 // Get the matches for <g> from current SVG string in textarea
                 const currentSVG = getInputSvg()
                 const matches = regexMatchesOfGroupColors(currentSVG)
                 // console.log('matches: ', matches)
-                // (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
+                // e.g: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
 
                 // Get three group colors value
-                const stroke = hexExpandTo6(getStroke(matches[i]))       // 6 digits hex (with hash mark)
-                const opacity = getOpacity(matches[i])       // [0-1] number
+                const stroke = hexExpandTo6(getStroke(matches[i])) // 6 digits hex (with hash mark)
+                const opacity = getOpacity(matches[i])             // [0-1] number
                 const strokeOpacity = getStrokeOpacity(matches[i]) // [0-1] number
 
 
-                // Generate the array like regex 'matche' object with input value
+                // Generate the array with input value, as structure like regex 'match' object
                 let valueAsMatchesStructure = [];
 
                 if (attrName === 'stroke') {
@@ -511,12 +517,12 @@ async function getFontBuffer() {
                     ]
                 }
                 console.log('valueAsMatchesStructure: ', valueAsMatchesStructure)
-                // (4) [undefined, '#FF0000', '0.8', '1']
+                // e.g: (4) [undefined, '#FF0000', '0.8', '1']
 
                 // 更新された <g>タグを生成する
                 changedGroupElem = generateGroupColorsSvgTags(valueAsMatchesStructure)
                 console.log('changedGroupElem: ', changedGroupElem)
-                // <g stroke="#FF7523" opacity="1" stroke-opacity="1">
+                // e.g: <g stroke="#FF7523" opacity="1" stroke-opacity="1">
 
 
                 // Replace the changed <g> elements via group ID
@@ -526,27 +532,21 @@ async function getFontBuffer() {
                 // Refresh the SVG string in <textarea>
                 svgInputElement.value = updatedSvg;
 
-                // Re-rendering the image
+                // Rendering the PNG image
                 convertSvg({ target: { value: updatedSvg } })
             });
         }
     }
-
-    // Add multiple event listener for whole stroke colors
-    const numberOfGroups = getNumberOfGroups(getInputSvg())
-    addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke')
-    addEventListenerForGroupColorsInputs(numberOfGroups, 'opacity')
-    addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke-opacity')
 
     /////////// Group 'stroke', 'opacity' and 'stroke-opacity' [n] ///////////
     //////////////////////////////////////////////////////////////////////////
 
 
     //////////////////////////////////////////////////////////////////////////
-    ///////////////////////////// Backdrop color /////////////////////////////
+    ///////////////////////////// Base color /////////////////////////////
 
-    // Color-picker: Backdrop color (background rect color)
-    document.querySelector('#rect-color-picker').addEventListener('change', (event) => {
+    // Color-picker: Base color (base rect fill color)
+    document.querySelector('#base-rect-color-picker').addEventListener('change', (event) => {
 
         // console.log('event.target.value: ', event.target.value) // e.g: #60D7FF
 
@@ -569,7 +569,7 @@ async function getFontBuffer() {
         // convertSvg関数を呼び出す
         convertSvg({ target: { value: updatedSvg } })
     })
-    ///////////////////////////// Backdrop color /////////////////////////////
+    ///////////////////////////// Base color /////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
 

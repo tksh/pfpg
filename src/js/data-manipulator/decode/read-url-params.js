@@ -45,7 +45,7 @@ function decodeAsTwoMaps(paramsArray) {
     const max = Math.max(...splitByX)              // 255
     const uintN = getUintN(max)                    // 5 (2 の 何乗か？)
 
-    // Background color
+    // Base color
     const bgColor = artworkParam[1].split("-")[1]  // 9999
 
 

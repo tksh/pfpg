@@ -193,8 +193,8 @@ label.stroke {
     margin-right: 0.5rem
 }
 
-/* Backdrop color */
-input.bg-color {
+/* Base color */
+input.base-rect-color {
     margin-top: 0;
     width: 8.5rem;
 }

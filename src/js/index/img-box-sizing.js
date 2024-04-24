@@ -207,7 +207,7 @@ adjustBox()
 //
 //        // // pngInfoElem 要素の背景色をランダムに変更
 //        // const pngInfoElem = document.getElementById('png-info');
-//        // pngInfoElem.style.backgroundColor = getRandomColor();
+//        // pngInfoElem.style.baseColor = getRandomColor();
 //
 //        // ウィンドウのサイズ変更を検知するたびに 計算して imgBoxElem, textareaBoxElem をリサイズする
 //        adjustBox()

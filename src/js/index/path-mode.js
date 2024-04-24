@@ -11,7 +11,7 @@ function decodeAsSelectedPathMode(pathMode) {
 
 // Recover the option values like
 //  - Anti-aliasing
-//  - Backdrop color
+//  - Base color
 //  - Shape to trim
 
 function recoverCurrentOptionValue(svgString, regexPattern, valueString) {

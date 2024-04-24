@@ -4,43 +4,18 @@ function setDefaultsForPreference() {
     console.log('setDefaultsForPreference() executed')
 
     // SVGのテキストを取得
-    const inpuSVG = getInputSvg()
+    const inputSVG = getInputSvg()
 
-    setDefaultForRectColorPicker(inpuSVG)
-    setDefaultForAntiAliasSelector(inpuSVG)
-    setDefaultForWidth(inpuSVG)
-//    setDefaultForTransparencyScopeSelector(inpuSVG)
+    setDefaultForBaseColorPicker(inputSVG)
+    setDefaultForAntiAliasSelector(inputSVG)
+    setDefaultForWidth(inputSVG)
 
+    // Color-picker: Base color (base rect fill color)
+    function setDefaultForBaseColorPicker(inputSVG) {
 
-    // Functions to set default value that detect from input svg
-
-//    function setDefaultForTransparencyScopeSelector(inpuSVG) {
-//
-//        // Check first <g> element has 'opacity' or not
-//        const pattern = /<g stroke="([^"]+)"\s*(?:opacity="([^"]+)")?\s*>/;
-//        const matches = pattern.exec(inpuSVG); // exec メソッドでマッチする部分を探す
-//        console.log(`matches: `, matches); // Array(3) [ '<g stroke="#000">', "#000", undefined ]
-//
-//        // Set default transparency scope
-//        const transparencyScopeSelectorElement = document.getElementById('transparency-scope')
-//        if (matches[2] === undefined) {
-//            transparencyScopeSelectorElement.value = 'per-stroke'
-//            console.log(`Default transparency scope value is "per-stroke"`)
-//        } else {
-//            transparencyScopeSelectorElement.value = 'whole-group'
-//            console.log(`Default transparency scope value is "whole-group"`)
-//        }
-//    }
-
-    // Color-picker: Background color (background rect color)
-    function setDefaultForRectColorPicker(inpuSVG) {
-
-        // Get the background color hex code
-        // 正規表現パターンを作成
-        const pattern = /<rect width="100%" height="100%" fill="(.*)"/g; // <<rect width="100%" height="100%" fill="#fff9"> is default background rect color
-        // パターンにマッチする部分をすべて探す
-        //const match = inpuSVG.match(pattern); // Array [ '<rect width="100%" height="100%" fill="#ccc"' ]
-        const matches = pattern.exec(inpuSVG); // exec メソッドでマッチする部分を探す
+        // Get the base color hex code
+        const pattern = /<rect width="100%" height="100%" fill="(.*)"/g; // <<rect width="100%" height="100%" fill="#fff9"> is default base rect color
+        const matches = pattern.exec(inputSVG); // exec メソッドでマッチする部分を探す
         console.log('matches(rect fill): ', matches)
         // Array
         // 0: '<rect width="100%" height="100%" fill="#ccc"'
@@ -51,23 +26,22 @@ function setDefaultsForPreference() {
 
         // Set as new value for <input>
 
-        // Background color picker の input要素を 取得
-        const inputElement = document.getElementById("rect-color-picker");
+        // Base color picker の input要素を 取得
+        const inputElement = document.getElementById("base-rect-color-picker");
         // input要素のvalue属性に新しい値を設定
         inputElement.value = eightDigitsHex;
         // The specified value "#99999999" does not conform to the required format.  The format is "#rrggbb" where rr, gg, bb are two-digit hexadecimal numbers.
 
-        console.log(`Default background color value is "${eightDigitsHex}"`)
+        console.log(`Default base color value is "${eightDigitsHex}"`)
     }
 
 
     // Selector: Anti-aliasing (On (geometricPrecision) or Off (crispEdges))
-    function setDefaultForAntiAliasSelector(inpuSVG) {
+    function setDefaultForAntiAliasSelector(inputSVG) {
 
         // Get the 'shape-rendering' attr value
-        // 正規表現パターンを作成
         const pattern = /shape-rendering="(.*)">/; // target: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" shape-rendering="geometricPrecision">
-        const matches = pattern.exec(inpuSVG); // exec メソッドでマッチする部分を探す
+        const matches = pattern.exec(inputSVG); // exec メソッドでマッチする部分を探す
         console.log('matches(for shape-rendering): ', matches)
         // Array [ 'shape-rendering="geometricPrecision">', "geometricPrecision" ]
         const defaultShapeRendering = matches[1]
@@ -89,13 +63,12 @@ function setDefaultsForPreference() {
 
 
     // Number and Range: Width to render
-    function setDefaultForWidth(inpuSVG) {
+    function setDefaultForWidth(inputSVG) {
 
-        // 正規表現パターンを作成
         // viewBox属性の値から最後の数字を抽出する正規表現
         const pattern = /viewBox="\d+\s+\d+\s+\d+\s+(\d+)"/;
-        const matches = pattern.exec(inpuSVG); // exec メソッドでマッチする部分を探す
-        console.log('matches(for width): ', matches[1]) //  255
+        const matches = pattern.exec(inputSVG); // exec メソッドでマッチする部分を探す
+        console.log('matches(for width): ', matches[1]) // e.g: 255
         const gridSize = matches[1]
 
         // `Width:` の初期設定サイズを グリッドサイズ にする

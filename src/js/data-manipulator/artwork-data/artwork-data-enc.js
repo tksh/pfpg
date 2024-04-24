@@ -43,7 +43,7 @@ function encodeArtworkData() {
     const max = Math.max(...split_by_x)                     // 255
     const uintN = getUintN(max)                             // 8 (2 の 何乗か？)
 
-    // Background color
+    // Base color
     const bg_color_str   = artworkDataObj.bg_color.slice(1) // 555C&
 
 

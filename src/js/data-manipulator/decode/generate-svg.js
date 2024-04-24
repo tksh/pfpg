@@ -242,9 +242,9 @@ function generateTagsBeforeStrokes(tabSpace, viewboxValue, artworkIdValue, rectF
 
     // clip-path: <rect> in <g>
     const clipPathGroupOpen = tabSpace.repeat(1) + '<g clip-path="url(#clipShape)">'
-    const backgroundRect = tabSpace.repeat(2) + `<rect width="100%" height="100%" fill="#${rectFillValue}" />`
+    const baseRect = tabSpace.repeat(2) + `<rect width="100%" height="100%" fill="#${rectFillValue}" />`
 
-    return [svgOpen, title, trimmingShapeDefs, clipPathGroupOpen, backgroundRect]
+    return [svgOpen, title, trimmingShapeDefs, clipPathGroupOpen, baseRect]
 }
 
 function generateTagsAfterStrokes(tabSpace) {

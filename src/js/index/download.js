@@ -122,9 +122,9 @@ function getCurrentStatus() {
     //  'relativeMerged' | 'absoluteSeparated' => 'relMer' | 'absSep'
 
 
-    // Backdrop color
-    const rectColorInput = document.getElementById('rect-color-picker')
-    // e.g.: <input id="rect-color-picker" class="bgcolor jscolor" value="#FFF9" data-jscolor="{}" ...  data-current-color="#99999999" ...
+    // Base color
+    const rectColorInput = document.getElementById('base-rect-color-picker')
+    // e.g.: <input id="base-rect-color-picker" class="bgcolor jscolor" value="#FFF9" data-jscolor="{}" ...  data-current-color="#99999999" ...
     const rectColorWithHash = rectColorInput.value // 要素の値は文字列として扱われる
     // e.g.: #99999999
     const rectColorWithHashShorten = eightToFourOrThree(rectColorWithHash) // 同じ値が連続していれば4桁に省略し さらに 最後が'F'or'f'なら削除し3桁にする
