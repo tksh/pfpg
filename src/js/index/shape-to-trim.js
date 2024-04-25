@@ -131,5 +131,5 @@ function updateSvgWithSelectedShapePath(shape, svgTextareaAndString) {
     const viewboxUpdatedString = svgWithNewShapeViewbox(shape, hasCropSideMargins, svgTextareaAndString);
     svgTextarea.value = viewboxUpdatedString;
 
-    return viewboxUpdatedString // Return the string to render with 'executeSvg2png(svgString)' at main.js
+    return viewboxUpdatedString // Return the string to render with 'executeSvg2png()' at main.js
 }

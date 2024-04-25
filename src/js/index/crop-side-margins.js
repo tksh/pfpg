@@ -1,6 +1,6 @@
 // Argument SVG is a set of element and string as Map object
 // Returned SVG is a just string only
-function svgWithNewShapeViewbox(shape, hasCropSideMargins, svg) {
+function svgWithNewShapeViewbox(shape, hasCropSideMargins, svgTextareaAndString) {
 
     // Update 'viewBox'
 
@@ -11,11 +11,11 @@ function svgWithNewShapeViewbox(shape, hasCropSideMargins, svg) {
     console.log('hasCropSideMargins: ', hasCropSideMargins) // boolean, true=cropped[checked], false=un-cropped[!checked]
 
     if (shape == 'squircleSlimmed' && hasCropSideMargins == true) {
-        return viewboxSlimmed(svg)
+        return viewboxSlimmed(svgTextareaAndString)
     } else { // shape == 'square | circle | squircle'
         console.log(`"viewBox" value will be replaced to original size, \n
                       because selected shape is ${shape}, and hasCropSideMargins is ${hasCropSideMargins}`)
-        return viewboxUnSlimmed(svg)
+        return viewboxUnSlimmed(svgTextareaAndString)
     }
 
 }

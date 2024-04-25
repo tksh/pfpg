@@ -23,33 +23,23 @@ function getSvgTextareaAndString() {
 
 // Get the artwork ID
 function getArtworkId() {
-    const inputSVG = getInputSvg()
+    const inputSvg = getInputSvg()
     // Set the regex to match the artwork id inside the <title> tag
     // `.` は任意の一文字にマッチし `*?` は直前の文字が 0回以上できるだけ少なく 繰り返される
     const patternForTitle = /<title>(.*?)<\/title>/g
 
     // Assign the content of the <title> tag to a variable
-    const titleText = patternForTitle.exec(inputSVG)[1]
-    console.log('titleText: ', titleText) // titleText:  202304_001
+    const titleText = patternForTitle.exec(inputSvg)[1]
+    console.log('titleText: ', titleText) // e.g.: 202304_001
 
     return titleText
 }
 
 // Get the grid size of SVG
 function getGridSizeWxH() {
-    const inputSVG = getInputSvg()
-
-    // Set the regex to match the grid size inside the viewBox attr
-    // e.g. viewBox="0 0 31 31", viewBox="0 0 255 255"
-    // スペースとダブルクォートに挟まれた 数字の一回以上の繰り返し にマッチ, 数字部分のみをグルーピング
-    //const patternForGridSize = /viewBox="([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)"/
-    // const patternForGridSize = /viewBox="\d+ \d+ (\d+) (\d+)"/
-
-    const viewboxStr = getViewboxStr(inputSVG)
+    const inputSvg = getInputSvg()
+    const viewboxStr = getViewboxStr(inputSvg)
     const viewboxValues = extractViewboxValues(viewboxStr) // e.g: Map(4) {'x' => 0, 'y' => 0, 'w' => 31, 'h' => 31}
-
-    // Assign the content of the <title> tag to a variable
-    //const matchesGridSize = patternForGridSize.exec(inputSVG) // 配列の 0番目には全体のマッチ結果, 1番目以降にはグルーピングした部分
 
     const gridSizeWidth = viewboxValues.get('w')
     const gridSizeHeight = viewboxValues.get('h')
@@ -119,12 +109,11 @@ function getCurrentStatus() {
     // Path mode
     const pathModeSelect = document.getElementById('path-mode')
     const pathMode = pathModeSelect.value.slice(0, 3) + pathModeSelect.value.slice(8, 11)
-    //  'relativeMerged' | 'absoluteSeparated' => 'relMer' | 'absSep'
+    //  <option> value as 'relativeMerged' | 'absoluteSeparated' => filename as 'relMer' | 'absSep'
 
 
     // Base color
     const rectColorInput = document.getElementById('base-rect-color-picker')
-    // e.g.: <input id="base-rect-color-picker" class="bgcolor jscolor" value="#FFF9" data-jscolor="{}" ...  data-current-color="#99999999" ...
     const rectColorWithHash = rectColorInput.value // 要素の値は文字列として扱われる
     // e.g.: #99999999
     const rectColorWithHashShorten = eightToFourOrThree(rectColorWithHash) // 同じ値が連続していれば4桁に省略し さらに 最後が'F'or'f'なら削除し3桁にする
@@ -139,7 +128,6 @@ function getCurrentStatus() {
 
     // Shape to trim
     const shapeToTrimSelect = document.getElementById('shape-to-trim')
-    //console.log(shapeToTrimSelect)
     let shapeToTrim = shapeToTrimSelect.value // 要素の値は文字列として扱われる
     console.log('shapeToTrim: ', shapeToTrim)
 
@@ -148,9 +136,9 @@ function getCurrentStatus() {
 
         // Two options for 'Squircle, slimmed'
         const selectWidthNarrowness = document.getElementById('width-narrowness')
-        const selectTopHeavyRatio   = document.getElementById('top-heavy-ratio')
+        const selectTopHeavyRatio = document.getElementById('top-heavy-ratio')
         const widthNarrowness = selectWidthNarrowness.value
-        const topHeavyRatio   = selectTopHeavyRatio.value
+        const topHeavyRatio = selectTopHeavyRatio.value
 
         // Merge with two option values
         shapeToTrim = `squircleSlimmed_${widthNarrowness}_${topHeavyRatio}`

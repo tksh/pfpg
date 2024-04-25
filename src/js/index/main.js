@@ -100,13 +100,13 @@
                 //console.log('typeof(groupId): ', typeof(groupId)) // string
 
                 // Get the matches for <g> from current SVG string in textarea
-                const currentSVG = getInputSvg()
-                const matches = regexMatchesOfGroupColors(currentSVG)
+                const currentSvg = getInputSvg()
+                const matches = regexMatchesOfGroupColors(currentSvg)
                 // console.log('matches: ', matches)
                 // e.g: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
 
                 // Get three group colors value
-                const stroke = hexExpandTo6(getStroke(matches[i])) // 6 digits hex (with hash mark)
+                const stroke = '#' + hexExpandTo6(getStroke(matches[i]).slice(1)) // 6 digits hex (with hash mark)
                 const opacity = getOpacity(matches[i])             // [0-1] number
                 const strokeOpacity = getStrokeOpacity(matches[i]) // [0-1] number
 
@@ -150,7 +150,7 @@
 
                 // Replace the changed <g> elements via group ID
                 const pattern = /<g stroke=[^>]*>/g;
-                const updatedSvg = replaceAtIndex(currentSVG, pattern, changedGroupElem, groupId)
+                const updatedSvg = replaceAtIndex(currentSvg, pattern, changedGroupElem, groupId)
 
                 // Refresh the SVG string in <textarea>
                 svgInputElement.value = updatedSvg;

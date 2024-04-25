@@ -5,9 +5,9 @@ function getUintNPortrayForDec() {
 
   let artworkParam = []
 
-  if (params != 0) { // Decode if URL Params exists
-    const paramsArray = [...params.entries()];         // entries()メソッドでキーと値のペアを取得
-    artworkParam = paramsArray[0]                // (2) ['202308_001', '31x31-9999']
+  if (params != 0) {                           // Decode if URL Params exists
+    const paramsArray = [...params.entries()]; // entries()メソッドでキーと値のペアを取得
+    artworkParam = paramsArray[0]              // e.g.: (2) ['202308_001', '31x31-9999']
 
   } else if (isDataManipulatorOrIndexBool === false) { // No URL Params at index.html, Get the encoded string from '<script type="text/plain"> with id
     const sampleArtworkEncodedStr = document.getElementById("sample-artwork-encoded-string").textContent
@@ -18,10 +18,10 @@ function getUintNPortrayForDec() {
     return null
   }
 
-  const gridSize = artworkParam[1].split("-")[0] // 31x31
-  const splitByX = gridSize.split('x')           // (2) ['31', '31']
-  const max = Math.max(...splitByX)              // 255
-  const uintN = getUintN(max)                    // 5 (2 の 何乗か？)
+  const gridSize = artworkParam[1].split("-")[0] // e.g.: 31x31
+  const splitByX = gridSize.split('x')           // e.g.: (2) ['31', '31']
+  const max = Math.max(...splitByX)              // e.g.: 255
+  const uintN = getUintN(max)                    // e.g.: 5 (2 の 何乗か？)
   return uintN
 }
 
@@ -35,9 +35,9 @@ function getUintNPortrayForEnc() {
 
   // Size
   const gridSizeStr = artworkDataObj.grid_size
-  const splitByX = gridSizeStr.split('x')        // (2) ['255', '255']
-  const max = Math.max(...splitByX)              // 255
-  const uintN = getUintN(max)                    // 8 (2 の 何乗か？)
+  const splitByX = gridSizeStr.split('x')        // e.g.: (2) ['255', '255']
+  const max = Math.max(...splitByX)              // e.g.: 255
+  const uintN = getUintN(max)                    // e.g.: 8 (2 の 何乗か？)
 
   // return uintN
   const sizesObj = { grid_size_str: gridSizeStr, max: max, uint_n: uintN }
@@ -48,8 +48,8 @@ function getUintN(n) {
   // Add 1 before judging, For 256 => 9, not 256 => 8
   addOne = n + 1
 
-  gridsize_limit = nextPowerOfTwo(addOne) // 256
-  uintN = (Math.log2(gridsize_limit))     // 8
+  gridsize_limit = nextPowerOfTwo(addOne) // e.g.: 256
+  uintN = (Math.log2(gridsize_limit))     // e.g.: 8
 
   return uintN
 }

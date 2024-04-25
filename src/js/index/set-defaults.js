@@ -4,18 +4,18 @@ function setDefaultsForPreference() {
     console.log('setDefaultsForPreference() executed')
 
     // SVGのテキストを取得
-    const inputSVG = getInputSvg()
+    const inputSvg = getInputSvg()
 
-    setDefaultForBaseColorPicker(inputSVG)
-    setDefaultForAntiAliasSelector(inputSVG)
-    setDefaultForWidth(inputSVG)
+    setDefaultForBaseColorPicker(inputSvg)
+    setDefaultForAntiAliasSelector(inputSvg)
+    setDefaultForWidth(inputSvg)
 
     // Color-picker: Base color (base rect fill color)
-    function setDefaultForBaseColorPicker(inputSVG) {
+    function setDefaultForBaseColorPicker(inputSvg) {
 
         // Get the base color hex code
         const pattern = /<rect width="100%" height="100%" fill="(.*)"/g; // <<rect width="100%" height="100%" fill="#fff9"> is default base rect color
-        const matches = pattern.exec(inputSVG); // exec メソッドでマッチする部分を探す
+        const matches = pattern.exec(inputSvg); // exec メソッドでマッチする部分を探す
         console.log('matches(rect fill): ', matches)
         // Array
         // 0: '<rect width="100%" height="100%" fill="#ccc"'
@@ -37,11 +37,11 @@ function setDefaultsForPreference() {
 
 
     // Selector: Anti-aliasing (On (geometricPrecision) or Off (crispEdges))
-    function setDefaultForAntiAliasSelector(inputSVG) {
+    function setDefaultForAntiAliasSelector(inputSvg) {
 
         // Get the 'shape-rendering' attr value
         const pattern = /shape-rendering="(.*)">/; // target: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" shape-rendering="geometricPrecision">
-        const matches = pattern.exec(inputSVG); // exec メソッドでマッチする部分を探す
+        const matches = pattern.exec(inputSvg); // exec メソッドでマッチする部分を探す
         console.log('matches(for shape-rendering): ', matches)
         // Array [ 'shape-rendering="geometricPrecision">', "geometricPrecision" ]
         const defaultShapeRendering = matches[1]
@@ -63,11 +63,11 @@ function setDefaultsForPreference() {
 
 
     // Number and Range: Width to render
-    function setDefaultForWidth(inputSVG) {
+    function setDefaultForWidth(inputSvg) {
 
         // viewBox属性の値から最後の数字を抽出する正規表現
         const pattern = /viewBox="\d+\s+\d+\s+\d+\s+(\d+)"/;
-        const matches = pattern.exec(inputSVG); // exec メソッドでマッチする部分を探す
+        const matches = pattern.exec(inputSvg); // exec メソッドでマッチする部分を探す
         console.log('matches(for width): ', matches[1]) // e.g: 255
         const gridSize = matches[1]
 

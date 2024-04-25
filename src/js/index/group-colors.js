@@ -22,7 +22,7 @@ function getOpacityStepsValue() {
     const selectOfOpacitySteps = document.getElementById("opacity-steps");
     return Number(selectOfOpacitySteps.value)
 }
-generateGroupColorsHtmlElements(getOpacityStepsValue())
+
 
 function generateGroupColorsHtmlElements(step) {
     console.log(`generateGroupColorsHtmlElements() now started. (Opacity step = ${step})`)
@@ -128,8 +128,8 @@ function getGroupColorsValues() {
     // Find whole group colors elements
 
     // Get the matches for <g> from current SVG string in textarea
-    const currentSVG = getInputSvg()
-    const matches = regexMatchesOfGroupColors(currentSVG)
+    const currentSvg = getInputSvg()
+    const matches = regexMatchesOfGroupColors(currentSvg)
     // console.log('matches: ', matches)
     // e.g.: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
 
@@ -146,9 +146,9 @@ function getGroupColorsValues() {
 
     for (let i = 0; i < matches.length; i++) { // i = group ID
         // Get three group colors value
-        const stroke = hexExpandTo6(getStroke(matches[i]))       // 6 digits hex (with hash mark)
-        const opacity = getOpacity(matches[i])       // [0-1] number
-        const strokeOpacity = getStrokeOpacity(matches[i]) // [0-1] number
+        const stroke = '#' + hexExpandTo6(getStroke(matches[i]).slice(1)) // 6 digits hex (delete '#' mark using '.slice(1)' before expand)
+        const opacity = getOpacity(matches[i])                            // [0-1] number
+        const strokeOpacity = getStrokeOpacity(matches[i])                // [0-1] number
 
         // Set into each array
         strokeArray.push(stroke)
@@ -201,14 +201,18 @@ function getStrokeOpacity(inputStr) {
 
 // Get the number of stroke colors to add multiple event listener
 // via addEventListenerForGroupColorsInputs()
-function getNumberOfGroups(inputSVG) {
+function getNumberOfGroups(inputSvg) {
     // 正規表現パターンを作成
     const pattern = /g stroke="[^"]*"/g; // g stroke="..." にマッチするパターン
     // パターンにマッチする部分をすべて探す
-    const matches = inputSVG.match(pattern); // matchメソッドで配列を返す
+    const matches = inputSvg.match(pattern); // matchメソッドで配列を返す
     //console.log('matches(g stroke="#XXX"): ', matches) // Array(3) [ 'g stroke="#000"', 'g stroke="#eee"', 'g stroke="#fff"' ]
     // マッチした部分の数を取得
     const numberOfGroups = matches.length; // 配列の長さでマッチした部分の数を得る
     //console.log('typeof(numberOfGroups): ', typeof (numberOfGroups)) // number
     return numberOfGroups
 }
+
+
+
+generateGroupColorsHtmlElements(getOpacityStepsValue())
