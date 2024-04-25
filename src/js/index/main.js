@@ -281,11 +281,14 @@
 
         // console.log('event.target.value: ', event.target.value) // e.g: #60D7FF
 
-        // e.g: Get the selected color via '.jscolor.toHEXAString()' instead of above '.value' method
-        const hexaColor = event.target.jscolor.toHEXAString();
-        const hexaColorShorten = eightToFourOrThree(hexaColor);
-        console.log("Selected color (HexA): " + hexaColor); // e.g: #FFFFFF99
-        console.log("Selected color (HexA, shorten): " + hexaColorShorten); // e.g: #FFF9
+        // Get the selected color hex (includes alpha-channel values)
+        // via '.jscolor.toHEXAString()' instead of above '.value' method
+        const hexAColor = event.target.jscolor.toHEXAString();
+
+        // Attempt to shorten the string after removing '#', then prepend '#' again
+        const hexAColorShorten = '#' + eightToFourOrThree(hexAColor.substring(1));
+        //console.log("Selected color (HexA): " + hexAColor);                 // e.g: #FFFFFF99
+        //console.log("Selected color (HexA, shorten): " + hexAColorShorten); // e.g: #FFF9
 
 
         // SVGの <textarea>要素と テキストを 取得
@@ -293,7 +296,7 @@
         // 正規表現パターンを作成
         const pattern = /<rect width="100%" height="100%" fill="[^"]*"/g;
         // 正規表現でマッチした部分を書き換える
-        const updatedSvg = svgTextareaAndString.get('string').replace(pattern, `<rect width="100%" height="100%" fill="${hexaColorShorten}"`);
+        const updatedSvg = svgTextareaAndString.get('string').replace(pattern, `<rect width="100%" height="100%" fill="${hexAColorShorten}"`);
         // <textarea>のvalue属性を更新する
         svgTextareaAndString.get('element').value = updatedSvg;
 

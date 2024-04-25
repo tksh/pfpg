@@ -59,10 +59,10 @@ function normalizedToHex(num) {
 // Merge the hex and opacity, and extended if in short style
 // For: transparency-scope = per-stroke
 // 'opacity' values are convert into hex 7,8 chars
-function mergeOpacityAndExtended(hexCodeInput, opacityValueInput) {
+function mergeOpacityAndExtended(hexInput, opacityValueInput) {
 
-    let hexcode = hexCodeInput.slice(1); // `#`記号 を除く文字列を取得
-    console.log('hexcode.length(start): ', hexcode.length) // 3
+    let hex = hexInput.slice(1); // `#`記号 を除く文字列を取得
+    console.log('hex.length(start): ', hex.length) // 3
     let hexForTransparency = ""; // Hex下二桁の透明度情報
 
     // 入力したhexがの長さが 3 or 6 で 且つ 'opacity' の値が 無い(undefined) なら 'FF' にする
@@ -72,47 +72,46 @@ function mergeOpacityAndExtended(hexCodeInput, opacityValueInput) {
         hexForTransparency = normalizedToHex(opacityValueInput)
     }
 
-    if (hexcode.length === 3) {
-        hexcode = hexcode.split("").map((char) => char.repeat(2)).join(""); // 文字列の各文字を2回繰り返して結合する
-        hexcode = hexcode + hexForTransparency
-    } else if (hexcode.length === 6) {
-        hexcode = hexcode + hexForTransparency
-    } else if (hexcode.length === 4) { // hexcode has opacity, but in short style
-        hexcode = hexcode.split("").map((char) => char.repeat(2)).join(""); // 文字列の各文字を2回繰り返して結合する
+    if (hex.length === 3) {
+        hex = hex.split("").map((char) => char.repeat(2)).join(""); // 文字列の各文字を2回繰り返して結合する
+        hex = hex + hexForTransparency
+    } else if (hex.length === 6) {
+        hex = hex + hexForTransparency
+    } else if (hex.length === 4) { // hex has opacity, but in short style
+        hex = hex.split("").map((char) => char.repeat(2)).join(""); // 文字列の各文字を2回繰り返して結合する
     }
-    console.log('hexcode.length(end): ', hexcode.length) // 10
-    const hexWithHash = '#' + hexcode.toUpperCase()
-    //    return eightToFourOrThree(hexWithHash) // shorten if could before return
-    return hexWithHash // shorten if could before return
+    console.log('hex.length(end): ', hex.length) // 10
+    const hexWithHash = '#' + hex.toUpperCase()
+    return hexWithHash
 }
 // console.log(mergeOpacityAndExtended('#000', 1))      // #000000FF
 // console.log(mergeOpacityAndExtended('#000000', 1))   // #000000FF
 // console.log(mergeOpacityAndExtended('#000000', 1.0)) // #000000FF
 
 
+// For generating the group colors SVG <g> element tags
 // Split the hex and opacity, and extended if in short style
-// For: transparency-scope = whole-group
-function splitOpacityAndExtended(hexCodeInput, opacityValueInput, strokeOpacityValueInput) {
+function splitOpacityAndExtended(strokeHexStr, opacityNumStr, strokeOpacityNumStr) {
 
-    let hexcode = hexCodeInput.slice(1); // `#`記号 を除く文字列を取得
+    let hex = strokeHexStr.slice(1); // `#`記号 を除く文字列を取得
 
-    if (hexcode.length === 3) {
-        hexcode = '#' + hexcode.split("").map((char) => char.repeat(2)).join(""); // 文字列の各文字を2回繰り返して結合する
-        return [undefined, hexcode.toUpperCase(), opacityValueInput, strokeOpacityValueInput]
-// 入力されるhex色情報は 3|6 だけでいい？ 下記のような透明度情報込みの 4|8 hex表現をサポートする必要があるかどうか 要検討
+    if (hex.length === 3) {
+        hex = '#' + hex.split("").map((char) => char.repeat(2)).join(""); // 文字列の各文字を2回繰り返して結合する
+        return [undefined, hex.toUpperCase(), opacityNumStr, strokeOpacityNumStr]
+        // 入力されるhex色情報は 3|6 だけでいい？ 下記のような透明度情報込みの 4|8 hex表現をサポートする必要があるかどうか 要検討
 
-    } else if (hexcode.length === 8) {
-        return splitHexAndOpacity(hexcode) // Hex6桁と 最後二桁の透明度情報を変換した数値[0-1]の 配列を返す
-    } else if (hexcode.length === 4) { // hexcode has opacity, but in short style
-        hexcode = hexcode.split("").map((char) => char.repeat(2)).join(""); // 文字列の各文字を2回繰り返して結合する (4 => 8)
-        return splitHexAndOpacity(hexcode) // Hex6桁と 最後二桁の透明度情報を変換した数値[0-1]の 配列を返す
+    } else if (hex.length === 8) {
+        return splitHexAndOpacity(hex) // Hex6桁と 最後二桁の透明度情報を変換した数値[0-1]の 配列を返す
+    } else if (hex.length === 4) { // hex has opacity, but in short style
+        hex = hex.split("").map((char) => char.repeat(2)).join(""); // 文字列の各文字を2回繰り返して結合する (4 => 8)
+        return splitHexAndOpacity(hex) // Hex6桁と 最後二桁の透明度情報を変換した数値[0-1]の 配列を返す
     }
 
     // 6桁のときは そのまま にする
     //console.log('hex code length is 6')
-    const hexWithHash = '#' + hexcode.toUpperCase()
-    //const hexcodeShorten = eightToFourOrThree(hexWithHash) // shorten if could before return
-    return [undefined, hexWithHash, opacityValueInput, strokeOpacityValueInput]
+    const hexWithHash = '#' + hex.toUpperCase()
+    //const hexShorten = eightToFourOrThree(hexWithHash) // shorten if could before return
+    return [undefined, hexWithHash, opacityNumStr, strokeOpacityNumStr]
 }
 // console.log(splitOpacityAndExtended('#fff'))      // Array(3) [ undefined, "#FFFFFF", undefined ]
 // console.log(splitOpacityAndExtended('#ffffff'))   // Array(3) [ undefined, "#FFFFFF", undefined ]
