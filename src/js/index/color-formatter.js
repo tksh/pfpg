@@ -110,7 +110,7 @@ function splitOpacityAndExtended(strokeHexStr, opacityNumStr, strokeOpacityNumSt
     // 6桁のときは そのまま にする
     //console.log('hex code length is 6')
     const hexWithHash = '#' + hex.toUpperCase()
-    //const hexShorten = eightToFourOrThree(hexWithHash) // shorten if could before return
+    //const hexShorten = tryDeleteF(tryReduceAsHalf(hexWithHash)) // shorten if could before return
     return [undefined, hexWithHash, opacityNumStr, strokeOpacityNumStr]
 }
 // console.log(splitOpacityAndExtended('#fff'))      // Array(3) [ undefined, "#FFFFFF", undefined ]

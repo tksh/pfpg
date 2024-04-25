@@ -116,7 +116,7 @@ function getCurrentStatus() {
     const rectColorInput = document.getElementById('base-rect-color-picker')
     const rectColorWithoutHash = rectColorInput.value.substring(1) // 要素の値は文字列として扱われる, 先頭の `#` を削除
     // e.g.: 99999999
-    const rectColorShorten = eightToFourOrThree(rectColorWithoutHash) // 同じ値が連続していれば4桁に省略し さらに 最後が'F'or'f'なら削除し3桁にする
+    const rectColorShorten = tryDeleteF(tryReduceAsHalf(rectColorWithoutHash)) // 同じ値が連続していれば4桁に省略し さらに 最後が'F'or'f'なら削除し3桁にする
     const rectColor = rectColorShorten.toUpperCase()
     // e.g.: 9999
 

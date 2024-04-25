@@ -284,11 +284,11 @@
         // Get the selected color hex (includes alpha-channel values)
         // via '.jscolor.toHEXAString()' instead of above '.value' method
         const hexAColor = event.target.jscolor.toHEXAString();
+        console.log("Base color (hex includes alpha-channel): " + hexAColor);                 // e.g: #FFFFFF99
 
         // Attempt to shorten the string after removing '#', then prepend '#' again
-        const hexAColorShorten = '#' + eightToFourOrThree(hexAColor.substring(1));
-        //console.log("Selected color (HexA): " + hexAColor);                 // e.g: #FFFFFF99
-        //console.log("Selected color (HexA, shorten): " + hexAColorShorten); // e.g: #FFF9
+        const hexAColorShorten = '#' + tryDeleteF(tryReduceAsHalf(hexAColor.substring(1)));
+        console.log("Base color (hex shorten): " + hexAColorShorten); // e.g: #FFF9
 
 
         // SVGの <textarea>要素と テキストを 取得
