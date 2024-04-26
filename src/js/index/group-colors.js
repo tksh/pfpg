@@ -18,7 +18,17 @@ function generateGroupColorsSvgTags(matches) {
 // HTML
 
 // Generate the strokes group color input HTML elements
-function getOpacityStepsValue() {
+
+// Get initial opacity steps detected from original decoded SVG
+function getInitialOpacitySteps() {
+    //const svgString = getInputSvg()
+
+    // get whole group 'opacity' and 'stroke-opacity' values
+    const groupColorsValue = getGroupColorsValues()
+
+
+}
+function getOpacitySteps() {
     const selectOfOpacitySteps = document.getElementById("opacity-steps");
     return Number(selectOfOpacitySteps.value)
 }
@@ -28,10 +38,10 @@ function generateGroupColorsHtmlElements(step) {
     console.log(`generateGroupColorsHtmlElements() now started. (Opacity step = ${step})`)
 
     const groupColorsValues = getGroupColorsValues();
-    const numberOfGroups = groupColorsValues.number_of_groups
-    const stroke = groupColorsValues.stroke_array
-    const opacity = groupColorsValues.opacity_array
-    const strokeOpacity = groupColorsValues.stroke_opacity_array
+    const numberOfGroups = groupColorsValues.get('number_of_groups')
+    const stroke         = groupColorsValues.get('stroke_array')
+    const opacity        = groupColorsValues.get('opacity_array')
+    const strokeOpacity  = groupColorsValues.get('stroke_opacity_array')
 
     // 挿入先のdiv要素を取得
     const groupColorsDiv = document.getElementById("group-colors-input-and-select");
@@ -175,12 +185,12 @@ function getGroupColorsValues() {
     console.log('opacityArray: ', opacityArray)
     console.log('strokeOpacityArray: ', strokeOpacityArray)
 
-    return {
-        number_of_groups: numberOfGroups,        // Number
-        stroke_array: strokeArray,               // Array
-        opacity_array: opacityArray,             // Array
-        stroke_opacity_array: strokeOpacityArray // Array
-    }
+    return new Map ([
+        ['number_of_groups',     numberOfGroups    ], // Number
+        ['stroke_array',         strokeArray       ], // Array
+        ['opacity_array',        opacityArray      ], // Array
+        ['stroke_opacity_array', strokeOpacityArray]  // Array
+    ])
 }
 
 // Get the values from group colors <g> element string
@@ -227,4 +237,4 @@ function getNumberOfGroups(inputSvg) {
 
 
 
-// generateGroupColorsHtmlElements(getOpacityStepsValue())
+// generateGroupColorsHtmlElements(getOpacitySteps())

@@ -1,9 +1,9 @@
 function changeOpacitySelectOptionsAsNewStep(step) {
 
     const groupColorsValues = getGroupColorsValues();
-    const numberOfGroups = groupColorsValues.number_of_groups
-    const opacity = groupColorsValues.opacity_array
-    const strokeOpacity = groupColorsValues.stroke_opacity_array
+    const numberOfGroups = groupColorsValues.get('number_of_groups')
+    const opacity        = groupColorsValues.get('opacity_array')
+    const strokeOpacity  = groupColorsValues.get('stroke_opacity_array')
 
     // group colors の数だけ繰り返す
     for (let i = 0; i < numberOfGroups; i++) {

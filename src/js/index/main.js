@@ -1,6 +1,7 @@
 (async function () {
-    const headerRectHeight = generateGroupColorsHtmlElements(getOpacityStepsValue())
-    // const headerRectHeight = generateGroupColorsHtmlElements(getOpacityStepsValue())
+    // Generate the HTML elements of group attrs color-pickers
+    generateGroupColorsHtmlElements(getOpacitySteps())
+    // generateGroupColorsHtmlElements(getInitialOpacitySteps())
 
     await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm')) // Path that relative from index.html
     const svgInputElement = document.querySelector('#input-svg') // <textarea id="input-svg" ... >
@@ -500,7 +501,6 @@
     // The half of `<input type="range" max="512">` is 256
     setPngSize(256);
 
-    //generateGroupColorsHtmlElements(getOpacityStepsValue())
 
     // 非同期にgetBoundingClientRect()を呼び出す
     setTimeout(() => {
@@ -515,7 +515,6 @@
         console.log('headerRect: ', headerRect.width, headerRect.height);
 
         adjustBox(headerRect.height)
-        // adjustBox(headerRectHeight)
     }, 0);
 
 })(); // `(async function () {` の 即時実行関数

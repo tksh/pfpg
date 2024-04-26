@@ -20,7 +20,7 @@ function adjustBox(headerRectHeight) {
     console.log('body: ', bodyRect.width, bodyRect.height);
 
     // <header>
-    //const headerRectHeight = generateGroupColorsHtmlElements(getOpacityStepsValue())
+    //const headerRectHeight = generateGroupColorsHtmlElements(getOpacitySteps())
     console.log('headerRectHeight: ', headerRectHeight)
 
     // const groupColorsStrokePicker0Elem = document.querySelector('group-colors-stroke-0');

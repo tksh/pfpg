@@ -76,10 +76,10 @@ function getPixelSizeWxH() {
 function getCurrentStatus() {
 
     // Lines group attributes (stroke, opacity, stroke-opacity)
-    const numberOfGroupsAndColorsValueArray = getGroupColorsValues()
-    const stArray = numberOfGroupsAndColorsValueArray.stroke_array
-    const opArray = numberOfGroupsAndColorsValueArray.opacity_array
-    const soArray = numberOfGroupsAndColorsValueArray.stroke_opacity_array
+    const groupColorsValues = getGroupColorsValues()
+    const stArray = groupColorsValues.get('stroke_array')
+    const opArray = groupColorsValues.get('opacity_array')
+    const soArray = groupColorsValues.get('stroke_opacity_array')
     console.log(stArray) // Type: String | e.g.: Array(5) [ "#97FF6E", "#000000", "#8ACAFF", "#eeeeee", "#ffffff" ]
     console.log(opArray) // Type: String | e.g.: Array(5) [ "0.5", "1", "1", "1", "1" ]
     console.log(soArray) // Type: String | e.g.: Array(5) [ "1", "0.8", "1", "1", "1" ]
