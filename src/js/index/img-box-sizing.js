@@ -1,4 +1,4 @@
-function adjustBox() {
+function adjustBox(headerRectHeight) {
 
     // Get elements sizes
 
@@ -9,7 +9,7 @@ function adjustBox() {
     // viewport (Not accurate :/)
     const viewport = document.documentElement;
     const viewportRect = viewport.getBoundingClientRect();
-    console.log('viewport: ', viewportRect.width, viewportRect.height); // 1850 1297
+    console.log(`viewport: w ${viewportRect.width} x h ${viewportRect.height}`); // 1850 1297
     // kの方法で得た viewportRect.height の数値は 1297 で
     // 実際の表示ディスプレイの縦の高さ 1080 を超えてしまって 実際の数値を取得出来ていない
     // window.innerHeight を使うべき
@@ -20,9 +20,24 @@ function adjustBox() {
     console.log('body: ', bodyRect.width, bodyRect.height);
 
     // <header>
-    const headerElem = document.querySelector('header');
-    const headerRect = headerElem.getBoundingClientRect();
-    console.log('header: ', headerRect.width, headerRect.height);
+    //const headerRectHeight = generateGroupColorsHtmlElements(getOpacityStepsValue())
+    console.log('headerRectHeight: ', headerRectHeight)
+
+    // const groupColorsStrokePicker0Elem = document.querySelector('group-colors-stroke-0');
+    // console.log('groupColorsStrokePicker0Elem: ', groupColorsStrokePicker0Elem)
+
+    // const tabOneElem = document.getElementById('tab-1');
+    // const tabOneRect = tabOneElem.getBoundingClientRect();
+    // console.log('tabOne: ', tabOneRect.width, tabOneRect.height);
+
+    // const headerElem = document.querySelector('header');
+    // console.log('headerElem: ', headerElem)
+
+    // const headerRect = {
+    //     size: headerElem.getBoundingClientRect(),
+    //     number: numberOfGroups
+    // }
+    // console.log(`header: ${headerRect.size.width}, ${headerRect.size.height} for ${numberOfGroups} groups color pickers`);
 
     // <main>
     const mainElem = document.querySelector('main');
@@ -99,13 +114,17 @@ function adjustBox() {
     // Calc
 
     // 全体の height を算出
-    const totalHeight = headerRect.height + mainRect.height + footerRect.height
+    const totalHeight = headerRectHeight + mainRect.height + footerRect.height
     console.log('totalHeight (header + main + footer):', totalHeight)
+
+    // header + main の height を算出
+    const headerAndMainHeight = headerRectHeight + mainRect.height
+    console.log('headerAndMainHeight (header + main):', headerAndMainHeight)
 
     // window.innerHeight と比較してどちらが 大きい数値か？ (画面からはみ出ているか？そうじゃないか？)
     // はみ出ていたら diffHeight の分だけ 正方形の box を小さくする
-    const diffHeight = Math.round(window.innerHeight - totalHeight)
-    console.log(`diffHeight (window.innerHeight - totalHeight) = ${window.innerHeight} - ${totalHeight} = `, diffHeight)
+    const diffHeight = Math.round(window.innerHeight - headerAndMainHeight)
+    console.log(`diffHeight (window.innerHeight - headerAndMainHeight) = ${window.innerHeight} - ${headerAndMainHeight} = `, diffHeight)
     //  1004 - 1297 =  -293
 
 
@@ -161,6 +180,7 @@ function adjustBox() {
 
 
         }
+
     } else { // モバイルの場合
         console.log('window.innerWidth < 512 => Mobile view mode')
         // => 何もしない (CSSだけで機能している)
@@ -169,7 +189,7 @@ function adjustBox() {
 
 }
 // ウィンドウのサイズ変更検知に関係なく最初に一度行う  imgBoxElem, textareaBoxElem のリサイズ
-adjustBox()
+// adjustBox()
 
 // 以下の サイズ変更を監視して常に動的に画面サイズにフィットさせる機能は disableする
 // 上手く動かないことが多いのと モバイル端末でソフトウェアキーボードが出るたびに画面サイズが変更されたと判断されて いちいち処理が走ってしまうのを避けるため

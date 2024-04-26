@@ -6,9 +6,9 @@ function generateGroupColorsSvgTags(matches) {
 
     const color = splitOpacityAndExtended(matches[1], matches[2], matches[3]) // stroke, opacity, stroke-opacity
     // console.log('color: ', color) // e.g.: (4) [undefined, '#4E8D09', '0.6', '1']
-    const opacity       = color[2] !== undefined ? color[2] : "1"; // opacity       が明示的に指定されていない場合は 1 とみなす
+    const opacity = color[2] !== undefined ? color[2] : "1"; // opacity       が明示的に指定されていない場合は 1 とみなす
     const strokeOpacity = color[3] !== undefined ? color[3] : "1"; // strokeOpacity が明示的に指定されていない場合は 1 とみなす
-    const groupElem     = `<g stroke="${color[1]}" opacity="${opacity}" stroke-opacity="${strokeOpacity}">`
+    const groupElem = `<g stroke="${color[1]}" opacity="${opacity}" stroke-opacity="${strokeOpacity}">`
 
     console.log('groupElem: ', groupElem) // e.g.: <g stroke="#4E8D09" opacity="0.6" stroke-opacity="1">
     return groupElem
@@ -79,7 +79,19 @@ function generateGroupColorsHtmlElements(step) {
 
         groupColorsDiv.appendChild(optsCellDiv)
     }
-    return numberOfGroups
+
+    //const groupColorsRect = groupColorsDiv.getBoundingClientRect()
+    //console.log('groupColorsRect: ', groupColorsRect.width, groupColorsRect.height); // 0
+    //return groupColorsRect.height
+
+    // 非同期にgetBoundingClientRect()を呼び出す
+    // setTimeout(() => {
+    //     const headerDiv = document.querySelector('header')
+    //     console.log('headerDiv: ', headerDiv)
+    //     const headerRect = headerDiv.getBoundingClientRect()
+    //     console.log('headerRect: ', headerRect.width, headerRect.height);
+    //     return headerRect.height;
+    // }, 0);
 }
 
 
@@ -215,4 +227,4 @@ function getNumberOfGroups(inputSvg) {
 
 
 
-generateGroupColorsHtmlElements(getOpacityStepsValue())
+// generateGroupColorsHtmlElements(getOpacityStepsValue())

@@ -1,4 +1,7 @@
 (async function () {
+    const headerRectHeight = generateGroupColorsHtmlElements(getOpacityStepsValue())
+    // const headerRectHeight = generateGroupColorsHtmlElements(getOpacityStepsValue())
+
     await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm')) // Path that relative from index.html
     const svgInputElement = document.querySelector('#input-svg') // <textarea id="input-svg" ... >
     //console.log('svgInputElement.value.trim(): ', svgInputElement.value.trim()) // <svg xmlns="http://www.w3.org/2000/svg" ... </svg>
@@ -497,8 +500,22 @@
     // The half of `<input type="range" max="512">` is 256
     setPngSize(256);
 
-    // Initial PNG rendering
-    // executeSvg2png(svgInputElement.value.trim())
-    executeSvg2png({ target: { value: svgInputElement.value.trim() } })
+    //generateGroupColorsHtmlElements(getOpacityStepsValue())
+
+    // 非同期にgetBoundingClientRect()を呼び出す
+    setTimeout(() => {
+
+        // Initial PNG rendering
+        // executeSvg2png(svgInputElement.value.trim())
+        executeSvg2png({ target: { value: svgInputElement.value.trim() } })
+
+        const headerDiv = document.querySelector('header')
+        console.log('headerDiv: ', headerDiv)
+        const headerRect = headerDiv.getBoundingClientRect()
+        console.log('headerRect: ', headerRect.width, headerRect.height);
+
+        adjustBox(headerRect.height)
+        // adjustBox(headerRectHeight)
+    }, 0);
 
 })(); // `(async function () {` の 即時実行関数
