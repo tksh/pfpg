@@ -20,24 +20,7 @@ function adjustBox(headerRectHeight) {
     console.log('body: ', bodyRect.width, bodyRect.height);
 
     // <header>
-    //const headerRectHeight = generateGroupColorsHtmlElements(getOpacitySteps())
     console.log('headerRectHeight: ', headerRectHeight)
-
-    // const groupColorsStrokePicker0Elem = document.querySelector('group-colors-stroke-0');
-    // console.log('groupColorsStrokePicker0Elem: ', groupColorsStrokePicker0Elem)
-
-    // const tabOneElem = document.getElementById('tab-1');
-    // const tabOneRect = tabOneElem.getBoundingClientRect();
-    // console.log('tabOne: ', tabOneRect.width, tabOneRect.height);
-
-    // const headerElem = document.querySelector('header');
-    // console.log('headerElem: ', headerElem)
-
-    // const headerRect = {
-    //     size: headerElem.getBoundingClientRect(),
-    //     number: numberOfGroups
-    // }
-    // console.log(`header: ${headerRect.size.width}, ${headerRect.size.height} for ${numberOfGroups} groups color pickers`);
 
     // <main>
     const mainElem = document.querySelector('main');

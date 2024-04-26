@@ -1,7 +1,7 @@
 (async function () {
     // Generate the HTML elements of group attrs color-pickers
-    generateGroupColorsHtmlElements(getOpacitySteps())
-    // generateGroupColorsHtmlElements(getInitialOpacitySteps())
+    // generateGroupColorsHtmlElements(getOpacitySteps())
+    generateGroupColorsHtmlElements(getInitialOpacitySteps())
 
     await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm')) // Path that relative from index.html
     const svgInputElement = document.querySelector('#input-svg') // <textarea id="input-svg" ... >
@@ -509,12 +509,11 @@
         // executeSvg2png(svgInputElement.value.trim())
         executeSvg2png({ target: { value: svgInputElement.value.trim() } })
 
-        const headerDiv = document.querySelector('header')
-        console.log('headerDiv: ', headerDiv)
-        const headerRect = headerDiv.getBoundingClientRect()
-        console.log('headerRect: ', headerRect.width, headerRect.height);
-
+        // Adjust the contents (header + main) height to viewport
+        const headerRect = document.querySelector('header').getBoundingClientRect()
+        console.log('headerRect size (for adjusting the contents as viewport size): ', headerRect.width, headerRect.height);
         adjustBox(headerRect.height)
+
     }, 0);
 
 })(); // `(async function () {` の 即時実行関数
