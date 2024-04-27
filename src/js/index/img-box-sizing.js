@@ -55,7 +55,7 @@ function adjustBox(headerRectHeight) {
     if (window.innerWidth > 512        // モバイルではない 場合
         && window.innerHeight > 720) { // 縦の幅が狭くない 場合
 
-            console.log('window.innerWidth and window.innerHeight (window.innerWidth > 512 && window.innerHeight > 720): ', window.innerWidth, window.innerHeight)
+        console.log('window.innerWidth and window.innerHeight (window.innerWidth > 512 && window.innerHeight > 720): ', window.innerWidth, window.innerHeight)
 
         // outputの正方形の一辺よりも 計算で導き出した 画像表示の縦の長さ が 同じか もしくは 短かった 場合
         // => id="img-box" と id="textarea-box" の正方形divの一辺 を 計算で導き出した 縦の長さ とする
@@ -89,7 +89,6 @@ function adjustBox(headerRectHeight) {
     } else { // モバイル & 縦の幅が狭い 場合
         console.log('window.innerWidth < 512 => Mobile view mode, or window.innerHeight < 720 => The display height is too small to fit the output area.')
         // => 何もしない (CSSだけで機能している)
-
     }
 
 }

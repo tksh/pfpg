@@ -101,6 +101,7 @@ main {
 
 /* For #input and #output */
 .cell {
+    width: 50%;
     padding: 1rem;
     flex: 1;
     display: flex;
@@ -341,6 +342,10 @@ div#samples figure {
 
     .opts {
         flex-direction: column;
+    }
+
+    .cell {
+        width: 100%;
     }
 
     #png-info,
