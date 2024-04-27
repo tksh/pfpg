@@ -1,18 +1,10 @@
 function adjustBox(headerRectHeight) {
 
-    // Get elements sizes
+    // Get the element rect sizes
 
     // window.innerHeightを使用してビューポートの高さを取得
     const windowInnerHeight = window.innerHeight;
     console.log('windowInnerHeight: ', windowInnerHeight) // 1004
-
-    // viewport (Not accurate :/)
-    const viewport = document.documentElement;
-    const viewportRect = viewport.getBoundingClientRect();
-    console.log(`viewport: w ${viewportRect.width} x h ${viewportRect.height}`); // 1850 1297
-    // kの方法で得た viewportRect.height の数値は 1297 で
-    // 実際の表示ディスプレイの縦の高さ 1080 を超えてしまって 実際の数値を取得出来ていない
-    // window.innerHeight を使うべき
 
     // <body>
     const bodyElem = document.querySelector('body');
@@ -27,112 +19,43 @@ function adjustBox(headerRectHeight) {
     const mainRect = mainElem.getBoundingClientRect();
     console.log('main: ', mainRect.width, mainRect.height);
 
-    // <div id="customization">
-    const customizationElem = document.getElementById('customization');
-    const customizationRect = customizationElem.getBoundingClientRect();
-    console.log('customization: ', customizationRect.width, customizationRect.height);
-
-
-    // <div id="input-and-output">
-    const inputAndOutputElem = document.getElementById('input-and-output');
-    const inputAndOutputRect = inputAndOutputElem.getBoundingClientRect();
-    console.log('input-and-output: ' + inputAndOutputRect.width + ' x ' + inputAndOutputRect.height);
-
-    // <div id="input">
-    const inputElem = document.getElementById('input');
-    const inputRect = inputElem.getBoundingClientRect();
-    console.log('input: ' + inputRect.width, inputRect.height);
-    // <div id="output">
-    const outputElem = document.getElementById('output');
-    const outputRect = outputElem.getBoundingClientRect();
-    console.log('output: ' + outputRect.width, outputRect.height);
+    // Get the output rect boxes to resize
 
     // <div id="img-box">
     const imgBoxElem = document.getElementById('img-box');
     const imgBoxRect = imgBoxElem.getBoundingClientRect();
     console.log('img-box: ', imgBoxRect.width, imgBoxRect.height);
+
     // <div id="textarea-box">
     const textareaBoxElem = document.getElementById('textarea-box');
     const textareaBoxRect = textareaBoxElem.getBoundingClientRect();
     console.log('textarea-box: ', textareaBoxRect.width, textareaBoxRect.height);
 
-    // <div id="img">
-    const imgElem = document.getElementById('img');
-    const imgRect = imgElem.getBoundingClientRect();
-    console.log('img: ', imgRect.width, imgRect.height);
-    // <div id="input-svg">
-    const textareaElem = document.getElementById('input-svg');
-    const textareaRect = textareaElem.getBoundingClientRect();
-    console.log('input-svg: ', textareaRect.width, textareaRect.height);
-
-    // <div class="header-info">
-    const headerInfoElements = document.getElementsByClassName('header-info');
-    const headerInfoElemPng = headerInfoElements[0]
-    const headerInfoElemSvg = headerInfoElements[1]
-
-    const headerInfoRectPng = headerInfoElemPng.getBoundingClientRect()
-    const headerInfoRectSvg = headerInfoElemSvg.getBoundingClientRect()
-    console.log('headerInfoRectPng: ', headerInfoRectPng.width, headerInfoRectPng.height)
-    console.log('headerInfoRectSvg: ', headerInfoRectSvg.width, headerInfoRectSvg.height)
-    //for (let i = 0; i < headerInfoElements.length; i++) {
-    //    const headerInfoRect = headerInfoElements[i].getBoundingClientRect();
-    //    console.log(`headerInfoElements [${i}]: `, headerInfoRect.width, headerInfoRect.height)
-    //}
-
-    // <div class="download-button">
-    const downloadButtonElements = document.getElementsByClassName('download-button');
-    const downloadButtonElemPng = downloadButtonElements[0]
-    const downloadButtonElemSvg = downloadButtonElements[1]
-    const downloadButtonRectPng = downloadButtonElemPng.getBoundingClientRect();
-    const downloadButtonRectSvg = downloadButtonElemSvg.getBoundingClientRect();
-    console.log('downloadButtonRectPng: ', downloadButtonRectPng.width, downloadButtonRectPng.height);
-    console.log('downloadButtonRectSvg: ', downloadButtonRectSvg.width, downloadButtonRectSvg.height);
-
-    // <footer>
-    const footerElem = document.querySelector('footer');
-    const footerRect = footerElem.getBoundingClientRect();
-    console.log('footer: ', footerRect.width, footerRect.height);
-
 
     // Calc
-
-    // 全体の height を算出
-    const totalHeight = headerRectHeight + mainRect.height + footerRect.height
-    console.log('totalHeight (header + main + footer):', totalHeight)
 
     // header + main の height を算出
     const headerAndMainHeight = headerRectHeight + mainRect.height
     console.log('headerAndMainHeight (header + main):', headerAndMainHeight)
 
-    // window.innerHeight と比較してどちらが 大きい数値か？ (画面からはみ出ているか？そうじゃないか？)
-    // はみ出ていたら diffHeight の分だけ 正方形の box を小さくする
+    // window.innerHeight と比較してどちらが 大きい数値か？ (画面から はみ出ているか？ そうではないか？)
+    // はみ出ていたら diffHeight の分だけ 正方形 (imgBoxElem, textareaBoxElem) の box を小さくする
     const diffHeight = Math.round(window.innerHeight - headerAndMainHeight)
-    console.log(`diffHeight (window.innerHeight - headerAndMainHeight) = ${window.innerHeight} - ${headerAndMainHeight} = `, diffHeight)
-    //  1004 - 1297 =  -293
+    console.log(`diffHeight (window.innerHeight - headerAndMainHeight) = ${window.innerHeight} - ${headerAndMainHeight} = ${diffHeight}`)
+    // e.g.: 1004 - 1297 =  -293
 
-
-    // xxxxx.style.height と xxxxxRect.height の 値が同じかどうか確認しようとしたけど無理だった
-    // xxxxx.style.heightの結果は `<empty string>` になってしまう
-    // `.style.height` は インラインスタイルのみを取得する
-    // もし高さが CSSファイル内で スタイルとして定義されている場合 この方法では取得できない
-    // `window.getComputedStyle()` を使用して計算されたスタイルを取得する必要がある
-    console.log('imgBoxElem.style.height: ', imgBoxElem.style.height) // <empty string>
-    console.log('textareaBoxElem.style.height: ', textareaBoxElem.style.height) // <empty string>
-    console.log('imgBoxRect.height: ', imgBoxRect.height) // 343
-    console.log('textareaBoxRect.height: ', textareaBoxRect.height) // 343
-
-
-    // boxSizeCalculated から overflowedHeightSize を引いて
-    // 実際に 'img-box', 'textarea=box' に適用すべき 縮小させた imgBoxHeightNew を算出
-    //const newBoxHeightSize = Math.round(boxSizeCalculated - overflowedHeightSize)
+    // 'img-box', 'textarea=box' に適用すべき imgBoxHeightNew を算出
     const imgBoxHeightNew = Math.round(imgBoxRect.height + diffHeight)
-    //const newBoxHeightSize = Math.round(boxSizeCalculated)// 算出したそのままの数値を適用
     console.log('imgBoxRect.height => imgBoxHeightNew: ', imgBoxRect.height, imgBoxHeightNew) //  480 443
 
+
+    // Adjust
+
     // ウィンドウサイズによって適用するかどうかを判定する
-    if ((window.innerWidth) > 512) { // モバイルではない場合
-        console.log('window.innerWidth: ', window.innerWidth)
-        console.log('window.innerWidth > 512 => Not mobile view mode')
+    if (window.innerWidth > 512        // モバイルではない 場合
+        && window.innerHeight > 720) { // 縦の幅が狭くない 場合
+
+            console.log('window.innerWidth and window.innerHeight (window.innerWidth > 512 && window.innerHeight > 720): ', window.innerWidth, window.innerHeight)
 
         // outputの正方形の一辺よりも 計算で導き出した 画像表示の縦の長さ が 同じか もしくは 短かった 場合
         // => id="img-box" と id="textarea-box" の正方形divの一辺 を 計算で導き出した 縦の長さ とする
@@ -151,21 +74,20 @@ function adjustBox(headerRectHeight) {
                 console.log('imgBoxRect.height < imgBoxHeightNew: ', imgBoxRect.height + ' < ' + imgBoxHeightNew) // 480 < 443
 
                 // PNG画像と SVGテキストエリアの それぞれ 縦と横のサイズを 全て同じ値に変更する => 二つの同じサイズの正方形が出来る
-                imgBoxElem.style.height      = imgBoxHeightNew + "px"
+                imgBoxElem.style.height = imgBoxHeightNew + "px"
                 textareaBoxElem.style.height = imgBoxHeightNew + "px"
-                imgBoxElem.style.width       = imgBoxHeightNew + "px"
-                textareaBoxElem.style.width  = imgBoxHeightNew + "px"
+                imgBoxElem.style.width = imgBoxHeightNew + "px"
+                textareaBoxElem.style.width = imgBoxHeightNew + "px"
             }
             // outputの正方形の一辺よりも 計算で導き出した 画像表示の縦の長さ が長かった場合
             // => 何もしない (CSSだけで機能している)
+
         } else if (imgBoxHeightNew > imgBoxRect.height) {
             console.log('imgBoxHeightNew > imgBoxRect.height')
-
-
         }
 
-    } else { // モバイルの場合
-        console.log('window.innerWidth < 512 => Mobile view mode')
+    } else { // モバイル & 縦の幅が狭い 場合
+        console.log('window.innerWidth < 512 => Mobile view mode, or window.innerHeight < 720 => The display height is too small to fit the output area.')
         // => 何もしない (CSSだけで機能している)
 
     }

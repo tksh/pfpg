@@ -509,7 +509,7 @@
         // executeSvg2png(svgInputElement.value.trim())
         executeSvg2png({ target: { value: svgInputElement.value.trim() } })
 
-        // Adjust the contents (header + main) height to viewport
+        // To fit the contents (header + main) height to viewport
         const headerRect = document.querySelector('header').getBoundingClientRect()
         console.log('headerRect size (for adjusting the contents as viewport size): ', headerRect.width, headerRect.height);
         adjustBox(headerRect.height)
