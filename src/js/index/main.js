@@ -1,6 +1,5 @@
 (async function () {
     // Generate the HTML elements of group attrs color-pickers
-    // generateGroupColorsHtmlElements(getOpacitySteps())
     generateGroupColorsHtmlElements(getInitialOpacitySteps())
 
     await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm')) // Path that relative from index.html
@@ -233,16 +232,14 @@
         const recoverViewbox = recoverCurrentOptionValue(recoverShapeToTrim, patternViewbox, valueOfViewbox);
 
         // Group colors (stroke, opacity, stroke-opacity)
-        const recoverGroupColors = recoverCurrentGroupColorsValues(recoverViewbox, patternGroupColors, matchOfGroupColors)
+        const updatedSvg = recoverCurrentGroupColorsValues(recoverViewbox, patternGroupColors, matchOfGroupColors)
 
 
         // 保存しておいた設定の値を 全て元に戻した 最終的な新しいSVG文字列を <textarea>のvalue属性に挿入する
-        svgTextarea.value = recoverGroupColors
+        svgTextarea.value = updatedSvg
 
         // executeSvg2png関数を呼び出す
-        executeSvg2png({ target: { value: recoverGroupColors } })
-        // executeSvg2png({ target: recoverGroupColors })
-        // executeSvg2png(recoverGroupColors)
+        executeSvg2png({ target: { value: updatedSvg } })
     });
 
     /////////////////////////////// Path mode ////////////////////////////////
@@ -502,17 +499,15 @@
     setPngSize(256);
 
 
-    // 非同期にgetBoundingClientRect()を呼び出す
+
+    // 非同期に関数を呼び出す
     setTimeout(() => {
 
         // Initial PNG rendering
-        // executeSvg2png(svgInputElement.value.trim())
         executeSvg2png({ target: { value: svgInputElement.value.trim() } })
 
-        // To fit the contents (header + main) height to viewport
-        const headerRect = document.querySelector('header').getBoundingClientRect()
-        console.log('headerRect size (for adjusting the contents as viewport size): ', headerRect.width, headerRect.height);
-        adjustBox(headerRect.height)
+        // To fit the contents (header + main) height as viewport height
+        adjustBox()
 
     }, 0);
 

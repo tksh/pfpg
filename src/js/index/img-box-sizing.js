@@ -1,4 +1,4 @@
-function adjustBox(headerRectHeight) {
+function adjustBox() {
 
     // Get the element rect sizes
 
@@ -12,7 +12,9 @@ function adjustBox(headerRectHeight) {
     console.log('body: ', bodyRect.width, bodyRect.height);
 
     // <header>
-    console.log('headerRectHeight: ', headerRectHeight)
+    const headerElem = document.querySelector('header');
+    const headerRect = headerElem.getBoundingClientRect();
+    console.log('headerRect.height: ', headerRect.height)
 
     // <main>
     const mainElem = document.querySelector('main');
@@ -35,7 +37,7 @@ function adjustBox(headerRectHeight) {
     // Calc
 
     // header + main の height を算出
-    const headerAndMainHeight = headerRectHeight + mainRect.height
+    const headerAndMainHeight = headerRect.height + mainRect.height
     console.log('headerAndMainHeight (header + main):', headerAndMainHeight)
 
     // window.innerHeight と比較してどちらが 大きい数値か？ (画面から はみ出ているか？ そうではないか？)
@@ -66,8 +68,8 @@ function adjustBox(headerRectHeight) {
 
             // PNG画像と SVGテキストエリアの boxの それぞれ 縦と横のサイズを 全て同じ値に変更する => ２つの 同じサイズの 正方形div が 並ぶ
             imgBoxElem.style.height      = imgBoxHeightNew + "px"
-            textareaBoxElem.style.height = imgBoxHeightNew + "px"
             imgBoxElem.style.width       = imgBoxHeightNew + "px"
+            textareaBoxElem.style.height = imgBoxHeightNew + "px"
             textareaBoxElem.style.width  = imgBoxHeightNew + "px"
         }
 
