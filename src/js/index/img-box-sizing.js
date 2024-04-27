@@ -51,49 +51,41 @@ function adjustBox(headerRectHeight) {
 
     // Adjust
 
-    // ウィンドウサイズによって適用するかどうかを判定する
-    if (window.innerWidth > 512        // モバイルではない 場合
-        && window.innerHeight > 720) { // 縦の幅が狭くない 場合
+    // ウィンドウサイズによって 適用するかどうかを判定する
+    if (window.innerWidth > 512         // モバイルではなく
+        && window.innerHeight >= 720) { // 縦の幅が狭くない (HDディスプレイ以上) 場合
 
-        console.log('window.innerWidth and window.innerHeight (window.innerWidth > 512 && window.innerHeight > 720): ', window.innerWidth, window.innerHeight)
+        console.log('window.innerWidth and window.innerHeight (window.innerWidth > 512 && window.innerHeight >= 720): ', window.innerWidth, window.innerHeight)
 
-        // outputの正方形の一辺よりも 計算で導き出した 画像表示の縦の長さ が 同じか もしくは 短かった 場合
-        // => id="img-box" と id="textarea-box" の正方形divの一辺 を 計算で導き出した 縦の長さ とする
+        // 計算で導き出した 縦の幅で ２つのoutput正方形divサイズを 大きく出来る 場合
+        // => id="img-box" と id="textarea-box" の output正方形divを 計算で導き出したサイズに 変更する
 
-        // if (newBoxHeightSize <= imgBoxRect.height) { // 一旦画面サイズを小さくしてから大きくリサイズしたときに 小さいまま
-        // if (newBoxHeightSize !== imgBoxRect.height) { // 下の else if も満たしてしまい 大きくなりすぎる
-        if (imgBoxHeightNew <= (window.innerWidth / 2) && imgBoxHeightNew !== imgBoxRect.height) {
-            // ウィンドウサイズの半分以下 という条件を付ければ 大きくなり過ぎることは なくなった
+        if (imgBoxHeightNew < imgBoxRect.width) { // 計算で導き出した output正方形divサイズの 横の幅が 元々の output正方形divサイズの幅 よりも 小さい場合
 
-            console.log('imgBoxHeightNew <= imgBoxRect.height')
-            // styleプロパティのheightに新しい値を設定する
-            // id="img-box" と id="textarea-box" に オーバフローしたサイズ分を マイナスした imgBoxHeightNew を適用する
-            // 新しいサイズが現在のサイズよりも大きいときにだけ適用する
-            // そうしないと縦の幅が狭いときに画像の比率が変わってまで画面サイズに合わせてしまう (1/1の比率が保たれない)
-            if (imgBoxElem.style.height < imgBoxHeightNew) {
-                console.log('imgBoxRect.height < imgBoxHeightNew: ', imgBoxRect.height + ' < ' + imgBoxHeightNew) // 480 < 443
+            console.log(`Increase the height of img and textarea boxes: ${imgBoxRect.height} => ${imgBoxHeightNew}`)
 
-                // PNG画像と SVGテキストエリアの それぞれ 縦と横のサイズを 全て同じ値に変更する => 二つの同じサイズの正方形が出来る
-                imgBoxElem.style.height = imgBoxHeightNew + "px"
-                textareaBoxElem.style.height = imgBoxHeightNew + "px"
-                imgBoxElem.style.width = imgBoxHeightNew + "px"
-                textareaBoxElem.style.width = imgBoxHeightNew + "px"
-            }
-            // outputの正方形の一辺よりも 計算で導き出した 画像表示の縦の長さ が長かった場合
-            // => 何もしない (CSSだけで機能している)
-
-        } else if (imgBoxHeightNew > imgBoxRect.height) {
-            console.log('imgBoxHeightNew > imgBoxRect.height')
+            // PNG画像と SVGテキストエリアの boxの それぞれ 縦と横のサイズを 全て同じ値に変更する => ２つの 同じサイズの 正方形div が 並ぶ
+            imgBoxElem.style.height      = imgBoxHeightNew + "px"
+            textareaBoxElem.style.height = imgBoxHeightNew + "px"
+            imgBoxElem.style.width       = imgBoxHeightNew + "px"
+            textareaBoxElem.style.width  = imgBoxHeightNew + "px"
         }
 
-    } else { // モバイル & 縦の幅が狭い 場合
-        console.log('window.innerWidth < 512 => Mobile view mode, or window.innerHeight < 720 => The display height is too small to fit the output area.')
+        // 計算で導き出した output正方形divサイズの 横の幅が 元々の output正方形divサイズの幅 よりも 大きい場合
+        // すでに 横幅の50%を使っているので 大きく出来る余地がない
         // => 何もしない (CSSだけで機能している)
+
+    } else { // モバイル or 画面の縦の幅が 狭すぎる 場合
+        console.log(`window.innerWidth < 512 => Mobile view mode, or window.innerHeight < 720 => The display height ${window.innerHeight} is too small to fit the output area.`)
+        // => 何もしない (CSSだけで機能している)
+        // 'window.innerHeight < 720' のような 縦の幅が狭すぎる画面のときは 無理にフィットさせると 画像表示エリアが 小さくなり過ぎるので そのまま横幅の50%の表示サイズから 変更せずに スクロールで見るようにする
     }
 
 }
-// ウィンドウのサイズ変更検知に関係なく最初に一度行う  imgBoxElem, textareaBoxElem のリサイズ
-// adjustBox()
+// Execute at main.js for initial rendering.
+
+
+
 
 // 以下の サイズ変更を監視して常に動的に画面サイズにフィットさせる機能は disableする
 // 上手く動かないことが多いのと モバイル端末でソフトウェアキーボードが出るたびに画面サイズが変更されたと判断されて いちいち処理が走ってしまうのを避けるため
