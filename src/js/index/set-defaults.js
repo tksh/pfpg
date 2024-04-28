@@ -6,9 +6,10 @@ function setDefaultValueOfOptions() {
     // SVGのテキストを取得
     const inputSvg = getInputSvg()
 
+    // Get each attrs values, then set it as default
     setDefaultOfBaseColor(inputSvg) // Base color picker
     setDefaultOfAntiAlias(inputSvg) // Anti-alias selector
-    setDefaultOfOpacitySteps(inputSvg)     // Width pixel size input
+    setDefaultOfOpacitySteps()      // Opacity steps
 
     // Color-picker: Base color (base rect fill color)
     function setDefaultOfBaseColor(inputSvg) {
@@ -32,7 +33,7 @@ function setDefaultValueOfOptions() {
         inputElement.value = eightDigitsHex;
         // The specified value "#99999999" does not conform to the required format.  The format is "#rrggbb" where rr, gg, bb are two-digit hexadecimal numbers.
 
-        console.log(`Default base color value is "${eightDigitsHex}"`)
+        console.log(`Default 'Base color' value is "${eightDigitsHex}"`)
     }
 
 
@@ -58,13 +59,20 @@ function setDefaultValueOfOptions() {
             }
         }
 
-        console.log(`Default shape-rendering value is "${defaultShapeRendering}"`)
+        console.log(`Default 'shape-rendering' value is "${defaultShapeRendering}"`)
     }
 
 
     // Number and Range input: Width pixel size
-    function setDefaultOfOpacitySteps(inputSvg) {
+    function setDefaultOfOpacitySteps() {
 
+        // Get initial opacity steps detected from original decoded SVG
+        const steps = getInitialOpacitySteps() // Number, 0.2 | 0.1 | 0.04
+
+        // Set as default value
+        document.getElementById("opacity-steps").value = steps
+
+        console.log(`Default 'Opacity steps' value is "${steps}"`)
     }
 
 }
