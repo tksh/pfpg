@@ -1,17 +1,17 @@
-setDefaultsForPreference()
+setDefaultValueOfOptions()
 
-function setDefaultsForPreference() {
-    console.log('setDefaultsForPreference() executed')
+function setDefaultValueOfOptions() {
+    console.log('setDefaultValueOfOptions() executed')
 
     // SVGのテキストを取得
     const inputSvg = getInputSvg()
 
-    setDefaultForBaseColorPicker(inputSvg)
-    setDefaultForAntiAliasSelector(inputSvg)
-    setDefaultForWidth(inputSvg)
+    setDefaultOfBaseColor(inputSvg) // Base color picker
+    setDefaultOfAntiAlias(inputSvg) // Anti-alias selector
+    setDefaultOfOpacitySteps(inputSvg)     // Width pixel size input
 
     // Color-picker: Base color (base rect fill color)
-    function setDefaultForBaseColorPicker(inputSvg) {
+    function setDefaultOfBaseColor(inputSvg) {
 
         // Get the base color hex code
         const pattern = /<rect width="100%" height="100%" fill="(.*)"/g; // <<rect width="100%" height="100%" fill="#fff9"> is default base rect color
@@ -20,7 +20,7 @@ function setDefaultsForPreference() {
         // Array
         // 0: '<rect width="100%" height="100%" fill="#ccc"'
         // 1: "#ccc"
-        // [1]の hexcode部分を 透明度を加えて 8桁のフォーマットに直して 新しい値 として設定
+        // [1]の hex-code部分を 透明度を加えて 8桁のフォーマットに直して 新しい値 として設定
         const eightDigitsHex = mergeOpacityAndExtended(matches[1])
         console.log('eightDigitsHex: ', eightDigitsHex)
 
@@ -37,7 +37,7 @@ function setDefaultsForPreference() {
 
 
     // Selector: Anti-aliasing (On (geometricPrecision) or Off (crispEdges))
-    function setDefaultForAntiAliasSelector(inputSvg) {
+    function setDefaultOfAntiAlias(inputSvg) {
 
         // Get the 'shape-rendering' attr value
         const pattern = /shape-rendering="(.*)">/; // target: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" shape-rendering="geometricPrecision">
@@ -62,19 +62,9 @@ function setDefaultsForPreference() {
     }
 
 
-    // Number and Range: Width to render
-    function setDefaultForWidth(inputSvg) {
+    // Number and Range input: Width pixel size
+    function setDefaultOfOpacitySteps(inputSvg) {
 
-        // viewBox属性の値から最後の数字を抽出する正規表現
-        const pattern = /viewBox="\d+\s+\d+\s+\d+\s+(\d+)"/;
-        const matches = pattern.exec(inputSvg); // exec メソッドでマッチする部分を探す
-        console.log('matches(for width): ', matches[1]) // e.g: 255
-        const gridSize = matches[1]
-
-        // `Width:` の初期設定サイズを グリッドサイズ にする
-        const sizeInputElement = document.getElementById("png-size-number");
-        sizeInputElement.value = gridSize
-        console.log(`Default grid size value is "${gridSize}"`)
     }
 
 }

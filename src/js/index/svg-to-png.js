@@ -23,6 +23,7 @@ async function svg2png(svgString, opts, hasCrop) {
         return
     }
     const resvgJS = new resvg.Resvg(svg, opts)
+    console.log('resvgJS: ', resvgJS)
 
     // resvg-js default outputs the w and h size as integer
     // document.querySelector('#svg-info').textContent = 'Source SVG grid size: ' + resvgJS.width + ' x ' + resvgJS.height
@@ -99,6 +100,8 @@ async function measureSvg2pngTime(svgString, opts, hasCrop, renderingStatusEleme
         setTimeout(async () => {
             // 開始時刻を記録
             const startTime = performance.now();
+            console.log('svg2png startTime: ', startTime)
+
 
             try {
                 // svg2png関数を呼び出す
@@ -106,12 +109,14 @@ async function measureSvg2pngTime(svgString, opts, hasCrop, renderingStatusEleme
 
                 // 終了時刻を記録
                 const endTime = performance.now();
+                console.log('svg2png endTime: ', endTime)
+
 
                 // 処理時間を計算
                 const elapsedTime = Math.floor(endTime - startTime);
 
                 // 処理時間をコンソールに出力
-                console.log(`Rendering time: ${elapsedTime} ms`);
+                console.log(`svg2png rendering time: ${elapsedTime} ms`);
 
                 // 処理完了メッセージを表示
                 await updateRenderingStatus(`Last rendering time: ${elapsedTime} ms`, renderingStatusElements.get('lastRenderingTimeP'));

@@ -272,13 +272,13 @@ function getStroke(inputStr) {
 function getOpacity(inputStr) {
     const pattern = /\sopacity="([^"]*)"/
     const matches = inputStr.match(pattern)
-    console.log('matches[1]: ', matches[1])
+    //console.log('matches[1]: ', matches[1])
     return matches[1]
 }
 function getStrokeOpacity(inputStr) {
     const pattern = /stroke-opacity="([^"]*)"/
     const matches = inputStr.match(pattern)
-    console.log('matches[1]: ', matches[1])
+    //console.log('matches[1]: ', matches[1])
     return matches[1]
 }
 

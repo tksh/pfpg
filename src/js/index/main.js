@@ -477,38 +477,44 @@
 
     // Initialize the 'Width pixel size' as 256
 
-    const setPngSize = (value) => { // 直接数値を指定するため 上のサイズ変更用関数から 引数 を event から value に変更
-        //const value = event.target.value // を disableして 直接 引数の数値を value とする
+    const setPngSize = async (value) => { // 直接数値を指定するため 上のサイズ変更用関数から 引数 を event から value に変更
 
-        // 引数(value)の値で svg2png() の第二引数となる resvgOpts オブジェクトを新しく更新する
-        Object.assign(resvgOpts, {
-            fitTo: {
-                mode: 'height',
-                value: parseInt(value, 10), // parseInt(string, radix= 10 進数)
-            }
-        })
+            //const value = event.target.value // を disableして 直接 引数の数値を fitTo: value: の値とする
 
-        // Set the width number of input area with argument value
-        document.querySelector('#png-size-number').value = value;
-        document.querySelector('#png-size-range').value = value;
-        console.log(`Set 'Width pixel size' initial value as "${value}"`)
+            // 引数(value)の値で svg2png() の第二引数となる resvgOpts オブジェクトを新しく更新する
+            Object.assign(resvgOpts, {
+                fitTo: {
+                    mode: 'height',
+                    value: parseInt(value, 10), // parseInt(string, radix= 10 進数)
+                }
+            })
+
+            // Set the width number of input area with argument value
+            document.querySelector('#png-size-number').value = value;
+            document.querySelector('#png-size-range').value = value;
+            console.log(`Set 'Width pixel size' initial value as "${value}"`)
+
     }
 
     // Force to apply the '256' as PNG rendering size
     // The half of `<input type="range" max="512">` is 256
-    setPngSize(256);
+    //setPngSize(256);
 
 
 
-    // 非同期に関数を呼び出す
-    setTimeout(() => {
+    // Startup initialize process
+    async function init() {
+
+        // Set default width size
+        await setPngSize(256)
 
         // Initial PNG rendering
-        executeSvg2png({ target: { value: svgInputElement.value.trim() } })
+        await executeSvg2png({ target: { value: svgInputElement.value.trim() } })
 
         // To fit the contents (header + main) height as viewport height
-        adjustBox()
+        await adjustBox()
 
-    }, 0);
+    };
+    init()
 
 })(); // `(async function () {` の 即時実行関数

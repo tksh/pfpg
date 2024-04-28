@@ -1,4 +1,4 @@
-function adjustBox() {
+async function adjustBox() {
 
     // Get the element rect sizes
 
