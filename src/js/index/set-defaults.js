@@ -1,6 +1,4 @@
-setDefaultValueOfOptions()
-
-function setDefaultValueOfOptions() {
+async function setDefaultValueOfOptions() {
     console.log('setDefaultValueOfOptions() executed')
 
     // SVGのテキストを取得

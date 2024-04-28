@@ -505,6 +505,9 @@
     // Startup initialize process
     async function init() {
 
+        // Set default options values
+        await setDefaultValueOfOptions()
+
         // Set default width size
         await setPngSize(256)
 
