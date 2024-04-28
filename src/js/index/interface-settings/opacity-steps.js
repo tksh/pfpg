@@ -89,6 +89,9 @@ function tryReduceZerosAtEnd(numberStringArray) {
         return num.toString();
     });
 }
+// console.log(tryReduceZerosAtEnd(valuesByStep(0.04)))
+// console.log(tryReduceZerosAtEnd(valuesByStep(0.1)))
+// console.log(tryReduceZerosAtEnd(valuesByStep(0.2)))
 // Array(26) [ "1", "0.96", "0.92", "0.88", "0.84", "0.8", "0.76", "0.72", "0.68", "0.64", … "0" ]
 // Array(11) [ "1", "0.9", "0.8", "0.7", "0.6", "0.5", "0.4", "0.3", "0.2", "0.1", … "0" ]
 // Array(6)  [ "1", "0.8", "0.6", "0.4", "0.2", "0" ]

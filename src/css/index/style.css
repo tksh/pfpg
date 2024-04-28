@@ -215,13 +215,20 @@ button#width-size-inc {
 }
 
 button#width-size-dec {
-    margin-left: 1rem
+    margin-left: 2rem;
         /*
         同じ数値が 以下の二通りに機能する
          - PC画面用には 数値入力ボックスとの余白
          - モバイル画面用には その上の数値入力項目に対するインデント
         */
+
+    margin-right: .5rem; /* スライダーとボタンの間の余白 */
 }
+button#width-size-inc {
+    margin-left: .5rem;  /* スライダーとボタンの間の余白 */
+}
+
+
 
 #customization,
 figcaption,
