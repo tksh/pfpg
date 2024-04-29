@@ -416,9 +416,12 @@
         updateAndConvert(event.target.value);
     };
 
-    // Attach event listeners
+    // Attach event listeners to input-box and slider
     document.querySelector('#png-size-number').addEventListener('change', pngSizeElement);
     document.querySelector('#png-size-range').addEventListener('change', pngSizeElement);
+
+
+    // '-' and '+' buttons
 
     // Function to handle button clicks
     const handleButtonClick = (step) => {
@@ -475,17 +478,14 @@
 
 
 
-    // Initialize the 'Width pixel size' as 256
-
+    // Initialize the 'Width pixel size'
     const setPngSize = async (value) => { // 直接数値を指定するため 上のサイズ変更用関数から 引数 を event から value に変更
-
-            //const value = event.target.value // を disableして 直接 引数の数値を fitTo: value: の値とする
 
             // 引数(value)の値で svg2png() の第二引数となる resvgOpts オブジェクトを新しく更新する
             Object.assign(resvgOpts, {
                 fitTo: {
                     mode: 'height',
-                    value: parseInt(value, 10), // parseInt(string, radix= 10 進数)
+                    value: value
                 }
             })
 
@@ -493,22 +493,19 @@
             document.querySelector('#png-size-number').value = value;
             document.querySelector('#png-size-range').value = value;
             console.log(`Set 'Width pixel size' initial value as "${value}"`)
-
     }
-
-    // Force to apply the '256' as PNG rendering size
-    // The half of `<input type="range" max="512">` is 256
-    //setPngSize(256);
-
 
 
     // Startup initialize process
     async function init() {
 
         // Set default options values
+        // Read the values from original decoded SVG, then apply them as each option elements.
         await setDefaultValueOfOptions()
 
         // Set default width size
+        // Force to apply '256' as PNG rendering size even if SVG has any grid size.
+        // '256' is the half of `<input type="range" max="512">`
         await setPngSize(256)
 
         // Initial PNG rendering
