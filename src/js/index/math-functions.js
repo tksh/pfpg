@@ -19,7 +19,8 @@ function roundToOneDecimal(num) {
 //   - Before: viewBox="0.00 0 31.00 31"
 //   - After : viewBox="0 0 31 31"
 function toFixedTrimmed(num) {
-    return num.toFixed(2).replace(/\.00$/, '');
+    return Number.parseFloat(num.toFixed(2))
+    // return num.toFixed(2).replace(/\.00$/, '');
 }
 
 

@@ -151,38 +151,6 @@ function getCurrentStatus() {
 
 
 
-// Download as SVG
-
-function downloadSvg() {
-
-    const svg = document.getElementById('input-svg').value
-    const blob = new Blob([svg], { type: 'image/svg+xml' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-
-
-    // Generate a the filename
-
-    // artwork id
-    const artworkId = getArtworkId()
-
-    // grid size
-    const gridSizeWxH = getGridSizeWxH()
-
-    // current status
-    const currentStatus = getCurrentStatus()
-
-
-    // Set the filename
-    link.download = `${artworkId}-${gridSizeWxH}-${currentStatus}.svg`
-
-    link.click()
-}
-// e.g.: 202308_001-31x31-g_000_000_000_EEE_FFF-p_abs-b_9999-t_square-r_crispEdges.svg
-
-
-
 // Download as PNG
 
 function downloadPng() {
@@ -217,3 +185,54 @@ function downloadPng() {
     link.click()
 }
 // e.g.: 202308_001-256x256px-g_000_000_000_EEE_FFF-p_abs-b_9999-t_square-r_crispEdges.png
+
+
+
+// Download as SVG
+
+function downloadSvg() {
+
+    const svg = document.getElementById('input-svg').value
+    const blob = new Blob([svg], { type: 'image/svg+xml' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+
+
+    // Generate a the filename
+
+    // artwork id
+    const artworkId = getArtworkId()
+
+    // grid size
+    const gridSizeWxH = getGridSizeWxH()
+
+    // current status
+    const currentStatus = getCurrentStatus()
+
+
+    // Set the filename
+    link.download = `${artworkId}-${gridSizeWxH}-${currentStatus}.svg`
+
+    link.click()
+}
+// e.g.: 202308_001-31x31-g_000_000_000_EEE_FFF-p_abs-b_9999-t_square-r_crispEdges.svg
+
+
+// SVGファイルサイズを ダウンロードボタンに 表示する関数
+function countSvgSize(svgString) {
+    // バイトサイズを表示する button要素を取得
+    const svgDownloadButtonElement = document.getElementById("svg-download-button");
+
+    // バイトサイズを計算して表示
+    const svgSize = byteCount(svgString);
+    const svgSizeAsKb = roundToOneDecimal(svgSize / 1024)
+    console.log('SVG file size: ', svgSize)
+    svgDownloadButtonElement.innerHTML = `Download as SVG<br>(size: ${svgSizeAsKb} kb / ${svgSize} bytes)`;
+}
+
+// テキストのバイトサイズを計算する関数
+function byteCount(s) {
+    // Blobオブジェクトを使ってUTF-8でのバイトサイズを取得
+    return new Blob([s]).size;
+}
