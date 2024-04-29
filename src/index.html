@@ -32,12 +32,19 @@
     <!-- JScolor -->
     <script defer src="./js/index/lib-jscolor/jscolor.min.js"></script>
 
-    <script defer src="./js/index/math-functions.js"></script>
-    <script defer src="./js/index/download.js"></script>
-    <script defer src="./js/index/color-formatter-hex-to-hex.js"></script>
-    <script defer src="./js/index/color-formatter.js"></script>
-    <script defer src="./js/index/replace-at-index.js"></script>
 
+    <script defer src="./js/index/tabs.js"></script>
+    <script defer src="./js/index/svg-to-png.js"></script>
+    <script defer src="./js/index/download.js"></script>
+
+    <!-- Utility -->
+    <script defer src="./js/index/utils/number-generator.js"></script>
+    <script defer src="./js/index/utils/number-rounding.js"></script>
+    <script defer src="./js/index/utils/hex-reducer.js"></script>
+    <script defer src="./js/index/utils/color-value-converter.js"></script>
+    <script defer src="./js/index/utils/replace-at-index.js"></script>
+
+    <!-- Options -->
     <script defer src="./js/index/tab-line/group-colors.js"></script> <!-- Generate the group colors tags for HTML and SVG -->
     <script defer src="./js/index/tab-line/path-mode.js"></script>
     <script defer src="./js/index/tab-line/opacity-steps.js"></script>
@@ -48,9 +55,6 @@
     <script defer src="./js/index/tab-ui/view-scale.js"></script>
     <script defer src="./js/index/tab-ui/checker-pattern.js"></script>
     <script defer src="./js/index/tab-ui/color-theme.js"></script>
-
-    <script defer src="./js/index/tabs.js"></script>
-    <script defer src="./js/index/svg-to-png.js"></script>
 
 
     <!-- Data IO -->
@@ -130,11 +134,13 @@
     <script defer src="./js/data-manipulator/decode/rel-to-abs.js"></script>
     <script defer src="./js/data-manipulator/decode/decode.js"></script>
 
-    <!-- Set defaults value for some selectors in artwork customization area read from decoded SVG -->
+    <!-- Initialize -->
+
+    <!-- Set defaults value for option selectors using the values that read from decoded SVG -->
     <script defer src="./js/index/init/set-defaults.js"></script>
     <!-- Adjust the height of whole components to fit to display height -->
     <script defer src="./js/index/init/adjust-output-boxes-size.js"></script>
-    <!-- EventListeners for preferences, and force to apply the values like width-size=256 as defaults -->
+    <!-- Add eventListeners for options, and call the functions to initialize -->
     <script defer src="./js/index/main.js"></script>
 
 
