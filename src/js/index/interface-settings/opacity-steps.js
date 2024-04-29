@@ -31,11 +31,11 @@ function replaceToNewStepOptions(i, step, attrName, attrValueArray) {
     // Add new <option>
 
     // 選択肢となる数値のリストを作成
-    values = tryReduceZerosAtEnd(valuesByStep(step))
+    values = numbersIncrementByStep(step)
     console.log('values: ', values)
-    // 0.04 => // (26) [ "1", "0.96", "0.92", "0.88", "0.84", "0.8", "0.76", "0.72", "0.68", "0.64", … "0" ]
-    // 0.1  => // (11) [ "1", "0.9", "0.8", "0.7", "0.6", "0.5", "0.4", "0.3", "0.2", "0.1", … "0" ]
-    // 0.2  => //  (6) [ "1", "0.8", "0.6", "0.4", "0.2", "0" ]
+    // step: 0.04 => (26) [1, 0.96, 0.92, 0.88, 0.84, 0.8, 0.76, 0.72, 0.68, 0.64, 0.6, 0.56, 0.52, 0.48, 0.44, 0.4, 0.36, 0.32, 0.28, 0.24, 0.2, 0.16, 0.12, 0.08, 0.04, 0]
+    // step: 0.1  => (11) [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0]
+    // step: 0.2  =>  (6) [1, 0.8, 0.6, 0.4, 0.2, 0]
 
     // 現在の値を設定
     let currentValue = attrValueArray[i]
@@ -57,44 +57,6 @@ function replaceToNewStepOptions(i, step, attrName, attrValueArray) {
         selectElement.appendChild(optionElement);
     });
 }
-
-// Get the strings of incremental numbers for selector option value
-function valuesByStep(step) {
-    let values = [];
-    if (step === 0.04) {
-        // 0から100までの整数を4の間隔で配列に格納
-        for (let i = 0; i <= 100; i += 4) {
-            // 整数を100で割って小数に戻す
-            values.push((i / 100).toFixed(2));
-        }
-    } else { // step = 0.1|0.2
-        for (let i = 0; i <= 1; i += parseFloat(step)) {
-            values.push(i.toFixed(1));
-        }
-    }
-    return values.reverse() // 一番上に表示される選びやすい<option>が 0 ではなく 1 になるように 逆順にする
-}
-// console.log(valuesByStep(0.04))
-// console.log(valuesByStep(0.1))
-// console.log(valuesByStep(0.2))
-// (26) ['1.00', '0.96', '0.92', '0.88', '0.84', '0.80', '0.76', '0.72', '0.68', '0.64', '0.60', '0.56', '0.52', '0.48', '0.44', '0.40', '0.36', '0.32', '0.28', '0.24', '0.20', '0.16', '0.12', '0.08', '0.04', '0.00']
-// (11) ['1.0', '0.9', '0.8', '0.7', '0.6', '0.5', '0.4', '0.3', '0.2', '0.1', '0.0']
-//  (6) ['1.0', '0.8', '0.6', '0.4', '0.2', '0.0']
-
-function tryReduceZerosAtEnd(numberStringArray) {
-    return numberStringArray.map(numStr => {
-        // Convert the string to a number to remove trailing zeros
-        const num = Number.parseFloat(numStr);
-        // Convert the number back to a string
-        return num.toString();
-    });
-}
-// console.log(tryReduceZerosAtEnd(valuesByStep(0.04)))
-// console.log(tryReduceZerosAtEnd(valuesByStep(0.1)))
-// console.log(tryReduceZerosAtEnd(valuesByStep(0.2)))
-// Array(26) [ "1", "0.96", "0.92", "0.88", "0.84", "0.8", "0.76", "0.72", "0.68", "0.64", … "0" ]
-// Array(11) [ "1", "0.9", "0.8", "0.7", "0.6", "0.5", "0.4", "0.3", "0.2", "0.1", … "0" ]
-// Array(6)  [ "1", "0.8", "0.6", "0.4", "0.2", "0" ]
 
 
 

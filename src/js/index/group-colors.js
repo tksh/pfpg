@@ -81,7 +81,7 @@ function generateGroupColorsHtmlElements(step) {
 function generateOpacityElements(i, step, attrName, attrValue) {
 
     // 選択肢となる数値のリストを作成
-    values = tryReduceZerosAtEnd(valuesByStep(step))
+    values = numbersIncrementByStep(step)
     console.log('values: ', values)
     // 0.04 => // (26) [ "1", "0.96", "0.92", "0.88", "0.84", "0.8", "0.76", "0.72", "0.68", "0.64", … "0" ]
     // 0.1  => // (11) [ "1", "0.9", "0.8", "0.7", "0.6", "0.5", "0.4", "0.3", "0.2", "0.1", … "0" ]
