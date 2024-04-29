@@ -14,7 +14,8 @@ function roundToOneDecimal(num) {
 }
 
 
-// Delete '.00' if could after round to two decimal places.
+// Round to two decimal places via '.toFixed(2)'
+// Delete '.00' if could via Number.parseFloat()
 // For simplify the viewBox value like the case of 'Squircle, slimmed' and 'Width narrowness: 0'
 //   - Before: viewBox="0.00 0 31.00 31"
 //   - After : viewBox="0 0 31 31"

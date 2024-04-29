@@ -29,21 +29,24 @@
 
     <!-- JS for index.html -->
     <script defer src="./js/index/jscolor.min.js"></script>
-    <script defer src="./js/index/sync-number-and-range.js"></script>
-    <script defer src="./js/index/path-mode.js"></script>
     <script defer src="./js/index/math-functions.js"></script>
     <script defer src="./js/index/download.js"></script>
     <script defer src="./js/index/color-formatter-hex-to-hex.js"></script>
     <script defer src="./js/index/color-formatter.js"></script>
     <script defer src="./js/index/replace-at-index.js"></script>
-    <script defer src="./js/index/interface-settings/view-scale.js"></script>
-    <script defer src="./js/index/interface-settings/checker-pattern.js"></script>
-    <script defer src="./js/index/interface-settings/color-theme.js"></script>
-    <script defer src="./js/index/interface-settings/opacity-steps.js"></script>
+
+    <script defer src="./js/index/tab-line/group-colors.js"></script> <!-- Generate the group colors tags for HTML and SVG -->
+    <script defer src="./js/index/tab-line/path-mode.js"></script>
+    <script defer src="./js/index/tab-line/opacity-steps.js"></script>
+    <script defer src="./js/index/tab-canvas/shape-to-trim.js"></script>
+    <script defer src="./js/index/tab-canvas/crop-side-margins.js"></script>
+    <script defer src="./js/index/tab-render/width-pixel-size.js"></script>
+    <script defer src="./js/index/tab-render/sync-number-and-range.js"></script>
+    <script defer src="./js/index/tab-ui/view-scale.js"></script>
+    <script defer src="./js/index/tab-ui/checker-pattern.js"></script>
+    <script defer src="./js/index/tab-ui/color-theme.js"></script>
+
     <script defer src="./js/index/tabs.js"></script>
-    <script defer src="./js/index/shape-to-trim.js"></script>
-    <script defer src="./js/index/crop-side-margins.js"></script>
-    <script defer src="./js/index/width-pixel-size.js"></script>
     <script defer src="./js/index/svg-to-png.js"></script>
 
 
@@ -124,14 +127,12 @@
     <script defer src="./js/data-manipulator/decode/rel-to-abs.js"></script>
     <script defer src="./js/data-manipulator/decode/decode.js"></script>
 
-    <!-- Generate the group colors tags for HTML and SVG -->
-    <script defer src="./js/index/group-colors.js"></script>
     <!-- Set defaults value for some selectors in artwork customization area read from decoded SVG -->
     <script defer src="./js/index/set-defaults.js"></script>
     <!-- EventListeners for preferences, and force to apply the values like width-size=256 as defaults -->
     <script defer src="./js/index/main.js"></script>
     <!-- Adjust the height of whole components to fit to display height -->
-    <script defer src="./js/index/img-box-sizing.js"></script>
+    <script defer src="./js/index/adjust-output-boxes-size.js"></script>
 
 
 </head>
