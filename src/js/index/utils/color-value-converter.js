@@ -1,34 +1,3 @@
-// Convert the strokes group color format
-
-// For Converting from Per-stroke to whole-group
-// '#'無しの hexを受け取って 'matches'の構造と同じ 3つの要素の配列 で返す
-
-function splitHexAndOpacity(hexColor) {
-    // 16進数から透明度情報を抽出し、10進数に変換
-    const opacityHex = hexColor.slice(-2);
-    const opacityDecimal = parseInt(opacityHex, 16);
-
-    // 0から255の範囲を0から1の範囲に変換
-    const opacityNormalized = opacityDecimal / 255;
-    // 小数点以下2位までに丸める
-    const opacityRounded = roundToTwoDecimals(opacityNormalized)
-
-    // 透明度無しの 色情報のみの部分(6桁) を抽出
-    const colorHex = hexColor.slice(0, 6)
-    return [undefined, '#' + colorHex.toUpperCase(), opacityRounded];
-}
-// console.log(splitHexAndOpacity('ffffff')) // Array(3) [ undefined, "#FFFFFF", 1 ]
-// console.log(splitHexAndOpacity('000000')) // Array(3) [ undefined, "#000000", 0 ]
-// console.log(splitHexAndOpacity('ffffffff')) // Array(3) [ undefined, "#FFFFFF", 1 ]
-// console.log(splitHexAndOpacity('00000000')) // Array(3) [ undefined, "#000000", 0 ]
-// console.log(splitHexAndOpacity('12345678')) // Array(3) [ undefined, "#123456", 0.47 ]
-// console.log(splitHexAndOpacity('00000001')) // Array(3) [ undefined, "#000000", 0 ]
-// console.log(splitHexAndOpacity('00000001')) // Array(3) [ undefined, "#000000", 0.01 ]
-
-
-
-// For Converting from whole-group to Per-stroke
-
 // 0から1の範囲に正規化された数値を引数として受け取る関数
 function normalizedToHex(num) {
 
@@ -46,8 +15,6 @@ function normalizedToHex(num) {
     // 大文字に変換して返す
     return padded.toUpperCase();
 }
-
-// // Test
 // console.log(normalizedToHex(1));    // FF
 // console.log(normalizedToHex(0.8));  // CC
 // console.log(normalizedToHex(0.01)); // 03

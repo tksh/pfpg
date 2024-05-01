@@ -202,8 +202,6 @@ input#png-size-number {
 }
 
 input[type="range"] {
-    min-width: 16rem;
-
     /* スライダーを親要素のフォントサイズの0.3倍下にずらす */
     vertical-align: -0.3rem;
 }
