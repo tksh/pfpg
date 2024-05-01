@@ -47,12 +47,11 @@ function normalizedToHex(num) {
     return padded.toUpperCase();
 }
 
-// // テスト用の数値
-// // 関数を呼び出して結果を表示する
-// console.log(normalizedToHex(1)); // FF
-// console.log(normalizedToHex(0.8)); // CC
+// // Test
+// console.log(normalizedToHex(1));    // FF
+// console.log(normalizedToHex(0.8));  // CC
 // console.log(normalizedToHex(0.01)); // 03
-// console.log(normalizedToHex(0)); // 00
+// console.log(normalizedToHex(0));    // 00
 
 
 
@@ -87,38 +86,3 @@ function mergeOpacityAndExtended(hexInput, opacityValueInput) {
 // console.log(mergeOpacityAndExtended('#000', 1))      // #000000FF
 // console.log(mergeOpacityAndExtended('#000000', 1))   // #000000FF
 // console.log(mergeOpacityAndExtended('#000000', 1.0)) // #000000FF
-
-
-// For generating the group colors SVG <g> element tags
-// Split the hex and opacity, and extended if in short style
-function splitOpacityAndExtended(strokeHexStr, opacityNumStr, strokeOpacityNumStr) {
-
-    let hex = strokeHexStr.slice(1); // `#`記号 を除く文字列を取得
-
-    if (hex.length === 3) {
-        hex = '#' + hex.split("").map((char) => char.repeat(2)).join(""); // 文字列の各文字を2回繰り返して結合する
-        return [undefined, hex.toUpperCase(), opacityNumStr, strokeOpacityNumStr]
-        // 入力されるhex色情報は 3|6 だけでいい？ 下記のような透明度情報込みの 4|8 hex表現をサポートする必要があるかどうか 要検討
-
-    } else if (hex.length === 8) {
-        return splitHexAndOpacity(hex) // Hex6桁と 最後二桁の透明度情報を変換した数値[0-1]の 配列を返す
-    } else if (hex.length === 4) { // hex has opacity, but in short style
-        hex = hex.split("").map((char) => char.repeat(2)).join(""); // 文字列の各文字を2回繰り返して結合する (4 => 8)
-        return splitHexAndOpacity(hex) // Hex6桁と 最後二桁の透明度情報を変換した数値[0-1]の 配列を返す
-    }
-
-    // 6桁のときは そのまま にする
-    //console.log('hex code length is 6')
-    const hexWithHash = '#' + hex.toUpperCase()
-    //const hexShorten = tryDeleteF(tryReduceAsHalf(hexWithHash)) // shorten if could before return
-    return [undefined, hexWithHash, opacityNumStr, strokeOpacityNumStr]
-}
-// console.log(splitOpacityAndExtended('#fff'))      // Array(3) [ undefined, "#FFFFFF", undefined ]
-// console.log(splitOpacityAndExtended('#ffffff'))   // Array(3) [ undefined, "#FFFFFF", undefined ]
-// console.log(splitOpacityAndExtended('#ffffffff')) // Array(3) [ undefined, "#FFFFFF", 1 ]
-// console.log(splitOpacityAndExtended('#000'))      // Array(3) [ undefined, "#000000", undefined ]
-// console.log(splitOpacityAndExtended('#000000'))   // Array(3) [ undefined, "#000000", undefined ]
-// console.log(splitOpacityAndExtended('#00000000')) // Array(3) [ undefined, "#000000", 0 ]
-
-// console.log(splitOpacityAndExtended('#fff'))  // (3) [undefined, '#FFFFFF', undefined]
-// console.log(splitOpacityAndExtended('#ffffff')) // (4) [undefined, '#FFFFFF', undefined, undefined]
