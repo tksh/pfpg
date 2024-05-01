@@ -4,7 +4,7 @@
 function generateGroupColorsSvgTags(matches) {
     console.log('matches: ', matches) // e.g.: (4) [undefined, '#4E8D09', '0.6', '1']
 
-    const stroke        = matches[1].slice(1);                                                  // `#`記号 を除く文字列を取得
+    const stroke        = tryReduceAsHalf(matches[1].slice(1));                                                  // `#`記号 を除く文字列を取得
     const opacity       = matches[2] !== undefined ? matches[2] : "1";       // opacity が明示的に指定されていない場合は 1 とみなす
     const strokeOpacity = matches[3] !== undefined ? matches[3] : "1"; // strokeOpacity が明示的に指定されていない場合は 1 とみなす
     const groupElem = `<g stroke="#${stroke}" opacity="${opacity}" stroke-opacity="${strokeOpacity}">`
