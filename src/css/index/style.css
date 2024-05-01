@@ -177,7 +177,8 @@ select.opacity {
 }
 
 /* 'stroke' */
-input[data-jscolor="{}"] {
+input[data-jscolor="{}"],
+input.base-rect-color {
     margin-right: 2px;
     margin-top: 1rem;
     border: 1px solid var(--color-picker-border);
@@ -186,15 +187,13 @@ input[data-jscolor="{}"] {
 input.stroke {
     width: 7rem;
 }
-
 label.stroke {
     margin-right: 0.5rem
 }
 
 /* Base color */
 input.base-rect-color {
-    margin-top: 0;
-    width: 8.5rem;
+    width: 9rem;
 }
 
 /* Width pixel size */
