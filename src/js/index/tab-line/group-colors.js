@@ -4,7 +4,7 @@
 function generateGroupColorsSvgTags(matches) {
     console.log('matches: ', matches) // e.g.: (4) [undefined, '#4E8D09', '0.6', '1']
 
-    const stroke        = tryReduceAsHalf(matches[1].slice(1));                                                  // `#`記号 を除く文字列を取得
+    const stroke        = tryReduceAsHalf(matches[1].slice(1));                                 // `#`記号 を除く文字列を取得
     const opacity       = matches[2] !== undefined ? matches[2] : "1";       // opacity が明示的に指定されていない場合は 1 とみなす
     const strokeOpacity = matches[3] !== undefined ? matches[3] : "1"; // strokeOpacity が明示的に指定されていない場合は 1 とみなす
     const groupElem = `<g stroke="#${stroke}" opacity="${opacity}" stroke-opacity="${strokeOpacity}">`
@@ -23,9 +23,9 @@ function generateGroupColorsHtmlElements(step) {
 
     const groupColorsValues = getGroupColorsValues();
     const numberOfGroups = groupColorsValues.get('number_of_groups')
-    const stroke = groupColorsValues.get('stroke_array')
-    const opacity = groupColorsValues.get('opacity_array')
-    const strokeOpacity = groupColorsValues.get('stroke_opacity_array')
+    const stroke         = groupColorsValues.get('stroke_array')
+    const opacity        = groupColorsValues.get('opacity_array')
+    const strokeOpacity  = groupColorsValues.get('stroke_opacity_array')
 
     // 挿入先のdiv要素を取得
     const groupColorsDiv = document.getElementById("group-colors-input-and-select");
@@ -95,7 +95,7 @@ function generateOpacityElements(i, step, attrName, attrValue) {
     // select要素を作成
     let selectElement = document.createElement("select");
     selectElement.name = `group-colors-${attrName}-${i}`;
-    selectElement.id = `group-colors-${attrName}-${i}`;
+    selectElement.id   = `group-colors-${attrName}-${i}`;
     selectElement.classList.add('opacity');
 
     // 各選択肢を作成し、それぞれにvalue属性を設定
@@ -140,7 +140,7 @@ function getGroupColorsValues() {
     for (let i = 0; i < matches.length; i++) { // i = group ID
         // Get three group colors value
         const stroke = '#' + hexExpandTo6(getStroke(matches[i]).slice(1)) // 6 digits hex (delete '#' mark using '.slice(1)' before expand)
-        const opacity = getOpacity(matches[i])                            // [0-1] number
+        const opacity       = getOpacity(matches[i])                      // [0-1] number
         const strokeOpacity = getStrokeOpacity(matches[i])                // [0-1] number
 
         // Set into each array

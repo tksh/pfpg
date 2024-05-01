@@ -55,34 +55,28 @@ function normalizedToHex(num) {
 
 
 
-// Merge the hex and opacity, and extended if in short style
-// For: transparency-scope = per-stroke
-// 'opacity' values are convert into hex 7,8 chars
-function mergeOpacityAndExtended(hexInput, opacityValueInput) {
+// Extend to 8 digits hex if in short style or no hex-code (value = 1)
+// Add opacity value '1' as 'FF' (7th and 8th chars)
+// Input with "#" but and output without "#"
+function expandToEightDigitsHex(hexInputWithHash) {
 
-    let hex = hexInput.slice(1); // `#`記号 を除く文字列を取得
-    console.log('hex.length(start): ', hex.length) // 3
-    let hexForTransparency = ""; // Hex下二桁の透明度情報
+    let hex = hexInputWithHash.slice(1)                              // `#`記号 を除く文字列を取得
+    //console.log('hex.length: ', hex.length)                        // 3 | 4 | 6 | 8
 
-    // 入力したhexがの長さが 3 or 6 で 且つ 'opacity' の値が 無い(undefined) なら 'FF' にする
-    if (opacityValueInput === undefined) {
-        hexForTransparency = 'FF'
-    } else { // 'undefined'ではない 数値があった場合は それを hexに変換する
-        hexForTransparency = normalizedToHex(opacityValueInput)
-    }
-
+    // Input hex has no opacity
     if (hex.length === 3) {
-        hex = hex.split("").map((char) => char.repeat(2)).join(""); // 文字列の各文字を2回繰り返して結合する
-        hex = hex + hexForTransparency
+        hex = hex.split("").map((char) => char.repeat(2)).join("")   // RGB の各文字を2回繰り返す  3 => 6
+        return hex + 'FF'                                            // Add opacity value 'FF' 6 => 8
     } else if (hex.length === 6) {
-        hex = hex + hexForTransparency
-    } else if (hex.length === 4) { // hex has opacity, but in short style
-        hex = hex.split("").map((char) => char.repeat(2)).join(""); // 文字列の各文字を2回繰り返して結合する
+        return hex + 'FF'                                            // Add opacity value 'FF' 6 => 8
+
+    // Input hex has opacity
+    } else if (hex.length === 4) {
+        return hex.split("").map((char) => char.repeat(2)).join("")  // RGBA の各文字を2回繰り返す 4 => 8
+    } else {
+        return hex                                                   // 8 => 8
     }
-    console.log('hex.length(end): ', hex.length) // 10
-    const hexWithHash = '#' + hex.toUpperCase()
-    return hexWithHash
 }
-// console.log(mergeOpacityAndExtended('#000', 1))      // #000000FF
-// console.log(mergeOpacityAndExtended('#000000', 1))   // #000000FF
-// console.log(mergeOpacityAndExtended('#000000', 1.0)) // #000000FF
+// console.log(expandToEightDigitsHex('#000'))    // 000000FF
+// console.log(expandToEightDigitsHex('#000000')) // 000000FF
+// console.log(expandToEightDigitsHex('#000000')) // 000000FF

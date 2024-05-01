@@ -14,15 +14,15 @@ async function setDefaultValueOfOptions() {
 
         // Get the base color hex code
 
-        const pattern = /<rect width="100%" height="100%" fill="(.*)"/g; // <<rect width="100%" height="100%" fill="#fff9"> is default base rect color
-        const matches = pattern.exec(inputSvg); // exec メソッドでマッチする部分を探す
+        const pattern = /<rect width="100%" height="100%" fill="(.*)"/g; // e.g.: <<rect width="100%" height="100%" fill="#fff9">
+        const matches = pattern.exec(inputSvg);                          // exec メソッドでマッチする部分を探す
         console.log('matches(rect fill): ', matches)
         // Array
         // 0: '<rect width="100%" height="100%" fill="#ccc"'
         // 1: "#ccc"
 
-        // [1]の hex-code部分を 透明度を加えて 8桁のフォーマットに直す
-        const eightDigitsHex = mergeOpacityAndExtended(matches[1])
+        // [1]の hex-code部分を 透明度を補完して 8桁のフォーマットに直す
+        const eightDigitsHexWithHash = '#' + expandToEightDigitsHex(matches[1])
 
 
         // Set as new value for <input>
@@ -34,9 +34,9 @@ async function setDefaultValueOfOptions() {
         new JSColor('#base-rect-color-picker', {format:'hexa'}); // Force to visible the alpha slider even if value hasn't it.
 
         // input要素のvalue属性に新しい値を設定
-        inputElement.value = eightDigitsHex;
+        inputElement.value = eightDigitsHexWithHash;
 
-        console.log(`Default 'Base color' value is "${eightDigitsHex}"`)
+        console.log(`Default 'Base color' value is "${eightDigitsHexWithHash}"`)
     }
 
 
