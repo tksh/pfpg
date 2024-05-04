@@ -78,7 +78,7 @@ async function svg2png(svgString, opts, hasCrop) {
 
 
     // PNGピクセルサイズを <div id="png-info">要素に 表示する
-    document.querySelector('#png-info').textContent = `Rendered PNG pixel size: ${pngData.width} x ${pngData.height} px`
+    document.querySelector('#png-info').textContent = `Rendered PNG pixel size: ${pngData.width} x ${pngData.height}`
 
     // PNGファイルサイズを ダウンロードボタンに 表示する
 
@@ -119,7 +119,7 @@ async function measureSvg2pngTime(svgString, opts, hasCrop, renderingStatusEleme
                 console.log(`svg2png rendering time: ${elapsedTime} ms`);
 
                 // 処理完了メッセージを表示
-                await updateRenderingStatus(`Last rendering time: ${elapsedTime} ms`, renderingStatusElements.get('lastRenderingTimeP'));
+                await updateRenderingStatus(`Last rendering time: ${elapsedTime} milliseconds`, renderingStatusElements.get('lastRenderingTimeP'));
 
                 // 処理結果を返す
                 resolve(result);
