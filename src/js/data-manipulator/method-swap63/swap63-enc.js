@@ -52,7 +52,7 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
 
 
     // Choose smaller one between URLComp applied or not, for each group
-    const optimizedEncodedStrokesByGroup = applyUrlCompIfEffective(
+    const optimizedEncodedStrokesByGroup = tryOptimizeWithURLComp(
         encodedDvalByGroup,
         encodedWidthCountByGroup,
         encodedColorsByGroup,

@@ -40,10 +40,10 @@ function bruteforce53Enc() {
 
         // Loop 2. Each lines-group (.g_id) from '1' to group size
 
-        for (let agg of aggDataMap.values()) {
-            //console.log('agg.g_id: ', agg.g_id)
+        for (const aggData of aggDataMap.values()) {
+            //console.log('aggData.g_id: ', aggData.g_id)
             // 1
-            //console.log('agg.d.relative: ', agg.d.relative)
+            //console.log('aggData.d.relative: ', aggData.d.relative)
             // Object { diff_by_row: {…}, frequent_diff_values_sorted: {…}, frequent_diff_counts_sorted: {…} }
 
             let dictAndDiffEncodedFourColumns = []
@@ -52,10 +52,10 @@ function bruteforce53Enc() {
             // Loop 3. Four columns from 'x1' to 'y2'
 
             for (const column of ['x1', 'y1', 'x2', 'y2']) {
-                console.log('//////// Column (column): ', column, '////////')
+                console.log('//////// column: ', column, '////////')
 
-                let diffArr          = agg.d.relative.diff_by_row[column]
-                let freqDiffValueArr = agg.d.relative.frequent_diff_values_sorted[column]
+                let diffArr          = aggData.d.relative.diff_by_row[column]
+                let freqDiffValueArr = aggData.d.relative.frequent_diff_values_sorted[column]
                 //console.log('diffArr: ', diffArr)   // (19) [1, 2, 0, -3, -2, 1, 9, -7, -3, 6, -2, -15, -3, 30, -12, -3, 1, -1, -7]
                 //console.log('freqDiffValueArr: ', freqDiffValueArr) // (3) [-3, -2, -7]
 
@@ -220,7 +220,7 @@ function bruteforce53Enc() {
             console.log('dictAndDiffEncodedFourColumns: ', dictAndDiffEncodedFourColumns)
 
             // Set encoded [dict]-[diff] into map as value with group ID key
-            encodedDval.set(agg.g_id, dictAndDiffEncodedFourColumnsJoined)
+            encodedDval.set(aggData.g_id, dictAndDiffEncodedFourColumnsJoined)
 
         } // End of `for (let agg of aggDataMap.values()) {`
         console.log('encodedDval: ', encodedDval)
@@ -245,14 +245,14 @@ function bruteforce53Enc() {
 
 
         // Choose smaller one between URLComp applied or not, for each group
-        const optimizedStr = applyUrlCompIfEffective(
-            encodedDval,
-            encodedWidthCount,
-            encodedColors,
-            'bruteforce53-enc',
-            baseXNumber
-        )
-        console.log('optimizedStr: ', optimizedStr)
+        const optimizedWithUrlComp = tryOptimizeWithURLComp(
+                                                            encodedDval,
+                                                            encodedWidthCount,
+                                                            encodedColors,
+                                                            'bruteforce53-enc',
+                                                            baseXNumber
+                                                           )
+        console.log('optimizedWithUrlComp: ', optimizedWithUrlComp)
         //  Map(5) {'1' => '0=129CaIjMCzLAFox3gEVYTdnymbAmwP-UWDCnew3h-Aqsd6rQsPf7nuc97B-Tyl896LIItSqsH-0_igZRCKY265Ta0zzD8-axd0B3NgagFJ2rRrUWcULFyn1IwBi', '2' => '0=129zi ...
 
 
@@ -262,12 +262,12 @@ function bruteforce53Enc() {
         // For first loop, init the map with current value
         if (maxDictSize === maxDictSizeStartAt) {
             console.log('maxDictSize in first loop: ', maxDictSize) // 0
-            currentSmallest = optimizedStr
+            currentSmallest = optimizedWithUrlComp
             console.log('currentSmallest in first loop: ', currentSmallest)
         }
 
         // For every loop
-        currentSmallest = storeSmaller(currentSmallest, optimizedStr)
+        currentSmallest = storeSmaller(currentSmallest, optimizedWithUrlComp)
 
     }
     // End of Loop for every baseX values: [0-52]
