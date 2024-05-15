@@ -28,13 +28,13 @@ function getUintNPortrayForDec() {
 
 function getUintNPortrayForEnc() {
   // Read from textarea
-  const rawJson = readTextarea('textarea-artwork-data-uploaded')
+  const rawJson = readTextarea('textarea-basic-data-uploaded')
 
   // Parse as JSON
-  const artworkDataObj = JSON.parse(rawJson)
+  const basicDataObj = JSON.parse(rawJson)
 
   // Size
-  const gridSizeStr = artworkDataObj.grid_size
+  const gridSizeStr = basicDataObj.grid_size
   const splitByX = gridSizeStr.split('x')        // e.g.: (2) ['255', '255']
   const max = Math.max(...splitByX)              // e.g.: 255
   const uintN = getUintN(max)                    // e.g.: 8 (2 の 何乗か？)

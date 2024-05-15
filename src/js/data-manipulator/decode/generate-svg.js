@@ -52,12 +52,12 @@
 
 
 
-function generateSvg(isRelOrAbsBool, artworkDataMap, strokesValuesMap, decodedRelDvalsMap, decodedAbsDvalsMap) {
+function generateSvg(isRelOrAbsBool, basicDataMap, strokesValuesMap, decodedRelDvalsMap, decodedAbsDvalsMap) {
 
-    // Read the values from Artwork Data
-    const viewboxValue = getViewBoxValue(artworkDataMap.get('grid_size')) // e.g. '0 0 31 31'
-    const artworkIdValue = artworkDataMap.get("artwork_id")               // e.g. '202308_001'
-    const rectFillValue = artworkDataMap.get("bg_color")                  // e.g. '9999'
+    // Read the values from Basic Data
+    const viewboxValue = getViewBoxValue(basicDataMap.get('grid_size')) // e.g. '0 0 31 31'
+    const artworkIdValue = basicDataMap.get("artwork_id")               // e.g. '202308_001'
+    const rectFillValue = basicDataMap.get("bg_color")                  // e.g. '9999'
 
     // Set the tab size
     const tabSpace = '    ' // Four spaces

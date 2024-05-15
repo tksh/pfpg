@@ -36,8 +36,8 @@ function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) 
     if (urlParamsAsTwoMaps != null) {
 
         // Extract the values
-        const artworkDataMap = urlParamsAsTwoMaps.artwork_data
-        // console.log("artworkDataMap: ", artworkDataMap)
+        const basicDataMap = urlParamsAsTwoMaps.artwork_data
+        // console.log("basicDataMap: ", basicDataMap)
         // Map(4) {'artwork_id' => '202308_001', 'grid_size' => '31x31', 'uint_n' => 5, 'bg_color' => '9999'}
 
         const strokesValuesMap = urlParamsAsTwoMaps.strokes_values
@@ -87,7 +87,7 @@ function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) 
 
         // Generate SVG string
 
-        const svgStr = generateSvg(isRelOrAbsBool, artworkDataMap, strokesValuesMap, decodedRelDvalsMap, decodedAbsDvalsMap)
+        const svgStr = generateSvg(isRelOrAbsBool, basicDataMap, strokesValuesMap, decodedRelDvalsMap, decodedAbsDvalsMap)
 
         // Output to textarea
         const specificOutputTextareaId = getSpecificOutputTextareaId(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId)

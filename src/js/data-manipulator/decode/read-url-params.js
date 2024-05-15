@@ -27,9 +27,9 @@ function readUrlParamsAsMaps(isDataManipulatorOrIndexBool) {
 function decodeAsTwoMaps(paramsArray) {
     console.log('paramsArray.length: ', paramsArray.length) // 6
 
-    // Get Artwork Data as Map
+    // Get Basic Data as Map
     // e.g.: ?202308_001=31x31-9999&
-    const artworkDataMap = new Map()
+    const basicDataMap = new Map()
 
     const artworkParam = paramsArray[0]
     console.log("artworkParam: ", artworkParam) // Error (2) ["\n        '?202308_001", '31x31-9999']
@@ -50,12 +50,12 @@ function decodeAsTwoMaps(paramsArray) {
 
 
     // Set into Map
-    artworkDataMap.set("artwork_id", artworkId)  // String
-    artworkDataMap.set("grid_size", gridSize)    // String
-    artworkDataMap.set("uint_n", uintN)          // Number
-    artworkDataMap.set("bg_color", bgColor)      // String
+    basicDataMap.set("artwork_id", artworkId)  // String
+    basicDataMap.set("grid_size", gridSize)    // String
+    basicDataMap.set("uint_n", uintN)          // Number
+    basicDataMap.set("bg_color", bgColor)      // String
 
-    console.log('artworkDataMap: ', artworkDataMap)
+    console.log('basicDataMap: ', basicDataMap)
     // Map(4) {'artwork_id' => '202308_001', 'grid_size' => '31x31', 'uint_n' => 5, 'bg_color' => '9999'}
 
 
@@ -126,6 +126,6 @@ function decodeAsTwoMaps(paramsArray) {
             encoded_dvals: encodedDvalsStr
         })
     }
-    return {artwork_data:artworkDataMap, strokes_values:strokesValuesMap}
+    return {artwork_data:basicDataMap, strokes_values:strokesValuesMap}
 
 }

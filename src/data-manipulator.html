@@ -36,9 +36,9 @@
     <!-- URLCompressor -->
     <script src="./js/data-manipulator/url-comp-0-1-0/url-comp.js"></script>
 
-    <!-- Artwork Data -->
-    <script src="./js/data-manipulator/artwork-data/artwork-data-enc.js"></script>
-    <script src="./js/data-manipulator/artwork-data/detect-uint-n.js"></script>
+    <!-- Basic Data -->
+    <script src="./js/data-manipulator/basic-data/basic-data-enc.js"></script>
+    <script src="./js/data-manipulator/basic-data/detect-uint-n.js"></script>
 
     <!-- Color Formatter -->
     <script src="./js/data-manipulator/color-formatter/normalized-to-hex.js"></script>
@@ -95,16 +95,16 @@
 <body>
     <h1>data-manipulator</h1>
     <div class="bg-0 pad">
-        <h2>Encode the Artwork Data: <span>For the first element of encoded url params</span></h2>
+        <h2>Encode the Basic Data: <span>For the first element of encoded url params</span></h2>
 
-        <h3>1. ⬆ Artwork Data:</h3>
-        <label for="select-file-artwork-data" class="custom-file-upload-button">Select the JSON file that contains artwork id, grid size and background color</label>
+        <h3>1. ⬆ Basic Data:</h3>
+        <label for="select-file-basic-data" class="custom-file-upload-button">Select the JSON file that contains artwork id, grid size and background color</label>
         <br />
-        <input type="file" id="select-file-artwork-data" onchange="selectFileToInput('select-file-artwork-data', 'textarea-artwork-data-uploaded')" />
+        <input type="file" id="select-file-basic-data" onchange="selectFileToInput('select-file-basic-data', 'textarea-basic-data-uploaded')" />
         <br />
 
         <!-- Textarea to input the artwork data json -->
-        <textarea id="textarea-artwork-data-uploaded" class="height-1" placeholder="./json_extracted/%{ARTWORK_ID}_artwork_data.json">{
+        <textarea id="textarea-basic-data-uploaded" class="height-1" placeholder="./json_extracted/%{ARTWORK_ID}_basic_data.json">{
     "title": "202401_001",
     "viewbox": "0 0 127 127",
     "rect": {
@@ -113,13 +113,13 @@
 }
         </textarea>
 
-        <button onclick="encodeArtworkData()">Encode via <b>encodeArtworkData()</b></button>
+        <button onclick="encodeBasicData()">Encode via <b>encodeBasicData()</b></button>
 
         <!-- Textarea to output the artwork data encoded -->
-        <textarea id="textarea-artwork-data-encoded" class="height-0" placeholder="Artwork Data encoded"></textarea>
+        <textarea id="textarea-basic-data-encoded" class="height-0" placeholder="Basic Data encoded"></textarea>
         <!-- Show the result -->
-        <p id="encoded-artwork-data-size"></p>
-        <p id="encoded-artwork-data-time"></p>
+        <p id="encoded-basic-data-size"></p>
+        <p id="encoded-basic-data-time"></p>
 
     </div>
     <div class="bg-1 pad">
@@ -545,10 +545,10 @@
 
     </div>
     <div class="bg-2 pad">
-        <h2>Merge the Encoded Artwork Data and Strokes Values</h2>
+        <h2>Merge the Encoded Basic Data and Strokes Values</h2>
 
         <h3>3. ⬇ Finished URL Params:</h3>
-        <button onclick="mergeArtworkDataAndStrokesValues()">Merge via <b>mergeArtworkDataAndStrokesValues()</b></button>
+        <button onclick="mergeBasicDataAndStrokesValues()">Merge via <b>mergeBasicDataAndStrokesValues()</b></button>
         <textarea id="textarea-encoded-url-params" class="height-2" placeholder="Encoded URL Params"></textarea>
 
         <!-- Button to copy -->

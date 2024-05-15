@@ -90,7 +90,7 @@ document.getElementById('button-to-download-url-params-as-txt').onclick = functi
 function getIdAndSize() {
 
     // Read from textarea
-    const rawJson = readTextarea('textarea-artwork-data-uploaded')
+    const rawJson = readTextarea('textarea-basic-data-uploaded')
     //console.log(rawJson)
     // {
     //     "artwork_id": "202310_002",
@@ -98,8 +98,8 @@ function getIdAndSize() {
     //     "bg_color": "#555C"
     // }
 
-    const artworkDataObj = JSON.parse(rawJson)
-    //console.log('artworkDataObj: ', artworkDataObj)
+    const basicDataObj = JSON.parse(rawJson)
+    //console.log('basicDataObj: ', basicDataObj)
     // {artwork_id: '202310_002', grid_size: '255x255', bg_color: '#555C'}
     // artwork_id: "202310_002"
     // bg_color: "#555C"
@@ -107,9 +107,9 @@ function getIdAndSize() {
     // [[Prototype]]: Object
 
     // ID
-    const artwork_id_str = artworkDataObj.artwork_id // "202310_002"
+    const artwork_id_str = basicDataObj.artwork_id // "202310_002"
     // Size
-    const grid_size_str = artworkDataObj.grid_size   // "255x255"
+    const grid_size_str = basicDataObj.grid_size   // "255x255"
 
     return `${artwork_id_str}_${grid_size_str}`      // "202310_002_255x255"
 }

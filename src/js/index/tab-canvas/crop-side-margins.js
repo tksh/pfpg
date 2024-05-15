@@ -101,10 +101,10 @@ function viewboxUnSlimmed(svgTextareaAndString) {
     // Read original artwork data from url params
     const isDataManipulatorOrIndexBool = false
     const urlParamsAsTwoMaps = readUrlParamsAsMaps(isDataManipulatorOrIndexBool)
-    const artworkDataMap = urlParamsAsTwoMaps.artwork_data
+    const basicDataMap = urlParamsAsTwoMaps.artwork_data
     // e.g.: Map(4) {'artwork_id' => '202308_001', 'grid_size' => '31x31', 'uint_n' => 5, 'bg_color' => '9999'}
 
-    const gridSize = artworkDataMap.get('grid_size') // e.g: '31x31'
+    const gridSize = basicDataMap.get('grid_size') // e.g: '31x31'
     const splitByX = gridSize.split('x')             // e.g.: '31', '31'
 
     // Generate new string with original viewBox size

@@ -80,11 +80,11 @@ function bigint64Enc() {
 
 function getDigitsOfChunk() {
     // Read from textarea as JSON
-    const rawJson = readTextarea('textarea-artwork-data-uploaded')
-    const artworkDataObj = JSON.parse(rawJson)
+    const rawJson = readTextarea('textarea-basic-data-uploaded')
+    const basicDataObj = JSON.parse(rawJson)
 
     // Size
-    const grid_size_str = artworkDataObj.grid_size
+    const grid_size_str = basicDataObj.grid_size
     const split_by_x = grid_size_str.split('x')            // (2) ['255', '255']
     const max = Math.max(...split_by_x)                    // 255
 
