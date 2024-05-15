@@ -1,88 +1,62 @@
 ////////////////////////////////// Input: //////////////////////////////////
 
-// Aggregated Data for Compression
+// Basic Data
+// Lines Data
+// Lines Data Aggregated for Encoding
 
-// {
-//     "1": {
-//         "list_of_width": [3],
-//         "count_by_width": [19],
-//         "absolute": {
-//                      ...
-//         },
-//         "relative": {
-//             "x1": {
-//                 "diff": [1, 2, 0, -3, -2, 1, 9, -7, -3, 6, -2, -15, -3, 30, -12, -3, 1, -1, -7],
-//                 "diff_values_sorted_by_freq": [-3, -2, -7],
-//                 "diff_counts_sorted_by_freq": [4, 2, 2]
-//             },
-//             "y1": {
-//                 "diff": [0, -26, 1, 17, 7, -17, 18, -5, -4, -13, -3, 26, -8, -15, 24, -3, 0, 0, -18],
-//                 "diff_values_sorted_by_freq": [-3],
-//                 "diff_counts_sorted_by_freq": [2]
-//             },
-//             "x2": {
-//                 "diff": [0, 0, -1, 5, -4, 4, 1, -4, -1, 0, 0, 3, 1, -2, -5, 3, 2, 6, -5],
-//                 "diff_values_sorted_by_freq": [-5, -4, -1],
-//                 "diff_counts_sorted_by_freq": [2, 2, 2]
-//             },
-//             "y2": {
-//                 "diff": [26, -1, -2, -17, -3, -8, 10, 19, -17, 18, 2, -24, -5, 11, -3, -2, 0, 1, -3],
-//                 "diff_values_sorted_by_freq": [-3, -2, -17],
-//                 "diff_counts_sorted_by_freq": [3, 2, 2]
-//             }
-//         }
-//     },
-//     "2": {
-//           ...
+
+// for-loop 1: Max dict size from 0 to 52
+// for-loop 2: Each lines-group (.g_id) from '1' to group size
+// for-loop 3: Four columns from 'x1' to 'y2'
+// for-loop 4: From 0 to actual dict size (each column has own size)
+//       .map: Apply for array of 'diff_by_row' (each column has own size)
 
 
 function bruteforce53Enc() {
     const startTime = performance.now()
 
     // To store the smallest encoded string of each group
-    let currentSmallestByGroup = new Map()
+    let currentSmallest = new Map()
 
     const maxDictSizeStartAt = 0
     const maxDictSizeEndAt = 52
 
-    // Loop for every baseX values from 0 to 52
+
+    // Loop 1. Max dict size from 0 to 52
+
     for (let i = maxDictSizeStartAt; i <= maxDictSizeEndAt; i++) {
         const maxDictSize = i
         const baseXNumber = 52 - i
         console.log('////////////////////////////////// maxDictSize: ', maxDictSize, ' //////////////////////////////////') // 0, 1, ... 51, 52
         console.log('////////////////////////////////// baseXNumber: ', baseXNumber, ' //////////////////////////////////') // 52, 51, ... 1, 0
 
-        const minimumDiffValue = -getUintNPortrayForEnc().max*4
-        const maxDiffValue = getUintNPortrayForEnc().max*4
+        const minimumDiffValue = -parseBasicData().max*4
+        const maxDiffValue     =  parseBasicData().max*4
 
-        const encodedDvalByGroup = new Map()
+        const encodedDval = new Map()
 
         const aggDataMap = jsonToMapObj(`textarea-agg-data-for-comp-uploaded`)
-        for (let [groupId, aggDataObj] of aggDataMap) {
-            //console.log('groupId: ', groupId) // 1
-            //console.log('aggDataObj: ', aggDataObj) // {list_of_width: Array(1), count_by_width: Array(1), absolute: {…}, relative: {…}}
-            //console.log('aggDataObj.relative: ', aggDataObj.relative)
-            //{x1: {…}, y1: {…}, x2: {…}, y2: {…}}
-            //    x1: {diff: Array(19), diff_values_sorted_by_freq: Array(3), diff_counts_sorted_by_freq: Array(3)}
-            //    x2: {diff: Array(19), diff_values_sorted_by_freq: Array(3), diff_counts_sorted_by_freq: Array(3)}
-            //    y1: {diff: Array(19), diff_values_sorted_by_freq: Array(1), diff_counts_sorted_by_freq: Array(1)}
-            //    y2: {diff: Array(19), diff_values_sorted_by_freq: Array(3), diff_counts_sorted_by_freq: Array(3)}
-            //    [[Prototype]]: Object
+
+
+        // Loop 2. Each lines-group (.g_id) from '1' to group size
+
+        for (let agg of aggDataMap.values()) {
+            //console.log('agg.g_id: ', agg.g_id)
+            // 1
+            //console.log('agg.d.relative: ', agg.d.relative)
+            // Object { diff_by_row: {…}, frequent_diff_values_sorted: {…}, frequent_diff_counts_sorted: {…} }
 
             let dictAndDiffEncodedFourColumns = []
 
-            for (const key in aggDataObj.relative) { // Loop for x1 to y2
-                console.log('//////// Column (key): ', key, '////////')
 
-                // Get the strings as key, and arrays as value
-                //                let keyDiff = ''
-                //                let keyValue = ''
-                //                let diffArr = []
-                //                let freqDiffValueArr = []
+            // Loop 3. Four columns from 'x1' to 'y2'
 
-                let diffArr = aggDataObj.relative[key].diff
-                let freqDiffValueArr = aggDataObj.relative[key].diff_values_sorted_by_freq
-                console.log('diffArr: ', diffArr)   // (19) [1, 2, 0, -3, -2, 1, 9, -7, -3, 6, -2, -15, -3, 30, -12, -3, 1, -1, -7]
+            for (const column of ['x1', 'y1', 'x2', 'y2']) {
+                console.log('//////// Column (column): ', column, '////////')
+
+                let diffArr          = agg.d.relative.diff_by_row[column]
+                let freqDiffValueArr = agg.d.relative.frequent_diff_values_sorted[column]
+                //console.log('diffArr: ', diffArr)   // (19) [1, 2, 0, -3, -2, 1, 9, -7, -3, 6, -2, -15, -3, 30, -12, -3, 1, -1, -7]
                 //console.log('freqDiffValueArr: ', freqDiffValueArr) // (3) [-3, -2, -7]
 
 
@@ -100,7 +74,8 @@ function bruteforce53Enc() {
 
                 // Extract top ${maxDictSize} numerical numbers
                 // `.slice`の 第二引数の終了位置は切り出されないので
-                // ${actualDictSize}個の数値を切り出したい時には [0]...[28]が${actualDictSize}個なので `.slice(0, ${actualDictSize})` となるようにする
+                // ${actualDictSize}個の数値を切り出したい時には [0]...[28]が${actualDictSize}個なので
+                //  `.slice(0, ${actualDictSize})` となるようにする
                 const freqDiffValueArrDict = freqDiffValueArr.slice(0, actualDictSize);
                 //console.log('freqDiffValueArrDict: ', freqDiffValueArrDict)
                 // [] | If dict size is zero, Empty array will be returned
@@ -116,15 +91,18 @@ function bruteforce53Enc() {
 
                 const freqdictMap = new Map();
 
+                // Loop 4. From 0 to actual dict size (each column has own size)
+
                 for (let i = 0; i < alphabetsForDict.length; i++) {
                     // Mapオブジェクトに キー(頻出数値) と バリュー(置換用アルファベット) のペアを追加する
                     console.log('typeof(freqDiffValueArrDict[i], alphabetsForDict[i]), freqDiffValueArrDict[i], alphabetsForDict[i]: ', typeof(freqDiffValueArrDict[i]), typeof(alphabetsForDict[i]), freqDiffValueArrDict[i], alphabetsForDict[i])
-                    // number string -2 I
+                    // e.g.: number string -2 I
                     freqdictMap.set(freqDiffValueArrDict[i], alphabetsForDict[i]);
                 }
                 console.log('freqdictMap: ', freqdictMap)
-                // Map(0) {size: 0}, when maxDictSize = 0, baseXNumber = 52
-                // Map(29) {-2 => 'x', -1 => 'y', -4 => 'z', -7 => 'A', -3 => 'B', …}
+                // e.g.: Map(0) {size: 0}, when maxDictSize = 0, baseXNumber = 52
+                // e.g.: Map(29) {-2 => 'x', -1 => 'y', -4 => 'z', -7 => 'A', -3 => 'B', …}
+
 
 
                 // Encode the frequency diff values array as a string to embed
@@ -133,7 +111,7 @@ function bruteforce53Enc() {
                 // 結果が一文字の場合は `.padStart(2, 'a')` で 長さを 2文字 に揃える
                 // 結果が三文字の場合は 先頭にアンダースコア `_` をひとつ付ける ( abc => _abc )
 
-                const freqDiffValueToEmbed = freqDiffValueArrDict.map((value) => base52EncodeForFreqDictValue(value))
+                const freqDiffValueToEmbed       = freqDiffValueArrDict.map((value) => base52EncodeForFreqDictValue(value))
                 const freqDiffValueToEmbedJoined = freqDiffValueToEmbed.join('')
 
 
@@ -226,7 +204,7 @@ function bruteforce53Enc() {
                 // Merge with hyphen'-': `[encoded dict]-[encoded diff]`
                 const mergeEncodedDictAndDiff = freqDiffValueToEmbedJoined + '-' + diffEncodedJoined
 
-                // Push into whole columns array
+                // Push into four columns array
                 dictAndDiffEncodedFourColumns.push(mergeEncodedDictAndDiff)
                 // Like: [x1: dict and diff], [y1: dict and diff], [x2: dict and diff], [y2: dict and diff]`
 
@@ -241,11 +219,11 @@ function bruteforce53Enc() {
             dictAndDiffEncodedFourColumnsJoined = dictAndDiffEncodedFourColumns.join('-')
             console.log('dictAndDiffEncodedFourColumns: ', dictAndDiffEncodedFourColumns)
 
-            // Set encoded [dict]-[diff] into map as value with groupId key
-            encodedDvalByGroup.set(groupId, dictAndDiffEncodedFourColumnsJoined)
+            // Set encoded [dict]-[diff] into map as value with group ID key
+            encodedDval.set(agg.g_id, dictAndDiffEncodedFourColumnsJoined)
 
-        } // End of `for (let [groupId, aggDataObj] of aggDataMap) {`
-        console.log('encodedDvalByGroup: ', encodedDvalByGroup)
+        } // End of `for (let agg of aggDataMap.values()) {`
+        console.log('encodedDval: ', encodedDval)
         // Map(5) {'1' => 'crcscn-120yZ19zy6ZlqyMKlSy1lxz-cr-0lL1Md7lpMElvlWlrzMIlUlqMHz00lP-cpcqct-00z5Z41Zz0031lXy326y-crcscd-MIlxZzylUMAMezME2lMlvMayZ01', '2' => '-0lNM ...
         // x1からy2まで 全てに頻出数値が無い場合: '5' => '-lmlF3lL10lK--lRLPlp4lk4lj--0lk1lL130--21lL1lk00'}
 
@@ -256,25 +234,25 @@ function bruteforce53Enc() {
         // [Group Colors]=[Width Count]-[Encode Dict and Diff]
 
         // Get the width count (list_of_width and count_by_width) encoded as a string
-        const encodedWidthCountByGroup = encodeWidthCount()
+        const encodedWidthCount = encodeWidthCount()
 
-        // Read the strokes attributes from .json as Map() grouped by group_id
-        const strokesAttrsMap = jsonToMapObj('textarea-strokes-attrs-uploaded')
+        // Read the lines data from .json as Map()
+        const linesDataMap = jsonToMapObj('textarea-lines-data-uploaded')
 
         // Get the group colors(stroke, opacity, stroke-opacity) encoded as 10|6|5|3|1 chars hex
-        const encodedColorsByGroup = encodeColors(strokesAttrsMap)
-        //console.log(encodedColorsByGroup) // Map(5) {'1' => '0', '2' => '0', '3' => '0', '4' => 'e', '5' => 'f'}
+        const encodedColors = encodeGroupColors(linesDataMap)
+        //console.log(encodedColors) // Map(5) {'1' => '0', '2' => '0', '3' => '0', '4' => 'e', '5' => 'f'}
 
 
         // Choose smaller one between URLComp applied or not, for each group
-        const optimizedStrByGroup = applyUrlCompIfEffective(
-            encodedDvalByGroup,
-            encodedWidthCountByGroup,
-            encodedColorsByGroup,
+        const optimizedStr = applyUrlCompIfEffective(
+            encodedDval,
+            encodedWidthCount,
+            encodedColors,
             'bruteforce53-enc',
             baseXNumber
         )
-        console.log('optimizedStrByGroup: ', optimizedStrByGroup)
+        console.log('optimizedStr: ', optimizedStr)
         //  Map(5) {'1' => '0=129CaIjMCzLAFox3gEVYTdnymbAmwP-UWDCnew3h-Aqsd6rQsPf7nuc97B-Tyl896LIItSqsH-0_igZRCKY265Ta0zzD8-axd0B3NgagFJ2rRrUWcULFyn1IwBi', '2' => '0=129zi ...
 
 
@@ -284,27 +262,30 @@ function bruteforce53Enc() {
         // For first loop, init the map with current value
         if (maxDictSize === maxDictSizeStartAt) {
             console.log('maxDictSize in first loop: ', maxDictSize) // 0
-            currentSmallestByGroup = optimizedStrByGroup
-            console.log('currentSmallestByGroup in first loop: ', currentSmallestByGroup)
+            currentSmallest = optimizedStr
+            console.log('currentSmallest in first loop: ', currentSmallest)
         }
 
         // For every loop
-        currentSmallestByGroup = storeSmaller(currentSmallestByGroup, optimizedStrByGroup)
+        currentSmallest = storeSmaller(currentSmallest, optimizedStr)
 
-    } //End of Loop for every baseX values: [0-52]
+    }
+    // End of Loop for every baseX values: [0-52]
+    // 'for (let i = maxDictSizeStartAt; i <= maxDictSizeEndAt; i++) {'
+
 
 
     // Result map
-    console.log('currentSmallestByGroup: ', currentSmallestByGroup)
+    console.log('currentSmallest: ', currentSmallest)
 
     // Whole group strings joined with `&`
-    const smallestJoined = joinWithAnd(currentSmallestByGroup)
+    const smallestJoined = joinWithAnd(currentSmallest)
 
     // Output to textarea
     outputToTextarea(smallestJoined, 'textarea-strokes-values-encoded')
 
     // Show the size of result in html and console
-    showStringSize('Strokes Values', smallestJoined, 'encoded-strokes-values-size')
+    showStringSize('Lines Data', smallestJoined, 'encoded-strokes-values-size')
 
     // Show the processing time in html and console
     const endTime = performance.now()
@@ -312,7 +293,7 @@ function bruteforce53Enc() {
     showProcessingTime('bruteforce53Enc()', elapsedTime, 'encoded-strokes-values-time')
 
     // Show the encoding result of each group in console
-    showDetailsByGroup('Strokes Values', currentSmallestByGroup)
+    showDetailsByGroup('Lines Data', currentSmallest)
 
-    return currentSmallestByGroup
+    return currentSmallest
 }

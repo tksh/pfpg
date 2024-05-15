@@ -16,10 +16,10 @@ function bestMixFrom3Methods() {
     outputToTextarea(smallestJoined, 'textarea-strokes-values-encoded')
 
     // Show the size of result in html and console
-    showStringSize('Strokes Values (Best mix)', smallestJoined, 'encoded-strokes-values-size')
+    showStringSize('Lines Data (Best mix)', smallestJoined, 'encoded-strokes-values-size')
 
     // Show the details of encoding result by group in console
-    showDetailsByGroup('Strokes Values', bestMixResultMap)
+    showDetailsByGroup('Lines Data', bestMixResultMap)
 }
 
 
@@ -39,8 +39,8 @@ function bestMixFrom2Methods() {
     outputToTextarea(smallestJoined, 'textarea-strokes-values-encoded')
 
     // Show the size of result in html and console
-    showStringSize('Strokes Values (Best mix)', smallestJoined, 'encoded-strokes-values-size')
+    showStringSize('Lines Data (Best mix)', smallestJoined, 'encoded-strokes-values-size')
 
     // Show the details of encoding result by group in console
-    showDetailsByGroup('Strokes Values', bestMixResultMap)
+    showDetailsByGroup('Lines Data', bestMixResultMap)
 }

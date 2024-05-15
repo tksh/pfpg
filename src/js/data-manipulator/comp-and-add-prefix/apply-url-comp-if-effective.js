@@ -67,7 +67,7 @@ function applyUrlCompIfEffective(
 
         // For JUST comparing between URLComp applied or not
 
-        // Join the encoded group colors and strokes values (without flags)
+        // Join the encoded group colors and lines data (without flags)
         const joinedAsURLParamsBeforeURLComp = encodedColorsByGroup.get(groupId) + '=' + widthCountAndDval
         const joinedAsURLParamsAfterURLComp  = encodedColorsByGroup.get(groupId) + '=' + widthCountAndDvalURLCompressed
         // Push to the array for whole colors, `+ 3` means length of 3 chars flags

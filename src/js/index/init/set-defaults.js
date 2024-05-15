@@ -12,7 +12,7 @@ async function setDefaultValueOfOptions() {
     // Color-picker: Base color (base rect fill color)
     function setDefaultOfBaseColor(inputSvg) {
 
-        // Get the base color hex code
+        // Get the base color (rect fill) hex code
 
         const pattern = /<rect width="100%" height="100%" fill="(.*)"/g; // e.g.: <<rect width="100%" height="100%" fill="#fff9">
         const matches = pattern.exec(inputSvg);                          // exec メソッドでマッチする部分を探す

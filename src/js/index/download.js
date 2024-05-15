@@ -24,7 +24,7 @@ function getSvgTextareaAndString() {
 // Get the artwork ID
 function getArtworkId() {
     const inputSvg = getInputSvg()
-    // Set the regex to match the artwork id inside the <title> tag
+    // Set the regex to match the title inside the <title> tag
     // `.` は任意の一文字にマッチし `*?` は直前の文字が 0回以上できるだけ少なく 繰り返される
     const patternForTitle = /<title>(.*?)<\/title>/g
 
@@ -35,7 +35,7 @@ function getArtworkId() {
     return titleText
 }
 
-// Get the grid size of SVG
+// Get the viewbox of SVG
 function getGridSizeWxH() {
     const inputSvg = getInputSvg()
     const viewboxStr = getViewboxStr(inputSvg)
@@ -169,7 +169,7 @@ function downloadPng() {
 
     // Generate a the filename
 
-    // artwork id
+    // title
     const artworkId = getArtworkId()
 
     // rasterized PNG pixel size
@@ -201,10 +201,10 @@ function downloadSvg() {
 
     // Generate a the filename
 
-    // artwork id
+    // title
     const artworkId = getArtworkId()
 
-    // grid size
+    // viewbox
     const gridSizeWxH = getGridSizeWxH()
 
     // current status

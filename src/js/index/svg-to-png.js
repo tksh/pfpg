@@ -26,7 +26,7 @@ async function svg2png(svgString, opts, hasCrop) {
     console.log('resvgJS: ', resvgJS)
 
     // resvg-js default outputs the w and h size as integer
-    // document.querySelector('#svg-info').textContent = 'Source SVG grid size: ' + resvgJS.width + ' x ' + resvgJS.height
+    // document.querySelector('#svg-info').textContent = 'Source SVG viewbox: ' + resvgJS.width + ' x ' + resvgJS.height
 
     // Outputs the viewBox size as float to indicate at #svg-info <textarea>
     const viewboxStr = getViewboxStr(svgString)

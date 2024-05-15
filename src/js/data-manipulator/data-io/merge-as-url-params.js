@@ -2,7 +2,7 @@ function mergeBasicDataAndStrokesValues(){
     // Basic Data encoded string from textarea
     const basicDataStr = readTextarea(`textarea-basic-data-encoded`)
 
-    // Strokes Values encoded string from textarea
+    // Lines Data encoded string from textarea
     const strokesValuesStr = readTextarea(`textarea-strokes-values-encoded`)
 
     // Merge

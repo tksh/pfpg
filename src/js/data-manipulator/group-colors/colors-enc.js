@@ -1,19 +1,14 @@
-function encodeColors(strokesAttrsMap){
-    const encodedColorsByGroup = new Map();
+function encodeGroupColors(linesDataMap){
+    const encodedColors = new Map();
 
-    // Color attrs for group like ...
-    // "g_stroke": "#000",
-    // "g_opacity": 1,
-    // "g_stroke-opacity": 1,
-
-    for ([groupId, attrsObj] of strokesAttrsMap) {
+    for (let linesData of linesDataMap.values()) {
 
         let colorsStr = ""
 
         // Normalize three color values
-        const gStroke = hexExpandTo6(attrsObj.g_stroke.slice(1))            // Remove '#'
-        const gOpacity = normalizedToHex(attrsObj.g_opacity)                 // Number to Hex
-        const gStrokeOpacity = normalizedToHex(attrsObj["g_stroke-opacity"]) // Number to Hex
+        const gStroke           = hexExpandTo6(linesData.g_stroke.slice(1)) // Remove '#'
+        const gOpacity       = normalizedToHex(linesData.g_opacity)         // Number to Hex
+        const gStrokeOpacity = normalizedToHex(linesData.g_stroke_opacity)  // Number to Hex
 
         // Merge
         colorsStr = gStroke + gOpacity + gStrokeOpacity
@@ -23,7 +18,7 @@ function encodeColors(strokesAttrsMap){
         colorsStr = hexShortenFrom10(colorsStr)
 
         // Set into Map
-        encodedColorsByGroup.set(groupId, colorsStr)
+        encodedColors.set(linesData.g_id, colorsStr)
     }
-    return encodedColorsByGroup
+    return encodedColors
 }

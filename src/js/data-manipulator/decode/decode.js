@@ -38,7 +38,7 @@ function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) 
         // Extract the values
         const basicDataMap = urlParamsAsTwoMaps.artwork_data
         // console.log("basicDataMap: ", basicDataMap)
-        // Map(4) {'artwork_id' => '202308_001', 'grid_size' => '31x31', 'uint_n' => 5, 'bg_color' => '9999'}
+        // Map(4) {'artwork_id' => '202308_001', 'grid_size' => '31x31', 'uintN' => 5, 'bg_color' => '9999'}
 
         const strokesValuesMap = urlParamsAsTwoMaps.strokes_values
         // console.log("strokesValuesMap: ", strokesValuesMap)

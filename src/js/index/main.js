@@ -461,7 +461,7 @@
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////// Change background ///////////////////////////
 
-    // resvg-js playground original background color picker
+    // resvg-js playground original base color picker
 
     // const backgroundColorPickerElement = document.querySelector('#background-color-picker')
     // backgroundColorPickerElement.addEventListener('change', function (event) {

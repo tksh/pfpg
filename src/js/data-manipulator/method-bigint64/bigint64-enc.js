@@ -6,15 +6,15 @@ function bigint64Enc() {
     //console.log("digits_of_chunk: ", digits_of_chunk) // 2
 
 
-    // Get the strokes values
+    // Get the lines data
 
-    // Read the relative d values from .json as Map() grouped by group_id
-    const strokesAttrsMap = jsonToMapObj('textarea-strokes-attrs-uploaded')
-    //console.log('strokesAttrsMap: ', strokesAttrsMap)
+    // Read the relative d values from .json as Map()
+    const linesDataMap = jsonToMapObj('textarea-lines-data-uploaded')
+    //console.log('linesDataMap: ', linesDataMap)
     //Map(5) {'1' => {…}, '2' => {…}, '3' => {…}, '4' => {…}, '5' => {…}}
 
     // Test
-    //for ([groupId, attrsObj] of strokesAttrsMap) {
+    //for ([groupId, attrsObj] of linesDataMap) {
     //    console.log(groupId)                // 1
     //    console.log(attrsObj)               // {g_stroke: '#000', g_opacity: 1, g_stroke-opacity: 1, id: Array(19), stroke-width: Array(19), …}
     //    console.log(attrsObj.d.absolute)    // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
@@ -25,7 +25,7 @@ function bigint64Enc() {
 
     // Bigint64 encode apply to absolute d values
 
-    const encodedDvalByGroup = bigint64EncByGroup(strokesAttrsMap, digits_of_chunk)
+    const encodedDvalByGroup = bigint64EncByGroup(linesDataMap, digits_of_chunk)
     //console.log("encodedStrByGroup: ", encodedStrByGroup)
     // Map(5) {'1' => '01040706080719252428301704222622222323000000152005000015000028240011161922080104061008112426242830200824232224312626252321230005242225273122091720232710', '2' => ...
 
@@ -37,7 +37,7 @@ function bigint64Enc() {
     const encodedWidthCountByGroup = encodeWidthCount()
 
     // Get the group colors(stroke, opacity, stroke-opacity) encoded as 10|6|5|3|1 chars hex
-    const encodedColorsByGroup = encodeColors(strokesAttrsMap)
+    const encodedColorsByGroup = encodeGroupColors(linesDataMap)
     console.log(encodedColorsByGroup) // Map(5) {'1' => '0', '2' => '0', '3' => '0', '4' => 'e', '5' => 'f'}
 
     // Choose smaller one between URLComp applied or not, for each group
@@ -62,7 +62,7 @@ function bigint64Enc() {
     // 0=129CaJGsAQK33q3FDaoQNuZs6u8XQW_EYegViBcDQ0gxtk-YqavrFw0V3KXggctKtnLfj_rl3ZzTzitfvmVp-Wz09Um3k4e8YyZ9kGHG0aT&0=129ziJH ...
 
     // Show the size of result in html and console
-    showStringSize('Strokes Values', wholeGroupStrJoined, 'encoded-strokes-values-size')
+    showStringSize('Lines Data', wholeGroupStrJoined, 'encoded-strokes-values-size')
 
     // Show the processing time in html and console
     const endTime = performance.now()
@@ -70,7 +70,7 @@ function bigint64Enc() {
     showProcessingTime('bigint64Enc()', elapsedTime, 'encoded-strokes-values-time')
 
     // Show the encoding result of each group in console
-    showDetailsByGroup('Strokes Values', optimizedEncodedStrokesByGroup)
+    showDetailsByGroup('Lines Data', optimizedEncodedStrokesByGroup)
 
     return optimizedEncodedStrokesByGroup
 }
@@ -99,10 +99,10 @@ function padZero(number, targetLength) {
 
 
 
-function bigint64EncByGroup(strokesAttrsMap, digits_of_chunk) {
+function bigint64EncByGroup(linesDataMap, digits_of_chunk) {
     const encodedStrByGroup = new Map();
 
-    for ([groupId, attrsObj] of strokesAttrsMap) {
+    for ([groupId, attrsObj] of linesDataMap) {
 
         // absolute d values array in obj, x1 to y2
         const absDvals = attrsObj.d.absolute

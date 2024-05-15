@@ -1,19 +1,12 @@
 function encodeWidthCount() {
-    // Read the Aggregated Data for Compression from .json as Map() grouped by group_id
+    // Read the Lines Data Aggregated for Encoding from .json as Map()
     const aggDataMap = jsonToMapObj(`textarea-agg-data-for-comp-uploaded`)
 
     const encodedStrByGroupId = new Map()
 
-    // for ([groupId, aggDataObj] of aggDataMap) {
-    //     console.log(groupId)                   // 1
-    //     console.log(aggDataObj)                // {list_of_width: Array(1), count_by_width: Array(1), absolute: {…}, relative: {…}}
-    //     console.log(aggDataObj.list_of_width)  // [3]
-    //     console.log(aggDataObj.count_by_width) // [19]
-    // }
-
-    for ([groupId, aggDataObj] of aggDataMap) {
-        const widthArr = aggDataObj.list_of_width
-        const countArr = aggDataObj.count_by_width
+    for (let agg of aggDataMap.values()) {
+        const widthArr = agg.stroke_width.list_of
+        const countArr = agg.stroke_width.count_by
 
         // Merge into a string
         let widthAndCountStr = ""
@@ -21,7 +14,7 @@ function encodeWidthCount() {
             widthAndCountStr += widthArr[i]
             widthAndCountStr += base53Encode(countArr[i])
         }
-        encodedStrByGroupId.set(groupId, widthAndCountStr)
+        encodedStrByGroupId.set(agg.g_id, widthAndCountStr)
     }
     return encodedStrByGroupId
 }

@@ -11,7 +11,7 @@ function subtractNumAfterDecodeForBase52ForFreqDictValue(num) {
 
 
 function getMostSmallDiffNumberAsAbsForEnc() {
-    const uintXPortray = getUintNPortrayForEnc().uint_n    // Get uintX from "textarea"
+    const uintXPortray = parseBasicData().uintN    // Get uintX from "textarea"
     const  startOfRelValue = -(2**uintXPortray) + 1        // if uintXPortray = 8 =>  -255
     const startOfRelRange  = -(startOfRelValue*2)          // if uintXPortray = 8 =>  -510
     const startOfDiffRange = -(startOfRelRange*2)          // if uintXPortray = 8 => -1020

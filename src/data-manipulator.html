@@ -98,7 +98,7 @@
         <h2>Encode the Basic Data: <span>For the first element of encoded url params</span></h2>
 
         <h3>1. ⬆ Basic Data:</h3>
-        <label for="select-file-basic-data" class="custom-file-upload-button">Select the JSON file that contains artwork id, grid size and background color</label>
+        <label for="select-file-basic-data" class="custom-file-upload-button">Select the JSON file that contains title, viewbox and base color (rect fill)</label>
         <br />
         <input type="file" id="select-file-basic-data" onchange="selectFileToInput('select-file-basic-data', 'textarea-basic-data-uploaded')" />
         <br />
@@ -123,14 +123,14 @@
 
     </div>
     <div class="bg-1 pad">
-        <h2>Encode the Strokes Values: <span>For the second element of encoded url params</span></h2>
+        <h2>Encode the Lines Data: <span>For the second element of encoded url params</span></h2>
 
-        <h3>2.1 ⬆ Strokes Attributes</h3>
-        <label for="select-file-strokes-attrs">Select the JSON file that contains the strokes values extracted from SVG</label>
+        <h3>2.1 ⬆ Lines Data</h3>
+        <label for="select-file-lines-data">Select the JSON file that contains the lines data extracted from SVG</label>
         <br />
-        <input type="file" id="select-file-strokes-attrs" onchange="selectFileToInput('select-file-strokes-attrs', 'textarea-strokes-attrs-uploaded')" />
+        <input type="file" id="select-file-lines-data" onchange="selectFileToInput('select-file-lines-data', 'textarea-lines-data-uploaded')" />
         <br />
-        <textarea id="textarea-strokes-attrs-uploaded" class="height-1" placeholder="./json_extracted/%{ARTWORK_ID}_strokes_attrs.json">[
+        <textarea id="textarea-lines-data-uploaded" class="height-1" placeholder="./json_extracted/%{ARTWORK_ID}_strokes_attrs.json">[
     {
         "g_id": 1,
         "g_stroke": "#000000",
@@ -179,8 +179,8 @@
         </textarea>
         <br />
 
-        <h3>2.2 ⬆ Aggregated Data for Compression</h3>
-        <label for="select-file-agg-data-for-comp">Select the JSON file that contains the data aggregated from strokes values</label>
+        <h3>2.2 ⬆ Lines Data Aggregated for Encoding</h3>
+        <label for="select-file-agg-data-for-comp">Select the JSON file that contains the data aggregated from lines data</label>
         <br />
         <input type="file" id="select-file-agg-data-for-comp" onchange="selectFileToInput('select-file-agg-data-for-comp', 'textarea-agg-data-for-comp-uploaded')" />
         <br />
@@ -291,15 +291,15 @@
         <h3>Select: Encoding Methods</h3>
 
         <button onclick="bruteforce53Enc()">Encode via <b>bruteforce53Enc()</b></button>
-        <p>For: UInt[5-14]Portray<br>With: Aggregated Data for Compression (list_of_width, count_by_width, diff, diff_values_sorted_by_freq and diff_counts_sorted_by_freq)</p>
+        <p>For: UInt[5-14]Portray<br>With: Lines Data Aggregated for Encoding (list_of_width, count_by_width, diff, diff_values_sorted_by_freq and diff_counts_sorted_by_freq)</p>
         <br />
 
         <button onclick="bigint64Enc()">Encode via <b>bigint64Enc()</b></button>
-        <p>For: UInt[5-14]Portray<br>With: Strokes Attributes (<b>absolute</b> d values) and Aggregated Data for Compression (list_of_width and count_by_width)</p>
+        <p>For: UInt[5-14]Portray<br>With: Lines Data (<b>absolute</b> d values) and Lines Data Aggregated for Encoding (list_of_width and count_by_width)</p>
         <br />
 
         <button onclick="swap63Enc()">Encode via <b>swap63Enc()</b></button>
-        <p>For: <b>UInt5Portray ONLY</b> (grid size: 31 x 31)<br>With: Strokes Attributes (<b>relative</b> d values) and Aggregated Data for Compression (list_of_width and count_by_width)</p>
+        <p>For: <b>UInt5Portray ONLY</b> (viewbox: 31 x 31)<br>With: Lines Data (<b>relative</b> d values) and Lines Data Aggregated for Encoding (list_of_width and count_by_width)</p>
         <br />
 
 
@@ -313,8 +313,8 @@
         <p>For: UInt<b>[6-14]</b>Portray<br>Methods: bruteforce53Enc(), bigint64Enc()</p>
         <br />
 
-        <!-- Textarea to output the strokes values encoded -->
-        <textarea id="textarea-strokes-values-encoded" class="height-1" placeholder="Strokes Values encoded"></textarea>
+        <!-- Textarea to output the lines data encoded -->
+        <textarea id="textarea-strokes-values-encoded" class="height-1" placeholder="Lines Data encoded"></textarea>
         <!-- Show the result -->
         <p id="encoded-strokes-values-size"></p>
         <p id="encoded-strokes-values-time"></p>
@@ -322,7 +322,7 @@
 
     </div>
     <div class="bg-2 pad">
-        <h2>Merge the Encoded Basic Data and Strokes Values</h2>
+        <h2>Merge the Encoded Basic Data and Lines Data</h2>
 
         <h3>3. ⬇ Finished URL Params:</h3>
         <button onclick="mergeBasicDataAndStrokesValues()">Merge via <b>mergeBasicDataAndStrokesValues()</b></button>

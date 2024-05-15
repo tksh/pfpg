@@ -52,15 +52,15 @@ function decodeAsTwoMaps(paramsArray) {
     // Set into Map
     basicDataMap.set("artwork_id", artworkId)  // String
     basicDataMap.set("grid_size", gridSize)    // String
-    basicDataMap.set("uint_n", uintN)          // Number
+    basicDataMap.set("uintN", uintN)          // Number
     basicDataMap.set("bg_color", bgColor)      // String
 
     console.log('basicDataMap: ', basicDataMap)
-    // Map(4) {'artwork_id' => '202308_001', 'grid_size' => '31x31', 'uint_n' => 5, 'bg_color' => '9999'}
+    // Map(4) {'artwork_id' => '202308_001', 'grid_size' => '31x31', 'uintN' => 5, 'bg_color' => '9999'}
 
 
 
-    // Get Strokes Values as Map
+    // Get Lines Data as Map
     // 2番目([1])以降のストローク情報の key, value を ループで取り出し
 
     const strokesValuesMap = new Map()
@@ -109,7 +109,7 @@ function decodeAsTwoMaps(paramsArray) {
         const decodedWidthCount = decodeWidthCountAsObj(encodedWidthCount)
         // width_count: Map(1) {3 => 19}
 
-        // Get the strokes values
+        // Get the lines data
         // Extract an encoded string of whole d values
         // Not split into x1, y1, x2, y2
         const encodedDvalsStr = extractAfterFirstHyphen(strokesValues)

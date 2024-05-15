@@ -102,7 +102,7 @@ function viewboxUnSlimmed(svgTextareaAndString) {
     const isDataManipulatorOrIndexBool = false
     const urlParamsAsTwoMaps = readUrlParamsAsMaps(isDataManipulatorOrIndexBool)
     const basicDataMap = urlParamsAsTwoMaps.artwork_data
-    // e.g.: Map(4) {'artwork_id' => '202308_001', 'grid_size' => '31x31', 'uint_n' => 5, 'bg_color' => '9999'}
+    // e.g.: Map(4) {'artwork_id' => '202308_001', 'grid_size' => '31x31', 'uintN' => 5, 'bg_color' => '9999'}
 
     const gridSize = basicDataMap.get('grid_size') // e.g: '31x31'
     const splitByX = gridSize.split('x')             // e.g.: '31', '31'

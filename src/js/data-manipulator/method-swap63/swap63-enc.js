@@ -10,9 +10,9 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
     // Map(63) { -31 → "0", -30 → "1", -29 → "2", -28 → "3", -27 → "4", -26 → "5", -25 → "6", -24 → "7", -23 → "8", -22 → "9", … }
 
 
-    // Read the relative d values from .json as Map() grouped by group_id
-    const strokesAttrsMap = jsonToMapObj('textarea-strokes-attrs-uploaded')
-    //console.log('strokesAttrsMap: ', strokesAttrsMap)
+    // Read the relative d values from .json as Map()
+    const linesDataMap = jsonToMapObj('textarea-lines-data-uploaded')
+    //console.log('linesDataMap: ', linesDataMap)
     //Map(5) {'1' => {…}, '2' => {…}, '3' => {…}, '4' => {…}, '5' => {…}}
     //    [[Entries]]
     //    0: {"1" => Object}
@@ -22,7 +22,7 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
     //    4: {"5" => Object}
 
     // Test
-    //for ([groupId, attrsObj] of strokesAttrsMap) {
+    //for ([groupId, attrsObj] of linesDataMap) {
     //    console.log(groupId)                // 1
     //    console.log(attrsObj)               // {g_stroke: '#000', g_opacity: 1, g_stroke-opacity: 1, id: Array(19), stroke-width: Array(19), …}
     //    console.log(attrsObj.d.relative)    // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
@@ -31,7 +31,7 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
 
 
     // Get the string of d values encoded as Map
-    const encodedDvalByGroup = swap63EncByGroup(swap63DictMap, strokesAttrsMap)
+    const encodedDvalByGroup = swap63EncByGroup(swap63DictMap, linesDataMap)
     console.log('encodedDvalByGroup: ', encodedDvalByGroup)
     // Map(5) {'1' => 'wyyvtuDwtzxifJxuvunv56nudvqm96wo9xuuucvvuzvzAwvvvyzxsvxDyVUSByqATCUWytEBzzAx', '2' => 'v9oswnHvnuzxsxwmvxDDAA7tWtvshunl_AxxwxxxxxyvwtvxwspCtuxxwwxyuwxw', '3' => 'wCuuzusuvxxrxuxtvAzyyyrvveuurvsttxxputwvsvttturpyutrsqttsAtvaBVbpyJuvwttrurvwrqppqqstrskuvmruyxmsqtruvtrwwwvBymtrvuDxuvqwuMuuwwwyywwvuxxuvyyrstuutwxyxxwxwyxxswxxtvyxzwxxxwwxAyxxxzyywwwxzwzzsyxvxxyytxwxyCCBAAyxzyxyxyxtuvAxzyzwvxvtsssuwwzyyzvwttxtvyt', '4' => 'JvruxouwuwvpwjxuvvABtvBuxzuxAhHsvtssxvqAxvxxwwwxwvwxyywyxxtuwutzvvywAxxxxwtt', '5' => 'HuxwxxuQcuywAwvtutuxxxyxywww'}
 
@@ -46,7 +46,7 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
 
 
     // Get the group colors(stroke, opacity, stroke-opacity) encoded as 10|6|5|3|1 chars hex
-    const encodedColorsByGroup = encodeColors(strokesAttrsMap)
+    const encodedColorsByGroup = encodeGroupColors(linesDataMap)
     //console.log(encodedColorsByGroup) // Map(5) {'1' => '000', '2' => '000', '3' => '000', '4' => 'eee', '5' => 'fff'}
 
 
@@ -75,7 +75,7 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
     // 000=19gUZa0HMswFYl ... lCLwK3WhT
 
     // Show the size of result in html and console
-    showStringSize('Strokes Values', wholeGroupStrJoined, 'encoded-strokes-values-size')
+    showStringSize('Lines Data', wholeGroupStrJoined, 'encoded-strokes-values-size')
 
     // Show the processing time in html and console
     const endTime = performance.now()
@@ -83,7 +83,7 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
     showProcessingTime('swap63Enc()', elapsedTime, 'encoded-strokes-values-time')
 
     // Show the encoding result of each group in console
-    showDetailsByGroup('Strokes Values', optimizedEncodedStrokesByGroup)
+    showDetailsByGroup('Lines Data', optimizedEncodedStrokesByGroup)
 
     return optimizedEncodedStrokesByGroup
 }
@@ -91,12 +91,12 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
 
 
 // Get the encoded string of d values as Map
-function swap63EncByGroup(dictMap, strokesAttrsMap) {
+function swap63EncByGroup(dictMap, linesDataMap) {
     //console.log(dictMap); // Map(63) {-31 => '0', -30 => '1', -29 => '2', -28 => '3', -27 => '4', …}
 
     const encodedStrByGroup = new Map();
 
-    for ([groupId, attrsObj] of strokesAttrsMap) {
+    for ([groupId, attrsObj] of linesDataMap) {
 
         // A variable to store the encoded string of d values
         let dvalsEncodedStr = ""; // x1, y1, x2, y2, joined without spaces

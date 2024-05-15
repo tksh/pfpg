@@ -19,6 +19,6 @@ function decodeColors(tenDigitsHex) {
     // Set into Object
     groupColors["g_stroke"]         = stroke
     groupColors["g_opacity"]        = opacity
-    groupColors["g_stroke-opacity"] = strokeOpacity
+    groupColors.g_stroke_opacity = strokeOpacity
     return groupColors
 }
