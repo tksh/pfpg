@@ -229,26 +229,27 @@ function bruteforce53Enc() {
 
 
 
-        //  Merge with Width Count and Group Colors, Then Compress
+        //  Merge with Width-and-Counts and Group-Colors, Then Compress
 
-        // [Group Colors]=[Width Count]-[Encode Dict and Diff]
+        // [group-colors]=[width-and-counts]-[dict-and-diff]
 
-        // Get the width count (list_of_width and count_by_width) encoded as a string
-        const encodedWidthCount = encodeWidthCount()
 
-        // Read the lines data from .json as Map()
-        const linesDataMap = jsonToMapObj('textarea-lines-data-uploaded')
+        // Get the encoded strings of width-and-counts and group-colors
+
+        // Get the list-of-stroke-width and count-by-stroke-width encoded as a string
+        const encodedWidthAndCounts = encodeWidthAndCounts()
+        // Map(5) {'1' => '3t', '2' => '2q', '3' => '1bk', '4' => '1t', '5' => '1h'}
 
         // Get the group colors(stroke, opacity, stroke-opacity) encoded as 10|6|5|3|1 chars hex
-        const encodedColors = encodeGroupColors(linesDataMap)
-        //console.log(encodedColors) // Map(5) {'1' => '0', '2' => '0', '3' => '0', '4' => 'e', '5' => 'f'}
+        const encodedGroupColors = encodeGroupColors()
+        // Map(5) {'1' => '0', '2' => '0', '3' => '0', '4' => 'e', '5' => 'f'}
 
 
         // Choose smaller one between URLComp applied or not, for each group
         const optimizedByGroup = tryOptimizeWithURLComp(
             encodedDval,
-            encodedWidthCount,
-            encodedColors,
+            encodedWidthAndCounts,
+            encodedGroupColors,
             'bruteforce53-enc',
             baseXNumber
         )

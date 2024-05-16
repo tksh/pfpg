@@ -23,30 +23,32 @@ function bigint64Enc() {
     // Map(5) {'1' => '01040706080719252428301704222622222323000000152005000015000028240011161922080104061008112426242830200824232224312626252321230005242225273122091720232710', '2' => ...
 
 
-    //  From agg-data-for-comp
+    // Get the encoded strings of width-and-counts and group-colors
 
-    // Get the width count (list_of_stroke_width and count_by_stroke_width) encoded as a string
-    const encodedWidthCount = encodeWidthCount()
+    // Get the list-of-stroke-width and count-by-stroke-width encoded as a string
+    const encodedWidthAndCounts = encodeWidthAndCounts()
+    // Map(5) {'1' => '3t', '2' => '2q', '3' => '1bk', '4' => '1t', '5' => '1h'}
 
     // Get the group colors(stroke, opacity, stroke-opacity) encoded as 10|6|5|3|1 chars hex
-    const encodedColors = encodeGroupColors(linesDataMap)
-    console.log(encodedColors) // Map(5) {'1' => '0', '2' => '0', '3' => '0', '4' => 'e', '5' => 'f'}
+    const encodedGroupColors = encodeGroupColors()
+    // Map(5) {'1' => '0', '2' => '0', '3' => '0', '4' => 'e', '5' => 'f'}
+
 
     // Choose smaller one between URLComp applied or not, for each group
-    const optimizedWithUrlComp = tryOptimizeWithURLComp(
-                                                        encodedDval,
-                                                        encodedWidthCount,
-                                                        encodedColors,
-                                                        'bigint64-enc',
-                                                        digitsOfChunk
-                                                       )
-    //console.log('optimizedWithUrlComp: ', optimizedWithUrlComp)
+    const optimizedByGroup = tryOptimizeWithURLComp(
+        encodedDval,
+        encodedWidthAndCounts,
+        encodedGroupColors,
+        'bigint64-enc',
+        digitsOfChunk
+    )
+    //console.log('optimizedByGroup: ', optimizedByGroup)
     // Map(5) {'1' => '0=129CaJGsAQK33q3FDaoQNuZs6u8XQW_EYegViBcDQ0gxtk-YqavrFw0V3KXggctKtnLfj_rl3ZzTzitfvmVp-Wz09Um3k4e8YyZ9kGHG0aT', '2' => '0=129ziJH ...
 
 
 
     // Whole group strings joined with `&`
-    const wholeGroupStrJoined = joinWithAnd(optimizedWithUrlComp)
+    const wholeGroupStrJoined = joinWithAnd(optimizedByGroup)
 
 
     // Output to textarea
@@ -62,9 +64,9 @@ function bigint64Enc() {
     showProcessingTime('bigint64Enc()', elapsedTime, 'encoded-strokes-values-time')
 
     // Show the encoding result of each group in console
-    showDetailsByGroup('Lines Data', optimizedWithUrlComp)
+    showDetailsByGroup('Lines Data', optimizedByGroup)
 
-    return optimizedWithUrlComp
+    return optimizedByGroup
 }
 
 

@@ -63,13 +63,13 @@ function parseBasicData() {
     const rectFill = json.rect.fill.slice(1) // 555C&
 
     return {
-        title        : title,
+        title,
         viewbox      : viewboxEncoded,
         viewboxWidth : viewboxSplitBySpace[2],
         viewboxHeight: viewboxSplitBySpace[3],
-        max          : max,
-        uintN        : uintN,
-        rectFill     : rectFill
+        max,
+        uintN,
+        rectFill
     }
 }
 

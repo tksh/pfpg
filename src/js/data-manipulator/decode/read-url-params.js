@@ -73,7 +73,7 @@ function decodeAsTwoMaps(paramsArray) {
     //                                },
     //                three_flags   => [Three Chars Array],
     //                width_count   => {
-    //                                 "list_of_width" <Number> => "count_by_width" <Number> ...,
+    //                                 "list_of_stroke_width" <Number> => "count_by_stroke_width" <Number> ...,
     //                                },
     //                encoded_dvals => "Encoded_Strings" <String>
     //               ]
@@ -82,7 +82,7 @@ function decodeAsTwoMaps(paramsArray) {
 
         console.log('paramsArray[i]: ', paramsArray[i])
 
-        // Group Colors as Object
+        // Group-Colors as Object
         const hex10Chars = hexExpandTo10(paramsArray[i][0])         // 000000ffff
         const decodedColorsObj = decodeColors(hex10Chars) // Return as Object with 3 elements
         // group_colors: {g_stroke: '#ffffff', g_opacity: 1, g_stroke-opacity: 1}
@@ -91,7 +91,7 @@ function decodeAsTwoMaps(paramsArray) {
         const splittedThreeFlags = paramsArray[i][1].slice(0, 3).split('')   // ['1', '2', 'n']
         // three_flags: (3) ['1', '2', 'n']
 
-        // Width Count as Map
+        // Width-and-Counts as Map
         let strokesValues = paramsArray[i][1].slice(3)
         //console.log("strokesValues(Before URLComp expand): ", strokesValues)
         // 3t-BRY8zuZS6-yuj6xgi-u9utYvXoK0QEXoKySIqr46g3-9HxEs1eG2VMHxerRFrXM3mjZxLkf-wwSvNRnQb88G
@@ -102,11 +102,11 @@ function decodeAsTwoMaps(paramsArray) {
 
         console.log("strokesValues(After URLComp expand): ", strokesValues)
 
-        const encodedWidthCount = strokesValues.split('-')[0]
-        console.log("encodedWidthCount: ", encodedWidthCount) // 3t
+        const encodedWidthAndCounts = strokesValues.split('-')[0]
+        console.log("encodedWidthAndCounts: ", encodedWidthAndCounts) // 3t
 
         // Decode the count and width, and generate the firstline and lastline
-        const decodedWidthCount = decodeWidthCountAsObj(encodedWidthCount)
+        const decodedWidthCount = decodeWidthCountAsObj(encodedWidthAndCounts)
         // width_count: Map(1) {3 => 19}
 
         // Get the lines data

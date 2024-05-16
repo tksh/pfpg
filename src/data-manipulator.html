@@ -46,13 +46,13 @@
     <script src="./js/data-manipulator/color-formatter/hex-shorten.js"></script>
     <script src="./js/data-manipulator/color-formatter/hex-expand.js"></script>
 
-    <!-- Group Colors -->
-    <script src="./js/data-manipulator/group-colors/colors-enc.js"></script>
-    <script src="./js/data-manipulator/group-colors/colors-dec.js"></script>
+    <!-- Group-Colors -->
+    <script src="./js/data-manipulator/encode/group-colors-enc.js"></script>
+    <script src="./js/data-manipulator/decode/group-colors-dec.js"></script>
 
-    <!-- Width Count -->
-    <script src="./js/data-manipulator/width-count/width-count-enc.js"></script>
-    <script src="./js/data-manipulator/width-count/width-count-dec.js"></script>
+    <!-- Width-and-Counts -->
+    <script src="./js/data-manipulator/encode/width-and-counts-enc.js"></script>
+    <script src="./js/data-manipulator/decode/width-and-counts-dec.js"></script>
 
     <!-- Bruteforce53 encoding method -->
     <script src="./js/data-manipulator/method-bruteforce53/bruteforce53-enc.js"></script>
@@ -220,15 +220,15 @@
         <h3>Select: Encoding Methods</h3>
 
         <button onclick="bruteforce53Enc()">Encode via <b>bruteforce53Enc()</b></button>
-        <p>For: UInt[5-14]Portray<br>With: Lines Data Aggregated for Encoding (list_of_width, count_by_width, diff, diff_values_sorted_by_freq and diff_counts_sorted_by_freq)</p>
+        <p>For: UInt[5-14]Portray<br>With: Lines Data Aggregated for Encoding (list_of_stroke_width, count_by_stroke_width, diff, diff_values_sorted_by_freq and diff_counts_sorted_by_freq)</p>
         <br />
 
         <button onclick="bigint64Enc()">Encode via <b>bigint64Enc()</b></button>
-        <p>For: UInt[5-14]Portray<br>With: Lines Data (<b>absolute</b> d values) and Lines Data Aggregated for Encoding (list_of_width and count_by_width)</p>
+        <p>For: UInt[5-14]Portray<br>With: Lines Data (<b>absolute</b> d values) and Lines Data Aggregated for Encoding (list_of_stroke_width and count_by_stroke_width)</p>
         <br />
 
         <button onclick="swap63Enc()">Encode via <b>swap63Enc()</b></button>
-        <p>For: <b>UInt5Portray ONLY</b> (viewbox: 31 x 31)<br>With: Lines Data (<b>relative</b> d values) and Lines Data Aggregated for Encoding (list_of_width and count_by_width)</p>
+        <p>For: <b>UInt5Portray ONLY</b> (viewbox: 31 x 31)<br>With: Lines Data (<b>relative</b> d values) and Lines Data Aggregated for Encoding (list_of_stroke_width and count_by_stroke_width)</p>
         <br />
 
 

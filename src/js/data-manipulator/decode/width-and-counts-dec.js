@@ -18,8 +18,8 @@ function decodeWidthCountAsObj(encodedStr) {
 
     // Decode each base53 encoded string to a decimal number
     // インデックスiを2で割った余りが1と等しい = 2で割り切れるない= 奇数 の場合に要素を取得し デコードする
-    const countArray = parts.filter((_, i) => i % 2 === 1).map(part => base53Decode(part));
-    console.log('countArray: ', countArray) // Array(7) [ 104, 168, 183, 92, 12, 5, 37 ]
+    const countsArray = parts.filter((_, i) => i % 2 === 1).map(part => base53Decode(part));
+    console.log('countsArray: ', countsArray) // Array(7) [ 104, 168, 183, 92, 12, 5, 37 ]
 
 
     // Firstline
@@ -27,7 +27,7 @@ function decodeWidthCountAsObj(encodedStr) {
     const reducer = (acc, cur) => acc + cur;
     const initialValueOne = 1; // firstline number
 
-    let firstlineArray = runningReduce(countArray, reducer, initialValueOne);
+    let firstlineArray = runningReduce(countsArray, reducer, initialValueOne);
     firstlineArray.unshift(1) // Add first element with Number 1
     firstlineArray.pop()                             // Delete last element
     //console.log('firstlineArray: ', firstlineArray)
@@ -37,15 +37,15 @@ function decodeWidthCountAsObj(encodedStr) {
 
     const initialValueZero = 0; // firstline number
 
-    let lastlineArray = runningReduce(countArray, reducer, initialValueZero);
-    lastlineArray.unshift(countArray[0]) // Add first element with first 'count' element
+    let lastlineArray = runningReduce(countsArray, reducer, initialValueZero);
+    lastlineArray.unshift(countsArray[0]) // Add first element with first 'count' element
     lastlineArray.pop()                             // Delete last element
     //console.log('lastlineArray: ', lastlineArray)
 
 
     // Return as Object
     return {
-        count: countArray,         // <Number>
+        count: countsArray,         // <Number>
         firstline: firstlineArray, // <Number>
         lastline: lastlineArray,   // <Number>
         width: widthArray          // <String>
