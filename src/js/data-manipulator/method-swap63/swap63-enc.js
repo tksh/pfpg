@@ -24,12 +24,14 @@ function swap63Enc() {
 
     // Get the encoded strings of width-and-counts and group-colors
 
+    const encodedAttrsExceptsDvals = getEncodedAttrsExceptsDvals()
+
     // Get the list-of-stroke-width and count-by-stroke-width encoded as a string
-    const encodedWidthAndCounts = encodeWidthAndCounts()
+//    const encodedWidthAndCounts = encodeWidthAndCounts()
     // Map(5) {'1' => '3t', '2' => '2q', '3' => '1bk', '4' => '1t', '5' => '1h'}
 
     // Get the group colors(stroke, opacity, stroke-opacity) encoded as 10|6|5|3|1 chars hex
-    const encodedGroupColors = encodeGroupColors()
+//    const encodedGroupColors = encodeGroupColors()
     // Map(5) {'1' => '000', '2' => '000', '3' => '000', '4' => 'eee', '5' => 'fff'}
 
 
@@ -37,8 +39,9 @@ function swap63Enc() {
     // Choose smaller one between URLComp applied or not, for each group
     const optimizedByGroup = tryOptimizeWithURLComp(
         encodedDval,
-        encodedWidthAndCounts,
-        encodedGroupColors,
+        encodedAttrsExceptsDvals,
+        // encodedWidthAndCounts,
+        // encodedGroupColors,
         'swap63-enc',
         null                        // value for 3rd char, swap63-enc needs no 3rd char to encode
     )

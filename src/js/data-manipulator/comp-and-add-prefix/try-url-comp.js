@@ -1,12 +1,16 @@
 function tryOptimizeWithURLComp(
     encodedDval,
-    encodedWidthAndCounts,
-    encodedGroupColors,
+    encodedAttrsExceptsDvals,
+    // encodedWidthAndCounts,
+    // encodedGroupColors,
     encodingMethodName,
     valueFor3rdChar
 ) {
     // Encoded string structure: [color]=[1stFlagChar][2ndFlagChar]([3rdFlagChar])[widthAndCounts]-[dval]
     // URLCompressor applied to: [widthAndCounts]-[dval]
+
+    const encodedWidthAndCounts = encodedAttrsExceptsDvals.widthAndCounts
+    const encodedGroupColors    = encodedAttrsExceptsDvals.groupColors
 
     // Store smaller length strings
     const wholeEncodedValues = new Map();
