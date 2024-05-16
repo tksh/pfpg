@@ -245,14 +245,14 @@ function bruteforce53Enc() {
 
 
         // Choose smaller one between URLComp applied or not, for each group
-        const optimizedWithUrlComp = tryOptimizeWithURLComp(
-                                                            encodedDval,
-                                                            encodedWidthCount,
-                                                            encodedColors,
-                                                            'bruteforce53-enc',
-                                                            baseXNumber
-                                                           )
-        console.log('optimizedWithUrlComp: ', optimizedWithUrlComp)
+        const optimizedByGroup = tryOptimizeWithURLComp(
+            encodedDval,
+            encodedWidthCount,
+            encodedColors,
+            'bruteforce53-enc',
+            baseXNumber
+        )
+        console.log('optimizedByGroup: ', optimizedByGroup)
         //  Map(5) {'1' => '0=129CaIjMCzLAFox3gEVYTdnymbAmwP-UWDCnew3h-Aqsd6rQsPf7nuc97B-Tyl896LIItSqsH-0_igZRCKY265Ta0zzD8-axd0B3NgagFJ2rRrUWcULFyn1IwBi', '2' => '0=129zi ...
 
 
@@ -262,12 +262,12 @@ function bruteforce53Enc() {
         // For first loop, init the map with current value
         if (maxDictSize === maxDictSizeStartAt) {
             console.log('maxDictSize in first loop: ', maxDictSize) // 0
-            currentSmallest = optimizedWithUrlComp
+            currentSmallest = optimizedByGroup
             console.log('currentSmallest in first loop: ', currentSmallest)
         }
 
         // For every loop
-        currentSmallest = storeSmaller(currentSmallest, optimizedWithUrlComp)
+        currentSmallest = storeSmaller(currentSmallest, optimizedByGroup)
 
     }
     // End of Loop for every baseX values: [0-52]

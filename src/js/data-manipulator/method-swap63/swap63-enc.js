@@ -6,7 +6,7 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
     // Dictionary and input values
 
     // Swap63 dictionary
-    //console.log('swap63DictMap: ', swap63DictMap);
+    console.log('swap63DictMap: ', swap63DictMap);
     // Map(63) { -31 → "0", -30 → "1", -29 → "2", -28 → "3", -27 → "4", -26 → "5", -25 → "6", -24 → "7", -23 → "8", -22 → "9", … }
 
 
@@ -22,11 +22,11 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
     //    4: {"5" => Object}
 
     // Test
-    //for ([groupId, attrsObj] of linesDataMap) {
+    //for ([groupId, linesData] of linesDataMap) {
     //    console.log(groupId)                // 1
-    //    console.log(attrsObj)               // {g_stroke: '#000', g_opacity: 1, g_stroke-opacity: 1, id: Array(19), stroke-width: Array(19), …}
-    //    console.log(attrsObj.d.relative)    // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
-    //    console.log(attrsObj.d.relative.x1) // (19) [1, 3, 3, 0, -2, -1, 8, 1, -2, 4, 2, -13, -16, 14, 2, -1, 0, -1, -8]
+    //    console.log(linesData)               // {g_stroke: '#000', g_opacity: 1, g_stroke-opacity: 1, id: Array(19), stroke-width: Array(19), …}
+    //    console.log(linesData.d.relative)    // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
+    //    console.log(linesData.d.relative.x1) // (19) [1, 3, 3, 0, -2, -1, 8, 1, -2, 4, 2, -13, -16, 14, 2, -1, 0, -1, -8]
     //}
 
 
@@ -41,13 +41,12 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
 
     // Get the width count (list_of_width and count_by_width) encoded as a string
     const encodedWidthCountByGroup = encodeWidthCount()
-    //console.log(encodedWidthCountByGroup)          // Map(5) {'1' => '3t', '2' => '2q', '3' => '1bk', '4' => '1t', '5' => '1h'}
-    //console.log(encodedWidthCountByGroup.get("1")) // 3t
+    //console.log('encodedWidthCountByGroup: ', encodedWidthCountByGroup)          // Map(5) {'1' => '3t', '2' => '2q', '3' => '1bk', '4' => '1t', '5' => '1h'}
 
 
     // Get the group colors(stroke, opacity, stroke-opacity) encoded as 10|6|5|3|1 chars hex
     const encodedColorsByGroup = encodeGroupColors(linesDataMap)
-    //console.log(encodedColorsByGroup) // Map(5) {'1' => '000', '2' => '000', '3' => '000', '4' => 'eee', '5' => 'fff'}
+    //console.log('encodedColorsByGroup: ', encodedColorsByGroup) // Map(5) {'1' => '000', '2' => '000', '3' => '000', '4' => 'eee', '5' => 'fff'}
 
 
 
@@ -59,7 +58,7 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
         'swap63-enc',
         null                        // value for 3rd char, swap63-enc needs no 3rd char to encode
     )
-    //console.log('optimizedEncodedStrokesByGroup: ', optimizedEncodedStrokesByGroup)
+    console.log('optimizedEncodedStrokesByGroup: ', optimizedEncodedStrokesByGroup)
     // Map { 000 → (2) […] }
     //     0: 000 → Array [ 400, "000=13xbqDCEgLL7jANz5XKXua ... LiAh5KEXgVutC" ]
 
@@ -94,43 +93,45 @@ function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getS
 function swap63EncByGroup(dictMap, linesDataMap) {
     //console.log(dictMap); // Map(63) {-31 => '0', -30 => '1', -29 => '2', -28 => '3', -27 => '4', …}
 
-    const encodedStrByGroup = new Map();
+    const encodedDvals = new Map();
 
-    for ([groupId, attrsObj] of linesDataMap) {
+    for (const linesData of linesDataMap.values()) {
 
         // A variable to store the encoded string of d values
-        let dvalsEncodedStr = ""; // x1, y1, x2, y2, joined without spaces
+        // Joined whole columns (x1, y1, x2, y2) without spaces
+        let dvalsEncodedStr = "";
 
         // relative d values array in obj, x1 to y2
-        const relDvals = attrsObj.d.relative
+        const relDvals = linesData.d.relative
 
-        const numberOfPath = (attrsObj.d.relative.x1).length // x1 to y2 arrays have same length
+        const numberOfPath = (linesData.d.relative.x1).length // x1 to y2 arrays have same length
 
         // Swap from number to char
         for (let key in relDvals) {
-            //console.log('key: ', key)  // key: x1, y1, x2, y2
+            //console.log('key: ', key)  // x1, y1, x2, y2
             const dval = relDvals[key]
             //console.log(dval); // (19) [1, 3, 3, 0, -2, -1, 8, 1, -2, 4, 2, -13, -16, 14, 2, -1, 0, -1, -8]
 
+            // Encode and append
             dvalsEncodedStr = dvalsEncodedStr + swap63NumToChar(dval, numberOfPath, dictMap)
         }
 
-        encodedStrByGroup.set(groupId, dvalsEncodedStr)
+        encodedDvals.set(linesData.g_id, dvalsEncodedStr)
     }
-    return encodedStrByGroup
+    return encodedDvals
 }
 
 
 
 function swap63NumToChar(dval, numberOfPath, dictMap) {
 
-    let dvalsEncodedStr = ''
+    let dvalEncoded = ''
 
     // Use the original d value as an index to look up a character from the keys list and append it to the symbol string variable
     for (let i = 0; i < numberOfPath; i++) {
         const encodedChar = dictMap.get(dval[i]);
-        dvalsEncodedStr = dvalsEncodedStr + encodedChar
+        dvalEncoded = dvalEncoded + encodedChar
     }
 
-    return dvalsEncodedStr
+    return dvalEncoded
 }
