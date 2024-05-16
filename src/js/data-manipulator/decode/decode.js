@@ -140,7 +140,7 @@ function decodeStrokesValues(strokesValuesMap) {
     const decodedAbsDvalsMap = new Map()
     const decodedRelDvalsMap = new Map()
 
-    for ([groupId, v] of strokesValuesMap) {
+    for ([gId, v] of strokesValuesMap) {
         // console.log("v.encoded_dvals: ", v.encoded_dvals) // "x1 + y1 + x2 + y2"
         // H5yJn8tIS6hWuVfFgdJIY10GsuwXo0w
 
@@ -148,7 +148,7 @@ function decodeStrokesValues(strokesValuesMap) {
         let decodedRelDvals = []
 
         if (v.three_flags[1] === '0') {
-            console.log(`Group ${groupId} has encoded with 'bruteforce53-enc'`)
+            console.log(`Group ${gId} has encoded with 'bruteforce53-enc'`)
             decodedDiffDvals = decodeBruteforce53Enc(v.encoded_dvals, v.three_flags)
             decodedRelDvals = decodedDiffDvals.map(column => diffToRel(column))
             decodedAbsDvals = relToAbs(decodedRelDvals)
@@ -170,14 +170,14 @@ function decodeStrokesValues(strokesValuesMap) {
 
         // Set into Map
         decodedAbsDvalsMap.set(
-            groupId, {
+            gId, {
             x1: decodedAbsDvals[0],
             y1: decodedAbsDvals[1],
             x2: decodedAbsDvals[2],
             y2: decodedAbsDvals[3],
         })
         decodedRelDvalsMap.set(
-            groupId, {
+            gId, {
             x1: decodedRelDvals[0],
             y1: decodedRelDvals[1],
             x2: decodedRelDvals[2],

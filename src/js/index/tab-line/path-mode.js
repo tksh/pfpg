@@ -26,9 +26,9 @@ function recoverCurrentOptionValue(svgString, regexPattern, valueString) {
 
 function recoverCurrentGroupColorsValues(svgString, regexPattern, regexMatches) {
     let recoveredSvgString = svgString
-    for (let groupId = 0; groupId < regexMatches.length; groupId++) {
-        const colorsValues = regexMatches[groupId]
-        recoveredSvgString = replaceAtIndex(recoveredSvgString, regexPattern, colorsValues, groupId)
+    for (let gId = 0; gId < regexMatches.length; gId++) {
+        const colorsValues = regexMatches[gId]
+        recoveredSvgString = replaceAtIndex(recoveredSvgString, regexPattern, colorsValues, gId)
     }
     return recoveredSvgString
 }

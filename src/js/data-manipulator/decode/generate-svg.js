@@ -102,8 +102,8 @@ function generateRelPathTags(tabSpace, strokesValuesMap, decodedRelDvalsMap) {
 
     const relPathTagsByGroup = new Map()
 
-    for (let [groupId, v] of strokesValuesMap) {
-        const dvalsObj = decodedRelDvalsMap.get(groupId)
+    for (let [gId, v] of strokesValuesMap) {
+        const dvalsObj = decodedRelDvalsMap.get(gId)
         console.log('dvalsObj: ', dvalsObj) // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
 
         const widthArr = v.width_count.width // list of stroke-width
@@ -142,7 +142,7 @@ function generateRelPathTags(tabSpace, strokesValuesMap, decodedRelDvalsMap) {
         }
         // Set whole tags string that under same color group as value with group ID key
         const wholeTagsUnderGroup = pathTagUnderGroup.join('\n')
-        relPathTagsByGroup.set(groupId, wholeTagsUnderGroup)
+        relPathTagsByGroup.set(gId, wholeTagsUnderGroup)
     }
     // console.log('relPathTagsByGroup: ', relPathTagsByGroup)
     // Map(5) { 
@@ -162,8 +162,8 @@ function generateAbsPathTags(tabSpace, strokesValuesMap, decodedAbsDvalsMap) {
 
     const absPathTagsByGroup = new Map()
 
-    for (let [groupId, v] of strokesValuesMap) {
-        const dvalsObj = decodedAbsDvalsMap.get(groupId)
+    for (let [gId, v] of strokesValuesMap) {
+        const dvalsObj = decodedAbsDvalsMap.get(gId)
         console.log('dvalsObj: ', dvalsObj) // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
 
         const widthArr = v.width_count.width // list of stroke-width
@@ -205,7 +205,7 @@ function generateAbsPathTags(tabSpace, strokesValuesMap, decodedAbsDvalsMap) {
         }
         // Set whole tags string that under same color group as value with group ID key
         const wholeTagsUnderGroup = gAndPathTagsUnderGroup.join('\n')
-        absPathTagsByGroup.set(groupId, wholeTagsUnderGroup)
+        absPathTagsByGroup.set(gId, wholeTagsUnderGroup)
     }
     console.log('absPathTagsByGroup: ', absPathTagsByGroup)
     // Map(5) {
@@ -257,7 +257,7 @@ function generateTagsAfterStrokes(tabSpace) {
 
 function generateGTagOpenByGroup(tabSpace, strokesValuesMap) {
     const gTagOpenByGroup = new Map()
-    for (let [groupId, v] of strokesValuesMap) {
+    for (let [gId, v] of strokesValuesMap) {
         // Generate stroke color group
         const groupColors = v.group_colors
 
@@ -265,7 +265,7 @@ function generateGTagOpenByGroup(tabSpace, strokesValuesMap) {
             + `<g stroke="${groupColors['g_stroke']}" opacity="${groupColors['g_opacity']}" stroke-opacity="${groupColors['g_stroke-opacity']}">`
         //         <g stroke="#000000" opacity="1" stroke-opacity="1">
 
-        gTagOpenByGroup.set(groupId, colorGroupTagOpen)
+        gTagOpenByGroup.set(gId, colorGroupTagOpen)
 
     }
     return gTagOpenByGroup
@@ -273,10 +273,10 @@ function generateGTagOpenByGroup(tabSpace, strokesValuesMap) {
 
 function generateGTagCloseByGroup(tabSpace, strokesValuesMap) {
     const gTagCloseByGroup = new Map()
-    for (let [groupId, v] of strokesValuesMap) {
+    for (let [gId, v] of strokesValuesMap) {
         const colorGroupTagClose = tabSpace.repeat(2) + '</g>'
         //         </g>
-        gTagCloseByGroup.set(groupId, colorGroupTagClose)
+        gTagCloseByGroup.set(gId, colorGroupTagClose)
     }
     return gTagCloseByGroup
 }
@@ -291,9 +291,9 @@ function generatePathTags(isRelOrAbsBool, tabSpace, strokesValuesMap, decodedRel
 }
 
 function mergeGAndPathTags(strokesValuesMap, gTagOpenByGroup, pathTagsByGroup, gTagCloseByGroup) {
-    const groupId = strokesValuesMap.keys()
+    const gId = strokesValuesMap.keys()
     let strokesTags = []
-    for (let id of groupId) {
+    for (let id of gId) {
         strokesTags.push(gTagOpenByGroup.get(id))
         strokesTags.push(pathTagsByGroup.get(id))
         strokesTags.push(gTagCloseByGroup.get(id))

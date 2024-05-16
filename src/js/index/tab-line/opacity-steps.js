@@ -71,20 +71,20 @@ function updateSvgForNewStep() {
     const numberOfGroups = getNumberOfGroups(svgString)
 
     // Loop by group ID: Extract the values from UI tab HTML elements => Replace the <textarea> string
-    for (let groupId = 0; groupId < numberOfGroups; groupId++) {
+    for (let gId = 0; gId < numberOfGroups; gId++) {
 
         // Get 'stroke' value
-        const strokeElementId = `group-colors-stroke-${groupId}`
+        const strokeElementId = `group-colors-stroke-${gId}`
         const strokeElement = document.getElementById(`${strokeElementId}`)
         const stroke = strokeElement.value
 
         // Get 'opacity' value
-        const opacityElementId = `group-colors-opacity-${groupId}`
+        const opacityElementId = `group-colors-opacity-${gId}`
         const opacityElement = document.getElementById(`${opacityElementId}`)
         const opacity = opacityElement.value
 
         // Get 'stroke-opacity' value
-        const strokeOpacityElementId = `group-colors-stroke-opacity-${groupId}`
+        const strokeOpacityElementId = `group-colors-stroke-opacity-${gId}`
         const strokeOpacityElement = document.getElementById(`${strokeOpacityElementId}`)
         const strokeOpacity = strokeOpacityElement.value
 
@@ -101,7 +101,7 @@ function updateSvgForNewStep() {
 
         // Replace the <g> elements via group ID
         const pattern = /<g stroke=[^>]*>/g
-        svgString = replaceAtIndex(svgString, pattern, changedGroupElem, groupId)
+        svgString = replaceAtIndex(svgString, pattern, changedGroupElem, gId)
     }
 
     // Refresh the SVG string in <textarea>
@@ -127,7 +127,7 @@ function getInitialOpacitySteps() {
     const opLargestStep = findLargestStep(opNumArray)
     const soLargestStep = findLargestStep(soNumArray)
 
-    // Select smaller, it is 'opacity steps' for this artwork
+    // Select shorter, it is 'opacity steps' for this artwork
     return Math.min(opLargestStep, soLargestStep);
 }
 

@@ -15,8 +15,8 @@
 function bruteforce53Enc() {
     const startTime = performance.now()
 
-    // To store the smallest encoded string of each group
-    let currentSmallest = new Map()
+    // To store the shortest encoded string of each group
+    let currentShortest = new Map()
 
     const maxDictSizeStartAt = 0
     const maxDictSizeEndAt = 52
@@ -229,46 +229,41 @@ function bruteforce53Enc() {
 
 
 
-        //  Merge with Width-and-Counts and Group-Colors, Then Compress
+        // Try compress and add prefix
 
-        // [group-colors]=[width-and-counts]-[dict-and-diff]
+        // 1. Prepend the encoded stroke-width value and counts to the beginning of encoded d values
+        // 2. Compress the combined string using URLCompressor and choose the shorter version.
+        // 3. Prepend the encoded group-colors value to the chosen string (compressed or original).
+
+        // Format: [group-colors]=[width-and-counts]-[d-values]
 
 
         // Get the encoded strings of width-and-counts and group-colors
+        const encodedAttrsExceptsDvals = getEncodedAttrsExceptsDvals()
 
-        // Get the list-of-stroke-width and count-by-stroke-width encoded as a string
-        const encodedWidthAndCounts = encodeWidthAndCounts()
-        // Map(5) {'1' => '3t', '2' => '2q', '3' => '1bk', '4' => '1t', '5' => '1h'}
-
-        // Get the group colors(stroke, opacity, stroke-opacity) encoded as 10|6|5|3|1 chars hex
-        const encodedGroupColors = encodeGroupColors()
-        // Map(5) {'1' => '0', '2' => '0', '3' => '0', '4' => 'e', '5' => 'f'}
-
-
-        // Choose smaller one between URLComp applied or not, for each group
-        const optimizedByGroup = tryOptimizeWithURLComp(
+        // Choose shorter one between URLComp applied or not, for each group
+        const compressedByGroup = tryCompress(
             encodedDval,
-            encodedWidthAndCounts,
-            encodedGroupColors,
+            encodedAttrsExceptsDvals,
             'bruteforce53-enc',
             baseXNumber
         )
-        console.log('optimizedByGroup: ', optimizedByGroup)
+        console.log('compressedByGroup: ', compressedByGroup)
         //  Map(5) {'1' => '0=129CaIjMCzLAFox3gEVYTdnymbAmwP-UWDCnew3h-Aqsd6rQsPf7nuc97B-Tyl896LIItSqsH-0_igZRCKY265Ta0zzD8-axd0B3NgagFJ2rRrUWcULFyn1IwBi', '2' => '0=129zi ...
 
 
 
-        // Store the smallest string for each group
+        // Store the shortest string for each group
 
         // For first loop, init the map with current value
         if (maxDictSize === maxDictSizeStartAt) {
             console.log('maxDictSize in first loop: ', maxDictSize) // 0
-            currentSmallest = optimizedByGroup
-            console.log('currentSmallest in first loop: ', currentSmallest)
+            currentShortest = compressedByGroup
+            console.log('currentShortest in first loop: ', currentShortest)
         }
 
         // For every loop
-        currentSmallest = storeSmaller(currentSmallest, optimizedByGroup)
+        currentShortest = storeShorter(currentShortest, compressedByGroup)
 
     }
     // End of Loop for every baseX values: [0-52]
@@ -277,16 +272,16 @@ function bruteforce53Enc() {
 
 
     // Result map
-    console.log('currentSmallest: ', currentSmallest)
+    console.log('currentShortest: ', currentShortest)
 
-    // Whole group strings joined with `&`
-    const smallestJoined = joinWithAnd(currentSmallest)
+    // Whole group strings joined with '&'
+    const shortestJoined = joinWithAmpersand(currentShortest)
 
     // Output to textarea
-    outputToTextarea(smallestJoined, 'textarea-strokes-values-encoded')
+    outputToTextarea(shortestJoined, 'textarea-strokes-values-encoded')
 
     // Show the size of result in html and console
-    showStringSize('Lines Data', smallestJoined, 'encoded-strokes-values-size')
+    showStringSize('Lines Data', shortestJoined, 'encoded-strokes-values-size')
 
     // Show the processing time in html and console
     const endTime = performance.now()
@@ -294,7 +289,7 @@ function bruteforce53Enc() {
     showProcessingTime('bruteforce53Enc()', elapsedTime, 'encoded-strokes-values-time')
 
     // Show the encoding result of each group in console
-    showDetailsByGroup('Lines Data', currentSmallest)
+    showDetailsByGroup('Lines Data', currentShortest)
 
-    return currentSmallest
+    return currentShortest
 }

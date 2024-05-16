@@ -64,7 +64,7 @@ function decodeAsTwoMaps(paramsArray) {
     // 2番目([1])以降のストローク情報の key, value を ループで取り出し
 
     const strokesValuesMap = new Map()
-    // key = groupId (seq num)
+    // key = gId (seq num)
     // value = Object[
     //                "group_colors"  => {
     //                                 "g_stroke"         => "#000" <String>,

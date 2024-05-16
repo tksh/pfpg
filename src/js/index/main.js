@@ -98,9 +98,9 @@
                 if (!inputValue) return;
 
                 // elementId最後の idの数値のみ を抽出して 変更されたグループの indexナンバー を特定
-                const groupId = elementId.replace(`group-colors-${attrName}-`, '');
-                //console.log('groupId: ', groupId)                 // e.g: '0', '1', '2' ...
-                //console.log('typeof(groupId): ', typeof(groupId)) // string
+                const gId = elementId.replace(`group-colors-${attrName}-`, '');
+                //console.log('gId: ', gId)                 // e.g: '0', '1', '2' ...
+                //console.log('typeof(gId): ', typeof(gId)) // string
 
                 // Get the matches for <g> from current SVG string in textarea
                 const currentSvg = getInputSvg()
@@ -153,7 +153,7 @@
 
                 // Replace the changed <g> elements via group ID
                 const pattern = /<g stroke=[^>]*>/g;
-                const updatedSvg = replaceAtIndex(currentSvg, pattern, changedGroupElem, groupId)
+                const updatedSvg = replaceAtIndex(currentSvg, pattern, changedGroupElem, gId)
 
                 // Refresh the SVG string in <textarea>
                 svgInputElement.value = updatedSvg;

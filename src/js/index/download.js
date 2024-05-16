@@ -99,10 +99,10 @@ function getCurrentStatus() {
 
     // Reducing into half length if all hex pairs are duplicated.                  10 => 5
     // And deleting for "FF" (in 5 chars hex) or "FFFF" (in 10 chars hex) at last. 10 => 6, 5 => 3
-    const optimizedHexArray = mergedHexArray.map(tenCharsHex => tryDeleteFs(tryReduceAsHalf(tenCharsHex)))
+    const compressedHexArray = mergedHexArray.map(tenCharsHex => tryDeleteFs(tryReduceAsHalf(tenCharsHex)))
 
     // Join the formatted hex with underscore '_'
-    const groupColorsHexString = optimizedHexArray.join('_')
+    const groupColorsHexString = compressedHexArray.join('_')
     console.log('groupColorsHexString: ', groupColorsHexString) // e.g.: "FCFF4280FF_000FC_8F52FFFFFF_EEEFF_FFFFF"
 
 

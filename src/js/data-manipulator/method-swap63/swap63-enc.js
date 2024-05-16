@@ -22,37 +22,33 @@ function swap63Enc() {
 
 
 
-    // Get the encoded strings of width-and-counts and group-colors
+    // Try compress and add prefix
 
+    // 1. Prepend the encoded stroke-width value and counts to the beginning of encoded d values
+    // 2. Compress the combined string using URLCompressor and choose the shorter version.
+    // 3. Prepend the encoded group-colors value to the chosen string (compressed or original).
+
+    // Format: [group-colors]=[width-and-counts]-[d-values]
+
+
+    // Get the encoded strings of width-and-counts and group-colors
     const encodedAttrsExceptsDvals = getEncodedAttrsExceptsDvals()
 
-    // Get the list-of-stroke-width and count-by-stroke-width encoded as a string
-//    const encodedWidthAndCounts = encodeWidthAndCounts()
-    // Map(5) {'1' => '3t', '2' => '2q', '3' => '1bk', '4' => '1t', '5' => '1h'}
-
-    // Get the group colors(stroke, opacity, stroke-opacity) encoded as 10|6|5|3|1 chars hex
-//    const encodedGroupColors = encodeGroupColors()
-    // Map(5) {'1' => '000', '2' => '000', '3' => '000', '4' => 'eee', '5' => 'fff'}
-
-
-
-    // Choose smaller one between URLComp applied or not, for each group
-    const optimizedByGroup = tryOptimizeWithURLComp(
+    // Choose shorter one between URLComp applied or not, for each group
+    const compressedByGroup = tryCompress(
         encodedDval,
         encodedAttrsExceptsDvals,
-        // encodedWidthAndCounts,
-        // encodedGroupColors,
         'swap63-enc',
         null                        // value for 3rd char, swap63-enc needs no 3rd char to encode
     )
-    console.log('optimizedByGroup: ', optimizedByGroup)
+    console.log('compressedByGroup: ', compressedByGroup)
     // Map { 000 → (2) […] }
     //     0: 000 → Array [ 400, "000=13xbqDCEgLL7jANz5XKXua ... LiAh5KEXgVutC" ]
 
 
 
-    // Whole group strings joined with `&`
-    const wholeGroupStrJoined = joinWithAnd(optimizedByGroup)
+    // Whole group strings joined with '&'
+    const wholeGroupStrJoined = joinWithAmpersand(compressedByGroup)
 
 
 
@@ -69,9 +65,9 @@ function swap63Enc() {
     showProcessingTime('swap63Enc()', elapsedTime, 'encoded-strokes-values-time')
 
     // Show the encoding result of each group in console
-    showDetailsByGroup('Lines Data', optimizedByGroup)
+    showDetailsByGroup('Lines Data', compressedByGroup)
 
-    return optimizedByGroup
+    return compressedByGroup
 }
 
 

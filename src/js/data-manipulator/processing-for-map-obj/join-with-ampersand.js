@@ -1,6 +1,6 @@
-// Whole color strings joined with `&`
+// Whole group strings joined with '&' (ampersand sign)
 
-function joinWithAnd(encodedStrByGroupMap) {
+function joinWithAmpersand(encodedStrByGroupMap) {
     // values()メソッドで 各グループの文字列 だけを配列で取得
     const wholeGroupString = [...encodedStrByGroupMap.values()]
 

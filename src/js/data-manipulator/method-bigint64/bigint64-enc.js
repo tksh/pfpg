@@ -23,32 +23,33 @@ function bigint64Enc() {
     // Map(5) {'1' => '01040706080719252428301704222622222323000000152005000015000028240011161922080104061008112426242830200824232224312626252321230005242225273122091720232710', '2' => ...
 
 
+
+    // Try compress and add prefix
+
+    // 1. Prepend the encoded stroke-width value and counts to the beginning of encoded d values
+    // 2. Compress the combined string using URLCompressor and choose the shorter version.
+    // 3. Prepend the encoded group-colors value to the chosen string (compressed or original).
+
+    // Format: [group-colors]=[width-and-counts]-[d-values]
+
+
     // Get the encoded strings of width-and-counts and group-colors
+    const encodedAttrsExceptsDvals = getEncodedAttrsExceptsDvals()
 
-    // Get the list-of-stroke-width and count-by-stroke-width encoded as a string
-    const encodedWidthAndCounts = encodeWidthAndCounts()
-    // Map(5) {'1' => '3t', '2' => '2q', '3' => '1bk', '4' => '1t', '5' => '1h'}
-
-    // Get the group colors(stroke, opacity, stroke-opacity) encoded as 10|6|5|3|1 chars hex
-    const encodedGroupColors = encodeGroupColors()
-    // Map(5) {'1' => '0', '2' => '0', '3' => '0', '4' => 'e', '5' => 'f'}
-
-
-    // Choose smaller one between URLComp applied or not, for each group
-    const optimizedByGroup = tryOptimizeWithURLComp(
+    // Choose shorter one between URLComp applied or not, for each group
+    const compressedByGroup = tryCompress(
         encodedDval,
-        encodedWidthAndCounts,
-        encodedGroupColors,
+        encodedAttrsExceptsDvals,
         'bigint64-enc',
         digitsOfChunk
     )
-    //console.log('optimizedByGroup: ', optimizedByGroup)
+    //console.log('compressedByGroup: ', compressedByGroup)
     // Map(5) {'1' => '0=129CaJGsAQK33q3FDaoQNuZs6u8XQW_EYegViBcDQ0gxtk-YqavrFw0V3KXggctKtnLfj_rl3ZzTzitfvmVp-Wz09Um3k4e8YyZ9kGHG0aT', '2' => '0=129ziJH ...
 
 
 
-    // Whole group strings joined with `&`
-    const wholeGroupStrJoined = joinWithAnd(optimizedByGroup)
+    // Whole group strings joined with '&'
+    const wholeGroupStrJoined = joinWithAmpersand(compressedByGroup)
 
 
     // Output to textarea
@@ -64,9 +65,9 @@ function bigint64Enc() {
     showProcessingTime('bigint64Enc()', elapsedTime, 'encoded-strokes-values-time')
 
     // Show the encoding result of each group in console
-    showDetailsByGroup('Lines Data', optimizedByGroup)
+    showDetailsByGroup('Lines Data', compressedByGroup)
 
-    return optimizedByGroup
+    return compressedByGroup
 }
 
 
