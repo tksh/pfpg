@@ -77,7 +77,6 @@ function zip(...arrays) {
 
     return ret;
 }
-
 // Test
 // console.log(zip([1, 2, 3], [4, 5, 6])); // [[1, 4], [2, 5], [3, 6]]
 // console.log(zip(["a", "b", "c"], [true, false, true])); // [["a", true], ["b", false], ["c", true]]

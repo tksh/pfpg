@@ -6,49 +6,48 @@ function decodeWidthAndCountsAsObj(encodedStr) {
     console.log(parts) // (14) ['1', 'ca', '2', 'dm', '3', 'dB', '5', 'bO', '8', 'm', '13', 'f', '21', 'L']
 
 
-    // Width
+    // Width (list of stroke-width)
 
     // Set the numbers and decoded strings into Map object
     // 配列のインデックス番号が2で割り切れる = 偶数 [0],[2],... の場合に 'width'要素を取得し キーとする
-    const widthArray = parts.filter((_, i) => i % 2 === 0).map((part => part));
-    console.log('widthArray: ', widthArray)
+    const widthArr = parts.filter((_, i) => i % 2 === 0).map((part => part));
+    console.log('widthArr: ', widthArr)
 
 
-    // Count
+    // Counts (count by stroke-width)
 
     // Decode each base53 encoded string to a decimal number
     // インデックスiを2で割った余りが1と等しい = 2で割り切れるない= 奇数 の場合に要素を取得し デコードする
-    const countsArray = parts.filter((_, i) => i % 2 === 1).map(part => base53Decode(part));
-    console.log('countsArray: ', countsArray) // Array(7) [ 104, 168, 183, 92, 12, 5, 37 ]
+    const countsArr = parts.filter((_, i) => i % 2 === 1).map(part => base53Decode(part));
+    console.log('countsArr: ', countsArr) // Arr(7) [ 104, 168, 183, 92, 12, 5, 37 ]
 
 
-    // Firstline
+    // Firstline indices
 
     const reducer = (acc, cur) => acc + cur;
     const initialValueOne = 1; // firstline number
 
-    let firstlineArray = runningReduce(countsArray, reducer, initialValueOne);
-    firstlineArray.unshift(1) // Add first element with Number 1
-    firstlineArray.pop()      // Delete last element
-    //console.log('firstlineArray: ', firstlineArray)
-    // e.g.: Array(4) [ 1, 4, 8, 25 ]
+    let firstlineArr = runningReduce(countsArr, reducer, initialValueOne);
+    firstlineArr.unshift(1) // Add first element with Number 1
+    firstlineArr.pop()      // Delete last element
+    //console.log('firstlineArr: ', firstlineArr)
+    // e.g.: Arr(4) [ 1, 4, 8, 25 ]
 
 
-    // Lastline
+    // Lastline indices
 
     const initialValueZero = 0; // firstline number
 
-    let lastlineArray = runningReduce(countsArray, reducer, initialValueZero);
-    //console.log('lastlineArray: ', lastlineArray)
-    // e.g.: Array(4) [ 3, 7, 24, 91 ]
+    let lastlineArr = runningReduce(countsArr, reducer, initialValueZero);
+    //console.log('lastlineArr: ', lastlineArr)
+    // e.g.: Arr(4) [ 3, 7, 24, 91 ]
 
 
     // Return as Object
     return {
-        //count    : countsArray,     // <Number>
-        firstline: firstlineArray,  // <Number>
-        lastline : lastlineArray,   // <Number>
-        width    : widthArray       // <String>
+        firstline: firstlineArr,  // <Number>
+        lastline : lastlineArr,   // <Number>
+        width    : widthArr       // <String>
     }
 }
 

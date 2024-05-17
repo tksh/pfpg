@@ -1,5 +1,3 @@
-// Decode from URL Params to SVG
-
 // Get the SVG output textarea ID from URL for argument for decode()
 // index           : 'input-svg'
 // data-manipulator: 'textarea-decoded-svg'
@@ -11,7 +9,6 @@ function isDataManipulatorOrIndex() {
     const target = 'data-manipulator' // target: 検索したい文字列
     return url.includes(target);
 }
-const isDataManipulatorOrIndexBool = isDataManipulatorOrIndex()
 
 function getTextareaId() {
     if (isDataManipulatorOrIndex() === true) {  // data-manipulator.html
@@ -20,15 +17,10 @@ function getTextareaId() {
         return 'input-svg'
     }
 }
-const svgOutputTextAreaId = getTextareaId()
 
 
-
-decode(isRelOrAbsBool = false, isDataManipulatorOrIndexBool, svgOutputTextAreaId)  // absolute and separated
-decode(isRelOrAbsBool = true,  isDataManipulatorOrIndexBool, svgOutputTextAreaId)  // relative and merged
-// 'isDataManipulatorOrIndexBool = true' will export the generated svg into each textarea
-
-
+// Decode to SVG string when page loaded.
+// And also will be called from '/js/index/tab-line/path-mode.js' when 'path-mode' changed via option selector.
 function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) {
     const urlParamsAsTwoMaps = readUrlParamsAsMaps(isDataManipulatorOrIndexBool)
 
@@ -47,7 +39,7 @@ function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) 
         //            groupColors  : Object {g_stroke: '#000000', g_opacity: 1, g_stroke_opacity: 1}
         //            {threeFlags  : Array(3)}
         //            {widthAndCounts  : Map(1)}
-        //            {widthAndCounts  : Object { count: (4) […], firstline: (4) […], lastline: (4) […], … }}
+        //            {widthAndCounts  : Object { firstline: (4) […], lastline: (4) […], … }}
         //            {encodedDvals: 'wyyvtuDwtzxifJxuvunv56nudvqm96wo9xuuucvvuzvzAwvvvyzxsvxDyVUSByqATCUWytEBzzAx'}
 
 
@@ -142,7 +134,7 @@ function decodeStrokesValues(strokesValuesMap) {
 
     for ([gId, v] of strokesValuesMap) {
         // console.log("v.encodedDvals: ", v.encodedDvals) // "x1 + y1 + x2 + y2"
-        // H5yJn8tIS6hWuVfFgdJIY10GsuwXo0w
+        // e.g.: H5yJn8tIS6hWuVfFgdJIY10GsuwXo0w
 
         let decodedAbsDvals = []
         let decodedRelDvals = []
@@ -198,12 +190,12 @@ function decodeStrokesValues(strokesValuesMap) {
 function getSpecificOutputTextareaId(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) {
 
     if (isDataManipulatorOrIndexBool === true) {          // page: data-manipulator.html
-        if (isRelOrAbsBool === true) {                       // path style: relative
+        if (isRelOrAbsBool === true) {                    // path style: relative
             return `${outputTextareaId}-rel`
-        } else if (isRelOrAbsBool === false) {               // path style: absolute
+        } else if (isRelOrAbsBool === false) {            // path style: absolute
             return `${outputTextareaId}-abs`
         }
-    } else if (isDataManipulatorOrIndexBool === false) { // page: index.html
+    } else if (isDataManipulatorOrIndexBool === false) {  // page: index.html
         return outputTextareaId
     }
 }
