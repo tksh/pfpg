@@ -14,6 +14,9 @@
     <link rel="stylesheet" href="./css/data-manipulator/style.css">
 
 
+    <!-- Both for encoding and decoding -->
+    <script src="./js/data-manipulator/both-encode-and-decode/get-uint-n.js"></script>
+
     <!-- Data IO -->
     <script src="./js/data-manipulator/data-io/select-file.js"></script>
     <script src="./js/data-manipulator/data-io/read-textarea.js"></script>
@@ -38,7 +41,6 @@
 
     <!-- Basic Data -->
     <script src="./js/data-manipulator/basic-data/basic-data-enc.js"></script>
-    <script src="./js/data-manipulator/basic-data/detect-uint-n.js"></script>
 
     <!-- Color Formatter -->
     <script src="./js/data-manipulator/color-formatter/normalized-to-hex.js"></script>
@@ -65,6 +67,7 @@
     <script src="./js/data-manipulator/method-bruteforce53/decode-diff.js"></script>
     <script src="./js/data-manipulator/method-bruteforce53/diff-to-rel.js"></script>
     <script src="./js/data-manipulator/method-bruteforce53/add-and-subtract.js"></script>
+    <script src="./js/data-manipulator/method-bruteforce53/get-uint-n-from-urlparam.js"></script>
 
     <!-- Bigint64 encoding method -->
     <script src="./js/data-manipulator/method-bigint64/bigint64-enc.js"></script>
@@ -85,8 +88,10 @@
     <script src="./js/data-manipulator/comp-and-add-prefix/add-prefix.js"></script>
 
     <!-- Decode from URL Params -->
+    <script src="./js/data-manipulator/decode/basic-data-dec.js"></script>
     <script src="./js/data-manipulator/decode/read-url-params.js"></script>
     <script src="./js/data-manipulator/decode/generate-svg.js"></script>
+    <script src="./js/data-manipulator/decode/rel-to-abs.js"></script>
     <script defer src="./js/data-manipulator/decode/decode.js"></script>
 
 </head>
@@ -102,7 +107,7 @@
         <input type="file" id="select-file-basic-data" onchange="selectFileToInput('select-file-basic-data', 'textarea-basic-data-uploaded')" />
         <br />
 
-        <!-- Textarea to input the artwork data json -->
+        <!-- Textarea to input the basic data json -->
         <textarea id="textarea-basic-data-uploaded" class="height-1" placeholder="./json_extracted/%{ARTWORK_ID}_basic_data.json">{
             "title": "202404_001",
             "viewbox": "0 0 31 31",
@@ -114,7 +119,7 @@
 
         <button onclick="encodeBasicData()">Encode via <b>encodeBasicData()</b></button>
 
-        <!-- Textarea to output the artwork data encoded -->
+        <!-- Textarea to output the basic data encoded -->
         <textarea id="textarea-basic-data-encoded" class="height-0" placeholder="Basic Data encoded"></textarea>
         <!-- Show the result -->
         <p id="encoded-basic-data-size"></p>
@@ -272,12 +277,12 @@
         <h2>Decode the URL Params and Generate the SVG String</h2>
 
         <h3>⬇ Path style: Relative and Merged</h3>
-        <textarea id="textarea-decoded-svg-as-rel" class="height-2" placeholder="If inputed text at address bar includes the url params like /data-manipulator.html?..., Decoding to SVG is automatically starts when page loaded and result text will export here."></textarea>
-        <button id="button-decoded-svg" onclick="copyTextarea('textarea-decoded-svg', 'button-decoded-svg')">Copy to clipboard</button>
+        <textarea id="textarea-decoded-svg-as-rel" class="height-2" placeholder="If inputted text at address bar includes the url params like /data-manipulator.html?..., Decoding to SVG is automatically starts when page loaded and result text will export here."></textarea>
+        <button id="button-decoded-svg-as-rel" onclick="copyTextarea('textarea-decoded-svg-as-rel', 'button-decoded-svg-as-rel')">Copy to clipboard</button>
         <p id="encoded-size-compare"></p>
 
         <h3>⬇ Path style: Absolute and Separated</h3>
-        <textarea id="textarea-decoded-svg-as-abs" class="height-2" placeholder="If inputed text at address bar includes the url params like /data-manipulator.html?..., Decoding to SVG is automatically starts when page loaded and result text will export here."></textarea>
+        <textarea id="textarea-decoded-svg-as-abs" class="height-2" placeholder="If inputted text at address bar includes the url params like /data-manipulator.html?..., Decoding to SVG is automatically starts when page loaded and result text will export here."></textarea>
         <button id="button-decoded-svg-as-abs" onclick="copyTextarea('textarea-decoded-svg-as-abs', 'button-decoded-svg-as-abs')">Copy to clipboard</button>
         <p id="encoded-size-compare"></p>
 

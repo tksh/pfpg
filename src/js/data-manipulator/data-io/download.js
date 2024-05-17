@@ -40,7 +40,7 @@ async function downloadUrlParamsAsTxtZstd(textareaId) {
     // Generate the filename
 
     // Get artwork ID and size
-    const idAndSizeStr = getIdAndSize()
+    const idAndSizeStr = getTitleAndSize()
     // Set the filename
     link.download = `${idAndSizeStr}.txt.zst`;
 
@@ -68,7 +68,7 @@ function downloadUrlParamsAsTxt(textareaId) { // ('textarea-encoded-url-params')
     // Generate the filename
 
     // Get artwork ID and size
-    const idAndSizeStr = getIdAndSize()
+    const idAndSizeStr = getTitleAndSize()
     // Set the filename
     link.download = `${idAndSizeStr}.txt`;
 
@@ -84,32 +84,32 @@ document.getElementById('button-to-download-url-params-as-txt').onclick = functi
 
 
 
-// Get the artwork ID and gird size string
-// Extract via artwork data .json strings in textarea
+// Get the artwork title and gird size string
+// Extract via basic data .json strings in textarea
 
-function getIdAndSize() {
+function getTitleAndSize() {
 
     // Read from textarea
     const rawJson = readTextarea('textarea-basic-data-uploaded')
     //console.log(rawJson)
     // {
-    //     "artwork_id": "202310_002",
+    //     "title": "202310_002",
     //     "grid_size": "255x255",
-    //     "bg_color": "#555C"
+    //     "rectFill": "#555C"
     // }
 
     const basicDataObj = JSON.parse(rawJson)
     //console.log('basicDataObj: ', basicDataObj)
-    // {artwork_id: '202310_002', grid_size: '255x255', bg_color: '#555C'}
-    // artwork_id: "202310_002"
-    // bg_color: "#555C"
+    // {title: '202310_002', grid_size: '255x255', rectFill: '#555C'}
+    // title: "202310_002"
+    // rectFill: "#555C"
     // grid_size: "255x255"
     // [[Prototype]]: Object
 
     // ID
-    const artwork_id_str = basicDataObj.artwork_id // "202310_002"
+    const title_str = basicDataObj.title // "202310_002"
     // Size
     const grid_size_str = basicDataObj.grid_size   // "255x255"
 
-    return `${artwork_id_str}_${grid_size_str}`      // "202310_002_255x255"
+    return `${title_str}_${grid_size_str}`      // "202310_002_255x255"
 }

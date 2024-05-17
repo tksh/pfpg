@@ -98,11 +98,11 @@ function extractViewboxValues(viewBoxString) {
 function viewboxUnSlimmed(svgTextareaAndString) {
     console.log('svgTextareaAndString: ', svgTextareaAndString)
 
-    // Read original artwork data from url params
+    // Read original basic data from url params
     const isDataManipulatorOrIndexBool = false
     const urlParamsAsTwoMaps = readUrlParamsAsMaps(isDataManipulatorOrIndexBool)
-    const basicDataMap = urlParamsAsTwoMaps.artwork_data
-    // e.g.: Map(4) {'artwork_id' => '202308_001', 'grid_size' => '31x31', 'uintN' => 5, 'bg_color' => '9999'}
+    const basicDataMap = urlParamsAsTwoMaps.basicData
+    // e.g.: Map(4) {'title' => '202308_001', 'grid_size' => '31x31', 'uintN' => 5, 'rectFill' => '9999'}
 
     const gridSize = basicDataMap.get('grid_size') // e.g: '31x31'
     const splitByX = gridSize.split('x')             // e.g.: '31', '31'

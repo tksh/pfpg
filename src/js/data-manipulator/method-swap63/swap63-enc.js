@@ -47,7 +47,7 @@ function swap63Enc() {
 
 
 
-    // Whole group strings joined with '&'
+    // Whole group strings joined with '&' (ampersand sign)
     const wholeGroupStrJoined = joinWithAmpersand(compressedByGroup)
 
 

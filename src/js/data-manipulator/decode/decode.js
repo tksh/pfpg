@@ -1,32 +1,31 @@
 // Decode from URL Params to SVG
 
 // Get the SVG output textarea ID from URL for argument for decode()
-// index: 'input-svg'
+// index           : 'input-svg'
 // data-manipulator: 'textarea-decoded-svg'
 
 function isDataManipulatorOrIndex() {
     // 現在のURLを取得する
-    const url = window.location.href;
-    const target = 'data-manipulator'
-    // url: 検索対象の文字列
-    // target: 検索したい文字列
+    const url = window.location.href; // url: 検索対象の文字列
+
+    const target = 'data-manipulator' // target: 検索したい文字列
     return url.includes(target);
 }
 const isDataManipulatorOrIndexBool = isDataManipulatorOrIndex()
 
-function getTextareaId(isDataManipulatorOrIndexBool) {
-    if (isDataManipulatorOrIndexBool === true) { // data-manipulator.html
+function getTextareaId() {
+    if (isDataManipulatorOrIndex() === true) {  // data-manipulator.html
         return 'textarea-decoded-svg-as'
-    } else {                              // index.html
+    } else {                                      // index.html
         return 'input-svg'
     }
 }
-const svgOutputTextAreaId = getTextareaId(isDataManipulatorOrIndexBool)
+const svgOutputTextAreaId = getTextareaId()
 
 
 
-decode(isRelOrAbsBool = false, isDataManipulatorOrIndexBool, svgOutputTextAreaId) // absolute and separated
-decode(isRelOrAbsBool = true, isDataManipulatorOrIndexBool, svgOutputTextAreaId)  // relative and merged
+decode(isRelOrAbsBool = false, isDataManipulatorOrIndexBool, svgOutputTextAreaId)  // absolute and separated
+decode(isRelOrAbsBool = true,  isDataManipulatorOrIndexBool, svgOutputTextAreaId)  // relative and merged
 // 'isDataManipulatorOrIndexBool = true' will export the generated svg into each textarea
 
 
@@ -36,19 +35,20 @@ function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) 
     if (urlParamsAsTwoMaps != null) {
 
         // Extract the values
-        const basicDataMap = urlParamsAsTwoMaps.artwork_data
-        // console.log("basicDataMap: ", basicDataMap)
-        // Map(4) {'artwork_id' => '202308_001', 'grid_size' => '31x31', 'uintN' => 5, 'bg_color' => '9999'}
+        const basicDataMap = urlParamsAsTwoMaps.basicData
+        console.log("basicDataMap: ", basicDataMap)
+        // Map(4) {'title' => '202308_001', 'grid_size' => '31x31', 'uintN' => 5, 'rectFill' => '9999'}
 
-        const strokesValuesMap = urlParamsAsTwoMaps.strokes_values
-        // console.log("strokesValuesMap: ", strokesValuesMap)
+        const strokesValuesMap = urlParamsAsTwoMaps.strokesValues
+        //console.log("strokesValuesMap: ", strokesValuesMap)
         // Map(5) {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
         // key  : Group ID (seq num)
         // value: Object
-        //            group_colors  : Object {g_stroke: '#000000', g_opacity: 1, g_stroke-opacity: 1}
-        //            {three_flags  : Array(3)}
-        //            {width_count  : Map(1)}
-        //            {encoded_dvals: 'wyyvtuDwtzxifJxuvunv56nudvqm96wo9xuuucvvuzvzAwvvvyzxsvxDyVUSByqATCUWytEBzzAx'}
+        //            groupColors  : Object {g_stroke: '#000000', g_opacity: 1, g_stroke_opacity: 1}
+        //            {threeFlags  : Array(3)}
+        //            {widthAndCounts  : Map(1)}
+        //            {widthAndCounts  : Object { count: (4) […], firstline: (4) […], lastline: (4) […], … }}
+        //            {encodedDvals: 'wyyvtuDwtzxifJxuvunv56nudvqm96wo9xuuucvvuzvzAwvvvyzxsvxDyVUSByqATCUWytEBzzAx'}
 
 
         const decodedAbsAndRelDvalsMaps = decodeStrokesValues(strokesValuesMap)
@@ -141,28 +141,28 @@ function decodeStrokesValues(strokesValuesMap) {
     const decodedRelDvalsMap = new Map()
 
     for ([gId, v] of strokesValuesMap) {
-        // console.log("v.encoded_dvals: ", v.encoded_dvals) // "x1 + y1 + x2 + y2"
+        // console.log("v.encodedDvals: ", v.encodedDvals) // "x1 + y1 + x2 + y2"
         // H5yJn8tIS6hWuVfFgdJIY10GsuwXo0w
 
         let decodedAbsDvals = []
         let decodedRelDvals = []
 
-        if (v.three_flags[1] === '0') {
+        if (v.threeFlags[1] === '0') {
             console.log(`Group ${gId} has encoded with 'bruteforce53-enc'`)
-            decodedDiffDvals = decodeBruteforce53Enc(v.encoded_dvals, v.three_flags)
+            decodedDiffDvals = decodeBruteforce53Enc(v.encodedDvals, v.threeFlags)
             decodedRelDvals = decodedDiffDvals.map(column => diffToRel(column))
-            decodedAbsDvals = relToAbs(decodedRelDvals)
+            decodedAbsDvals = relToAbs(decodedRelDvals, v.widthAndCounts)
 
-        } else if (v.three_flags[1] === '1') {
+        } else if (v.threeFlags[1] === '1') {
             console.log("This group has encoded with 'bigint64-enc'")
-            decodedAbsAndRelDvalsObj = decodeBigint64Enc(v.encoded_dvals)
+            decodedAbsAndRelDvalsObj = decodeBigint64Enc(v.encodedDvals)
             decodedAbsDvals = decodedAbsAndRelDvalsObj.absolute
             decodedRelDvals = decodedAbsAndRelDvalsObj.relative
 
-        } else if (v.three_flags[1] === '2') {
+        } else if (v.threeFlags[1] === '2') {
             console.log("This group has encoded with 'swap63-enc'")
-            decodedRelDvals = decodeSwap63Enc(v.encoded_dvals)
-            decodedAbsDvals = relToAbs(decodedRelDvals)
+            decodedRelDvals = decodeSwap63Enc(v.encodedDvals)
+            decodedAbsDvals = relToAbs(decodedRelDvals, v.widthAndCounts)
 
         } else {
             console.log('Error! This group has unknown flag for encoding method.')

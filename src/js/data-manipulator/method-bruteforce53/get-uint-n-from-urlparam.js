@@ -1,0 +1,19 @@
+// Get the N number of UIntNPortray for Bruteforce53 decoding
+
+function getUintNFromUrlParams() {
+  // Detect the url: 'index.html' or 'data-manipulator.html'
+  const isDataManipulatorOrIndexBool = isDataManipulatorOrIndex()
+
+  // Get the URL params
+  const params = new URLSearchParams(window.location.search)
+
+  // Get the URL params from right source
+  const paramsArray = getUrlParams(params, isDataManipulatorOrIndexBool)
+
+  // Get the basic data as Map
+  const basicDataMap = getBasicDataFromUrlParam(paramsArray)
+  console.log('basicDataMap: ', basicDataMap)
+  // Map(4) { title → "202404_001", viewbox → "0 0 31 31", uintN → 5, rectFill → "fff" }
+
+  return basicDataMap.get("uintN")
+}

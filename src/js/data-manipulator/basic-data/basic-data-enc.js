@@ -53,10 +53,11 @@ function parseBasicData() {
     // Sizes
     const viewboxDelimitedBySpace = json.viewbox
     const viewboxDelimitedByUnderscore = viewboxDelimitedBySpace.replace(/ /g, '_')
-    const viewboxEncoded = viewboxReducer(viewboxDelimitedByUnderscore)
+    const viewboxShorten = viewboxShortener(viewboxDelimitedByUnderscore)
 
-    const viewboxSplitBySpace = viewboxDelimitedBySpace.split(' ')
-    const max = Math.max(viewboxSplitBySpace.slice(2, 4))     // Extract 3rd (width) and 4th (height) elements
+    const viewboxSplitted = viewboxDelimitedBySpace.split(' ')
+    const viewboxWH = viewboxSplitted.slice(-2)  // Extract 3rd (width) and 4th (height) elements
+    const max = Math.max(...viewboxWH)
     const uintN = getUintN(max)
 
     // Base color
@@ -64,9 +65,9 @@ function parseBasicData() {
 
     return {
         title,
-        viewbox      : viewboxEncoded,
-        viewboxWidth : viewboxSplitBySpace[2],
-        viewboxHeight: viewboxSplitBySpace[3],
+        viewbox      : viewboxShorten,
+        viewboxWidth : viewboxWH[0],
+        viewboxHeight: viewboxWH[1],
         max,
         uintN,
         rectFill
@@ -75,7 +76,7 @@ function parseBasicData() {
 
 // To compact the viewBox value if could
 
-function viewboxReducer(viewbox) {
+function viewboxShortener(viewbox) {
     if (viewbox.startsWith('0_0_')) {
         // Remove the leading '0_0_' and split the remaining part
         const [width, height] = viewbox.replace(/^0_0_/, '').split('_');
@@ -89,41 +90,6 @@ function viewboxReducer(viewbox) {
 //const str1 = '0_0_127_127'
 //const str2 = '0_0_127_128'
 //const str3 = '0_1_127_127'
-//console.log(viewboxReducer(str1)) // 127
-//console.log(viewboxReducer(str2)) // 127_128
-//console.log(viewboxReducer(str3)) // 0_1_127_127
-
-
-
-// Get the 'N' number of UIntNPortray
-
-function getUintN(n) {
-    // Add 1 before judging, For 256 => 9, not 256 => 8
-    addOne = n + 1
-    gridsize_limit = nextPowerOfTwo(addOne) // e.g.: 256
-    uintN = (Math.log2(gridsize_limit))     // e.g.: 8
-    return uintN
-}
-// Test
-// console.log(getUintN(255)) // 8
-// console.log(getUintN(256)) // 9
-// console.log(getUintN(257)) // 9
-// console.log(getUintN(30))  // 5
-// console.log(getUintN(31))  // 5
-// console.log(getUintN(32))  // 6
-
-
-function nextPowerOfTwo(n) {
-    // nが2のべき乗であればそのまま返す
-    if (n && !(n & (n - 1))) return n;
-    // nの2を底とする対数を求める
-    let log2 = Math.log2(n);
-    // 対数を切り上げる
-    let ceil = Math.ceil(log2);
-    // 2の切り上げた対数乗を返す
-    return Math.pow(2, ceil);
-}
-// Test
-// console.log(nextPowerOfTwo(255))    // 256
-// console.log(nextPowerOfTwo(256))    // 256
-// console.log(nextPowerOfTwo(257))    // 512
+//console.log(viewboxShortener(str1)) // 127
+//console.log(viewboxShortener(str2)) // 127_128
+//console.log(viewboxShortener(str3)) // 0_1_127_127

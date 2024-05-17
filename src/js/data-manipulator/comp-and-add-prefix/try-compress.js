@@ -9,12 +9,12 @@ function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMethodName, 
     const ampersandCount = groupCount - 1;
 
     for (const [gId, dvalEncodedStr] of encodedDval) {
-        const widthCountEncoded = encodedWidthAndCounts.get(gId);
-        const widthCountAndDval = widthCountEncoded + '-' + dvalEncodedStr;
+        const widthAndCountsEncoded = encodedWidthAndCounts.get(gId);
+        const widthAndCountsAndDval = widthAndCountsEncoded + '-' + dvalEncodedStr;
 
-        const {compressed, shouldApply} = compressAndCompare(widthCountAndDval, gId);
+        const {compressed, shouldApply} = compressAndCompare(widthAndCountsAndDval, gId);
 
-        const shorterStrWithPrefix   = addPrefixToShorter(shouldApply, compressed, widthCountAndDval, encodingMethodName, valueFor3rdChar);
+        const shorterStrWithPrefix   = addPrefixToShorter(shouldApply, compressed, widthAndCountsAndDval, encodingMethodName, valueFor3rdChar);
         const groupColorsPrefixAdded = addGroupColorPrefix(encodedGroupColors, gId, shorterStrWithPrefix);
 
         wholeEncodedValues.set(gId, groupColorsPrefixAdded);
@@ -28,18 +28,18 @@ function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMethodName, 
 
     return wholeEncodedValues;
 }
-function compressAndCompare(widthCountAndDval, gId) {
+function compressAndCompare(widthAndCountsAndDval, gId) {
     // Compress and compare
-    const compressed = URLCompressor.compress(widthCountAndDval);
-    const shouldApply = compressed.length < widthCountAndDval.length
+    const compressed = URLCompressor.compress(widthAndCountsAndDval);
+    const shouldApply = compressed.length < widthAndCountsAndDval.length
 
     // Output the result details
     if (shouldApply === true) {
         // before の方が長い場合 = URLCompressor が効果的である場合
-        console.log(`URLCompressor is effective for group #${gId}, so should be applied it:`, widthCountAndDval.length, '=>', compressed.length)
+        console.log(`URLCompressor is effective for group #${gId}, so should be applied it:`, widthAndCountsAndDval.length, '=>', compressed.length)
     } else {
         // before の方が短いか 同じ 場合 = URLCompressor が効果的ではない場合
-        console.log(`URLCompressor is not effective for group #${gId}, so should be passed it:`, widthCountAndDval.length, '=>', compressed.length)
+        console.log(`URLCompressor is not effective for group #${gId}, so should be passed it:`, widthAndCountsAndDval.length, '=>', compressed.length)
     }
 
     return {compressed, shouldApply};

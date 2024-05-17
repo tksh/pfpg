@@ -17,7 +17,7 @@ function decodeBigint64Enc(encodedDvalsStr) {
                 console.log("bigintAsStr.length: ", bigintAsStr.length) // 151
 
                 // Number of chunks to split
-                const numberOfChunks = Number(v.three_flags[2]) // 2
+                const numberOfChunks = Number(v.threeFlags[2]) // 2
 
                 // Get the length of original zero padded string
                 const originalPaddedLength = findNearestMultipleOfFourX(bigintAsStr.length, numberOfChunks)

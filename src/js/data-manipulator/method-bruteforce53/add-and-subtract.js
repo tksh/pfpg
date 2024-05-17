@@ -22,8 +22,9 @@ function getMostSmallDiffNumberAsAbsForEnc() {
 
 
 function getMostSmallDiffNumberAsAbsForDec() {
-    const uintXPortray = getUintNPortrayForDec()    // Get uintX from "url params"
-    const  startOfRelValue = -(2**uintXPortray) + 1 // if uintXPortray = 8 =>  -255
+    const uintXPortray = getUintNFromUrlParams()    // Get uintX from "url params"
+    console.log('//////////////// uintXPortray', uintXPortray)
+    const startOfRelValue  = -(2**uintXPortray) + 1 // if uintXPortray = 8 =>  -255
     const startOfRelRange  = -(startOfRelValue*2)   // if uintXPortray = 8 =>  -510
     const startOfDiffRange = -(startOfRelRange*2)   // if uintXPortray = 8 => -1020
 

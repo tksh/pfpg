@@ -1,5 +1,5 @@
 // Decode the count and width, and generate the firstline and lastline
-function decodeWidthCountAsObj(encodedStr) {
+function decodeWidthAndCountsAsObj(encodedStr) {
 
     // Split the string into alternating numbers and base53 encoded strings
     const parts = encodedStr.match(/\d+|[_a-zA-Z]+/g);
@@ -29,8 +29,9 @@ function decodeWidthCountAsObj(encodedStr) {
 
     let firstlineArray = runningReduce(countsArray, reducer, initialValueOne);
     firstlineArray.unshift(1) // Add first element with Number 1
-    firstlineArray.pop()                             // Delete last element
+    firstlineArray.pop()      // Delete last element
     //console.log('firstlineArray: ', firstlineArray)
+    // e.g.: Array(4) [ 1, 4, 8, 25 ]
 
 
     // Lastline
@@ -38,17 +39,16 @@ function decodeWidthCountAsObj(encodedStr) {
     const initialValueZero = 0; // firstline number
 
     let lastlineArray = runningReduce(countsArray, reducer, initialValueZero);
-    lastlineArray.unshift(countsArray[0]) // Add first element with first 'count' element
-    lastlineArray.pop()                             // Delete last element
     //console.log('lastlineArray: ', lastlineArray)
+    // e.g.: Array(4) [ 3, 7, 24, 91 ]
 
 
     // Return as Object
     return {
-        count: countsArray,         // <Number>
-        firstline: firstlineArray, // <Number>
-        lastline: lastlineArray,   // <Number>
-        width: widthArray          // <String>
+        //count    : countsArray,     // <Number>
+        firstline: firstlineArray,  // <Number>
+        lastline : lastlineArray,   // <Number>
+        width    : widthArray       // <String>
     }
 }
 

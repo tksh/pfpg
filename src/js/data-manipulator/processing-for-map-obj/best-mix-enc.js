@@ -9,7 +9,7 @@ function bestMixFrom3Methods() {
     const bestMixResultMap = storeShorter(firstCompareResult, swap63Map)
 
 
-    // Whole group strings joined with '&'
+    // Whole group strings joined with '&' (ampersand sign)
     const shortestJoined = joinWithAmpersand(bestMixResultMap)
 
     // Output to textarea
@@ -32,7 +32,7 @@ function bestMixFrom2Methods() {
     const bestMixResultMap = storeShorter(bruteforce53Map, bigint64Map)
 
 
-    // Whole group strings joined with '&'
+    // Whole group strings joined with '&' (ampersand sign)
     const shortestJoined = joinWithAmpersand(bestMixResultMap)
 
     // Output to textarea

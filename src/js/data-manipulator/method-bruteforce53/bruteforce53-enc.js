@@ -274,7 +274,7 @@ function bruteforce53Enc() {
     // Result map
     console.log('currentShortest: ', currentShortest)
 
-    // Whole group strings joined with '&'
+    // Whole group strings joined with '&' (ampersand sign)
     const shortestJoined = joinWithAmpersand(currentShortest)
 
     // Output to textarea

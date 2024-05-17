@@ -1,37 +1,44 @@
-function relToAbs(relativeArray) {
+function relToAbs(relativeArr, widthAndCounts) {
 
-    const x1Array = relativeArray[0] // [x1, x1, x1 ...]
-    const y1Array = relativeArray[1] // [y1, y1, y1 ...]
-    const x2Array = relativeArray[2] // [x2, x2, x2 ...]
-    const y2Array = relativeArray[3] // [y2, y2, y2 ...]
+    const x1Arr = relativeArr[0] // [x1, x1, x1 ...]
+    const y1Arr = relativeArr[1] // [y1, y1, y1 ...]
+    const x2Arr = relativeArr[2] // [x2, x2, x2 ...]
+    const y2Arr = relativeArr[3] // [y2, y2, y2 ...]
+
+    // Get the array of firstline indices for each stroke-width
+    const firstlineArr      = widthAndCounts.firstline      // e.g.: Arr(4) [ 1, 4, 8, 25 ]
+    const firstlineIndexArr = firstlineArr.map(n => n - 1)  // e.g.: Arr(4) [ 0, 3, 7, 24 ]
 
     let absoluteCoordinates = [] // [[x1, y1, x2, y2], [x1, y1, x2, y2], ...]
 
-    for (i = 0; i < x1Array.length; i++) {
-        if (i === 0) {
-            const x1 = x1Array[i]
-            const y1 = y1Array[i]
-            const x2 = x1Array[i] + x2Array[i]
-            const y2 = y1Array[i] + y2Array[i]
+    for (i = 0; i < x1Arr.length; i++) {
+        if (firstlineIndexArr.includes(i)) {
 
-            absoluteCoordinates.push([x1, y1, x2, y2]) // index = 0
+            // x1 and y1 of each stroke-width's firstline is already as absolute value
+
+            const x1 = x1Arr[i]
+            const y1 = y1Arr[i]
+            const x2 = x1Arr[i] + x2Arr[i]
+            const y2 = y1Arr[i] + y2Arr[i]
+
+            absoluteCoordinates.push([x1, y1, x2, y2])
 
         } else {
-            const x1 = x1Array[i] + absoluteCoordinates[i - 1][2] // + previous x2
-            const y1 = y1Array[i] + absoluteCoordinates[i - 1][3] // + previous y2
-            const x2 = x2Array[i] + x1                            // +  current x1
-            const y2 = y2Array[i] + y1                            // +  current y1
+            const x1 = x1Arr[i] + absoluteCoordinates[i - 1][2] // + previous x2
+            const y1 = y1Arr[i] + absoluteCoordinates[i - 1][3] // + previous y2
+            const x2 = x2Arr[i] + x1                            // +  current x1
+            const y2 = y2Arr[i] + y1                            // +  current y1
 
-            absoluteCoordinates.push([x1, y1, x2, y2]) // index = 1, 2, ...
+            absoluteCoordinates.push([x1, y1, x2, y2])
         }
     }
 
-    // Convert the array structure
+    // Convert the array structure to same as original relative values array.
     // From: [x1, y1, x2, y2] * length
-    // To:   [x1, x1, x1 ...] * 4 columns
-    const absoluteArray = zip(...absoluteCoordinates)
+    // To  : [x1, x1, ... x1] * 4 columns
+    const absoluteArr = zip(...absoluteCoordinates)
 
-    return absoluteArray
+    return absoluteArr
 }
 
 
@@ -71,7 +78,7 @@ function zip(...arrays) {
     return ret;
 }
 
-// Test the zip function with some examples
+// Test
 // console.log(zip([1, 2, 3], [4, 5, 6])); // [[1, 4], [2, 5], [3, 6]]
 // console.log(zip(["a", "b", "c"], [true, false, true])); // [["a", true], ["b", false], ["c", true]]
 // console.log(zip([1, 2], [3, 4], [5, 6], [7, 8])); // [[1, 3, 5, 7], [2, 4, 6, 8]]

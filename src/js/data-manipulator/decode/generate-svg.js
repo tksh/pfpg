@@ -55,9 +55,9 @@
 function generateSvg(isRelOrAbsBool, basicDataMap, strokesValuesMap, decodedRelDvalsMap, decodedAbsDvalsMap) {
 
     // Read the values from Basic Data
-    const viewboxValue = getViewBoxValue(basicDataMap.get('grid_size')) // e.g. '0 0 31 31'
-    const artworkIdValue = basicDataMap.get("artwork_id")               // e.g. '202308_001'
-    const rectFillValue = basicDataMap.get("bg_color")                  // e.g. '9999'
+    const viewboxValue   = basicDataMap.get('viewbox')   // e.g. '0 0 31 31'
+    const artworkIdValue = basicDataMap.get("title")     // e.g. '202308_001'
+    const rectFillValue  = basicDataMap.get("rectFill")  // e.g. '9999'
 
     // Set the tab size
     const tabSpace = '    ' // Four spaces
@@ -106,9 +106,9 @@ function generateRelPathTags(tabSpace, strokesValuesMap, decodedRelDvalsMap) {
         const dvalsObj = decodedRelDvalsMap.get(gId)
         console.log('dvalsObj: ', dvalsObj) // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
 
-        const widthArr = v.width_count.width // list of stroke-width
-        const firstlineArr = v.width_count.firstline
-        const lastlineArr = v.width_count.lastline
+        const widthArr     = v.widthAndCounts.width      // list of stroke-width
+        const firstlineArr = v.widthAndCounts.firstline  // e.g.: Array(4) [ 1, 4, 8, 25 ]
+        const lastlineArr  = v.widthAndCounts.lastline   // e.g.: Array(4) [ 3, 7, 24, 91 ]
 
         let pathTagUnderGroup = [] // Group has one or more number of stroke-width
 
@@ -144,7 +144,7 @@ function generateRelPathTags(tabSpace, strokesValuesMap, decodedRelDvalsMap) {
         const wholeTagsUnderGroup = pathTagUnderGroup.join('\n')
         relPathTagsByGroup.set(gId, wholeTagsUnderGroup)
     }
-    // console.log('relPathTagsByGroup: ', relPathTagsByGroup)
+    console.log('relPathTagsByGroup: ', relPathTagsByGroup)
     // Map(5) { 
     //     1 => '            <g stroke-width="3">\n                <path d="m1 0 0 26m3 ... " />\n            </g>'
     //     2 => '            <g stroke-width="2">\n                <path d="m0 0 31 1m- ... " />\n            </g>'
@@ -166,16 +166,16 @@ function generateAbsPathTags(tabSpace, strokesValuesMap, decodedAbsDvalsMap) {
         const dvalsObj = decodedAbsDvalsMap.get(gId)
         console.log('dvalsObj: ', dvalsObj) // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
 
-        const widthArr = v.width_count.width // list of stroke-width
-        const firstlineArr = v.width_count.firstline
-        const lastlineArr = v.width_count.lastline
+        const widthArr     = v.widthAndCounts.width      // list of stroke-width
+        const firstlineArr = v.widthAndCounts.firstline  // e.g.: Array(4) [ 1, 4, 8, 25 ]
+        const lastlineArr  = v.widthAndCounts.lastline   // e.g.: Array(4) [ 3, 7, 24, 91 ]
 
         let gAndPathTagsUnderGroup = [] // Group has one or more number of stroke-width
 
-        for (let i = 0; i < widthArr.length; i++) { // loop for each stroke-width
+        for (let i = 0; i < widthArr.length; i++) {      // loop for each stroke-width
             const width = widthArr[i]
-            const firstlineIndex = firstlineArr[i] - 1 // Subtract 1 to convert as index number
-            const lastlineIndex = lastlineArr[i] - 1   // Subtract 1 to convert as index number
+            const firstlineIndex = firstlineArr[i] - 1   // Subtract 1 to convert as index number
+            const lastlineIndex = lastlineArr[i] - 1     // Subtract 1 to convert as index number
 
             // Generate open and close <g> tags
             const widthGTagOpen = tabSpace.repeat(3) + `<g stroke-width="${width}">`
@@ -220,13 +220,6 @@ function generateAbsPathTags(tabSpace, strokesValuesMap, decodedAbsDvalsMap) {
 
 
 
-
-function getViewBoxValue(gridSize) {
-    width = gridSize.split('x')[0]
-    height = gridSize.split('x')[1]
-    return `0 0 ${width} ${height}`
-}
-
 function generateTagsBeforeStrokes(tabSpace, viewboxValue, artworkIdValue, rectFillValue) {
 
     const svgOpen = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewboxValue}" shape-rendering="crispEdges">`
@@ -259,10 +252,10 @@ function generateGTagOpenByGroup(tabSpace, strokesValuesMap) {
     const gTagOpenByGroup = new Map()
     for (let [gId, v] of strokesValuesMap) {
         // Generate stroke color group
-        const groupColors = v.group_colors
+        const groupColors = v.groupColors
 
         const colorGroupTagOpen = tabSpace.repeat(2)
-            + `<g stroke="${groupColors['g_stroke']}" opacity="${groupColors['g_opacity']}" stroke-opacity="${groupColors['g_stroke-opacity']}">`
+            + `<g stroke="${groupColors.g_stroke}" opacity="${groupColors.g_opacity}" stroke-opacity="${groupColors.g_stroke_opacity}">`
         //         <g stroke="#000000" opacity="1" stroke-opacity="1">
 
         gTagOpenByGroup.set(gId, colorGroupTagOpen)
