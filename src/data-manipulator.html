@@ -11,36 +11,10 @@
     <link rel="manifest" href="/site.webmanifest">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 
+    <!-- CSS -->
     <link rel="stylesheet" href="./css/data-manipulator/style.css">
 
-
-    <!-- Both for encoding and decoding -->
-    <script src="./js/data-manipulator/both-encode-and-decode/get-uint-n.js"></script>
-
-    <!-- Data IO -->
-    <script src="./js/data-manipulator/data-io/select-file.js"></script>
-    <script src="./js/data-manipulator/data-io/read-textarea.js"></script>
-    <script src="./js/data-manipulator/data-io/output-to-textarea.js"></script>
-    <script src="./js/data-manipulator/data-io/json-to-map-obj.js"></script>
-    <script src="./js/data-manipulator/data-io/merge-as-url-params.js"></script>
-    <script src="./js/data-manipulator/data-io/copy-textarea.js"></script>
-    <script src="./js/data-manipulator/data-io/show-result.js"></script>
-    <script src="./js/data-manipulator/data-io/download.js" type="module" ></script>
-
-    <!-- Base N Encodings -->
-    <script src="./js/data-manipulator/base-n-encodings/get-char-list.js"></script>
-    <script src="./js/data-manipulator/base-n-encodings/base-52-enc.js"></script>
-    <script src="./js/data-manipulator/base-n-encodings/base-52-dec.js"></script>
-    <script src="./js/data-manipulator/base-n-encodings/base-53-enc.js"></script>
-    <script src="./js/data-manipulator/base-n-encodings/base-53-dec.js"></script>
-    <script src="./js/data-manipulator/base-n-encodings/base-64-url-enc.js"></script>
-    <script src="./js/data-manipulator/base-n-encodings/base-64-url-dec.js"></script>
-
-    <!-- URLCompressor -->
-    <script src="./js/data-manipulator/url-comp-0-1-0/url-comp.js"></script>
-
-    <!-- Basic Data -->
-    <script src="./js/data-manipulator/basic-data/basic-data-enc.js"></script>
+    <!-- JS -->
 
     <!-- Color Formatter -->
     <script src="./js/color-formatter/normalized-to-hex.js"></script>
@@ -48,51 +22,80 @@
     <script src="./js/color-formatter/hex-shorten.js"></script>
     <script src="./js/color-formatter/hex-expand.js"></script>
 
-    <!-- Attributes excepts d values (Group-Colors and Width-and-Counts) -->
-    <script src="./js/data-manipulator/encode/attrs-excepts-dvals.js"></script>
-    <!-- Group-Colors -->
-    <script src="./js/data-manipulator/encode/group-colors-enc.js"></script>
-    <script src="./js/data-manipulator/decode/group-colors-dec.js"></script>
-    <!-- Width-and-Counts -->
-    <script src="./js/data-manipulator/encode/width-and-counts-enc.js"></script>
-    <script src="./js/data-manipulator/decode/width-and-counts-dec.js"></script>
+    <!-- Base N Encodings -->
+    <script src="./js/data-manipulator/base-n-encodings/base-52-enc.js"></script>
+    <script src="./js/data-manipulator/base-n-encodings/base-52-dec.js"></script>
+    <script src="./js/data-manipulator/base-n-encodings/base-53-enc.js"></script>
+    <script src="./js/data-manipulator/base-n-encodings/base-53-dec.js"></script>
+    <script src="./js/data-manipulator/base-n-encodings/base-64url-enc.js"></script>
+    <script src="./js/data-manipulator/base-n-encodings/base-64url-dec.js"></script>
+    <script src="./js/data-manipulator/base-n-encodings/get-base-53-and-64url-chars.js"></script>
 
-    <!-- Bruteforce53 encoding method -->
-    <script src="./js/data-manipulator/method-bruteforce53/bruteforce53-enc.js"></script>
-    <script src="./js/data-manipulator/method-bruteforce53/bruteforce53-dec.js"></script>
-    <script src="./js/data-manipulator/method-bruteforce53/base-x-enc.js"></script>
-    <script src="./js/data-manipulator/method-bruteforce53/base-x-dec.js"></script>
-    <script src="./js/data-manipulator/method-bruteforce53/specific-alphabets.js"></script>
-    <script src="./js/data-manipulator/method-bruteforce53/actual-dict-size.js"></script>
-    <script src="./js/data-manipulator/method-bruteforce53/decode-diff.js"></script>
-    <script src="./js/data-manipulator/method-bruteforce53/diff-to-rel.js"></script>
-    <script src="./js/data-manipulator/method-bruteforce53/add-and-subtract.js"></script>
-    <script src="./js/data-manipulator/method-bruteforce53/get-uint-n-from-urlparam.js"></script>
+    <!-- Data IO -->
+    <script src="./js/data-manipulator/data-io/download-url-params.js" type="module" ></script>
+    <script src="./js/data-manipulator/data-io/copy-textarea.js"></script>
+    <script src="./js/data-manipulator/data-io/json-to-map-obj.js"></script>
+    <script src="./js/data-manipulator/data-io/merge-as-url-params.js"></script>
+    <script src="./js/data-manipulator/data-io/output-to-textarea.js"></script>
+    <script src="./js/data-manipulator/data-io/read-textarea.js"></script>
+    <script src="./js/data-manipulator/data-io/select-file.js"></script>
+    <script src="./js/data-manipulator/data-io/show-result.js"></script>
+
+    <!-- Decode -->
+    <script src="./js/data-manipulator/decode/decode.js"></script>
+    <script src="./js/data-manipulator/decode/generate-svg.js"></script>
+    <script src="./js/data-manipulator/decode/read-url-params.js"></script>
+    <script src="./js/data-manipulator/decode/rel-to-abs.js"></script>
+
+    <!-- Encode and Decode-->
+
+    <!-- Attributes excepts d values (Group-Colors and Width-and-Counts) -->
+
+    <!-- Group Colors -->
+    <script src="./js/data-manipulator/enc-and-dec/attrs-excepts-dvals/group-colors-enc.js"></script>
+    <script src="./js/data-manipulator/enc-and-dec/attrs-excepts-dvals/group-colors-dec.js"></script>
+    <!-- Width and Counts -->
+    <script src="./js/data-manipulator/enc-and-dec/attrs-excepts-dvals/width-and-counts-enc.js"></script>
+    <script src="./js/data-manipulator/enc-and-dec/attrs-excepts-dvals/width-and-counts-dec.js"></script>
+
+    <!-- Basic Data -->
+    <script src="./js/data-manipulator/enc-and-dec/basic-data/basic-data-dec.js"></script>
+    <script src="./js/data-manipulator/enc-and-dec/basic-data/basic-data-enc.js"></script>
+    <script src="./js/data-manipulator/enc-and-dec/basic-data/get-uint-n.js"></script>
+
+    <!-- Encoding Methods for d Values -->
 
     <!-- Bigint64 encoding method -->
-    <script src="./js/data-manipulator/method-bigint64/bigint64-enc.js"></script>
-    <script src="./js/data-manipulator/method-bigint64/bigint64-dec.js"></script>
+    <script src="./js/data-manipulator/enc-and-dec/encoding-methods-for-dvals/bigint64/bigint64-dec.js"></script>
+    <script src="./js/data-manipulator/enc-and-dec/encoding-methods-for-dvals/bigint64/bigint64-enc.js"></script>
+
+    <!-- Bruteforce53 encoding method -->
+    <script src="./js/data-manipulator/enc-and-dec/encoding-methods-for-dvals/bruteforce53/actual-dict-size.js"></script>
+    <script src="./js/data-manipulator/enc-and-dec/encoding-methods-for-dvals/bruteforce53/add-and-subtract.js"></script>
+    <script src="./js/data-manipulator/enc-and-dec/encoding-methods-for-dvals/bruteforce53/base-x-dec.js"></script>
+    <script src="./js/data-manipulator/enc-and-dec/encoding-methods-for-dvals/bruteforce53/base-x-enc.js"></script>
+    <script src="./js/data-manipulator/enc-and-dec/encoding-methods-for-dvals/bruteforce53/bruteforce53-dec.js"></script>
+    <script src="./js/data-manipulator/enc-and-dec/encoding-methods-for-dvals/bruteforce53/bruteforce53-enc.js"></script>
+    <script src="./js/data-manipulator/enc-and-dec/encoding-methods-for-dvals/bruteforce53/decode-diff.js"></script>
+    <script src="./js/data-manipulator/enc-and-dec/encoding-methods-for-dvals/bruteforce53/diff-to-rel.js"></script>
+    <script src="./js/data-manipulator/enc-and-dec/encoding-methods-for-dvals/bruteforce53/get-uint-n-from-urlparam.js"></script>
+    <script src="./js/data-manipulator/enc-and-dec/encoding-methods-for-dvals/bruteforce53/specific-alphabets.js"></script>
 
     <!-- Swap63 encoding method -->
-    <script src="./js/data-manipulator/method-swap63/swap63-dict.js"></script>
-    <script src="./js/data-manipulator/method-swap63/swap63-enc.js"></script>
-    <script src="./js/data-manipulator/method-swap63/swap63-dec.js"></script>
+    <script src="./js/data-manipulator/enc-and-dec/encoding-methods-for-dvals/swap63/create-dict.js"></script>
+    <script src="./js/data-manipulator/enc-and-dec/encoding-methods-for-dvals/swap63/swap63-dec.js"></script>
+    <script src="./js/data-manipulator/enc-and-dec/encoding-methods-for-dvals/swap63/swap63-enc.js"></script>
 
-    <!-- Processing for Map object -->
-    <script src="./js/data-manipulator/processing-for-map-obj/join-with-ampersand.js"></script>
-    <script src="./js/data-manipulator/processing-for-map-obj/best-mix-enc.js"></script>
-    <script src="./js/data-manipulator/processing-for-map-obj/store-shorter.js"></script>
+    <!-- Encode -->
+    <script src="./js/data-manipulator/encode/add-prefix.js"></script>
+    <script src="./js/data-manipulator/encode/best-mix-enc.js"></script>
+    <script src="./js/data-manipulator/encode/get-attrs-excepts-dvals.js"></script>
+    <script src="./js/data-manipulator/encode/join-with-ampersand.js"></script>
+    <script src="./js/data-manipulator/encode/store-shorter.js"></script>
+    <script src="./js/data-manipulator/encode/try-compress.js"></script>
 
-    <!-- Apply the URLCompressor and add prefix chars into shorter one -->
-    <script src="./js/data-manipulator/comp-and-add-prefix/try-compress.js"></script>
-    <script src="./js/data-manipulator/comp-and-add-prefix/add-prefix.js"></script>
-
-    <!-- Decode from URL Params -->
-    <script src="./js/data-manipulator/decode/basic-data-dec.js"></script>
-    <script src="./js/data-manipulator/decode/read-url-params.js"></script>
-    <script src="./js/data-manipulator/decode/generate-svg.js"></script>
-    <script src="./js/data-manipulator/decode/rel-to-abs.js"></script>
-    <script src="./js/data-manipulator/decode/decode.js"></script>
+    <!-- URLCompressor -->
+    <script src="./js/data-manipulator/url-comp-0-1-0/url-comp.js"></script>
 
     <!-- Execute the decoding when page loaded -->
     <script defer src="./js/data-manipulator/main.js"></script>

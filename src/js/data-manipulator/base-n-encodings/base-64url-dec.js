@@ -1,8 +1,7 @@
 // For bigint64-enc
 
 function base64UrlDec(str) {
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
-    // https://datatracker.ietf.org/doc/html/rfc4648#section-5
+    const alphabet = getBase64UrlCharacters()
 
     let base = BigInt(alphabet.length);
     let num = 0n;

@@ -1,9 +1,9 @@
 // For:
 //     3rd flag for bruteforce53-enc
-//     Width count value
+//     Width counts value
 
 function base53Encode(num) {
-    const alphabet = getCharList53()
+    const alphabet = getBase53Characters()
     // '_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
     let base = alphabet.length;
