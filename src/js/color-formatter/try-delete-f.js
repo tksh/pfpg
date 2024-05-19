@@ -1,27 +1,3 @@
-// For group colors attributes
-
-// hexコードを受け取り 半分のサイズの省略形に 変換する関数
-// 各2桁が同じであれば 1桁だけにする
-function tryReduceAsHalf(hex) {
-    let result = "";
-    for (let i = 0; i < hex.length - 1; i += 2) {
-        if (hex[i] === hex[i + 1]) {
-            result += hex[i];
-        } else {
-            return hex;
-        }
-    }
-    return result;
-}
-
-// console.log(tryReduceAsHalf("aabbccffff")) // abcff
-// console.log(tryReduceAsHalf("AABBCCFFFF")) // ABCFF
-// console.log(tryReduceAsHalf("112233ffff")) // 123ff
-// console.log(tryReduceAsHalf("112233ee00")) // 123e0
-// console.log(tryReduceAsHalf("123456ffff")) // 123456ffff
-
-
-
 // For "Group colors"
 function tryDeleteFs(hex) { // Input 10 or 5 chars hex only
 
@@ -42,7 +18,7 @@ function tryDeleteFs(hex) { // Input 10 or 5 chars hex only
         return hex
     }
 }
-
+// Test
 // console.log(tryDeleteFs("abcff"))       // ABC
 // console.log(tryDeleteFs("ABCFF"))       // ABC
 // console.log(tryDeleteFs("abcde"))       // ABCDE
@@ -73,7 +49,7 @@ function tryDeleteF(hex) { // Input 8 or 4 chars hex only
         return hex
     }
 }
-
+// Test
 //console.log(tryDeleteF("abcf"))      // ABC
 //console.log(tryDeleteF("ABCF"))      // ABC
 //console.log(tryDeleteF("abcd"))      // ABCD

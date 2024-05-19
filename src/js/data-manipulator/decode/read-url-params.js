@@ -75,7 +75,7 @@ function decodeAsTwoMaps(paramsArray) {
         console.log('paramsArray[i]: ', paramsArray[i])
 
         // Group-Colors as Object
-        const hex10Chars = hexExpandTo10(paramsArray[i][0])         // 000000ffff
+        const hex10Chars = hexExpandToTen(paramsArray[i][0])         // 000000ffff
         const decodedGroupColorsObj = decodeGroupColors(hex10Chars) // Return as Object with 3 elements
         // groupColors: {g_stroke: '#ffffff', g_opacity: 1, g_stroke_opacity: 1}
 

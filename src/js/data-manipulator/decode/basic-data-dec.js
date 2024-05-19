@@ -12,7 +12,7 @@ function getBasicDataFromUrlParam(paramsArray) {
     const viewboxExpanded = viewboxExpander(viewboxShorten)              // '0_0_31_31'
     const viewboxDelimitedBySpace = viewboxExpanded.replace(/_/g, ' ')   // '0 0 31 31'
 
-    const viewboxSplitted = viewboxExpanded.split('_') // (2) ['31', '31']
+    const viewboxSplitted = viewboxExpanded.split('_') // (4) ['0', '0', '31', '31']
     const viewboxWH = viewboxSplitted.slice(-2)        // Extract 3rd (width) and 4th (height) elements
     const max = Math.max(...viewboxWH)
     const uintN = getUintN(max)                        // 5 (2 の 何乗か？)
@@ -21,17 +21,11 @@ function getBasicDataFromUrlParam(paramsArray) {
     const rectFill = basicDataParam[1].split("-")[1] // 9999
 
 
-    // Set into Map
-    const basicDataMap = new Map()
-
-    basicDataMap.set("title", title)                        // String
-    basicDataMap.set("viewbox", viewboxDelimitedBySpace)    // String
-    basicDataMap.set("uintN", uintN)                        // Number
-    basicDataMap.set("rectFill", rectFill)                  // String
-
     return new Map([
         ["title", title],                       // String
         ["viewbox", viewboxDelimitedBySpace],   // String
+        ["viewboxWidth",  viewboxWH[0]],        // String
+        ["viewboxHeight", viewboxWH[1]],        // String
         ["uintN", uintN],                       // Number
         ["rectFill", rectFill]                  // String
     ])

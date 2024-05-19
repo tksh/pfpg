@@ -22,7 +22,7 @@ async function setDefaultValueOfOptions() {
         // 1: "#ccc"
 
         // [1]の hex-code部分を 透明度を補完して 8桁のフォーマットに直す
-        const eightDigitsHexWithHash = '#' + expandToEightDigitsHex(matches[1])
+        const eightDigitsHexWithHash = '#' + hexExpandToEight(matches[1])
 
 
         // Set as new value for <input>

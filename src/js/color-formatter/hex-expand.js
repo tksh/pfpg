@@ -1,6 +1,6 @@
-// 6|5|3|1桁 に変換されたhexを 10桁に戻す関数
+// 6|5|3|1桁 に変換された hex を 10桁に戻す関数
 
-function hexExpandTo10(hex) {
+function hexExpandToTen(hex) {
     // 文字列の長さが 10 ならば そのまま 返す
     if (hex.length === 10) {
         return hex;
@@ -38,24 +38,51 @@ function hexExpandTo10(hex) {
 }
 
 // Test
-
 // // 1 => 10
-// console.log(hexExpandTo10("a"));          // "aaaaaaffff"
+// console.log(hexExpandToTen("a"));          // "aaaaaaffff"
 // // 3 => 10
-// console.log(hexExpandTo10("123"));        // "112233ffff"
+// console.log(hexExpandToTen("123"));        // "112233ffff"
 // // 5 => 10
-// console.log(hexExpandTo10("abcde"));      // "aabbccddee"
+// console.log(hexExpandToTen("abcde"));      // "aabbccddee"
 // // 6 => 10
-// console.log(hexExpandTo10("ffffff"));     // ffffffffff
+// console.log(hexExpandToTen("ffffff"));     // ffffffffff
 // // 10 => 10
-// console.log(hexExpandTo10("ffffffeedd")); // ffffffeedd
+// console.log(hexExpandToTen("ffffffeedd")); // ffffffeedd
 // // Invalid
-// console.log(hexExpandTo10("ff"));         // Error: Invalid hex string
-// console.log(hexExpandTo10(""))            // Error: Invalid hex string
+// console.log(hexExpandToTen("ff"));         // Error: Invalid hex string
+// console.log(hexExpandToTen(""))            // Error: Invalid hex string
 
 
 
-function hexExpandTo6(hex) {
+// Extend to 8 digits hex if in short style or no hex-code (value = 1)
+// Add opacity value '1' as 'FF' (7th and 8th chars)
+// Input with "#" but and output without "#"
+function hexExpandToEight(hexInputWithHash) {
+
+    let hex = hexInputWithHash.slice(1)                              // `#`記号 を除く文字列を取得
+    //console.log('hex.length: ', hex.length)                        // 3 | 4 | 6 | 8
+
+    // Input hex has no opacity
+    if (hex.length === 3) {
+        hex = hex.split("").map((char) => char.repeat(2)).join("")   // RGB の各文字を2回繰り返す  3 => 6
+        return hex + 'FF'                                            // Add opacity value 'FF' 6 => 8
+    } else if (hex.length === 6) {
+        return hex + 'FF'                                            // Add opacity value 'FF' 6 => 8
+
+    // Input hex has opacity
+    } else if (hex.length === 4) {
+        return hex.split("").map((char) => char.repeat(2)).join("")  // RGBA の各文字を2回繰り返す 4 => 8
+    } else {
+        return hex                                                   // 8 => 8
+    }
+}
+// console.log(hexExpandToEight('#000'))    // 000000FF
+// console.log(hexExpandToEight('#000000')) // 000000FF
+// console.log(hexExpandToEight('#000000')) // 000000FF
+
+
+
+function hexExpandToSix(hex) {
     if (hex.length === 6) {
         // 文字列の長さが 6 ならば そのまま 返す
         return hex;
@@ -72,5 +99,4 @@ function hexExpandTo6(hex) {
     } else {
         return new Error("Invalid hex code");
     }
-
 }

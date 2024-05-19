@@ -139,7 +139,7 @@ function getGroupColorsValues() {
 
     for (let i = 0; i < matches.length; i++) { // i = group ID
         // Get three group colors value
-        const stroke = '#' + hexExpandTo6(getStroke(matches[i]).slice(1)) // 6 digits hex (delete '#' mark using '.slice(1)' before expand)
+        const stroke = '#' + hexExpandToSix(getStroke(matches[i]).slice(1)) // 6 digits hex (delete '#' mark using '.slice(1)' before expand)
         const opacity       = getOpacity(matches[i])                      // [0-1] number
         const strokeOpacity = getStrokeOpacity(matches[i])                // [0-1] number
 

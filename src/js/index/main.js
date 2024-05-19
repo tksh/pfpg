@@ -109,7 +109,7 @@
                 // e.g: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
 
                 // Get three group colors value
-                const stroke = '#' + hexExpandTo6(getStroke(matches[i]).slice(1)) // 6 digits hex (with hash mark)
+                const stroke = '#' + hexExpandToSix(getStroke(matches[i]).slice(1)) // 6 digits hex (with hash mark)
                 const opacity = getOpacity(matches[i])             // [0-1] number
                 const strokeOpacity = getStrokeOpacity(matches[i]) // [0-1] number
 
@@ -288,7 +288,7 @@
         console.log("Base color (hex includes alpha-channel): " + hexAColor);                 // e.g: #FFFFFF99
 
         // Attempt to shorten the string after removing '#', then prepend '#' again
-        const hexAColorShorten = '#' + tryDeleteF(tryReduceAsHalf(hexAColor.substring(1)));
+        const hexAColorShorten = '#' + tryDeleteF(tryShortenAsHalf(hexAColor.substring(1)));
         console.log("Base color (hex shorten): " + hexAColorShorten); // e.g: #FFF9
 
 

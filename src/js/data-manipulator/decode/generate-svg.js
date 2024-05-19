@@ -10,7 +10,7 @@
 //         </clipPath>
 //     </defs>
 //     <g clip-path="url(#clipShape)">
-//         <rect width="100%" height="100%" fill="#9999" />
+//         <rect width="31" height="31" fill="#9999" />
 //         <g stroke="#000000" opacity="1" stroke-opacity="1">
 //             <g stroke-width="3">
 //                 <path d="m1 0 0 26m3-26 0 25m3-25-1 ... 8 5m-8-19 3 2" />
@@ -36,7 +36,7 @@
 //         </clipPath>
 //     </defs>
 //     <g clip-path="url(#clipShape)">
-//         <rect width="100%" height="100%" fill="#9999" />
+//         <rect width="31" height="31" fill="#9999" />
 //         <g stroke="#000000" opacity="1" stroke-opacity="1">
 //             <g stroke-width="3">
 //                 <path d="M 1 0 L 1 26" />
@@ -54,17 +54,12 @@
 
 function generateSvg(isRelOrAbsBool, basicDataMap, strokesValuesMap, decodedRelDvalsMap, decodedAbsDvalsMap) {
 
-    // Read the values from Basic Data
-    const viewboxValue   = basicDataMap.get('viewbox')   // e.g. '0 0 31 31'
-    const artworkIdValue = basicDataMap.get("title")     // e.g. '202308_001'
-    const rectFillValue  = basicDataMap.get("rectFill")  // e.g. '9999'
-
     // Set the tab size
     const tabSpace = '    ' // Four spaces
 
 
     // Generate tags except stroke tags
-    const tagsBeforeStrokes = generateTagsBeforeStrokes(tabSpace, viewboxValue, artworkIdValue, rectFillValue)
+    const tagsBeforeStrokes = generateTagsBeforeStrokes(tabSpace, basicDataMap)
     const tagsAfterStrokes = generateTagsAfterStrokes(tabSpace)
 
 
@@ -220,10 +215,10 @@ function generateAbsPathTags(tabSpace, strokesValuesMap, decodedAbsDvalsMap) {
 
 
 
-function generateTagsBeforeStrokes(tabSpace, viewboxValue, artworkIdValue, rectFillValue) {
+function generateTagsBeforeStrokes(tabSpace, basicDataMap) {
 
-    const svgOpen = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewboxValue}" shape-rendering="crispEdges">`
-    const title = tabSpace.repeat(1) + `<title>${artworkIdValue}</title>`
+    const svgOpen = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${basicDataMap.get("viewbox")}" shape-rendering="crispEdges">`
+    const title = tabSpace.repeat(1) + `<title>${basicDataMap.get("title")}</title>`
 
     // Trimming shape <defs> tag (has no variables)
     const trimmingShapeDefs =
@@ -235,7 +230,7 @@ function generateTagsBeforeStrokes(tabSpace, viewboxValue, artworkIdValue, rectF
 
     // clip-path: <rect> in <g>
     const clipPathGroupOpen = tabSpace.repeat(1) + '<g clip-path="url(#clipShape)">'
-    const baseRect = tabSpace.repeat(2) + `<rect width="100%" height="100%" fill="#${rectFillValue}" />`
+    const baseRect = tabSpace.repeat(2) + `<rect width="${basicDataMap.get("viewboxWidth")}" height="${basicDataMap.get("viewboxHeight")}" fill="#${basicDataMap.get("rectFill")}" />`
 
     return [svgOpen, title, trimmingShapeDefs, clipPathGroupOpen, baseRect]
 }
@@ -255,7 +250,7 @@ function generateGTagOpenByGroup(tabSpace, strokesValuesMap) {
         const groupColors = v.groupColors
 
         const colorGroupTagOpen = tabSpace.repeat(2)
-            + `<g stroke="${groupColors.g_stroke}" opacity="${groupColors.g_opacity}" stroke-opacity="${groupColors.g_stroke_opacity}">`
+            + `<g stroke="#${tryShortenAsHalf(groupColors.g_stroke.slice(1))}" opacity="${groupColors.g_opacity}" stroke-opacity="${groupColors.g_stroke_opacity}">`
         //         <g stroke="#000000" opacity="1" stroke-opacity="1">
 
         gTagOpenByGroup.set(gId, colorGroupTagOpen)

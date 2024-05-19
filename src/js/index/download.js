@@ -99,7 +99,7 @@ function getCurrentStatus() {
 
     // Reducing into half length if all hex pairs are duplicated.                  10 => 5
     // And deleting for "FF" (in 5 chars hex) or "FFFF" (in 10 chars hex) at last. 10 => 6, 5 => 3
-    const compressedHexArray = mergedHexArray.map(tenCharsHex => tryDeleteFs(tryReduceAsHalf(tenCharsHex)))
+    const compressedHexArray = mergedHexArray.map(tenCharsHex => tryDeleteFs(tryShortenAsHalf(tenCharsHex)))
 
     // Join the formatted hex with underscore '_'
     const groupColorsHexString = compressedHexArray.join('_')
@@ -116,7 +116,7 @@ function getCurrentStatus() {
     const rectColorInput = document.getElementById('base-rect-color-picker')
     const rectColorWithoutHash = rectColorInput.value.substring(1) // 要素の値は文字列として扱われる, 先頭の `#` を削除
     // e.g.: 99999999
-    const rectColorShorten = tryDeleteF(tryReduceAsHalf(rectColorWithoutHash)) // 同じ値が連続していれば4桁に省略し さらに 最後が'F'or'f'なら削除し3桁にする
+    const rectColorShorten = tryDeleteF(tryShortenAsHalf(rectColorWithoutHash)) // 同じ値が連続していれば4桁に省略し さらに 最後が'F'or'f'なら削除し3桁にする
     const rectColor = rectColorShorten.toUpperCase()
     // e.g.: 9999
 
