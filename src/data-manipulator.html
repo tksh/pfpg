@@ -230,26 +230,26 @@
         <h3>Select: Encoding Methods</h3>
 
         <button onclick="bruteforce53Enc()">Encode via <b>bruteforce53Enc()</b></button>
-        <p>For: UInt[5-14]Portray<br>With: Lines Data Aggregated for Encoding (list_of_stroke_width, count_by_stroke_width, diff, diff_values_sorted_by_freq and diff_counts_sorted_by_freq)</p>
+        <p>For: UInt[5-14]Portray<br>With: Lines Data Aggregated for Encoding (stroke_width.list_of, stroke_width.count_by, d.relative.diff_by_row, d.relative.frequent_diff_values_sorted and d.relative.frequent_diff_counts_sorted)</p>
         <br />
 
         <button onclick="bigint64Enc()">Encode via <b>bigint64Enc()</b></button>
-        <p>For: UInt[5-14]Portray<br>With: Lines Data (<b>absolute</b> d values) and Lines Data Aggregated for Encoding (list_of_stroke_width and count_by_stroke_width)</p>
+        <p>For: UInt[5-14]Portray<br>With: Lines Data (d.absolute) and Lines Data Aggregated for Encoding (stroke_width.list_of and stroke_width.count_by)</p>
         <br />
 
         <button onclick="swap63Enc()">Encode via <b>swap63Enc()</b></button>
-        <p>For: <b>UInt5Portray ONLY</b> (viewbox: 31 x 31)<br>With: Lines Data (<b>relative</b> d values) and Lines Data Aggregated for Encoding (list_of_stroke_width and count_by_stroke_width)</p>
+        <p>For: <b>UInt5Portray ONLY</b> (viewbox: 31 x 31)<br>With: Lines Data (d.relative) and Lines Data Aggregated for Encoding (stroke_width.list_of and stroke_width.count_by)</p>
         <br />
 
 
         <h3>Try Above Multipul Encoding Methods and Get Shortest Result By Group</h3>
 
         <button onclick="bestMixFrom3Methods()">Encode via <b>bestMixFrom3Methods()</b></button>
-        <p>For: UInt<b>[5-14]</b>Portray<br>Methods: bruteforce53Enc(), bigint64Enc() and <b>swap63Enc()</b></p>
+        <p>For: UInt[<b>5</b>-14]Portray<br>Methods: bruteforce53Enc(), bigint64Enc() and swap63Enc()</p>
         <br />
 
         <button onclick="bestMixFrom2Methods()">Encode via <b>bestMixFrom2Methods()</b></button>
-        <p>For: UInt<b>[6-14]</b>Portray<br>Methods: bruteforce53Enc(), bigint64Enc()</p>
+        <p>For: UInt[<b>6</b>-14]Portray<br>Methods: bruteforce53Enc() and bigint64Enc()</p>
         <br />
 
         <!-- Textarea to output the lines data encoded -->
@@ -285,12 +285,12 @@
         <h3>⬇ Path style: Relative and Merged</h3>
         <textarea id="textarea-decoded-svg-as-rel" class="height-2" placeholder="If inputted text at address bar includes the url params like /data-manipulator.html?..., Decoding to SVG is automatically starts when page loaded and result text will export here."></textarea>
         <button id="button-decoded-svg-as-rel" onclick="copyTextarea('textarea-decoded-svg-as-rel', 'button-decoded-svg-as-rel')">Copy to clipboard</button>
-        <p id="encoded-size-compare"></p>
+        <p id="encoded-size-compare-for-rel"></p>
 
         <h3>⬇ Path style: Absolute and Separated</h3>
         <textarea id="textarea-decoded-svg-as-abs" class="height-2" placeholder="If inputted text at address bar includes the url params like /data-manipulator.html?..., Decoding to SVG is automatically starts when page loaded and result text will export here."></textarea>
         <button id="button-decoded-svg-as-abs" onclick="copyTextarea('textarea-decoded-svg-as-abs', 'button-decoded-svg-as-abs')">Copy to clipboard</button>
-        <p id="encoded-size-compare"></p>
+        <p id="encoded-size-compare-for-abs"></p>
 
     </div>
 </body>

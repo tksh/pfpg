@@ -95,11 +95,12 @@ function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) 
         const compRatio = queryString.length / svgStr.length
 
         // Show the result in html
-        const resultTextElem = document.getElementById('encoded-size-compare');
+        const postfix = isRelOrAbsBool ? 'rel' : 'abs';
+        const resultTextElem = document.getElementById(`encoded-size-compare-for-${postfix}`);
         if (resultTextElem) {
-            const text = `url params size: <b>${queryString.length}</b> characters (bytes)<br>
-        decoded svg size: <b>${svgStr.length}</b> characters (bytes)<br>
-        ${queryString.length} / ${svgStr.length} = <b>${compRatio}</b>`
+            const text = `Size of URL Params: <b>${queryString.length}</b> characters (bytes)<br>
+        Size of SVG String: <b>${svgStr.length}</b> characters (bytes)<br>
+        Ratio: ${queryString.length} / ${svgStr.length} = <b>${compRatio}</b>`
             resultTextElem.innerHTML = text
         }
 
