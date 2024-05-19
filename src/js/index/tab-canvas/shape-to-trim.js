@@ -75,20 +75,20 @@ function svgWithNewShapeClippath(shape, svgString, shapePathOfSquircle, shapePat
     // Update <clipPath>
 
     // cliPathとして使う かたち のパス文字列 を 取得する正規表現パターン
-    const patternForClipPathShape = /<clipPath id="clipShape">\n.*\n.*<\/clipPath>/g;
+    const patternForClipPathShape = /<clipPath id="shape-to-trim">\n.*\n.*<\/clipPath>/g;
 
     if (shape == 'square') {
         console.log('Selected shape is ', shape)
-        updatedSvgString = svgString.replace(patternForClipPathShape, '<clipPath id="clipShape">\n            <rect width="100%" height="100%" />\n        <\/clipPath>');
+        updatedSvgString = svgString.replace(patternForClipPathShape, '<clipPath id="shape-to-trim">\n            <rect width="100%" height="100%" />\n        <\/clipPath>');
     } else if (shape == 'circle') {
         console.log('Selected shape is ', shape)
-        updatedSvgString = svgString.replace(patternForClipPathShape, '<clipPath id="clipShape">\n            <circle cx="50%" cy="50%" r="50%" />\n        <\/clipPath>');
+        updatedSvgString = svgString.replace(patternForClipPathShape, '<clipPath id="shape-to-trim">\n            <circle cx="50%" cy="50%" r="50%" />\n        <\/clipPath>');
     } else if (shape == 'squircle') {
         console.log('Selected shape is ', shape)
-        updatedSvgString = svgString.replace(patternForClipPathShape, `<clipPath id="clipShape">\n            ${shapePathOfSquircle}\n        <\/clipPath>`);
+        updatedSvgString = svgString.replace(patternForClipPathShape, `<clipPath id="shape-to-trim">\n            ${shapePathOfSquircle}\n        <\/clipPath>`);
     } else if (shape == 'squircleSlimmed') {
         console.log('Selected shape is ', shape)
-        updatedSvgString = svgString.replace(patternForClipPathShape, `<clipPath id="clipShape">\n            ${shapePathOfSquircleSlimmed}\n        <\/clipPath>`);
+        updatedSvgString = svgString.replace(patternForClipPathShape, `<clipPath id="shape-to-trim">\n            ${shapePathOfSquircleSlimmed}\n        <\/clipPath>`);
     }
 
     return updatedSvgString
@@ -122,8 +122,8 @@ function updateSvgWithSelectedShapePath(shape, svgTextareaAndString) {
                 : `<path d="M 0,${center}Q 0,0 ${center},0T ${gridSize},${center} ${center},${gridSize} 0,${center}" />`; // shape === 'squircle'
 
     // Replace to new shape <clipPath>
-    const patternForClipPathShape = /<clipPath id="clipShape">\n.*\n.*<\/clipPath>/g;
-    const pathUpdatedSvg = svgString.replace(patternForClipPathShape, `<clipPath id="clipShape">\n\t\t${shapePath}\n\t</clipPath>`);
+    const patternForClipPathShape = /<clipPath id="shape-to-trim">\n.*\n.*<\/clipPath>/g;
+    const pathUpdatedSvg = svgString.replace(patternForClipPathShape, `<clipPath id="shape-to-trim">\n\t\t${shapePath}\n\t</clipPath>`);
     svgTextareaAndString.set('string', pathUpdatedSvg);
 
     // Update the <textarea>

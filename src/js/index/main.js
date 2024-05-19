@@ -198,7 +198,7 @@
         const matchOfBaseRectFill = currentPathModeSvgStr.match(patternBaseRectFill)
         const valueOfBaseRectFill = matchOfBaseRectFill[0] // Hex string
         // Shape to trim
-        const patternShapeToTrim = /<clipPath id="clipShape">[^>]*>/g
+        const patternShapeToTrim = /<clipPath id="shape-to-trim">[^>]*>/g
         const matchOfShapeToTrim = currentPathModeSvgStr.match(patternShapeToTrim)
         const valueOfShapeToTrim = matchOfShapeToTrim[0] // 'square' | 'circle' | 'squircle' | 'squircle, slimmed'
         // viewBox (for 'Crop side margins' checked.)

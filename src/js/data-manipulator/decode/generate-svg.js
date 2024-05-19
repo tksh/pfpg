@@ -5,11 +5,11 @@
 // <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" shape-rendering="crispEdges">
 //     <title>202308_001</title>
 //     <defs>
-//         <clipPath id="clipShape">
+//         <clipPath id="shape-to-trim">
 //             <rect width="100%" height="100%" />
 //         </clipPath>
 //     </defs>
-//     <g clip-path="url(#clipShape)">
+//     <g clip-path="url(#shape-to-trim)">
 //         <rect width="31" height="31" fill="#9999" />
 //         <g stroke="#000000" opacity="1" stroke-opacity="1">
 //             <g stroke-width="3">
@@ -31,11 +31,11 @@
 // <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" shape-rendering="crispEdges">
 //     <title>202308_001</title>
 //     <defs>
-//         <clipPath id="clipShape">
+//         <clipPath id="shape-to-trim">
 //             <rect width="100%" height="100%" />
 //         </clipPath>
 //     </defs>
-//     <g clip-path="url(#clipShape)">
+//     <g clip-path="url(#shape-to-trim)">
 //         <rect width="31" height="31" fill="#9999" />
 //         <g stroke="#000000" opacity="1" stroke-opacity="1">
 //             <g stroke-width="3">
@@ -223,13 +223,13 @@ function generateTagsBeforeStrokes(tabSpace, basicDataMap) {
     // Trimming shape <defs> tag (has no variables)
     const trimmingShapeDefs =
         tabSpace.repeat(1) + '<defs>' + '\n' +
-        tabSpace.repeat(2) + '<clipPath id="clipShape">' + '\n' +
+        tabSpace.repeat(2) + '<clipPath id="shape-to-trim">' + '\n' +
         tabSpace.repeat(3) + '<rect width="100%" height="100%" />' + '\n' +
         tabSpace.repeat(2) + '</clipPath>' + '\n' +
         tabSpace.repeat(1) + '</defs>'
 
     // clip-path: <rect> in <g>
-    const clipPathGroupOpen = tabSpace.repeat(1) + '<g clip-path="url(#clipShape)">'
+    const clipPathGroupOpen = tabSpace.repeat(1) + '<g clip-path="url(#shape-to-trim)">'
     const baseRect = tabSpace.repeat(2) + `<rect width="${basicDataMap.get("viewboxWidth")}" height="${basicDataMap.get("viewboxHeight")}" fill="#${basicDataMap.get("rectFill")}" />`
 
     return [svgOpen, title, trimmingShapeDefs, clipPathGroupOpen, baseRect]
