@@ -35,7 +35,6 @@
     <script src="./js/data-manipulator/data-io/download-url-params.js" type="module" ></script>
     <script src="./js/data-manipulator/data-io/copy-textarea.js"></script>
     <script src="./js/data-manipulator/data-io/json-to-map-obj.js"></script>
-    <script src="./js/data-manipulator/data-io/merge-as-url-params.js"></script>
     <script src="./js/data-manipulator/data-io/output-to-textarea.js"></script>
     <script src="./js/data-manipulator/data-io/read-textarea.js"></script>
     <script src="./js/data-manipulator/data-io/select-file.js"></script>
@@ -242,7 +241,7 @@
         <br />
 
 
-        <h3>Try Above Multipul Encoding Methods and Get Shortest Result By Group</h3>
+        <h3>Try Above Multiple Encoding Methods and Get Shortest Result By Group</h3>
 
         <button onclick="bestMixFrom3Methods()">Encode via <b>bestMixFrom3Methods()</b></button>
         <p>For: UInt[<b>5</b>-14]Portray<br>Methods: bruteforce53Enc(), bigint64Enc() and swap63Enc()</p>
@@ -264,15 +263,15 @@
         <h2>Merge the Encoded Basic Data and Lines Data</h2>
 
         <h3>3. ⬇ Finished URL Params:</h3>
-        <button onclick="mergeBasicDataAndStrokesValues()">Merge via <b>mergeBasicDataAndStrokesValues()</b></button>
+        <button id="button-to-merge-as-url-params">Merge via <b>mergeBasicDataAndStrokesValues()</b></button>
         <textarea id="textarea-encoded-url-params" class="height-2" placeholder="Encoded URL Params"></textarea>
 
         <!-- Button to copy -->
         <button id="button-encoded-url-params" onclick="copyTextarea('textarea-encoded-url-params', 'button-encoded-url-params')">Copy to clipboard</button>
         <!-- Button to download as .txt -->
-        <button id="button-to-download-url-params-as-txt" onclick="downloadUrlParamsAsTxt()">Download as .txt</button>
+        <button id="button-to-download-url-params-as-txt">Download as .txt</button>
         <!-- Button to download as .txt.zstd -->
-        <button id="button-to-download-url-params-as-txt-zstd" onclick="downloadUrlParamsAsTxtZstd()">Compress and download as .txt.zst</button>
+        <button id="button-to-download-url-params-as-txt-zstd">Download (after compressed) as .txt.zst</button>
 
         <p id="encoded-url-params-size"></p>
 

@@ -98,8 +98,8 @@ function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) 
         const postfix = isRelOrAbsBool ? 'rel' : 'abs';
         const resultTextElem = document.getElementById(`encoded-size-compare-for-${postfix}`);
         if (resultTextElem) {
-            const text = `Size of URL Params: <b>${queryString.length}</b> characters (bytes)<br>
-        Size of SVG String: <b>${svgStr.length}</b> characters (bytes)<br>
+            const text = `Size of URL params: <b>${queryString.length}</b> characters (bytes)<br>
+        Size of SVG string: <b>${svgStr.length}</b> characters (bytes)<br>
         Ratio: ${queryString.length} / ${svgStr.length} = <b>${compRatio}</b>`
             resultTextElem.innerHTML = text
         }
