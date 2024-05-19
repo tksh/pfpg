@@ -1,5 +1,5 @@
 function decodeSwap63Enc(encodedDvalsStr) {
-    const dictMapToDec = generateSwap63DictToDec()
+    const dictMapToDec = createDecodingDict()
     // Map(63) { 0 → -31, 1 → -30, 2 → -29, 3 → -28, 4 → -27, 5 → -26, 6 → -25, 7 → -24, 8 → -23, 9 → -22, … }
 
     dividedDvals = divideStringEqually(encodedDvalsStr, 4)

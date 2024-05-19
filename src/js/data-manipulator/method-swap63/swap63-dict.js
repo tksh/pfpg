@@ -1,15 +1,14 @@
 // Swap63 変換辞書用の キーとバリューの配列 を定義する
-//   エンコード時と デコード時で key,value を 逆にする
+// エンコード時と デコード時で key,value を 逆にする
 
-function generateSwap63DictToEnc(keys = getSwap63Nums(), values = getSwap63Chars()) {
-    console.log('keys: ', keys) // Array(63) [ -31, -30, … -1, 0, 1, 2, … , 31]
-    console.log('values: ', values) // Array(63) [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, … "Z", "_"]
+function createEncodingDict(keys = get63Numbers(), values = get63Characters()) {
+    //console.log('keys: ', keys)     // Array(63) [ -31, -30, … -1, 0, 1, 2, … , 31]
+    //console.log('values: ', values) // Array(63) [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, … "Z", "_"]
 
     const dictMap = new Map()
 
     // 配列の要素をループしてマップにセットする
     for (let i = 0; i < keys.length; i++) {
-        // keys[i] をキーとして values[i] を値としてセットする
         dictMap.set(keys[i], values[i]);
     }
 
@@ -17,17 +16,15 @@ function generateSwap63DictToEnc(keys = getSwap63Nums(), values = getSwap63Chars
 }
 
 
-function generateSwap63DictToDec(keys = getSwap63Nums(), values = getSwap63Chars()) {
-    //console.log('keys: ', keys) // Array(63) [ -31, -30, … -1, 0, 1, 2, … , 31]
-    //console.log('values: ', values) // Array(63) [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, … "Z", "_"]
+function createDecodingDict(keys = get63Characters(), values = get63Numbers()) {
+    //console.log('keys: ', keys)     // Array(63) [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, … "Z", "_"]
+    //console.log('values: ', values) // Array(63) [ -31, -30, … -1, 0, 1, 2, … , 31]
 
     const dictMap = new Map()
 
     // 配列の要素をループしてマップにセットする
     for (let i = 0; i < keys.length; i++) {
-        // values[i] をキーとして keys[i] を値としてセットする
-        // エンコード用と 逆 にする
-        dictMap.set(values[i], keys[i]);
+        dictMap.set(keys[i], values[i]);
     }
 
     return dictMap
@@ -35,12 +32,7 @@ function generateSwap63DictToDec(keys = getSwap63Nums(), values = getSwap63Chars
 
 
 
-
-
-/////// Inner functions ///////
-
-
-function getSwap63Nums() {
+function get63Numbers() {
     let minus31To31 = [];
     for (let i = -31; i < 32; i++) {
         //console.log(i)
@@ -51,11 +43,8 @@ function getSwap63Nums() {
 }
 // Array(63) [ "-31", "-30", "-29", "-28", "-27", "-26", "-25", "-24", "-23", "-22", … , "31"]
 
-// Without `.toString()` method, Number will returned
-// Array(63) [ -31, -30, -29, -28, -27, -26, -25, -24, -23, -22, … , 31]
 
-
-function getSwap63Chars() {
+function get63Characters() {
     let zeroToNine = [];
     for (i = 0; i < 10; i++) {
         zeroToNine.push(i.toString())

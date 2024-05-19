@@ -1,11 +1,11 @@
 // Replace a number of relative d values (-31 to 31) with a char of 63 keys ([0,1,2…9,a,b,c…z,A,B,C…Z,_])
 
 function swap63Enc() {
-// function swap63Enc(swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getSwap63Chars())) {
+// function swap63Enc(swap63DictMap = createEncodingDict(get63Numbers(), get63Characters())) {
     const startTime = performance.now()
 
     // Dictionary to swap from number to char
-    swap63DictMap = generateSwap63DictToEnc(getSwap63Nums(), getSwap63Chars())
+    swap63DictMap = createEncodingDict(get63Numbers(), get63Characters())
     console.log('swap63DictMap: ', swap63DictMap);
     // Map(63) { -31 → "0", -30 → "1", -29 → "2", -28 → "3", -27 → "4", -26 → "5", -25 → "6", -24 → "7", -23 → "8", -22 → "9", … }
 
