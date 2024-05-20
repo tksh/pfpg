@@ -1,4 +1,4 @@
-function decodeBruteforce53Enc(encodedDvalsStr, threeFlagCharsArr) {
+function bruteforce53Dec(encodedDvalsStr, threeFlagCharsArr) {
     //console.log("threeFlagCharsArr: ", threeFlagCharsArr)
     //console.log("encodedDvalsStr: ", encodedDvalsStr)
 

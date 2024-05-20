@@ -90,7 +90,7 @@ function decodeAsTwoMaps(paramsArray) {
     // Get Lines Data as Map
     // 2番目([1])以降のストローク情報の key, value を ループで取り出し
 
-    const strokesValuesMap = new Map()
+    const linesDataMap = new Map()
     // key = gId (seq num)
     // value = Object[
     //                "groupColors"  => {
@@ -119,17 +119,17 @@ function decodeAsTwoMaps(paramsArray) {
         // threeFlags: (3) ['1', '2', 'n']
 
         // Width-and-Counts as Map
-        let strokesValues = paramsArray[i][1].slice(3)
-        //console.log("strokesValues(Before URLComp expand): ", strokesValues)
+        let linesData = paramsArray[i][1].slice(3)
+        //console.log("linesData(Before URLComp expand): ", linesData)
         // 3t-BRY8zuZS6-yuj6xgi-u9utYvXoK0QEXoKySIqr46g3-9HxEs1eG2VMHxerRFrXM3mjZxLkf-wwSvNRnQb88G
 
         if (Number(splittedThreeFlags[0]) === 1) { // Decompress if URLCompressor applied
-            strokesValues = URLCompressor.expand(strokesValues)
+            linesData = URLCompressor.expand(linesData)
         }
 
-        console.log("strokesValues(After URLComp expand): ", strokesValues)
+        console.log("linesData(After URLComp expand): ", linesData)
 
-        const encodedWidthAndCounts = strokesValues.split('-')[0]
+        const encodedWidthAndCounts = linesData.split('-')[0]
         console.log("encodedWidthAndCounts: ", encodedWidthAndCounts) // 3t
 
         // Decode the count and width, and generate the firstline and lastline
@@ -139,14 +139,14 @@ function decodeAsTwoMaps(paramsArray) {
         // Get the lines data
         // Extract an encoded string of whole d values
         // Not split into x1, y1, x2, y2
-        const encodedDvalsStr = extractAfterFirstHyphen(strokesValues)
+        const encodedDvalsStr = extractAfterFirstHyphen(linesData)
         console.log("encodedDvalsStr: ", encodedDvalsStr)
         // BRY8zuZS6-yuj6xgi-u9utYvXoK0QEXoKySIqr46g3-9HxEs1eG2VMHxerRFrXM3mjZxLkf-wwSvNRnQb88G
 
 
 
         // Set into Map by group ID
-        strokesValuesMap.set(i, {
+        linesDataMap.set(i, {
             groupColors: decodedGroupColorsObj,
             threeFlags: splittedThreeFlags,
             widthAndCounts: decodedWidthAndCounts,
@@ -154,6 +154,6 @@ function decodeAsTwoMaps(paramsArray) {
         })
     }
 
-    return {basicData:basicDataMap, strokesValues:strokesValuesMap}
+    return {basicData:basicDataMap, linesData:linesDataMap}
 
 }

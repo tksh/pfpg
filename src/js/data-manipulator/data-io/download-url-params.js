@@ -135,10 +135,10 @@ async function mergeBasicDataAndStrokesValues(){
     const basicDataStr = readTextarea(`textarea-basic-data-encoded`)
 
     // Lines Data encoded string from textarea
-    const strokesValuesStr = readTextarea(`textarea-strokes-values-encoded`)
+    const linesDataStr = readTextarea(`textarea-strokes-values-encoded`)
 
     // Merge as a string
-    const urlParamsStr = basicDataStr + strokesValuesStr
+    const urlParamsStr = basicDataStr + linesDataStr
 
     // Output to textarea
     outputToTextarea(urlParamsStr, 'textarea-encoded-url-params')

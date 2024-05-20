@@ -12,8 +12,8 @@ function decode(isRelative, isDataManipulatorPage) {
         //console.log("basicDataMap: ", basicDataMap)
         // Map(6) { title → "202404_001", viewbox → "0 0 31 31", viewboxWidth → "31", viewboxHeight → "31", uintN → 5, rectFill → "fff" }
 
-        const strokesValuesMap = urlParamsAsTwoMaps.strokesValues
-        console.log("strokesValuesMap: ", strokesValuesMap)
+        const linesDataMap = urlParamsAsTwoMaps.linesData
+        console.log("linesDataMap: ", linesDataMap)
         // Map(5) {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
         // key  : Group ID (seq num)
         // value: Object
@@ -24,7 +24,7 @@ function decode(isRelative, isDataManipulatorPage) {
         //            {encodedDvals: 'wyyvtuDwtzxifJxuvunv56nudvqm96wo9xuuucvvuzvzAwvvvyzxsvxDyVUSByqATCUWytEBzzAx'}
 
 
-        const decodedAbsAndRelDvalsMaps = decodeStrokesValues(strokesValuesMap)
+        const decodedAbsAndRelDvalsMaps = decodeDvals(linesDataMap)
 
         const decodedRelDvalsMap = decodedAbsAndRelDvalsMaps.get('relative')
         const decodedAbsDvalsMap = decodedAbsAndRelDvalsMaps.get('absolute')
@@ -60,7 +60,7 @@ function decode(isRelative, isDataManipulatorPage) {
 
         // Generate SVG string
 
-        const svgStr = generateSvg(isRelative, basicDataMap, strokesValuesMap, decodedRelDvalsMap, decodedAbsDvalsMap)
+        const svgStr = generateSvg(isRelative, basicDataMap, linesDataMap, decodedRelDvalsMap, decodedAbsDvalsMap)
 
         // Output to textarea
         const outputTextareaId = selectOutputTextareaId(isRelative, isDataManipulatorPage)
@@ -110,11 +110,11 @@ function decode(isRelative, isDataManipulatorPage) {
 
 
 
-function decodeStrokesValues(strokesValuesMap) {
+function decodeDvals(linesDataMap) {
     const decodedAbsDvalsMap = new Map()
     const decodedRelDvalsMap = new Map()
 
-    for ([gId, v] of strokesValuesMap) {
+    for ([gId, v] of linesDataMap) {
         // console.log("v.encodedDvals: ", v.encodedDvals) // "x1 + y1 + x2 + y2"
         // e.g.: H5yJn8tIS6hWuVfFgdJIY10GsuwXo0w
 
@@ -123,19 +123,19 @@ function decodeStrokesValues(strokesValuesMap) {
 
         if (v.threeFlags[1] === '0') {
             console.log(`Group ${gId} has encoded with 'bruteforce53-enc'`)
-            decodedDiffDvals = decodeBruteforce53Enc(v.encodedDvals, v.threeFlags)
+            decodedDiffDvals = bruteforce53Dec(v.encodedDvals, v.threeFlags)
             decodedRelDvals = decodedDiffDvals.map(column => diffToRel(column))
             decodedAbsDvals = relToAbs(decodedRelDvals, v.widthAndCounts)
 
         } else if (v.threeFlags[1] === '1') {
             console.log("This group has encoded with 'bigint64-enc'")
-            decodedAbsAndRelDvalsObj = decodeBigint64Enc(v.encodedDvals)
+            decodedAbsAndRelDvalsObj = bigint64Dec(v.encodedDvals)
             decodedAbsDvals = decodedAbsAndRelDvalsObj.absolute
             decodedRelDvals = decodedAbsAndRelDvalsObj.relative
 
         } else if (v.threeFlags[1] === '2') {
             console.log("This group has encoded with 'swap63-enc'")
-            decodedRelDvals = decodeSwap63Enc(v.encodedDvals)
+            decodedRelDvals = swap63Dec(v.encodedDvals)
             decodedAbsDvals = relToAbs(decodedRelDvals, v.widthAndCounts)
 
         } else {

@@ -1,12 +1,11 @@
-// Replace a number of relative d values (-31 to 31) with a char of 63 keys ([0,1,2…9,a,b,c…z,A,B,C…Z,_])
+// Replace each number of relative d values (-31 to 31) with a character from the set [0-9, a-z, A-Z, _]
 
 function swap63Enc() {
-// function swap63Enc(swap63DictMap = createEncodingDict(get63Numbers(), get63Characters())) {
     const startTime = performance.now()
 
-    // Dictionary to swap from number to char
-    swap63DictMap = createEncodingDict(get63Numbers(), get63Characters())
-    console.log('swap63DictMap: ', swap63DictMap);
+    // Dictionary to swap from number to character
+    dictForEncoding = createDictionary(get63Numbers(), get63Characters())
+    console.log('dictForEncoding: ', dictForEncoding);
     // Map(63) { -31 → "0", -30 → "1", -29 → "2", -28 → "3", -27 → "4", -26 → "5", -25 → "6", -24 → "7", -23 → "8", -22 → "9", … }
 
 
@@ -15,8 +14,8 @@ function swap63Enc() {
     //console.log('linesDataMap: ', linesDataMap) // Map { 0 → {…}, 1 → {…} }
 
 
-    // Get the string of d values encoded as Map
-    const encodedDval = swapFromNumbersToChars(swap63DictMap, linesDataMap)
+    // Get the string of d values encoded
+    const encodedDval = swapFromNumbersToChars(dictForEncoding, linesDataMap)
     console.log('encodedDval: ', encodedDval)
     // Map(5) {'1' => 'wyyvtuDwtzxifJxuvunv56nudvqm96wo9xuuucvvuzvzAwvvvyzxsvxDyVUSByqATCUWytEBzzAx', '2' => 'v9oswnHvnuzxsxwmvxDDAA7tWtvshunl_AxxwxxxxxyvwtvxwspCtuxxwwxyuwxw', '3' => 'wCuuzusuvxxrxuxtvAzyyyrvveuurvsttxxputwvsvttturpyutrsqttsAtvaBVbpyJuvwttrurvwrqppqqstrskuvmruyxmsqtruvtrwwwvBymtrvuDxuvqwuMuuwwwyywwvuxxuvyyrstuutwxyxxwxwyxxswxxtvyxzwxxxwwxAyxxxzyywwwxzwzzsyxvxxyytxwxyCCBAAyxzyxyxyxtuvAxzyzwvxvtsssuwwzyyzvwttxtvyt', '4' => 'JvruxouwuwvpwjxuvvABtvBuxzuxAhHsvtssxvqAxvxxwwwxwvwxyywyxxtuwutzvvywAxxxxwtt', '5' => 'HuxwxxuQcuywAwvtutuxxxyxywww'}
 
@@ -82,7 +81,7 @@ function swapFromNumbersToChars(dictMap, linesDataMap) {
 
         // A variable to store the encoded string of d values
         // Joined whole columns (x1, y1, x2, y2) without spaces
-        let dvalsEncodedStr = "";
+        let encodedDval = "";
 
         // relative d values array in obj, x1 to y2
         const relDvals = linesData.d.relative
@@ -96,10 +95,10 @@ function swapFromNumbersToChars(dictMap, linesDataMap) {
             //console.log(dval); // (19) [1, 3, 3, 0, -2, -1, 8, 1, -2, 4, 2, -13, -16, 14, 2, -1, 0, -1, -8]
 
             // Encode and append
-            dvalsEncodedStr = dvalsEncodedStr + swapFromNumToChar(dval, numberOfPath, dictMap)
+            encodedDval = encodedDval + swapFromNumToChar(dval, numberOfPath, dictMap)
         }
 
-        encodedDvals.set(linesData.g_id, dvalsEncodedStr)
+        encodedDvals.set(linesData.g_id, encodedDval)
     }
     return encodedDvals
 }

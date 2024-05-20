@@ -1,4 +1,4 @@
-function decodeBigint64Enc(encodedDvalsStr) {
+function bigint64Dec(encodedDvalsStr) {
 
                 // Decode as bigint
                 const decodedDvalsBigint = base64UrlDec(encodedDvalsStr)
@@ -159,7 +159,7 @@ function absToRel(arr) {
 // Test
 
 // 絶対座標データの配列
-// const absoluteArray = [
+// const absoluteDvalsay = [
 //     [10, 90, 90, 10], // x1
 //     [10, 10, 90, 90], // y1
 //     [90, 90, 10, 10], // x2
@@ -167,10 +167,10 @@ function absToRel(arr) {
 // ];
 
 // 関数 absToRel で相対座標データの配列に変換する
-// const relativeArray = absToRel(absoluteArray);
+// const relativeDvalsay = absToRel(absoluteDvalsay);
 
 // 結果
-// console.log(relativeArray);
+// console.log(relativeDvalsay);
 // (4) [Array(4), Array(4), Array(4), Array(4)]
 //     0: (4) [10, 0, 0, 0]   // x1
 //     1: (4) [10, 0, 0, 0]   // y1

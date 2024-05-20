@@ -1,35 +1,21 @@
 // Swap63 変換辞書用の キーとバリューの配列 を定義する
 // エンコード時と デコード時で key,value を 逆にする
 
-function createEncodingDict(keys = get63Numbers(), values = get63Characters()) {
-    //console.log('keys: ', keys)     // Array(63) [ -31, -30, … -1, 0, 1, 2, … , 31]
-    //console.log('values: ', values) // Array(63) [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, … "Z", "_"]
+function createDictionary(keys, values) {
+    //console.log(get63Numbers())     // Array(63) [ -31, -30, … -2, -1, 0, 1, 2, … 30, 31]
+    //console.log(get63Characters())  // Array(63) [ "0", "1", … "a", "b", … "z", "A", … "Z", "_"]
+
+    // For encoding: keys = numbers,    value = characters
+    // For decoding: keys = characters, values = numbers
 
     const dictMap = new Map()
 
-    // 配列の要素をループしてマップにセットする
     for (let i = 0; i < keys.length; i++) {
         dictMap.set(keys[i], values[i]);
     }
 
     return dictMap
 }
-
-
-function createDecodingDict(keys = get63Characters(), values = get63Numbers()) {
-    //console.log('keys: ', keys)     // Array(63) [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, … "Z", "_"]
-    //console.log('values: ', values) // Array(63) [ -31, -30, … -1, 0, 1, 2, … , 31]
-
-    const dictMap = new Map()
-
-    // 配列の要素をループしてマップにセットする
-    for (let i = 0; i < keys.length; i++) {
-        dictMap.set(keys[i], values[i]);
-    }
-
-    return dictMap
-}
-
 
 
 function get63Numbers() {

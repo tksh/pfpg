@@ -52,7 +52,7 @@
 
 
 
-function generateSvg(isRelative, basicDataMap, strokesValuesMap, decodedRelDvalsMap, decodedAbsDvalsMap) {
+function generateSvg(isRelative, basicDataMap, linesDataMap, decodedRelDvalsMap, decodedAbsDvalsMap) {
 
     // Set the tab size
     const tabSpace = '    ' // Four spaces
@@ -66,21 +66,21 @@ function generateSvg(isRelative, basicDataMap, strokesValuesMap, decodedRelDvals
     // Strokes tags ( group-id-<g> and <path> )
 
     // Generate the open and close group-id-<g> tags
-    const gTagOpenByGroup = generateGTagOpenByGroup(tabSpace, strokesValuesMap)
-    const gTagCloseByGroup = generateGTagCloseByGroup(tabSpace, strokesValuesMap)
+    const gTagOpenByGroup = generateGTagOpenByGroup(tabSpace, linesDataMap)
+    const gTagCloseByGroup = generateGTagCloseByGroup(tabSpace, linesDataMap)
 
     // Generate the <path> tags (as relative or absolute, switched by isRelative)
     const pathTagsByGroup = generatePathTags(
         isRelative,
         tabSpace,
-        strokesValuesMap,
+        linesDataMap,
         decodedRelDvalsMap,
         decodedAbsDvalsMap
     )
 
     // Merge the group-id-<g> tags and <path> tags
     const strokesTags = mergeGAndPathTags(
-        strokesValuesMap,
+        linesDataMap,
         gTagOpenByGroup,
         pathTagsByGroup,
         gTagCloseByGroup
@@ -93,11 +93,11 @@ function generateSvg(isRelative, basicDataMap, strokesValuesMap, decodedRelDvals
 
 
 
-function generateRelPathTags(tabSpace, strokesValuesMap, decodedRelDvalsMap) {
+function generateRelPathTags(tabSpace, linesDataMap, decodedRelDvalsMap) {
 
     const relPathTagsByGroup = new Map()
 
-    for (let [gId, v] of strokesValuesMap) {
+    for (let [gId, v] of linesDataMap) {
         const dvalsObj = decodedRelDvalsMap.get(gId)
         console.log('dvalsObj: ', dvalsObj) // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
 
@@ -153,11 +153,11 @@ function generateRelPathTags(tabSpace, strokesValuesMap, decodedRelDvalsMap) {
 
 
 
-function generateAbsPathTags(tabSpace, strokesValuesMap, decodedAbsDvalsMap) {
+function generateAbsPathTags(tabSpace, linesDataMap, decodedAbsDvalsMap) {
 
     const absPathTagsByGroup = new Map()
 
-    for (let [gId, v] of strokesValuesMap) {
+    for (let [gId, v] of linesDataMap) {
         const dvalsObj = decodedAbsDvalsMap.get(gId)
         console.log('dvalsObj: ', dvalsObj) // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
 
@@ -243,9 +243,9 @@ function generateTagsAfterStrokes(tabSpace) {
 }
 
 
-function generateGTagOpenByGroup(tabSpace, strokesValuesMap) {
+function generateGTagOpenByGroup(tabSpace, linesDataMap) {
     const gTagOpenByGroup = new Map()
-    for (let [gId, v] of strokesValuesMap) {
+    for (let [gId, v] of linesDataMap) {
         // Generate stroke color group
         const groupColors = v.groupColors
 
@@ -259,9 +259,9 @@ function generateGTagOpenByGroup(tabSpace, strokesValuesMap) {
     return gTagOpenByGroup
 }
 
-function generateGTagCloseByGroup(tabSpace, strokesValuesMap) {
+function generateGTagCloseByGroup(tabSpace, linesDataMap) {
     const gTagCloseByGroup = new Map()
-    for (let [gId, v] of strokesValuesMap) {
+    for (let [gId, v] of linesDataMap) {
         const colorGroupTagClose = tabSpace.repeat(2) + '</g>'
         //         </g>
         gTagCloseByGroup.set(gId, colorGroupTagClose)
@@ -270,16 +270,16 @@ function generateGTagCloseByGroup(tabSpace, strokesValuesMap) {
 }
 
 
-function generatePathTags(isRelative, tabSpace, strokesValuesMap, decodedRelDvalsMap, decodedAbsDvalsMap) {
+function generatePathTags(isRelative, tabSpace, linesDataMap, decodedRelDvalsMap, decodedAbsDvalsMap) {
     if (isRelative === true) {         // true = relative and merged
-        return generateRelPathTags(tabSpace, strokesValuesMap, decodedRelDvalsMap)
+        return generateRelPathTags(tabSpace, linesDataMap, decodedRelDvalsMap)
     } else if (isRelative === false) { // false = absolute and separated
-        return generateAbsPathTags(tabSpace, strokesValuesMap, decodedAbsDvalsMap)
+        return generateAbsPathTags(tabSpace, linesDataMap, decodedAbsDvalsMap)
     }
 }
 
-function mergeGAndPathTags(strokesValuesMap, gTagOpenByGroup, pathTagsByGroup, gTagCloseByGroup) {
-    const gId = strokesValuesMap.keys()
+function mergeGAndPathTags(linesDataMap, gTagOpenByGroup, pathTagsByGroup, gTagCloseByGroup) {
+    const gId = linesDataMap.keys()
     let strokesTags = []
     for (let id of gId) {
         strokesTags.push(gTagOpenByGroup.get(id))
