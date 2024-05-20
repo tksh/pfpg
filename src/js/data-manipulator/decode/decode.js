@@ -1,16 +1,3 @@
-// Get the SVG output textarea ID from URL for argument for decode()
-// index           : 'input-svg'
-// data-manipulator: 'textarea-decoded-svg'
-
-function isOnDataManipulatorPage() {
-    // 現在のURLを取得する
-    const url = window.location.href; // url: 検索対象の文字列
-
-    const target = 'data-manipulator' // target: 検索したい文字列
-    return url.includes(target);
-}
-
-
 // Decode to SVG string when page loaded.
 
 // And also will be called from '/js/index/tab-line/path-mode.js' when 'path-mode' changed via option selector.
