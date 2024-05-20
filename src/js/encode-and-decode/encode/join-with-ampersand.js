@@ -5,8 +5,8 @@ function joinWithAmpersand(encodedStrByGroupMap) {
     const wholeGroupString = [...encodedStrByGroupMap.values()]
 
     // Join the whole group string with '&'
-    const wholeGroupStrJoined = wholeGroupString.join('&')
-    //console.log('wholeGroupStrJoined.length: ', wholeGroupStrJoined.length)
+    const wholeGroupsJoined = wholeGroupString.join('&')
+    //console.log('wholeGroupsJoined.length: ', wholeGroupsJoined.length)
 
-    return wholeGroupStrJoined
+    return wholeGroupsJoined
 }

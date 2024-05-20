@@ -3,9 +3,9 @@ function bigint64Enc() {
 
     // Get digits of chunk for padding
     const max = parseBasicData().max
-    const digitsOfChunk = String(max).length
-    // const digitsOfChunk = getDigitsOfChunk()
-    console.log("digitsOfChunk: ", digitsOfChunk) // 2
+    const digitsPerChunk = String(max).length
+    // const digitsPerChunk = getDigitsOfChunk()
+    console.log("digitsPerChunk: ", digitsPerChunk) // e.g.: 2
 
 
     // Get the lines data
@@ -15,12 +15,11 @@ function bigint64Enc() {
     //console.log('linesDataMap: ', linesDataMap) // Map { 0 → {…}, 1 → {…} }
 
 
-    // Bigint64 encode apply to absolute d values
+    // Bigint64 encoding apply to absolute d values
 
-    const encodedDval = base64UrlEncAfterJoinAsBigint(linesDataMap, digitsOfChunk)
-    // const encodedDval = bigint64Enc(linesDataMap, digitsOfChunk)
-    //console.log("encodedStr: ", encodedStr)
-    // Map(5) {'1' => '01040706080719252428301704222622222323000000152005000015000028240011161922080104061008112426242830200824232224312626252321230005242225273122091720232710', '2' => ...
+    const encodedDvals = base64UrlEncAfterJoinAsBigint(linesDataMap, digitsPerChunk)
+    //console.log("encodedDvals: ", encodedDvals)
+    // Map { 1 → "BsmvdfXHD12-EB_BesTenvoA_x-Nt6Ir73u4cAK5rBuSbnWTQPkCe-GP6Yh ... " }
 
 
 
@@ -38,10 +37,10 @@ function bigint64Enc() {
 
     // Choose shorter one between URLComp applied or not, for each group
     const compressedByGroup = tryCompress(
-        encodedDval,
+        encodedDvals,
         encodedAttrsExceptsDvals,
         'bigint64-enc',
-        digitsOfChunk
+        digitsPerChunk
     )
     //console.log('compressedByGroup: ', compressedByGroup)
     // Map(5) {'1' => '0=129CaJGsAQK33q3FDaoQNuZs6u8XQW_EYegViBcDQ0gxtk-YqavrFw0V3KXggctKtnLfj_rl3ZzTzitfvmVp-Wz09Um3k4e8YyZ9kGHG0aT', '2' => '0=129ziJH ...
@@ -49,15 +48,15 @@ function bigint64Enc() {
 
 
     // Whole group strings joined with '&' (ampersand sign)
-    const wholeGroupStrJoined = joinWithAmpersand(compressedByGroup)
+    const wholeGroupsJoined = joinWithAmpersand(compressedByGroup)
 
 
     // Output to textarea
-    outputToTextarea(wholeGroupStrJoined, 'textarea-strokes-values-encoded')
+    outputToTextarea(wholeGroupsJoined, 'textarea-strokes-values-encoded')
     // 0=129CaJGsAQK33q3FDaoQNuZs6u8XQW_EYegViBcDQ0gxtk-YqavrFw0V3KXggctKtnLfj_rl3ZzTzitfvmVp-Wz09Um3k4e8YyZ9kGHG0aT&0=129ziJH ...
 
     // Show the size of result in html and console
-    showStringSize('Lines Data', wholeGroupStrJoined, 'encoded-strokes-values-size')
+    showStringSize('Lines Data', wholeGroupsJoined, 'encoded-strokes-values-size')
 
     // Show the processing time in html and console
     const endTime = performance.now()
@@ -78,8 +77,8 @@ function padZero(number, targetLength) {
 }
 
 
-function base64UrlEncAfterJoinAsBigint(linesDataMap, digitsOfChunk) {
-    const encodedDval = new Map();
+function base64UrlEncAfterJoinAsBigint(linesDataMap, digitsPerChunk) {
+    const encodedDvals = new Map();
 
     for (const linesData of linesDataMap.values()) {
 
@@ -97,7 +96,7 @@ function base64UrlEncAfterJoinAsBigint(linesDataMap, digitsOfChunk) {
             //console.log(dval); // (19) [1, 4, 7, 6, 8, 7, 19, 25, 24, 28, 30, 17, 4, 22, 26, 22, 22, 23, 23]
 
             // Pad
-            const paddedDval = dval.map(number => padZero(number, digitsOfChunk))
+            const paddedDval = dval.map(number => padZero(number, digitsPerChunk))
             //console.log("paddedDval: ", paddedDval)
             // (19) ['01', '04', '07', '06', '08', '07', '19', '25', '24', '28', '30', '17', '04', '22', '26', '22', '22', '23', '23']
 
@@ -115,12 +114,12 @@ function base64UrlEncAfterJoinAsBigint(linesDataMap, digitsOfChunk) {
         const joinedDvalsBigInt = BigInt(joinedDvalsStr)
         const base64EncodedDvalsStr = base64UrlEnc(joinedDvalsBigInt)
 
-        encodedDval.set(linesData.g_id, base64EncodedDvalsStr)
+        encodedDvals.set(linesData.g_id, base64EncodedDvalsStr)
     }
 
     // Encoded
-    //console.log("encodedDval: ", encodedDval)
+    //console.log("encodedDvals: ", encodedDvals)
     // Map(5) {'1' => '01040706080719252428301704222622222323000000152005000015000028240011161922080104061008112426242830200824232224312626252321230005242225273122091720232710', '2' => ...
 
-    return encodedDval
+    return encodedDvals
 }

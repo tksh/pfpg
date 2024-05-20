@@ -118,6 +118,8 @@ function decodeDvals(linesDataMap) {
         // console.log("v.encodedDvals: ", v.encodedDvals) // "x1 + y1 + x2 + y2"
         // e.g.: H5yJn8tIS6hWuVfFgdJIY10GsuwXo0w
 
+        console.log("v.threeFlags: ", v.threeFlags) //
+
         let decodedAbsDvals = []
         let decodedRelDvals = []
 
@@ -129,7 +131,7 @@ function decodeDvals(linesDataMap) {
 
         } else if (v.threeFlags[1] === '1') {
             console.log("This group has encoded with 'bigint64-enc'")
-            decodedAbsAndRelDvalsObj = bigint64Dec(v.encodedDvals)
+            decodedAbsAndRelDvalsObj = bigint64Dec(v.encodedDvals, v.threeFlags)
             decodedAbsDvals = decodedAbsAndRelDvalsObj.absolute
             decodedRelDvals = decodedAbsAndRelDvalsObj.relative
 

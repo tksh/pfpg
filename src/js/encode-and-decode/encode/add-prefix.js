@@ -62,7 +62,7 @@ function addPrefixToShorter(shouldApply, compressed, original, encodingMethodNam
 // 3rd char(Config value for Encoding-methods):
 //     [char or number]:
 //         [0] bruteforce53-enc => Base X number (Base53 encoded)
-//         [1] bigint64-enc     => X digits to split into each chunks
+//         [1] bigint64-enc     => Number of digits used to split into each chunk.
 //         [2] swap63-enc       => 'n' ('n' means null, skip it when decoding.)
 
 function addPrefixAsFlags(inputStr, numOf1stChar, numOf2ndChar, numOf3rdChar) {

@@ -1,8 +1,8 @@
-function bruteforce53Dec(encodedDvalsStr, threeFlagCharsArr) {
-    //console.log("threeFlagCharsArr: ", threeFlagCharsArr)
+function bruteforce53Dec(encodedDvalsStr, threeFlags) {
+    //console.log("threeFlags: ", threeFlags)
     //console.log("encodedDvalsStr: ", encodedDvalsStr)
 
-    const baseX = base53Decode(threeFlagCharsArr[2]) // 3rd char indicates Base X number
+    const baseX = base53Decode(threeFlags[2]) // 3rd char indicates Base X number
     const maxDictSize = 52 - baseX
     console.log('baseX: ', baseX)
     console.log('maxDictSize: ', maxDictSize)
