@@ -15,7 +15,7 @@ function swap63Enc() {
 
 
     // Get the string of d values encoded
-    const encodedDval = swapFromNumbersToChars(dictForEncoding, linesDataMap)
+    const encodedDval = swapToEncode(dictForEncoding, linesDataMap)
     console.log('encodedDval: ', encodedDval)
     // Map(5) {'1' => 'wyyvtuDwtzxifJxuvunv56nudvqm96wo9xuuucvvuzvzAwvvvyzxsvxDyVUSByqATCUWytEBzzAx', '2' => 'v9oswnHvnuzxsxwmvxDDAA7tWtvshunl_AxxwxxxxxyvwtvxwspCtuxxwwxyuwxw', '3' => 'wCuuzusuvxxrxuxtvAzyyyrvveuurvsttxxputwvsvttturpyutrsqttsAtvaBVbpyJuvwttrurvwrqppqqstrskuvmruyxmsqtruvtrwwwvBymtrvuDxuvqwuMuuwwwyywwvuxxuvyyrstuutwxyxxwxwyxxswxxtvyxzwxxxwwxAyxxxzyywwwxzwzzsyxvxxyytxwxyCCBAAyxzyxyxyxtuvAxzyzwvxvtsssuwwzyyzvwttxtvyt', '4' => 'JvruxouwuwvpwjxuvvABtvBuxzuxAhHsvtssxvqAxvxxwwwxwvwxyywyxxtuwutzvvywAxxxxwtt', '5' => 'HuxwxxuQcuywAwvtutuxxxyxywww'}
 
@@ -38,7 +38,7 @@ function swap63Enc() {
         encodedDval,
         encodedAttrsExceptsDvals,
         'swap63-enc',
-        null                        // value for 3rd char, swap63-enc needs no 3rd char to encode
+        null  // value for 3rd flag char, swap63-enc needs no 3rd flag char to encode
     )
     console.log('compressedByGroup: ', compressedByGroup)
     // Map { 000 → (2) […] }
@@ -72,20 +72,21 @@ function swap63Enc() {
 
 
 // Get the encoded string of d values as Map
-function swapFromNumbersToChars(dictMap, linesDataMap) {
+function swapToEncode(dictMap, linesDataMap) {
     //console.log(dictMap); // Map(63) {-31 => '0', -30 => '1', -29 => '2', -28 => '3', -27 => '4', …}
 
-    const encodedDvals = new Map();
+    const encodedDvals = new Map()
 
     for (const linesData of linesDataMap.values()) {
 
         // A variable to store the encoded string of d values
         // Joined whole columns (x1, y1, x2, y2) without spaces
-        let encodedDval = "";
+        let encodedDval = ""
 
         // relative d values array in obj, x1 to y2
         const relDvals = linesData.d.relative
 
+        // Assume all x1 to y2 arrays have the same length, get length from x1
         const numberOfPath = (linesData.d.relative.x1).length // x1 to y2 arrays have same length
 
         // Swap from number to char
@@ -95,7 +96,7 @@ function swapFromNumbersToChars(dictMap, linesDataMap) {
             //console.log(dval); // (19) [1, 3, 3, 0, -2, -1, 8, 1, -2, 4, 2, -13, -16, 14, 2, -1, 0, -1, -8]
 
             // Encode and append
-            encodedDval = encodedDval + swapFromNumToChar(dval, numberOfPath, dictMap)
+            encodedDval += swapFromNumberToCharacter(dval, numberOfPath, dictMap)
         }
 
         encodedDvals.set(linesData.g_id, encodedDval)
@@ -105,14 +106,14 @@ function swapFromNumbersToChars(dictMap, linesDataMap) {
 
 
 
-function swapFromNumToChar(dval, numberOfPath, dictMap) {
+function swapFromNumberToCharacter(dval, numberOfPath, dictMap) {
 
     let dvalEncoded = ''
 
     // Use the original d value as an index to look up a character from the keys list and append it to the symbol string variable
     for (let i = 0; i < numberOfPath; i++) {
         const encodedChar = dictMap.get(dval[i]);
-        dvalEncoded = dvalEncoded + encodedChar
+        dvalEncoded += encodedChar
     }
 
     return dvalEncoded

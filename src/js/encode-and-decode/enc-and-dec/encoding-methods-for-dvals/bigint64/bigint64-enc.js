@@ -85,9 +85,6 @@ function base64UrlEncAfterJoinAsBigint(linesDataMap, digitsPerChunk) {
         // absolute d values array in obj, x1 to y2
         const absDvals = linesData.d.absolute
 
-        //const numberOfPath = (linesData.d.absolute.x1).length // x1 to y2 arrays have same length
-
-
         // Pad and join
         let joinedDvalsStr = ""; // x1, y1, x2, y2, joined without spaces
 
