@@ -29,7 +29,7 @@ async function downloadUrlParamsAsTxtZstd(textareaId) {
     // Generate the filename
 
     // Get artwork ID and size
-    const idAndSizeStr = getTitleAndSize()
+    const idAndSizeStr = getTitle()
     // Set the filename
     link.download = `${idAndSizeStr}.txt.zst`;
 
@@ -85,7 +85,7 @@ function downloadUrlParamsAsTxt(textareaId) { // ('textarea-encoded-url-params')
     // Generate the filename
 
     // Get artwork ID and size
-    const idAndSizeStr = getTitleAndSize()
+    const idAndSizeStr = getTitle()
     // Set the filename
     link.download = `${idAndSizeStr}.txt`;
 
@@ -99,7 +99,7 @@ function downloadUrlParamsAsTxt(textareaId) { // ('textarea-encoded-url-params')
 // Get the artwork title and gird size string
 // Extract via basic data .json strings in textarea
 
-function getTitleAndSize() {
+function getTitle() {
 
     // Read from textarea
     const rawJson = readTextarea('textarea-basic-data-uploaded')
@@ -118,12 +118,9 @@ function getTitleAndSize() {
     // grid_size: "255x255"
     // [[Prototype]]: Object
 
-    // ID
-    const title_str = basicDataObj.title // "202310_002"
-    // Size
-    const grid_size_str = basicDataObj.grid_size   // "255x255"
+    const title = basicDataObj.title // "202310_002"
 
-    return `${title_str}_${grid_size_str}`      // "202310_002_255x255"
+    return title      // "202310_002"
 }
 
 
