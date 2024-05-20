@@ -99,8 +99,8 @@ function viewboxUnSlimmed(svgTextareaAndString) {
     console.log('svgTextareaAndString: ', svgTextareaAndString)
 
     // Read original basic data from url params
-    const isDataManipulatorOrIndexBool = false
-    const urlParamsAsTwoMaps = readUrlParamsAsMaps(isDataManipulatorOrIndexBool)
+    const isDataManipulatorPage = false
+    const urlParamsAsTwoMaps = readUrlParamsAsMaps(isDataManipulatorPage)
     const basicDataMap = urlParamsAsTwoMaps.basicData
     // e.g.: Map(4) {'title' => '202308_001', 'grid_size' => '31x31', 'uintN' => 5, 'rectFill' => '9999'}
 

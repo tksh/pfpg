@@ -2,10 +2,10 @@
 function decodeAsSelectedPathMode(pathMode) {
     if (pathMode === 'relativeMerged') {
         console.log('Path mode: Relative and merged')
-        return decode(isRelOrAbsBool = true, isDataManipulatorOrIndex(), getTextareaId())
+        return decode(isRelative = true, isOnDataManipulatorPage())
     } else { // (value === 'absoluteSeparated')
         console.log('Path mode: Absolute and separated')
-        return decode(isRelOrAbsBool = false, isDataManipulatorOrIndex(), getTextareaId())
+        return decode(isRelative = false, isOnDataManipulatorPage())
     }
 }
 

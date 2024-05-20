@@ -1,5 +1,5 @@
 // function to download encoded url params string
-// as `000_0000_31x31.txt` or `000_0000_31x31.txt.zst`
+// as `000_0000.txt` or `000_0000.txt.zst`
 
 import Zstd from 'https://cdn.skypack.dev/numcodecs/zstd?min';
 
@@ -126,6 +126,7 @@ function getTitle() {
 
 
 // Merge the basic data and lines data as URL params
+// And get the size of after Zstandard compression to indicate
 
 document.getElementById('button-to-merge-as-url-params').addEventListener('click', mergeBasicDataAndStrokesValues);
 

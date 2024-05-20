@@ -52,7 +52,7 @@
 
 
 
-function generateSvg(isRelOrAbsBool, basicDataMap, strokesValuesMap, decodedRelDvalsMap, decodedAbsDvalsMap) {
+function generateSvg(isRelative, basicDataMap, strokesValuesMap, decodedRelDvalsMap, decodedAbsDvalsMap) {
 
     // Set the tab size
     const tabSpace = '    ' // Four spaces
@@ -69,9 +69,9 @@ function generateSvg(isRelOrAbsBool, basicDataMap, strokesValuesMap, decodedRelD
     const gTagOpenByGroup = generateGTagOpenByGroup(tabSpace, strokesValuesMap)
     const gTagCloseByGroup = generateGTagCloseByGroup(tabSpace, strokesValuesMap)
 
-    // Generate the <path> tags (as relative or absolute, switched by isRelOrAbsBool)
+    // Generate the <path> tags (as relative or absolute, switched by isRelative)
     const pathTagsByGroup = generatePathTags(
-        isRelOrAbsBool,
+        isRelative,
         tabSpace,
         strokesValuesMap,
         decodedRelDvalsMap,
@@ -270,10 +270,10 @@ function generateGTagCloseByGroup(tabSpace, strokesValuesMap) {
 }
 
 
-function generatePathTags(isRelOrAbsBool, tabSpace, strokesValuesMap, decodedRelDvalsMap, decodedAbsDvalsMap) {
-    if (isRelOrAbsBool === true) {         // true = relative and merged
+function generatePathTags(isRelative, tabSpace, strokesValuesMap, decodedRelDvalsMap, decodedAbsDvalsMap) {
+    if (isRelative === true) {         // true = relative and merged
         return generateRelPathTags(tabSpace, strokesValuesMap, decodedRelDvalsMap)
-    } else if (isRelOrAbsBool === false) { // false = absolute and separated
+    } else if (isRelative === false) { // false = absolute and separated
         return generateAbsPathTags(tabSpace, strokesValuesMap, decodedAbsDvalsMap)
     }
 }

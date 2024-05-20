@@ -1,10 +1,10 @@
-function readUrlParamsAsMaps(isDataManipulatorOrIndexBool) {
+function readUrlParamsAsMaps(isDataManipulatorPage) {
     // URLSearchParamsオブジェクトを作成
     const params = new URLSearchParams(window.location.search);
     console.log('params: ', params) // URLSearchParams {size: 6}
 
     // Get the URL params from right source
-    const paramsArray = getUrlParams(params, isDataManipulatorOrIndexBool)
+    const paramsArray = getUrlParams(params, isDataManipulatorPage)
 
     if (paramsArray != null) {
         return decodeAsTwoMaps(paramsArray)
@@ -16,7 +16,7 @@ function readUrlParamsAsMaps(isDataManipulatorOrIndexBool) {
 
 // Get the URL params from right source
 
-function getUrlParams(params, isDataManipulatorOrIndexBool) {
+function getUrlParams(params, isDataManipulatorPage) {
     // If at index.html and there is no URL Params => get sample strings from textContent element
     if (params != 0) {
         // At both index.html or data-manipulator.html,
@@ -25,7 +25,7 @@ function getUrlParams(params, isDataManipulatorOrIndexBool) {
         const paramsArray = [...params.entries()]; // entries()メソッドでキーと値のペアを取得
         return paramsArray
 
-    } else if (isDataManipulatorOrIndexBool === false) {
+    } else if (isDataManipulatorPage === false) {
         // At index.html and if there is No URL Params,
         // Get the encoded string from '<script type="text/plain"> with id.
 

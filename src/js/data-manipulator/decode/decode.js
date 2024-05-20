@@ -2,7 +2,7 @@
 // index           : 'input-svg'
 // data-manipulator: 'textarea-decoded-svg'
 
-function isDataManipulatorOrIndex() {
+function isOnDataManipulatorPage() {
     // 現在のURLを取得する
     const url = window.location.href; // url: 検索対象の文字列
 
@@ -10,29 +10,23 @@ function isDataManipulatorOrIndex() {
     return url.includes(target);
 }
 
-function getTextareaId() {
-    if (isDataManipulatorOrIndex() === true) {  // data-manipulator.html
-        return 'textarea-decoded-svg-as'
-    } else {                                      // index.html
-        return 'input-svg'
-    }
-}
-
 
 // Decode to SVG string when page loaded.
+
 // And also will be called from '/js/index/tab-line/path-mode.js' when 'path-mode' changed via option selector.
-function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) {
-    const urlParamsAsTwoMaps = readUrlParamsAsMaps(isDataManipulatorOrIndexBool)
+
+function decode(isRelative, isDataManipulatorPage) {
+    const urlParamsAsTwoMaps = readUrlParamsAsMaps(isDataManipulatorPage)
 
     if (urlParamsAsTwoMaps != null) {
 
         // Extract the values
         const basicDataMap = urlParamsAsTwoMaps.basicData
-        console.log("basicDataMap: ", basicDataMap)
-        // Map(4) {'title' => '202308_001', 'grid_size' => '31x31', 'uintN' => 5, 'rectFill' => '9999'}
+        //console.log("basicDataMap: ", basicDataMap)
+        // Map(6) { title → "202404_001", viewbox → "0 0 31 31", viewboxWidth → "31", viewboxHeight → "31", uintN → 5, rectFill → "fff" }
 
         const strokesValuesMap = urlParamsAsTwoMaps.strokesValues
-        //console.log("strokesValuesMap: ", strokesValuesMap)
+        console.log("strokesValuesMap: ", strokesValuesMap)
         // Map(5) {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
         // key  : Group ID (seq num)
         // value: Object
@@ -79,15 +73,15 @@ function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) 
 
         // Generate SVG string
 
-        const svgStr = generateSvg(isRelOrAbsBool, basicDataMap, strokesValuesMap, decodedRelDvalsMap, decodedAbsDvalsMap)
+        const svgStr = generateSvg(isRelative, basicDataMap, strokesValuesMap, decodedRelDvalsMap, decodedAbsDvalsMap)
 
         // Output to textarea
-        const specificOutputTextareaId = getSpecificOutputTextareaId(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId)
-        // console.log("specificOutputTextareaId: ", specificOutputTextareaId)
+        const outputTextareaId = selectOutputTextareaId(isRelative, isDataManipulatorPage)
+        // console.log("outputTextareaId: ", outputTextareaId)
         // index.html: 'input-svg'
         // data-manipulator.html: 'textarea-decoded-svg-as-rel' | 'textarea-decoded-svg-as-abs'
 
-        outputToTextarea(svgStr, specificOutputTextareaId)
+        outputToTextarea(svgStr, outputTextareaId)
 
 
         // Compare the data size of URL params and generated SVG
@@ -95,7 +89,7 @@ function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) 
         const compRatio = queryString.length / svgStr.length
 
         // Show the result in html
-        const postfix = isRelOrAbsBool ? 'rel' : 'abs';
+        const postfix = isRelative ? 'rel' : 'abs';
         const resultTextElem = document.getElementById(`encoded-size-compare-for-${postfix}`);
         if (resultTextElem) {
             const text = `Size of URL params: <b>${queryString.length}</b> characters (bytes)<br>
@@ -110,7 +104,7 @@ function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) 
         // Stop decoding when urlParamsAsTwoMaps = null
         console.log('There is no url params to decode.')
 
-        if (isDataManipulatorOrIndexBool === false) {
+        if (isDataManipulatorPage === false) {
             console.log('Read a SVG string from input-svg textarea.')
             // <textarea>の要素を取得
             const svgTextarea = document.querySelector('#input-svg') // Select <textarea id="input-svg" ...
@@ -119,9 +113,9 @@ function decode(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) 
             const svgStr = svgTextarea.value.trim() // '.trim()' = 文字列の両端の空白を削除
 
             // Get textarea ID
-            const specificOutputTextareaId = getSpecificOutputTextareaId(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId)
+            const outputTextareaId = selectOutputTextareaId(isRelative, isDataManipulatorPage)
 
-            outputToTextarea(svgStr, specificOutputTextareaId)
+            outputToTextarea(svgStr, outputTextareaId)
         }
     }
 
@@ -186,19 +180,3 @@ function decodeStrokesValues(strokesValuesMap) {
         ['relative', decodedRelDvalsMap]
     ])
 }
-
-
-function getSpecificOutputTextareaId(isRelOrAbsBool, isDataManipulatorOrIndexBool, outputTextareaId) {
-
-    if (isDataManipulatorOrIndexBool === true) {          // page: data-manipulator.html
-        if (isRelOrAbsBool === true) {                    // path style: relative
-            return `${outputTextareaId}-rel`
-        } else if (isRelOrAbsBool === false) {            // path style: absolute
-            return `${outputTextareaId}-abs`
-        }
-    } else if (isDataManipulatorOrIndexBool === false) {  // page: index.html
-        return outputTextareaId
-    }
-}
-
-
