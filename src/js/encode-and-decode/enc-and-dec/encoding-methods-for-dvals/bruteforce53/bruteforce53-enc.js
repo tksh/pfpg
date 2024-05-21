@@ -56,7 +56,6 @@ function bruteforce53Enc() {
                 //console.log('diffArr: ', diffArr)   // (19) [1, 2, 0, -3, -2, 1, 9, -7, -3, 6, -2, -15, -3, 30, -12, -3, 1, -1, -7]
                 //console.log('freqDiffArr: ', freqDiffArr) // (3) [-3, -2, -7]
 
-
                 // Generate the codebook to encode frequent diff_by_row values
 
                 // Source symbol of codebook => Value of diff_by_row
@@ -88,7 +87,9 @@ function bruteforce53Enc() {
                 const freqDiffAsRefDict = encodeFreqDiffAsReferenceDict(freqDiffArr, maxCodebookSize)
 
 
-                // Encode the diff
+                // Encode the diff values
+
+                // Calculate the target range of BaseX encoding
 
                 // Get the range to apply the BaseX encoding
                 const startOfBaseXEncTargetBefore0 = 0 - getHalfOfBaseXRange(baseXNumber)
@@ -103,74 +104,25 @@ function bruteforce53Enc() {
                 // -124  <  -41  |  50  <  124
 
 
+                // Encode
                 const diffArrEncoded = diffArr.map((diff) => {
-                    ////console.log('diff; ', diff)
+
                     // [0-9] の一桁の正の数は そのままにする
-                    if (diff >= 0 && diff <= 9) {
-                        console.log('Value in [0-9]: ', diff)
-                        return diff;
-                    }
+                    let result = handleSingleDigit(diff);
+                    if (result!== undefined) return result;
 
-                    // 頻出数値Top${maxCodebookSize} dictArray[index] が存在するかどうかを確認し 存在する場合にのみ `has` でキーを探し
-                    // ${maxCodebookSize}個のアルファベット のどれか一文字に置換
-                    else if (codebookToEncodeFreqDiff.has(diff)) {
-                        console.log('diff value in freq dict, diff and codebookToEncodeFreqDiff.get(diff): ', typeof(diff), diff, codebookToEncodeFreqDiff.get(diff))
-                        return codebookToEncodeFreqDiff.get(diff);
-                    }
+                    // 頻出数値が codebookに キーとして存在するかどうか を確認し (`codebookToEncodeFreqDiff.has`)
+                    // 存在する場合にのみ 対応するアルファベット一文字に 置換     (`codebookToEncodeFreqDiff.get`)
+                    result = handleFrequencyDiff(diff, codebookToEncodeFreqDiff);
+                    if (result!== undefined) return result;
 
-                    // [0-9]でもなく 頻出辞書のキーにも なければ baseX でEncode
-                    // baseX で2桁にエンコードできないものは base52 encodeしてから アンダースコア を先頭に 付ける
-                    // 先ず baseX範囲外のものを 処理して 最後に残った baseX対象のものを else で処理する
-                    else {
-                        // baseX の対象の中でも 大小両極の数字は baseX で 2文字で エンコード出来ないので baseXエンコードは しない
-                        // Base52 でアルファベットにエンコードし 上で一文字変換をしたアルファベットと区別するために `_`を 先頭に いくつか 付ける
-                        //   エンコード後の文字数が 2文字 になった場合
-                        //     正の数値は 前に アンダースコアを 1個 付ける
-                        //     負の数値は 前に アンダースコアを 2個 付ける
-                        //   エンコード後の文字数が 3文字 になった場合
-                        //     正の数値は 前に アンダースコアを 3個 付ける
-                        //     負の数値は 前に アンダースコアを 4個 付ける
-
-                        //   52*52=2704 なので 数値が 2703(ZZ) までは 2文字に変換できる
-                        //   52*52*52=140608 なので 数値が 140607(ZZZ) までは 3文字に変換できる
-                        //   UInt8Portray (grid size: 0-255)   までは diff の負の数を消した時に取り得る最大値 (2044)   を 2文字でカバーできる
-                        //   UInt14Portray(grid size: 0-16383) までは diff の負の数を消した時に取り得る最大値 (131064) を 3文字でカバーできる
-
-                        if (diff <= endOfIneligibleForBaseXEncLower) {
-                            // 負の数なので baseXエンコードできない場合
-
-                            diffEncoded = String(base52Encode(Math.abs(diff))) // Math.absで絶対値に変換して マイナス記号を消す
-                            if (diffEncoded.length <= 2) { // Add `__` as prefix for encoded as 2 digits from minus number
-                                diffEncodedWithUnderscorePrefix = '__' + diffEncoded.padStart(2, 'a') // total: 4 (2+2) chars
-                            } else if (diffEncoded.length = 3) { // Add `____` as prefix for encoded as 3 chars from minus number
-                                diffEncodedWithUnderscorePrefix = '____' + diffEncoded // total: 7 (4+3) chars
-                            }
-
-                            console.log(`${diff} は 小さ過ぎて Base${baseXNumber}Encの 対象範囲外なので base52Encしてから 2|4 個の'_'を prefixとして加える: `, diff, diffEncodedWithUnderscorePrefix);
-                            return diffEncodedWithUnderscorePrefix
-
-                        } else if (startOfIneligibleForBaseXEncHigher <= diff) {
-                            // 大きい正の数で baseXエンコードでは 三桁以上になってしまう場合
-
-                            diffEncoded = String(base52Encode(diff))
-                            if (diffEncoded.length <= 2) { // Add `_` as prefix for encoded as 2 chars from plus number
-                                diffEncodedWithUnderscorePrefix = '_' + diffEncoded.padStart(2, 'a') // total: 3 (1+2) chars
-                            } else if (diffEncoded.length = 3) { // Add `___` as prefix for encoded as 3 chars from plus number
-                                diffEncodedWithUnderscorePrefix = '___' + diffEncoded // total: 6 (3+3) chars
-                            }
-                            console.log(`${diff} は 大き過ぎて Base${baseXNumber}Encの 対象範囲外なので base52Encしてから 1|3 個の'_'を prefixとして加える: `, diff, diffEncodedWithUnderscorePrefix);
-                            return diffEncodedWithUnderscorePrefix
-
-                        } else {
-                            // diffが baseXエンコード可能な範囲にある場合
-                            // BaseX でアルファベット2文字にエンコード
-                            const baseXEncoded = baseXEnc(diff, baseXNumber);
-                            console.log(`diffが baseXエンコード可能な範囲にあるので Base${baseXNumber} でアルファベット2文字にエンコード:`, diff, baseXEncoded)
-                            return  baseXEncoded
-                        }
-                    }
+                    // [0-9]でもなく codebookのキーにもなければ baseX でエンコードする
+                    // baseX で2桁にエンコードできないものは base52 encodeしてから アンダースコア を先頭にフラグとして付ける
+                    return handleBaseXEncoding(diff, startOfIneligibleForBaseXEncHigher, endOfIneligibleForBaseXEncLower, baseXNumber);
                 });
-                console.log('diffArrEncoded: ', diffArrEncoded) // (484) [7, 'ln', 'B', 'B', 'D', 'N', 'X', 6, 'nl', 'U', 8, ...
+
+                console.log('diffArrEncoded: ', diffArrEncoded);
+                // (484) [7, 'ln', 'B', 'B', 'D', 'N', 'X', 6, 'nl', 'U', 8, ...
 
 
                 // Join the encoded four columns values as a string
