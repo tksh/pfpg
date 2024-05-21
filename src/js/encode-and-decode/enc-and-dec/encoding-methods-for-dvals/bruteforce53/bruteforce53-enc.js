@@ -8,9 +8,6 @@
 // for-loop 1: Max dict size from 0 to 52
 // for-loop 2: Each lines-group (.g_id) from '1' to group size
 // for-loop 3: Four columns from 'x1' to 'y2'
-// for-loop 4: From 0 to actual dict size (each column has own size)
-//       .map: Apply for array of 'diff_by_row' (each column has own size)
-
 
 function bruteforce53Enc() {
     const startTime = performance.now()
@@ -18,22 +15,22 @@ function bruteforce53Enc() {
     // To store the shortest encoded string of each group
     let currentShortest = new Map()
 
-    const maxDictSizeStartAt = 0
-    const maxDictSizeEndAt = 52
+    const maxCodebookSizeStartAt = 0
+    const maxCodebookSizeEndAt = 52
 
 
     // Loop 1. Max dict size from 0 to 52
 
-    for (let i = maxDictSizeStartAt; i <= maxDictSizeEndAt; i++) {
-        const maxDictSize = i
+    for (let i = maxCodebookSizeStartAt; i <= maxCodebookSizeEndAt; i++) {
+        const maxCodebookSize = i
         const baseXNumber = 52 - i
-        console.log('////////////////////////////////// maxDictSize: ', maxDictSize, ' //////////////////////////////////') // 0, 1, ... 51, 52
+        console.log('////////////////////////////////// maxCodebookSize: ', maxCodebookSize, ' //////////////////////////////////') // 0, 1, ... 51, 52
         console.log('////////////////////////////////// baseXNumber: ', baseXNumber, ' //////////////////////////////////') // 52, 51, ... 1, 0
 
         const minimumDiffValue = -parseBasicData().max*4
         const maxDiffValue     =  parseBasicData().max*4
 
-        const encodedDval = new Map()
+        const encodedDvals = new Map()
 
         const aggDataMap = jsonToMapObj(`textarea-agg-data-for-comp-uploaded`)
 
@@ -46,7 +43,7 @@ function bruteforce53Enc() {
             //console.log('aggData.d.relative: ', aggData.d.relative)
             // Object { diff_by_row: {…}, frequent_diff_values_sorted: {…}, frequent_diff_counts_sorted: {…} }
 
-            let dictAndDiffEncodedFourColumns = []
+            let refDictAndDiffEncodedFourColumns = []
 
 
             // Loop 3. Four columns from 'x1' to 'y2'
@@ -54,65 +51,41 @@ function bruteforce53Enc() {
             for (const column of ['x1', 'y1', 'x2', 'y2']) {
                 console.log('//////// column: ', column, '////////')
 
-                let diffArr          = aggData.d.relative.diff_by_row[column]
-                let freqDiffValueArr = aggData.d.relative.frequent_diff_values_sorted[column]
+                let diffArr     = aggData.d.relative.diff_by_row[column]
+                let freqDiffArr = aggData.d.relative.frequent_diff_values_sorted[column]
                 //console.log('diffArr: ', diffArr)   // (19) [1, 2, 0, -3, -2, 1, 9, -7, -3, 6, -2, -15, -3, 30, -12, -3, 1, -1, -7]
-                //console.log('freqDiffValueArr: ', freqDiffValueArr) // (3) [-3, -2, -7]
+                //console.log('freqDiffArr: ', freqDiffArr) // (3) [-3, -2, -7]
 
 
-                // Generate the frequency dictionary
+                // Generate the codebook to encode frequent diff_by_row values
 
-                // length of dictionary:
-                // If      `freqDiffValueArr`length is OVER maxDictSize,  then dict length is maxDictSize
-                // Else if `freqDiffValueArr`length is UNDER maxDictSize, then dict length equals `freqDiffValueArr`length
+                // Source symbol of codebook => Value of diff_by_row
+                // Codeword      of codebook => Alphabets
 
-                // Get the number of dict length
-                actualDictSize = getActualDictSize(maxDictSize, freqDiffValueArr)
+                // Define the size of codebook:
+                // If      freqDiffArr.length is OVER maxCodebookSize,  => actualCodebookSize.length is maxCodebookSize
+                // Else if freqDiffArr.length is UNDER maxCodebookSize, => actualCodebookSize.length equals freqDiffArr.length
 
+                // Get the number of actual codebook length in this column
+                const actualCodebookSize = getActualCodebookSize(maxCodebookSize, freqDiffArr)
+                console.log('actualCodebookSize: ', actualCodebookSize)
 
-                // Key of freq dict
+                // Extract top ${maxCodebookSize} elements of numerical numbers
 
-                // Extract top ${maxDictSize} numerical numbers
-                // `.slice`の 第二引数の終了位置は切り出されないので
-                // ${actualDictSize}個の数値を切り出したい時には [0]...[28]が${actualDictSize}個なので
-                //  `.slice(0, ${actualDictSize})` となるようにする
-                const freqDiffValueArrDict = freqDiffValueArr.slice(0, actualDictSize);
-                //console.log('freqDiffValueArrDict: ', freqDiffValueArrDict)
-                // [] | If dict size is zero, Empty array will be returned
+                // ${actualCodebookSize}個の数値を切り出したい時には [0]...[${actualCodebookSize} - 1]が ${actualCodebookSize}個なので
+                // `.slice(0, ${actualCodebookSize})` とする (`.slice`の 第二引数の終了位置は切り出されない)
+                const freqDiffArrActualCodebookSized = freqDiffArr.slice(0, actualCodebookSize);
+                // If actualCodebookSize is 0, Empty array `[]` will be returned
 
-
-                // Value of freq dict
-
-                const alphabetsForDict = getAlphabetsForDict(actualDictSize)
-                // From 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-
-
-                // Set the KV pair into Map()
-
-                const freqdictMap = new Map();
-
-                // Loop 4. From 0 to actual dict size (each column has own size)
-
-                for (let i = 0; i < alphabetsForDict.length; i++) {
-                    // Mapオブジェクトに キー(頻出数値) と バリュー(置換用アルファベット) のペアを追加する
-                    console.log('typeof(freqDiffValueArrDict[i], alphabetsForDict[i]), freqDiffValueArrDict[i], alphabetsForDict[i]: ', typeof(freqDiffValueArrDict[i]), typeof(alphabetsForDict[i]), freqDiffValueArrDict[i], alphabetsForDict[i])
-                    // e.g.: number string -2 I
-                    freqdictMap.set(freqDiffValueArrDict[i], alphabetsForDict[i]);
-                }
-                console.log('freqdictMap: ', freqdictMap)
-                // e.g.: Map(0) {size: 0}, when maxDictSize = 0, baseXNumber = 52
+                // Create the codebook to encode
+                const codebookToEncodeFreqDiff = createCodebookToEncodeFrequentDiff(freqDiffArrActualCodebookSized, actualCodebookSize)
+                console.log('codebookToEncodeFreqDiff: ', codebookToEncodeFreqDiff)
+                // e.g.: Map(0) {size: 0}, when maxCodebookSize = 0, baseXNumber = 52
                 // e.g.: Map(29) {-2 => 'x', -1 => 'y', -4 => 'z', -7 => 'A', -3 => 'B', …}
 
 
-
-                // Encode the frequency diff values array as a string to embed
-
-                // 頻出数値の配列 を base52Encode して ひとつの文字列にまとめる
-                // 結果が一文字の場合は `.padStart(2, 'a')` で 長さを 2文字 に揃える
-                // 結果が三文字の場合は 先頭にアンダースコア `_` をひとつ付ける ( abc => _abc )
-
-                const freqDiffValueToEmbed       = freqDiffValueArrDict.map((value) => base52EncodeForFreqDictValue(value))
-                const freqDiffValueToEmbedJoined = freqDiffValueToEmbed.join('')
+                // Encode the frequency diff values array as a string to attach
+                const freqDiffAsRefDict = encodeFreqDiffAsReferenceDict(freqDiffArr, maxCodebookSize)
 
 
                 // Encode the diff
@@ -131,17 +104,18 @@ function bruteforce53Enc() {
 
 
                 const diffArrEncoded = diffArr.map((diff) => {
+                    ////console.log('diff; ', diff)
                     // [0-9] の一桁の正の数は そのままにする
                     if (diff >= 0 && diff <= 9) {
                         console.log('Value in [0-9]: ', diff)
                         return diff;
                     }
 
-                    // 頻出数値Top${maxDictSize} dictArray[index] が存在するかどうかを確認し 存在する場合にのみ `has` でキーを探し
-                    // ${maxDictSize}個のアルファベット のどれか一文字に置換
-                    else if (freqdictMap.has(diff)) {
-                        console.log('diff value in freq dict, diff and freqdictMap.get(diff): ', typeof(diff), diff, freqdictMap.get(diff))
-                        return freqdictMap.get(diff);
+                    // 頻出数値Top${maxCodebookSize} dictArray[index] が存在するかどうかを確認し 存在する場合にのみ `has` でキーを探し
+                    // ${maxCodebookSize}個のアルファベット のどれか一文字に置換
+                    else if (codebookToEncodeFreqDiff.has(diff)) {
+                        console.log('diff value in freq dict, diff and codebookToEncodeFreqDiff.get(diff): ', typeof(diff), diff, codebookToEncodeFreqDiff.get(diff))
+                        return codebookToEncodeFreqDiff.get(diff);
                     }
 
                     // [0-9]でもなく 頻出辞書のキーにも なければ baseX でEncode
@@ -202,28 +176,26 @@ function bruteforce53Enc() {
                 // Join the encoded four columns values as a string
                 const diffEncodedJoined = diffArrEncoded.join('')
                 // Merge with hyphen'-': `[encoded dict]-[encoded diff]`
-                const mergeEncodedDictAndDiff = freqDiffValueToEmbedJoined + '-' + diffEncodedJoined
+                const mergeEncodedRefDictAndDiff = freqDiffAsRefDict + '-' + diffEncodedJoined
 
-                // Push into four columns array
-                dictAndDiffEncodedFourColumns.push(mergeEncodedDictAndDiff)
+                // Merge four columns into one array
+                refDictAndDiffEncodedFourColumns.push(mergeEncodedRefDictAndDiff)
                 // Like: [x1: dict and diff], [y1: dict and diff], [x2: dict and diff], [y2: dict and diff]`
+            }
 
-            } // End of `for (const key in aggDataObj.relative) { // Loop for x1 to y2`
-
-            //console.log('typeof(dictAndDiffEncodedFourColumns): ', typeof(dictAndDiffEncodedFourColumns)) // object
-            //console.log('dictAndDiffEncodedFourColumns: ', dictAndDiffEncodedFourColumns)
+            //console.log('typeof(refDictAndDiffEncodedFourColumns): ', typeof(refDictAndDiffEncodedFourColumns)) // object
+            //console.log('refDictAndDiffEncodedFourColumns: ', refDictAndDiffEncodedFourColumns)
             // (4) ['crcscn-120yZ19zy6ZlEylvlfy1lLz', 'cr-0LW1lP7lDlplJljlFzltlhlElsz00lc', 'cpcqct-00z5Z41Zz0031lky326y', 'crcscd-ltlLZzylhlllQzlp2LXlJlMyZ01y']
             // x1 に頻出数値が無い場合 hyphen始まりになる (4) ['-0lalO44lHlqlflh75lklJ5lLlg', 'crbR-0260Z0zlrlVz2ZlGlNlIlk', 'cr-lWLWz0lL100001z1z22', 'cqct-1ZlKlNlH130z011Z21z']
 
-            // Join four columns
-            dictAndDiffEncodedFourColumnsJoined = dictAndDiffEncodedFourColumns.join('-')
-            console.log('dictAndDiffEncodedFourColumns: ', dictAndDiffEncodedFourColumns)
+            // Join four columns (x1, y1, x2, y2)
+            refDictAndDiffEncodedFourColumnsJoined = refDictAndDiffEncodedFourColumns.join('-')
 
-            // Set encoded [dict]-[diff] into map as value with group ID key
-            encodedDval.set(aggData.g_id, dictAndDiffEncodedFourColumnsJoined)
+            // Set the encoded d values ([refDict]-[encodedDiff]) into map as value with group ID key
+            encodedDvals.set(aggData.g_id, refDictAndDiffEncodedFourColumnsJoined)
 
         } // End of `for (let agg of aggDataMap.values()) {`
-        console.log('encodedDval: ', encodedDval)
+        console.log('encodedDvals: ', encodedDvals)
         // Map(5) {'1' => 'crcscn-120yZ19zy6ZlqyMKlSy1lxz-cr-0lL1Md7lpMElvlWlrzMIlUlqMHz00lP-cpcqct-00z5Z41Zz0031lXy326y-crcscd-MIlxZzylUMAMezME2lMlvMayZ01', '2' => '-0lNM ...
         // x1からy2まで 全てに頻出数値が無い場合: '5' => '-lmlF3lL10lK--lRLPlp4lk4lj--0lk1lL130--21lL1lk00'}
 
@@ -243,7 +215,7 @@ function bruteforce53Enc() {
 
         // Choose shorter one between URLComp applied or not, for each group
         const compressedByGroup = tryCompress(
-            encodedDval,
+            encodedDvals,
             encodedAttrsExceptsDvals,
             'bruteforce53-enc',
             baseXNumber
@@ -256,8 +228,8 @@ function bruteforce53Enc() {
         // Store the shortest string for each group
 
         // For first loop, init the map with current value
-        if (maxDictSize === maxDictSizeStartAt) {
-            console.log('maxDictSize in first loop: ', maxDictSize) // 0
+        if (maxCodebookSize === maxCodebookSizeStartAt) {
+            console.log('maxCodebookSize in first loop: ', maxCodebookSize) // 0
             currentShortest = compressedByGroup
             console.log('currentShortest in first loop: ', currentShortest)
         }
@@ -267,7 +239,7 @@ function bruteforce53Enc() {
 
     }
     // End of Loop for every baseX values: [0-52]
-    // 'for (let i = maxDictSizeStartAt; i <= maxDictSizeEndAt; i++) {'
+    // 'for (let i = maxCodebookSizeStartAt; i <= maxCodebookSizeEndAt; i++) {'
 
 
 

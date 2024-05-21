@@ -1,18 +1,18 @@
 // Functions to decode the diff
 
-function decodeDiffFromStr(diffStr, freqdictMap, baseX) {
+function decodeDiffFromStr(diffStr, dictToDecodeFreqDiff, baseX) {
     let decodedDiffArray = [];
 
     //console.log('diffStr: ', diffStr)
     //console.log('diffStr.length: ', diffStr.length)
-    //console.log('freqdictMap: ', freqdictMap)
+    //console.log('dictToDecodeFreqDiff: ', dictToDecodeFreqDiff)
 
     for (let i = 0; i < diffStr.length; i++) {
         //console.log('i, diffStr[i]): ', i, diffStr[i])
 
-        if (isInDict(diffStr[i], freqdictMap)) { // freq dict に含まれる ならば 1文字ごとに diffStr[i]をキーにして 対応する数値を得て 配列に格納
-            //console.log(`isInDict = true, diffStr[${i}] => freqdictMap.get(diffStr[${i}]): `, diffStr[i], ' => ', freqdictMap.get(diffStr[i]))
-            decodedDiffArray.push(freqdictMap.get(diffStr[i]));
+        if (isInDict(diffStr[i], dictToDecodeFreqDiff)) { // freq dict に含まれる ならば 1文字ごとに diffStr[i]をキーにして 対応する数値を得て 配列に格納
+            //console.log(`isInDict = true, diffStr[${i}] => dictToDecodeFreqDiff.get(diffStr[${i}]): `, diffStr[i], ' => ', dictToDecodeFreqDiff.get(diffStr[i]))
+            decodedDiffArray.push(dictToDecodeFreqDiff.get(diffStr[i]));
 
         } else if (isNumber(diffStr[i])) { // 整数[0-9] ならば 1文字ごとに そのまま 配列に格納
             decodedDiffArray.push(parseInt(diffStr[i]));
@@ -60,10 +60,10 @@ function decodeDiffFromStr(diffStr, freqdictMap, baseX) {
 
 
 // 辞書用文字列に含まれているなら `true` を返す
-function isInDict(str, freqdictMap) {
+function isInDict(str, dictToDecodeFreqDiff) {
     // 判定用文字列
     // Mapオブジェクトのキーのみを 配列として取り出し 区切り無しでjoinして ひとつの文字列にする
-    const dictionary = [...freqdictMap.keys()].join('');
+    const dictionary = [...dictToDecodeFreqDiff.keys()].join('');
 
     // 文字が辞書用文字列に含まれているかどうかを判定する
     // 含まれている場合は true を返す
@@ -79,9 +79,9 @@ function isNumber(str) {
 
 
 // 辞書用文字列に含まれているなら `true` を返す
-function isInDictOld(str, maxDictSize) {
+function isInDictOld(str, maxCodebookSize) {
     // 辞書用文字列
-    const dictionary = getAlphabetsForDict(maxDictSize)
+    const dictionary = getAlphabetsForDict(maxCodebookSize)
 
     // 文字が辞書用文字列に含まれているかどうかを判定する
     // 含まれている場合はtrueを返す

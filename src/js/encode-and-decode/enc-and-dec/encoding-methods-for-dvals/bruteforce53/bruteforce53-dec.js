@@ -3,9 +3,9 @@ function bruteforce53Dec(encodedDvalsStr, threeFlags) {
     //console.log("encodedDvalsStr: ", encodedDvalsStr)
 
     const baseX = base53Decode(threeFlags[2]) // 3rd char indicates Base X number
-    const maxDictSize = 52 - baseX
+    const maxCodebookSize = 52 - baseX
     console.log('baseX: ', baseX)
-    console.log('maxDictSize: ', maxDictSize)
+    console.log('maxCodebookSize: ', maxCodebookSize)
 
     // split into eight parts like: [x1:dict]-[x1:diff]-[y1:dict]-[y1:diff]-[x2:dict]-[x2:diff]-[y2:dict]-[y2:diff]
     const dictAndDiffDvals = encodedDvalsStr.split('-')
@@ -37,13 +37,13 @@ function bruteforce53Dec(encodedDvalsStr, threeFlags) {
     for (let i = 0; i < 4; i++) {
 
         // get freq dict map with actual size
-        const actualDictSize = getActualDictSize(maxDictSize, freqNumsByColumns[i])
-        const freqdictMap = freqdictForDec(freqNumsByColumns[i], actualDictSize)
+        const actualCodebookSize = getActualCodebookSize(maxCodebookSize, freqNumsByColumns[i])
+        const dictToDecodeFreqDiff = createFreqdictForDecode(freqNumsByColumns[i], actualCodebookSize)
 
         // Decode the diff
         const decodedDiffArray = decodeDiffFromStr(
             diffStrByColumns[i],
-            freqdictMap,
+            dictToDecodeFreqDiff,
             baseX,
         )
         //console.log('decodedDiffArray: ', decodedDiffArray)
@@ -83,21 +83,21 @@ function decodeFreqNumArray(diffStr) {
 }
 
 
-function freqdictForDec(numArray, maxDictSize) {
+function createFreqdictForDecode(numArray, maxCodebookSize) {
     // Generate the frequency dictionary for decoding
 
     // Key:   freq numbers
     // Value: char from alphabets
 
     // An array of alphabet chars to replace the numerical numbers
-    const alphabetForDict = getAlphabetsForDict(maxDictSize)
+    const alphabetForDict = getAlphabetsForDict(maxCodebookSize)
 
     // Set the kv pair into Map()
-    const freqdictMap = new Map();
+    const dictToDecodeFreqDiff = new Map();
 
     for (let i = 0; i < numArray.length; i++) {
         // Mapオブジェクトに キー(頻出数値) と バリュー(一文字置換用アルファベット) のペアを追加する
-        freqdictMap.set(alphabetForDict[i], numArray[i]);
+        dictToDecodeFreqDiff.set(alphabetForDict[i], numArray[i]);
     }
-    return freqdictMap
+    return dictToDecodeFreqDiff
 }

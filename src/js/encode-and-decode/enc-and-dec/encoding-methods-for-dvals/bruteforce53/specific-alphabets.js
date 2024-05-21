@@ -37,8 +37,8 @@ function getAlphabetsForDict(dictSize) {
         console.log('dictSize is 0, return the empty string.')
         return "";
     } else {
-        const alphabetsForDict = alphabets52.slice(-dictSize);
-        return alphabetsForDict
+        const alphabetsActualCodebookSized = alphabets52.slice(-dictSize);
+        return alphabetsActualCodebookSized
     }
 }
 // console.log(typeof(getAlphabetsForDict(0))) // string
