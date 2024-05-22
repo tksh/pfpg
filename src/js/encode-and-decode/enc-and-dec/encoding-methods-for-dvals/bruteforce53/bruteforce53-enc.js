@@ -109,16 +109,20 @@ function bruteforce53Enc() {
 
                     // [0-9] の一桁の正の数は そのままにする
                     let result = handleSingleDigit(diff);
-                    if (result!== undefined) return result;
+                    if (result !== undefined) return result;
 
-                    // 頻出数値が codebookに キーとして存在するかどうか を確認し (`codebookToEncodeFreqDiff.has`)
-                    // 存在する場合にのみ 対応するアルファベット一文字に 置換     (`codebookToEncodeFreqDiff.get`)
+                    // 頻出数値が codebookに キーとして存在するかどうか を確認し 存在する場合にのみ 対応する アルファベット1文字 に 置換する
                     result = handleFrequencyDiff(diff, codebookToEncodeFreqDiff);
-                    if (result!== undefined) return result;
+                    if (result !== undefined) return result;
 
-                    // [0-9]でもなく codebookのキーにもなければ baseX でエンコードする
-                    // baseX で2桁にエンコードできないものは base52 encodeしてから アンダースコア を先頭にフラグとして付ける
-                    return handleBaseXEncoding(diff, startOfIneligibleForBaseXEncHigher, endOfIneligibleForBaseXEncLower, baseXNumber);
+                    // 数値が [大き|小さ]過ぎて BaseX で 2桁 にエンコードできないものは base52エンコードしてから アンダースコア を先頭にフラグとして 条件に応じて [1|2|3|4]個 付ける
+                    //   上の Codebook と 下の BaseX は それぞれ重複しないアルファベットを 切り出して使っているが
+                    //   Base52 は 両方ともと同じ種類の文字を使っているので デコード時にそれらと区別できるようにするため フラグを付ける
+                    result = handleBase52EncodingWithPrefix(diff, startOfIneligibleForBaseXEncHigher, endOfIneligibleForBaseXEncLower, baseXNumber);
+                    if (result !== undefined) return result;
+
+                    // 上記 3条件 いずれでもなければ baseX で アルファベット2文字 に エンコードする
+                    return handleBaseXEncoding(diff, baseXNumber);
                 });
 
                 console.log('diffArrEncoded: ', diffArrEncoded);
