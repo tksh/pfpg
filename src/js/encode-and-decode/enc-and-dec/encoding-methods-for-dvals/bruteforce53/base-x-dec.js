@@ -1,4 +1,4 @@
-// BaseX decode for both `a` padded or not
+// BaseX decode for both 'a' padded or not
 
 function baseXDec(str, baseX) {
     const alphabets52 = getAlphabets52()

@@ -2,7 +2,7 @@
 
 function handleSingleDigit(diff) {
     if (diff >= 0 && diff <= 9) {
-        console.log('Value in [0-9]: ', diff);
+        //console.log('Value in [0-9]: ', diff);
         return diff;
     }
 }
@@ -16,7 +16,7 @@ function handleSingleDigit(diff) {
 
 function handleFrequencyDiff(diff, codebookToEncodeFreqDiff) {
     if (codebookToEncodeFreqDiff.has(diff)) {
-        console.log('Diff value has included in codebook. diff => codebookToEncodeFreqDiff.get(diff): ', diff, ' => ', codebookToEncodeFreqDiff.get(diff));
+        //console.log('Diff value has included in codebook. diff => codebookToEncodeFreqDiff.get(diff): ', diff, ' => ', codebookToEncodeFreqDiff.get(diff));
         return codebookToEncodeFreqDiff.get(diff);
     }
 }
@@ -66,12 +66,9 @@ function calculateLimitsForBaseXSkipRange(baseXNumber, minimumDiffValue, maximum
 // Base52 encode
 function handleBase52EncodingWithPrefix(diff, baseXNumber, baseXRangeLimits) {
 
-    // // Get the lower and upper limits for baseX exclusion
-    // const limits = calculateLimitsForBaseXSkipRange(baseXNumber)
-
     if (diff <= baseXRangeLimits.baseXSkipRangeLowerLimit || baseXRangeLimits.baseXSkipRangeUpperLimit <= diff) {
-        // base52 エンコードしてアンダースコアを接頭辞として付加
-        const diffEncoded = base52Encode(Math.abs(diff));
+        // base52エンコードして 2桁に'a'でパディングしたあと いくつかのアンダースコアを接頭辞として付加
+        const diffEncoded = base52Encode(Math.abs(diff)).padStart(2, 'a');
         const diffEncodedWithUnderscorePrefix = prependUnderscores(diffEncoded, diff > 0);
         console.log(`diff ${diff} は Base${baseXNumber} エンコード範囲外なので Base52エンコード ('_'を [1|2|3|4]個 フラグとして付ける): `, diffEncodedWithUnderscorePrefix);
         return diffEncodedWithUnderscorePrefix;
@@ -80,10 +77,10 @@ function handleBase52EncodingWithPrefix(diff, baseXNumber, baseXRangeLimits) {
 
 // Prepend some underscore signs
 function prependUnderscores(str, isPositive) {
-    if (str.padStart(2, 'a').length = 2) {
+    if (str.length = 2) {
         const prefix = isPositive ? '_' : '__';
         return prefix + str
-    } else {          // str.length = 3
+    } else {  // str.length = 3
         const prefix = isPositive ? '___' : '____';
         return prefix + str
     }
@@ -96,6 +93,6 @@ function prependUnderscores(str, isPositive) {
 // baseXエンコード可能な範囲にある場合 => BaseX でアルファベット2文字にエンコード
 function handleBaseXEncoding(diff, baseXNumber) {
     const baseXEncoded = baseXEnc(diff, baseXNumber);
-    console.log(`diff ${diff} は baseXエンコード可能な範囲にあるので Base${baseXNumber} でアルファベット2文字にエンコード:`, baseXEncoded);
+    //console.log(`diff ${diff} は baseXエンコード可能な範囲にあるので Base${baseXNumber} でアルファベット2文字にエンコード:`, baseXEncoded);
     return baseXEncoded;
 }

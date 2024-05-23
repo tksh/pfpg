@@ -7,97 +7,46 @@ function bruteforce53Dec(encodedDvalsStr, threeFlags) {
     console.log('baseX: ', baseX)
     console.log('maxCodebookSize: ', maxCodebookSize)
 
-    // split into eight parts like: [x1:dict]-[x1:diff]-[y1:dict]-[y1:diff]-[x2:dict]-[x2:diff]-[y2:dict]-[y2:diff]
-    const dictAndDiffDvals = encodedDvalsStr.split('-')
+    // Split into eight elements: [x1RefDict]-[x1Diff]-[y1RefDict]-[y1Diff]-[x2RefDict]-[x2Diff]-[y2RefDict]-[y2Diff]
+    const refDictAndDiff = encodedDvalsStr.split('-')
 
-    // Freq Nums and Diff arrays
+    // Split into two arrays: Reference dictionary and encoded diff
+    const { refDictByColumn, diffByColumn } = refDictAndDiff.reduce((acc, val, index) => {
+        if (index % 2 === 0) {
+            acc.refDictByColumn.push(val);  // Even index number elements
+        } else {
+            acc.diffByColumn.push(val);      // Odd index number elements
+        }
+        return acc;
+    }, { refDictByColumn: [], diffByColumn: [] });
 
-    const freqNumsByColumns = [ // 頻出数値が無い column の場合には 空の配列が 返ってくる
-        decodeFreqNumArray(dictAndDiffDvals[0]), // x1
-        decodeFreqNumArray(dictAndDiffDvals[2]), // y1
-        decodeFreqNumArray(dictAndDiffDvals[4]), // x2
-        decodeFreqNumArray(dictAndDiffDvals[6])  // y2
-    ]
-    const diffStrByColumns = [
-        dictAndDiffDvals[1], // x1
-        dictAndDiffDvals[3], // y1
-        dictAndDiffDvals[5], // x2
-        dictAndDiffDvals[7]  // y2
-    ]
-    console.log("freqNumsByColumns: ", freqNumsByColumns)
-    // 0: [-3]
-    // 1: [-3]
-    // 2: [-5]
-    // 3: [-3]
-    console.log("diffStrByColumns: ", diffStrByColumns)
-    // (4) ['120Zml19mJZ6mlmFZmwmgZ1mMmJ', '0MZ1mQ7mEmqmKmkmGZmumimFmtZ00md', '00mM5mk41mkmM0031mlZ326Z', 'mumMmlmEZmimmmRmEmq2mamKmNZml01Z']
+    //console.log("refDictByColumn: ", refDictByColumn) // 頻出数値が無い column の場合には 空の文字列が 返ってくる
+    // Array(4) [ "ctcscpcrbWcmcocKcZ", "cscrctcncocpcjclcqcH", "ctcscr", "ctcscr" ]
+    //console.log("diffByColumn: ", diffByColumn)
+    // Array(4) [ "21XZVVZfccd80UdeYS3Ybj90fjdcRWhgajfb501T5RR10200TR308W1001RS1U43eg3T4X55S0dj8R10SRfedi30UT461R0010Reb5U5S", "gjbjR ... " ]
+
 
     // Processing for each columns from x1 [0] to y2 [3]
     let decodedDiffColumns = []
     for (let i = 0; i < 4; i++) {
 
-        // get freq dict map with actual size
-        const actualCodebookSize = getActualCodebookSize(maxCodebookSize, freqNumsByColumns[i])
-        const dictToDecodeFreqDiff = createFreqdictForDecode(freqNumsByColumns[i], actualCodebookSize)
+        // Get the codebook as actual size
+        const actualCodebookSize = getActualCodebookSize(maxCodebookSize, refDictByColumn[i])
+        const codebook = createCodebookToDecodeFrequentDiff(refDictByColumn[i], actualCodebookSize)
+
+
 
         // Decode the diff
-        const decodedDiffArray = decodeDiffFromStr(
-            diffStrByColumns[i],
-            dictToDecodeFreqDiff,
+        const decodedDiffArr = decodeDiff(
+            diffByColumn[i],
+            codebook,
             baseX,
         )
-        //console.log('decodedDiffArray: ', decodedDiffArray)
-        // Array(484) [ 7, 10, -3, -3, -12, -13, -17, 6, 54, -47, … ]
+        console.log('decodedDiffArr: ', decodedDiffArr)
+        // e.g.: Array(484) [ 7, 10, -3, -3, -12, -13, -17, 6, 54, -47, … ]
 
-        decodedDiffColumns.push(decodedDiffArray)
+        // Push to merge four columns into one array: [x1, y1, x2, y2]
+        decodedDiffColumns.push(decodedDiffArr)
     }
     return decodedDiffColumns
-}
-
-
-// Functions to get the freq dict
-
-// Get the numbers array for frequency dictionary from encoded string
-function decodeFreqNumArray(diffStr) {
-    // Base52デコードした 数値の配列を返す
-
-    // Base52エンコードされた文字列を 以下のルールで区切る
-    // '_' アンダースコアは それを含む 4文字
-    // その他 (小文字の連なり)は 2文字ずつ
-
-    const splitted = diffStr.match(/(_.{3})|(.{2})/g); // 2 or 4文字ずつ取り出す
-    console.log('splitted: ', splitted) // 頻出数値が無い column の場合には 'splitted:  null' となる
-
-    // regex test
-    //const strTEST = 'abcd_efg_hij_klmnopqrstu'
-    //const splittedTEST = strTEST.match(/(_.{3})|(.{2})/g);
-    //console.log('splittedTEST: ', splittedTEST)
-    //Array(9) [ "ab", "cd", "_efg", "_hij", "_klm", "no", "pq", "rs", "tu" ]
-
-    if (splitted !== null) {
-        return splitted.map(twoChars => base52DecodeForFreqDictValue(twoChars))
-    } else {
-        return [] // 頻出数値が無い column の場合には 空の配列を 返す
-    }
-    // (29) [-2, -1, -7, -5, -3, -4, 11, 10, 12, -8, -11, -6, 16, -10, 13, 24, -27, -9, 14, 15, 17, 20, 73, -38, -37, -25, -24, -23, -22]
-}
-
-
-function createFreqdictForDecode(numArray, maxCodebookSize) {
-    // Generate the frequency dictionary for decoding
-
-    // Key:   freq numbers
-    // Value: char from alphabets
-
-    // An array of alphabet chars to replace the numerical numbers
-    const alphabetForDict = getAlphabetsForDict(maxCodebookSize)
-
-    // Set the kv pair into Map()
-    const dictToDecodeFreqDiff = new Map();
-
-    for (let i = 0; i < numArray.length; i++) {
-        // Mapオブジェクトに キー(頻出数値) と バリュー(一文字置換用アルファベット) のペアを追加する
-        dictToDecodeFreqDiff.set(alphabetForDict[i], numArray[i]);
-    }
-    return dictToDecodeFreqDiff
 }

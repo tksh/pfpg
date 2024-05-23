@@ -1,6 +1,6 @@
 function createCodebookToEncodeFrequentDiff(freqDiffArrActualCodebookSized) {
 
-    const alphabetsActualCodebookSized = getAlphabetsForDict(freqDiffArrActualCodebookSized.length)
+    const alphabetsActualCodebookSized = getAlphabetsForCodebook(freqDiffArrActualCodebookSized.length)
     console.log('alphabetsActualCodebookSized: ', alphabetsActualCodebookSized)
     // From 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 

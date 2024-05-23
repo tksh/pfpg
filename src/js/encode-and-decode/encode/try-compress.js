@@ -28,6 +28,7 @@ function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMethodName, 
 
     return wholeEncodedValues;
 }
+
 function compressAndCompare(widthAndCountsAndDval, gId) {
     // Compress and compare
     const compressed = URLCompressor.compress(widthAndCountsAndDval);

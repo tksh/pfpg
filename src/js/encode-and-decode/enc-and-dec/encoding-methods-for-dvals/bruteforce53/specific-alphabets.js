@@ -28,24 +28,24 @@ function getAlphabets52() {
 // abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
 
 
-function getAlphabetsForDict(dictSize) {
+function getAlphabetsForCodebook(codebookSize) {
     const alphabets52 = getAlphabets52()
     // 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-    // 文字列の後方から dictSize の値の分を取り出す
-    if (dictSize == 0) {
-        console.log('dictSize is 0, return the empty string.')
+    // 文字列の後方から codebookSize の値の分を取り出す
+    if (codebookSize == 0) {
+        console.log('codebookSize is 0, return the empty string.')
         return "";
     } else {
-        const alphabetsActualCodebookSized = alphabets52.slice(-dictSize);
+        const alphabetsActualCodebookSized = alphabets52.slice(-codebookSize);
         return alphabetsActualCodebookSized
     }
 }
-// console.log(typeof(getAlphabetsForDict(0))) // string
-// console.log(getAlphabetsForDict(0))  // ""
-// console.log(getAlphabetsForDict(1))  // Z
-// console.log(getAlphabetsForDict(51)) // bcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
-// console.log(getAlphabetsForDict(52)) // abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+// console.log(typeof(getAlphabetsForCodebook(0))) // string
+// console.log(getAlphabetsForCodebook(0))  // ""
+// console.log(getAlphabetsForCodebook(1))  // Z
+// console.log(getAlphabetsForCodebook(51)) // bcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+// console.log(getAlphabetsForCodebook(52)) // abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
 
 function getAlphabetsForBaseX(baseX) {
     const alphabets52 = getAlphabets52()

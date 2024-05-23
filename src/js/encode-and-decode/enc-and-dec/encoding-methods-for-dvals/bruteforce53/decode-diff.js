@@ -1,89 +1,73 @@
 // Functions to decode the diff
 
-function decodeDiffFromStr(diffStr, dictToDecodeFreqDiff, baseX) {
-    let decodedDiffArray = [];
-
-    //console.log('diffStr: ', diffStr)
-    //console.log('diffStr.length: ', diffStr.length)
-    //console.log('dictToDecodeFreqDiff: ', dictToDecodeFreqDiff)
+function decodeDiff(diffStr, codebook, baseX) {
+    let decodedDiffArr = [];
 
     for (let i = 0; i < diffStr.length; i++) {
-        //console.log('i, diffStr[i]): ', i, diffStr[i])
 
-        if (isInDict(diffStr[i], dictToDecodeFreqDiff)) { // freq dict に含まれる ならば 1文字ごとに diffStr[i]をキーにして 対応する数値を得て 配列に格納
-            //console.log(`isInDict = true, diffStr[${i}] => dictToDecodeFreqDiff.get(diffStr[${i}]): `, diffStr[i], ' => ', dictToDecodeFreqDiff.get(diffStr[i]))
-            decodedDiffArray.push(dictToDecodeFreqDiff.get(diffStr[i]));
+        if (isInRefDict(diffStr[i], codebook)) {
+            // Codebook に含まれるアルファベットならば 1文字ごとに diffStr[i]をキーにして 対応する数値を得て 配列に格納
+            //console.log(`If isInRefDict = true, diffStr[${i}] => codebook.get(diffStr[${i}])`)
+            decodedDiffArr.push(codebook.get(diffStr[i]));
 
-        } else if (isNumber(diffStr[i])) { // 整数[0-9] ならば 1文字ごとに そのまま 配列に格納
-            decodedDiffArray.push(parseInt(diffStr[i]));
+
+        } else if (isNumber(diffStr[i])) {
+            // 整数[0-9] ならば 1文字ごとに そのまま 配列に格納
 
 
         } else if (diffStr[i] === '_') {
-
+            // '_'が １個見つかったら その次に更に '_'が何個続くか を調べて それに応じた処理をする
+            // '_'があれば その次に続く 2文字 を Base52デコード: '_ab'
             if (diffStr[i + 1] !== '_') { // '_' が 一つしか続かない場合
-                // `_`があれば その次に続く "2文字" を Base52デコードして 配列に格納: `_ab`
-                decodedDiffArray.push(base52Decode((diffStr[i + 1] + diffStr[i + 2])));
-                i += 2; // `i` を `2`増やして `_`の後に続く "2文字" 分を スキップさせる
+                decodedDiffArr.push(base52Decode((diffStr[i + 1] + diffStr[i + 2])));
+                i += 2; // 'i' を '2'増やして '_'の後に続く 2文字分を スキップさせる
             }
 
-            // `__`があれば その次に続く "2文字" を Base52デコードして 配列に格納: `__ab`
+            // '__'があれば その次に続く 2文字 を Base52デコード: '__ab'
             // 返ってきた 数値には マイナス記号を付ける
             if (diffStr[i + 1] === '_') { // '_' が 一つ目の後に もう一つ続く場合
-                console.log(`${diffStr} は "__"が 付いているので Base52デコードし マイナス記号を付ける`)
-                decodedDiffArray.push(-base52Decode((diffStr[i + 2] + diffStr[i + 3])));
-                i += 3; // `i` を `3`増やして `__`の後に続く "2文字" 分を スキップさせる
+                decodedDiffArr.push(-base52Decode((diffStr[i + 2] + diffStr[i + 3])));
+                i += 3; // 'i' を '3'増やして '__'の後に続く 2文字分を スキップさせる
             }
 
-            // `___`があれば その次に続く "3文字" を Base52デコードして 配列に格納: `___abc`
+            // '___'があれば その次に続く 3文字 を Base52デコード: '___abc'
             if (diffStr[i + 1] === '_' && diffStr[i + 2] === '_') {
-                decodedDiffArray.push(base52Decode((diffStr[i + 3] + diffStr[i + 4] + diffStr[i + 5])));
-                i += 5; // `i` を `5`増やして `___`の後に続く "3文字" 分を スキップさせる
+                decodedDiffArr.push(base52Decode((diffStr[i + 3] + diffStr[i + 4] + diffStr[i + 5])));
+                i += 5; // 'i' を '5'増やして '___'の後に続く 3文字分を スキップさせる
             }
 
-            // `____`があれば その次に続く "3文字" を Base52デコードして 配列に格納: `____abc`
+            // '____'があれば その次に続く 3文字 を Base52デコード: '____abc'
             // 返ってきた 数値には マイナス記号を付ける
             if (diffStr[i + 1] === '_' && diffStr[i + 2] === '_' && diffStr[i + 3] === '_') {
-                decodedDiffArray.push(-base52Decode((diffStr[i + 4] + diffStr[i + 5] + diffStr[i + 6])));
-                i += 6; // `i` を `6`増やして `____`の後に続く "3文字" 分を スキップさせる
+                decodedDiffArr.push(-base52Decode((diffStr[i + 4] + diffStr[i + 5] + diffStr[i + 6])));
+                i += 6; // 'i' を '6'増やして '____'の後に続く 3文字分を スキップさせる
             }
 
 
-        } else { // 残りは BaseXでエンコードされた 小文字2文字ずつ のみなので 2文字ずつ baseXDec()して 配列に格納
+        } else { // 残りは BaseXでエンコードされた 小文字2文字ずつ のみ なので 2文字ずつ baseXDec()する
             const toBaseXDecode = diffStr[i] + diffStr[i + 1];
-            decodedDiffArray.push(baseXDec(toBaseXDecode, baseX));
-            i++; // `i` を `1`増やして 2文字目の文字分を 次のループで スキップさせる
+            decodedDiffArr.push(baseXDec(toBaseXDecode, baseX));
+            i++; // 'i' を '1'増やして 2文字目の文字分を 次のループで スキップさせる
+
         }
     }
-    return decodedDiffArray
+    return decodedDiffArr
 }
 
 
 
-// 辞書用文字列に含まれているなら `true` を返す
-function isInDict(str, dictToDecodeFreqDiff) {
+// 辞書文字列 (Reference dictionary) に含まれているなら `true` を返す
+function isInRefDict(char, codebook) {
     // 判定用文字列
     // Mapオブジェクトのキーのみを 配列として取り出し 区切り無しでjoinして ひとつの文字列にする
-    const dictionary = [...dictToDecodeFreqDiff.keys()].join('');
+    const refDict = [...codebook.keys()].join('');
 
-    // 文字が辞書用文字列に含まれているかどうかを判定する
-    // 含まれている場合は true を返す
-    const bool = dictionary.indexOf(str) !== -1;
+    // 文字 char が 判定用文字列に 含まれているかどうか を判定する => 含まれている場合は true が返る
+    const bool = refDict.indexOf(char) !== -1;
     return bool
 }
 
-// 文字が[0-9]かどうかを判定する
-function isNumber(str) {
-    return /^[0-9]+$/g.test(str);
-}
-
-
-
-// 辞書用文字列に含まれているなら `true` を返す
-function isInDictOld(str, maxCodebookSize) {
-    // 辞書用文字列
-    const dictionary = getAlphabetsForDict(maxCodebookSize)
-
-    // 文字が辞書用文字列に含まれているかどうかを判定する
-    // 含まれている場合はtrueを返す
-    return dictionary.indexOf(str) !== -1;
+// 文字が [0-9]かどうか を判定する
+function isNumber(char) {
+    return /^[0-9]+$/g.test(char);
 }

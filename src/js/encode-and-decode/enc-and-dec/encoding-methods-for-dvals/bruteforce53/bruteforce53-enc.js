@@ -73,7 +73,6 @@ function bruteforce53Enc() {
 
                 // Get the number of actual codebook length in this column
                 const actualCodebookSize = getActualCodebookSize(maxCodebookSize, freqDiffArr)
-                console.log('actualCodebookSize: ', actualCodebookSize)
 
                 // Extract top ${maxCodebookSize} elements of numerical numbers
 
@@ -85,12 +84,11 @@ function bruteforce53Enc() {
                 // Create the codebook to encode
                 const codebookToEncodeFreqDiff = createCodebookToEncodeFrequentDiff(freqDiffArrActualCodebookSized, actualCodebookSize)
                 console.log('codebookToEncodeFreqDiff: ', codebookToEncodeFreqDiff)
-                // e.g.: Map(0) {size: 0}, when maxCodebookSize = 0, baseXNumber = 52
                 // e.g.: Map(29) {-2 => 'x', -1 => 'y', -4 => 'z', -7 => 'A', -3 => 'B', …}
 
 
                 // Encode the frequency diff values array as a string to attach
-                const freqDiffAsRefDict = encodeFreqDiffAsReferenceDict(freqDiffArr, maxCodebookSize)
+                const freqDiffAsRefDict = encodeFreqDiffAsReferenceDict(freqDiffArrActualCodebookSized)
 
                 // Encode the diff values
                 const diffArrEncoded = diffArr.map((diff) => {
@@ -112,7 +110,7 @@ function bruteforce53Enc() {
                     // 上記 3条件 いずれでもなければ baseX で アルファベット2文字 に エンコードする
                     return handleBaseXEncoding(diff, baseXNumber);
                 });
-                console.log('diffArrEncoded: ', diffArrEncoded);
+                //console.log('diffArrEncoded: ', diffArrEncoded);
                 // e.g.: (484) [7, 'ln', 'B', 'B', 'D', 'N', 'X', 6, 'nl', 'U', 8, ...
 
 
@@ -160,7 +158,7 @@ function bruteforce53Enc() {
             'bruteforce53-enc',
             baseXNumber
         )
-        console.log('compressedByGroup: ', compressedByGroup)
+        console.log(`baseXNumber = ${baseXNumber}, compressedByGroup: `, compressedByGroup)
         //  Map(5) {'1' => '0=129CaIjMCzLAFox3gEVYTdnymbAmwP-UWDCnew3h-Aqsd6rQsPf7nuc97B-Tyl896LIItSqsH-0_igZRCKY265Ta0zzD8-axd0B3NgagFJ2rRrUWcULFyn1IwBi', '2' => '0=129zi ...
 
 
@@ -174,8 +172,9 @@ function bruteforce53Enc() {
             console.log('currentShortest in first loop: ', currentShortest)
         }
 
-        // For every loop
-        currentShortest = storeShorter(currentShortest, compressedByGroup)
+        // For after second loop
+        // baseXNumber will be used for just indicating to console when updated the current shortest.
+        currentShortest = storeShorter(currentShortest, compressedByGroup, baseXNumber)
 
     }
     // End of Loop for every baseX values: [0-52]
