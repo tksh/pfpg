@@ -2,9 +2,7 @@ function bigint64Enc() {
     const startTime = performance.now()
 
     // Get digits of chunk for padding
-    const max = parseBasicData().max
-    const digitsPerChunk = String(max).length
-    // const digitsPerChunk = getDigitsOfChunk()
+    const digitsPerChunk = getDigitsPerChunk(parseBasicData().uintN)
     console.log("digitsPerChunk: ", digitsPerChunk) // e.g.: 2
 
 
@@ -35,7 +33,7 @@ function bigint64Enc() {
     // Get the encoded strings of width-and-counts and group-colors
     const encodedAttrsExceptsDvals = getEncodedAttrsExceptsDvals()
 
-    // Choose shorter one between URLComp applied or not, for each group
+    // Choose shorter one between URLComp applied or not, by each group
     const compressedByGroup = tryCompress(
         encodedDvals,
         encodedAttrsExceptsDvals,

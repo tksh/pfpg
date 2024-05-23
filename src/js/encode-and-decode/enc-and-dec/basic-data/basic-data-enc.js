@@ -68,7 +68,6 @@ function parseBasicData() {
         viewbox      : viewboxShorten,
         viewboxWidth : viewboxWH[0],
         viewboxHeight: viewboxWH[1],
-        max,
         uintN,
         rectFill
     }

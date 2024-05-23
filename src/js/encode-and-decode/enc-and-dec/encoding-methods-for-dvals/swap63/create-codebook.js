@@ -1,7 +1,7 @@
-// Swap63 変換辞書用の キーとバリューの配列 を定義する
+// Swap63変換Map()用の キーとバリューの配列 を定義する
 // エンコード時と デコード時で key,value を 逆にする
 
-function createDictionary(keys, values) {
+function createCodebook(keys, values) {
     //console.log(get63Numbers())     // Array(63) [ -31, -30, … -2, -1, 0, 1, 2, … 30, 31]
     //console.log(get63Characters())  // Array(63) [ "0", "1", … "a", "b", … "z", "A", … "Z", "_"]
 

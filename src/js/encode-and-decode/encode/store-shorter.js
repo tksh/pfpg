@@ -1,4 +1,4 @@
-// Store the shortest length sting for each group
+// Store the shortest length sting by each group
 
 function storeShorter(currentShortestByGroup, encodeStrByGroup) {
     for (let [gId, encodedStr] of encodeStrByGroup) {

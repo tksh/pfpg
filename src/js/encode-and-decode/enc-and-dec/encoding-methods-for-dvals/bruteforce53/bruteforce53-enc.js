@@ -18,6 +18,9 @@ function bruteforce53Enc() {
     const maxCodebookSizeStartAt = 0
     const maxCodebookSizeEndAt = 52
 
+    // min|max diff value (Just for indicating to console at function calculateLimitsForBaseXSkipRange(baseXNumber))
+    const minimumDiffValue = 0 - (2 ** parseBasicData().uintN - 1) * 4
+    const maximumDiffValue =     (2 ** parseBasicData().uintN - 1) * 4
 
     // Loop 1. Max dict size from 0 to 52
 
@@ -27,12 +30,14 @@ function bruteforce53Enc() {
         console.log('////////////////////////////////// maxCodebookSize: ', maxCodebookSize, ' //////////////////////////////////') // 0, 1, ... 51, 52
         console.log('////////////////////////////////// baseXNumber: ', baseXNumber, ' //////////////////////////////////') // 52, 51, ... 1, 0
 
-        const minimumDiffValue = -parseBasicData().max*4
-        const maxDiffValue     =  parseBasicData().max*4
-
         const encodedDvals = new Map()
 
         const aggDataMap = jsonToMapObj(`textarea-agg-data-for-comp-uploaded`)
+
+        // Get the lower and upper limits for baseX exclusion.
+        // This is the argument for handleBase52EncodingWithPrefix().
+        const baseXRangeLimits = calculateLimitsForBaseXSkipRange(baseXNumber, minimumDiffValue, maximumDiffValue)
+        // Object { baseXSkipRangeLowerLimit, baseXSkipRangeUpperLimit }
 
 
         // Loop 2. Each lines-group (.g_id) from '1' to group size
@@ -51,10 +56,11 @@ function bruteforce53Enc() {
             for (const column of ['x1', 'y1', 'x2', 'y2']) {
                 console.log('//////// column: ', column, '////////')
 
-                let diffArr     = aggData.d.relative.diff_by_row[column]
-                let freqDiffArr = aggData.d.relative.frequent_diff_values_sorted[column]
-                //console.log('diffArr: ', diffArr)   // (19) [1, 2, 0, -3, -2, 1, 9, -7, -3, 6, -2, -15, -3, 30, -12, -3, 1, -1, -7]
+                let diffArr     = aggData.d.relative.diff_by_row[column]                    // Diff-by-row original
+                let freqDiffArr = aggData.d.relative.frequent_diff_values_sorted[column]    // Diff-by-row sorted by frequency and remove the values that only once appeared
+                //console.log('diffArr: ', diffArr)         // (19) [1, 2, 0, -3, -2, 1, 9, -7, -3, 6, -2, -15, -3, 30, -12, -3, 1, -1, -7]
                 //console.log('freqDiffArr: ', freqDiffArr) // (3) [-3, -2, -7]
+
 
                 // Generate the codebook to encode frequent diff_by_row values
 
@@ -86,25 +92,7 @@ function bruteforce53Enc() {
                 // Encode the frequency diff values array as a string to attach
                 const freqDiffAsRefDict = encodeFreqDiffAsReferenceDict(freqDiffArr, maxCodebookSize)
 
-
                 // Encode the diff values
-
-                // Calculate the target range of BaseX encoding
-
-                // Get the range to apply the BaseX encoding
-                const startOfBaseXEncTargetBefore0 = 0 - getHalfOfBaseXRange(baseXNumber)
-                const endOfBaseXEncTargetAfter9 = getHalfOfBaseXRange(baseXNumber) + 9
-                console.log('the range to apply the baseXEnc: ', startOfBaseXEncTargetBefore0, ' < 0 | 9 < ', endOfBaseXEncTargetAfter9)
-                // -40  < 0 | 9 <  49
-
-                // Get the range to skip the BaseX encoding
-                const endOfIneligibleForBaseXEncLower = startOfBaseXEncTargetBefore0 - 1
-                const startOfIneligibleForBaseXEncHigher = endOfBaseXEncTargetAfter9 + 1
-                console.log('the range to skip the baseXEnc: ', minimumDiffValue, ' < ', endOfIneligibleForBaseXEncLower, ' | ', startOfIneligibleForBaseXEncHigher, ' < ', maxDiffValue )
-                // -124  <  -41  |  50  <  124
-
-
-                // Encode
                 const diffArrEncoded = diffArr.map((diff) => {
 
                     // [0-9] の一桁の正の数は そのままにする
@@ -118,42 +106,38 @@ function bruteforce53Enc() {
                     // 数値が [大き|小さ]過ぎて BaseX で 2桁 にエンコードできないものは base52エンコードしてから アンダースコア を先頭にフラグとして 条件に応じて [1|2|3|4]個 付ける
                     //   上の Codebook と 下の BaseX は それぞれ重複しないアルファベットを 切り出して使っているが
                     //   Base52 は 両方ともと同じ種類の文字を使っているので デコード時にそれらと区別できるようにするため フラグを付ける
-                    result = handleBase52EncodingWithPrefix(diff, startOfIneligibleForBaseXEncHigher, endOfIneligibleForBaseXEncLower, baseXNumber);
+                    result = handleBase52EncodingWithPrefix(diff, baseXNumber, baseXRangeLimits);
                     if (result !== undefined) return result;
 
                     // 上記 3条件 いずれでもなければ baseX で アルファベット2文字 に エンコードする
                     return handleBaseXEncoding(diff, baseXNumber);
                 });
-
                 console.log('diffArrEncoded: ', diffArrEncoded);
-                // (484) [7, 'ln', 'B', 'B', 'D', 'N', 'X', 6, 'nl', 'U', 8, ...
+                // e.g.: (484) [7, 'ln', 'B', 'B', 'D', 'N', 'X', 6, 'nl', 'U', 8, ...
 
 
-                // Join the encoded four columns values as a string
+                // Join the encoded diff values as a string
                 const diffEncodedJoined = diffArrEncoded.join('')
-                // Merge with hyphen'-': `[encoded dict]-[encoded diff]`
+                // Combine the dictionary and diff to form: '[encoded reference_dictionary]-[encoded diff_by_row]'
                 const mergeEncodedRefDictAndDiff = freqDiffAsRefDict + '-' + diffEncodedJoined
 
-                // Merge four columns into one array
+                // Push to merge four columns into one array: [x1, y1, x2, y2]
                 refDictAndDiffEncodedFourColumns.push(mergeEncodedRefDictAndDiff)
-                // Like: [x1: dict and diff], [y1: dict and diff], [x2: dict and diff], [y2: dict and diff]`
             }
 
-            //console.log('typeof(refDictAndDiffEncodedFourColumns): ', typeof(refDictAndDiffEncodedFourColumns)) // object
             //console.log('refDictAndDiffEncodedFourColumns: ', refDictAndDiffEncodedFourColumns)
-            // (4) ['crcscn-120yZ19zy6ZlEylvlfy1lLz', 'cr-0LW1lP7lDlplJljlFzltlhlElsz00lc', 'cpcqct-00z5Z41Zz0031lky326y', 'crcscd-ltlLZzylhlllQzlp2LXlJlMyZ01y']
-            // x1 に頻出数値が無い場合 hyphen始まりになる (4) ['-0lalO44lHlqlflh75lklJ5lLlg', 'crbR-0260Z0zlrlVz2ZlGlNlIlk', 'cr-lWLWz0lL100001z1z22', 'cqct-1ZlKlNlH130z011Z21z']
+            // 頻出数値が無い場合 hyphen始まりになる (4) ['-0lalO44lHlqlflh75lklJ5lLlg', 'crbR-0260Z0zlrlVz2ZlGlNlIlk', 'cr-lWLWz0lL100001z1z22', 'cqct-1ZlKlNlH130z011Z21z']
 
-            // Join four columns (x1, y1, x2, y2)
+            // Join four columns to form: '[x1]-[y1]-[x2]-[y2]'
             refDictAndDiffEncodedFourColumnsJoined = refDictAndDiffEncodedFourColumns.join('-')
 
             // Set the encoded d values ([refDict]-[encodedDiff]) into map as value with group ID key
             encodedDvals.set(aggData.g_id, refDictAndDiffEncodedFourColumnsJoined)
 
-        } // End of `for (let agg of aggDataMap.values()) {`
+        }
         console.log('encodedDvals: ', encodedDvals)
-        // Map(5) {'1' => 'crcscn-120yZ19zy6ZlqyMKlSy1lxz-cr-0lL1Md7lpMElvlWlrzMIlUlqMHz00lP-cpcqct-00z5Z41Zz0031lXy326y-crcscd-MIlxZzylUMAMezME2lMlvMayZ01', '2' => '-0lNM ...
-        // x1からy2まで 全てに頻出数値が無い場合: '5' => '-lmlF3lL10lK--lRLPlp4lk4lj--0lk1lL130--21lL1lk00'}
+        // e.g.: Map(5) {'1' => 'crcscn-120yZ19zy6ZlqyMKlSy1lxz-cr-0lL1Md7lpMElvlWlrzMIlUlqMHz00lP-cpcqct-00z5Z41Zz0031lXy326y-crcscd-MIlxZzylUMAMezME2lMlvMayZ01', '2' => '-0lNM ...
+        // e.g.: x1からy2まで 全てに頻出数値が無い場合: '5' => '-lmlF3lL10lK--lRLPlp4lk4lj--0lk1lL130--21lL1lk00'}
 
 
 
@@ -169,7 +153,7 @@ function bruteforce53Enc() {
         // Get the encoded strings of width-and-counts and group-colors
         const encodedAttrsExceptsDvals = getEncodedAttrsExceptsDvals()
 
-        // Choose shorter one between URLComp applied or not, for each group
+        // Choose shorter one between URLComp applied or not, by each group
         const compressedByGroup = tryCompress(
             encodedDvals,
             encodedAttrsExceptsDvals,
@@ -181,7 +165,7 @@ function bruteforce53Enc() {
 
 
 
-        // Store the shortest string for each group
+        // Store the shortest string by each group
 
         // For first loop, init the map with current value
         if (maxCodebookSize === maxCodebookSizeStartAt) {

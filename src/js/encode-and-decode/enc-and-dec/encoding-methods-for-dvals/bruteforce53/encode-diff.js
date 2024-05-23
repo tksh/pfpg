@@ -8,6 +8,7 @@ function handleSingleDigit(diff) {
 }
 
 
+
 // Encode the frequent diff values via codebook.
 
 // 頻出数値が Codebookに キーとして存在するかどうか を確認し (`codebookToEncodeFreqDiff.has`)
@@ -25,8 +26,8 @@ function handleFrequencyDiff(diff, codebookToEncodeFreqDiff) {
 // Base52 encode (with prefix) for too small|big numbers
 
 // Rules:
-//     大小両極の数字は baseX で 2文字に エンコード出来ないので baseXエンコードしない
-//     代わりに Base52 でアルファベットにエンコードし Codebookを使って頻出数値から 一文字に変換をしたアルファベットと 区別するために アンダースコア('_')を 先頭に いくつか フラグとして付ける
+//     大小両極の数字は baseX で 2文字以内に エンコード出来ないので baseXエンコードしない
+//     代わりに Base52 でアルファベットにエンコードし Codebookを使って頻出数値から 一文字に変換をしたアルファベットと 区別するために アンダースコア('_')を 先頭に 1|2|3|4個 フラグとして付ける
 //
 //         エンコード後の文字数が 2文字 になった場合:
 //             正の数値は 前に アンダースコアを 1個 付ける
@@ -41,26 +42,49 @@ function handleFrequencyDiff(diff, codebookToEncodeFreqDiff) {
 //     UInt8Portray (grid size: 0-255)   までは diff の負の数を消した時に取り得る最大値 (2044)   を 2文字でカバーできる
 //     UInt14Portray(grid size: 0-16383) までは diff の負の数を消した時に取り得る最大値 (131064) を 3文字でカバーできる
 
-// BaseX の対象の中でも 大小両極の数字は 2文字以内に エンコード出来ないので BaseXエンコードは しない
-// Base52 でアルファベットにエンコードし アンダースコア('_')を 先頭に 1|2|3|4個 フラグとして付ける
-function handleBase52EncodingWithPrefix(diff, startOfIneligibleForBaseXEncHigher, endOfIneligibleForBaseXEncLower, baseXNumber) {
 
-    if (diff <= endOfIneligibleForBaseXEncLower || startOfIneligibleForBaseXEncHigher <= diff) {
+// Calculate the threshold for target range of BaseX ans Base52
+function calculateLimitsForBaseXSkipRange(baseXNumber, minimumDiffValue, maximumDiffValue) {
+    // Get the baseX encoding target range (values within this range will be encoded)
+    const baseXTargetRangeStart = 0 - getHalfOfBaseXRange(baseXNumber);
+    const baseXTargetRangeEnd   =     getHalfOfBaseXRange(baseXNumber) + 9;
+    console.log(`Range to target for Base${baseXNumber} encoding: ${baseXTargetRangeStart} ... 0 / 9 ... ${baseXTargetRangeEnd}`);
+    // e.g: // -40  < 0 | 9 <  49
+
+    // Get the range to skip BaseX encoding (values outside this range will be skipped and Base52 encoding will be applied)
+    const baseXSkipRangeLowerLimit = baseXTargetRangeStart - 1;
+    const baseXSkipRangeUpperLimit = baseXTargetRangeEnd + 1;
+    console.log(`Range to skip for Base${baseXNumber} encoding: minimum diff value = ${minimumDiffValue} ... ${baseXSkipRangeLowerLimit} / ${baseXSkipRangeUpperLimit} ... ${maximumDiffValue} = maximum diff value`);
+    // e.g.: -124  <  -41  |  50  <  124
+
+    return {
+        baseXSkipRangeLowerLimit,
+        baseXSkipRangeUpperLimit
+    }
+}
+
+// Base52 encode
+function handleBase52EncodingWithPrefix(diff, baseXNumber, baseXRangeLimits) {
+
+    // // Get the lower and upper limits for baseX exclusion
+    // const limits = calculateLimitsForBaseXSkipRange(baseXNumber)
+
+    if (diff <= baseXRangeLimits.baseXSkipRangeLowerLimit || baseXRangeLimits.baseXSkipRangeUpperLimit <= diff) {
         // base52 エンコードしてアンダースコアを接頭辞として付加
         const diffEncoded = base52Encode(Math.abs(diff));
-        const diffEncodedWithUnderscorePrefix = addUnderscorePrefixToBase52Encoded(diffEncoded, diff < 0);
-        console.log(`${diff} は Base${baseXNumber} エンコード範囲外なので base52 エンコード ('_'を [1|2|3|4]個 フラグとして付ける): `, diffEncodedWithUnderscorePrefix);
+        const diffEncodedWithUnderscorePrefix = prependUnderscores(diffEncoded, diff > 0);
+        console.log(`diff ${diff} は Base${baseXNumber} エンコード範囲外なので Base52エンコード ('_'を [1|2|3|4]個 フラグとして付ける): `, diffEncodedWithUnderscorePrefix);
         return diffEncodedWithUnderscorePrefix;
     }
 }
 
-// Add prefix
-function addUnderscorePrefixToBase52Encoded(str, isNegative) {
+// Prepend some underscore signs
+function prependUnderscores(str, isPositive) {
     if (str.padStart(2, 'a').length = 2) {
-        const prefix = isNegative ? '__' : '_';
+        const prefix = isPositive ? '_' : '__';
         return prefix + str
     } else {          // str.length = 3
-        const prefix = isNegative ? '____' : '___';
+        const prefix = isPositive ? '___' : '____';
         return prefix + str
     }
 }
@@ -72,6 +96,6 @@ function addUnderscorePrefixToBase52Encoded(str, isNegative) {
 // baseXエンコード可能な範囲にある場合 => BaseX でアルファベット2文字にエンコード
 function handleBaseXEncoding(diff, baseXNumber) {
     const baseXEncoded = baseXEnc(diff, baseXNumber);
-    console.log(`diffが baseXエンコード可能な範囲にあるので Base${baseXNumber} でアルファベット2文字にエンコード:`, diff, baseXEncoded);
+    console.log(`diff ${diff} は baseXエンコード可能な範囲にあるので Base${baseXNumber} でアルファベット2文字にエンコード:`, baseXEncoded);
     return baseXEncoded;
 }

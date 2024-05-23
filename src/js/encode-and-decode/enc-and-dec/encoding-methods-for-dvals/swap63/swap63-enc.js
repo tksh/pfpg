@@ -3,9 +3,9 @@
 function swap63Enc() {
     const startTime = performance.now()
 
-    // Dictionary to swap from number to character
-    dictForEncoding = createDictionary(get63Numbers(), get63Characters())
-    console.log('dictForEncoding: ', dictForEncoding);
+    // Codebook to encode from number to character
+    codebookForEncoding = createCodebook(get63Numbers(), get63Characters())
+    console.log('codebookForEncoding: ', codebookForEncoding);
     // Map(63) { -31 → "0", -30 → "1", -29 → "2", -28 → "3", -27 → "4", -26 → "5", -25 → "6", -24 → "7", -23 → "8", -22 → "9", … }
 
 
@@ -15,7 +15,7 @@ function swap63Enc() {
 
 
     // Get the string of d values encoded
-    const encodedDval = swapToEncode(dictForEncoding, linesDataMap)
+    const encodedDval = swapToEncode(codebookForEncoding, linesDataMap)
     console.log('encodedDval: ', encodedDval)
     // Map(5) {'1' => 'wyyvtuDw ... WytEBzzAx', '2' => 'v9oswnHvnuz ... wwxyuwxw', ... }
 
@@ -33,7 +33,7 @@ function swap63Enc() {
     // Get the encoded strings of width-and-counts and group-colors
     const encodedAttrsExceptsDvals = getEncodedAttrsExceptsDvals()
 
-    // Choose shorter one between URLComp applied or not, for each group
+    // Choose shorter one between URLComp applied or not, by each group
     const compressedByGroup = tryCompress(
         encodedDval,
         encodedAttrsExceptsDvals,
