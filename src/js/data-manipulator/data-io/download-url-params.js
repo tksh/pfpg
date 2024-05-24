@@ -7,9 +7,12 @@ import Zstd from 'https://cdn.skypack.dev/numcodecs/zstd?min';
 // Download as .txt.zst
 
 // Define the downloadUrlParamsAsTxt function in the same scope as the onclick event handler
-document.getElementById('button-to-download-url-params-as-txt-zstd').onclick = function () {
-    downloadUrlParamsAsTxtZstd('textarea-encoded-url-params');
-};
+// Only on data-manipulator.html
+if (isOnDataManipulatorPage()) {
+    document.getElementById('button-to-download-url-params-as-txt-zstd').onclick = function () {
+        downloadUrlParamsAsTxtZstd('textarea-encoded-url-params');
+    };
+}
 
 async function downloadUrlParamsAsTxtZstd(textareaId) {
 
@@ -66,9 +69,12 @@ export async function compressStringToBlob(string) {
 // Download as .txt
 
 // Define the downloadUrlParamsAsTxt function in the same scope as the onclick event handler
-document.getElementById('button-to-download-url-params-as-txt').onclick = function () {
-    downloadUrlParamsAsTxt('textarea-encoded-url-params');
-};
+// Only on data-manipulator.html
+if (isOnDataManipulatorPage()) {
+        document.getElementById('button-to-download-url-params-as-txt').onclick = function () {
+        downloadUrlParamsAsTxt('textarea-encoded-url-params');
+    };
+}
 
 function downloadUrlParamsAsTxt(textareaId) { // ('textarea-encoded-url-params')
 
@@ -128,7 +134,10 @@ function getTitle() {
 // Merge the basic data and lines data as URL params
 // And get the size of after Zstandard compression to indicate
 
-document.getElementById('button-to-merge-as-url-params').addEventListener('click', mergeBasicDataAndStrokesValues);
+// Only on data-manipulator.html
+if (isOnDataManipulatorPage()) {
+    document.getElementById('button-to-merge-as-url-params').addEventListener('click', mergeBasicDataAndStrokesValues);
+}
 
 async function mergeBasicDataAndStrokesValues(){
     // Basic Data encoded string from textarea
