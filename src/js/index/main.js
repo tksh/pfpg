@@ -498,7 +498,6 @@
 
     // Startup initialize process
     async function init() {
-
         // Set default options values
         // Read the values from original decoded SVG, then apply them as each option elements.
         await setDefaultValueOfOptions()

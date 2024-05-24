@@ -3,6 +3,7 @@
 // And also will be called from '/js/index/tab-line/path-mode.js' when 'path-mode' changed via option selector.
 
 function decode(isRelative, isDataManipulatorPage) {
+    console.log('Start the decoding SVG ...')
     const urlParamsAsTwoMaps = readUrlParamsAsMaps(isDataManipulatorPage)
 
     if (urlParamsAsTwoMaps != null) {

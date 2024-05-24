@@ -48,23 +48,6 @@
     <script defer src="./js/index/utils/number-rounding.js"></script>
     <script defer src="./js/index/utils/replace-at-index.js"></script>
 
-    <!-- Tabs -->
-
-    <!-- Tab - Line -->
-    <script defer src="./js/index/tab-line/group-colors.js"></script> <!-- Generate the group colors tags for HTML and SVG -->
-    <script defer src="./js/index/tab-line/path-mode.js"></script>
-    <script defer src="./js/index/tab-line/opacity-steps.js"></script>
-    <!-- Tab - Canvas -->
-    <script defer src="./js/index/tab-canvas/shape-to-trim.js"></script>
-    <script defer src="./js/index/tab-canvas/crop-side-margins.js"></script>
-    <!-- Tab - Render -->
-    <script defer src="./js/index/tab-render/width-pixel-size.js"></script>
-    <script defer src="./js/index/tab-render/sync-number-and-range.js"></script>
-    <!-- Tab - UI -->
-    <script defer src="./js/index/tab-ui/view-scale.js"></script>
-    <script defer src="./js/index/tab-ui/checker-pattern.js"></script>
-    <script defer src="./js/index/tab-ui/color-theme.js"></script>
-
 
     <!-- Data IO -->
     <script src="./js/data-manipulator/data-io/download-url-params.js" type="module" ></script>
@@ -74,6 +57,16 @@
     <script src="./js/data-manipulator/data-io/read-textarea.js"></script>
     <script src="./js/data-manipulator/data-io/select-file.js"></script>
     <script src="./js/data-manipulator/data-io/show-result.js"></script>
+
+    <!-- Encode and Decode -->
+
+    <!-- Attributes excepts d values -->
+    <!-- Group Colors -->
+    <script src="./js/encode-and-decode/enc-and-dec/attrs-excepts-dvals/group-colors-enc.js"></script>
+    <script src="./js/encode-and-decode/enc-and-dec/attrs-excepts-dvals/group-colors-dec.js"></script>
+    <!-- Width and Counts -->
+    <script src="./js/encode-and-decode/enc-and-dec/attrs-excepts-dvals/width-and-counts-enc.js"></script>
+    <script src="./js/encode-and-decode/enc-and-dec/attrs-excepts-dvals/width-and-counts-dec.js"></script>
 
     <!-- Base N Encodings -->
     <script src="./js/encode-and-decode/enc-and-dec/base-n-encodings/base-52-enc.js"></script>
@@ -130,8 +123,28 @@
     <script src="./js/encode-and-decode/decode/rel-to-abs.js"></script>
     <script src="./js/encode-and-decode/decode/select-output-textarea.js"></script>
 
+    <!-- Tabs -->
+
+    <!-- Tab - Line -->
+    <script defer src="./js/index/tab-line/group-colors.js"></script> <!-- Generate the group colors tags for HTML and SVG -->
+    <script defer src="./js/index/tab-line/path-mode.js"></script>
+    <script defer src="./js/index/tab-line/opacity-steps.js"></script>
+    <!-- Tab - Canvas -->
+    <script defer src="./js/index/tab-canvas/shape-to-trim.js"></script>
+    <script defer src="./js/index/tab-canvas/crop-side-margins.js"></script>
+    <!-- Tab - Render -->
+    <script defer src="./js/index/tab-render/width-pixel-size.js"></script>
+    <script defer src="./js/index/tab-render/sync-number-and-range.js"></script>
+    <!-- Tab - UI -->
+    <script defer src="./js/index/tab-ui/view-scale.js"></script>
+    <script defer src="./js/index/tab-ui/checker-pattern.js"></script>
+    <script defer src="./js/index/tab-ui/color-theme.js"></script>
+
+
     <!-- Initialize -->
 
+    <!-- Decoded SVG from URL params or sample text in index.html -->
+    <script defer src="./js/index/init/decode-svg.js"></script>
     <!-- Set defaults value for option selectors using the values that read from decoded SVG -->
     <script defer src="./js/index/init/set-defaults.js"></script>
     <!-- Adjust the height of whole components to fit to display height -->
