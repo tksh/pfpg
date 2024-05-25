@@ -30,20 +30,3 @@ function base52Encode(num) {
 // console.log('2704: ',   base52Encode(2704))   // baa  (52*52=2704)
 // console.log('140607: ', base52Encode(140607)) // ZZZ
 // console.log('140608: ', base52Encode(140608)) // baaa (52*52*52=140608)
-
-
-
-
-// To encode the number of freq dict values
-
-function base52EncodeForFreqDictValue(num) {
-    const encoded = base52Encode(addNumBeforeEncodeForBase52ForFreqDictValue(num));
-
-    // base52エンコードした結果が3文字の場合、先頭にアンダースコアを追加
-    if (encoded.length === 3) {
-        return '_' + encoded;
-    }
-
-    // それ以外の場合、結果の文字列を二文字に揃える
-    return encoded.padStart(2, 'a');
-}

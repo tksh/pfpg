@@ -2,6 +2,7 @@
 
 function base64UrlEnc(num) {
     const alphabet = getBase64UrlCharacters()
+    // 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
 
     let base = BigInt(alphabet.length);
     let encoded = '';

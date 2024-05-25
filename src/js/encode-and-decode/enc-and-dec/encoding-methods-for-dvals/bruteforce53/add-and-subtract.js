@@ -11,24 +11,24 @@ function subtractNumAfterDecodeForBase52ForFreqDictValue(num) {
 
 
 function getMostSmallDiffNumberAsAbsForEnc() {
-    const uintXPortray = parseBasicData().uintN    // Get uintX from "textarea"
-    const  startOfRelValue = -(2**uintXPortray) + 1        // if uintXPortray = 8 =>  -255
-    const startOfRelRange  = -(startOfRelValue*2)          // if uintXPortray = 8 =>  -510
-    const startOfDiffRange = -(startOfRelRange*2)          // if uintXPortray = 8 => -1020
+    const uintNPortray = parseBasicData().uintN            // Get uintN from "textarea"
+    const startOfRelValue  = -(2**uintNPortray) + 1        // if uintNPortray = 8 =>  -255
+    const startOfRelRange  = -(startOfRelValue*2)          // if uintNPortray = 8 =>  -510
+    const startOfDiffRange = -(startOfRelRange*2)          // if uintNPortray = 8 => -1020
 
     // This number should be add or subtract to freq dict diff values to reduce the minus numbers
-    return Math.abs(startOfDiffRange)                      // if uintXPortray = 8 =>  1020
+    return Math.abs(startOfDiffRange)                      // if uintNPortray = 8 =>  1020
 }
 
 
 function getMostSmallDiffNumberAsAbsForDec() {
-    const uintXPortray = getUintNFromUrlParams()    // Get uintX from "url params"
-    const startOfRelValue  = -(2**uintXPortray) + 1 // if uintXPortray = 8 =>  -255
-    const startOfRelRange  = -(startOfRelValue*2)   // if uintXPortray = 8 =>  -510
-    const startOfDiffRange = -(startOfRelRange*2)   // if uintXPortray = 8 => -1020
+    const uintNPortray = getUintNFromUrlParams()    // Get uintN from "url params"
+    const startOfRelValue  = -(2**uintNPortray) + 1 // if uintNPortray = 8 =>  -255
+    const startOfRelRange  = -(startOfRelValue*2)   // if uintNPortray = 8 =>  -510
+    const startOfDiffRange = -(startOfRelRange*2)   // if uintNPortray = 8 => -1020
 
     // This number should be add or subtract to freq dict diff values to reduce the minus numbers
-    return Math.abs(startOfDiffRange)               // if uintXPortray = 8 =>  1020
+    return Math.abs(startOfDiffRange)               // if uintNPortray = 8 =>  1020
 }
 
 
