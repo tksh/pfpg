@@ -8,7 +8,7 @@ function createCodebookToDecodeFrequentDiff(encodedRefDict, maxCodebookSize) {
     const alphabets = getAlphabetsForCodebook(maxCodebookSize)
 
     // Decode the reference dictionary
-    const refDict = decodeFreqDiffAsReferenceDict(encodedRefDict)
+    const refDict = decodeFreqDiffAsRefDict(encodedRefDict)
 
     // Set the kv pair into Map()
     const codebook = new Map();
@@ -22,7 +22,7 @@ function createCodebookToDecodeFrequentDiff(encodedRefDict, maxCodebookSize) {
 
 // Decode the reference dictionary (frequent diff value)
 
-function decodeFreqDiffAsReferenceDict(diffStr) {
+function decodeFreqDiffAsRefDict(diffStr) {
     // Base52デコードした 数値の配列を返す
 
     // Base52エンコードされた文字列を 以下のルールで区切る
@@ -39,7 +39,7 @@ function decodeFreqDiffAsReferenceDict(diffStr) {
     //Array(9) [ "ab", "cd", "_efg", "_hij", "_klm", "no", "pq", "rs", "tu" ]
 
     if (splitted !== null) {
-        return splitted.map(twoChars => base52DecodeForFreqDictValue(twoChars))
+        return splitted.map(twoChars => base52DecodeForRefDict(twoChars))
     } else {
         return [] // 頻出数値が無い column の場合には 空の配列を 返す
     }

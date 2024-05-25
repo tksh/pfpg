@@ -7,19 +7,22 @@ function decodeDiff(diffStr, codebook, baseX) {
 
         if (isInRefDict(diffStr[i], codebook)) {
             // Codebook に含まれるアルファベットならば 1文字ごとに diffStr[i]をキーにして 対応する数値を得て 配列に格納
-            //console.log(`If isInRefDict = true, diffStr[${i}] => codebook.get(diffStr[${i}])`)
+            console.log(`Decode diff: isInRefDict = true, ${diffStr[i]} => ${codebook.get(diffStr[i])}`)
             decodedDiffArr.push(codebook.get(diffStr[i]));
 
 
         } else if (isNumber(diffStr[i])) {
+            console.log(`Decode diff: isNumber    = true, ${diffStr[i]} => ${diffStr[i]}`)
             // 整数[0-9] ならば 1文字ごとに そのまま 配列に格納
+            decodedDiffArr.push(diffStr[i]);
 
-
-        } else if (diffStr[i] === '_') {
+        } else if (diffStr[i] == '_') {
+            console.log(`Decode diff: : '_' found ...`)
             // '_'が １個見つかったら その次に更に '_'が何個続くか を調べて それに応じた処理をする
             // '_'があれば その次に続く 2文字 を Base52デコード: '_ab'
             if (diffStr[i + 1] !== '_') { // '_' が 一つしか続かない場合
                 decodedDiffArr.push(base52Decode((diffStr[i + 1] + diffStr[i + 2])));
+                console.log(`'_' found: ${diffStr[i] + (diffStr[i + 1] + diffStr[i + 2])} =>`, base52Decode((diffStr[i + 1] + diffStr[i + 2])))
                 i += 2; // 'i' を '2'増やして '_'の後に続く 2文字分を スキップさせる
             }
 
@@ -46,6 +49,7 @@ function decodeDiff(diffStr, codebook, baseX) {
 
         } else { // 残りは BaseXでエンコードされた 小文字2文字ずつ のみ なので 2文字ずつ baseXDec()する
             const toBaseXDecode = diffStr[i] + diffStr[i + 1];
+            console.log(`Decode diff: toBaseXDecode: ${toBaseXDecode} => `, baseXDec(toBaseXDecode, baseX))
             decodedDiffArr.push(baseXDec(toBaseXDecode, baseX));
             i++; // 'i' を '1'増やして 2文字目の文字分を 次のループで スキップさせる
 

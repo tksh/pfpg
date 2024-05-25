@@ -1,24 +1,23 @@
 // Get back original relative values from diff
-
 function diffToRel(diffArray) {
-    // 元の値の配列を格納するための変数
-    let originalArray = [];
+    // Array to store original values
+    let originalArray = []
 
-    // 差分を取った配列に対してforEachメソッドを呼び出す
+    // Iterate over the diff array
     diffArray.forEach((diff, index) => {
-        // 各要素（差分）に対して処理を行う
-        // ここでは、インデックスが0（最初）の場合だけ何らかの処理（例えば0と足す）を行い、
-        // そうでない場合は前の要素と差分を足す処理を行っています
+        console.log(`Row ${index}: ${diff} <${typeof(diff)}>`)  // Mixed <number> and <string> types
+
+        // Process each element (diff)
+        // If index is [0], perform Number() operation
+        // Otherwise (index [1:end]), perform Number() operation and add to previous element
+
         if (index === 0) {
-            //console.log('if (index === 0): index diff', index, diff)
-            let original = diff + 0; // 最初の要素に対する処理
-            // 元の値を元の配列に追加する
-            originalArray.push(original);
+            let original = parseInt(diff, 10) // Process for first element
+            originalArray.push(original)
+
         } else {
-            let original = originalArray[index - 1] + diff;
-            //console.log('typeof(diff), typeof(original), diff, original: ', typeof(diff), typeof(original), diff, original)
-            // 元の値を元の配列に追加する
-            originalArray.push(original);
+            let original = originalArray[index - 1] + parseInt(diff, 10)
+            originalArray.push(original)
         }
     });
     return originalArray;

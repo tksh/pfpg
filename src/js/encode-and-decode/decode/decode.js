@@ -30,7 +30,7 @@ function decode(isRelative, isDataManipulatorPage) {
         const decodedRelDvalsMap = decodedAbsAndRelDvalsMaps.get('relative')
         const decodedAbsDvalsMap = decodedAbsAndRelDvalsMaps.get('absolute')
 
-        //console.log("decodedRelDvalsMap: ", decodedRelDvalsMap)
+        console.log("decodedRelDvalsMap: ", decodedRelDvalsMap) ///////////////////////////////////////////////
         // Map(5) {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
         // [[Entries]]
         //     0: {1 => Object}
@@ -43,7 +43,7 @@ function decode(isRelative, isDataManipulatorPage) {
         //         key: 2
         // ...
 
-        //console.log("decodedAbsDvalsMap: ", decodedAbsDvalsMap)
+        console.log("decodedAbsDvalsMap: ", decodedAbsDvalsMap)
         // Map(5) {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
         // [[Entries]]
         //     0: {1 => Object}
@@ -162,8 +162,8 @@ function decodeDvals(linesDataMap) {
         })
 
     }
-    //console.log('decodedAbsDvalsMap: ', decodedAbsDvalsMap)
-    //console.log('decodedRelDvalsMap: ', decodedRelDvalsMap)
+    console.log('decodedAbsDvalsMap: ', decodedAbsDvalsMap)
+    console.log('decodedRelDvalsMap: ', decodedRelDvalsMap)
 
     return new Map([
         ['absolute', decodedAbsDvalsMap],

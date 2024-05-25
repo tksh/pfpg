@@ -87,8 +87,9 @@ function bruteforce53Enc() {
                 // e.g.: Map(29) {-2 => 'x', -1 => 'y', -4 => 'z', -7 => 'A', -3 => 'B', …}
 
 
-                // Encode the frequency diff values array as a string to attach
-                const freqDiffAsRefDict = encodeFreqDiffAsReferenceDict(freqDiffArrActualCodebookSized)
+                // Create the reference dictionary
+                //   Encode the array of frequency diff values as a string to attach
+                const freqDiffAsRefDict = encodeFreqDiffAsRefDict(freqDiffArrActualCodebookSized)
 
                 // Encode the diff values
                 const diffArrEncoded = diffArr.map((diff) => {

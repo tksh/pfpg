@@ -57,6 +57,6 @@ function showDetailsByGroup(nameOfInput, encodedStrByGroupMap) {
     console.log('3 chars prefix as flag: ', threeCharsAsFlag) // (5) ['10Z', '10i', '10X', '10b', '10Z']
     console.log('flag 1, Compression method name', flag1CompressionMethodName) // (5) 
     console.log('flag 2, Encoding method name', flag2EncodingMethodName) // (5)
-    console.log('flag 3, Configuration value for encoding indicates:\nBase X number for bruteforce53-enc | Chunk size for bigint64-enc | \'n\' (=null, skip it for decoding) for swap63-enc') 
+    console.log('flag 3, Configuration value for encoding indicates:\nBase X number for bruteforce53-enc | Chunk size for bigint64-enc | \'n\' (=null, skip it for decoding) for swap63-enc')
     console.log('flag 3, Configuration value for encoding', flag3ConfigurationValueName) // (5) 
 }

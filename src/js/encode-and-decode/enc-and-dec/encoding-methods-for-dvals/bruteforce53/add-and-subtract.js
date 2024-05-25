@@ -1,35 +1,65 @@
-// Add and subtract functions for base52 to encode the diff values
+// For base52 encoding for reference dict
 
-// For encoding
-function addNumBeforeEncodeForBase52ForFreqDictValue(num) {
-    return num + getMostSmallDiffNumberAsAbsForEnc()
+// Shift the entire range of reference dictionary (frequent diff values) to the positive side,
+// as Base52 encoding cannot handle negative numbers.
+
+// Before encoding:
+//   Add the minimum possible value to the encoding target values to eliminate negative numbers.
+
+// After decoding:
+//   Subtract the value added above to restore the original values.
+
+/**
+ * Adds the minimum possible value to the encoding target values to eliminate negative numbers before encoding.
+ *
+ * @param {number} num The target number to encode.
+ * @returns {number} The adjusted value after adding the **minimum** possible value.
+ */
+function addToEliminateNegativeBeforeEncode(num) {
+    return num + Math.abs(getMinimumPossibleDiffForEnc());
 }
-// For decoding
-function subtractNumAfterDecodeForBase52ForFreqDictValue(num) {
-    return num - getMostSmallDiffNumberAsAbsForDec()
+
+/**
+ * Subtracts the added value to restore the original values after decoding.
+ *
+ * @param {number} num The decoded value.
+ * @returns {number} The original value after subtracting the added value.
+ */
+function subtractToRestoreOriginalAfterDecode(num) {
+    return num - Math.abs(getMinimumPossibleDiffForDec());
+}
+
+// Get the minimum possible diff value
+// When diff value has made from relative d value
+function calculateMinimumPossibleDiffValueFromUintN(uintN) {
+    // Relative d value
+    const maximumRelativeDValue = (2 ** uintN) - 1           //  255 (if uintNPortray = 8)
+    const minimumRelativeDValue = 0 - maximumRelativeDValue  // -255
+    //const rangeOfRelativeDValue = maximumRelativeDValue + Math.abs(minimumRelativeDValue)  // 255 + 255 = 510
+                                                                                             // 510 (-255 to 255)
+    // Diff value
+    //const maximumDiffValue = maximumRelativeDValue - minimumRelativeDValue  //  510: 255 - (-255) = 510
+    const minimumDiffValue = minimumRelativeDValue - maximumRelativeDValue    // -510: -255 - 255 = -510
+    //const rangeOfDiffValue = maximumDiffValue + Math.abs(minimumDiffValue)  // 1020: 510 + 510 = 1020
+
+    return minimumDiffValue * 2
 }
 
 
-function getMostSmallDiffNumberAsAbsForEnc() {
-    const uintNPortray = parseBasicData().uintN            // Get uintN from "textarea"
-    const startOfRelValue  = -(2**uintNPortray) + 1        // if uintNPortray = 8 =>  -255
-    const startOfRelRange  = -(startOfRelValue*2)          // if uintNPortray = 8 =>  -510
-    const startOfDiffRange = -(startOfRelRange*2)          // if uintNPortray = 8 => -1020
-
-    // This number should be add or subtract to freq dict diff values to reduce the minus numbers
-    return Math.abs(startOfDiffRange)                      // if uintNPortray = 8 =>  1020
+// For encode
+function getMinimumPossibleDiffForEnc() {
+    const uintN = parseBasicData().uintN   // Get uintN from *textarea* at data-manipulator
+    return calculateMinimumPossibleDiffValueFromUintN(uintN)
+}
+// For decode
+function getMinimumPossibleDiffForDec() {
+    const uintN = getUintNFromUrlParams()  // Get uintN from *url params* at index.html, data-manipulator
+    // or from *hidden sample text* at index.html when there is no url params.
+    return calculateMinimumPossibleDiffValueFromUintN(uintN)
 }
 
 
-function getMostSmallDiffNumberAsAbsForDec() {
-    const uintNPortray = getUintNFromUrlParams()    // Get uintN from "url params"
-    const startOfRelValue  = -(2**uintNPortray) + 1 // if uintNPortray = 8 =>  -255
-    const startOfRelRange  = -(startOfRelValue*2)   // if uintNPortray = 8 =>  -510
-    const startOfDiffRange = -(startOfRelRange*2)   // if uintNPortray = 8 => -1020
 
-    // This number should be add or subtract to freq dict diff values to reduce the minus numbers
-    return Math.abs(startOfDiffRange)               // if uintNPortray = 8 =>  1020
-}
 
 
 // For baseX encoding for diff

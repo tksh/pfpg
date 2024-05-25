@@ -34,7 +34,7 @@ function base52Decode(str) {
 
 // To decode the number of freq dict
 
-function base52DecodeForFreqDictValue(str) {
+function base52DecodeForRefDict(str) {
     let encodedStr = str
 
     // base52エンコードした結果が3文字の場合に付けた 先頭のアンダースコアを削除
@@ -46,7 +46,7 @@ function base52DecodeForFreqDictValue(str) {
     let rawDecoded = base52Decode(encodedStr);
 
     // UIntX の値に応じた 正の数だけにするために 加えていた数値を 取り除く
-    decoded = subtractNumAfterDecodeForBase52ForFreqDictValue(rawDecoded)
+    decoded = subtractToRestoreOriginalAfterDecode(rawDecoded)
 
     //console.log('decoded, rawDecoded, encodeStr: ', decoded, rawDecoded, encodedStr) // -2 1018 tE
 

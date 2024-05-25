@@ -83,17 +83,6 @@ function splitStringIntoFour(str) {
 // console.log(splitStringIntoFour('abcdefgh')) // (4) ['ab', 'cd', 'ef', 'gh']
 
 
-function extractAfterFirstHyphen(str) {
-    // ハイフンの位置を取得
-    const index = str.indexOf("-");
-    console.log("index: ", index)
-    // ハイフンの次の位置から末尾までを切り出す
-    const result = str.slice(index + 1);
-
-    return result
-}
-
-
 
 // Convert to Javascript from Deno standard library chunk.ts
 
