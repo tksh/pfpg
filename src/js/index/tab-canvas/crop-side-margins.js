@@ -102,13 +102,9 @@ function viewboxUnSlimmed(svgTextareaAndString) {
     const isDataManipulatorPage = false
     const urlParamsAsTwoMaps = readUrlParamsAsMaps(isDataManipulatorPage)
     const basicDataMap = urlParamsAsTwoMaps.basicData
-    // e.g.: Map(4) {'title' => '202308_001', 'grid_size' => '31x31', 'uintN' => 5, 'rectFill' => '9999'}
-
-    const gridSize = basicDataMap.get('grid_size') // e.g: '31x31'
-    const splitByX = gridSize.split('x')             // e.g.: '31', '31'
 
     // Generate new string with original viewBox size
-    const originalViewboxString = `viewBox="0 0 ${splitByX[0]} ${splitByX[1]}"` // e.g.: viewBox="0 0 31 31"
+    const originalViewboxString = basicDataMap.get('viewbox') // e.g.: '0 0 31 31'
 
     // Replace the textarea value with new string
     const patternForViewboxStr = /viewBox="([^"]+)"/

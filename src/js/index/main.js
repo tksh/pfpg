@@ -194,7 +194,7 @@
         // Canvas tab
 
         // Base color (include opacity)
-        const patternBaseRectFill = /<rect width="100%" height="100%" fill="[^"]*"/g
+        const patternBaseRectFill = /<rect width="[^"]+" height="[^"]+" fill="[^"]+>"/g
         const matchOfBaseRectFill = currentPathModeSvgStr.match(patternBaseRectFill)
         const valueOfBaseRectFill = matchOfBaseRectFill[0] // Hex string
         // Shape to trim
@@ -204,6 +204,7 @@
         // viewBox (for 'Crop side margins' checked.)
         const patternViewbox = /viewBox="[^"]*"/; // viewBox属性を抽出する正規表現
         const matchOfViewbox = currentPathModeSvgStr.match(patternViewbox)
+        console.log('////matchOfViewbox: ', matchOfViewbox)
         const valueOfViewbox = matchOfViewbox[0] // e.g.: viewBox="1.55 0 27.9 31"
 
 
@@ -295,9 +296,15 @@
         // SVGの <textarea>要素と テキストを 取得
         const svgTextareaAndString = getSvgTextareaAndString()
         // 正規表現パターンを作成
-        const pattern = /<rect width="100%" height="100%" fill="[^"]*"/g;
+        const pattern = /<rect width="[^"]+" height="[^"]+" (fill="[^"]+")/g;
+        const matches = pattern.exec(svgTextareaAndString.get('string'))
+        console.log('//////matches: ', matches)
+        // Array [ '<rect width="31" height="31" fill="#fff"', 'fill="#fff"' ]
+        //   0: '<rect width="31" height="31" fill="#fff"'
+        //   1: 'fill="#fff"'
         // 正規表現でマッチした部分を書き換える
-        const updatedSvg = svgTextareaAndString.get('string').replace(pattern, `<rect width="100%" height="100%" fill="${hexAColorShorten}"`);
+        const updatedSvg = svgTextareaAndString.get('string').replace(matches[1], `fill="${hexAColorShorten}"`);
+        console.log('////////////updatedSvg: ', updatedSvg)
         // <textarea>のvalue属性を更新する
         svgTextareaAndString.get('element').value = updatedSvg;
 

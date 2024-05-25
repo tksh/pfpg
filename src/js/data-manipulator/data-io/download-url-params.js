@@ -109,24 +109,9 @@ function getTitle() {
 
     // Read from textarea
     const rawJson = readTextarea('textarea-basic-data-uploaded')
-    //console.log(rawJson)
-    // {
-    //     "title": "202310_002",
-    //     "grid_size": "255x255",
-    //     "rectFill": "#555C"
-    // }
 
     const basicDataObj = JSON.parse(rawJson)
-    //console.log('basicDataObj: ', basicDataObj)
-    // {title: '202310_002', grid_size: '255x255', rectFill: '#555C'}
-    // title: "202310_002"
-    // rectFill: "#555C"
-    // grid_size: "255x255"
-    // [[Prototype]]: Object
-
-    const title = basicDataObj.title // "202310_002"
-
-    return title      // "202310_002"
+    return basicDataObj.title // e.g.: "202310_002"
 }
 
 

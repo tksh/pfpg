@@ -4,7 +4,7 @@
 function generateGroupColorsSvgTags(matches) {
     console.log('matches: ', matches) // e.g.: (4) [undefined, '#4E8D09', '0.6', '1']
 
-    const stroke        = tryReduceAsHalf(matches[1].slice(1));                                 // `#`記号 を除く文字列を取得
+    const stroke        = tryShortenAsHalf(matches[1].slice(1));                                 // `#`記号 を除く文字列を取得
     const opacity       = matches[2] !== undefined ? matches[2] : "1";       // opacity が明示的に指定されていない場合は 1 とみなす
     const strokeOpacity = matches[3] !== undefined ? matches[3] : "1"; // strokeOpacity が明示的に指定されていない場合は 1 とみなす
     const groupElem = `<g stroke="#${stroke}" opacity="${opacity}" stroke-opacity="${strokeOpacity}">`
@@ -122,9 +122,7 @@ function getGroupColorsValues() {
 
     // Get the matches for <g> from current SVG string in textarea
     const currentSvg = getInputSvg()
-    console.log('///////currentSvg: ', currentSvg)
     const matches = regexMatchesOfGroupColors(currentSvg)
-    console.log('///////matches: ', matches)
     // e.g.: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
 
     // マッチした部分の数を取得
@@ -141,21 +139,18 @@ function getGroupColorsValues() {
     for (let i = 0; i < matches.length; i++) { // i = group ID
         // Get three group colors value
         const stroke = '#' + hexExpandToSix(getStroke(matches[i]).slice(1)) // 6 digits hex (delete '#' mark using '.slice(1)' before expand)
-        const opacity       = getOpacity(matches[i])                      // [0-1] number
-        const strokeOpacity = getStrokeOpacity(matches[i])                // [0-1] number
+        const opacity       = getOpacity(matches[i])                        // [0-1] number
+        const strokeOpacity = getStrokeOpacity(matches[i])                  // [0-1] number
 
         // Set into each array
         strokeArray.push(stroke)
         opacityArray.push(opacity)
         strokeOpacityArray.push(strokeOpacity)
     }
-    // strokeArray:         (5) ['#000000', '#000000', '#000000', '#eeeeee', '#ffffff']
-    // opacityArray:        (5) ['1', '1', '1', '1', '1']
-    // strokeOpacityArray:  (5) ['1', '1', '1', '1', '1']
 
-    console.log('strokeArray: ', strokeArray)
-    console.log('opacityArray: ', opacityArray)
-    console.log('strokeOpacityArray: ', strokeOpacityArray)
+    console.log('strokeArray: ', strokeArray)                // e.g.: (5) ['#000000', '#000000', '#000000', '#eeeeee', '#ffffff']
+    console.log('opacityArray: ', opacityArray)              // e.g.: (5) ['1', '1', '1', '1', '1']
+    console.log('strokeOpacityArray: ', strokeOpacityArray)  // e.g.: (5) ['1', '1', '1', '1', '1']
 
     return new Map([
         ['number_of_groups', numberOfGroups], // Number
