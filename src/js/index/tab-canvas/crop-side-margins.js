@@ -1,6 +1,6 @@
 // Argument SVG is a set of element and string as Map object
 // Returned SVG is a just string only
-function svgWithNewShapeViewbox(shape, hasCropSideMargins, svgElemAndVal) {
+function svgWithNewShapeViewbox(shape, hasCropSideMargins, newClippathSvg) {
 
     // Update 'viewBox'
 
@@ -11,35 +11,31 @@ function svgWithNewShapeViewbox(shape, hasCropSideMargins, svgElemAndVal) {
     console.log('hasCropSideMargins: ', hasCropSideMargins) // boolean, true=cropped[checked], false=un-cropped[!checked]
 
     if (shape == 'squircleSlimmed' && hasCropSideMargins == true) { // shape == 'squircleSlimmed'
-        return viewboxSlimmed(svgElemAndVal)
+        return viewboxSlimmed(newClippathSvg)
     } else {                                                        // shape == 'square | circle | squircle'
         console.log(`"viewBox" value will be replaced to original size,
                       because selected shape is ${shape}, and hasCropSideMargins is ${hasCropSideMargins}`)
-        return viewboxUnSlimmed(svgElemAndVal)
+        return viewboxUnSlimmed(newClippathSvg)
     }
 
 }
 
 // Change the viewBox size fit to Squircle, slimmed.
 // And textarea replaced as it.
-function viewboxSlimmed(svgElemAndVal) {
-    const viewboxStr = getViewboxStr(svgElemAndVal.get('stringValue'))
-    const viewboxValues = extractViewboxValues(viewboxStr)
-
-    const slimmedWidthValues = getSlimmedViewboxXW(svgElemAndVal.get('stringValue'))
+function viewboxSlimmed(inputSvg) {
+    const slimmedWidthValues = getSlimmedViewboxXW(inputSvg)
     //console.log('slimmedWidthValues.get('x'): ', slimmedWidthValues.get('x')) // e.g.: 1.55
     //console.log('slimmedWidthValues.get('w'): ', slimmedWidthValues.get('w')) // e.g.: 27.9
 
-    // Generate new string
+    const viewboxValues = extractViewboxValues(inputSvg)
+
+    // Generate new viewBox string
     const newViewboxString = `viewBox="${slimmedWidthValues.x} ${viewboxValues.get('y')} ${slimmedWidthValues.w} ${viewboxValues.get('h')}"`
     console.log('newViewboxString: ', newViewboxString) // e.g.: viewBox="1.55 0 27.9 31"
 
-    // Replace the textarea value with new string
+    // Replace the viewBox string with new one
     const patternForViewboxStr = /viewBox="([^"]+)"/; // viewBox属性を抽出する正規表現
-    const updatedSVG = svgElemAndVal.get('stringValue').replace(patternForViewboxStr, newViewboxString);
-    svgElemAndVal.get('textareaElement').value = updatedSVG
-
-    return updatedSVG
+    return inputSvg.replace(patternForViewboxStr, newViewboxString);
 }
 
 
@@ -71,9 +67,9 @@ function getSlimmedViewboxXW(svgString) {
 }
 
 // Get viewBox four numbers as Map object
-function extractViewboxValues(viewBoxString) {
+function extractViewboxValues(inputSvg) {
     // Use a regular expression to match the four numbers in the viewBox string
-    const match = viewBoxString.match(/viewBox="([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)"/);
+    const match = inputSvg.match(/viewBox="([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)"/);
 
     // Check if the match was successful
     if (match && match.length === 5) {
@@ -95,23 +91,18 @@ function extractViewboxValues(viewBoxString) {
 
 /////// When un-check the checkbox, Get back the viewBox as square ///////
 
-function viewboxUnSlimmed(svgElemAndVal) {
-    console.log('svgElemAndVal: ', svgElemAndVal)
-
+function viewboxUnSlimmed(inputSvg) {
     // Read original basic data from url params
     const isDataManipulatorPage = false
     const urlParamsAsTwoMaps = readUrlParamsAsMaps(isDataManipulatorPage)
     const basicDataMap = urlParamsAsTwoMaps.basicData
 
     // Generate new string with original viewBox size
-    const originalViewboxString = basicDataMap.get('viewbox') // e.g.: '0 0 31 31'
+    const originalViewboxString = basicDataMap.get('viewbox')                      // e.g.: '0 0 31 31'
 
-    // Replace the textarea value with new string
+    // Replace the viewBox string with new one
     const patternForViewboxStr = /viewBox="([^"]+)"/
-    const matchesForViewboxStr = patternForViewboxStr.exec(svgElemAndVal.get('stringValue')); // e.g.: 'viewBox="0 0 31 31"'
-    const matchForViewboxValueStr = matchesForViewboxStr[1]                                                      // e.g.: '0 0 31 31'
-    const updatedSVG = svgElemAndVal.get('stringValue').replace(matchForViewboxValueStr, originalViewboxString)
-    svgElemAndVal.get('textareaElement').value = updatedSVG
-
-    return updatedSVG
+    const matchesForViewboxStr = patternForViewboxStr.exec(inputSvg);        // e.g.: 'viewBox="0 0 31 31"'
+    const matchForViewboxValueStr = matchesForViewboxStr[1]                        // e.g.: '0 0 31 31'
+    return inputSvg.replace(matchForViewboxValueStr, originalViewboxString)
 }

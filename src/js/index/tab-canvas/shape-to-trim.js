@@ -1,17 +1,7 @@
 // For generating the shape to trim
 
-// Get the grid size
-function getGridSize(svgString) {
-    const patternToGetGridsizeFromViewbox = /viewBox=".*\s+([\d\.]+)"/; // viewBox属性の値から最後の数字を抽出する正規表現
-    const matches = patternToGetGridsizeFromViewbox.exec(svgString);    // 正規表現パターンと文字列を照合, 結果を配列として返す
-    const gridSize = matches[1]
-    //console.log('gridSize: ', gridSize) // 配列の 0番目には全体のマッチ結果, 1番目にはグルーピングした部分 // 255
-    return gridSize
-}
-
 // Get center (the half of grid size)
 function getCenter(gridSize) {
-    // const gridSize = getGridSize(svgString)
     const center = roundToTwoDecimals(gridSize / 2)
     return center
 }
@@ -48,11 +38,11 @@ function getBoolOfCropSideMargins() {
 
 
 // Generate the path string of Squircle, slimmed
-function generateClipPathShapeOfSquircleSlimmed(svgString, widthNarrowness, topHeavyRatio) {
-    // function generateClipPathShapeOfSquircleSlimmed(widthNarrowness, topHeavyRatio) {
+function generateClippathShapeOfSquircleSlimmed(inputSvg, widthNarrowness, topHeavyRatio) {
+    // function generateClippathShapeOfSquircleSlimmed(widthNarrowness, topHeavyRatio) {
     console.log('widthNarrowness, topHeavyRatio: ', widthNarrowness, topHeavyRatio)
 
-    const gridSize = getGridSize(svgString);
+    const gridSize = extractViewboxValues(inputSvg).get('h');
     const center = getCenter(gridSize);
 
     // generate the path of squircle slimmed
@@ -68,27 +58,27 @@ function generateClipPathShapeOfSquircleSlimmed(svgString, widthNarrowness, topH
 
 
 // Replace the path string with new selected shape one
-function svgWithNewShapeClippath(shape, svgString, shapePathOfSquircle, shapePathOfSquircleSlimmed) {
+function svgWithNewShapeClippath(shape, inputSvg, shapePathOfSquircle, shapePathOfSquircleSlimmed) {
 
-    let updatedSvgString = svgString
+    let updatedSvgString = inputSvg
 
     // Update <clipPath>
 
     // cliPathとして使う かたち のパス文字列 を 取得する正規表現パターン
-    const patternForClipPathShape = /<clipPath id="shape-to-trim">\n.*\n.*<\/clipPath>/g;
+    const patternForClippathShape = /<clipPath id="shape-to-trim">\n.*\n.*<\/clipPath>/g;
 
     if (shape == 'square') {
         console.log('Selected shape is ', shape)
-        updatedSvgString = svgString.replace(patternForClipPathShape, '<clipPath id="shape-to-trim">\n            <rect width="100%" height="100%" />\n        <\/clipPath>');
+        updatedSvgString = inputSvg.replace(patternForClippathShape, '<clipPath id="shape-to-trim">\n            <rect width="100%" height="100%" />\n        <\/clipPath>');
     } else if (shape == 'circle') {
         console.log('Selected shape is ', shape)
-        updatedSvgString = svgString.replace(patternForClipPathShape, '<clipPath id="shape-to-trim">\n            <circle cx="50%" cy="50%" r="50%" />\n        <\/clipPath>');
+        updatedSvgString = inputSvg.replace(patternForClippathShape, '<clipPath id="shape-to-trim">\n            <circle cx="50%" cy="50%" r="50%" />\n        <\/clipPath>');
     } else if (shape == 'squircle') {
         console.log('Selected shape is ', shape)
-        updatedSvgString = svgString.replace(patternForClipPathShape, `<clipPath id="shape-to-trim">\n            ${shapePathOfSquircle}\n        <\/clipPath>`);
+        updatedSvgString = inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">\n            ${shapePathOfSquircle}\n        <\/clipPath>`);
     } else if (shape == 'squircleSlimmed') {
         console.log('Selected shape is ', shape)
-        updatedSvgString = svgString.replace(patternForClipPathShape, `<clipPath id="shape-to-trim">\n            ${shapePathOfSquircleSlimmed}\n        <\/clipPath>`);
+        updatedSvgString = inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">\n            ${shapePathOfSquircleSlimmed}\n        <\/clipPath>`);
     }
 
     return updatedSvgString
@@ -104,17 +94,16 @@ function toggleDisplay(elements, display) {
 
 
 // Update SVG with selected shape path
-function updateSvgWithSelectedShapePath(shape, svgElemAndVal) {
-    const svgString = svgElemAndVal.get('stringValue');
-    const svgTextarea = svgElemAndVal.get('textareaElement');
+function updateSvgWithSelectedShapePath(shape, inputSvg) {
 
     // Params for generating the 'Squircle' and 'Squircle, slimmed' shape path
-    const gridSize = getGridSize(svgString)
+    const gridSize = extractViewboxValues(inputSvg).get('h');
+    console.log('///gridSize: ', gridSize)
     const center = roundToTwoDecimals(gridSize / 2)
 
     // Generate new shape path to trim
     const shapePath = shape === 'squircleSlimmed'
-        ? generateClipPathShapeOfSquircleSlimmed(svgString, getWidthNarrowness(), getTopHeavyRatio())
+        ? generateClippathShapeOfSquircleSlimmed(inputSvg, getWidthNarrowness(), getTopHeavyRatio())
         : shape === 'square'
             ? `<path d="M 0,0 L ${gridSize},0 L ${gridSize},${gridSize} L 0,${gridSize} Z" />`
             : shape === 'circle'
@@ -122,14 +111,12 @@ function updateSvgWithSelectedShapePath(shape, svgElemAndVal) {
                 : `<path d="M 0,${center}Q 0,0 ${center},0T ${gridSize},${center} ${center},${gridSize} 0,${center}" />`; // shape === 'squircle'
 
     // Replace to new shape <clipPath>
-    const patternForClipPathShape = /<clipPath id="shape-to-trim">\n.*\n.*<\/clipPath>/g;
-    const pathUpdatedSvg = svgString.replace(patternForClipPathShape, `<clipPath id="shape-to-trim">\n\t\t${shapePath}\n\t</clipPath>`);
-    svgElemAndVal.set('stringValue', pathUpdatedSvg);
+    const patternForClippathShape = /<clipPath id="shape-to-trim">\n.*\n.*<\/clipPath>/g;
+    const newClippathSvg = inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">\n\t\t${shapePath}\n\t</clipPath>`);
 
     // Update the <textarea>
     const hasCropSideMargins = getBoolOfCropSideMargins();
-    const viewboxUpdatedSvg = svgWithNewShapeViewbox(shape, hasCropSideMargins, svgElemAndVal);
-    svgTextarea.value = viewboxUpdatedSvg;
+    const clippathAndViewboxUpdatedSvg = svgWithNewShapeViewbox(shape, hasCropSideMargins, newClippathSvg);
 
-    return viewboxUpdatedSvg // Return the string to render with 'executeSvg2png()' at main.js
+    return clippathAndViewboxUpdatedSvg
 }

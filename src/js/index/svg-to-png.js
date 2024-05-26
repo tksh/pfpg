@@ -29,8 +29,7 @@ async function svg2png(svgString, opts, hasCrop) {
     // document.querySelector('#svg-info').textContent = 'Source SVG viewbox: ' + resvgJS.width + ' x ' + resvgJS.height
 
     // Outputs the viewBox size as float to indicate at #svg-info <textarea>
-    const viewboxStr = getViewboxStr(svgString)
-    const viewboxValues = extractViewboxValues(viewboxStr) // e.g: Map(4) {'x' => 0, 'y' => 0, 'w' => 31, 'h' => 31}
+    const viewboxValues = extractViewboxValues(svgString) // e.g: Map(4) {'x' => 0, 'y' => 0, 'w' => 31, 'h' => 31}
     document.querySelector('#svg-info').textContent = 'Source SVG viewBox size: ' + viewboxValues.get('w') + ' x ' + viewboxValues.get('h')
 
     // SVG内に含まれる外部リンクの画像を取得して解決する (Un-used)

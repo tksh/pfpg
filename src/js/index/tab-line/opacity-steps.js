@@ -64,8 +64,10 @@ function replaceToNewStepOptions(i, step, attrName, attrValueArray) {
 
 function updateSvgForNewStep() {
 
-    // Read current SVG string from <textarea>
-    let svgString = getInputSvg()
+    // Get the SVG textarea element and string value
+    const svg = getInputSvgElemAndVal()
+    const svgString     = svg.get('stringValue')
+    const svgTextarea   = svg.get('textareaElement')
 
     // Get current SVG string and number of groups
     const numberOfGroups = getNumberOfGroups(svgString)
@@ -105,7 +107,6 @@ function updateSvgForNewStep() {
     }
 
     // Refresh the SVG string in <textarea>
-    const svgTextarea = document.querySelector('#input-svg')
     svgTextarea.value = svgString
 
     return svgString

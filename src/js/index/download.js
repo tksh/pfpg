@@ -1,17 +1,12 @@
-// function to get the svg whole string
+// Get the svg string from <textarea> element
 function getInputSvg() {
-
-    // <textarea>の要素を取得
-    const svgTextarea = document.querySelector('#input-svg') // Select <textarea id="input-svg" ...
-    console.log('///////svgTextarea: ', svgTextarea)
-    // <textarea>のvalue属性を取得
-    return svgTextarea.value.trim() // '.trim()' = 文字列の両端の空白を削除
+    return document.querySelector('#input-svg').value.trim() // '.trim()' => 文字列の両端の空白を削除
 }
 
 // Get the <textarea> element and its `.value` string of SVG
-function getSvg() {
+function getInputSvgElemAndVal() {
     const svgTextarea = document.querySelector('#input-svg')
-    const svgString = svgTextarea.value.trim() // <textarea>のvalue属性を取得, '.trim()' => 文字列の両端の空白を削除
+    const svgString = svgTextarea.value.trim()               // <textarea>のvalue属性を取得
     return new Map([
         ['textareaElement', svgTextarea],
         ['stringValue',     svgString]
@@ -32,20 +27,6 @@ function getArtworkId() {
     console.log('titleText: ', titleText) // e.g.: 202304_001
 
     return titleText
-}
-
-// Get the viewbox of SVG
-function getGridSizeWxH() {
-    const inputSvg = getInputSvg()
-    const viewboxStr = getViewboxStr(inputSvg)
-    const viewboxValues = extractViewboxValues(viewboxStr) // e.g: Map(4) {'x' => 0, 'y' => 0, 'w' => 31, 'h' => 31}
-
-    const gridSizeWidth = viewboxValues.get('w')
-    const gridSizeHeight = viewboxValues.get('h')
-    const gridSizeWxH = `${gridSizeWidth}x${gridSizeHeight}`
-    console.log('gridSizeWxH is ', gridSizeWxH)
-
-    return gridSizeWxH
 }
 
 // Get the rasterized pixel size of PNG
@@ -191,9 +172,9 @@ function downloadPng() {
 
 function downloadSvg() {
 
-    const svg = document.getElementById('input-svg').value
-    const blob = new Blob([svg], { type: 'image/svg+xml' })
-    const url = URL.createObjectURL(blob)
+    const inputSvg = getInputSvg()
+    const blob = new Blob([inputSvg], { type: 'image/svg+xml' })
+    const url  = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
 
@@ -204,18 +185,22 @@ function downloadSvg() {
     const artworkId = getArtworkId()
 
     // viewbox
-    const gridSizeWxH = getGridSizeWxH()
+    const viewboxValues = extractViewboxValues(inputSvg)
+    const viewboxValueDelimitedWithUnderscores = viewboxValues.get('x') + '_' +
+                                                 viewboxValues.get('y') + '_' +
+                                                 viewboxValues.get('w') + '_' +
+                                                 viewboxValues.get('h')         // e.g.: 0_0_31_31
 
     // current status
     const currentStatus = getCurrentStatus()
 
 
     // Set the filename
-    link.download = `${artworkId}-${gridSizeWxH}-${currentStatus}.svg`
+    link.download = `${artworkId}-v_${viewboxValueDelimitedWithUnderscores}-${currentStatus}.svg`
 
     link.click()
 }
-// e.g.: 202308_001-31x31-g_000_000_000_EEE_FFF-p_abs-b_9999-t_square-r_crispEdges.svg
+// e.g.: 202404_001-v_0_0_31_31-g_000-p_absSep-b_FFF-t_square-r_crispEdges.svg
 
 
 // SVGファイルサイズを ダウンロードボタンに 表示する関数

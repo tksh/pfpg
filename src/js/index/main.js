@@ -155,7 +155,7 @@
                 const pattern = /<g stroke=[^>]*>/g;
                 const updatedSvg = replaceAtIndex(currentSvg, pattern, changedGroupElem, gId)
 
-                // Refresh the SVG string in <textarea>
+                // Update the SVG string in <textarea>
                 svgInputElement.value = updatedSvg;
 
                 // Rendering the PNG image
@@ -176,10 +176,9 @@
         console.log('CHANGE THE PATH MODE')
 
         // 現在の設定の値を保存しておく
-        // Get the SVG textarea element and string
-        const svgElemAndVal = getSvg()
-        const currentPathModeSvg = svgElemAndVal.get('stringValue')
-        const svgTextarea = svgElemAndVal.get('textareaElement')
+
+        // Get the SVG string value
+        const currentPathModeSvg = getInputSvg()
 
 
         // Line tab
@@ -223,14 +222,14 @@
         const valueOfPathMode = document.getElementById("path-mode").value  // 'relativeMerged' | 'absoluteSeparated'
         console.log(`"${valueOfPathMode}" selected.`)
 
-        // Get new 'Path mode' styled svg string, decode from url params
-        const newPathModeSvgStr = decodeAsSelectedPathMode(valueOfPathMode)
+        // Re-decode as new 'Path mode' styled svg string from url params
+        const newPathModeSvg = decodeAsSelectedPathMode(valueOfPathMode)
 
 
         // レンダリングし直す前に 保存しておいた 設定の値を 元に戻す
 
         // Anti-alias, Base color, Shape to trim, viewBox
-        const recoverShapeRendering = recoverCurrentOptionValue(newPathModeSvgStr, patternShapeRendering, valueOfShapeRendering)
+        const recoverShapeRendering = recoverCurrentOptionValue(newPathModeSvg, patternShapeRendering, valueOfShapeRendering)
         const recoverBaseRectFill   = recoverCurrentOptionValue(recoverShapeRendering, patternBaseRectFill, valueOfBaseRectFill)
         const recoverShapeToTrim    = recoverCurrentOptionValue(recoverBaseRectFill, patternShapeToTrim, valueOfShapeToTrim)
         const recoverViewbox        = recoverCurrentOptionValue(recoverShapeToTrim, patternViewbox, valueOfViewbox)
@@ -239,7 +238,7 @@
 
 
         // 保存しておいた設定の値を 全て元に戻した 最終的な新しいSVG文字列を <textarea>のvalue属性に挿入する
-        svgTextarea.value = updatedSvg
+        svgInputElement.value = updatedSvg
 
         // executeSvg2png関数を呼び出す
         executeSvg2png({ target: { value: updatedSvg } })
@@ -296,21 +295,21 @@
 
 
         // SVGの <textarea>要素と テキストを 取得
-        const svgElemAndVal = getSvg() // returns { element, string }
+        const inputSvg = getInputSvg()
 
         // 正規表現パターンを作成
         const pattern = /<rect width="[^"]+" height="[^"]+" (fill="[^"]+")/g;
-        const matches = pattern.exec(svgElemAndVal.get('stringValue'))
+        const matches = pattern.exec(inputSvg)
         //console.log('matches: ', matches)
         // Array [ '<rect width="31" height="31" fill="#fff"', 'fill="#fff"' ]
         //   0: '<rect width="31" height="31" fill="#fff"'
         //   1: 'fill="#fff"'
 
         // 正規表現でマッチした部分を書き換える
-        const updatedSvg = svgElemAndVal.get('stringValue').replace(matches[1], `fill="${hexAColorShorten}"`);
+        const updatedSvg = inputSvg.replace(matches[1], `fill="${hexAColorShorten}"`);
 
         // <textarea>のvalue属性を更新する
-        svgElemAndVal.get('textareaElement').value = updatedSvg;
+        svgInputElement.value = updatedSvg;
 
         // executeSvg2png関数を呼び出す
         executeSvg2png({ target: { value: updatedSvg } })
@@ -323,13 +322,15 @@
     ///////////////////////////// Shapes to trim /////////////////////////////
 
     document.getElementById('width-narrowness').addEventListener('change', () => {
-        const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvg());
-        executeSvg2png({ target: { value: updatedSvg } })
+        const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getInputSvg());
+        svgInputElement.value = updatedSvg                 // Update textarea
+        executeSvg2png({ target: { value: updatedSvg } })  // Render to PNG
     });
 
     document.getElementById('top-heavy-ratio').addEventListener('change', () => {
-        const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvg());
-        executeSvg2png({ target: { value: updatedSvg } })
+        const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getInputSvg());
+        svgInputElement.value = updatedSvg                 // Update textarea
+        executeSvg2png({ target: { value: updatedSvg } })  // Render to PNG
     });
 
 
@@ -349,9 +350,13 @@
             toggleDisplay(elementsToToggle, 'none');
         }
 
-        const updatedSvg = updateSvgWithSelectedShapePath(shape, getSvg());
-        console.log('------updatedSvg: ', updatedSvg)
-        executeSvg2png({ target: { value: updatedSvg } })
+        const inputSvg = getInputSvg()
+
+        // Update thee SVG string with new clip shape path and viewBox
+        const updatedSvg = updateSvgWithSelectedShapePath(shape, inputSvg);
+
+        svgInputElement.value = updatedSvg                 // Update textarea
+        executeSvg2png({ target: { value: updatedSvg } })  // Render to PNG
 
     });
     ///////////////////////////// Shapes to trim /////////////////////////////
@@ -366,14 +371,16 @@
         if (event.target.checked) {
             // チェックボックスがチェックされた場合、クロップ処理を実行
             console.log('Crop side margins: [x]')
-            const svgElemAndVal = getSvg()
-            const updatedSvg = viewboxSlimmed(svgElemAndVal); // 1. Crop the SVG, Replace the textarea content.
+            const inputSvg = getInputSvg()
+            const updatedSvg = viewboxSlimmed(inputSvg)
+            svgInputElement.value = updatedSvg
             executeSvg2png({ target: { value: updatedSvg } })
         } else {
             // チェックボックスが外れた場合、元のデータと同じ矩形のサイズに戻す
             console.log('Crop side margins: [ ]')
-            const svgElemAndVal = getSvg()
-            const updatedSvg = viewboxUnSlimmed(svgElemAndVal); // 1. Un-Crop the SVG, Replace the textarea content.
+            const inputSvg = getInputSvg()
+            const updatedSvg = viewboxUnSlimmed(inputSvg)
+            svgInputElement.value = updatedSvg
             executeSvg2png({ target: { value: updatedSvg } })
         }
     });
