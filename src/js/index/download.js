@@ -8,13 +8,13 @@ function getInputSvg() {
     return svgTextarea.value.trim() // '.trim()' = 文字列の両端の空白を削除
 }
 
-// Get the <textarea> element and string value of SVG
-function getSvgTextareaAndString() {
+// Get the <textarea> element and its `.value` string of SVG
+function getSvg() {
     const svgTextarea = document.querySelector('#input-svg')
     const svgString = svgTextarea.value.trim() // <textarea>のvalue属性を取得, '.trim()' => 文字列の両端の空白を削除
     return new Map([
-        ['element', svgTextarea],
-        ['string', svgString]
+        ['textareaElement', svgTextarea],
+        ['stringValue',     svgString]
     ])
 }
 
@@ -43,7 +43,7 @@ function getGridSizeWxH() {
     const gridSizeWidth = viewboxValues.get('w')
     const gridSizeHeight = viewboxValues.get('h')
     const gridSizeWxH = `${gridSizeWidth}x${gridSizeHeight}`
-    //console.log('gridSizeWxH is ', gridSizeWxH)
+    console.log('gridSizeWxH is ', gridSizeWxH)
 
     return gridSizeWxH
 }

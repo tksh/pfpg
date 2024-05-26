@@ -176,9 +176,9 @@
 
         // 現在の設定の値を保存しておく
         // Get the SVG textarea element and string
-        const svgTextareaAndString = getSvgTextareaAndString()
-        const currentPathModeSvgStr = svgTextareaAndString.get('string')
-        const svgTextarea = svgTextareaAndString.get('element')
+        const svgElemAndVal = getSvg()
+        const currentPathModeSvgStr = svgElemAndVal.get('stringValue')
+        const svgTextarea = svgElemAndVal.get('textareaElement')
 
 
         // Line tab
@@ -294,19 +294,21 @@
 
 
         // SVGの <textarea>要素と テキストを 取得
-        const svgTextareaAndString = getSvgTextareaAndString()
+        const svgElemAndVal = getSvg() // returns { element, string }
+
         // 正規表現パターンを作成
         const pattern = /<rect width="[^"]+" height="[^"]+" (fill="[^"]+")/g;
-        const matches = pattern.exec(svgTextareaAndString.get('string'))
-        console.log('//////matches: ', matches)
+        const matches = pattern.exec(svgElemAndVal.get('stringValue'))
+        //console.log('matches: ', matches)
         // Array [ '<rect width="31" height="31" fill="#fff"', 'fill="#fff"' ]
         //   0: '<rect width="31" height="31" fill="#fff"'
         //   1: 'fill="#fff"'
+
         // 正規表現でマッチした部分を書き換える
-        const updatedSvg = svgTextareaAndString.get('string').replace(matches[1], `fill="${hexAColorShorten}"`);
-        console.log('////////////updatedSvg: ', updatedSvg)
+        const updatedSvg = svgElemAndVal.get('stringValue').replace(matches[1], `fill="${hexAColorShorten}"`);
+
         // <textarea>のvalue属性を更新する
-        svgTextareaAndString.get('element').value = updatedSvg;
+        svgElemAndVal.get('textareaElement').value = updatedSvg;
 
         // executeSvg2png関数を呼び出す
         executeSvg2png({ target: { value: updatedSvg } })
@@ -319,12 +321,12 @@
     ///////////////////////////// Shapes to trim /////////////////////////////
 
     document.getElementById('width-narrowness').addEventListener('change', () => {
-        const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvgTextareaAndString());
+        const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvg());
         executeSvg2png({ target: { value: updatedSvg } })
     });
 
     document.getElementById('top-heavy-ratio').addEventListener('change', () => {
-        const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvgTextareaAndString());
+        const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvg());
         executeSvg2png({ target: { value: updatedSvg } })
     });
 
@@ -345,7 +347,8 @@
             toggleDisplay(elementsToToggle, 'none');
         }
 
-        const updatedSvg = updateSvgWithSelectedShapePath(shape, getSvgTextareaAndString());
+        const updatedSvg = updateSvgWithSelectedShapePath(shape, getSvg());
+        console.log('------updatedSvg: ', updatedSvg)
         executeSvg2png({ target: { value: updatedSvg } })
 
     });
@@ -361,14 +364,14 @@
         if (event.target.checked) {
             // チェックボックスがチェックされた場合、クロップ処理を実行
             console.log('Crop side margins: [x]')
-            const svgTextareaAndString = getSvgTextareaAndString()
-            const updatedSvg = viewboxSlimmed(svgTextareaAndString); // 1. Crop the SVG, Replace the textarea content.
+            const svgElemAndVal = getSvg()
+            const updatedSvg = viewboxSlimmed(svgElemAndVal); // 1. Crop the SVG, Replace the textarea content.
             executeSvg2png({ target: { value: updatedSvg } })
         } else {
             // チェックボックスが外れた場合、元のデータと同じ矩形のサイズに戻す
             console.log('Crop side margins: [ ]')
-            const svgTextareaAndString = getSvgTextareaAndString()
-            const updatedSvg = viewboxUnSlimmed(svgTextareaAndString); // 1. Un-Crop the SVG, Replace the textarea content.
+            const svgElemAndVal = getSvg()
+            const updatedSvg = viewboxUnSlimmed(svgElemAndVal); // 1. Un-Crop the SVG, Replace the textarea content.
             executeSvg2png({ target: { value: updatedSvg } })
         }
     });

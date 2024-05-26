@@ -3,7 +3,7 @@
 // Get the grid size
 function getGridSize(svgString) {
     const patternToGetGridsizeFromViewbox = /viewBox=".*\s+([\d\.]+)"/; // viewBox属性の値から最後の数字を抽出する正規表現
-    const matches = patternToGetGridsizeFromViewbox.exec(svgString); // // 正規表現パターンと文字列を照合, 結果を配列として返す
+    const matches = patternToGetGridsizeFromViewbox.exec(svgString);    // 正規表現パターンと文字列を照合, 結果を配列として返す
     const gridSize = matches[1]
     //console.log('gridSize: ', gridSize) // 配列の 0番目には全体のマッチ結果, 1番目にはグルーピングした部分 // 255
     return gridSize
@@ -104,9 +104,9 @@ function toggleDisplay(elements, display) {
 
 
 // Update SVG with selected shape path
-function updateSvgWithSelectedShapePath(shape, svgTextareaAndString) {
-    const svgString = svgTextareaAndString.get('string');
-    const svgTextarea = svgTextareaAndString.get('element');
+function updateSvgWithSelectedShapePath(shape, svgElemAndVal) {
+    const svgString = svgElemAndVal.get('stringValue');
+    const svgTextarea = svgElemAndVal.get('textareaElement');
 
     // Params for generating the 'Squircle' and 'Squircle, slimmed' shape path
     const gridSize = getGridSize(svgString)
@@ -124,12 +124,12 @@ function updateSvgWithSelectedShapePath(shape, svgTextareaAndString) {
     // Replace to new shape <clipPath>
     const patternForClipPathShape = /<clipPath id="shape-to-trim">\n.*\n.*<\/clipPath>/g;
     const pathUpdatedSvg = svgString.replace(patternForClipPathShape, `<clipPath id="shape-to-trim">\n\t\t${shapePath}\n\t</clipPath>`);
-    svgTextareaAndString.set('string', pathUpdatedSvg);
+    svgElemAndVal.set('stringValue', pathUpdatedSvg);
 
     // Update the <textarea>
     const hasCropSideMargins = getBoolOfCropSideMargins();
-    const viewboxUpdatedString = svgWithNewShapeViewbox(shape, hasCropSideMargins, svgTextareaAndString);
-    svgTextarea.value = viewboxUpdatedString;
+    const viewboxUpdatedSvg = svgWithNewShapeViewbox(shape, hasCropSideMargins, svgElemAndVal);
+    svgTextarea.value = viewboxUpdatedSvg;
 
-    return viewboxUpdatedString // Return the string to render with 'executeSvg2png()' at main.js
+    return viewboxUpdatedSvg // Return the string to render with 'executeSvg2png()' at main.js
 }

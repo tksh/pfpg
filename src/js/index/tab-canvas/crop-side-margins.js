@@ -1,6 +1,6 @@
 // Argument SVG is a set of element and string as Map object
 // Returned SVG is a just string only
-function svgWithNewShapeViewbox(shape, hasCropSideMargins, svgTextareaAndString) {
+function svgWithNewShapeViewbox(shape, hasCropSideMargins, svgElemAndVal) {
 
     // Update 'viewBox'
 
@@ -10,23 +10,23 @@ function svgWithNewShapeViewbox(shape, hasCropSideMargins, svgTextareaAndString)
 
     console.log('hasCropSideMargins: ', hasCropSideMargins) // boolean, true=cropped[checked], false=un-cropped[!checked]
 
-    if (shape == 'squircleSlimmed' && hasCropSideMargins == true) {
-        return viewboxSlimmed(svgTextareaAndString)
-    } else { // shape == 'square | circle | squircle'
-        console.log(`"viewBox" value will be replaced to original size, \n
+    if (shape == 'squircleSlimmed' && hasCropSideMargins == true) { // shape == 'squircleSlimmed'
+        return viewboxSlimmed(svgElemAndVal)
+    } else {                                                        // shape == 'square | circle | squircle'
+        console.log(`"viewBox" value will be replaced to original size,
                       because selected shape is ${shape}, and hasCropSideMargins is ${hasCropSideMargins}`)
-        return viewboxUnSlimmed(svgTextareaAndString)
+        return viewboxUnSlimmed(svgElemAndVal)
     }
 
 }
 
 // Change the viewBox size fit to Squircle, slimmed.
 // And textarea replaced as it.
-function viewboxSlimmed(svgTextareaAndString) {
-    const viewboxStr = getViewboxStr(svgTextareaAndString.get('string'))
+function viewboxSlimmed(svgElemAndVal) {
+    const viewboxStr = getViewboxStr(svgElemAndVal.get('stringValue'))
     const viewboxValues = extractViewboxValues(viewboxStr)
 
-    const slimmedWidthValues = getSlimmedViewboxXW(svgTextareaAndString.get('string'))
+    const slimmedWidthValues = getSlimmedViewboxXW(svgElemAndVal.get('stringValue'))
     //console.log('slimmedWidthValues.get('x'): ', slimmedWidthValues.get('x')) // e.g.: 1.55
     //console.log('slimmedWidthValues.get('w'): ', slimmedWidthValues.get('w')) // e.g.: 27.9
 
@@ -36,8 +36,8 @@ function viewboxSlimmed(svgTextareaAndString) {
 
     // Replace the textarea value with new string
     const patternForViewboxStr = /viewBox="([^"]+)"/; // viewBox属性を抽出する正規表現
-    const updatedSVG = svgTextareaAndString.get('string').replace(patternForViewboxStr, newViewboxString);
-    svgTextareaAndString.get('element').value = updatedSVG
+    const updatedSVG = svgElemAndVal.get('stringValue').replace(patternForViewboxStr, newViewboxString);
+    svgElemAndVal.get('textareaElement').value = updatedSVG
 
     return updatedSVG
 }
@@ -95,8 +95,8 @@ function extractViewboxValues(viewBoxString) {
 
 /////// When un-check the checkbox, Get back the viewBox as square ///////
 
-function viewboxUnSlimmed(svgTextareaAndString) {
-    console.log('svgTextareaAndString: ', svgTextareaAndString)
+function viewboxUnSlimmed(svgElemAndVal) {
+    console.log('svgElemAndVal: ', svgElemAndVal)
 
     // Read original basic data from url params
     const isDataManipulatorPage = false
@@ -108,8 +108,10 @@ function viewboxUnSlimmed(svgTextareaAndString) {
 
     // Replace the textarea value with new string
     const patternForViewboxStr = /viewBox="([^"]+)"/
-    const updatedSVG = svgTextareaAndString.get('string').replace(patternForViewboxStr, originalViewboxString)
-    svgTextareaAndString.get('element').value = updatedSVG
+    const matchesForViewboxStr = patternForViewboxStr.exec(svgElemAndVal.get('stringValue')); // e.g.: 'viewBox="0 0 31 31"'
+    const matchForViewboxValueStr = matchesForViewboxStr[1]                                                      // e.g.: '0 0 31 31'
+    const updatedSVG = svgElemAndVal.get('stringValue').replace(matchForViewboxValueStr, originalViewboxString)
+    svgElemAndVal.get('textareaElement').value = updatedSVG
 
     return updatedSVG
 }
