@@ -173,11 +173,12 @@
 
     //  Event listeners for 'Path mode' selection changes
     document.getElementById("path-mode").addEventListener("change", () => {
+        console.log('CHANGE THE PATH MODE')
 
         // 現在の設定の値を保存しておく
         // Get the SVG textarea element and string
         const svgElemAndVal = getSvg()
-        const currentPathModeSvgStr = svgElemAndVal.get('stringValue')
+        const currentPathModeSvg = svgElemAndVal.get('stringValue')
         const svgTextarea = svgElemAndVal.get('textareaElement')
 
 
@@ -185,8 +186,10 @@
 
         // Group colors
         const patternGroupColors = /<g stroke=[^>]*>/g
-        const matchOfGroupColors = currentPathModeSvgStr.match(patternGroupColors)
+        const matchOfGroupColors = currentPathModeSvg.match(patternGroupColors)
+        console.log('matchOfGroupColors: ', matchOfGroupColors)
         // e.g.: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="# ...
+
 
         // Opacity steps の選択肢の値は svgのコンテンツではなく UIのみに関わるので 保存しておいて元に戻す 必要はない
 
@@ -194,31 +197,31 @@
         // Canvas tab
 
         // Base color (include opacity)
-        const patternBaseRectFill = /<rect width="[^"]+" height="[^"]+" fill="[^"]+>"/g
-        const matchOfBaseRectFill = currentPathModeSvgStr.match(patternBaseRectFill)
-        const valueOfBaseRectFill = matchOfBaseRectFill[0] // Hex string
+        const patternBaseRectFill = /<rect.*fill=[^>]+>/
+        const matchOfBaseRectFill = currentPathModeSvg.match(patternBaseRectFill)
+        const valueOfBaseRectFill = matchOfBaseRectFill[0]  // e.g.: <rect width="31" height="31" fill="#fff" />
         // Shape to trim
         const patternShapeToTrim = /<clipPath id="shape-to-trim">[^>]*>/g
-        const matchOfShapeToTrim = currentPathModeSvgStr.match(patternShapeToTrim)
-        const valueOfShapeToTrim = matchOfShapeToTrim[0] // 'square' | 'circle' | 'squircle' | 'squircle, slimmed'
+        const matchOfShapeToTrim = currentPathModeSvg.match(patternShapeToTrim)
+        const valueOfShapeToTrim = matchOfShapeToTrim[0]   // 'square' | 'circle' | 'squircle' | 'squircle, slimmed'
         // viewBox (for 'Crop side margins' checked.)
-        const patternViewbox = /viewBox="[^"]*"/; // viewBox属性を抽出する正規表現
-        const matchOfViewbox = currentPathModeSvgStr.match(patternViewbox)
-        console.log('////matchOfViewbox: ', matchOfViewbox)
-        const valueOfViewbox = matchOfViewbox[0] // e.g.: viewBox="1.55 0 27.9 31"
+        const patternViewbox = /viewBox="[^"]*"/
+        const matchOfViewbox = currentPathModeSvg.match(patternViewbox)
+        const valueOfViewbox = matchOfViewbox[0]           // e.g.: viewBox="1.55 0 27.9 31"
 
 
         // Render tab
 
         // Anti-aliasing (shape-rendering)
         const patternShapeRendering = /shape-rendering="[^"]*"/g
-        const matchOfShapeRendering = currentPathModeSvgStr.match(patternShapeRendering)
+        const matchOfShapeRendering = currentPathModeSvg.match(patternShapeRendering)
         const valueOfShapeRendering = matchOfShapeRendering[0] // 'geometricPrecision' | 'crispEdges'
 
 
 
         // 選択された 'Path mode'の値を 取得
-        const valueOfPathMode = document.getElementById("path-mode").value; // 'relativeMerged' | 'absoluteSeparated'
+        const valueOfPathMode = document.getElementById("path-mode").value  // 'relativeMerged' | 'absoluteSeparated'
+        console.log(`"${valueOfPathMode}" selected.`)
 
         // Get new 'Path mode' styled svg string, decode from url params
         const newPathModeSvgStr = decodeAsSelectedPathMode(valueOfPathMode)
@@ -227,13 +230,12 @@
         // レンダリングし直す前に 保存しておいた 設定の値を 元に戻す
 
         // Anti-alias, Base color, Shape to trim, viewBox
-        const recoverShapeRendering = recoverCurrentOptionValue(newPathModeSvgStr, patternShapeRendering, valueOfShapeRendering);
-        const recoverBaseRectFill = recoverCurrentOptionValue(recoverShapeRendering, patternBaseRectFill, valueOfBaseRectFill);
-        const recoverShapeToTrim = recoverCurrentOptionValue(recoverBaseRectFill, patternShapeToTrim, valueOfShapeToTrim);
-        const recoverViewbox = recoverCurrentOptionValue(recoverShapeToTrim, patternViewbox, valueOfViewbox);
-
+        const recoverShapeRendering = recoverCurrentOptionValue(newPathModeSvgStr, patternShapeRendering, valueOfShapeRendering)
+        const recoverBaseRectFill   = recoverCurrentOptionValue(recoverShapeRendering, patternBaseRectFill, valueOfBaseRectFill)
+        const recoverShapeToTrim    = recoverCurrentOptionValue(recoverBaseRectFill, patternShapeToTrim, valueOfShapeToTrim)
+        const recoverViewbox        = recoverCurrentOptionValue(recoverShapeToTrim, patternViewbox, valueOfViewbox)
         // Group colors (stroke, opacity, stroke-opacity)
-        const updatedSvg = recoverCurrentGroupColorsValues(recoverViewbox, patternGroupColors, matchOfGroupColors)
+        const updatedSvg            = recoverCurrentGroupColorsValues(recoverViewbox, patternGroupColors, matchOfGroupColors)
 
 
         // 保存しておいた設定の値を 全て元に戻した 最終的な新しいSVG文字列を <textarea>のvalue属性に挿入する
