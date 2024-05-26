@@ -5,9 +5,28 @@ async function setDefaultValueOfOptions() {
     const inputSvg = getInputSvg()
 
     // Get each attrs values, then set it as default
+    setDefaultOfPathMode(inputSvg)  // Path mode selector
     setDefaultOfBaseColor(inputSvg) // Base color picker
     setDefaultOfAntiAlias(inputSvg) // Anti-alias selector
     setDefaultOfOpacitySteps()      // Opacity steps
+
+    // Selector: Path mode
+    function setDefaultOfPathMode(inputSvg) {
+
+        // Find the '<path d= ... M ... L ... >' to detect as 'absolute'
+        const pattern = /<path[^>]*d="[^"]*M[^"]*L[^"]*"[^>]*>/g;
+        const isAbsolute = pattern.test(inputSvg);
+
+        // Set the 'Path mode' input element value
+        if (isAbsolute === true) {
+            document.getElementById("path-mode").value = 'absoluteSeparated'
+            console.log("Default 'Path mode' is 'Absolute and separated'");
+        } else {
+            document.getElementById("path-mode").value = 'Relative and merged'
+            console.log("Default 'Path mode' is 'relativeMerged'");
+        }
+
+    }
 
     // Color-picker: Base color (base rect fill color)
     function setDefaultOfBaseColor(inputSvg) {
