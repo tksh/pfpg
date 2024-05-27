@@ -41,7 +41,7 @@ function showDetailsByGroup(nameOfInput, encodedStrByGroupMap) {
             return 'swap63'
         }
     })
-    const flag3ConfigurationValueName = threeCharsAsFlag.map((value, index) => {        // 3rd char value
+    const flag3ConfigurationValueName = threeCharsAsFlag.map((value, index) => {     // 3rd char value
         if (flag2EncodingMethodName[index] === 'bruteforce53') {
             return base53Decode(value[2])
         } else {
@@ -51,12 +51,12 @@ function showDetailsByGroup(nameOfInput, encodedStrByGroupMap) {
 
     // Show in console
     console.log(`//////////////////////// Result of ${nameOfInput} encoding details by group ////////////////////////`)
-    console.log('Group key numbers: ', keys) // (5) ['1', '2', '3', '4', '5']
-    console.log('Group colors encoded: ', groupColors) // (5) ['0', '0', '0', 'e', 'f']
+    console.log('Group key numbers: ', keys)                                             // e.g.: (5) ['1', '2', '3', '4', '5']
+    console.log('Group colors encoded: ', groupColors)                                   // e.g.: (5) ['0', '0', '0', 'e', 'f']
     console.log('Length of encoded strings: ', lengthOfValues)
-    console.log('3 chars prefix as flag: ', threeCharsAsFlag) // (5) ['10Z', '10i', '10X', '10b', '10Z']
-    console.log('flag 1, Compression method name', flag1CompressionMethodName) // (5) 
-    console.log('flag 2, Encoding method name', flag2EncodingMethodName) // (5)
-    console.log('flag 3, Configuration value for encoding indicates:\nBase X number for bruteforce53-enc | Chunk size for bigint64-enc | \'n\' (=null, skip it for decoding) for swap63-enc')
-    console.log('flag 3, Configuration value for encoding', flag3ConfigurationValueName) // (5) 
+    console.log('3 chars prefix as flag: ', threeCharsAsFlag)                            // e.g.: (5) ['10Z', '10i', '10X', '10b', '10Z']
+    console.log('flag 1, Compression method name', flag1CompressionMethodName)           // e.g.: (5) 
+    console.log('flag 2, Encoding method name', flag2EncodingMethodName)                 // e.g.: (5)
+    console.log('flag 3, Configuration value for encoding indicates: Base X number for bruteforce53-enc | Chunk size for bigint64-enc | \'n\' (=null, skip it for decoding) for swap63-enc')
+    console.log('flag 3, Configuration value for encoding', flag3ConfigurationValueName) // e.g.: (5) 
 }

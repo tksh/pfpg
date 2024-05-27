@@ -1,5 +1,3 @@
-// Argument SVG is a set of element and string as Map object
-// Returned SVG is a just string only
 function svgWithNewShapeViewbox(shape, hasCropSideMargins, newClippathSvg) {
 
     // Update 'viewBox'
@@ -8,7 +6,7 @@ function svgWithNewShapeViewbox(shape, hasCropSideMargins, newClippathSvg) {
     // 1. the shapes excepts 'squircleSlimmed' selected, or
     // 2. 'squircleSlimmed' and not checked for 'Crop side margins' checkbox
 
-    console.log('hasCropSideMargins: ', hasCropSideMargins) // boolean, true=cropped[checked], false=un-cropped[!checked]
+    console.log('hasCropSideMargins: ', hasCropSideMargins)         // boolean, true=cropped[checked], false=un-cropped[!checked]
 
     if (shape == 'squircleSlimmed' && hasCropSideMargins == true) { // shape == 'squircleSlimmed'
         return viewboxSlimmed(newClippathSvg)
@@ -23,57 +21,44 @@ function svgWithNewShapeViewbox(shape, hasCropSideMargins, newClippathSvg) {
 // Change the viewBox size fit to Squircle, slimmed.
 // And textarea replaced as it.
 function viewboxSlimmed(inputSvg) {
-    const slimmedWidthValues = getSlimmedViewboxXW(inputSvg)
-    //console.log('slimmedWidthValues.get('x'): ', slimmedWidthValues.get('x')) // e.g.: 1.55
-    //console.log('slimmedWidthValues.get('w'): ', slimmedWidthValues.get('w')) // e.g.: 27.9
+    const slimmedXW = getSlimmedViewboxXW(inputSvg)
+    //console.log('slimmedXW.get('x'): ', slimmedXW.get('x')) // e.g.: 1.55
+    //console.log('slimmedXW.get('w'): ', slimmedXW.get('w')) // e.g.: 27.9
 
     const viewboxValues = extractViewboxValues(inputSvg)
 
     // Generate new viewBox string
-    const newViewboxString = `viewBox="${slimmedWidthValues.x} ${viewboxValues.get('y')} ${slimmedWidthValues.w} ${viewboxValues.get('h')}"`
+    const newViewboxString = `viewBox="${slimmedXW.get('x')} ${viewboxValues.get('y')} ${slimmedXW.get('w')} ${viewboxValues.get('h')}"`
     console.log('newViewboxString: ', newViewboxString) // e.g.: viewBox="1.55 0 27.9 31"
 
     // Replace the viewBox string with new one
-    const patternForViewboxStr = /viewBox="([^"]+)"/; // viewBox属性を抽出する正規表現
+    const patternForViewboxStr = /viewBox="[^"]+"/;  // viewBox属性 全体 を抽出する正規表現
     return inputSvg.replace(patternForViewboxStr, newViewboxString);
 }
 
 
-
-// Get the viewBox string
-function getViewboxStr(svgString) {
-    const patternForViewboxStr = /viewBox="([^"]+)"/; // viewBox属性を抽出する正規表現
-    const matches = patternForViewboxStr.exec(svgString);
-
-    // 配列の 0番目には全体のマッチ結果, 1番目にはグルーピングした部分
-    const viewboxStr = matches[0]        // e.g.: viewBox="0 0 31 31"
-    //const vieBoxValueStr = matches[1]  // e.g.: 0 0 31 31
-
-    return viewboxStr
-}
-
 // Get the slimmed width size and 'x' position (= same number as how much reduced each sides)
-function getSlimmedViewboxXW(svgString) {
+function getSlimmedViewboxXW(inputSvg) {
     const patternToGetSquircleSlimmedPathStr = /<path d="M ([\d\.]+),.*Q.*T ([\d\.]+),/; // viewBox属性を抽出する正規表現
-    const matches = patternToGetSquircleSlimmedPathStr.exec(svgString);
+    const matches = patternToGetSquircleSlimmedPathStr.exec(inputSvg);
     //console.log('matches: ', matches)       // e.g.: Array(3) [ '<path d="M 1.55,15.5Q 1.24,0 15.5,0T 29.45,', "1.55", "29.45" ]
     //console.log('matches[1]: ', matches[1]) // e.g.: 1.55
     //console.log('matches[2]: ', matches[2]) // e.g.: 29.45
 
-    return {
-        x: toFixedTrimmed(parseFloat(matches[1])),             // viewBox start position | e.g.: 1.55
-        w: toFixedTrimmed(parseFloat(matches[2] - matches[1])) // new viewBox width size | e.g.: 27.9 (= 29.45 - 1.55)
-    }
+    return new Map([
+        ['x', toFixedTrimmed(parseFloat(matches[1]))             ], // viewBox start position | e.g.: 1.55
+        ['w', toFixedTrimmed(parseFloat(matches[2] - matches[1]))]  // new viewBox width size | e.g.: 27.9 (= 29.45 - 1.55)
+    ]);
 }
 
-// Get viewBox four numbers as Map object
+// Get viewBox four number values as Map object
 function extractViewboxValues(inputSvg) {
-    // Use a regular expression to match the four numbers in the viewBox string
+    // Use a regular expression to match the four number values in the viewBox string
     const match = inputSvg.match(/viewBox="([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)"/);
 
     // Check if the match was successful
     if (match && match.length === 5) {
-        // Extract the four numbers and return them as an Map object
+        // Extract the four number values and return them as a Map object
         return new Map([
             ['x', parseFloat(match[1])],
             ['y', parseFloat(match[2])],
@@ -89,7 +74,7 @@ function extractViewboxValues(inputSvg) {
 
 
 
-/////// When un-check the checkbox, Get back the viewBox as square ///////
+// When un-check the checkbox, Get back the viewBox as square
 
 function viewboxUnSlimmed(inputSvg) {
     // Read original basic data from url params
@@ -98,11 +83,11 @@ function viewboxUnSlimmed(inputSvg) {
     const basicDataMap = urlParamsAsTwoMaps.basicData
 
     // Generate new string with original viewBox size
-    const originalViewboxString = basicDataMap.get('viewbox')                      // e.g.: '0 0 31 31'
+    const originalViewboxString = basicDataMap.get('viewbox')                // e.g.: '0 0 31 31'
 
     // Replace the viewBox string with new one
     const patternForViewboxStr = /viewBox="([^"]+)"/
     const matchesForViewboxStr = patternForViewboxStr.exec(inputSvg);        // e.g.: 'viewBox="0 0 31 31"'
-    const matchForViewboxValueStr = matchesForViewboxStr[1]                        // e.g.: '0 0 31 31'
+    const matchForViewboxValueStr = matchesForViewboxStr[1]                  // e.g.: '0 0 31 31'
     return inputSvg.replace(matchForViewboxValueStr, originalViewboxString)
 }
