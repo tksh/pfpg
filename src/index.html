@@ -45,6 +45,7 @@
     <script src="./js/color-formatter/try-delete-f.js"></script>
 
     <!-- Utilities -->
+    <script defer src="./js/index/utils/get-number-of-groups.js"></script>
     <script defer src="./js/index/utils/number-generator.js"></script>
     <script defer src="./js/index/utils/number-rounding.js"></script>
     <script defer src="./js/index/utils/replace-at-index.js"></script>
@@ -147,6 +148,7 @@
     <!-- Decoded SVG from URL params or sample text in index.html -->
     <script defer src="./js/index/init/decode-svg.js"></script>
     <!-- Set defaults value for option selectors using the values that read from decoded SVG -->
+    <script defer src="./js/index/init/get-initial-opacity-steps.js"></script>
     <script defer src="./js/index/init/set-defaults.js"></script>
     <!-- Adjust the height of whole components to fit to display height -->
     <script defer src="./js/index/init/adjust-output-boxes-size.js"></script>
@@ -197,8 +199,8 @@
                         <div class="opts-cell">
                             <label for="path-mode">Path mode: </label>
                             <select name="path-mode" id="path-mode">
-                                <option value="relativeMerged">Relative and merged</option>
                                 <option value="absoluteSeparated">Absolute and separated</option>
+                                <option value="relativeMerged">Relative and merged</option>
                             </select>
                         </div>
                     </div>

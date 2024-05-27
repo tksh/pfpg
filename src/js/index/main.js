@@ -172,8 +172,7 @@
     /////////////////////////////// Path mode ////////////////////////////////
 
     //  Event listeners for 'Path mode' selection changes
-    document.getElementById("path-mode").addEventListener("change", () => {
-        console.log('CHANGE THE PATH MODE')
+    document.getElementById("path-mode").addEventListener("change", (event) => {
 
         // 現在の設定の値を保存しておく
 
@@ -219,7 +218,7 @@
 
 
         // 選択された 'Path mode'の値を 取得
-        const valueOfPathMode = document.getElementById("path-mode").value  // 'relativeMerged' | 'absoluteSeparated'
+        const valueOfPathMode = event.target.value  // 'relativeMerged' | 'absoluteSeparated'
         console.log(`"${valueOfPathMode}" selected.`)
 
         // Re-decode as new 'Path mode' styled svg string from url params
@@ -252,21 +251,20 @@
     ////////////////////////////// Opacity steps /////////////////////////////
 
     // Event listeners for 'Opacity steps' value changes
-    document.getElementById("opacity-steps").addEventListener("change", () => {
+    document.getElementById("opacity-steps").addEventListener("change", (event) => {
 
         // 選択されたセレクトメニューの値を取得
-        const step = Number(document.getElementById("opacity-steps").value); // 0.04 | 0.1 | 0.2
+        const step = Number(event.target.value);           // 0.04 | 0.1 | 0.2
 
         // 新しいセレクトメニューに更新
         changeOpacitySelectOptionsAsNewStep(step)
 
-        // 新しいセレクトメニューへの更新で選ばれた その step での 一番近い値の表示と 元々のSVGの色情報が ずれてしまうので
-        // 新しいセレクトメニューでの値を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
+        // 新しいセレクトメニューへの 更新で選ばれた その step での 一番近い値の表示と 元々のSVGの色情報が ずれてしまうので
+        // 新しいセレクトメニューでの 値 を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
         const updatedSvg = updateSvgForNewStep()
 
-        // Render the image via SVG with new step opacity value
-        // executeSvg2png(updatedSvg)
-        executeSvg2png({ target: { value: updatedSvg } })
+        svgInputElement.value = updatedSvg                 // Update textarea
+        executeSvg2png({ target: { value: updatedSvg } })  // Rendering to PNG
     });
 
     ////////////////////////////// Opacity steps /////////////////////////////
@@ -335,10 +333,10 @@
 
 
     // 'shape-to-trim' changeイベントリスナーを設定
-    document.getElementById('shape-to-trim').addEventListener("change", () => {
+    document.getElementById('shape-to-trim').addEventListener("change", (event) => {
 
         // 選択された値を取得
-        const shape = document.getElementById('shape-to-trim').value; // square|circle|squircle|squircleSlimmed
+        const shape = event.target.value; // square|circle|squircle|squircleSlimmed
 
         // 'squircleSlimmed'が 選ばれた時だけ表示される
         // 2つのオプション選択用の<select>要素 と 横幅クロップ用の<label>&<input>要素 を取得し 表示または非表示にする
@@ -395,9 +393,9 @@
     ////////////////////////////// Anti-aliasing /////////////////////////////
 
     // Event listeners for 'shape-rendering' type changes
-    document.getElementById("shape-rendering").addEventListener("change", () => {
+    document.getElementById("shape-rendering").addEventListener("change", (event) => {
         // 選択された値を取得
-        const value = document.getElementById("shape-rendering").value; // 'geometricPrecision' | 'crispEdges'
+        const value = event.target.value; // 'geometricPrecision' | 'crispEdges'
         // <textarea>のvalue属性を取得
         const svgString = svgInputElement.value;
 

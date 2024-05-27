@@ -34,8 +34,8 @@ async function setDefaultValueOfOptions() {
         // Get the base color (rect fill) hex code
 
         const pattern = /<rect width="[^"]+" height="[^"]+" fill="([^"]+)"/g; // e.g.: <<rect width="255" height="255" fill="#fff9">
-        const matches = pattern.exec(inputSvg);                                // exec メソッドでマッチする部分を探す
-        console.log('matches(rect fill): ', matches) ////////////////////////////////////////////////////// null
+        const matches = pattern.exec(inputSvg);                               // exec メソッドでマッチする部分を探す
+        console.log('matches(rect fill): ', matches)
         // Array
         // 0: '<rect width="255" height="255" fill="#ccc"'
         // 1: "#ccc"

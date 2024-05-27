@@ -1,6 +1,6 @@
-// For event listener of Opacity steps <select>.
+// For event listener of Opacity steps <select>
 
-// 'opacity' and 'stroke-opacity' values of whole groups will be changed as selected new steps.
+// 'opacity' and 'stroke-opacity' values of entire groups will be changed as selected new steps.
 function changeOpacitySelectOptionsAsNewStep(step) {
 
     const groupColorsValues = getGroupColorsValues();
@@ -59,36 +59,32 @@ function replaceToNewStepOptions(i, step, attrName, attrValueArray) {
 }
 
 
-
 // Update SVG
 
 function updateSvgForNewStep() {
 
-    // Get the SVG textarea element and string value
-    const svg = getInputSvgElemAndVal()
-    const svgString     = svg.get('stringValue')
-    const svgTextarea   = svg.get('textareaElement')
+    // Get the SVG string value
+    let inputSvg = getInputSvg()
 
-    // Get current SVG string and number of groups
-    const numberOfGroups = getNumberOfGroups(svgString)
+    // Get the number of groups
+    const numberOfGroups = getNumberOfGroups(inputSvg)
 
     // Loop by group ID: Extract the values from UI tab HTML elements => Replace the <textarea> string
-    for (let gId = 0; gId < numberOfGroups; gId++) {
+
+    // Function to process each group
+    const processGroup = (inputSvg, gId) => {
 
         // Get 'stroke' value
         const strokeElementId = `group-colors-stroke-${gId}`
-        const strokeElement = document.getElementById(`${strokeElementId}`)
-        const stroke = strokeElement.value
+        const stroke = getElementValueById(strokeElementId)
 
         // Get 'opacity' value
         const opacityElementId = `group-colors-opacity-${gId}`
-        const opacityElement = document.getElementById(`${opacityElementId}`)
-        const opacity = opacityElement.value
+        const opacity = getElementValueById(opacityElementId)
 
         // Get 'stroke-opacity' value
         const strokeOpacityElementId = `group-colors-stroke-opacity-${gId}`
-        const strokeOpacityElement = document.getElementById(`${strokeOpacityElementId}`)
-        const strokeOpacity = strokeOpacityElement.value
+        const strokeOpacity = getElementValueById(strokeOpacityElementId)
 
         // Generate the array like regex 'match' object with input value
         const valueAsMatchesStructure = [
@@ -99,93 +95,21 @@ function updateSvgForNewStep() {
         ]
 
         // Generate new group colors <g> element
-        changedGroupElem = generateGroupColorsSvgTags(valueAsMatchesStructure)
+        const changedGroupElem = generateGroupColorsSvgTags(valueAsMatchesStructure)
 
         // Replace the <g> elements via group ID
         const pattern = /<g stroke=[^>]*>/g
-        svgString = replaceAtIndex(svgString, pattern, changedGroupElem, gId)
+        return replaceAtIndex(inputSvg, pattern, changedGroupElem, gId)
     }
 
-    // Refresh the SVG string in <textarea>
-    svgTextarea.value = svgString
+    // Process each group and update svgString
+    const updatedSvg = Array.from({ length: numberOfGroups }, (_, gId) => gId)
+    .reduce((acc, gId) => processGroup(acc, gId), inputSvg)
 
-    return svgString
+    return updatedSvg
 }
 
-
-
-// For init()
-
-// Get initial opacity steps detected from original decoded SVG
-function getInitialOpacitySteps() {
-
-    // get whole group 'opacity' and 'stroke-opacity' values
-    const groupColorsValues = getGroupColorsValues()
-    const opNumArray = groupColorsValues.get('opacity_array').map(value => Number(value))
-    const soNumArray = groupColorsValues.get('stroke_opacity_array').map(value => Number(value))
-
-    // Find largest step selected from [0.2, 0.1, 0.04] for each attr
-    const opLargestStep = findLargestStep(opNumArray)
-    const soLargestStep = findLargestStep(soNumArray)
-
-    // Select shorter, it is 'opacity steps' for this artwork
-    return Math.min(opLargestStep, soLargestStep);
-}
-
-// Find largest step from number array, selected from [0.2, 0.1, 0.04]
-function findLargestStep(numberArray) {
-    // 値を整数に変換する
-    const intValues = numberArray.map(v => Math.round(v * 100));
-
-    // 最大公約数を求める関数
-    function gcd(a, b) {
-        // 2つの数の最大公約数を求める
-        // ユークリッドの互除法を使用
-        while (b !== 0) {
-            // bが0でなければ、aをbで割った余りをbに代入する
-            [a, b] = [b, a % b];
-        }
-        // aが最大公約数となる
-        return Math.abs(a);
-    }
-
-    let maxStep = 0.2;
-    let currentGCD = 0;
-
-    // 要素が0.2、0.1、0.04のいずれかで割り切れるかを確認する
-    for (let i = 0; i < intValues.length; i++) {
-        // 要素が20で割り切れる場合
-        if (intValues[i] % 20 === 0) {
-            // 現在の最大公約数と20の最大公約数を求める
-            currentGCD = gcd(currentGCD, 20);
-        }
-        // 要素が10で割り切れる場合
-        else if (intValues[i] % 10 === 0) {
-            // 現在の最大公約数と10の最大公約数を求める
-            currentGCD = gcd(currentGCD, 10);
-        }
-        // 要素が4で割り切れる場合
-        else if (intValues[i] % 4 === 0) {
-            // 現在の最大公約数と4の最大公約数を求める
-            currentGCD = gcd(currentGCD, 4);
-        }
-    }
-
-    // 最大公約数に応じて、最大ステップサイズを決定する
-    if (currentGCD === 20) {
-        maxStep = 0.2;
-    } else if (currentGCD === 10) {
-        maxStep = 0.1;
-    } else if (currentGCD === 4) {
-        maxStep = 0.04;
-    }
-
-    // 最大ステップサイズを返す
-    return maxStep;
-}
-
-
-// Get the opacity steps detected from html <select> element
-function getOpacitySteps() {
-    return Number(document.getElementById("opacity-steps").value)
+// Function to get element value by ID
+function getElementValueById(id) {
+    return document.getElementById(id).value
 }
