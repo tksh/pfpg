@@ -78,6 +78,6 @@ function zip(...arrays) {
     return ret;
 }
 // Test
-// console.log(zip([1, 2, 3], [4, 5, 6])); // [[1, 4], [2, 5], [3, 6]]
+// console.log(zip([1, 2, 3], [4, 5, 6]));                 // [[1, 4], [2, 5], [3, 6]]
 // console.log(zip(["a", "b", "c"], [true, false, true])); // [["a", true], ["b", false], ["c", true]]
-// console.log(zip([1, 2], [3, 4], [5, 6], [7, 8])); // [[1, 3, 5, 7], [2, 4, 6, 8]]
+// console.log(zip([1, 2], [3, 4], [5, 6], [7, 8]));       // [[1, 3, 5, 7], [2, 4, 6, 8]]

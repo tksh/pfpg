@@ -41,7 +41,7 @@ function showDetailsByGroup(nameOfInput, encodedStrByGroupMap) {
             return 'swap63'
         }
     })
-    const flag3ConfigurationValueName = threeCharsAsFlag.map((value, index) => {     // 3rd char value
+    const flag3ConfigurationValue = threeCharsAsFlag.map((value, index) => {     // 3rd char value
         if (flag2EncodingMethodName[index] === 'bruteforce53') {
             return base53Decode(value[2])
         } else {
@@ -58,5 +58,16 @@ function showDetailsByGroup(nameOfInput, encodedStrByGroupMap) {
     console.log('flag 1, Compression method name', flag1CompressionMethodName)           // e.g.: (5) 
     console.log('flag 2, Encoding method name', flag2EncodingMethodName)                 // e.g.: (5)
     console.log('flag 3, Configuration value for encoding indicates: Base X number for bruteforce53-enc | Chunk size for bigint64-enc | \'n\' (=null, skip it for decoding) for swap63-enc')
-    console.log('flag 3, Configuration value for encoding', flag3ConfigurationValueName) // e.g.: (5) 
+    console.log('flag 3, Configuration value for encoding', flag3ConfigurationValue) // e.g.: (5)
+
+    // Return the values to show also in html when call this function from best mix encoding (bestMixFromNMethods()).
+    return new Map([
+        ['gId', keys],
+        ['colors', groupColors],
+        ['length', lengthOfValues],
+        ['flags', threeCharsAsFlag],
+        ['flag1', flag1CompressionMethodName],
+        ['flag2', flag2EncodingMethodName],
+        ['flag3', flag3ConfigurationValue]
+    ]);
 }
