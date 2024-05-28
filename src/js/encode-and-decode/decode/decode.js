@@ -3,7 +3,9 @@
 // And also will be called from '/js/index/tab-line/path-mode.js' when 'path-mode' changed via option selector.
 
 function decode(isRelative, isDataManipulatorPage) {
+    const startTime = performance.now()
     console.log('Start the decoding SVG ...')
+
     const urlParamsAsTwoMaps = readUrlParamsAsMaps(isDataManipulatorPage)
 
     if (urlParamsAsTwoMaps != null) {
@@ -85,6 +87,11 @@ function decode(isRelative, isDataManipulatorPage) {
         Ratio: ${queryString.length} / ${svgStr.length} = <b>${compRatio}</b>`
             resultTextElem.innerHTML = text
         }
+
+        // Show the processing time in html and console
+        const endTime = performance.now()
+        const elapsedTime = Math.floor(endTime - startTime)
+        showProcessingTime('SVG decoding', elapsedTime, `encoded-strokes-values-time-for-${postfix}`)
 
         return svgStr
 

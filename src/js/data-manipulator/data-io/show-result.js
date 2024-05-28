@@ -2,8 +2,8 @@ function showStringSize(nameOfInput, inputStr, outputElemId) {
     console.log(`//////////////////////// Result of ${nameOfInput} encoding ////////////////////////`)
 
     // Show the size in html
-    const outputText = document.getElementById(`${outputElemId}`)
-    outputText.textContent = `Encoded ${nameOfInput} size: ${inputStr.length} characters (bytes)`
+    const outputTextElem = document.getElementById(`${outputElemId}`)
+    outputTextElem.textContent = `Encoded ${nameOfInput} size: ${inputStr.length} characters (bytes)`
 
     // Show the size in console
     console.log(`Encoded as ${nameOfInput} successfully, Size: `, inputStr.length);
@@ -11,8 +11,8 @@ function showStringSize(nameOfInput, inputStr, outputElemId) {
 
 function showProcessingTime(nameOfInput, inputNum, outputElemId) {
     // Show the time in html
-    const outputText = document.getElementById(`${outputElemId}`)
-    outputText.textContent = `Processing time of ${nameOfInput}: ${inputNum} milliseconds`
+    const outputTextElem = document.getElementById(`${outputElemId}`)
+    outputTextElem.textContent = `Processing time of ${nameOfInput}: ${inputNum} milliseconds`
 
     // Show the time in console
     console.log(`Processing time of ${nameOfInput}: `, inputNum, ' ms');
@@ -41,7 +41,7 @@ function showDetailsByGroup(nameOfInput, encodedStrByGroupMap) {
             return 'swap63'
         }
     })
-    const flag3ConfigurationValue = threeCharsAsFlag.map((value, index) => {     // 3rd char value
+    const flag3ConfigurationValue = threeCharsAsFlag.map((value, index) => {          // 3rd char value
         if (flag2EncodingMethodName[index] === 'bruteforce53') {
             return base53Decode(value[2])
         } else {
@@ -58,7 +58,8 @@ function showDetailsByGroup(nameOfInput, encodedStrByGroupMap) {
     console.log('flag 1, Compression method name', flag1CompressionMethodName)           // e.g.: (5) 
     console.log('flag 2, Encoding method name', flag2EncodingMethodName)                 // e.g.: (5)
     console.log('flag 3, Configuration value for encoding indicates: Base X number for bruteforce53-enc | Chunk size for bigint64-enc | \'n\' (=null, skip it for decoding) for swap63-enc')
-    console.log('flag 3, Configuration value for encoding', flag3ConfigurationValue) // e.g.: (5)
+    console.log('flag 3, Configuration value for encoding', flag3ConfigurationValue)     // e.g.: (5)
+
 
     // Return the values to show also in html when call this function from best mix encoding (bestMixFromNMethods()).
     return new Map([
