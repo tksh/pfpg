@@ -9,13 +9,16 @@ function showStringSize(nameOfInput, inputStr, outputElemId) {
     console.log(`Encoded as ${nameOfInput} successfully, Size: `, inputStr.length);
 }
 
-function showProcessingTime(nameOfInput, inputNum, outputElemId) {
-    // Show the time in html
-    const outputTextElem = document.getElementById(`${outputElemId}`)
-    outputTextElem.textContent = `Processing time of ${nameOfInput}: ${inputNum} milliseconds`
-
+function showProcessingTime(nameOfInput, inputNum, outputElemId, isDataManipulatorPage) {
     // Show the time in console
     console.log(`Processing time of ${nameOfInput}: `, inputNum, ' ms');
+
+    // Show the time in html if on data-manipulator.html
+    if (isDataManipulatorPage) {
+        const outputTextElem = document.getElementById(`${outputElemId}`)
+        outputTextElem.textContent = `Processing time of ${nameOfInput}: ${inputNum} milliseconds`
+    }
+
 }
 
 function showDetailsByGroup(nameOfInput, encodedStrByGroupMap) {

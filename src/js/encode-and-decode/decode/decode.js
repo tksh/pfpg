@@ -91,7 +91,7 @@ function decode(isRelative, isDataManipulatorPage) {
         // Show the processing time in html and console
         const endTime = performance.now()
         const elapsedTime = Math.floor(endTime - startTime)
-        showProcessingTime('SVG decoding', elapsedTime, `encoded-strokes-values-time-for-${postfix}`)
+        showProcessingTime('SVG decoding', elapsedTime, `encoded-strokes-values-time-for-${postfix}`, isDataManipulatorPage)
 
         return svgStr
 

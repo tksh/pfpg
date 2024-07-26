@@ -1,0 +1,6 @@
+{
+    "imports": {
+      "get-number-of-groups": "./index/utils/get-number-of-groups.js",
+      "number-generator": "./index/utils/number-generator.js"
+    }
+  }
