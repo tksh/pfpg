@@ -1,13 +1,4 @@
-function showStringSize(nameOfInput, inputStr, outputElemId) {
-    console.log(`//////////////////////// Result of ${nameOfInput} encoding ////////////////////////`)
-
-    // Show the size in html
-    const outputTextElem = document.getElementById(`${outputElemId}`)
-    outputTextElem.textContent = `Encoded ${nameOfInput} size: ${inputStr.length} characters (bytes)`
-
-    // Show the size in console
-    console.log(`Encoded as ${nameOfInput} successfully, Size: `, inputStr.length);
-}
+// Decoding result
 
 function showProcessingTime(nameOfInput, inputNum, outputElemId, isDataManipulatorPage) {
     // Show the time in console
@@ -19,6 +10,21 @@ function showProcessingTime(nameOfInput, inputNum, outputElemId, isDataManipulat
         outputTextElem.textContent = `Processing time of ${nameOfInput}: ${inputNum} milliseconds`
     }
 
+}
+
+
+
+// Encoding result
+
+function showStringSize(nameOfInput, inputStr, outputElemId) {
+    console.log(`//////////////////////// Result of ${nameOfInput} encoding ////////////////////////`)
+
+    // Show the size in html
+    const outputTextElem = document.getElementById(`${outputElemId}`)
+    outputTextElem.textContent = `Encoded ${nameOfInput} size: ${inputStr.length} characters (bytes)`
+
+    // Show the size in console
+    console.log(`Encoded as ${nameOfInput} successfully, Size: `, inputStr.length);
 }
 
 function showDetailsByGroup(nameOfInput, encodedStrByGroupMap) {
