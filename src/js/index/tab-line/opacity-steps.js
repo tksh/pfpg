@@ -1,4 +1,7 @@
-import { getGroupColorsValues } from './group-colors.js'
+import { getGroupColorsValues }   from './group-colors.js'
+import { numbersIncrementByStep } from '../utils/number-generator.js'
+import { getNumberOfGroups }      from '../utils/get-number-of-groups.js'
+import { generateGroupColorsSvgTags } from './group-colors.js'
 
 export
 { changeOpacitySelectOptionsAsNewStep
@@ -40,11 +43,11 @@ function replaceToNewStepOptions(i, step, attrName, attrValueArray) {
     // Add new <option>
 
     // 選択肢となる数値のリストを作成
-    values = numbersIncrementByStep(step)
+    const values = numbersIncrementByStep(step)
     console.log('values: ', values)
-    // step: 0.04 => (26) [1, 0.96, 0.92, 0.88, 0.84, 0.8, 0.76, 0.72, 0.68, 0.64, 0.6, 0.56, 0.52, 0.48, 0.44, 0.4, 0.36, 0.32, 0.28, 0.24, 0.2, 0.16, 0.12, 0.08, 0.04, 0]
-    // step: 0.1  => (11) [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0]
-    // step: 0.2  =>  (6) [1, 0.8, 0.6, 0.4, 0.2, 0]
+    // e.g.: step: 0.04 => (26) [0, 0.04, 0.08, 0.12, 0.16, 0.2, 0.24, ... 0.8, 0.84, 0.88, 0.92, 0.96, 1]
+    // e.g.: step: 0.1  => (11) [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+    // e.g.: step: 0.2  =>  (6) [0, 0.2, 0.4, 0.6, 0.8, 1]
 
     // 現在の値を設定
     let currentValue = attrValueArray[i]

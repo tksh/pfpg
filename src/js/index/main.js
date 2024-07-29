@@ -11,6 +11,12 @@ import
     }
 from './tab-line/group-colors.js'
 
+import 
+    { changeOpacitySelectOptionsAsNewStep
+    , updateSvgForNewStep
+    }
+from './tab-line/opacity-steps.js'
+
 import
     { getInitialOpacitySteps
     , findLargestStep
@@ -19,6 +25,8 @@ import
 from './init/get-initial-opacity-steps.js'
 
 import { setDefaultValueOfOptions } from './init/set-defaults.js'
+
+// import { updateSvgForNewStep } from
 
 (async function () {
     // Generate the HTML elements of group attrs color-pickers
@@ -168,7 +176,7 @@ import { setDefaultValueOfOptions } from './init/set-defaults.js'
                 // e.g: (4) [undefined, '#FF0000', '0.8', '1']
 
                 // 更新された <g>タグを生成する
-                changedGroupElem = generateGroupColorsSvgTags(valueAsMatchesStructure)
+                const changedGroupElem = generateGroupColorsSvgTags(valueAsMatchesStructure)
                 console.log('changedGroupElem: ', changedGroupElem)
                 // e.g: <g stroke="#FF7523" opacity="1" stroke-opacity="1">
 
