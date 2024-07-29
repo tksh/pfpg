@@ -1,4 +1,6 @@
-async function setDefaultValueOfOptions() {
+import { getInitialOpacitySteps } from './get-initial-opacity-steps.js'
+
+export async function setDefaultValueOfOptions() {
     console.log('setDefaultValueOfOptions() executed')
 
     // SVGのテキストを取得

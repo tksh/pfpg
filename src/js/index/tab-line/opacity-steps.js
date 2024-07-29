@@ -1,3 +1,12 @@
+import { getGroupColorsValues } from './group-colors.js'
+
+export
+{ changeOpacitySelectOptionsAsNewStep
+, replaceToNewStepOptions
+, updateSvgForNewStep
+, getElementValueById
+}
+
 // For event listener of Opacity steps <select>
 
 // 'opacity' and 'stroke-opacity' values of entire groups will be changed as selected new steps.

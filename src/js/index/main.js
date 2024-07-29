@@ -1,3 +1,25 @@
+import { getNumberOfGroups } from './utils/get-number-of-groups.js'
+import
+    { generateGroupColorsSvgTags
+    , generateGroupColorsHtmlElements
+    , generateOpacityElements
+    , getGroupColorsValues
+    , regexMatchesOfGroupColors
+    , getStroke
+    , getOpacity
+    , getStrokeOpacity
+    }
+from './tab-line/group-colors.js'
+
+import
+    { getInitialOpacitySteps
+    , findLargestStep
+    , gcd
+    }
+from './init/get-initial-opacity-steps.js'
+
+import { setDefaultValueOfOptions } from './init/set-defaults.js'
+
 (async function () {
     // Generate the HTML elements of group attrs color-pickers
     generateGroupColorsHtmlElements(getInitialOpacitySteps())

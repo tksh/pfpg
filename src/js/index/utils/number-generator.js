@@ -1,13 +1,17 @@
+export { numbersIncrementByStep }
+
 // For 'Opacity steps'
 
 // Get the strings of incremental numbers for selector option value
 function numbersIncrementByStep(step) {
+    console.log("///////step: ", step)
     let numbers = [];
     // 0から100までの整数を (step * 100)の間隔で 配列に格納
     for (let i = 0; i <= 100; i += step * 100) {
         // 整数を100で割って小数に戻す
         numbers.push((i / 100));
     }
+    console.log("///////numbers.reverse(): ", numbers.reverse())
     return numbers.reverse() // 一番上に表示される選びやすい<option>が 0 ではなく 1 になるように 逆順にする
 }
 //console.log(numbersIncrementByStep(0.04))

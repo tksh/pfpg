@@ -1,6 +1,6 @@
 // Get the number of stroke colors to add multiple event listener
 // via addEventListenerForGroupColorsInputs()
-function getNumberOfGroups(inputSvg) {
+export function getNumberOfGroups(inputSvg) {
     // 正規表現パターンを作成
     const pattern = /g stroke="[^"]*"/g; // g stroke="..." にマッチするパターン
     // パターンにマッチする部分をすべて探す

@@ -1,3 +1,11 @@
+import { getGroupColorsValues } from '../tab-line/group-colors.js'
+
+export {
+    getInitialOpacitySteps
+    , findLargestStep
+    , gcd
+}
+
 // getInitialOpacitySteps() function used twice at main.js ...
 //
 //   1.
@@ -25,22 +33,11 @@ function getInitialOpacitySteps() {
     return Math.min(opLargestStep, soLargestStep);
 }
 
+
 // Find largest step from number array, selected from [0.2, 0.1, 0.04]
 function findLargestStep(numberArray) {
     // 値を整数に変換する
     const intValues = numberArray.map(v => Math.round(v * 100));
-
-    // 最大公約数を求める関数
-    function gcd(a, b) {
-        // 2つの数の最大公約数を求める
-        // ユークリッドの互除法を使用
-        while (b !== 0) {
-            // bが0でなければ、aをbで割った余りをbに代入する
-            [a, b] = [b, a % b];
-        }
-        // aが最大公約数となる
-        return Math.abs(a);
-    }
 
     let maxStep = 0.2;
     let currentGCD = 0;
@@ -76,3 +73,16 @@ function findLargestStep(numberArray) {
     // 最大ステップサイズを返す
     return maxStep;
 }
+
+// 最大公約数を求める関数
+function gcd(a, b) {
+    // 2つの数の最大公約数を求める
+    // ユークリッドの互除法を使用
+    while (b !== 0) {
+        // bが0でなければ、aをbで割った余りをbに代入する
+        [a, b] = [b, a % b];
+    }
+    // aが最大公約数となる
+    return Math.abs(a);
+}
+
