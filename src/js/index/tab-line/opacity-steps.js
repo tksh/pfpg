@@ -1,7 +1,8 @@
-import { getGroupColorsValues }   from './group-colors.js'
-import { numbersIncrementByStep } from '../utils/number-generator.js'
-import { getNumberOfGroups }      from '../utils/get-number-of-groups.js'
+import { getGroupColorsValues }       from './group-colors.js'
 import { generateGroupColorsSvgTags } from './group-colors.js'
+import { numbersIncrementByStep }     from '../utils/number-generator.js'
+import { getNumberOfGroups }          from '../utils/get-number-of-groups.js'
+import { getInputSvg }                from '../download.js'
 
 export
 { changeOpacitySelectOptionsAsNewStep

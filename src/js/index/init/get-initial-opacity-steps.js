@@ -1,10 +1,6 @@
 import { getGroupColorsValues } from '../tab-line/group-colors.js'
 
-export {
-    getInitialOpacitySteps
-    , findLargestStep
-    , gcd
-}
+export { getInitialOpacitySteps }
 
 // getInitialOpacitySteps() function used twice at main.js ...
 //

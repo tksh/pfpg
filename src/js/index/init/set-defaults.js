@@ -1,4 +1,5 @@
 import { getInitialOpacitySteps } from './get-initial-opacity-steps.js'
+import { getInputSvg }            from '../download.js'
 
 export async function setDefaultValueOfOptions() {
     console.log('setDefaultValueOfOptions() executed')

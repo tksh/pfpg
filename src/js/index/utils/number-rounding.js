@@ -1,3 +1,9 @@
+export
+    { roundToTwoDecimals
+    , roundToOneDecimal
+    , toFixedTrimmed
+    }
+
 // **Math.round()**メソッドだけでは、小数点第二位までを丸めることができません。そこで、数値に100をかけてから丸めて、100で割るという工夫をします。例えば、以下のように書くことができます。
 
 // var num = 1.2345;

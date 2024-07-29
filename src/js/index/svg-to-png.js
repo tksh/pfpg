@@ -1,3 +1,7 @@
+import { roundToOneDecimal } from './utils/number-rounding.js'
+
+export { measureSvg2pngTime }
+
 // Update .innerHtml text
 async function updateRenderingStatus(text, element) {
     return new Promise((resolve) => {

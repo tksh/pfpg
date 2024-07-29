@@ -1,9 +1,9 @@
 import { numbersIncrementByStep } from '../utils/number-generator.js'
+import { getInputSvg } from '../download.js'
 
 export
 { generateGroupColorsSvgTags
 , generateGroupColorsHtmlElements
-, generateOpacityElements
 , getGroupColorsValues
 , regexMatchesOfGroupColors
 , getStroke

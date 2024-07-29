@@ -1,9 +1,10 @@
+import { getInputSvg, countSvgSize } from './download.js'
+import { measureSvg2pngTime } from './svg-to-png.js'
+
 import { getNumberOfGroups } from './utils/get-number-of-groups.js'
 import
     { generateGroupColorsSvgTags
     , generateGroupColorsHtmlElements
-    , generateOpacityElements
-    , getGroupColorsValues
     , regexMatchesOfGroupColors
     , getStroke
     , getOpacity
@@ -11,18 +12,13 @@ import
     }
 from './tab-line/group-colors.js'
 
-import 
+import
     { changeOpacitySelectOptionsAsNewStep
     , updateSvgForNewStep
     }
 from './tab-line/opacity-steps.js'
 
-import
-    { getInitialOpacitySteps
-    , findLargestStep
-    , gcd
-    }
-from './init/get-initial-opacity-steps.js'
+import { getInitialOpacitySteps } from './init/get-initial-opacity-steps.js'
 
 import { setDefaultValueOfOptions } from './init/set-defaults.js'
 

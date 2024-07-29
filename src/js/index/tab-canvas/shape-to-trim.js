@@ -1,3 +1,5 @@
+import { roundToTwoDecimals } from '../utils/number-rounding.js'
+
 // For generating the shape to trim
 
 // Get center (the half of grid size)

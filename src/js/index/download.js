@@ -1,3 +1,12 @@
+import { roundToOneDecimal } from './utils/number-rounding.js'
+
+export
+{ getInputSvg
+, downloadPng           // via onclick="" at index.html
+, downloadSvg           // via onclick="" at index.html
+, countSvgSize
+}
+
 // Get the svg string from <textarea> element
 function getInputSvg() {
     return document.querySelector('#input-svg').value.trim() // '.trim()' => 文字列の両端の空白を削除
