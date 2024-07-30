@@ -1,6 +1,8 @@
+import { isOnDataManipulatorPage } from '../../../../encode-and-decode/decode/select-output-textarea.js'
+
 // Get the N number of UIntNPortray for Bruteforce53 decoding
 
-function getUintNFromUrlParams() {
+export function getUintNFromUrlParams() {
   // Detect the url: 'index.html' or 'data-manipulator.html'
   const isDataManipulatorPage = isOnDataManipulatorPage()
 

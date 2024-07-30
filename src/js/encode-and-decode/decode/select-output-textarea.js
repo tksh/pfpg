@@ -1,3 +1,8 @@
+export
+    { isOnDataManipulatorPage
+    , selectOutputTextareaId
+    }
+
 // Get the SVG output textarea ID from URL for decode()
 // index           : 'input-svg'
 // data-manipulator: 'textarea-decoded-svg'

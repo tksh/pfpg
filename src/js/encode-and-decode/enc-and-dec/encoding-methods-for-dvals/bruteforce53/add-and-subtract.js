@@ -1,3 +1,12 @@
+import { getUintNFromUrlParams } from './uint-n-from-urlparam.js'
+
+export
+{ addToEliminateNegativeBeforeEncode
+, subtractToRestoreOriginalAfterDecode
+, addNumBeforeEncode
+, subtractNumAfterDecode
+}
+
 // For base52 encoding for reference dict
 
 // Shift the entire range of reference dictionary (frequent diff values) to the positive side,
@@ -74,8 +83,8 @@ function getHalfOfBaseXRange(baseX) {
 function getTwoNumbersToAddOrSub(baseX) {
     const halfOfBase64Range = getHalfOfBaseXRange(baseX)
 
-    numberToAddAndSubForBefore0 = halfOfBase64Range
-    numberToAddAndSubForAfter9  = halfOfBase64Range - 10
+    const numberToAddAndSubForAfter9  = halfOfBase64Range - 10
+    const numberToAddAndSubForBefore0 = halfOfBase64Range
 
     return [numberToAddAndSubForBefore0, numberToAddAndSubForAfter9]
 }

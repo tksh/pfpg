@@ -1,4 +1,5 @@
 import { roundToOneDecimal } from './utils/number-rounding.js'
+import { extractViewboxValues } from './tab-canvas/crop-side-margins.js'
 
 export
 { getInputSvg

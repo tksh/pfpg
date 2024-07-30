@@ -1,8 +1,11 @@
+import { bruteforce53Dec }        from '../enc-and-dec/encoding-methods-for-dvals/bruteforce53/bruteforce53-dec.js'
+import { selectOutputTextareaId } from './select-output-textarea.js'
+
 // Decode to SVG string when page loaded.
 
 // And also will be called from '/js/index/tab-line/path-mode.js' when 'path-mode' changed via option selector.
 
-function decode(isRelative, isDataManipulatorPage) {
+export function decode(isRelative, isDataManipulatorPage) {
     const startTime = performance.now()
     console.log('Start the decoding SVG ...')
 
@@ -122,7 +125,7 @@ function decodeDvals(linesDataMap) {
     const decodedAbsDvalsMap = new Map()
     const decodedRelDvalsMap = new Map()
 
-    for ([gId, v] of linesDataMap) {
+    for (const [gId, v] of linesDataMap) {
         // console.log("v.encodedDvals: ", v.encodedDvals) // "x1 + y1 + x2 + y2"
         // e.g.: H5yJn8tIS6hWuVfFgdJIY10GsuwXo0w
 
@@ -133,13 +136,13 @@ function decodeDvals(linesDataMap) {
 
         if (v.threeFlags[1] === '0') {
             console.log(`Group ${gId} has encoded with 'bruteforce53-enc'`)
-            decodedDiffDvals = bruteforce53Dec(v.encodedDvals, v.threeFlags)
+            const decodedDiffDvals = bruteforce53Dec(v.encodedDvals, v.threeFlags)
             decodedRelDvals = decodedDiffDvals.map(column => diffToRel(column))
             decodedAbsDvals = relToAbs(decodedRelDvals, v.widthAndCounts)
 
         } else if (v.threeFlags[1] === '1') {
             console.log("This group has encoded with 'bigint64-enc'")
-            decodedAbsAndRelDvalsObj = bigint64Dec(v.encodedDvals, v.threeFlags)
+            const decodedAbsAndRelDvalsObj = bigint64Dec(v.encodedDvals, v.threeFlags)
             decodedAbsDvals = decodedAbsAndRelDvalsObj.absolute
             decodedRelDvals = decodedAbsAndRelDvalsObj.relative
 

@@ -1,4 +1,7 @@
-function bruteforce53Dec(encodedDvalsStr, threeFlags) {
+import { createCodebookToDecodeFrequentDiff } from './create-codebook-to-dec.js'
+import { decodeDiff }                         from './decode-diff.js'
+
+export function bruteforce53Dec(encodedDvalsStr, threeFlags) {
     //console.log("threeFlags: ", threeFlags)
     //console.log("encodedDvalsStr: ", encodedDvalsStr)
 
@@ -15,7 +18,7 @@ function bruteforce53Dec(encodedDvalsStr, threeFlags) {
         if (index % 2 === 0) {
             acc.refDictByColumn.push(val);  // Even index number elements
         } else {
-            acc.diffByColumn.push(val);      // Odd index number elements
+            acc.diffByColumn.push(val);     // Odd index number elements
         }
         return acc;
     }, { refDictByColumn: [], diffByColumn: [] });
@@ -33,6 +36,7 @@ function bruteforce53Dec(encodedDvalsStr, threeFlags) {
         // Get the codebook as actual size
         const actualCodebookSize = getActualCodebookSize(maxCodebookSize, refDictByColumn[i])
         const codebook = createCodebookToDecodeFrequentDiff(refDictByColumn[i], actualCodebookSize)
+        console.log("|||codebook: ", codebook)
 
 
 

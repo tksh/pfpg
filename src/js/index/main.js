@@ -2,6 +2,8 @@ import { getInputSvg, countSvgSize } from './download.js'
 import { measureSvg2pngTime } from './svg-to-png.js'
 
 import { getNumberOfGroups } from './utils/get-number-of-groups.js'
+import { replaceAtIndex }    from './utils/replace-at-index.js'
+
 import
     { generateGroupColorsSvgTags
     , generateGroupColorsHtmlElements
@@ -17,10 +19,29 @@ import
     , updateSvgForNewStep
     }
 from './tab-line/opacity-steps.js'
+import
+    { decodeAsSelectedPathMode
+    , recoverCurrentOptionValue
+    , recoverCurrentGroupColorsValues
+    }
+from './tab-line/path-mode.js'
+
+import
+    { toggleDisplay
+    , updateSvgWithSelectedShapePath
+    }
+from './tab-canvas/shape-to-trim.js'
+
+import
+    { viewboxSlimmed
+    , viewboxUnSlimmed
+    }
+from './tab-canvas/crop-side-margins.js'
 
 import { getInitialOpacitySteps } from './init/get-initial-opacity-steps.js'
 
 import { setDefaultValueOfOptions } from './init/set-defaults.js'
+
 
 // import { updateSvgForNewStep } from
 

@@ -1,11 +1,23 @@
+import { replaceAtIndex }          from '../utils/replace-at-index.js'
+import { isOnDataManipulatorPage } from '../../encode-and-decode/decode/select-output-textarea.js'
+import { decode } from '../../encode-and-decode/decode/decode.js'
+
+export
+    { decodeAsSelectedPathMode
+    , recoverCurrentOptionValue
+    , recoverCurrentGroupColorsValues
+    }
+
 // 選択された path-mode で URL Params から デコードし直す
 function decodeAsSelectedPathMode(pathMode) {
     if (pathMode === 'relativeMerged') {
         console.log('Path mode: Relative and merged')
-        return decode(isRelative = true, isOnDataManipulatorPage())
+        const isRelative = true
+        return decode(isRelative, isOnDataManipulatorPage())
     } else { // (value === 'absoluteSeparated')
         console.log('Path mode: Absolute and separated')
-        return decode(isRelative = false, isOnDataManipulatorPage())
+        const isRelative = false
+        return decode(isRelative, isOnDataManipulatorPage())
     }
 }
 

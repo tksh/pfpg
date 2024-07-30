@@ -1,3 +1,12 @@
+import { toFixedTrimmed } from '../utils/number-rounding.js'
+
+export
+    { svgWithNewShapeViewbox
+    , viewboxSlimmed
+    , extractViewboxValues
+    , viewboxUnSlimmed
+    }
+
 function svgWithNewShapeViewbox(shape, hasCropSideMargins, newClippathSvg) {
 
     // Update 'viewBox'

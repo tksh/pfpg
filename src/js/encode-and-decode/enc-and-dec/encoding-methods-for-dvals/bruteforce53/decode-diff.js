@@ -1,6 +1,8 @@
+import { baseXDec } from './base-x-dec.js'
+
 // Functions to decode the diff
 
-function decodeDiff(diffStr, codebook, baseX) {
+export function decodeDiff(diffStr, codebook, baseX) {
     let decodedDiffArr = [];
 
     for (let i = 0; i < diffStr.length; i++) {

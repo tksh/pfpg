@@ -1,4 +1,15 @@
-import { roundToTwoDecimals } from '../utils/number-rounding.js'
+import
+    { svgWithNewShapeViewbox
+    , extractViewboxValues
+    }
+from './crop-side-margins.js'
+
+import { roundToTwoDecimals }     from '../utils/number-rounding.js'
+
+export
+    { toggleDisplay
+    , updateSvgWithSelectedShapePath
+    }
 
 // For generating the shape to trim
 
@@ -56,34 +67,6 @@ function generateClippathShapeOfSquircleSlimmed(inputSvg, widthNarrowness, topHe
     const topInflationAmount = roundToTwoDecimals(left - ((gridSize / 100) * topHeavyRatio))
     //console.log('topInflationAmount: ', topInflationAmount)
     return `<path d="M ${left},${center}Q ${topInflationAmount},0 ${center},0T ${right},${center} ${center},${gridSize} ${left},${center}" />`
-}
-
-
-// Replace the path string with new selected shape one
-function svgWithNewShapeClippath(shape, inputSvg, shapePathOfSquircle, shapePathOfSquircleSlimmed) {
-
-    let updatedSvgString = inputSvg
-
-    // Update <clipPath>
-
-    // cliPathとして使う かたち のパス文字列 を 取得する正規表現パターン
-    const patternForClippathShape = /<clipPath id="shape-to-trim">\n.*\n.*<\/clipPath>/g;
-
-    if (shape == 'square') {
-        console.log('Selected shape is ', shape)
-        updatedSvgString = inputSvg.replace(patternForClippathShape, '<clipPath id="shape-to-trim">\n            <rect width="100%" height="100%" />\n        <\/clipPath>');
-    } else if (shape == 'circle') {
-        console.log('Selected shape is ', shape)
-        updatedSvgString = inputSvg.replace(patternForClippathShape, '<clipPath id="shape-to-trim">\n            <circle cx="50%" cy="50%" r="50%" />\n        <\/clipPath>');
-    } else if (shape == 'squircle') {
-        console.log('Selected shape is ', shape)
-        updatedSvgString = inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">\n            ${shapePathOfSquircle}\n        <\/clipPath>`);
-    } else if (shape == 'squircleSlimmed') {
-        console.log('Selected shape is ', shape)
-        updatedSvgString = inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">\n            ${shapePathOfSquircleSlimmed}\n        <\/clipPath>`);
-    }
-
-    return updatedSvgString
 }
 
 

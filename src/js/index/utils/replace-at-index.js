@@ -1,4 +1,4 @@
-function replaceAtIndex(inputString, regexPattern, replacement, index) {
+export function replaceAtIndex(inputString, regexPattern, replacement, index) {
     //console.log('replacement: ', replacement) // <g stroke="#00000088">
 
     // 正規表現でマッチした結果を配列として取得

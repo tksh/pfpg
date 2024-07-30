@@ -1,6 +1,8 @@
+import { subtractNumAfterDecode } from './add-and-subtract.js'
+
 // BaseX decode for both 'a' padded or not
 
-function baseXDec(str, baseX) {
+export function baseXDec(str, baseX) {
     const alphabets52 = getAlphabets52()
     const alphabet = alphabets52.substring(0, baseX)
     let base = alphabet.length;

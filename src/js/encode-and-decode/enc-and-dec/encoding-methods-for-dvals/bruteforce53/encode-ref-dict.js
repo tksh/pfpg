@@ -1,3 +1,5 @@
+import { addToEliminateNegativeBeforeEncode } from './add-and-subtract.js'
+
 // Create the reference dictionary
 //   Encode the array of frequent diff values as a string to attach
 
@@ -5,7 +7,7 @@
 //   結果が 1文字の場合は `.padStart(2, 'a')` で 長さを 2文字 に揃える
 //   結果が 3文字の場合は 先頭にアンダースコア '_' をひとつ付ける ( 'abc' => '_abc' )
 
-function encodeFreqDiffAsRefDict(freqDiffArrActualCodebookSized) {
+export function encodeFreqDiffAsRefDict(freqDiffArrActualCodebookSized) {
     const refDict = freqDiffArrActualCodebookSized.map((value) => base52EncodeForRefDict(value))
     return refDict.join('') // return after joined as a string
 }

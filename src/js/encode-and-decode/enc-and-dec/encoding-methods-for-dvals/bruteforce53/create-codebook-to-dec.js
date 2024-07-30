@@ -1,6 +1,8 @@
+import { base52DecodeForRefDict } from '../../base-n-encodings/base-52-dec.js'
+
 // Create the codebook
 
-function createCodebookToDecodeFrequentDiff(encodedRefDict, maxCodebookSize) {
+export function createCodebookToDecodeFrequentDiff(encodedRefDict, maxCodebookSize) {
     // Key  : Alphabets
     // Value: Frequent diff value from reference dictionary
 

@@ -1,4 +1,11 @@
-// For the number value of freq dict to embed for bruteforce53-enc
+import { subtractToRestoreOriginalAfterDecode } from '../../enc-and-dec/encoding-methods-for-dvals/bruteforce53/add-and-subtract.js'
+
+export
+    { base52Decode
+    , base52DecodeForRefDict
+    }
+
+    // For the number value of freq dict to embed for bruteforce53-enc
 
 function base52Decode(str) {
     const alphabet = getAlphabets52()
@@ -43,10 +50,10 @@ function base52DecodeForRefDict(str) {
     }
 
     // Base52 decode
-    let rawDecoded = base52Decode(encodedStr);
+    const rawDecoded = base52Decode(encodedStr);
 
     // UIntX の値に応じた 正の数だけにするために 加えていた数値を 取り除く
-    decoded = subtractToRestoreOriginalAfterDecode(rawDecoded)
+    const decoded = subtractToRestoreOriginalAfterDecode(rawDecoded)
 
     //console.log('decoded, rawDecoded, encodeStr: ', decoded, rawDecoded, encodedStr) // -2 1018 tE
 
