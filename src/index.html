@@ -9,7 +9,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>pfpg</title>
 
-    <!-- Favicon -->
+    <script type="importmap">
+        {
+          "imports": {
+            "normalized-to-hex": "./js/color-formatter/normalized-to-hex.js"
+          }
+        }
+    </script>
+
+      <!-- Favicon -->
     <link rel="apple-touch-icon" href="./apple-touch-icon.png">
     <link rel="manifest" href="./site.webmanifest">
     <link rel="icon" href="./favicon.svg" type="image/svg+xml">
@@ -33,12 +41,12 @@
     <script defer src="./js/index/lib-jscolor/jscolor.min.js"></script>
 
 
-    <script type="module" src="./js/index/download.js"></script>
-    <script type="module" src="./js/index/svg-to-png.js"></script>
+    <!-- <script type="module" src="./js/index/download.js"></script> -->
+    <!-- <script type="module" src="./js/index/svg-to-png.js"></script> -->
     <script defer src="./js/index/tabs.js"></script>
 
     <!-- Color Formatter -->
-    <script src="./js/color-formatter/normalized-to-hex.js"></script>
+    <!-- <script src="./js/color-formatter/normalized-to-hex.js"></script> -->
     <script src="./js/color-formatter/normalized-from-hex.js"></script>
     <script src="./js/color-formatter/hex-shorten.js"></script>
     <script src="./js/color-formatter/hex-expand.js"></script>
@@ -65,7 +73,7 @@
 
     <!-- Attributes excepts d values -->
     <!-- Group Colors -->
-    <script src="./js/encode-and-decode/enc-and-dec/attrs-excepts-dvals/group-colors-enc.js"></script>
+    <script type="module" src="./js/encode-and-decode/enc-and-dec/attrs-excepts-dvals/group-colors-enc.js"></script>
     <script src="./js/encode-and-decode/enc-and-dec/attrs-excepts-dvals/group-colors-dec.js"></script>
     <!-- Width and Counts -->
     <script src="./js/encode-and-decode/enc-and-dec/attrs-excepts-dvals/width-and-counts-enc.js"></script>
@@ -407,7 +415,7 @@
                     <img id="img" class="checker fit-to-display-area" alt="Output PNG" />
                 </div> <!-- End of img-box -->
                 <div class="download-button">
-                    <button id="png-download-button" onclick="downloadPng()">Download as PNG</button>
+                    <button id="png-download-button">Download as PNG</button>
                 </div>
 
             </div> <!-- End of Output PNG cell -->
@@ -426,7 +434,7 @@
 
                 </div><!-- End of div textarea-box -->
                 <div class="download-button">
-                    <button id="svg-download-button" onclick="downloadSvg()">Download as SVG</button>
+                    <button id="svg-download-button">Download as SVG</button>
                 </div>
 
             </div> <!-- End of Input SVG cell -->

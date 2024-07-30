@@ -1,6 +1,6 @@
 // 0から1の範囲に正規化された数値を引数として受け取り
 // 2桁のHEX文字列として返す関数
-function normalizedToHex(num) {
+export function normalizedToHex(num) {
     // 数値が0から1の範囲にあるかチェックする
     if (num < 0 || num > 1) {
         // 範囲外であればエラーを返す

@@ -36,7 +36,7 @@ export function bruteforce53Dec(encodedDvalsStr, threeFlags) {
         // Get the codebook as actual size
         const actualCodebookSize = getActualCodebookSize(maxCodebookSize, refDictByColumn[i])
         const codebook = createCodebookToDecodeFrequentDiff(refDictByColumn[i], actualCodebookSize)
-        console.log("|||codebook: ", codebook)
+        console.log("codebook: ", codebook)
 
 
 

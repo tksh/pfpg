@@ -1,12 +1,14 @@
-import { roundToOneDecimal } from './utils/number-rounding.js'
+import { roundToOneDecimal }    from './utils/number-rounding.js'
 import { extractViewboxValues } from './tab-canvas/crop-side-margins.js'
+import { getGroupColorsValues } from './tab-line/group-colors.js'
+import { normalizedToHex }      from 'normalized-to-hex'
 
 export
-{ getInputSvg
-, downloadPng           // via onclick="" at index.html
-, downloadSvg           // via onclick="" at index.html
-, countSvgSize
-}
+    { getInputSvg
+    , initializeDownloadButtons  // for downloadPng() and downloadSvg()
+    , countSvgSize
+    }
+
 
 // Get the svg string from <textarea> element
 function getInputSvg() {
@@ -140,6 +142,20 @@ function getCurrentStatus() {
 }
 
 
+
+// Initialize download button for SVG and PNG
+
+function initializeDownloadButtons() {
+    const pngDownloadButton = document.getElementById('png-download-button');
+    if (pngDownloadButton) {
+        pngDownloadButton.addEventListener('click', downloadPng);
+    }
+
+    const svgDownloadButton = document.getElementById('svg-download-button');
+    if (svgDownloadButton) {
+        svgDownloadButton.addEventListener('click', downloadSvg);
+    }
+}
 
 // Download as PNG
 

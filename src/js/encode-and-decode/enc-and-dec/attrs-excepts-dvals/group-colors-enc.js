@@ -1,3 +1,5 @@
+import { normalizedToHex } from 'normalized-to-hex'
+
 function encodeGroupColors(){
     // Read the lines data from .json as Map()
     const linesDataMap = jsonToMapObj('textarea-lines-data-uploaded')

@@ -1,18 +1,10 @@
 import { roundToOneDecimal }    from './utils/number-rounding.js'
 import { extractViewboxValues } from './tab-canvas/crop-side-margins.js'
 
-export { measureSvg2pngTime }
-
-// Update .innerHtml text
-async function updateRenderingStatus(text, element) {
-    return new Promise((resolve) => {
-        // メッセージを更新し、次のフレームで反映させる
-        element.innerHTML = text;
-        requestAnimationFrame(() => {
-            resolve();
-        });
-    });
-}
+export
+    { measureSvg2pngTime
+    , svg2png
+    }
 
 
 // Rendering from SVG to PNG with options
@@ -135,5 +127,16 @@ async function measureSvg2pngTime(svgString, opts, hasCrop, renderingStatusEleme
                 reject(error);
             }
         }, 0); // 0ミリ秒後に実行
+    });
+}
+
+// Update .innerHtml text
+async function updateRenderingStatus(text, element) {
+    return new Promise((resolve) => {
+        // メッセージを更新し、次のフレームで反映させる
+        element.innerHTML = text;
+        requestAnimationFrame(() => {
+            resolve();
+        });
     });
 }

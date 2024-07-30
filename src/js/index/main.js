@@ -1,8 +1,21 @@
-import { getInputSvg, countSvgSize } from './download.js'
-import { measureSvg2pngTime } from './svg-to-png.js'
+import { getNumberOfGroups }         from './utils/get-number-of-groups.js'
+import { replaceAtIndex }            from './utils/replace-at-index.js'
+import { getInitialOpacitySteps }    from './init/get-initial-opacity-steps.js'
+import { setDefaultValueOfOptions }  from './init/set-defaults.js'
 
-import { getNumberOfGroups } from './utils/get-number-of-groups.js'
-import { replaceAtIndex }    from './utils/replace-at-index.js'
+import
+    { getInputSvg
+    , countSvgSize
+    , initializeDownloadButtons
+    }
+from './download.js'
+
+import
+    { measureSvg2pngTime
+    , svg2png
+    }
+from './svg-to-png.js'
+
 
 import
     { generateGroupColorsSvgTags
@@ -38,12 +51,8 @@ import
     }
 from './tab-canvas/crop-side-margins.js'
 
-import { getInitialOpacitySteps } from './init/get-initial-opacity-steps.js'
-
-import { setDefaultValueOfOptions } from './init/set-defaults.js'
 
 
-// import { updateSvgForNewStep } from
 
 (async function () {
     // Generate the HTML elements of group attrs color-pickers
@@ -112,6 +121,7 @@ import { setDefaultValueOfOptions } from './init/set-defaults.js'
 
     //////////////////////////////// textarea ////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
+
 
 
 
@@ -581,3 +591,11 @@ import { setDefaultValueOfOptions } from './init/set-defaults.js'
     init()
 
 })(); // `(async function () {` の 即時実行関数
+
+
+// IIFEの外にDOMContentLoadedイベントリスナーを設定
+// 即時実行関数（IIFE: Immediately Invoked Function Expression）
+document.addEventListener('DOMContentLoaded', () => {
+    initializeDownloadButtons();
+    // その他の初期化コード
+});
