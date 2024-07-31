@@ -1,4 +1,4 @@
-export function initializeViewScaleListener() {
+export function initViewScaleListener() {
 
     // セレクトメニューの要素を取得
     const selectOfViewScale = document.getElementById("view-scale");

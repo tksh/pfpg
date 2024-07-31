@@ -1,4 +1,4 @@
-export function initializeCheckerPatternListener() {
+export function initCheckerPatternListener() {
 
     // セレクトメニューの要素を取得
 const selectOfCheckerPattern = document.getElementById("checker-pattern");

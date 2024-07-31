@@ -6,7 +6,7 @@ import { setDefaultValueOfOptions }  from './init/set-defaults.js'
 import
     { getInputSvg
     , countSvgSize
-    , initializeDownloadButtons
+    , initDownloadButtons
     }
 from './download.js'
 
@@ -58,9 +58,9 @@ import { decode }                  from '../encode-and-decode/decode/decode.js'
 import { adjustBox }               from './init/adjust-output-boxes-size.js'
 
 // Tab - UI
-import { initializeViewScaleListener }      from 'tab-ui/view-scale'
-import { initializeCheckerPatternListener } from 'tab-ui/checker-pattern'
-import { initializeColorThemeListener
+import { initViewScaleListener }      from 'tab-ui/view-scale'
+import { initCheckerPatternListener } from 'tab-ui/checker-pattern'
+import { initColorThemeListener
        , setSchemeAsDefaultTheme
        }                                    from 'tab-ui/color-theme'
 
@@ -615,11 +615,11 @@ import { initializeColorThemeListener
 // IIFEの外にDOMContentLoadedイベントリスナーを設定
 // 即時実行関数（IIFE: Immediately Invoked Function Expression）
 document.addEventListener('DOMContentLoaded', () => {
-    initializeDownloadButtons();
+    initDownloadButtons();
 
-    initializeViewScaleListener();
-    initializeCheckerPatternListener();
-    initializeColorThemeListener();
+    initViewScaleListener();
+    initCheckerPatternListener();
+    initColorThemeListener();
     // その他の初期化コード
 
 

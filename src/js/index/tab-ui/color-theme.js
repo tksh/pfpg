@@ -1,9 +1,9 @@
 export
-    { initializeColorThemeListener
+    { initColorThemeListener
     , setSchemeAsDefaultTheme
     }
 
-function initializeColorThemeListener() {
+function initColorThemeListener() {
 
     // セレクトメニューの要素を取得
 const colorThemeSelector = document.getElementById("color-theme");

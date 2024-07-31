@@ -5,7 +5,7 @@ import { normalizedToHex }      from 'normalized-to-hex'
 
 export
     { getInputSvg
-    , initializeDownloadButtons  // for downloadPng() and downloadSvg()
+    , initDownloadButtons  // for downloadPng() and downloadSvg()
     , countSvgSize
     }
 
@@ -145,7 +145,7 @@ function getCurrentStatus() {
 
 // Initialize download button for SVG and PNG
 
-function initializeDownloadButtons() {
+function initDownloadButtons() {
     const pngDownloadButton = document.getElementById('png-download-button');
     if (pngDownloadButton) {
         pngDownloadButton.addEventListener('click', downloadPng);
