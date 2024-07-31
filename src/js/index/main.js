@@ -52,9 +52,18 @@ import
 from './tab-canvas/crop-side-margins.js'
 
 
+import { isOnDataManipulatorPage } from '../encode-and-decode/decode/select-output-textarea.js'
+import { decode }                  from '../encode-and-decode/decode/decode.js'
+
+import { adjustBox }               from './init/adjust-output-boxes-size.js'
+
 
 
 (async function () {
+    // Initial decoding from url param to svg
+    const isRelative = false   // Default value of path-mode is 'Absolute and separated'
+    decode(isRelative, isOnDataManipulatorPage())
+
     // Generate the HTML elements of group attrs color-pickers
     generateGroupColorsHtmlElements(getInitialOpacitySteps())
 
@@ -572,6 +581,8 @@ from './tab-canvas/crop-side-margins.js'
 
     // Startup initialize process
     async function init() {
+
+
         // Set default options values
         // Read the values from original decoded SVG, then apply them as each option elements.
         await setDefaultValueOfOptions()
@@ -597,5 +608,8 @@ from './tab-canvas/crop-side-margins.js'
 // 即時実行関数（IIFE: Immediately Invoked Function Expression）
 document.addEventListener('DOMContentLoaded', () => {
     initializeDownloadButtons();
+
     // その他の初期化コード
+
+
 });

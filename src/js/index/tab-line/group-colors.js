@@ -133,12 +133,14 @@ function getGroupColorsValues() {
 
     // Get the matches for <g> from current SVG string in textarea
     const currentSvg = getInputSvg()
+    console.log('|||currentSvg: ', currentSvg)
     const matches = regexMatchesOfGroupColors(currentSvg)
+    console.log('|||matches: ', matches)
     // e.g.: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
 
     // マッチした部分の数を取得
     const numberOfGroups = matches.length; // 配列の長さでマッチした部分の数を得る
-    // console.log('numberOfGroups: ', numberOfGroups) // 5 (Number)
+    console.log('|||numberOfGroups: ', numberOfGroups) // 5 (Number)
 
 
     // Get each color as hex code
