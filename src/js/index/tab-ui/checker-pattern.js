@@ -1,4 +1,6 @@
-// セレクトメニューの要素を取得
+export function initializeCheckerPatternListener() {
+
+    // セレクトメニューの要素を取得
 const selectOfCheckerPattern = document.getElementById("checker-pattern");
 console.log('selectOfCheckerPattern.length is ', selectOfCheckerPattern.length); // 2
 
@@ -21,3 +23,5 @@ selectOfCheckerPattern.addEventListener("change", () => {
         img.classList.remove("checker");
     }
 });
+
+}

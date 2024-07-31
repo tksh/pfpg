@@ -57,6 +57,13 @@ import { decode }                  from '../encode-and-decode/decode/decode.js'
 
 import { adjustBox }               from './init/adjust-output-boxes-size.js'
 
+// Tab - UI
+import { initializeViewScaleListener }      from 'tab-ui/view-scale'
+import { initializeCheckerPatternListener } from 'tab-ui/checker-pattern'
+import { initializeColorThemeListener
+       , setSchemeAsDefaultTheme
+       }                                    from 'tab-ui/color-theme'
+
 
 
 (async function () {
@@ -598,6 +605,7 @@ import { adjustBox }               from './init/adjust-output-boxes-size.js'
         // To fit the contents (header + main) height as viewport height
         await adjustBox()
 
+        await setSchemeAsDefaultTheme()
     };
     init()
 
@@ -609,6 +617,9 @@ import { adjustBox }               from './init/adjust-output-boxes-size.js'
 document.addEventListener('DOMContentLoaded', () => {
     initializeDownloadButtons();
 
+    initializeViewScaleListener();
+    initializeCheckerPatternListener();
+    initializeColorThemeListener();
     // その他の初期化コード
 
 

@@ -1,4 +1,11 @@
-// セレクトメニューの要素を取得
+export
+    { initializeColorThemeListener
+    , setSchemeAsDefaultTheme
+    }
+
+function initializeColorThemeListener() {
+
+    // セレクトメニューの要素を取得
 const colorThemeSelector = document.getElementById("color-theme");
 console.log('colorThemeSelector.length is ', colorThemeSelector.length); // 2
 
@@ -25,6 +32,7 @@ colorThemeSelector.addEventListener("change", () => {
     //    }
 });
 
+}
 
 function setSchemeAsDefaultTheme() {
     // セレクトメニューの要素を取得
@@ -45,4 +53,4 @@ function setSchemeAsDefaultTheme() {
         colorThemeSelector.value = 'light'
     }
 }
-setSchemeAsDefaultTheme()
+//setSchemeAsDefaultTheme()
