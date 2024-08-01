@@ -12,7 +12,20 @@
     <script type="importmap">
         {
           "imports": {
+            "download":   "./js/index/download.js",
+            "svg-to-png": "./js/index/svg-to-png.js",
+
+            "init/adjust-output-boxes-size":  "./js/index/init/adjust-output-boxes-size.js",
+            "init/get-initial-opacity-steps": "./js/index/init/get-initial-opacity-steps.js",
+            "init/set-defaults":              "./js/index/init/set-defaults.js",
+            "init/tab-setup":                 "./js/index/init/tab-setup.js",
+
             "normalized-to-hex": "./js/color-formatter/normalized-to-hex.js",
+
+            "utils/get-number-of-groups":       "./js/index/utils/get-number-of-groups.js",
+            "utils/number-generator":           "./js/index/utils/number-generator.js",
+            "utils/number-rounding":            "./js/index/utils/number-rounding.js",
+            "utils/replace-at-index":           "./js/index/utils/replace-at-index.js",
 
             "tab-canvas/crop-side-margins":     "./js/index/tab-canvas/crop-side-margins.js",
             "tab-canvas/shape-to-trim":         "./js/index/tab-canvas/shape-to-trim.js",
@@ -55,23 +68,12 @@
     <script defer src="./js/index/lib-jscolor/jscolor.min.js"></script>
 
 
-    <!-- <script type="module" src="./js/index/download.js"></script> -->
-    <!-- <script type="module" src="./js/index/svg-to-png.js"></script> -->
-    <script defer src="./js/index/tabs.js"></script>
-
     <!-- Color Formatter -->
     <!-- <script src="./js/color-formatter/normalized-to-hex.js"></script> -->
     <script src="./js/color-formatter/normalized-from-hex.js"></script>
     <script src="./js/color-formatter/hex-shorten.js"></script>
     <script src="./js/color-formatter/hex-expand.js"></script>
     <script src="./js/color-formatter/try-delete-f.js"></script>
-
-    <!-- Utilities -->
-    <!-- <script defer src="./js/index/utils/get-number-of-groups.js"></script> -->
-    <!-- <script defer src="./js/index/utils/number-generator.js"></script> -->
-    <!-- <script defer src="./js/index/utils/number-rounding.js"></script> -->
-    <!-- <script defer src="./js/index/utils/replace-at-index.js"></script> -->
-
 
     <!-- Data IO -->
     <script type="module" src="./js/data-manipulator/data-io/download-url-params.js" type="module" ></script>
@@ -148,25 +150,8 @@
     <script src="./js/encode-and-decode/decode/rel-to-abs.js"></script>
     <script type="module" src="./js/encode-and-decode/decode/select-output-textarea.js"></script>
 
-    <!-- Tabs -->
 
-    <!-- Tab - Line -->
-    <!-- <script defer src="./js/index/tab-line/group-colors.js"></script> Generate the group colors tags for HTML and SVG -->
-    <!-- <script defer src="./js/index/tab-line/path-mode.js"></script> -->
-    <!-- <script type="module" src="./js/index/tab-line/opacity-steps.js"></script> -->
-    <!-- Tab - Canvas -->
-    <!-- <script type="module" src="./js/index/tab-canvas/shape-to-trim.js"></script> -->
-    <!-- <script type="module" src="./js/index/tab-canvas/crop-side-margins.js"></script> -->
-    <!-- Tab - Render -->
-    <!-- <script defer src="./js/index/tab-render/width-pixel-size.js"></script> -->
-    <!-- <script defer src="./js/index/tab-render/sync-number-and-range.js"></script> -->
-    <!-- Tab - UI -->
-    <!-- <script defer src="./js/index/tab-ui/view-scale.js"></script>
-    <script defer src="./js/index/tab-ui/checker-pattern.js"></script>
-    <script defer src="./js/index/tab-ui/color-theme.js"></script> -->
-
-
-    <!-- Initialize -->
+    <!-- Main JS -->
     <script type="module" src="./js/index/main.js"></script>
 
 
@@ -193,10 +178,10 @@
             <fieldset class="tabs-container opts">
 
                 <div class="tabs">
-                    <button class="tab" data-tab="tab-1" onclick="openTab(event, 'tab-1')">Line</button>
-                    <button class="tab" data-tab="tab-2" onclick="openTab(event, 'tab-2')">Canvas</button>
-                    <button class="tab" data-tab="tab-3" onclick="openTab(event, 'tab-3')">Render</button>
-                    <button class="tab" data-tab="tab-4" onclick="openTab(event, 'tab-4')">UI</button>
+                    <button class="tab" data-tab="tab-1">Line</button>
+                    <button class="tab" data-tab="tab-2">Canvas</button>
+                    <button class="tab" data-tab="tab-3">Render</button>
+                    <button class="tab" data-tab="tab-4">UI</button>
                 </div>
 
 

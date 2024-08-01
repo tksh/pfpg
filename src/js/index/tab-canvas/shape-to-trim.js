@@ -1,10 +1,8 @@
-import
-    { svgWithNewShapeViewbox
-    , extractViewboxValues
-    }
-from './crop-side-margins.js'
+import { svgWithNewShapeViewbox
+       , extractViewboxValues
+       }                      from 'tab-canvas/crop-side-margins'
 
-import { roundToTwoDecimals }     from '../utils/number-rounding.js'
+import { roundToTwoDecimals } from 'utils/number-rounding'
 
 export
     { toggleDisplay

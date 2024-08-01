@@ -1,4 +1,4 @@
-import { getGroupColorsValues } from '../tab-line/group-colors.js'
+import { getGroupColorsValues } from 'tab-line/group-colors'
 
 export { getInitialOpacitySteps }
 

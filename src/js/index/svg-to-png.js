@@ -1,5 +1,5 @@
-import { roundToOneDecimal }    from './utils/number-rounding.js'
-import { extractViewboxValues } from './tab-canvas/crop-side-margins.js'
+import { roundToOneDecimal }    from 'utils/number-rounding'
+import { extractViewboxValues } from 'tab-canvas/crop-side-margins'
 
 export
     { measureSvg2pngTime

@@ -1,3 +1,13 @@
+export function initTabs() {
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', (event) => openTab(event, tab.dataset.tab));
+    });
+
+    // Open the first tab when the page loads
+    openTab(null, 'tab-1');
+}
+
 function openTab(evt, tabName) {
     const tabContent = document.getElementsByClassName("tab-content");
     const tabLinks = document.getElementsByClassName("tab");
@@ -20,14 +30,3 @@ function openTab(evt, tabName) {
         document.querySelector('.tab').classList.add('active');
     }
 }
-
-// Automatically open the first tab when the page loads
-document.addEventListener('DOMContentLoaded', function () {
-    console.log('DOMContent loaded.')
-
-    // Add the 'active' class to the first tab
-    document.querySelector('.tab').classList.add('active');
-
-    // Open the first tab
-    openTab(null, 'tab-1');
-});

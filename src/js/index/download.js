@@ -1,11 +1,11 @@
-import { roundToOneDecimal }    from './utils/number-rounding.js'
-import { extractViewboxValues } from './tab-canvas/crop-side-margins.js'
-import { getGroupColorsValues } from './tab-line/group-colors.js'
+import { roundToOneDecimal }    from 'utils/number-rounding'
+import { extractViewboxValues } from 'tab-canvas/crop-side-margins'
+import { getGroupColorsValues } from 'tab-line/group-colors'
 import { normalizedToHex }      from 'normalized-to-hex'
 
 export
     { getInputSvg
-    , initDownloadButtons  // for downloadPng() and downloadSvg()
+    , initDownloadButtons
     , countSvgSize
     }
 

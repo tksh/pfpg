@@ -1,5 +1,5 @@
-import { numbersIncrementByStep } from '../utils/number-generator.js'
-import { getInputSvg } from '../download.js'
+import { numbersIncrementByStep } from 'utils/number-generator'
+import { getInputSvg } from 'download'
 
 export
     { generateGroupColorsSvgTags

@@ -1,9 +1,9 @@
 import { getGroupColorsValues }       from 'tab-line/group-colors'
 import { generateGroupColorsSvgTags } from 'tab-line/group-colors'
-import { numbersIncrementByStep }     from '../utils/number-generator.js'
-import { getNumberOfGroups }          from '../utils/get-number-of-groups.js'
-import { replaceAtIndex }             from '../utils/replace-at-index.js'
-import { getInputSvg }                from '../download.js'
+import { numbersIncrementByStep }     from 'utils/number-generator'
+import { getNumberOfGroups }          from 'utils/get-number-of-groups'
+import { replaceAtIndex }             from 'utils/replace-at-index'
+import { getInputSvg }                from 'download'
 
 export
     { changeOpacitySelectOptionsAsNewStep

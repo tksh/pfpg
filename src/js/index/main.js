@@ -1,33 +1,22 @@
-import { getNumberOfGroups }         from './utils/get-number-of-groups.js'
-import { replaceAtIndex }            from './utils/replace-at-index.js'
-import { getInitialOpacitySteps }    from './init/get-initial-opacity-steps.js'
-import { setDefaultValueOfOptions }  from './init/set-defaults.js'
+import { getInputSvg
+       , countSvgSize
+       , initDownloadButtons
+       }            from 'download'
+import { measureSvg2pngTime
+       , svg2png
+       }            from 'svg-to-png'
 
-import
-    { getInputSvg
-    , countSvgSize
-    , initDownloadButtons
-    }
-from './download.js'
+import { getNumberOfGroups }         from 'utils/get-number-of-groups'
+import { replaceAtIndex }            from 'utils/replace-at-index'
 
-import
-    { measureSvg2pngTime
-    , svg2png
-    }
-from './svg-to-png.js'
-
-
-import
-    { viewboxSlimmed
-    , viewboxUnSlimmed
-    }
-from './tab-canvas/crop-side-margins.js'
+import { adjustBox }                from 'init/adjust-output-boxes-size'
+import { getInitialOpacitySteps }   from 'init/get-initial-opacity-steps'
+import { setDefaultValueOfOptions } from 'init/set-defaults'
+import { initTabs }                 from 'init/tab-setup'
 
 
 import { isOnDataManipulatorPage } from '../encode-and-decode/decode/select-output-textarea.js'
 import { decode }                  from '../encode-and-decode/decode/decode.js'
-
-import { adjustBox }               from './init/adjust-output-boxes-size.js'
 
 // Tab - line
 import { generateGroupColorsSvgTags
@@ -36,18 +25,21 @@ import { generateGroupColorsSvgTags
        , getStroke
        , getOpacity
        , getStrokeOpacity
-       }                              from './tab-line/group-colors.js'
+       }                              from 'tab-line/group-colors'
 import { changeOpacitySelectOptionsAsNewStep
        , updateSvgForNewStep
-       }                              from './tab-line/opacity-steps.js'
+       }                              from 'tab-line/opacity-steps'
 import { decodeAsSelectedPathMode
        , recoverCurrentOptionValue
        , recoverCurrentGroupColorsValues
-       }                              from './tab-line/path-mode.js'
+       }                              from 'tab-line/path-mode'
 // Tab - Canvas
 import { toggleDisplay
        , updateSvgWithSelectedShapePath
        }                              from 'tab-canvas/shape-to-trim'
+import { viewboxSlimmed
+       , viewboxUnSlimmed
+       }                              from 'tab-canvas/crop-side-margins'
 // Tab - Render
 import { syncWidthNum
        , adjustWidthNum }             from 'tab-render/sync-number-and-range';
@@ -620,5 +612,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Tab - Render
     initWidthValidatorListener()
+
+    // First tab ('Line') activate
+    // initFirstTab()
+    initTabs()
 
 });

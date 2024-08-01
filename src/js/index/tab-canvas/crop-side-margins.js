@@ -1,4 +1,4 @@
-import { toFixedTrimmed } from '../utils/number-rounding.js'
+import { toFixedTrimmed } from 'utils/number-rounding'
 
 export
     { svgWithNewShapeViewbox
