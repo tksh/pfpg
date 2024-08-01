@@ -1,16 +1,16 @@
-import { getGroupColorsValues }       from './group-colors.js'
-import { generateGroupColorsSvgTags } from './group-colors.js'
+import { getGroupColorsValues }       from 'tab-line/group-colors'
+import { generateGroupColorsSvgTags } from 'tab-line/group-colors'
 import { numbersIncrementByStep }     from '../utils/number-generator.js'
 import { getNumberOfGroups }          from '../utils/get-number-of-groups.js'
 import { replaceAtIndex }             from '../utils/replace-at-index.js'
 import { getInputSvg }                from '../download.js'
 
 export
-{ changeOpacitySelectOptionsAsNewStep
-, replaceToNewStepOptions
-, updateSvgForNewStep
-, getElementValueById
-}
+    { changeOpacitySelectOptionsAsNewStep
+    , replaceToNewStepOptions
+    , updateSvgForNewStep
+    , getElementValueById
+    }
 
 // For event listener of Opacity steps <select>
 

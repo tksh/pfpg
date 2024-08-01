@@ -13,9 +13,20 @@
         {
           "imports": {
             "normalized-to-hex": "./js/color-formatter/normalized-to-hex.js",
-            "tab-ui/view-scale": "./js/index/tab-ui/view-scale.js",
-            "tab-ui/checker-pattern": "./js/index/tab-ui/checker-pattern.js",
-            "tab-ui/color-theme": "./js/index/tab-ui/color-theme.js"
+
+            "tab-canvas/crop-side-margins":     "./js/index/tab-canvas/crop-side-margins.js",
+            "tab-canvas/shape-to-trim":         "./js/index/tab-canvas/shape-to-trim.js",
+
+            "tab-line/group-colors":            "./js/index/tab-line/group-colors.js",
+            "tab-line/opacity-steps":           "./js/index/tab-line/opacity-steps.js",
+            "tab-line/path-mode":               "./js/index/tab-line/path-mode.js",
+
+            "tab-render/width-pixel-size":      "./js/index/tab-render/width-pixel-size.js",
+            "tab-render/sync-number-and-range": "./js/index/tab-render/sync-number-and-range.js",
+
+            "tab-ui/view-scale":                "./js/index/tab-ui/view-scale.js",
+            "tab-ui/checker-pattern":           "./js/index/tab-ui/checker-pattern.js",
+            "tab-ui/color-theme":               "./js/index/tab-ui/color-theme.js"
           }
         }
     </script>
@@ -147,8 +158,8 @@
     <!-- <script type="module" src="./js/index/tab-canvas/shape-to-trim.js"></script> -->
     <!-- <script type="module" src="./js/index/tab-canvas/crop-side-margins.js"></script> -->
     <!-- Tab - Render -->
-    <script defer src="./js/index/tab-render/width-pixel-size.js"></script>
-    <script defer src="./js/index/tab-render/sync-number-and-range.js"></script>
+    <!-- <script defer src="./js/index/tab-render/width-pixel-size.js"></script> -->
+    <!-- <script defer src="./js/index/tab-render/sync-number-and-range.js"></script> -->
     <!-- Tab - UI -->
     <!-- <script defer src="./js/index/tab-ui/view-scale.js"></script>
     <script defer src="./js/index/tab-ui/checker-pattern.js"></script>
@@ -322,11 +333,11 @@
                         <div class="opts-cell flex-direction-column">
                             <div class="display-inline-block">
                                 <label for="png-size-number">Width pixel size:</label>
-                                <input type="number" id="png-size-number" name="png-size-number" class="width-size" min="1" value="256" autocomplete="off" oninput="syncWidthNum(this)">
+                                <input type="number" id="png-size-number" name="png-size-number" class="width-size" min="1" value="256" autocomplete="off">
                             </div>
                             <div class="display-inline-block buttons-and-range">
                                 <button type="button" id="width-size-dec">-</button>
-                                <input type="range" id="png-size-range" name="png-size-range" min="2" max="512" step="2" autocomplete="off" oninput="syncWidthNum(this)">
+                                <input type="range" id="png-size-range" name="png-size-range" min="2" max="512" step="2" autocomplete="off">
                                 <button type="button" id="width-size-inc">+</button>
                             </div>
                         </div>

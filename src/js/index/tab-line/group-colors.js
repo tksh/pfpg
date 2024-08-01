@@ -2,14 +2,14 @@ import { numbersIncrementByStep } from '../utils/number-generator.js'
 import { getInputSvg } from '../download.js'
 
 export
-{ generateGroupColorsSvgTags
-, generateGroupColorsHtmlElements
-, getGroupColorsValues
-, regexMatchesOfGroupColors
-, getStroke
-, getOpacity
-, getStrokeOpacity
-}
+    { generateGroupColorsSvgTags
+    , generateGroupColorsHtmlElements
+    , getGroupColorsValues
+    , regexMatchesOfGroupColors
+    , getStroke
+    , getOpacity
+    , getStrokeOpacity
+    }
 
 // SVG
 

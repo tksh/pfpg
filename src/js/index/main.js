@@ -18,34 +18,6 @@ from './svg-to-png.js'
 
 
 import
-    { generateGroupColorsSvgTags
-    , generateGroupColorsHtmlElements
-    , regexMatchesOfGroupColors
-    , getStroke
-    , getOpacity
-    , getStrokeOpacity
-    }
-from './tab-line/group-colors.js'
-
-import
-    { changeOpacitySelectOptionsAsNewStep
-    , updateSvgForNewStep
-    }
-from './tab-line/opacity-steps.js'
-import
-    { decodeAsSelectedPathMode
-    , recoverCurrentOptionValue
-    , recoverCurrentGroupColorsValues
-    }
-from './tab-line/path-mode.js'
-
-import
-    { toggleDisplay
-    , updateSvgWithSelectedShapePath
-    }
-from './tab-canvas/shape-to-trim.js'
-
-import
     { viewboxSlimmed
     , viewboxUnSlimmed
     }
@@ -57,12 +29,35 @@ import { decode }                  from '../encode-and-decode/decode/decode.js'
 
 import { adjustBox }               from './init/adjust-output-boxes-size.js'
 
+// Tab - line
+import { generateGroupColorsSvgTags
+       , generateGroupColorsHtmlElements
+       , regexMatchesOfGroupColors
+       , getStroke
+       , getOpacity
+       , getStrokeOpacity
+       }                              from './tab-line/group-colors.js'
+import { changeOpacitySelectOptionsAsNewStep
+       , updateSvgForNewStep
+       }                              from './tab-line/opacity-steps.js'
+import { decodeAsSelectedPathMode
+       , recoverCurrentOptionValue
+       , recoverCurrentGroupColorsValues
+       }                              from './tab-line/path-mode.js'
+// Tab - Canvas
+import { toggleDisplay
+       , updateSvgWithSelectedShapePath
+       }                              from 'tab-canvas/shape-to-trim'
+// Tab - Render
+import { syncWidthNum
+       , adjustWidthNum }             from 'tab-render/sync-number-and-range';
+import { initWidthValidatorListener } from 'tab-render/width-pixel-size';
 // Tab - UI
 import { initViewScaleListener }      from 'tab-ui/view-scale'
 import { initCheckerPatternListener } from 'tab-ui/checker-pattern'
 import { initColorThemeListener
        , setSchemeAsDefaultTheme
-       }                                    from 'tab-ui/color-theme'
+       }                              from 'tab-ui/color-theme'
 
 
 
@@ -503,15 +498,9 @@ import { initColorThemeListener
 
     // Event listener for both png-size-number and png-size-range
     const pngSizeElement = (event) => {
+        syncWidthNum(event.target);
         updateAndConvert(event.target.value);
     };
-
-    // Attach event listeners to input-box and slider
-    document.querySelector('#png-size-number').addEventListener('change', pngSizeElement);
-    document.querySelector('#png-size-range').addEventListener('change', pngSizeElement);
-
-
-    // '-' and '+' buttons
 
     // Function to handle button clicks
     const handleButtonClick = (step) => {
@@ -521,7 +510,12 @@ import { initColorThemeListener
         }
     };
 
-    // Attach event listeners to buttons
+    // Attach event listeners
+
+    // input-box and slider
+    document.querySelector('#png-size-number').addEventListener('change', pngSizeElement);
+    document.querySelector('#png-size-range').addEventListener('change', pngSizeElement);
+    // Increment and decrement buttons
     document.querySelector('#width-size-dec').addEventListener('click', () => handleButtonClick(-1));
     document.querySelector('#width-size-inc').addEventListener('click', () => handleButtonClick(1));
 
@@ -615,12 +609,16 @@ import { initColorThemeListener
 // IIFEの外にDOMContentLoadedイベントリスナーを設定
 // 即時実行関数（IIFE: Immediately Invoked Function Expression）
 document.addEventListener('DOMContentLoaded', () => {
+
+    // Download buttons for SVG and PNG
     initDownloadButtons();
 
+    // Tab - UI
     initViewScaleListener();
     initCheckerPatternListener();
     initColorThemeListener();
-    // その他の初期化コード
 
+    // Tab - Render
+    initWidthValidatorListener()
 
 });
