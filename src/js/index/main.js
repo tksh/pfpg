@@ -1,13 +1,13 @@
 import { getInputSvg
        , countSvgSize
        , initDownloadButtons
-       }            from 'download'
+       }                            from 'download'
 import { measureSvg2pngTime
        , svg2png
-       }            from 'svg-to-png'
+       }                            from 'svg-to-png'
 
-import { getNumberOfGroups }         from 'utils/get-number-of-groups'
-import { replaceAtIndex }            from 'utils/replace-at-index'
+import { getNumberOfGroups }        from 'utils/get-number-of-groups'
+import { replaceAtIndex }           from 'utils/replace-at-index'
 
 import { adjustBox }                from 'init/adjust-output-boxes-size'
 import { getInitialOpacitySteps }   from 'init/get-initial-opacity-steps'
@@ -15,8 +15,8 @@ import { setDefaultValueOfOptions } from 'init/set-defaults'
 import { initTabs }                 from 'init/tab-setup'
 
 
-import { isOnDataManipulatorPage } from '../encode-and-decode/decode/select-output-textarea.js'
-import { decode }                  from '../encode-and-decode/decode/decode.js'
+import { isOnDataManipulatorPage }  from 'decode/select-output-textarea'
+import { decode }                   from 'decode/decode'
 
 // Tab - line
 import { generateGroupColorsSvgTags

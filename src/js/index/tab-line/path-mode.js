@@ -1,6 +1,6 @@
 import { replaceAtIndex }          from 'utils/replace-at-index'
-import { isOnDataManipulatorPage } from '../../encode-and-decode/decode/select-output-textarea.js'
-import { decode } from '../../encode-and-decode/decode/decode.js'
+import { isOnDataManipulatorPage } from 'decode/select-output-textarea'
+import { decode }                  from 'decode/decode'
 
 export
     { decodeAsSelectedPathMode

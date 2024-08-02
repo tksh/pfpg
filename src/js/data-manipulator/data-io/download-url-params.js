@@ -3,7 +3,7 @@
 
 import Zstd from 'https://cdn.skypack.dev/numcodecs/zstd?min';
 
-import { isOnDataManipulatorPage } from '../../encode-and-decode/decode/select-output-textarea.js'
+import { isOnDataManipulatorPage } from 'decode/select-output-textarea'
 
 
 // Download as .txt.zst

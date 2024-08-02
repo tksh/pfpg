@@ -1,4 +1,5 @@
-import { isOnDataManipulatorPage } from '../../../../encode-and-decode/decode/select-output-textarea.js'
+import { getUrlParams }            from 'utils/read-url-params'
+import { isOnDataManipulatorPage } from 'decode/select-output-textarea'
 
 // Get the N number of UIntNPortray for Bruteforce53 decoding
 

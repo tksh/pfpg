@@ -1,3 +1,6 @@
+import { isOnDataManipulatorPage } from 'decode/select-output-textarea'
+import { decode }                  from 'decode/decode'
+
 // Decode from URL Params to SVG when page loaded.
 // If there is no URL params at index.html, Decode from sample hidden text.
 

@@ -1,4 +1,4 @@
-function relToAbs(relativeDvals, widthAndCounts) {
+export function relToAbs(relativeDvals, widthAndCounts) {
 
     const x1Arr = relativeDvals[0] // [x1, x1, x1 ...]
     const y1Arr = relativeDvals[1] // [y1, y1, y1 ...]

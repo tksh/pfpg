@@ -1,5 +1,10 @@
+import { readUrlParamsAsMaps }    from 'utils/read-url-params'
+import { relToAbs }               from 'decode/rel-to-abs'
+import { selectOutputTextareaId } from 'decode/select-output-textarea'
+import { generateSvg }            from 'decode/generate-svg'
+import { showProcessingTime }     from 'enc-and-dec/show-result'
+
 import { bruteforce53Dec }        from '../enc-and-dec/encoding-methods-for-dvals/bruteforce53/bruteforce53-dec.js'
-import { selectOutputTextareaId } from './select-output-textarea.js'
 
 // Decode to SVG string when page loaded.
 

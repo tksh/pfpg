@@ -52,7 +52,7 @@
 
 
 
-function generateSvg(isRelative, basicDataMap, linesDataMap, decodedRelDvalsMap, decodedAbsDvalsMap) {
+export function generateSvg(isRelative, basicDataMap, linesDataMap, decodedRelDvalsMap, decodedAbsDvalsMap) {
 
     // Set the tab size
     const tabSpace = '    ' // Four spaces
@@ -128,7 +128,7 @@ function generateRelPathTags(tabSpace, linesDataMap, decodedRelDvalsMap) {
             }
 
             // Join the whole <path> tag parts
-            pathTag = pathTagOpenWithWidth + pathTagDval + pathTagClose
+            const pathTag = pathTagOpenWithWidth + pathTagDval + pathTagClose
             // e.g. "                <path stroke-width="3" d=\"m1 0 0 26m3-26 0 25m ... m0-1 2 4m-1-1 8 5\" />"
 
             // Push the <path> tag string into same color group array
