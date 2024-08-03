@@ -1,5 +1,5 @@
 // Get back original relative values from diff
-function diffToRel(diffArray) {
+export function diffToRel(diffArray) {
     // Array to store original values
     let originalArray = []
 

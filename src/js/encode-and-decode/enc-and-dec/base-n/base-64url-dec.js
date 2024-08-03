@@ -1,6 +1,9 @@
+import { getBase64UrlCharacters } from 'enc-and-dec/base-n/get-chars'
+
+
 // For bigint64-enc
 
-function base64UrlDec(str) {
+export function base64UrlDec(str) {
     const alphabet = getBase64UrlCharacters()
 
     let base = BigInt(alphabet.length);

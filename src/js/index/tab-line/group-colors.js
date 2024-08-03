@@ -1,5 +1,7 @@
 import { numbersIncrementByStep } from 'utils/number-generator'
-import { getInputSvg } from 'download'
+import { tryShortenAsHalf }       from 'color-formatter/hex-shorten'
+import { hexExpandToSix }         from 'color-formatter/hex-expand'
+import { getInputSvg }            from 'download'
 
 export
     { generateGroupColorsSvgTags

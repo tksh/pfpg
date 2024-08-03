@@ -1,3 +1,5 @@
+import { tryShortenAsHalf } from 'color-formatter/hex-shorten'
+
 // Output SVG string like:
 
 // In relative and merged style

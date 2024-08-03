@@ -1,3 +1,8 @@
+export
+    { hexShortenFromTen
+    , tryShortenAsHalf
+    }
+
 // 10桁の hex を受け取り 省略して 6|5|3|1桁 に変換する関数
 // 省略できなければ 10桁のまま 返す
 

@@ -1,3 +1,4 @@
+import { hexExpandToEight }       from 'color-formatter/hex-expand'
 import { getInitialOpacitySteps } from 'init/get-initial-opacity-steps'
 import { getInputSvg }            from 'download'
 

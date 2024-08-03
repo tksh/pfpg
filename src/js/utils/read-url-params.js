@@ -1,3 +1,6 @@
+import { hexExpandToTen }           from 'color-formatter/hex-expand'
+import { getBasicDataFromUrlParam } from 'enc-and-dec/basic-data/basic-data-dec'
+
 export
     { readUrlParamsAsMaps
     , getUrlParams

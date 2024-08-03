@@ -1,3 +1,6 @@
+import { addNumBeforeEncode } from 'enc-and-dec/d-values/bruteforce53/add-and-subtract'
+
+
 // Generate alphabets52 string
 // アルファベットの文字コードの範囲を定義する
 //const lowerStart = 97; // 'a'の文字コード
@@ -28,7 +31,7 @@
 
 // BaseX encode with `a` padding
 
-function baseXEnc(numOriginal, baseX) {
+export function baseXEnc(numOriginal, baseX) {
     // Add some numbers to shift each number above zero
     let numWithoutMinus = addNumBeforeEncode(numOriginal, baseX)
     console.log("numOriginal, numWithoutMinus: ", numOriginal, numWithoutMinus)

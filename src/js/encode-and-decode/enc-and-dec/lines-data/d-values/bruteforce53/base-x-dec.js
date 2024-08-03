@@ -1,4 +1,6 @@
-import { subtractNumAfterDecode } from './add-and-subtract.js'
+import { subtractNumAfterDecode } from 'enc-and-dec/d-values/bruteforce53/add-and-subtract'
+import { getAlphabets52 }         from 'enc-and-dec/d-values/bruteforce53/specific-alphabets'
+
 
 // BaseX decode for both 'a' padded or not
 

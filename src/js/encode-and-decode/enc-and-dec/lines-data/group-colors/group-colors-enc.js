@@ -1,6 +1,9 @@
-import { normalizedToHex } from 'normalized-to-hex'
+import { normalizedToHex }   from 'color-formatter/normalized-to-hex'
+import { hexShortenFromTen } from 'color-formatter/hex-shorten'
+import { hexExpandToSix }    from 'color-formatter/hex-expand'
 
-function encodeGroupColors(){
+
+export function encodeGroupColors(){
     // Read the lines data from .json as Map()
     const linesDataMap = jsonToMapObj('textarea-lines-data-uploaded')
 

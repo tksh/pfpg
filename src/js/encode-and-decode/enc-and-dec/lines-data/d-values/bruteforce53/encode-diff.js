@@ -1,3 +1,12 @@
+import { base52Enc } from 'enc-and-dec/base-n/base-52-enc'
+
+export
+    { handleSingleDigit
+    , handleFrequencyDiff
+    , calculateLimitsForBaseXSkipRange
+    }
+
+
 // Remains the [0-9] number values, NOT encode.
 
 function handleSingleDigit(diff) {
@@ -68,7 +77,7 @@ function handleBase52EncodingWithPrefix(diff, baseXNumber, baseXRangeLimits) {
 
     if (diff <= baseXRangeLimits.baseXSkipRangeLowerLimit || baseXRangeLimits.baseXSkipRangeUpperLimit <= diff) {
         // base52エンコードして 2桁に'a'でパディングしたあと いくつかのアンダースコアを接頭辞として付加
-        const diffEncoded = base52Encode(Math.abs(diff)).padStart(2, 'a');
+        const diffEncoded = base52Enc(Math.abs(diff)).padStart(2, 'a');
         const diffEncodedWithUnderscorePrefix = prependUnderscores(diffEncoded, diff > 0);
         console.log(`diff ${diff} は Base${baseXNumber} エンコード範囲外なので Base52エンコード ('_'を [1|2|3|4]個 フラグとして付ける): `, diffEncodedWithUnderscorePrefix);
         return diffEncodedWithUnderscorePrefix;
@@ -88,11 +97,11 @@ function prependUnderscores(str, isPositive) {
 
 
 
-// BaseX encode for excepts above.
-
-// baseXエンコード可能な範囲にある場合 => BaseX でアルファベット2文字にエンコード
-function handleBaseXEncoding(diff, baseXNumber) {
-    const baseXEncoded = baseXEnc(diff, baseXNumber);
-    //console.log(`diff ${diff} は baseXエンコード可能な範囲にあるので Base${baseXNumber} でアルファベット2文字にエンコード:`, baseXEncoded);
-    return baseXEncoded;
-}
+/////// // BaseX encode for excepts above.
+/////// 
+/////// // baseXエンコード可能な範囲にある場合 => BaseX でアルファベット2文字にエンコード
+/////// function handleBaseXEncoding(diff, baseXNumber) {
+///////     const baseXEncoded = baseXEnc(diff, baseXNumber);
+///////     //console.log(`diff ${diff} は baseXエンコード可能な範囲にあるので Base${baseXNumber} でアルファベット2文字にエンコード:`, baseXEncoded);
+///////     return baseXEncoded;
+/////// }

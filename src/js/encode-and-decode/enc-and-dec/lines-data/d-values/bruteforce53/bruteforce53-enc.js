@@ -1,3 +1,12 @@
+import { getActualCodebookSize }              from 'enc-and-dec/d-values/bruteforce53/actual-codebook-size'
+import { createCodebookToEncodeFrequentDiff } from 'enc-and-dec/d-values/bruteforce53/create-codebook-to-enc'
+import { handleSingleDigit }                  from 'enc-and-dec/d-values/bruteforce53/encode-diff'
+import { handleFrequencyDiff }                from 'enc-and-dec/d-values/bruteforce53/encode-diff'
+import { calculateLimitsForBaseXSkipRange }   from 'enc-and-dec/d-values/bruteforce53/encode-diff'
+import { handleBase52EncodingWithPrefix }     from 'enc-and-dec/d-values/bruteforce53/encode-diff'
+import { encodeFreqDiffAsRefDict }            from 'enc-and-dec/d-values/bruteforce53/encode-ref-dict'
+
+
 ////////////////////////////////// Input: //////////////////////////////////
 
 // Basic Data
@@ -9,7 +18,7 @@
 // for-loop 2: Each lines-group (.g_id) from '1' to group size
 // for-loop 3: Four columns from 'x1' to 'y2'
 
-function bruteforce53Enc() {
+export function bruteforce53Enc() {
     const startTime = performance.now()
 
     // To store the shortest encoded string of each group

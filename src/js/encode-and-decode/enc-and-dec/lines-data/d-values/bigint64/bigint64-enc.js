@@ -1,4 +1,7 @@
-function bigint64Enc() {
+import { getDigitsPerChunk } from 'enc-and-dec/d-values/bigint64/digits-per-chunk'
+
+
+export function bigint64Enc() {
     const startTime = performance.now()
 
     // Get digits of chunk for padding

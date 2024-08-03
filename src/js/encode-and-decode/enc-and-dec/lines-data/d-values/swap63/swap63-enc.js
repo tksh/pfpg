@@ -1,6 +1,11 @@
+import { createCodebook
+       , get63Numbers
+       , get63Characters } from 'enc-and-dec/d-values/swap63/create-codebook'
+
+
 // Replace each number of relative d values (-31 to 31) with a character from the set [0-9, a-z, A-Z, _]
 
-function swap63Enc() {
+export function swap63Enc() {
     const startTime = performance.now()
 
     // Codebook to encode from number to character

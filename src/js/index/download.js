@@ -1,7 +1,11 @@
 import { roundToOneDecimal }    from 'utils/number-rounding'
 import { extractViewboxValues } from 'tab-canvas/crop-side-margins'
 import { getGroupColorsValues } from 'tab-line/group-colors'
-import { normalizedToHex }      from 'normalized-to-hex'
+import { normalizedToHex }      from 'color-formatter/normalized-to-hex'
+import { tryDeleteFs
+       , tryDeleteF
+       }                        from 'color-formatter/try-delete-f'
+import { tryShortenAsHalf }     from 'color-formatter/hex-shorten'
 
 export
     { getInputSvg

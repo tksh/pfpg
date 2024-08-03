@@ -1,5 +1,8 @@
+import { findNearestMultipleOfFourX } from 'enc-and-dec/d-values/bigint64/bigint64-dec'
+
+
 // Function to recover the original zero-padded string
-function recoverOriginalZeroPadding(bigintAsStr, digitsPerChunk) {
+export function recoverOriginalZeroPadding(bigintAsStr, digitsPerChunk) {
     // Log the length of the input string
     console.log("Input string length:", bigintAsStr.length);
 

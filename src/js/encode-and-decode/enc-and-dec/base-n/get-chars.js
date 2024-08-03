@@ -1,3 +1,9 @@
+export
+    { getBase53Characters
+    , getBase64UrlCharacters
+    }
+
+
 // Generate an string for encoding
 // Using for 3rd flag for bruteforce53-enc
 
@@ -70,5 +76,5 @@ function getBase64UrlCharacters() {
     return result;
 }
 
-console.log(getBase64UrlCharacters())
+//console.log(getBase64UrlCharacters())
 // 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';

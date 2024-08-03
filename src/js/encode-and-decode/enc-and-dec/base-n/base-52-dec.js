@@ -1,13 +1,14 @@
-import { subtractToRestoreOriginalAfterDecode } from '../../enc-and-dec/encoding-methods-for-dvals/bruteforce53/add-and-subtract.js'
+import { subtractToRestoreOriginalAfterDecode } from 'enc-and-dec/d-values/bruteforce53/add-and-subtract'
+import { getAlphabets52 }                       from 'enc-and-dec/d-values/bruteforce53/specific-alphabets'
 
 export
-    { base52Decode
+    { base52Dec
     , base52DecodeForRefDict
     }
 
     // For the number value of freq dict to embed for bruteforce53-enc
 
-function base52Decode(str) {
+function base52Dec(str) {
     const alphabet = getAlphabets52()
     // 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
@@ -22,20 +23,20 @@ function base52Decode(str) {
     return decoded;
 }
 
-// console.log(base52Decode('a'))    // 0
-// console.log(base52Decode('b'))    // 1
-// console.log(base52Decode('A'))    // 26
-// console.log(base52Decode('B'))    // 27
-// console.log(base52Decode('Z'))    // 51
-// console.log(base52Decode('ba'))   // 52
-// console.log(base52Decode('ZZ'))   // 2703
-// console.log(base52Decode('baa'))  // 2704
-// console.log(base52Decode('ZZZ'))  // 140607
-// console.log(base52Decode('baaa')) // 140608
+// console.log(base52Dec('a'))    // 0
+// console.log(base52Dec('b'))    // 1
+// console.log(base52Dec('A'))    // 26
+// console.log(base52Dec('B'))    // 27
+// console.log(base52Dec('Z'))    // 51
+// console.log(base52Dec('ba'))   // 52
+// console.log(base52Dec('ZZ'))   // 2703
+// console.log(base52Dec('baa'))  // 2704
+// console.log(base52Dec('ZZZ'))  // 140607
+// console.log(base52Dec('baaa')) // 140608
 
-// console.log(base52Decode('aa'))   // 0
-// console.log(base52Decode('aaa'))  // 0
-// console.log(base52Decode('aaaa')) // 0
+// console.log(base52Dec('aa'))   // 0
+// console.log(base52Dec('aaa'))  // 0
+// console.log(base52Dec('aaaa')) // 0
 
 
 
@@ -50,7 +51,7 @@ function base52DecodeForRefDict(str) {
     }
 
     // Base52 decode
-    const rawDecoded = base52Decode(encodedStr);
+    const rawDecoded = base52Dec(encodedStr);
 
     // UIntX の値に応じた 正の数だけにするために 加えていた数値を 取り除く
     const decoded = subtractToRestoreOriginalAfterDecode(rawDecoded)

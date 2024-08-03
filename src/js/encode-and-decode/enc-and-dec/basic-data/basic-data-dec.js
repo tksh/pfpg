@@ -1,4 +1,7 @@
-function getBasicDataFromUrlParam(paramsArray) {
+import { getUintN } from 'enc-and-dec/basic-data/get-uint-n'
+
+
+export function getBasicDataFromUrlParam(paramsArray) {
 
     // Get basic data params (first element)
     const basicDataParam = paramsArray[0]

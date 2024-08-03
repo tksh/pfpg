@@ -1,3 +1,5 @@
+import { normalizedFromHex } from 'color-formatter/normalized-from-hex'
+
 // Convert 10 digits hex to three group colors as Object
 
 // 10 digits hex string will convert to:
@@ -8,7 +10,7 @@
 // Input : "ffffffffff"
 // Output: groupColors: {g_stroke: '#ffffff', g_opacity: 1, g_stroke_opacity: 1}
 
-function decodeGroupColors(tenDigitsHex) {
+export function decodeGroupColors(tenDigitsHex) {
 
     // Convert
     const stroke = '#' + tenDigitsHex.slice(0, 6)

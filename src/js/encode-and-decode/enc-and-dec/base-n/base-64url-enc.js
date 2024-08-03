@@ -1,6 +1,9 @@
+import { getBase64UrlCharacters } from 'enc-and-dec/base-n/get-chars'
+
+
 // For bigint64-enc
 
-function base64UrlEnc(num) {
+export function base64UrlEnc(num) {
     const alphabet = getBase64UrlCharacters()
     // 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
 

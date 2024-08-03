@@ -11,25 +11,69 @@
 
     <script type="importmap">
         {
-          "imports": {
-            "utils/read-url-params": "./js/utils/read-url-params.js",
+            "imports": {
 
-            "decode/decode":                 "./js/encode-and-decode/decode/decode.js",
-            "decode/generate-svg":           "./js/encode-and-decode/decode/generate-svg.js",
-            "decode/rel-to-abs":             "./js/encode-and-decode/decode/rel-to-abs.js",
-            "decode/select-output-textarea": "./js/encode-and-decode/decode/select-output-textarea.js",
+                "utils/read-url-params": "./js/utils/read-url-params.js",
 
-            "enc-and-dec/show-result": "./js/encode-and-decode/enc-and-dec/show-result.js",
+                "color-formatter/hex-expand":          "./js/color-formatter/hex-expand.js",
+                "color-formatter/hex-shorten":         "./js/color-formatter/hex-shorten.js",
+                "color-formatter/normalized-from-hex": "./js/color-formatter/normalized-from-hex.js",
+                "color-formatter/normalized-to-hex":   "./js/color-formatter/normalized-to-hex.js",
+                "color-formatter/try-delete-f":        "./js/color-formatter/try-delete-f.js",
+
+                "decode/decode":                 "./js/encode-and-decode/decode/decode.js",
+                "decode/generate-svg":           "./js/encode-and-decode/decode/generate-svg.js",
+                "decode/rel-to-abs":             "./js/encode-and-decode/decode/rel-to-abs.js",
+                "decode/select-output-textarea": "./js/encode-and-decode/decode/select-output-textarea.js",
+
+                "enc-and-dec/show-result": "./js/encode-and-decode/enc-and-dec/show-result.js",
+
+                "enc-and-dec/base-n/base-52-dec.js":    "./js/encode-and-decode/enc-and-dec/base-n/base-52-dec",
+                "enc-and-dec/base-n/base-52-enc.js":    "./js/encode-and-decode/enc-and-dec/base-n/base-52-enc",
+                "enc-and-dec/base-n/base-53-dec.js":    "./js/encode-and-decode/enc-and-dec/base-n/base-53-dec",
+                "enc-and-dec/base-n/base-53-enc.js":    "./js/encode-and-decode/enc-and-dec/base-n/base-53-enc",
+                "enc-and-dec/base-n/base-64url-dec.js": "./js/encode-and-decode/enc-and-dec/base-n/base-64url-dec",
+                "enc-and-dec/base-n/base-64url-enc.js": "./js/encode-and-decode/enc-and-dec/base-n/base-64url-enc",
+                "enc-and-dec/base-n/get-chars.js":      "./js/encode-and-decode/enc-and-dec/base-n/get-chars",
+
+                "enc-and-dec/basic-data/basic-data-dec": "./js/encode-and-decode/enc-and-dec/basic-data/basic-data-dec.js",
+                "enc-and-dec/basic-data/basic-data-enc": "./js/encode-and-decode/enc-and-dec/basic-data/basic-data-enc.js",
+                "enc-and-dec/basic-data/get-uint-n":     "./js/encode-and-decode/enc-and-dec/basic-data/get-uint-n.js",
+
+                "enc-and-dec/d-values/bigint64/abs-to-rel":           "./js/encode-and-decode/enc-and-dec/d-values/bigint64/abs-to-rel.js",
+                "enc-and-dec/d-values/bigint64/bigint64-dec":         "./js/encode-and-decode/enc-and-dec/d-values/bigint64/bigint64-dec.js",
+                "enc-and-dec/d-values/bigint64/bigint64-enc":         "./js/encode-and-decode/enc-and-dec/d-values/bigint64/bigint64-enc.js",
+                "enc-and-dec/d-values/bigint64/digits-per-chunk":     "./js/encode-and-decode/enc-and-dec/d-values/bigint64/digits-per-chunk.js",
+                "enc-and-dec/d-values/bigint64/recover-zero-padding": "./js/encode-and-decode/enc-and-dec/d-values/bigint64/recover-zero-padding.js",
+
+                "enc-and-dec/d-values/bruteforce53/actual-codebook-size":   "./js/encode-and-decode/enc-and-dec/d-values/bruteforce53/actual-codebook-size.js",
+                "enc-and-dec/d-values/bruteforce53/add-and-subtract":       "./js/encode-and-decode/enc-and-dec/d-values/bruteforce53/add-and-subtract.js",
+                "enc-and-dec/d-values/bruteforce53/base-x-dec":             "./js/encode-and-decode/enc-and-dec/d-values/bruteforce53/base-x-dec.js",
+                "enc-and-dec/d-values/bruteforce53/base-x-enc":             "./js/encode-and-decode/enc-and-dec/d-values/bruteforce53/base-x-enc.js",
+                "enc-and-dec/d-values/bruteforce53/bruteforce53-dec":       "./js/encode-and-decode/enc-and-dec/d-values/bruteforce53/bruteforce53-dec.js",
+                "enc-and-dec/d-values/bruteforce53/bruteforce53-enc":       "./js/encode-and-decode/enc-and-dec/d-values/bruteforce53/bruteforce53-enc.js",
+                "enc-and-dec/d-values/bruteforce53/create-codebook-to-dec": "./js/encode-and-decode/enc-and-dec/d-values/bruteforce53/create-codebook-to-dec.js",
+                "enc-and-dec/d-values/bruteforce53/create-codebook-to-enc": "./js/encode-and-decode/enc-and-dec/d-values/bruteforce53/create-codebook-to-enc.js",
+                "enc-and-dec/d-values/bruteforce53/decode-diff":            "./js/encode-and-decode/enc-and-dec/d-values/bruteforce53/decode-diff.js",
+                "enc-and-dec/d-values/bruteforce53/diff-to-rel":            "./js/encode-and-decode/enc-and-dec/d-values/bruteforce53/diff-to-rel.js",
+                "enc-and-dec/d-values/bruteforce53/encode-diff":            "./js/encode-and-decode/enc-and-dec/d-values/bruteforce53/encode-diff.js",
+                "enc-and-dec/d-values/bruteforce53/encode-ref-dict":        "./js/encode-and-decode/enc-and-dec/d-values/bruteforce53/encode-ref-dict.js",
+                "enc-and-dec/d-values/bruteforce53/specific-alphabets":     "./js/encode-and-decode/enc-and-dec/d-values/bruteforce53/specific-alphabets.js",
+                "enc-and-dec/d-values/bruteforce53/uint-n-from-urlparam":   "./js/encode-and-decode/enc-and-dec/d-values/bruteforce53/uint-n-from-urlparam.js",
+
+                "enc-and-dec/d-values/swap63/create-codebook": "./js/encode-and-decode/enc-and-dec/d-values/swap63/create-codebook.js",
+                "enc-and-dec/d-values/swap63/swap63-dec":      "./js/encode-and-decode/enc-and-dec/d-values/swap63/swap63-dec.js",
+                "enc-and-dec/d-values/swap63/swap63-enc":      "./js/encode-and-decode/enc-and-dec/d-values/swap63/swap63-enc.js",
+
 
             "download":   "./js/index/download.js",
             "svg-to-png": "./js/index/svg-to-png.js",
+
 
             "init/adjust-output-boxes-size":  "./js/index/init/adjust-output-boxes-size.js",
             "init/get-initial-opacity-steps": "./js/index/init/get-initial-opacity-steps.js",
             "init/set-defaults":              "./js/index/init/set-defaults.js",
             "init/tab-setup":                 "./js/index/init/tab-setup.js",
-
-            "normalized-to-hex": "./js/color-formatter/normalized-to-hex.js",
 
             "utils/get-number-of-groups":       "./js/index/utils/get-number-of-groups.js",
             "utils/number-generator":           "./js/index/utils/number-generator.js",

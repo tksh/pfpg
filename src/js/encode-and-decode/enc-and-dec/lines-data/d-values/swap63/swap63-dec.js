@@ -1,4 +1,9 @@
-function swap63Dec(encodedDvalsStr) {
+import { createCodebook
+       , get63Numbers
+       , get63Characters } from 'enc-and-dec/d-values/swap63/create-codebook'
+
+
+export function swap63Dec(encodedDvalsStr) {
     const codebookForDecoding = createCodebook(get63Characters(), get63Numbers())
     // Map(63) { 0 → -31, 1 → -30, 2 → -29, 3 → -28, 4 → -27, 5 → -26, 6 → -25, 7 → -24, 8 → -23, 9 → -22, … }
 

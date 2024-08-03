@@ -1,11 +1,11 @@
-import { getUintNFromUrlParams } from './uint-n-from-urlparam.js'
+import { getUintNFromUrlParams } from 'enc-and-dec/d-values/bruteforce53/uint-n-from-urlparam'
 
 export
-{ addToEliminateNegativeBeforeEncode
-, subtractToRestoreOriginalAfterDecode
-, addNumBeforeEncode
-, subtractNumAfterDecode
-}
+    { addToEliminateNegativeBeforeEncode
+    , subtractToRestoreOriginalAfterDecode
+    , addNumBeforeEncode
+    , subtractNumAfterDecode
+    }
 
 // For base52 encoding for reference dict
 

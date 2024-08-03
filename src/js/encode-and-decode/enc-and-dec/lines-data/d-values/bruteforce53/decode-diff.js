@@ -1,4 +1,5 @@
-import { baseXDec } from './base-x-dec.js'
+import { baseXDec }  from 'enc-and-dec/d-values/bruteforce53/base-x-dec'
+import { base52Dec } from 'enc-and-dec/base-n/base-52-dec'
 
 // Functions to decode the diff
 
@@ -23,28 +24,28 @@ export function decodeDiff(diffStr, codebook, baseX) {
             // '_'が １個見つかったら その次に更に '_'が何個続くか を調べて それに応じた処理をする
             // '_'があれば その次に続く 2文字 を Base52デコード: '_ab'
             if (diffStr[i + 1] !== '_') { // '_' が 一つしか続かない場合
-                decodedDiffArr.push(base52Decode((diffStr[i + 1] + diffStr[i + 2])));
-                console.log(`'_' found: ${diffStr[i] + (diffStr[i + 1] + diffStr[i + 2])} =>`, base52Decode((diffStr[i + 1] + diffStr[i + 2])))
+                decodedDiffArr.push(base52Dec((diffStr[i + 1] + diffStr[i + 2])));
+                console.log(`'_' found: ${diffStr[i] + (diffStr[i + 1] + diffStr[i + 2])} =>`, base52Dec((diffStr[i + 1] + diffStr[i + 2])))
                 i += 2; // 'i' を '2'増やして '_'の後に続く 2文字分を スキップさせる
             }
 
             // '__'があれば その次に続く 2文字 を Base52デコード: '__ab'
             // 返ってきた 数値には マイナス記号を付ける
             if (diffStr[i + 1] === '_') { // '_' が 一つ目の後に もう一つ続く場合
-                decodedDiffArr.push(-base52Decode((diffStr[i + 2] + diffStr[i + 3])));
+                decodedDiffArr.push(-base52Dec((diffStr[i + 2] + diffStr[i + 3])));
                 i += 3; // 'i' を '3'増やして '__'の後に続く 2文字分を スキップさせる
             }
 
             // '___'があれば その次に続く 3文字 を Base52デコード: '___abc'
             if (diffStr[i + 1] === '_' && diffStr[i + 2] === '_') {
-                decodedDiffArr.push(base52Decode((diffStr[i + 3] + diffStr[i + 4] + diffStr[i + 5])));
+                decodedDiffArr.push(base52Dec((diffStr[i + 3] + diffStr[i + 4] + diffStr[i + 5])));
                 i += 5; // 'i' を '5'増やして '___'の後に続く 3文字分を スキップさせる
             }
 
             // '____'があれば その次に続く 3文字 を Base52デコード: '____abc'
             // 返ってきた 数値には マイナス記号を付ける
             if (diffStr[i + 1] === '_' && diffStr[i + 2] === '_' && diffStr[i + 3] === '_') {
-                decodedDiffArr.push(-base52Decode((diffStr[i + 4] + diffStr[i + 5] + diffStr[i + 6])));
+                decodedDiffArr.push(-base52Dec((diffStr[i + 4] + diffStr[i + 5] + diffStr[i + 6])));
                 i += 6; // 'i' を '6'増やして '____'の後に続く 3文字分を スキップさせる
             }
 

@@ -1,3 +1,9 @@
+export
+    { tryDeleteFs
+    , tryDeleteF
+    }
+
+
 // For "Group colors"
 function tryDeleteFs(hex) { // Input 10 or 5 chars hex only
 

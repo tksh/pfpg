@@ -1,3 +1,5 @@
+import { base53Dec } from 'enc-and-dec/base-n/base-53-dec'
+
 export
     { showStringSize
     , showDetailsByGroup
@@ -39,7 +41,7 @@ function showDetailsByGroup(nameOfInput, encodedStrByGroupMap) {
     })
     const flag3ConfigurationValue = threeCharsAsFlag.map((value, index) => {          // 3rd char value
         if (flag2EncodingMethodName[index] === 'bruteforce53') {
-            return base53Decode(value[2])
+            return base53Dec(value[2])
         } else {
             return value[2]
         }

@@ -1,3 +1,6 @@
+import { base53Dec } from 'enc-and-dec/base-n/base-53-dec'
+
+
 // Decode the count and width, and generate the firstline and lastline
 function decodeWidthAndCounts(encodedStr) {
 
@@ -18,7 +21,7 @@ function decodeWidthAndCounts(encodedStr) {
 
     // Decode each base53 encoded string to a decimal number
     // インデックスiを2で割った余りが1と等しい = 2で割り切れるない= 奇数 の場合に要素を取得し デコードする
-    const countsArr = parts.filter((_, i) => i % 2 === 1).map(part => base53Decode(part));
+    const countsArr = parts.filter((_, i) => i % 2 === 1).map(part => base53Dec(part));
     console.log('countsArr: ', countsArr) // Arr(7) [ 104, 168, 183, 92, 12, 5, 37 ]
 
 

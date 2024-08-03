@@ -1,8 +1,11 @@
+import { getBase53Characters } from 'enc-and-dec/base-n/get-chars'
+
+
 // For:
 //     3rd flag for bruteforce53-enc
 //     Width counts value
 
-function base53Decode(str) {
+export function base53Dec(str) {
     const alphabet = getBase53Characters()
     // '_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
@@ -17,10 +20,10 @@ function base53Decode(str) {
     return decoded;
 }
 
-// console.log(base53Decode('_')) // 0
-// console.log(base53Decode('a')) // 1
-// console.log(base53Decode('b')) // 2
-// console.log(base53Decode('h')) // 8
-// console.log(base53Decode('X')) // 50
-// console.log(base53Decode('Y')) // 51
-// console.log(base53Decode('Z')) // 52
+// console.log(base53Dec('_')) // 0
+// console.log(base53Dec('a')) // 1
+// console.log(base53Dec('b')) // 2
+// console.log(base53Dec('h')) // 8
+// console.log(base53Dec('X')) // 50
+// console.log(base53Dec('Y')) // 51
+// console.log(base53Dec('Z')) // 52

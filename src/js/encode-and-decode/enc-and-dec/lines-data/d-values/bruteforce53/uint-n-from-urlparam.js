@@ -1,5 +1,6 @@
 import { getUrlParams }            from 'utils/read-url-params'
 import { isOnDataManipulatorPage } from 'decode/select-output-textarea'
+import { getBasicDataFromUrlParam } from 'enc-and-dec/basic-data/basic-data-dec'
 
 // Get the N number of UIntNPortray for Bruteforce53 decoding
 

@@ -1,3 +1,11 @@
+import { getUintN } from 'enc-and-dec/basic-data/get-uint-n'
+
+
+export
+    { encodeBasicData
+    , parseBasicData
+    }
+
 ////////////////////////////////// Input: //////////////////////////////////
 
 // From: './json_extracted/%{ARTWORK_ID}_basic_data.json

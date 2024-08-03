@@ -1,4 +1,6 @@
-import { addToEliminateNegativeBeforeEncode } from './add-and-subtract.js'
+import { base52Enc }                          from 'enc-and-dec/base-n/base-52-enc'
+import { addToEliminateNegativeBeforeEncode } from 'enc-and-dec/d-values/bruteforce53/add-and-subtract'
+
 
 // Create the reference dictionary
 //   Encode the array of frequent diff values as a string to attach
@@ -14,7 +16,7 @@ export function encodeFreqDiffAsRefDict(freqDiffArrActualCodebookSized) {
 
 
 function base52EncodeForRefDict(num) {
-    const encoded = base52Encode(addToEliminateNegativeBeforeEncode(num));
+    const encoded = base52Enc(addToEliminateNegativeBeforeEncode(num));
 
     // base52エンコードした結果が 3文字の場合 先頭に アンダースコアを追加
     if (encoded.length === 3) {

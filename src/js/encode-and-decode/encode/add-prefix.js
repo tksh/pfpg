@@ -1,3 +1,11 @@
+import { base53Enc } from 'enc-and-dec/base-n/base-53-enc'
+
+export
+    { addGroupColorPrefix
+    , addPrefixToShorter
+    }
+
+
 // Add group-colors prefix
 
 function addGroupColorPrefix(encodedColors, gId, shorterStrWithPrefix) {
@@ -75,7 +83,7 @@ function addPrefixAsFlags(inputStr, numOf1stChar, numOf2ndChar, numOf3rdChar) {
 
     } else if (numOf2ndChar === 0) {
         // for bruteforce53-enc
-        base53EncodedChar = base53Encode(numOf3rdChar)
+        base53EncodedChar = base53Enc(numOf3rdChar)
         strWithFlag = `${base53EncodedChar}` + strWithFlag
 
     } else {

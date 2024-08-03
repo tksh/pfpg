@@ -3,8 +3,11 @@ import { relToAbs }               from 'decode/rel-to-abs'
 import { selectOutputTextareaId } from 'decode/select-output-textarea'
 import { generateSvg }            from 'decode/generate-svg'
 import { showProcessingTime }     from 'enc-and-dec/show-result'
+import { bigint64Dec }            from 'enc-and-dec/d-values/bigint64/bigint64-dec'
+import { bruteforce53Dec }        from 'enc-and-dec/d-values/bruteforce53/bruteforce53-dec'
+import { diffToRel }              from 'enc-and-dec/d-values/bruteforce53/diff-to-rel'
+import { swap63Dec }              from 'enc-and-dec/d-values/swap63/swap63-dec'
 
-import { bruteforce53Dec }        from '../enc-and-dec/encoding-methods-for-dvals/bruteforce53/bruteforce53-dec.js'
 
 // Decode to SVG string when page loaded.
 

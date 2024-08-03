@@ -2,7 +2,7 @@
 
 // 絶対座標データの配列を相対座標データの配列に変換する関数
 
-function absToRel(arr) {
+export function absToRel(arr) {
     // 結果を格納する空の配列を作る
     let result = [];
     // 前の要素の x2, y2 を記録する変数を初期化する

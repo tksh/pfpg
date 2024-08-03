@@ -1,3 +1,7 @@
+import { tryDeleteF }       from 'color-formatter/try-delete-f'
+import { tryShortenAsHalf } from 'color-formatter/hex-shorten'
+import { hexExpandToSix }   from 'color-formatter/hex-expand'
+
 import { getInputSvg
        , countSvgSize
        , initDownloadButtons
