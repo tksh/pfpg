@@ -1,4 +1,4 @@
-import { addNumBeforeEncode } from 'enc-and-dec/line-data/d-values/bruteforce53/add-and-subtract'
+import { addNumBeforeEncode } from 'enc-and-dec/lines-data/d-values/bruteforce53/add-and-subtract'
 
 
 // Generate alphabets52 string

@@ -1,6 +1,7 @@
 import { normalizedToHex }   from 'color-formatter/normalized-to-hex'
 import { hexShortenFromTen } from 'color-formatter/hex-shorten'
 import { hexExpandToSix }    from 'color-formatter/hex-expand'
+import { jsonToMapObj }      from 'encode/json-to-map-obj'
 
 
 export function encodeGroupColors(){

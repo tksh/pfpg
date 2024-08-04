@@ -2,9 +2,9 @@
 
 export function getUintN(n) {
     // Add 1 before judging, For 256 => 9, not 256 => 8
-    addOne = n + 1
-    gridsize_limit = nextPowerOfTwo(addOne) // e.g.: 256
-    uintN = (Math.log2(gridsize_limit))     // e.g.: 8
+    const addOne = n + 1
+    const gridsize_limit = nextPowerOfTwo(addOne) // e.g.: 256
+    const uintN = (Math.log2(gridsize_limit))     // e.g.: 8
     return uintN
 }
 // Test

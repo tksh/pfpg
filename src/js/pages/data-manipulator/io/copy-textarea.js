@@ -1,4 +1,4 @@
-function copyTextarea(textareaId, buttonId) {
+export function copyTextarea(textareaId, buttonId) {
   const textarea = document.getElementById(textareaId);
   const textToCopy = textarea.value;
 

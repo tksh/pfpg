@@ -1,9 +1,7 @@
-export { numbersIncrementByStep }
-
 // For 'Opacity steps'
 
 // Get the strings of incremental numbers for selector option value
-function numbersIncrementByStep(step) {
+export function numbersIncrementByStep(step) {
     console.log("///////step: ", step)
     let numbers = [];
     // 0から100までの整数を (step * 100)の間隔で 配列に格納

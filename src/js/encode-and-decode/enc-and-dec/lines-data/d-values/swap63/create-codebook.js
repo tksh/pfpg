@@ -1,3 +1,9 @@
+export
+    { createCodebook
+    , get63Numbers
+    , get63Characters
+    }
+
 // Swap63変換Map()用の キーとバリューの配列 を定義する
 // エンコード時と デコード時で key,value を 逆にする
 

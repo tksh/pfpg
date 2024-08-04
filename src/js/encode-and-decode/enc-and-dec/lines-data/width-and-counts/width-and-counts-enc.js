@@ -1,4 +1,6 @@
-import { base53Enc } from 'enc-and-dec/base-n/base-53-enc'
+import { base53Enc }    from 'enc-and-dec/base-n/base-53-enc'
+import { jsonToMapObj } from 'encode/json-to-map-obj'
+
 
 export function encodeWidthAndCounts() {
     // Read the Lines Data Aggregated for Encoding from .json as Map()

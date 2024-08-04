@@ -1,3 +1,9 @@
+export
+    { hexExpandToTen
+    , hexExpandToEight
+    , hexExpandToSix
+    }
+
 // 6|5|3|1桁 に変換された hex を 10桁に戻す関数
 
 function hexExpandToTen(hex) {

@@ -1,3 +1,10 @@
+export
+    { getAlphabets52
+    , getAlphabetsForCodebook
+    , getAlphabetsForBaseX
+    }
+
+
 // Get the alphabets string for frequency dictionary and baseX encodings
 
 function getAlphabets52() {

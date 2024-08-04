@@ -1,4 +1,4 @@
-import { getUrlParams }            from 'utils/read-url-params'
+import { getUrlParams }            from 'common-utils/read-url-params'
 import { isOnDataManipulatorPage } from 'decode/select-output-textarea'
 import { getBasicDataFromUrlParam } from 'enc-and-dec/basic-data/basic-data-dec'
 

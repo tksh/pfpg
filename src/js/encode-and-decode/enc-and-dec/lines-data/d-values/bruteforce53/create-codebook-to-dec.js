@@ -1,4 +1,6 @@
-import { base52DecodeForRefDict } from '../../base-n-encodings/base-52-dec.js'
+import { base52DecodeForRefDict }  from 'enc-and-dec/base-n/base-52-dec'
+import { getAlphabetsForCodebook } from 'enc-and-dec/lines-data/d-values/bruteforce53/specific-alphabets'
+
 
 // Create the codebook
 

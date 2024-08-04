@@ -1,4 +1,4 @@
-import { findNearestMultipleOfFourX } from 'enc-and-dec/line-data/d-values/bigint64/bigint64-dec'
+import { findNearestMultipleOfFourX } from 'enc-and-dec/lines-data/d-values/bigint64/bigint64-dec'
 
 
 // Function to recover the original zero-padded string

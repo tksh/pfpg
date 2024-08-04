@@ -1,4 +1,4 @@
-function selectFileToInput(selectFileId, textAreaId){
+export function selectFileToInput(selectFileId, textAreaId){
     // FileListオブジェクト取得
     const selectFiles = document.querySelector(`#${selectFileId}`).files
 

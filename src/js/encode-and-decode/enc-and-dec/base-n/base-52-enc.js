@@ -1,4 +1,4 @@
-import { getAlphabets52 } from 'enc-and-dec/line-data/d-values/bruteforce53/specific-alphabets'
+import { getAlphabets52 } from 'enc-and-dec/lines-data/d-values/bruteforce53/specific-alphabets'
 
 
 // For the number value of freq dict to embed for bruteforce53-enc

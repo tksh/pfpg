@@ -1,17 +1,17 @@
-import { getActualCodebookSize }              from 'enc-and-dec/line-data/d-values/bruteforce53/actual-codebook-size'
-import { createCodebookToEncodeFrequentDiff } from 'enc-and-dec/line-data/d-values/bruteforce53/create-codebook-to-enc'
-import { handleSingleDigit }                  from 'enc-and-dec/line-data/d-values/bruteforce53/encode-diff'
-import { handleFrequencyDiff }                from 'enc-and-dec/line-data/d-values/bruteforce53/encode-diff'
-import { calculateLimitsForBaseXSkipRange }   from 'enc-and-dec/line-data/d-values/bruteforce53/encode-diff'
-import { handleBase52EncodingWithPrefix }     from 'enc-and-dec/line-data/d-values/bruteforce53/encode-diff'
-import { encodeFreqDiffAsRefDict }            from 'enc-and-dec/line-data/d-values/bruteforce53/encode-ref-dict'
+import { getActualCodebookSize }              from 'enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size'
+import { createCodebookToEncodeFrequentDiff } from 'enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc'
+import { handleSingleDigit }                  from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
+import { handleFrequencyDiff }                from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
+import { calculateLimitsForBaseXSkipRange }   from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
+import { handleBase52EncodingWithPrefix }     from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
+import { encodeFreqDiffAsRefDict }            from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-ref-dict'
 import { getEncodedAttrsExceptsDvals }        from 'encode/get-attrs-excepts-dvals'
 import { joinWithAmpersand }                  from 'encode/join-with-ampersand'
 import { showStringSize
        , showDetailsByGroup }                 from 'encode/show-result'
 import { storeShorter }                       from 'encode/store-shorter'
 import { tryCompress }                        from 'encode/try-compress'
-
+import { jsonToMapObj }                       from 'encode/json-to-map-obj'
 
 
 ////////////////////////////////// Input: //////////////////////////////////

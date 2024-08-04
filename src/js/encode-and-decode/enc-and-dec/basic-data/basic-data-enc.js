@@ -1,5 +1,6 @@
 import { getUintN }       from 'enc-and-dec/basic-data/get-uint-n'
 import { showStringSize } from 'encode/show-result'
+import { readTextarea }   from 'common-utils/read-textarea'
 
 
 export
