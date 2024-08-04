@@ -1,6 +1,6 @@
 import { createCodebook
        , get63Numbers
-       , get63Characters } from 'enc-and-dec/d-values/swap63/create-codebook'
+       , get63Characters } from 'enc-and-dec/line-data/d-values/swap63/create-codebook'
 
 
 export function swap63Dec(encodedDvalsStr) {

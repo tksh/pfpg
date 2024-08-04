@@ -1,5 +1,5 @@
-import { subtractToRestoreOriginalAfterDecode } from 'enc-and-dec/d-values/bruteforce53/add-and-subtract'
-import { getAlphabets52 }                       from 'enc-and-dec/d-values/bruteforce53/specific-alphabets'
+import { subtractToRestoreOriginalAfterDecode } from 'enc-and-dec/line-data/d-values/bruteforce53/add-and-subtract'
+import { getAlphabets52 }                       from 'enc-and-dec/line-data/d-values/bruteforce53/specific-alphabets'
 
 export
     { base52Dec

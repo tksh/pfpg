@@ -1,4 +1,4 @@
-import { getDigitsPerChunk }           from 'enc-and-dec/d-values/bigint64/digits-per-chunk'
+import { getDigitsPerChunk }           from 'enc-and-dec/line-data/d-values/bigint64/digits-per-chunk'
 import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
 import { joinWithAmpersand }           from 'encode/join-with-ampersand'
 import { showStringSize

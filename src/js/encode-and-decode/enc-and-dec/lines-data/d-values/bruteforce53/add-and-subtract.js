@@ -1,4 +1,4 @@
-import { getUintNFromUrlParams } from 'enc-and-dec/d-values/bruteforce53/uint-n-from-urlparam'
+import { getUintNFromUrlParams } from 'enc-and-dec/line-data/d-values/bruteforce53/uint-n-from-urlparam'
 
 export
     { addToEliminateNegativeBeforeEncode

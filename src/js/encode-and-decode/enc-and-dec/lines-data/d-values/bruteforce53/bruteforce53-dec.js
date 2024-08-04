@@ -1,8 +1,8 @@
 import { decodeDiff }                         from './decode-diff.js'
 import { base53Dec }                          from 'enc-and-dec/base-n/base-53-dec'
-import { getActualCodebookSize }              from 'enc-and-dec/d-values/bruteforce53/actual-codebook-size'
-import { createCodebookToDecodeFrequentDiff } from 'enc-and-dec/d-values/bruteforce53/create-codebook-to-dec'
-import { decodeDiff }                         from 'enc-and-dec/d-values/bruteforce53/decode-diff'
+import { getActualCodebookSize }              from 'enc-and-dec/line-data/d-values/bruteforce53/actual-codebook-size'
+import { createCodebookToDecodeFrequentDiff } from 'enc-and-dec/line-data/d-values/bruteforce53/create-codebook-to-dec'
+import { decodeDiff }                         from 'enc-and-dec/line-data/d-values/bruteforce53/decode-diff'
 
 
 export function bruteforce53Dec(encodedDvalsStr, threeFlags) {

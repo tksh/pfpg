@@ -1,6 +1,6 @@
-import { bigint64Enc }        from 'enc-and-dec/d-values/bigint64/bigint64-enc'
-import { bruteforce53Enc }    from 'enc-and-dec/d-values/bruteforce53/bruteforce53-enc'
-import { swap63Enc }          from 'enc-and-dec/d-values/swap63/swap63-enc'
+import { bigint64Enc }        from 'enc-and-dec/line-data/d-values/bigint64/bigint64-enc'
+import { bruteforce53Enc }    from 'enc-and-dec/line-data/d-values/bruteforce53/bruteforce53-enc'
+import { swap63Enc }          from 'enc-and-dec/line-data/d-values/swap63/swap63-enc'
 import { joinWithAmpersand }  from 'encode/join-with-ampersand'
 import { showStringSize
        , showDetailsByGroup } from 'encode/show-result'

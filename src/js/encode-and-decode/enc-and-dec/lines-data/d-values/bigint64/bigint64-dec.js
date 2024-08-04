@@ -1,5 +1,5 @@
-import { absToRel }                   from 'enc-and-dec/d-values/bigint64/abs-to-rel'
-import { recoverOriginalZeroPadding } from 'enc-and-dec/d-values/bigint64/recover-zero-padding'
+import { absToRel }                   from 'enc-and-dec/line-data/d-values/bigint64/abs-to-rel'
+import { recoverOriginalZeroPadding } from 'enc-and-dec/line-data/d-values/bigint64/recover-zero-padding'
 
 export
     { bigint64Dec

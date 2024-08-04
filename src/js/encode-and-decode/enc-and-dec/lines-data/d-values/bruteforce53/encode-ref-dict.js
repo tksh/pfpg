@@ -1,5 +1,5 @@
 import { base52Enc }                          from 'enc-and-dec/base-n/base-52-enc'
-import { addToEliminateNegativeBeforeEncode } from 'enc-and-dec/d-values/bruteforce53/add-and-subtract'
+import { addToEliminateNegativeBeforeEncode } from 'enc-and-dec/line-data/d-values/bruteforce53/add-and-subtract'
 
 
 // Create the reference dictionary
