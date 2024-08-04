@@ -1,4 +1,4 @@
-import { base53Dec } from 'enc-and-dec/base-n/base-53-dec'
+import { base53Dec }           from 'enc-and-dec/base-n/base-53-dec'
 
 export
     { showStringSize

@@ -1,6 +1,12 @@
 import { createCodebook
        , get63Numbers
-       , get63Characters } from 'enc-and-dec/d-values/swap63/create-codebook'
+       , get63Characters }             from 'enc-and-dec/d-values/swap63/create-codebook'
+import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
+import { joinWithAmpersand }           from 'encode/join-with-ampersand'
+import { showStringSize
+       , showDetailsByGroup }          from 'encode/show-result'
+import { tryCompress }                 from 'encode/try-compress'
+
 
 
 // Replace each number of relative d values (-31 to 31) with a character from the set [0-9, a-z, A-Z, _]

@@ -1,5 +1,7 @@
 import { hexExpandToTen }           from 'color-formatter/hex-expand'
 import { getBasicDataFromUrlParam } from 'enc-and-dec/basic-data/basic-data-dec'
+import { decodeGroupColors }        from 'enc-and-dec/lines-data/group-colors/group-colors-dec'
+import { decodeWidthAndCounts }     from 'enc-and-dec/lines-data/width-and-counts/width-and-counts-dec'
 
 export
     { readUrlParamsAsMaps

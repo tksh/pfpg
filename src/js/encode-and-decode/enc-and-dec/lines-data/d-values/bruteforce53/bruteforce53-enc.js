@@ -5,6 +5,13 @@ import { handleFrequencyDiff }                from 'enc-and-dec/d-values/brutefo
 import { calculateLimitsForBaseXSkipRange }   from 'enc-and-dec/d-values/bruteforce53/encode-diff'
 import { handleBase52EncodingWithPrefix }     from 'enc-and-dec/d-values/bruteforce53/encode-diff'
 import { encodeFreqDiffAsRefDict }            from 'enc-and-dec/d-values/bruteforce53/encode-ref-dict'
+import { getEncodedAttrsExceptsDvals }        from 'encode/get-attrs-excepts-dvals'
+import { joinWithAmpersand }                  from 'encode/join-with-ampersand'
+import { showStringSize
+       , showDetailsByGroup }                 from 'encode/show-result'
+import { storeShorter }                       from 'encode/store-shorter'
+import { tryCompress }                        from 'encode/try-compress'
+
 
 
 ////////////////////////////////// Input: //////////////////////////////////

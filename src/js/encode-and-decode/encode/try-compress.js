@@ -1,4 +1,9 @@
-function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMethodName, valueFor3rdChar) {
+import
+    { addGroupColorPrefix
+    , addPrefixToShorter } from 'encode/add-prefix'
+
+
+export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMethodName, valueFor3rdChar) {
     const encodedWidthAndCounts = encodedAttrsExceptsDvals.widthAndCounts
     const encodedGroupColors    = encodedAttrsExceptsDvals.groupColors
 

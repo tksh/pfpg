@@ -1,6 +1,6 @@
 // Compare and store the shortest length string by each group
 
-function storeShorter(currentShortestByGroup, encodedStrByGroup, baseXNumber) {
+export function storeShorter(currentShortestByGroup, encodedStrByGroup, baseXNumber) {
     //console.log('currentShortestByGroup, encodedStrByGroup: ', currentShortestByGroup, encodedStrByGroup)
     for (let [gId, encodedStr] of encodedStrByGroup) {
         if (encodedStr.length < currentShortestByGroup.get(gId).length) {

@@ -1,13 +1,17 @@
-import { bigint64Enc }     from 'enc-and-dec/d-values/bigint64/bigint64-enc'
-import { bruteforce53Enc } from 'enc-and-dec/d-values/bruteforce53/bruteforce53-enc'
-import { swap63Enc }       from 'enc-and-dec/d-values/swap63/swap63-enc'
+import { bigint64Enc }        from 'enc-and-dec/d-values/bigint64/bigint64-enc'
+import { bruteforce53Enc }    from 'enc-and-dec/d-values/bruteforce53/bruteforce53-enc'
+import { swap63Enc }          from 'enc-and-dec/d-values/swap63/swap63-enc'
+import { joinWithAmpersand }  from 'encode/join-with-ampersand'
+import { showStringSize
+       , showDetailsByGroup } from 'encode/show-result'
+import { storeShorter }       from 'encode/store-shorter'
 
 
 /**
  * Selects the best mix of encoding methods based on the given number of methods.
  * @param {number} numberOfMethods - The number of encoding methods to consider (2 or 3).
  */
-function bestMixFromNMethods(numberOfMethods) {
+export function bestMixFromNMethods(numberOfMethods) {
     // Read the result of whole encoding methods
     const bruteforce53Map = bruteforce53Enc(); // Bruteforce 53 encoding
     const bigint64Map = bigint64Enc();         // Bigint 64 encoding

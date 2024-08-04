@@ -2,7 +2,7 @@ import { base53Dec } from 'enc-and-dec/base-n/base-53-dec'
 
 
 // Decode the count and width, and generate the firstline and lastline
-function decodeWidthAndCounts(encodedStr) {
+export function decodeWidthAndCounts(encodedStr) {
 
     // Split the string into alternating numbers and base53 encoded strings
     const parts = encodedStr.match(/\d+|[_a-zA-Z]+/g);

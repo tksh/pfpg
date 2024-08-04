@@ -1,4 +1,5 @@
-import { getUintN } from 'enc-and-dec/basic-data/get-uint-n'
+import { getUintN }       from 'enc-and-dec/basic-data/get-uint-n'
+import { showStringSize } from 'encode/show-result'
 
 
 export

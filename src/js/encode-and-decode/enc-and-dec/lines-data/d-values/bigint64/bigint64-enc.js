@@ -1,4 +1,9 @@
-import { getDigitsPerChunk } from 'enc-and-dec/d-values/bigint64/digits-per-chunk'
+import { getDigitsPerChunk }           from 'enc-and-dec/d-values/bigint64/digits-per-chunk'
+import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
+import { joinWithAmpersand }           from 'encode/join-with-ampersand'
+import { showStringSize
+       , showDetailsByGroup }          from 'encode/show-result'
+import { tryCompress }                 from 'encode/try-compress'
 
 
 export function bigint64Enc() {
