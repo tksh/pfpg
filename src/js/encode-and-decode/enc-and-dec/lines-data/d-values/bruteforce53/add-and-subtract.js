@@ -1,10 +1,12 @@
 import { getUintNFromUrlParams } from 'enc-and-dec/lines-data/d-values/bruteforce53/uint-n-from-urlparam'
+import { parseBasicData }        from 'enc-and-dec/basic-data/basic-data-enc'
 
 export
     { addToEliminateNegativeBeforeEncode
     , subtractToRestoreOriginalAfterDecode
     , addNumBeforeEncode
     , subtractNumAfterDecode
+    , getHalfOfBaseXRange
     }
 
 // For base52 encoding for reference dict

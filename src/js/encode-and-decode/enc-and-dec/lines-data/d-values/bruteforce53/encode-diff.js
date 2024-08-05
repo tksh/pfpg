@@ -1,9 +1,14 @@
-import { base52Enc } from 'enc-and-dec/base-n/base-52-enc'
+import { base52Enc }           from 'enc-and-dec/base-n/base-52-enc'
+import { getHalfOfBaseXRange } from 'enc-and-dec/lines-data/d-values/bruteforce53/add-and-subtract'
+import { baseXEnc }            from 'enc-and-dec/lines-data/d-values/bruteforce53/base-x-enc'
+
 
 export
     { handleSingleDigit
     , handleFrequencyDiff
     , calculateLimitsForBaseXSkipRange
+    , handleBase52EncodingWithPrefix
+    , handleBaseXEncoding
     }
 
 
@@ -86,7 +91,7 @@ function handleBase52EncodingWithPrefix(diff, baseXNumber, baseXRangeLimits) {
 
 // Prepend some underscore signs
 function prependUnderscores(str, isPositive) {
-    if (str.length = 2) {
+    if (str.length === 2) { // Uncaught TypeError: Cannot assign to read only property 'length' of string 'cp'
         const prefix = isPositive ? '_' : '__';
         return prefix + str
     } else {  // str.length = 3
@@ -97,11 +102,11 @@ function prependUnderscores(str, isPositive) {
 
 
 
-/////// // BaseX encode for excepts above.
-/////// 
-/////// // baseXエンコード可能な範囲にある場合 => BaseX でアルファベット2文字にエンコード
-/////// function handleBaseXEncoding(diff, baseXNumber) {
-///////     const baseXEncoded = baseXEnc(diff, baseXNumber);
-///////     //console.log(`diff ${diff} は baseXエンコード可能な範囲にあるので Base${baseXNumber} でアルファベット2文字にエンコード:`, baseXEncoded);
-///////     return baseXEncoded;
-/////// }
+// BaseX encode for excepts above.
+
+// baseXエンコード可能な範囲にある場合 => BaseX でアルファベット2文字にエンコード
+function handleBaseXEncoding(diff, baseXNumber) {
+    const baseXEncoded = baseXEnc(diff, baseXNumber);
+    //console.log(`diff ${diff} は baseXエンコード可能な範囲にあるので Base${baseXNumber} でアルファベット2文字にエンコード:`, baseXEncoded);
+    return baseXEncoded;
+}

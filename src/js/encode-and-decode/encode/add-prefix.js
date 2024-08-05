@@ -83,7 +83,7 @@ function addPrefixAsFlags(inputStr, numOf1stChar, numOf2ndChar, numOf3rdChar) {
 
     } else if (numOf2ndChar === 0) {
         // for bruteforce53-enc
-        base53EncodedChar = base53Enc(numOf3rdChar)
+        const base53EncodedChar = base53Enc(numOf3rdChar)
         strWithFlag = `${base53EncodedChar}` + strWithFlag
 
     } else {

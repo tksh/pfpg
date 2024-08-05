@@ -12,7 +12,7 @@ import { outputToTextarea }       from 'common-utils/output-to-textarea'
 
 // Decode to SVG string when page loaded.
 
-// And also will be called from '/js/index/tab-line/path-mode.js' when 'path-mode' changed via option selector.
+// And also will be called from '/js/page-specific/index/tab-line/path-mode.js' when 'path-mode' changed via option selector.
 
 export function decode(isRelative, isDataManipulatorPage) {
     const startTime = performance.now()

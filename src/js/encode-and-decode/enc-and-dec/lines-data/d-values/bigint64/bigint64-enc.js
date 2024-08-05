@@ -1,3 +1,4 @@
+import { showProcessingTime }          from 'enc-and-dec/show-result'
 import { getDigitsPerChunk }           from 'enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk'
 import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
 import { joinWithAmpersand }           from 'encode/join-with-ampersand'
@@ -5,6 +6,7 @@ import { showStringSize
        , showDetailsByGroup }          from 'encode/show-result'
 import { tryCompress }                 from 'encode/try-compress'
 import { jsonToMapObj }                from 'encode/json-to-map-obj'
+import { outputToTextarea }            from 'common-utils/output-to-textarea'
 
 
 export function bigint64Enc() {

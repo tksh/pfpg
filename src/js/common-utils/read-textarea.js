@@ -1,4 +1,4 @@
-function readTextarea(textareaId) {
+export function readTextarea(textareaId) {
     const textareaInput = document.querySelector(`#${textareaId}`)
     //console.log('textareaInput: ', textareaInput)
     const textareaContent = textareaInput.value

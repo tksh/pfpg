@@ -6,7 +6,7 @@ import { showStringSize
        , showDetailsByGroup } from 'encode/show-result'
 import { storeShorter }       from 'encode/store-shorter'
 import { showBestMixResult }  from 'common-utils/output-to-textarea'
-
+import { outputToTextarea }   from 'common-utils/output-to-textarea'
 
 /**
  * Selects the best mix of encoding methods based on the given number of methods.

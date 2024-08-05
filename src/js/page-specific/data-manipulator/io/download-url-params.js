@@ -1,6 +1,8 @@
 import { outputToTextarea } from 'common-utils/output-to-textarea'
 import { readTextarea }     from 'common-utils/read-textarea'
 
+export { mergeBasicDataAndStrokesValues }
+
 
 // function to download encoded url params string
 // as `000_0000.txt` or `000_0000.txt.zst`
@@ -125,10 +127,10 @@ function getTitle() {
 // Merge the basic data and lines data as URL params
 // And get the size of after Zstandard compression to indicate
 
-// Only on data-manipulator.html
-if (isOnDataManipulatorPage()) {
-    document.getElementById('button-to-merge-as-url-params').addEventListener('click', mergeBasicDataAndStrokesValues);
-}
+//// Only on data-manipulator.html
+//if (isOnDataManipulatorPage()) {
+//    document.getElementById('button-to-merge-as-url-params').addEventListener('click', mergeBasicDataAndStrokesValues);
+//}
 
 async function mergeBasicDataAndStrokesValues(){
     // Basic Data encoded string from textarea

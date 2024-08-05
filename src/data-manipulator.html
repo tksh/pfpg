@@ -6,6 +6,117 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>pfpg | data-manipulator</title>
 
+    <script type="importmap">
+        {
+            "imports": {
+
+                "common-utils/read-url-params":    "./js/common-utils/read-url-params.js",
+                "common-utils/output-to-textarea": "./js/common-utils/output-to-textarea.js",
+                "common-utils/read-textarea":      "./js/common-utils/read-textarea.js",
+
+                "color-formatter/hex-expand":          "./js/color-formatter/hex-expand.js",
+                "color-formatter/hex-shorten":         "./js/color-formatter/hex-shorten.js",
+                "color-formatter/normalized-from-hex": "./js/color-formatter/normalized-from-hex.js",
+                "color-formatter/normalized-to-hex":   "./js/color-formatter/normalized-to-hex.js",
+                "color-formatter/try-delete-f":        "./js/color-formatter/try-delete-f.js",
+
+
+                "decode/decode":                 "./js/encode-and-decode/decode/decode.js",
+                "decode/generate-svg":           "./js/encode-and-decode/decode/generate-svg.js",
+                "decode/rel-to-abs":             "./js/encode-and-decode/decode/rel-to-abs.js",
+                "decode/select-output-textarea": "./js/encode-and-decode/decode/select-output-textarea.js",
+
+                "enc-and-dec/show-result": "./js/encode-and-decode/enc-and-dec/show-result.js",
+
+                "enc-and-dec/base-n/base-52-dec":    "./js/encode-and-decode/enc-and-dec/base-n/base-52-dec.js",
+                "enc-and-dec/base-n/base-52-enc":    "./js/encode-and-decode/enc-and-dec/base-n/base-52-enc.js",
+                "enc-and-dec/base-n/base-53-dec":    "./js/encode-and-decode/enc-and-dec/base-n/base-53-dec.js",
+                "enc-and-dec/base-n/base-53-enc":    "./js/encode-and-decode/enc-and-dec/base-n/base-53-enc.js",
+                "enc-and-dec/base-n/base-64url-dec": "./js/encode-and-decode/enc-and-dec/base-n/base-64url-dec.js",
+                "enc-and-dec/base-n/base-64url-enc": "./js/encode-and-decode/enc-and-dec/base-n/base-64url-enc.js",
+                "enc-and-dec/base-n/get-chars":      "./js/encode-and-decode/enc-and-dec/base-n/get-chars.js",
+
+                "enc-and-dec/basic-data/basic-data-dec": "./js/encode-and-decode/enc-and-dec/basic-data/basic-data-dec.js",
+                "enc-and-dec/basic-data/basic-data-enc": "./js/encode-and-decode/enc-and-dec/basic-data/basic-data-enc.js",
+                "enc-and-dec/basic-data/get-uint-n":     "./js/encode-and-decode/enc-and-dec/basic-data/get-uint-n.js",
+
+                "enc-and-dec/lines-data/d-values/bigint64/abs-to-rel":                 "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/abs-to-rel.js",
+                "enc-and-dec/lines-data/d-values/bigint64/bigint64-dec":               "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/bigint64-dec.js",
+                "enc-and-dec/lines-data/d-values/bigint64/bigint64-enc":               "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/bigint64-enc.js",
+                "enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk":           "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk.js",
+                "enc-and-dec/lines-data/d-values/bigint64/recover-zero-padding":       "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/recover-zero-padding.js",
+
+                "enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size":   "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/add-and-subtract":       "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/add-and-subtract.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/base-x-dec":             "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/base-x-dec.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/base-x-enc":             "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/base-x-enc.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-dec":       "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-dec.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc":       "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-dec": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-dec.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/decode-diff":            "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/decode-diff.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/diff-to-rel":            "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/diff-to-rel.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/encode-diff":            "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/encode-diff.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/encode-ref-dict":        "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/encode-ref-dict.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/specific-alphabets":     "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/specific-alphabets.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/uint-n-from-urlparam":   "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/uint-n-from-urlparam.js",
+
+                "enc-and-dec/lines-data/d-values/swap63/create-codebook":              "./js/encode-and-decode/enc-and-dec/lines-data/d-values/swap63/create-codebook.js",
+                "enc-and-dec/lines-data/d-values/swap63/swap63-dec":                   "./js/encode-and-decode/enc-and-dec/lines-data/d-values/swap63/swap63-dec.js",
+                "enc-and-dec/lines-data/d-values/swap63/swap63-enc":                   "./js/encode-and-decode/enc-and-dec/lines-data/d-values/swap63/swap63-enc.js",
+
+                "enc-and-dec/lines-data/group-colors/group-colors-dec":         "./js/encode-and-decode/enc-and-dec/lines-data/group-colors/group-colors-dec.js",
+                "enc-and-dec/lines-data/group-colors/group-colors-enc":         "./js/encode-and-decode/enc-and-dec/lines-data/group-colors/group-colors-enc.js",
+
+                "enc-and-dec/lines-data/width-and-counts/width-and-counts-dec": "./js/encode-and-decode/enc-and-dec/lines-data/width-and-counts/width-and-counts-dec.js",
+                "enc-and-dec/lines-data/width-and-counts/width-and-counts-enc": "./js/encode-and-decode/enc-and-dec/lines-data/width-and-counts/width-and-counts-enc.js",
+
+                "encode/add-prefix":              "./js/encode-and-decode/encode/add-prefix.js",
+                "encode/best-mix-enc":            "./js/encode-and-decode/encode/best-mix-enc.js",
+                "encode/get-attrs-excepts-dvals": "./js/encode-and-decode/encode/get-attrs-excepts-dvals.js",
+                "encode/join-with-ampersand":     "./js/encode-and-decode/encode/join-with-ampersand.js",
+                "encode/show-best-mix-result":    "./js/encode-and-decode/encode/show-best-mix-result.js",
+                "encode/show-result":             "./js/encode-and-decode/encode/show-result.js",
+                "encode/store-shorter":           "./js/encode-and-decode/encode/store-shorter.js",
+                "encode/try-compress":            "./js/encode-and-decode/encode/try-compress.js",
+                "encode/json-to-map-obj":         "./js/encode-and-decode/encode/json-to-map-obj.js",
+
+
+                "download":                         "./js/page-specific/index/download.js",
+                "svg-to-png":                       "./js/page-specific/index/svg-to-png.js",
+
+                "init/adjust-output-boxes-size":    "./js/page-specific/index/init/adjust-output-boxes-size.js",
+                "init/get-initial-opacity-steps":   "./js/page-specific/index/init/get-initial-opacity-steps.js",
+                "init/set-defaults":                "./js/page-specific/index/init/set-defaults.js",
+                "init/tab-setup":                   "./js/page-specific/index/init/tab-setup.js",
+
+                "utils/get-number-of-groups":       "./js/page-specific/index/utils/get-number-of-groups.js",
+                "utils/number-generator":           "./js/page-specific/index/utils/number-generator.js",
+                "utils/number-rounding":            "./js/page-specific/index/utils/number-rounding.js",
+                "utils/replace-at-index":           "./js/page-specific/index/utils/replace-at-index.js",
+
+                "tab-canvas/crop-side-margins":     "./js/page-specific/index/tab-canvas/crop-side-margins.js",
+                "tab-canvas/shape-to-trim":         "./js/page-specific/index/tab-canvas/shape-to-trim.js",
+
+                "tab-line/group-colors":            "./js/page-specific/index/tab-line/group-colors.js",
+                "tab-line/opacity-steps":           "./js/page-specific/index/tab-line/opacity-steps.js",
+                "tab-line/path-mode":               "./js/page-specific/index/tab-line/path-mode.js",
+
+                "tab-render/width-pixel-size":      "./js/page-specific/index/tab-render/width-pixel-size.js",
+                "tab-render/sync-number-and-range": "./js/page-specific/index/tab-render/sync-number-and-range.js",
+
+                "tab-ui/view-scale":                "./js/page-specific/index/tab-ui/view-scale.js",
+                "tab-ui/checker-pattern":           "./js/page-specific/index/tab-ui/checker-pattern.js",
+                "tab-ui/color-theme":               "./js/page-specific/index/tab-ui/color-theme.js",
+
+
+                "io/copy-textarea":       "./js/page-specific/data-manipulator/io/copy-textarea.js",
+                "io/download-url-params": "./js/page-specific/data-manipulator/io/download-url-params.js",
+                "io/select-file":         "./js/page-specific/data-manipulator/io/select-file.js"
+            }
+        }
+    </script>
+
     <!-- Favicon -->
     <link rel="apple-touch-icon" href="./apple-touch-icon.png">
     <link rel="manifest" href="./site.webmanifest">
@@ -16,97 +127,11 @@
 
     <!-- JS -->
 
-    <!-- Color Formatter -->
-    <script src="./js/color-formatter/normalized-to-hex.js"></script>
-    <script src="./js/color-formatter/normalized-from-hex.js"></script>
-    <script src="./js/color-formatter/hex-shorten.js"></script>
-    <script src="./js/color-formatter/hex-expand.js"></script>
-    <script src="./js/color-formatter/try-delete-f.js"></script>
-
-    <!-- IO -->
-    <script src="./js/page-specific/data-manipulator/io/download-url-params.js" type="module" ></script>
-    <script src="./js/page-specific/data-manipulator/io/copy-textarea.js"></script>
-    <script src="./js/page-specific/data-manipulator/io/select-file.js"></script>
-
-
-    <!-- Encode and Decode -->
-
-    <script src="./js/encode-and-decode/enc-and-dec/show-result.js"></script>
-
-    <!-- Attributes excepts d values -->
-    <!-- Group Colors -->
-    <script src="./js/encode-and-decode/enc-and-dec/attrs-excepts-dvals/group-colors-enc.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/attrs-excepts-dvals/group-colors-dec.js"></script>
-    <!-- Width and Counts -->
-    <script src="./js/encode-and-decode/enc-and-dec/attrs-excepts-dvals/width-and-counts-enc.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/attrs-excepts-dvals/width-and-counts-dec.js"></script>
-
-    <!-- Base N Encodings -->
-    <script src="./js/encode-and-decode/enc-and-dec/base-n-encodings/base-52-enc.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/base-n-encodings/base-52-dec.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/base-n-encodings/base-53-enc.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/base-n-encodings/base-53-dec.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/base-n-encodings/base-64url-enc.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/base-n-encodings/base-64url-dec.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/base-n-encodings/get-base-53-and-64url-chars.js"></script>
-
-    <!-- Basic Data -->
-    <script src="./js/encode-and-decode/enc-and-dec/basic-data/basic-data-dec.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/basic-data/basic-data-enc.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/basic-data/get-uint-n.js"></script>
-
     <!-- URLCompressor -->
     <script src="./js/encode-and-decode/enc-and-dec/url-comp-0-1-0/url-comp.js"></script>
 
-
-    <!-- Encoding methods for d Values -->
-
-    <!-- Bigint64 -->
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/bigint64/abs-to-rel.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/bigint64/bigint64-dec.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/bigint64/bigint64-enc.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/bigint64/digits-per-chunk.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/bigint64/recover-zero-padding.js"></script>
-
-    <!-- Bruteforce53 -->
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/bruteforce53/actual-codebook-size.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/bruteforce53/add-and-subtract.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/bruteforce53/base-x-dec.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/bruteforce53/base-x-enc.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/bruteforce53/bruteforce53-dec.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/bruteforce53/bruteforce53-enc.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/bruteforce53/create-codebook-to-dec.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/bruteforce53/create-codebook-to-enc.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/bruteforce53/decode-diff.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/bruteforce53/diff-to-rel.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/bruteforce53/encode-diff.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/bruteforce53/encode-ref-dict.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/bruteforce53/uint-n-from-urlparam.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/bruteforce53/specific-alphabets.js"></script>
-
-    <!-- Swap63 -->
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/swap63/create-codebook.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/swap63/swap63-dec.js"></script>
-    <script src="./js/encode-and-decode/enc-and-dec/encoding-methods-for-dvals/swap63/swap63-enc.js"></script>
-
-
-    <!-- Encode -->
-    <script src="./js/encode-and-decode/encode/add-prefix.js"></script>
-    <script src="./js/encode-and-decode/encode/best-mix-enc.js"></script>
-    <script src="./js/encode-and-decode/encode/get-attrs-excepts-dvals.js"></script>
-    <script src="./js/encode-and-decode/encode/join-with-ampersand.js"></script>
-    <script src="./js/encode-and-decode/encode/store-shorter.js"></script>
-    <script src="./js/encode-and-decode/encode/try-compress.js"></script>
-
-    <!-- Decode -->
-    <script src="./js/encode-and-decode/decode/decode.js"></script>
-    <script src="./js/encode-and-decode/decode/generate-svg.js"></script>
-    <script src="./js/encode-and-decode/decode/read-url-params.js"></script>
-    <script src="./js/encode-and-decode/decode/rel-to-abs.js"></script>
-    <script src="./js/encode-and-decode/decode/select-output-textarea.js"></script>
-
     <!-- Execute the decoding when page loaded -->
-    <script defer src="./js/page-specific/data-manipulator/main.js"></script>
+    <script type="module" src="./js/page-specific/data-manipulator/main.js"></script>
 
 </head>
 
@@ -131,7 +156,7 @@
         }
         </textarea>
 
-        <button onclick="encodeBasicData()">Encode via <b>encodeBasicData()</b></button>
+        <button id="encode-basic-data">Encode via <b>encodeBasicData()</b></button>
 
         <!-- Textarea to output the basic data encoded -->
         <textarea id="textarea-basic-data-encoded" class="height-0" placeholder="Basic Data encoded"></textarea>
@@ -305,18 +330,18 @@
         </textarea>
         <br />
 
-        <!-- Buttons to encode the s:trokes values -->
+        <!-- Buttons to encode the strokes values -->
         <h3>Select: Encoding Methods</h3>
 
-        <button onclick="bruteforce53Enc()">Encode via <b>bruteforce53Enc()</b></button>
+        <button id="encode-lines-data-as-bruteforce53">Encode via <b>bruteforce53Enc()</b></button>
         <p>For: UInt[5-14]Portray<br>With: Lines Data Aggregated for Encoding (stroke_width.list_of, stroke_width.count_by, d.relative.diff_by_row, d.relative.frequent_diff_values_sorted and d.relative.frequent_diff_counts_sorted)</p>
         <br />
 
-        <button onclick="bigint64Enc()">Encode via <b>bigint64Enc()</b></button>
+        <button id="encode-lines-data-as-bigint64">Encode via <b>bigint64Enc()</b></button>
         <p>For: UInt[5-14]Portray<br>With: Lines Data (d.absolute) and Lines Data Aggregated for Encoding (stroke_width.list_of and stroke_width.count_by)</p>
         <br />
 
-        <button onclick="swap63Enc()">Encode via <b>swap63Enc()</b></button>
+        <button id="encode-lines-data-as-swap63">Encode via <b>swap63Enc()</b></button>
         <p>For: <b>UInt5Portray ONLY</b> (viewbox: 31 x 31)<br>With: Lines Data (d.relative) and Lines Data Aggregated for Encoding (stroke_width.list_of and stroke_width.count_by)</p>
         <br />
 
@@ -347,7 +372,7 @@
         <textarea id="textarea-encoded-url-params" class="height-2" placeholder="Encoded URL Params"></textarea>
 
         <!-- Button to copy -->
-        <button id="button-encoded-url-params" onclick="copyTextarea('textarea-encoded-url-params', 'button-encoded-url-params')">Copy to clipboard</button>
+        <button class="copy-button" data-textarea-id="textarea-encoded-url-params">Copy to clipboard</button>
         <!-- Button to download as .txt -->
         <button id="button-to-download-url-params-as-txt">Download as .txt</button>
         <!-- Button to download as .txt.zstd -->
@@ -363,13 +388,13 @@
 
         <h3>⬇ Path style: Relative and Merged</h3>
         <textarea id="textarea-decoded-svg-as-rel" class="height-2" placeholder="If inputted text at address bar includes the url params like /data-manipulator.html?..., Decoding to SVG is automatically starts when page loaded and result text will export here."></textarea>
-        <button id="button-decoded-svg-as-rel" onclick="copyTextarea('textarea-decoded-svg-as-rel', 'button-decoded-svg-as-rel')">Copy to clipboard</button>
+        <button class="copy-button" data-textarea-id="textarea-decoded-svg-as-rel">Copy to clipboard</button>
         <p id="encoded-size-compare-for-rel"></p>
         <p id="encoded-strokes-values-time-for-rel"></p>
 
         <h3>⬇ Path style: Absolute and Separated</h3>
         <textarea id="textarea-decoded-svg-as-abs" class="height-2" placeholder="If inputted text at address bar includes the url params like /data-manipulator.html?..., Decoding to SVG is automatically starts when page loaded and result text will export here."></textarea>
-        <button id="button-decoded-svg-as-abs" onclick="copyTextarea('textarea-decoded-svg-as-abs', 'button-decoded-svg-as-abs')">Copy to clipboard</button>
+        <button class="copy-button" data-textarea-id="textarea-decoded-svg-as-abs">Copy to clipboard</button>
         <p id="encoded-size-compare-for-abs"></p>
         <p id="encoded-strokes-values-time-for-abs"></p>
 

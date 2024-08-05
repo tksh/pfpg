@@ -1,3 +1,4 @@
+import { showProcessingTime }          from 'enc-and-dec/show-result'
 import { createCodebook
        , get63Numbers
        , get63Characters }             from 'enc-and-dec/lines-data/d-values/swap63/create-codebook'
@@ -7,7 +8,7 @@ import { showStringSize
        , showDetailsByGroup }          from 'encode/show-result'
 import { tryCompress }                 from 'encode/try-compress'
 import { jsonToMapObj }                from 'encode/json-to-map-obj'
-
+import { outputToTextarea }            from 'common-utils/output-to-textarea'
 
 // Replace each number of relative d values (-31 to 31) with a character from the set [0-9, a-z, A-Z, _]
 

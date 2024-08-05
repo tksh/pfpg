@@ -1,9 +1,11 @@
+import { showProcessingTime }                 from 'enc-and-dec/show-result'
 import { getActualCodebookSize }              from 'enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size'
 import { createCodebookToEncodeFrequentDiff } from 'enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc'
 import { handleSingleDigit }                  from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
 import { handleFrequencyDiff }                from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
 import { calculateLimitsForBaseXSkipRange }   from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
 import { handleBase52EncodingWithPrefix }     from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
+import { handleBaseXEncoding  }               from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
 import { encodeFreqDiffAsRefDict }            from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-ref-dict'
 import { getEncodedAttrsExceptsDvals }        from 'encode/get-attrs-excepts-dvals'
 import { joinWithAmpersand }                  from 'encode/join-with-ampersand'
@@ -12,6 +14,8 @@ import { showStringSize
 import { storeShorter }                       from 'encode/store-shorter'
 import { tryCompress }                        from 'encode/try-compress'
 import { jsonToMapObj }                       from 'encode/json-to-map-obj'
+import { parseBasicData }                     from 'enc-and-dec/basic-data/basic-data-enc'
+import { outputToTextarea }                   from 'common-utils/output-to-textarea'
 
 
 ////////////////////////////////// Input: //////////////////////////////////
@@ -144,7 +148,7 @@ export function bruteforce53Enc() {
             // 頻出数値が無い場合 hyphen始まりになる (4) ['-0lalO44lHlqlflh75lklJ5lLlg', 'crbR-0260Z0zlrlVz2ZlGlNlIlk', 'cr-lWLWz0lL100001z1z22', 'cqct-1ZlKlNlH130z011Z21z']
 
             // Join four columns to form: '[x1]-[y1]-[x2]-[y2]'
-            refDictAndDiffEncodedFourColumnsJoined = refDictAndDiffEncodedFourColumns.join('-')
+            const refDictAndDiffEncodedFourColumnsJoined = refDictAndDiffEncodedFourColumns.join('-')
 
             // Set the encoded d values ([refDict]-[encodedDiff]) into map as value with group ID key
             encodedDvals.set(aggData.g_id, refDictAndDiffEncodedFourColumnsJoined)

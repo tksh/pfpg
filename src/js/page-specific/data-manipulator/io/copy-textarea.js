@@ -1,30 +1,30 @@
-export function copyTextarea(textareaId, buttonId) {
-  const textarea = document.getElementById(textareaId);
-  const textToCopy = textarea.value;
+export function setupCopyButtons() {
+  document.querySelectorAll('.copy-button').forEach(button => {
+    button.addEventListener('click', function() {
+      const textareaId = this.getAttribute('data-textarea-id');
+      const textarea = document.getElementById(textareaId);
+      const textToCopy = textarea.value;
+      const originalText = this.textContent;
 
-  const button = document.getElementById(buttonId);
-  const originalText = button.textContent; // Store the original text in a variable
-
-
-  navigator.clipboard.writeText(textToCopy)
-    .then(() => {
-      if (textToCopy.length === 0) {
-        console.log('There is no text to copy.');
-        button.textContent = '❌ There is no text to copy'
-        // After some time, revert to the original text
-        setTimeout(() => {
-          button.textContent = originalText;
-        }, 3000);
-      } else {
-        console.log('Text copied to clipboard successfully.');
-        button.textContent = '✔️ Successfully copied !'
-        // After some time, revert to the original text
-        setTimeout(() => {
-          button.textContent = originalText;
-        }, 1500);
-      }
-    })
-    .catch((error) => {
-      console.error('Error copying text to clipboard:', error);
+      navigator.clipboard.writeText(textToCopy)
+        .then(() => {
+          if (textToCopy.length === 0) {
+            console.log('There is no text to copy.');
+            this.textContent = '❌ There is no text to copy';
+            setTimeout(() => {
+              this.textContent = originalText;
+            }, 3000);
+          } else {
+            console.log('Text copied to clipboard successfully.');
+            this.textContent = '✔️ Successfully copied !';
+            setTimeout(() => {
+              this.textContent = originalText;
+            }, 1500);
+          }
+        })
+        .catch((error) => {
+          console.error('Error copying text to clipboard:', error);
+        });
     });
+  });
 }

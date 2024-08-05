@@ -1,4 +1,5 @@
-import { addNumBeforeEncode } from 'enc-and-dec/lines-data/d-values/bruteforce53/add-and-subtract'
+import { addNumBeforeEncode }   from 'enc-and-dec/lines-data/d-values/bruteforce53/add-and-subtract'
+import { getAlphabetsForBaseX } from 'enc-and-dec/lines-data/d-values/bruteforce53/specific-alphabets'
 
 
 // Generate alphabets52 string
