@@ -1,4 +1,6 @@
 import { showProcessingTime }          from 'enc-and-dec/show-result'
+import { base64UrlEnc }                from 'enc-and-dec/base-n/base-64url-enc'
+import { parseBasicData }              from 'enc-and-dec/basic-data/basic-data-enc'
 import { getDigitsPerChunk }           from 'enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk'
 import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
 import { joinWithAmpersand }           from 'encode/join-with-ampersand'

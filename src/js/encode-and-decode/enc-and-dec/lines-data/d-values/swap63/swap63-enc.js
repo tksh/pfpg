@@ -18,7 +18,7 @@ export function swap63Enc() {
     const startTime = performance.now()
 
     // Codebook to encode from number to character
-    codebookForEncoding = createCodebook(get63Numbers(), get63Characters())
+    const codebookForEncoding = createCodebook(get63Numbers(), get63Characters())
     console.log('codebookForEncoding: ', codebookForEncoding);
     // Map(63) { -31 → "0", -30 → "1", -29 → "2", -28 → "3", -27 → "4", -26 → "5", -25 → "6", -24 → "7", -23 → "8", -22 → "9", … }
 
