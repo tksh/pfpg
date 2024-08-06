@@ -1,8 +1,9 @@
-import { getUintN }       from 'enc-and-dec/basic-data/get-uint-n'
-import { showStringSize } from 'encode/show-result'
-import { readTextarea }   from 'common-utils/read-textarea'
-import { outputToTextarea } from 'common-utils/output-to-textarea'
-import { showProcessingTime } from 'enc-and-dec/show-result'
+import { getUintN }                from 'enc-and-dec/basic-data/get-uint-n'
+import { showProcessingTime }      from 'enc-and-dec/show-result'
+import { showStringSize }          from 'encode/show-result'
+import { readTextarea }            from 'common-utils/read-textarea'
+import { outputToTextarea }        from 'common-utils/output-to-textarea'
+import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
 
 
 export
@@ -47,7 +48,7 @@ function encodeBasicData() {
     // Show the processing time in html and console
     const endTime = performance.now()
     const elapsedTime = Math.floor(endTime - startTime)
-    showProcessingTime('encodeBasicData()', elapsedTime, 'encoded-basic-data-time')
+    showProcessingTime('encodeBasicData()', elapsedTime, 'encoded-basic-data-time', isOnDataManipulatorPage())
 }
 
 

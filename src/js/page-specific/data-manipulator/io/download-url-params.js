@@ -9,7 +9,7 @@ export { mergeBasicDataAndStrokesValues }
 
 import Zstd from 'https://cdn.skypack.dev/numcodecs/zstd?min';
 
-import { isOnDataManipulatorPage } from 'decode/select-output-textarea'
+import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
 
 
 // Download as .txt.zst

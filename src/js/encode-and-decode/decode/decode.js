@@ -1,6 +1,6 @@
 import { readUrlParamsAsMaps }    from 'common-utils/read-url-params'
 import { relToAbs }               from 'decode/rel-to-abs'
-import { selectOutputTextareaId } from 'decode/select-output-textarea'
+import { selectOutputTextareaId } from 'common-utils/select-output-textarea'
 import { generateSvg }            from 'decode/generate-svg'
 import { showProcessingTime }     from 'enc-and-dec/show-result'
 import { bigint64Dec }            from 'enc-and-dec/lines-data/d-values/bigint64/bigint64-dec'

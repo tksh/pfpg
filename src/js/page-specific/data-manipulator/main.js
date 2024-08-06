@@ -1,4 +1,4 @@
-import { isOnDataManipulatorPage }        from 'decode/select-output-textarea'
+import { isOnDataManipulatorPage }        from 'common-utils/select-output-textarea'
 import { decode }                         from 'decode/decode'
 import { encodeBasicData }                from 'enc-and-dec/basic-data/basic-data-enc'
 import { bruteforce53Enc }                from 'enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc'
@@ -20,9 +20,8 @@ for (const boolean of [true, false]) {
     const isRelative = boolean
     decode(isRelative,  isDataManipulatorPage)
 }
-
-//decode(isRelative,  isDataManipulatorPage)  // relative and merged
-//decode(isRelative, isDataManipulatorPage)   // absolute and separated
+// decode(isRelative = true,  isDataManipulatorPage) => Relative and merged
+// decode(isRelative = false, isDataManipulatorPage) => Absolute and separated
 
 
 // Attach event listener
@@ -34,12 +33,13 @@ function initButtons(buttonId, functionName) {
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Buttons for encode
+    // Buttons to encode
     initButtons('encode-basic-data',                 encodeBasicData);
     initButtons('encode-lines-data-as-bruteforce53', bruteforce53Enc);
     initButtons('encode-lines-data-as-bigint64',     bigint64Enc);
     initButtons('encode-lines-data-as-swap63',       swap63Enc);
 
+    // Buttons to merge
     initButtons('button-to-merge-as-url-params',     mergeBasicDataAndStrokesValues);
 
     // Buttons to copy the text value of textarea of

@@ -19,7 +19,7 @@ import { setDefaultValueOfOptions } from 'init/set-defaults'
 import { initTabs }                 from 'init/tab-setup'
 
 
-import { isOnDataManipulatorPage }  from 'decode/select-output-textarea'
+import { isOnDataManipulatorPage }  from 'common-utils/select-output-textarea'
 import { decode }                   from 'decode/decode'
 
 // Tab - line

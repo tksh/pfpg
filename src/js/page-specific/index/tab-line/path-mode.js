@@ -1,5 +1,5 @@
 import { replaceAtIndex }          from 'utils/replace-at-index'
-import { isOnDataManipulatorPage } from 'decode/select-output-textarea'
+import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
 import { decode }                  from 'decode/decode'
 
 export

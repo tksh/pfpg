@@ -1,11 +1,12 @@
 import { showProcessingTime }                 from 'enc-and-dec/show-result'
+import { parseBasicData }                     from 'enc-and-dec/basic-data/basic-data-enc'
 import { getActualCodebookSize }              from 'enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size'
 import { createCodebookToEncodeFrequentDiff } from 'enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc'
-import { handleSingleDigit }                  from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
-import { handleFrequencyDiff }                from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
-import { calculateLimitsForBaseXSkipRange }   from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
-import { handleBase52EncodingWithPrefix }     from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
-import { handleBaseXEncoding  }               from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
+import { handleSingleDigit
+       , handleFrequencyDiff
+       , calculateLimitsForBaseXSkipRange
+       , handleBase52EncodingWithPrefix
+       , handleBaseXEncoding }                from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
 import { encodeFreqDiffAsRefDict }            from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-ref-dict'
 import { getEncodedAttrsExceptsDvals }        from 'encode/get-attrs-excepts-dvals'
 import { joinWithAmpersand }                  from 'encode/join-with-ampersand'
@@ -14,8 +15,8 @@ import { showStringSize
 import { storeShorter }                       from 'encode/store-shorter'
 import { tryCompress }                        from 'encode/try-compress'
 import { jsonToMapObj }                       from 'encode/json-to-map-obj'
-import { parseBasicData }                     from 'enc-and-dec/basic-data/basic-data-enc'
 import { outputToTextarea }                   from 'common-utils/output-to-textarea'
+import { isOnDataManipulatorPage }            from 'common-utils/select-output-textarea'
 
 
 ////////////////////////////////// Input: //////////////////////////////////
@@ -218,7 +219,7 @@ export function bruteforce53Enc() {
     // Show the processing time in html and console
     const endTime = performance.now()
     const elapsedTime = Math.floor(endTime - startTime)
-    showProcessingTime('bruteforce53Enc()', elapsedTime, 'encoded-strokes-values-time')
+    showProcessingTime('bruteforce53Enc()', elapsedTime, 'encoded-strokes-values-time', isOnDataManipulatorPage())
 
     // Show the encoding result of each group in console
     showDetailsByGroup('Lines Data', currentShortest)

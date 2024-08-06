@@ -7,6 +7,7 @@ import { showStringSize
 import { tryCompress }                 from 'encode/try-compress'
 import { jsonToMapObj }                from 'encode/json-to-map-obj'
 import { outputToTextarea }            from 'common-utils/output-to-textarea'
+import { isOnDataManipulatorPage }     from 'common-utils/select-output-textarea'
 
 
 export function bigint64Enc() {
@@ -70,7 +71,7 @@ export function bigint64Enc() {
     // Show the processing time in html and console
     const endTime = performance.now()
     const elapsedTime = Math.floor(endTime - startTime)
-    showProcessingTime('bigint64Enc()', elapsedTime, 'encoded-strokes-values-time')
+    showProcessingTime('bigint64Enc()', elapsedTime, 'encoded-strokes-values-time', isOnDataManipulatorPage())
 
     // Show the encoding result of each group in console
     showDetailsByGroup('Lines Data', compressedByGroup)
