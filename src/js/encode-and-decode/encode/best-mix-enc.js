@@ -5,14 +5,15 @@ import { joinWithAmpersand }  from 'encode/join-with-ampersand'
 import { showStringSize
        , showDetailsByGroup } from 'encode/show-result'
 import { storeShorter }       from 'encode/store-shorter'
-import { showBestMixResult }  from 'common-utils/output-to-textarea'
+import { showBestMixResult }  from 'encode/show-best-mix-result'
 import { outputToTextarea }   from 'common-utils/output-to-textarea'
+
 
 /**
  * Selects the best mix of encoding methods based on the given number of methods.
  * @param {number} numberOfMethods - The number of encoding methods to consider (2 or 3).
  */
-export function bestMixFromNMethods(numberOfMethods) {
+function bestMixFromNMethods(numberOfMethods) {
     // Read the result of whole encoding methods
     const bruteforce53Map = bruteforce53Enc(); // Bruteforce 53 encoding
     const bigint64Map = bigint64Enc();         // Bigint 64 encoding
@@ -55,4 +56,14 @@ export function bestMixFromNMethods(numberOfMethods) {
 
     // Clear the inaccurate processing time text
     document.getElementById('encoded-strokes-values-time').innerHTML = '';
+}
+
+export function setupMixEncodingButtons() {
+    const buttons = document.querySelectorAll('.mix-encode-button');
+    buttons.forEach(button => {
+        button.addEventListener('click', function() {
+            const methodCount = parseInt(this.getAttribute('data-methods'));
+            bestMixFromNMethods(methodCount);
+        });
+    });
 }

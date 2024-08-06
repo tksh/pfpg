@@ -4,9 +4,9 @@ import { encodeBasicData }                from 'enc-and-dec/basic-data/basic-dat
 import { bruteforce53Enc }                from 'enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc'
 import { bigint64Enc }                    from 'enc-and-dec/lines-data/d-values/bigint64/bigint64-enc'
 import { swap63Enc }                      from 'enc-and-dec/lines-data/d-values/swap63/swap63-enc'
+import { setupMixEncodingButtons }        from 'encode/best-mix-enc'
 import { mergeBasicDataAndStrokesValues } from 'io/download-url-params'
 import { setupCopyButtons }               from 'io/copy-textarea'
-
 
 // Decode from URL Params to SVG when page loaded.
 // If there is no URL params at index.html, Decode from sample hidden text.
@@ -35,9 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Buttons to encode
     initButtons('encode-basic-data',                 encodeBasicData);
+
     initButtons('encode-lines-data-as-bruteforce53', bruteforce53Enc);
     initButtons('encode-lines-data-as-bigint64',     bigint64Enc);
     initButtons('encode-lines-data-as-swap63',       swap63Enc);
+
+    setupMixEncodingButtons()
 
     // Buttons to merge
     initButtons('button-to-merge-as-url-params',     mergeBasicDataAndStrokesValues);
