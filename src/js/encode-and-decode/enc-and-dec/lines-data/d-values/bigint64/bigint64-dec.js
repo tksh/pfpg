@@ -1,5 +1,6 @@
 import { absToRel }                   from 'enc-and-dec/lines-data/d-values/bigint64/abs-to-rel'
 import { recoverOriginalZeroPadding } from 'enc-and-dec/lines-data/d-values/bigint64/recover-zero-padding'
+import { base64UrlDec }               from 'enc-and-dec/base-n/base-64url-dec'
 
 export
     { bigint64Dec
