@@ -112,7 +112,7 @@ function swapToEncode(dictMap, linesDataMap) {
                 // Encode and append
                 encodedDval += swapFromNumberToCharacter(dval, numberOfPath, dictMap)
             } catch (error) {
-                // Throw error if d value not is within the range
+                // Stop processing if d value is not within the range
                 const errorMessage = `Error encoding dval for key ${key}: ${error.message}`
                 console.error(errorMessage);
                 outputToTextarea(errorMessage, 'textarea-lines-data-encoded')

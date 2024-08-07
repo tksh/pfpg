@@ -112,37 +112,56 @@ export function bruteforce53Enc() {
                 //   Encode the array of frequency diff values as a string to attach
                 const freqDiffAsRefDict = encodeFreqDiffAsRefDict(freqDiffArrActualCodebookSized)
 
-                // Encode the diff values
-                const diffArrEncoded = diffArr.map((diff) => {
+                try {
+                    // Encode the diff values
+                    const diffArrEncoded = diffArr.map((diff) => {
 
-                    // [0-9] の一桁の正の数は そのままにする
-                    let result = handleSingleDigit(diff);
-                    if (result !== undefined) return result;
+                        // [0-9] の一桁の正の数は そのままにする
+                        let result = handleSingleDigit(diff);
+                        if (result !== undefined) return result;
 
-                    // 頻出数値が codebookに キーとして存在するかどうか を確認し 存在する場合にのみ 対応する アルファベット1文字 に 置換する
-                    result = handleFrequencyDiff(diff, codebookToEncodeFreqDiff);
-                    if (result !== undefined) return result;
+                        // 頻出数値が codebookに キーとして存在するかどうか を確認し 存在する場合にのみ 対応する アルファベット1文字 に 置換する
+                        result = handleFrequencyDiff(diff, codebookToEncodeFreqDiff);
+                        if (result !== undefined) return result;
 
-                    // 数値が [大き|小さ]過ぎて BaseX で 2桁 にエンコードできないものは base52エンコードしてから アンダースコア を先頭にフラグとして 条件に応じて [1|2|3|4]個 付ける
-                    //   上の Codebook と 下の BaseX は それぞれ重複しないアルファベットを 切り出して使っているが
-                    //   Base52 は 両方ともと同じ種類の文字を使っているので デコード時にそれらと区別できるようにするため フラグを付ける
-                    result = handleBase52EncodingWithPrefix(diff, baseXNumber, baseXRangeLimits);
-                    if (result !== undefined) return result;
+                        // 数値が [大き|小さ]過ぎて BaseX で 2桁 にエンコードできないものは base52エンコードしてから アンダースコア を先頭にフラグとして 条件に応じて [1|2|3|4]個 付ける
+                        //   上の Codebook と 下の BaseX は それぞれ重複しないアルファベットを 切り出して使っているが
+                        //   Base52 は 両方ともと同じ種類の文字を使っているので デコード時にそれらと区別できるようにするため フラグを付ける
+                        try {
+                            // Encode and append
+                            result = handleBase52EncodingWithPrefix(diff, baseXNumber, baseXRangeLimits);
+                        } catch (error) {
+                            // Throw error if diff value is not within the range [-65532 - 65532]
+                            const errorMessage = `Error encoding dval for column ${column}: ${error.message}`
+                            console.error(errorMessage);
+                            outputToTextarea(errorMessage, 'textarea-lines-data-encoded')
+                            throw error; // 例外を再スローして処理を中断する
+                        }
+                        if (result !== undefined) return result;
 
-                    // 上記 3条件 いずれでもなければ baseX で アルファベット2文字 に エンコードする
-                    return handleBaseXEncoding(diff, baseXNumber);
-                });
-                //console.log('diffArrEncoded: ', diffArrEncoded);
-                // e.g.: (484) [7, 'ln', 'B', 'B', 'D', 'N', 'X', 6, 'nl', 'U', 8, ...
+                        // 上記 3条件 いずれでもなければ baseX で アルファベット2文字 に エンコードする
+                        return handleBaseXEncoding(diff, baseXNumber);
+                    });
 
+                    //console.log('diffArrEncoded: ', diffArrEncoded);
+                    // e.g.: (484) [7, 'ln', 'B', 'B', 'D', 'N', 'X', 6, 'nl', 'U', 8, ...
 
-                // Join the encoded diff values as a string
-                const diffEncodedJoined = diffArrEncoded.join('')
-                // Combine the dictionary and diff to form: '[encoded reference_dictionary]-[encoded diff_by_row]'
-                const mergeEncodedRefDictAndDiff = freqDiffAsRefDict + '-' + diffEncodedJoined
+                    //return diffArrEncoded;
 
-                // Push to merge four columns into one array: [x1, y1, x2, y2]
-                refDictAndDiffEncodedFourColumns.push(mergeEncodedRefDictAndDiff)
+                    // Join the encoded diff values as a string
+                    const diffEncodedJoined = diffArrEncoded.join('')
+                    // Combine the dictionary and diff to form: '[encoded reference_dictionary]-[encoded diff_by_row]'
+                    const mergeEncodedRefDictAndDiff = freqDiffAsRefDict + '-' + diffEncodedJoined
+
+                    // Push to merge four columns into one array: [x1, y1, x2, y2]
+                    refDictAndDiffEncodedFourColumns.push(mergeEncodedRefDictAndDiff)
+
+                } catch (error) {
+                    // 外側のエラーハンドリングでキャッチし、処理を中断する
+                    console.error("An error occurred during encoding:", error.message);
+                    return null; // 処理を中断し、nullを返す
+            }
+
             }
 
             //console.log('refDictAndDiffEncodedFourColumns: ', refDictAndDiffEncodedFourColumns)

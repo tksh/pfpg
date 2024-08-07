@@ -80,11 +80,25 @@ function calculateLimitsForBaseXSkipRange(baseXNumber, minimumDiffValue, maximum
 // Base52 encode
 function handleBase52EncodingWithPrefix(diff, baseXNumber, baseXRangeLimits) {
 
+    // Check if original d value number is within the range -65532 and 65532,
+    // this is max diff value range for bruteforce53 with UInt14Portray
+    //   UInt14Portray range:
+    //     Absolute => [     0 - 16383] (2 ** 14 = 16384)
+    //     Relative => [-32766 - 32766]
+    //     Diff     => [-65532 - 65532]
+    if (diff < -65532 || diff > 65532) {
+        throw new Error(`Value out of range: ${diff}. Must be between -65532 and 65532.`);
+    }
+
+    // Encode
     if (diff <= baseXRangeLimits.baseXSkipRangeLowerLimit || baseXRangeLimits.baseXSkipRangeUpperLimit <= diff) {
         // base52エンコードして 2桁に'a'でパディングしたあと いくつかのアンダースコアを接頭辞として付加
         const diffEncoded = base52Enc(Math.abs(diff)).padStart(2, 'a');
         const diffEncodedWithUnderscorePrefix = prependUnderscores(diffEncoded, diff > 0);
-        console.log(`diff ${diff} は Base${baseXNumber} エンコード範囲外なので Base52エンコード ('_'を [1|2|3|4]個 フラグとして付ける): `, diffEncodedWithUnderscorePrefix);
+        console.log(
+            `diff ${diff} は Base${baseXNumber} エンコード範囲外なので Base52エンコード ('_'を [1|2|3|4]個 フラグとして付ける): `,
+            diffEncodedWithUnderscorePrefix
+        );
         return diffEncodedWithUnderscorePrefix;
     }
 }
