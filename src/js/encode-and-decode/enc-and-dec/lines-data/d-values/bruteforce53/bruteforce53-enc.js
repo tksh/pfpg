@@ -211,7 +211,7 @@ export function bruteforce53Enc() {
     const shortestJoined = joinWithAmpersand(currentShortest)
 
     // Output to textarea
-    outputToTextarea(shortestJoined, 'textarea-strokes-values-encoded')
+    outputToTextarea(shortestJoined, 'textarea-lines-data-encoded')
 
     // Show the size of result in html and console
     showStringSize('Lines Data', shortestJoined, 'encoded-strokes-values-size')

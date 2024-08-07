@@ -64,7 +64,7 @@ export function bigint64Enc() {
 
 
     // Output to textarea
-    outputToTextarea(wholeGroupsJoined, 'textarea-strokes-values-encoded')
+    outputToTextarea(wholeGroupsJoined, 'textarea-lines-data-encoded')
     // 0=129CaJGsAQK33q3FDaoQNuZs6u8XQW_EYegViBcDQ0gxtk-YqavrFw0V3KXggctKtnLfj_rl3ZzTzitfvmVp-Wz09Um3k4e8YyZ9kGHG0aT&0=129ziJH ...
 
     // Show the size of result in html and console

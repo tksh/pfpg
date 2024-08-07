@@ -39,7 +39,7 @@ function bestMixFromNMethods(numberOfMethods) {
     const shortestJoined = joinWithAmpersand(bestMixShortest);
 
     // Output the joined string to a textarea
-    outputToTextarea(shortestJoined, 'textarea-strokes-values-encoded');
+    outputToTextarea(shortestJoined, 'textarea-lines-data-encoded');
 
     // Determine the prefix message based on the number of methods considered
     const messagePrefix = `Lines Data (Best mix from ${numberOfMethods} methods)`;

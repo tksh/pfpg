@@ -25,14 +25,13 @@ export function swap63Enc() {
 
     // Lines Data
     const linesDataMap = jsonToMapObj('textarea-lines-data-uploaded')
-    //console.log('linesDataMap: ', linesDataMap) // Map { 0 → {…}, 1 → {…} }
+    console.log('linesDataMap: ', linesDataMap) // Map { 0 → {…}, 1 → {…} }
 
 
     // Get the string of d values encoded
     const encodedDval = swapToEncode(codebookForEncoding, linesDataMap)
     console.log('encodedDval: ', encodedDval)
     // Map(5) {'1' => 'wyyvtuDw ... WytEBzzAx', '2' => 'v9oswnHvnuz ... wwxyuwxw', ... }
-
 
 
     // Try compress and add prefix
@@ -66,7 +65,7 @@ export function swap63Enc() {
 
 
     // Output to textarea
-    outputToTextarea(wholeGroupsJoined, 'textarea-strokes-values-encoded')
+    outputToTextarea(wholeGroupsJoined, 'textarea-lines-data-encoded')
     // 000=19gUZa0HMswFYl ... lCLwK3WhT
 
     // Show the size of result in html and console
@@ -87,7 +86,7 @@ export function swap63Enc() {
 
 // Get the encoded string of d values as Map
 function swapToEncode(dictMap, linesDataMap) {
-    //console.log(dictMap); // Map(63) {-31 => '0', -30 => '1', -29 => '2', -28 => '3', -27 => '4', …}
+    //console.log(dictMap); // Map(63) {-31 => '0', -30 => '1', -29 => '2',  …  29 => 'Y', 30 => 'Z', 31 => '_'}
 
     const encodedDvals = new Map()
 
@@ -107,10 +106,18 @@ function swapToEncode(dictMap, linesDataMap) {
         for (let key in relDvals) {
             //console.log('key: ', key)  // x1, y1, x2, y2
             const dval = relDvals[key]
-            //console.log(dval); // (19) [1, 3, 3, 0, -2, -1, 8, 1, -2, 4, 2, -13, -16, 14, 2, -1, 0, -1, -8]
+            //e.g.: console.log(dval); // (19) [1, 3, 3, 0, -2, -1, 8, 1, -2, 4, 2, -13, -16, 14, 2, -1, 0, -1, -8]
 
-            // Encode and append
-            encodedDval += swapFromNumberToCharacter(dval, numberOfPath, dictMap)
+            try {
+                // Encode and append
+                encodedDval += swapFromNumberToCharacter(dval, numberOfPath, dictMap)
+            } catch (error) {
+                // Throw error if d value not is within the range
+                const errorMessage = `Error encoding dval for key ${key}: ${error.message}`
+                console.error(errorMessage);
+                outputToTextarea(errorMessage, 'textarea-lines-data-encoded')
+                return;
+            }
         }
 
         encodedDvals.set(linesData.g_id, encodedDval)
@@ -126,7 +133,14 @@ function swapFromNumberToCharacter(dval, numberOfPath, dictMap) {
 
     // Use the original d value as an index to look up a character from the keys list and append it to the symbol string variable
     for (let i = 0; i < numberOfPath; i++) {
-        const encodedChar = dictMap.get(dval[i]);
+        const originalNumber = dval[i];
+
+        // Check if original d value number is within the range -31 to 31
+        if (originalNumber < -31 || originalNumber > 31) {
+            throw new Error(`Value out of range: ${originalNumber}. Must be between -31 and 31.`);
+        }
+
+        const encodedChar = dictMap.get(originalNumber);
         dvalEncoded += encodedChar
     }
 
