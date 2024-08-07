@@ -30,9 +30,9 @@ function updateSvgWithSelectedShapePath(shape, inputSvg) {
     const shapePath = shape === 'squircleSlimmed'
         ? generateClippathShapeOfSquircleSlimmed(inputSvg, getWidthNarrowness(), getTopHeavyRatio())
         : shape === 'square'
-            ? `<path d="M 0,0 L ${gridSize},0 L ${gridSize},${gridSize} L 0,${gridSize} Z" />`
+            ? `<rect width="100%" height="100%" />`
             : shape === 'circle'
-                ? `<circle cx="${gridSize / 2}" cy="${gridSize / 2}" r="${gridSize / 2}" />`
+                ? `<circle cx="50%" cy="50%" r="50%" />`
                 : `<path d="M 0,${center}Q 0,0 ${center},0T ${gridSize},${center} ${center},${gridSize} 0,${center}" />`; // shape === 'squircle'
 
     // Replace to new shape <clipPath>
