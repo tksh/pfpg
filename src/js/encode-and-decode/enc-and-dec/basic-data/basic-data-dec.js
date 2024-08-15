@@ -1,5 +1,14 @@
 import { getUintN } from 'enc-and-dec/basic-data/get-uint-n'
 
+function decodeProperty(encodedValue) {
+    if (encodedValue.startsWith('~')) {
+        // チルダで始まる場合はデコードする
+        return URLCompressor.decompress(encodedValue.slice(1));
+    } else {
+        // チルダがない場合はそのまま返す
+        return encodedValue;
+    }
+}
 
 export function getBasicDataFromUrlParam(paramsArray) {
 

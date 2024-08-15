@@ -17,33 +17,51 @@ export
 
 // {
 //     "title": "202401_001",
-//     "viewbox": "0 0 127 127",
-//     "rect": {
-//         "fill": "#aaa"
-//     }
+//     "desc": "Portrait of a woman"
 // }
 
 
 ////////////////////////////////// Output: //////////////////////////////////
 
-// ?202401_001=127-aaa&
+// output: ?title=02024_001
+// input:
+//   "title": "202401_001",
 
+// output: ?title=202401_001&desc=~2J6DBxK74JRDIQ5EfH43
+// input:
+//   "title": "202401_001",
+//   "desc": "Portrait of a woman",
 
 
 function encodeBasicData() {
     const startTime = performance.now()
 
     // Parse the basic data JSON from textarea
-    const basicData = parseBasicData()
+    const data = parseBasicData()
 
-    // Merge as URL params
-    const basicDataEncodedStr = '?' + basicData.title + '=' + basicData.viewbox + '-' + basicData.rectFill + '&'
+    // Init the URL params string to return
+    let dataAsUrlParams = "?"
+
+    // Process each property
+    const properties = ['title', 'desc', 'metadata'];
+    properties.forEach(prop => {
+        if (prop in data && isNonEmpty(data[prop])) {
+        // if (prop in data) {
+            dataAsUrlParams += processProperty(prop, data[prop]);
+        } else {
+            console.log(`${prop} is missing`);
+        }
+    });
+
+    // Remove the trailing '&' if it exists
+    dataAsUrlParams = dataAsUrlParams.replace(/&$/, '');
+
 
     // Output to textarea
-    outputToTextarea(basicDataEncodedStr, 'textarea-basic-data-encoded')
+    outputToTextarea(dataAsUrlParams, 'textarea-basic-data-encoded')
 
     // Show the size of result in html and console
-    showStringSize('Basic Data', basicDataEncodedStr, 'encoded-basic-data-size')
+    showStringSize('Basic Data', dataAsUrlParams, 'encoded-basic-data-size')
 
     // Show the processing time in html and console
     const endTime = performance.now()
@@ -60,44 +78,102 @@ function parseBasicData() {
     const rawStr = readTextarea('textarea-basic-data-uploaded')
     const json = JSON.parse(rawStr)
 
-    // title
-    const title = json.title                  // 202310_002
+    const result = {};
 
-    // Sizes
-    const viewboxDelimitedBySpace = json.viewbox
-    const viewboxDelimitedByUnderscore = viewboxDelimitedBySpace.replace(/ /g, '_')
-    const viewboxShorten = viewboxShortener(viewboxDelimitedByUnderscore)
+    if ('title' in json) result.title = json.title;           // e.g.: "202401_001"
+    if ('desc' in json) result.desc = json.desc;              // e.g.: "Portrait of a woman"
+    if ('metadata' in json) result.metadata = json.metadata;  // e.g.: "<xml><reference-tag>some reference info<reference-tag></xml>"
 
-    const viewboxSplitted = viewboxDelimitedBySpace.split(' ')
-    const viewboxWH = viewboxSplitted.slice(-2)  // Extract 3rd (width) and 4th (height) elements
-    const max = Math.max(...viewboxWH)
-    const uintN = getUintN(max)
+    return result;
+}
 
-    // Base color
-    const rectFill = json.rect.fill.slice(1) // 555C&
+// Is valid string as URI
+// https://www.rfc-editor.org/rfc/rfc3986#section-2.3
+// Characters that are allowed in a URI but do not have a reserved.
+// unreserved  = ALPHA / DIGIT / "-" / "." / "_" / "~"
+function isValidStringAsUri(str) {
+    const regex = /^[0-9a-zA-Z_\-\.~]+$/;
+    return regex.test(str);
+}
 
-    return {
-        title,
-        viewbox      : viewboxShorten,
-        viewboxWidth : viewboxWH[0],
-        viewboxHeight: viewboxWH[1],
-        uintN,
-        rectFill
+
+// Check the value of `data[prop]` exists actually to abbreviate if possible.
+//   null and undefined: (data[prop] != null)。
+//   empty string      : (data[prop] !== '')。
+function isNonEmpty(value) {
+    return value != null && value !== '';
+}
+
+
+function processProperty(propertyName, value) {
+    console.log(`${propertyName}: ${value}`);
+
+    // Check if the value is a valid URI
+    const isValidAsUri = isValidStringAsUri(value);
+
+    // Log the validity of the value as a URI
+    console.log(`"${value}" is valid string as URI (true) or not (false): `, isValidAsUri);
+
+    // Provide feedback based on the validity
+    if (isValidAsUri) {
+        console.log(`"${value}" is valid, it does not need to encode.`);
+        return `${propertyName}=${value}&`;
+    } else {
+        console.log(`"${value}" is NOT valid, it needs to be encoded using URLCompressor.`);
+        return `${propertyName}=~${URLCompressor.compress(value)}&`;
     }
 }
+
+
+
+
+
+
+
+//function parseBasicData() {
+//
+//    // Read from textarea
+//    const rawStr = readTextarea('textarea-basic-data-uploaded')
+//    const json = JSON.parse(rawStr)
+//
+//    // title
+//    const title = json.title                  // 202310_002
+//
+//    // Sizes
+//    const viewboxDelimitedBySpace = json.viewbox
+//    const viewboxDelimitedByUnderscore = viewboxDelimitedBySpace.replace(/ /g, '_')
+//    const viewboxShorten = viewboxShortener(viewboxDelimitedByUnderscore)
+//
+//    const viewboxSplitted = viewboxDelimitedBySpace.split(' ')
+//    const viewboxWH = viewboxSplitted.slice(-2)  // Extract 3rd (width) and 4th (height) elements
+//    const max = Math.max(...viewboxWH)
+//    const uintN = getUintN(max)
+//
+//    // Base color
+//    const rectFill = json.rect.fill.slice(1) // 555C&
+//
+//    return {
+//        title,
+//        viewbox      : viewboxShorten,
+//        viewboxWidth : viewboxWH[0],
+//        viewboxHeight: viewboxWH[1],
+//        uintN,
+//        rectFill
+//    }
+//}
 
 // To compact the viewBox value if could
 
-function viewboxShortener(viewbox) {
-    if (viewbox.startsWith('0_0_')) {
-        // Remove the leading '0_0_' and split the remaining part
-        const [width, height] = viewbox.replace(/^0_0_/, '').split('_');
-        // If width and height are the same, return width; otherwise, return the reduced viewbox
-        return width === height ? width : `${width}_${height}`;
-    }
-    // Return the original viewbox if it doesn't start with '0_0_'
-    return viewbox;
-}
+//function viewboxShortener(viewbox) {
+//    if (viewbox.startsWith('0_0_')) {
+//        // Remove the leading '0_0_' and split the remaining part
+//        const [width, height] = viewbox.replace(/^0_0_/, '').split('_');
+//        // If width and height are the same, return width; otherwise, return the reduced viewbox
+//        return width === height ? width : `${width}_${height}`;
+//    }
+//    // Return the original viewbox if it doesn't start with '0_0_'
+//    return viewbox;
+//}
 // test
 //const str1 = '0_0_127_127'
 //const str2 = '0_0_127_128'
