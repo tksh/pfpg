@@ -1,5 +1,6 @@
 import { readUrlParamsAsMaps }    from 'common-utils/read-url-params'
 import { relToAbs }               from 'decode/rel-to-abs'
+import { absToRel }                   from 'enc-and-dec/lines-data/d-values/bigint64/abs-to-rel'
 import { selectOutputTextareaId } from 'common-utils/select-output-textarea'
 import { generateSvg }            from 'decode/generate-svg'
 import { showProcessingTime }     from 'enc-and-dec/show-result'
@@ -151,9 +152,8 @@ function decodeDvals(linesDataMap) {
 
         } else if (v.threeFlags[1] === '1') {
             console.log("This group has encoded with 'bigint64-enc'")
-            const decodedAbsAndRelDvalsObj = bigint64Dec(v.encodedDvals, v.threeFlags)
-            decodedAbsDvals = decodedAbsAndRelDvalsObj.absolute
-            decodedRelDvals = decodedAbsAndRelDvalsObj.relative
+            decodedAbsDvals = bigint64Dec(v.encodedDvals, v.threeFlags)
+            decodedRelDvals = absToRel(decodedAbsDvals, v.widthAndCounts)
 
         } else if (v.threeFlags[1] === '2') {
             console.log("This group has encoded with 'swap63-enc'")

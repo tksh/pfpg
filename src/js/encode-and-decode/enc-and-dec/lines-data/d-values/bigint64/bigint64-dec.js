@@ -1,4 +1,3 @@
-import { absToRel }                   from 'enc-and-dec/lines-data/d-values/bigint64/abs-to-rel'
 import { recoverOriginalZeroPadding } from 'enc-and-dec/lines-data/d-values/bigint64/recover-zero-padding'
 import { base64UrlDec }               from 'enc-and-dec/base-n/base-64url-dec'
 
@@ -49,17 +48,7 @@ function bigint64Dec(encodedDvalsStr, threeFlags) {
     //     2: (19) [1, 4, 6, 10, 8, 11, 24, 26, 24, 28, 30, 20, 8, 24, 23, 22, 24, 31, 26]
     //     3: (19) [26, 25, 23, 21, 23, 0, 5, 24, 22, 25, 27, 31, 22, 9, 17, 20, 23, 27, 10]length: 4[[Prototype]]: Array(0)
 
-    // Convert from absolute to relative
-    const decodedRelDvals = absToRel(decodedAbsDvals)
-    // console.log("decodedRelDvals: ", decodedRelDvals)
-    // (4) [Array(19), Array(19), Array(19), Array(19)]
-    //     0: (19) [1, 3, 3, 0, -2, -1, 8, 1, -2, 4, 2, -13, -16, 14, 2, -1, 0, -1, -8]
-    //     1: (19) [0, -26, -25, -8, -1, -18, 0, -5, -9, -22, -25, 1, -7, -22, 2, -1, -1, -1, -19]
-    //     2: (19) [0, 0, -1, 4, 0, 4, 5, 1, 0, 0, 0, 3, 4, 2, -3, 0, 2, 8, 3]
-    //     3: (19) [26, 25, 23, 6, 3, -5, 5, 24, 7, 25, 27, 3, -2, 9, 6, 4, 4, 5, 2]
-    // length: 4
-
-    return { relative: decodedRelDvals, absolute: decodedAbsDvals }
+    return decodedAbsDvals
 }
 
 
