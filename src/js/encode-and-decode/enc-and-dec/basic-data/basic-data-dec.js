@@ -39,10 +39,10 @@ export function getBasicDataFromUrlParams() {
 }
 
 
-export function getBasicDataFromUrlParam(paramsArray) {
+export function getBasicDataFromUrlParam(urlSearchParams) {
 
     // Get basic data params (first element)
-    const basicDataParam = paramsArray[0]
+    const basicDataParam = urlSearchParams[0]
 
 
     // Title

@@ -54,14 +54,14 @@ import { tryShortenAsHalf } from 'color-formatter/hex-shorten'
 
 
 
-export function generateSvg(isRelative, basicDataMap, linesDataMap, decodedRelDvalsMap, decodedAbsDvalsMap) {
+export function generateSvg(isRelative, basicDataObj, linesDataMap, decodedRelDvalsMap, decodedAbsDvalsMap) {
 
     // Set the tab size
     const tabSpace = '    ' // Four spaces
 
 
     // Generate tags except stroke tags
-    const tagsBeforeStrokes = generateTagsBeforeStrokes(tabSpace, basicDataMap)
+    const tagsBeforeStrokes = generateTagsBeforeStrokes(tabSpace, basicDataObj)
     const tagsAfterStrokes = generateTagsAfterStrokes(tabSpace)
 
 
@@ -217,10 +217,10 @@ function generateAbsPathTags(tabSpace, linesDataMap, decodedAbsDvalsMap) {
 
 
 
-function generateTagsBeforeStrokes(tabSpace, basicDataMap) {
+function generateTagsBeforeStrokes(tabSpace, basicDataObj) {
 
-    const svgOpen = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${basicDataMap.get("viewbox")}" shape-rendering="crispEdges">`
-    const title = tabSpace.repeat(1) + `<title>${basicDataMap.get("title")}</title>`
+    const svgOpen = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${basicDataObj.get("viewbox")}" shape-rendering="crispEdges">`
+    const title = tabSpace.repeat(1) + `<title>${basicDataObj.get("title")}</title>`
 
     // Trimming shape <defs> tag (has no variables)
     const trimmingShapeDefs =
@@ -232,7 +232,7 @@ function generateTagsBeforeStrokes(tabSpace, basicDataMap) {
 
     // clip-path: <rect> in <g>
     const clipPathGroupOpen = tabSpace.repeat(1) + '<g clip-path="url(#shape-to-trim)">'
-    const baseRect = tabSpace.repeat(2) + `<rect width="${basicDataMap.get("viewboxWidth")}" height="${basicDataMap.get("viewboxHeight")}" fill="#${basicDataMap.get("rectFill")}" />`
+    const baseRect = tabSpace.repeat(2) + `<rect width="${basicDataObj.get("viewboxWidth")}" height="${basicDataObj.get("viewboxHeight")}" fill="#${basicDataObj.get("rectFill")}" />`
 
     return [svgOpen, title, trimmingShapeDefs, clipPathGroupOpen, baseRect]
 }

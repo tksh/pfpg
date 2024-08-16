@@ -46,8 +46,8 @@ function encodeBasicData() {
     // Process each property
     const properties = ['version', 'title', 'desc', 'metadata', 'colors'];
     properties.forEach(prop => {
+        // Check the value of `data[prop]` exists actually to abbreviate if possible.
         if (prop in data && isNonEmpty(data[prop])) {
-        // if (prop in data) {
             dataAsUrlParams += processProperty(prop, data[prop]);
         } else {
             console.log(`${prop} is missing`);
@@ -96,13 +96,6 @@ function isValidStringAsUri(str) {
     return regex.test(str);
 }
 
-
-// Check the value of `data[prop]` exists actually to abbreviate if possible.
-//   null and undefined: (data[prop] != null)。
-//   empty string      : (data[prop] !== '')。
-function isNonEmpty(value) {
-    return value != null && value !== '';
-}
 
 
 function processProperty(propertyName, value) {

@@ -90,10 +90,10 @@ function viewboxUnSlimmed(inputSvg) {
     // Read original basic data from url params
     const isDataManipulatorPage = false
     const urlParamsAsTwoMaps = readUrlParamsAsMaps(isDataManipulatorPage)
-    const basicDataMap = urlParamsAsTwoMaps.basicData
+    const basicDataObj = urlParamsAsTwoMaps.basicData
 
     // Generate new string with original viewBox size
-    const originalViewboxString = basicDataMap.get('viewbox')                // e.g.: '0 0 31 31'
+    const originalViewboxString = basicDataObj.get('viewbox')                // e.g.: '0 0 31 31'
 
     // Replace the viewBox string with new one
     const patternForViewboxStr = /viewBox="([^"]+)"/

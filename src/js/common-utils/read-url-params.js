@@ -3,7 +3,7 @@ import { getBasicDataFromUrlParam } from 'enc-and-dec/basic-data/basic-data-dec'
 import { getBasicDataFromUrlParams } from 'enc-and-dec/basic-data/basic-data-dec'
 import { decodeGroupColors }        from 'enc-and-dec/lines-data/group-colors/group-colors-dec'
 import { decodeWidthAndCounts }     from 'enc-and-dec/lines-data/width-and-counts/width-and-counts-dec'
-import { isNonEmpty }              from 'common-utils/is-non-empty'
+import { isNonEmpty }               from 'common-utils/is-non-empty'
 
 export
     { readUrlParamsAsMaps
@@ -15,7 +15,7 @@ function readUrlParamsAsMaps(isDataManipulatorPage) {
     const params = getUrlParams(isDataManipulatorPage)
 
     if (params != null) {
-        return decodeAsTwoMaps(paramsArray)
+        return decodeAsTwoMaps(params)
     } else {
         console.log('There is NO url params to decode.')
     }
@@ -25,7 +25,7 @@ function readUrlParamsAsMaps(isDataManipulatorPage) {
 // Get the url params from right source
 
 function getUrlParams(isDataManipulatorPage) {
-    let paramsExists = isNonEmpty(URLSearchParams(window.location.search))
+    let paramsExists = isNonEmpty(new URLSearchParams(window.location.search))
 
     // If at index.html and there is no url params => get sample strings from textContent element
     if (paramsExists === true) {
@@ -86,19 +86,37 @@ function tryDeleteQuestionAtStart(str) {
 
 
 
-function decodeAsTwoMaps(paramsArray) {
-    console.log('paramsArray.length: ', paramsArray.length) // 6
+function decodeAsTwoMaps(urlSearchParams) {
 
     // Get Basic Data as Map from url params
     // e.g.: ?202404_001=31-fff&
 
-    const basicDataMap = getBasicDataFromUrlParams(paramsArray)
-    console.log('basicDataMap: ', basicDataMap)
+    const basicDataObj = getBasicDataFromUrlParams(urlSearchParams)
+    console.log('basicDataObj: ', basicDataObj)
     // Map(4) { title → "202404_001", viewbox → "0 0 31 31", uintN → 5, rectFill → "fff" }
+    //
+    // {title: '202401_001', desc: 'Portrait of a woman'}
+    // [[Prototype]]: Object
 
 
     // Get Lines Data as Map
-    // 2番目([1])以降のストローク情報の key, value を ループで取り出し
+    // ストローク情報の key, value を ループで取り出し
+
+    // 除外するキーのリスト
+    const excludeKeys = ['version', 'title', 'desc', 'metadata', 'colors'];
+
+    // 結果を格納する配列（順序を保持するため）
+    const linesDataKvArray = [];
+
+    // URLパラメータをイテレート
+    for (const [key, value] of urlSearchParams.entries()) {
+        // 除外リストに含まれていないキーのみを処理
+        if (!excludeKeys.includes(key)) {
+            linesDataKvArray.push([key, value]);
+        }
+    }
+
+    console.log("linesDataKvArray.length: ", linesDataKvArray.length)
 
     const linesDataMap = new Map()
     // key = gId (seq num)
@@ -115,40 +133,49 @@ function decodeAsTwoMaps(paramsArray) {
     //                encodedDvals => "Encoded_Strings" <String>
     //               ]
 
-    for (let i = 1; i <= paramsArray.length - 1; ++i) { // `1` is first lines-group
+    for (let i = 0; i < linesDataKvArray.length; ++i) {
+        // `i` as a group ID (gId, "g_id") number.
+        // First group (i = 0) represents canvas-base color and size,
+        // After second group represents actual drawing strokes.
 
-        console.log('paramsArray[i]: ', paramsArray[i])
+        console.log('linesDataKvArray[i]: ', linesDataKvArray[i])  // e.g.: (2) ['A', '013127b-NWrTPcKpRSjaX']
+        console.log('linesDataKvArray[i][0]: ', linesDataKvArray[i][0])
 
-        // Group-Colors as Object
-        const hex10Chars = hexExpandToTen(paramsArray[i][0])        // 000000ffff
-        const decodedGroupColorsObj = decodeGroupColors(hex10Chars) // Return as Object with 3 elements
+        // Group-colors as Object
+        const hex10Chars = hexExpandToTen(linesDataKvArray[i][0])    // e.g.: 000000ffff
+        const decodedGroupColorsObj = decodeGroupColors(hex10Chars)  // Return as Object with three attrs
         // groupColors: {g_stroke: '#ffffff', g_opacity: 1, g_stroke_opacity: 1}
 
-        // 3 Flags as Array
-        const splittedThreeFlags = paramsArray[i][1].slice(0, 3).split('')   // ['1', '2', 'n']
+        // 3 chars flag as Array
+        const decodedThreeFlagsArray = linesDataKvArray[i][1].slice(0, 3).split('')   // ['1', '2', 'n']
         // threeFlags: (3) ['1', '2', 'n']
 
-        // Width-and-Counts as Map
-        let linesData = paramsArray[i][1].slice(3)
+        // Lines data encoded string
+        //   stroke-width and coordinates data joined with '-' like:
+        //   [encoded-width-data]-[encoded-coordinates-data]
+        let linesData = linesDataKvArray[i][1].slice(3)
         //console.log("linesData(Before URLComp expand): ", linesData)
         // 3t-BRY8zuZS6-yuj6xgi-u9utYvXoK0QEXoKySIqr46g3-9HxEs1eG2VMHxerRFrXM3mjZxLkf-wwSvNRnQb88G
 
-        if (Number(splittedThreeFlags[0]) === 1) { // Decompress if URLCompressor applied
+        if (Number(decodedThreeFlagsArray[0]) === 1) { // Decompress if URLCompressor applied
             linesData = URLCompressor.expand(linesData)
         }
 
+        // Lines data decoded string
         console.log("linesData(After URLComp expand): ", linesData)
 
+        // Extract the encoded width data ('stroke-width' values and counts)
         const encodedWidthAndCounts = linesData.split('-')[0]
-        console.log("encodedWidthAndCounts: ", encodedWidthAndCounts) // 3t
+        console.log("encodedWidthAndCounts: ", encodedWidthAndCounts)
+        // e.g.: 3t
 
-        // Decode the count and width, and generate the firstline and lastline
-        const decodedWidthAndCounts = decodeWidthAndCounts(encodedWidthAndCounts)
-        // widthAndCounts: Map(1) {3 => 19}
+        // 'stroke-width' values and generated firstline and lastline indices as Map
+        const decodedWidthAndCountsMap = decodeWidthAndCounts(encodedWidthAndCounts)
+        console.log("decodedWidthAndCountsMap: ", decodedWidthAndCountsMap)
+        // e.g.: Map(1) {3 => 19}
 
-        // Get the lines data
-        // Extract an encoded string of whole d values
-        // Not split into x1, y1, x2, y2
+        // Coordinates data ('d' value) encoded
+        // It has own structure by its encoding method (defined by second char of flag)
         const encodedDvalsStr = extractAfterFirstHyphen(linesData)
         console.log("encodedDvalsStr: ", encodedDvalsStr)
         // BRY8zuZS6-yuj6xgi-u9utYvXoK0QEXoKySIqr46g3-9HxEs1eG2VMHxerRFrXM3mjZxLkf-wwSvNRnQb88G
@@ -156,27 +183,25 @@ function decodeAsTwoMaps(paramsArray) {
 
 
         // Set into Map by group ID
-        linesDataMap.set(i, {
-            groupColors: decodedGroupColorsObj,
-            threeFlags: splittedThreeFlags,
-            widthAndCounts: decodedWidthAndCounts,
-            encodedDvals: encodedDvalsStr
-        })
+        linesDataMap.set(
+            i,
+            {
+                groupColors:    decodedGroupColorsObj,
+                threeFlags:     decodedThreeFlagsArray,
+                widthAndCounts: decodedWidthAndCountsMap,
+                encodedDvals:   encodedDvalsStr
+            }
+        )
     }
 
-    return {basicData:basicDataMap, linesData:linesDataMap}
+    return {basicData:basicDataObj, linesData:linesDataMap}
 
 }
 
 
-
-
 function extractAfterFirstHyphen(str) {
     // ハイフンの位置を取得
-    const index = str.indexOf("-");
-    console.log("index: ", index)
+    const indexOfHyphen = str.indexOf("-");
     // ハイフンの次の位置から末尾までを切り出す
-    const result = str.slice(index + 1);
-
-    return result
+    return str.slice(indexOfHyphen + 1);
 }

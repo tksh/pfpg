@@ -12,12 +12,12 @@ export function getUintNFromUrlParams() {
   const params = new URLSearchParams(window.location.search)
 
   // Get the url params from right source
-  const paramsArray = getUrlParams(params, isDataManipulatorPage)
+  const urlSearchParams = getUrlParams(params, isDataManipulatorPage)
 
   // Get the basic data as Map
-  const basicDataMap = getBasicDataFromUrlParam(paramsArray)
-  console.log('basicDataMap: ', basicDataMap)
+  const basicDataObj = getBasicDataFromUrlParam(urlSearchParams)
+  console.log('basicDataObj: ', basicDataObj)
   // Map(4) { title → "202404_001", viewbox → "0 0 31 31", uintN → 5, rectFill → "fff" }
 
-  return basicDataMap.get("uintN")
+  return basicDataObj.get("uintN")
 }

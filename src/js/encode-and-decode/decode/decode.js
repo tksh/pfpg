@@ -24,8 +24,8 @@ export function decode(isRelative, isDataManipulatorPage) {
     if (urlParamsAsTwoMaps != null) {
 
         // Extract the values
-        const basicDataMap = urlParamsAsTwoMaps.basicData
-        console.log("basicDataMap: ", basicDataMap)
+        const basicDataObj = urlParamsAsTwoMaps.basicData
+        console.log("basicDataObj: ", basicDataObj)
         // Map(6) { title → "202404_001", viewbox → "0 0 31 31", viewboxWidth → "31", viewboxHeight → "31", uintN → 5, rectFill → "fff" }
 
         const linesDataMap = urlParamsAsTwoMaps.linesData
@@ -74,9 +74,10 @@ export function decode(isRelative, isDataManipulatorPage) {
         // ...
 
 
+
         // Generate SVG string
 
-        const svgStr = generateSvg(isRelative, basicDataMap, linesDataMap, decodedRelDvalsMap, decodedAbsDvalsMap)
+        const svgStr = generateSvg(isRelative, basicDataObj, linesDataMap, decodedRelDvalsMap, decodedAbsDvalsMap)
 
         // Output to textarea
         const outputTextareaId = selectOutputTextareaId(isRelative, isDataManipulatorPage)
