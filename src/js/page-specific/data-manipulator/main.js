@@ -8,8 +8,8 @@ import { setupMixEncodingButtons }        from 'encode/best-mix-enc'
 import { mergeBasicDataAndStrokesValues } from 'io/download-url-params'
 import { setupCopyButtons }               from 'io/copy-textarea'
 
-// Decode from URL Params to SVG when page loaded.
-// If there is no URL params at index.html, Decode from sample hidden text.
+// Decode from url params to SVG when page loaded.
+// If there is no url params at index.html, Decode from sample hidden text.
 
 const isDataManipulatorPage = isOnDataManipulatorPage()
 
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initButtons('button-to-merge-as-url-params',     mergeBasicDataAndStrokesValues);
 
     // Buttons to copy the text value of textarea of
-    //   1. 'Encoded URL Params',
+    //   1. 'Encoded url params',
     //   2. 'Decode SVG String (relative)' and
     //   3. 'Decode SVG String (absolute)'
     setupCopyButtons();

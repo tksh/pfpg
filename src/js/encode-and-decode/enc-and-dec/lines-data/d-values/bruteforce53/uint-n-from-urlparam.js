@@ -8,10 +8,10 @@ export function getUintNFromUrlParams() {
   // Detect the url: 'index.html' or 'data-manipulator.html'
   const isDataManipulatorPage = isOnDataManipulatorPage()
 
-  // Get the URL params
+  // Get the url params
   const params = new URLSearchParams(window.location.search)
 
-  // Get the URL params from right source
+  // Get the url params from right source
   const paramsArray = getUrlParams(params, isDataManipulatorPage)
 
   // Get the basic data as Map

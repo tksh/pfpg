@@ -25,7 +25,7 @@ export function decode(isRelative, isDataManipulatorPage) {
 
         // Extract the values
         const basicDataMap = urlParamsAsTwoMaps.basicData
-        //console.log("basicDataMap: ", basicDataMap)
+        console.log("basicDataMap: ", basicDataMap)
         // Map(6) { title → "202404_001", viewbox → "0 0 31 31", viewboxWidth → "31", viewboxHeight → "31", uintN → 5, rectFill → "fff" }
 
         const linesDataMap = urlParamsAsTwoMaps.linesData
@@ -87,7 +87,7 @@ export function decode(isRelative, isDataManipulatorPage) {
         outputToTextarea(svgStr, outputTextareaId)
 
 
-        // Compare the data size of URL params and generated SVG
+        // Compare the data size of url params and generated SVG
         const queryString = window.location.search;
         const compRatio = queryString.length / svgStr.length
 
@@ -95,7 +95,7 @@ export function decode(isRelative, isDataManipulatorPage) {
         const postfix = isRelative ? 'rel' : 'abs';
         const resultTextElem = document.getElementById(`encoded-size-compare-for-${postfix}`);
         if (resultTextElem) {
-            const text = `Size of URL params: <b>${queryString.length}</b> characters (bytes)<br>
+            const text = `Size of url params: <b>${queryString.length}</b> characters (bytes)<br>
         Size of SVG string: <b>${svgStr.length}</b> characters (bytes)<br>
         Ratio: ${queryString.length} / ${svgStr.length} = <b>${compRatio}</b>`
             resultTextElem.innerHTML = text

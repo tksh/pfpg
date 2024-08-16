@@ -10,6 +10,35 @@ function decodeProperty(encodedValue) {
     }
 }
 
+export function getBasicDataFromUrlParams() {
+    // URLパラメータを取得
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // 結果を格納するオブジェクト
+    const result = {};
+
+    // 取得したいキーのリスト
+    const keys = ['version', 'title', 'desc', 'metadata', 'colors'];
+
+    // 各キーについて処理
+    keys.forEach(key => {
+        if (urlParams.has(key)) {
+            let value = urlParams.get(key);
+
+            // チルダで始まる場合はデコード
+            if (value.startsWith('~')) {
+                value = URLCompressor.expand(value.slice(1));
+            }
+
+            // 結果オブジェクトに追加
+            result[key] = value;
+        }
+    });
+
+    return result;
+}
+
+
 export function getBasicDataFromUrlParam(paramsArray) {
 
     // Get basic data params (first element)

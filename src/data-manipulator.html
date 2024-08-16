@@ -10,9 +10,10 @@
         {
             "imports": {
 
-                "common-utils/read-url-params":        "./js/common-utils/read-url-params.js",
+                "common-utils/is-non-empty":           "./js/common-utils/is-non-empty.js",
                 "common-utils/output-to-textarea":     "./js/common-utils/output-to-textarea.js",
                 "common-utils/read-textarea":          "./js/common-utils/read-textarea.js",
+                "common-utils/read-url-params":        "./js/common-utils/read-url-params.js",
                 "common-utils/select-output-textarea": "./js/common-utils/select-output-textarea.js",
 
                 "color-formatter/hex-expand":          "./js/color-formatter/hex-expand.js",
@@ -458,9 +459,9 @@
     <div class="bg-2 pad">
         <h2>Merge the Encoded Basic Data and Lines Data</h2>
 
-        <h3>3. ⬇ Finished URL Params:</h3>
+        <h3>3. ⬇ Finished url params:</h3>
         <button id="button-to-merge-as-url-params">Merge via <b>mergeBasicDataAndStrokesValues()</b></button>
-        <textarea id="textarea-encoded-url-params" class="height-2" placeholder="Encoded URL Params"></textarea>
+        <textarea id="textarea-encoded-url-params" class="height-2" placeholder="Encoded url params"></textarea>
 
         <!-- Button to copy -->
         <button class="copy-button" data-textarea-id="textarea-encoded-url-params">Copy to clipboard</button>
@@ -475,7 +476,7 @@
     </div>
     <br>
     <div class="bg-3 pad">
-        <h2>Decode the URL Params and Generate the SVG String</h2>
+        <h2>Decode the url params and Generate the SVG String</h2>
 
         <h3>⬇ Path style: Relative and Merged</h3>
         <textarea id="textarea-decoded-svg-as-rel" class="height-2" placeholder="If inputted text at address bar includes the url params like /data-manipulator.html?..., Decoding to SVG is automatically starts when page loaded and result text will export here."></textarea>

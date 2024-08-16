@@ -1,7 +1,9 @@
 import { hexExpandToTen }           from 'color-formatter/hex-expand'
 import { getBasicDataFromUrlParam } from 'enc-and-dec/basic-data/basic-data-dec'
+import { getBasicDataFromUrlParams } from 'enc-and-dec/basic-data/basic-data-dec'
 import { decodeGroupColors }        from 'enc-and-dec/lines-data/group-colors/group-colors-dec'
 import { decodeWidthAndCounts }     from 'enc-and-dec/lines-data/width-and-counts/width-and-counts-dec'
+import { isNonEmpty }              from 'common-utils/is-non-empty'
 
 export
     { readUrlParamsAsMaps
@@ -9,14 +11,10 @@ export
     }
 
 function readUrlParamsAsMaps(isDataManipulatorPage) {
-    // URLSearchParamsオブジェクトを作成
-    const params = new URLSearchParams(window.location.search);
-    console.log('params: ', params) // URLSearchParams {size: 6}
+    // Get the url params from right source
+    const params = getUrlParams(isDataManipulatorPage)
 
-    // Get the URL params from right source
-    const paramsArray = getUrlParams(params, isDataManipulatorPage)
-
-    if (paramsArray != null) {
+    if (params != null) {
         return decodeAsTwoMaps(paramsArray)
     } else {
         console.log('There is NO url params to decode.')
@@ -24,27 +22,25 @@ function readUrlParamsAsMaps(isDataManipulatorPage) {
 }
 
 
-// Get the URL params from right source
+// Get the url params from right source
 
-function getUrlParams(params, isDataManipulatorPage) {
-    // If at index.html and there is no URL Params => get sample strings from textContent element
-    if (params != 0) {
+function getUrlParams(isDataManipulatorPage) {
+    let paramsExists = isNonEmpty(URLSearchParams(window.location.search))
+
+    // If at index.html and there is no url params => get sample strings from textContent element
+    if (paramsExists === true) {
         // At both index.html or data-manipulator.html,
-        // Decode if URL Params exists.
-
-        const paramsArray = [...params.entries()]; // entries()メソッドでキーと値のペアを取得
-        return paramsArray
+        // Decode the url params if it exists.
+        return new URLSearchParams(window.location.search);
 
     } else if (isDataManipulatorPage === false) {
-        // At index.html and if there is No URL Params,
-        // Get the encoded string from '<script type="text/plain"> with id.
-
+        // At index.html and if there is No url params,
+        // Get the encoded string from '<script type="text/plain"> tag
         const sampleArtworkEncodedStr = document.getElementById("sample-artwork-encoded-string").textContent
-        const paramsArray = parseStrAsUrlParams(sampleArtworkEncodedStr)
-        return paramsArray
+        return parseStrAsUrlParams(sampleArtworkEncodedStr)
 
     } else {
-        // At data-manipulator.html and if there is No URL Params,
+        // At data-manipulator.html and if there is No url params,
         // Do nothing.
         return null
     }
@@ -52,18 +48,24 @@ function getUrlParams(params, isDataManipulatorPage) {
 
 
 
-// Parse the string into array of KV pairs array like decoding from URL params
+// Parse the string of KV pairs array to url params structure
 
 function parseStrAsUrlParams(str) {
-    console.log("str: ", str)
-    const deleteQustion = deleteQustionAtStartIfExists(str.trim())
-    const splitByAmpersand = deleteQustion.split('&')
-    console.log("splitByAmpersand: ", splitByAmpersand)
+    // Split as array
+    const deleteQuestion = tryDeleteQuestionAtStart(str.trim())
+    const splitByAmpersand = deleteQuestion.split('&')
     const splitByEqual = splitByAmpersand.map(entry => entry.split('='))
-    return splitByEqual
+
+    // Set into Map object to keep order of elements
+    const map = new Map();
+    splitByEqual.forEach(([key, value]) => {
+        map.set(key, value);
+    });
+
+    return new URLSearchParams(map)
 }
 
-function deleteQustionAtStartIfExists(str) {
+function tryDeleteQuestionAtStart(str) {
     // 文字列の先頭が?ならば削除する
     if (str.startsWith("?")) {
         // 先頭の1文字を除いた文字列を取得する
@@ -73,14 +75,24 @@ function deleteQustionAtStartIfExists(str) {
     }
 }
 
+// // test
+// const params_like_str = "?title=202401_001&desc=~2J6DBxK74JRDIQ5EfH43&A=013127b-NWrTPcKpRSjaX&0=0135n3ap2bI1fR"
+// console.log(parseStrAsUrlParams(params_like_str))
+// // URLSearchParams(4) { title → "202401_001", desc → "~2J6DBxK74JRDIQ5EfH43", A → "013127b-NWrTPcKpRSjaX", 0 → "0135n3ap2bI1fR" }
+// console.log(typeof(parseStrAsUrlParams(params_like_str)))
+// // object
+
+
+
+
 
 function decodeAsTwoMaps(paramsArray) {
     console.log('paramsArray.length: ', paramsArray.length) // 6
 
-    // Get Basic Data as Map from URL Params
+    // Get Basic Data as Map from url params
     // e.g.: ?202404_001=31-fff&
 
-    const basicDataMap = getBasicDataFromUrlParam(paramsArray)
+    const basicDataMap = getBasicDataFromUrlParams(paramsArray)
     console.log('basicDataMap: ', basicDataMap)
     // Map(4) { title → "202404_001", viewbox → "0 0 31 31", uintN → 5, rectFill → "fff" }
 

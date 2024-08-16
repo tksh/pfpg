@@ -8,7 +8,7 @@ export
     , recoverCurrentGroupColorsValues
     }
 
-// 選択された path-mode で URL Params から デコードし直す
+// 選択された path-mode で url params から デコードし直す
 function decodeAsSelectedPathMode(pathMode) {
     if (pathMode === 'relativeMerged') {
         console.log('Path mode: Relative and merged')

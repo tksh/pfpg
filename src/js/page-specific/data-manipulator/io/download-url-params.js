@@ -124,7 +124,7 @@ function getTitle() {
 
 
 
-// Merge the basic data and lines data as URL params
+// Merge the basic data and lines data as url params
 // And get the size of after Zstandard compression to indicate
 
 //// Only on data-manipulator.html
@@ -158,7 +158,7 @@ async function mergeBasicDataAndStrokesValues(){
 
     // Show the size of result in html
     document.getElementById(`encoded-url-params-size`).innerHTML =
-    `Size of original URL params string: <b>${urlParamsStr.length}</b> characters(bytes) (.txt)<br>
+    `Size of original url params string: <b>${urlParamsStr.length}</b> characters(bytes) (.txt)<br>
     Size of after Zstandard compression: <b>${blobSize}</b> bytes (.txt.zst)<br>
     Ratio: ${blobSize} / ${urlParamsStr.length} = <b>${compRatio}</b>`
 

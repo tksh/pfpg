@@ -4,6 +4,7 @@ import { showStringSize }          from 'encode/show-result'
 import { readTextarea }            from 'common-utils/read-textarea'
 import { outputToTextarea }        from 'common-utils/output-to-textarea'
 import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
+import { isNonEmpty }              from 'common-utils/is-non-empty'
 
 
 export
@@ -39,11 +40,11 @@ function encodeBasicData() {
     // Parse the basic data JSON from textarea
     const data = parseBasicData()
 
-    // Init the URL params string to return
+    // Init the url params string to return
     let dataAsUrlParams = "?"
 
     // Process each property
-    const properties = ['title', 'desc', 'metadata'];
+    const properties = ['version', 'title', 'desc', 'metadata', 'colors'];
     properties.forEach(prop => {
         if (prop in data && isNonEmpty(data[prop])) {
         // if (prop in data) {
@@ -77,9 +78,11 @@ function parseBasicData() {
 
     const result = {};
 
+    if ('version' in json) result.version = json.version;     // e.g.: "0.1.0"
     if ('title' in json) result.title = json.title;           // e.g.: "202401_001"
     if ('desc' in json) result.desc = json.desc;              // e.g.: "Portrait of a woman"
     if ('metadata' in json) result.metadata = json.metadata;  // e.g.: "<xml><reference-tag>some reference info<reference-tag></xml>"
+    if ('colors' in json) result.colors = json.colors;        // e.g.: "1357ofN16e_246ofN16eSftB8_12ofN16e"
 
     return result;
 }
