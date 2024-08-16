@@ -23,11 +23,11 @@ export
 
 ////////////////////////////////// Output: //////////////////////////////////
 
-// output: ?title=02024_001
+// output: ?title=02024_001&
 // input:
 //   "title": "202401_001",
 
-// output: ?title=202401_001&desc=~2J6DBxK74JRDIQ5EfH43
+// output: ?title=202401_001&desc=~2J6DBxK74JRDIQ5EfH43&
 // input:
 //   "title": "202401_001",
 //   "desc": "Portrait of a woman",
@@ -52,9 +52,6 @@ function encodeBasicData() {
             console.log(`${prop} is missing`);
         }
     });
-
-    // Remove the trailing '&' if it exists
-    dataAsUrlParams = dataAsUrlParams.replace(/&$/, '');
 
 
     // Output to textarea
