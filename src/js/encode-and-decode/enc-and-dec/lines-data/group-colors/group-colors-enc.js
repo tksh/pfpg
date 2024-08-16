@@ -1,6 +1,6 @@
-import { normalizedToHex }   from 'color-formatter/normalized-to-hex'
+import { rgbObjToHex }       from 'color-formatter/normalized-to-hex'
+import { uint8ToHex }        from 'color-formatter/normalized-to-hex'
 import { hexShortenFromTen } from 'color-formatter/hex-shorten'
-import { hexExpandToSix }    from 'color-formatter/hex-expand'
 import { jsonToMapObj }      from 'encode/json-to-map-obj'
 
 
@@ -15,15 +15,16 @@ export function encodeGroupColors(){
         let colorsStr = ""
 
         // Normalize three color values
-        const gStroke           = hexExpandToSix(linesData.g_stroke.slice(1)) // Remove '#'
-        const gOpacity       = normalizedToHex(linesData.g_opacity)         // Number to Hex
-        const gStrokeOpacity = normalizedToHex(linesData.g_stroke_opacity)  // Number to Hex
+        // console.log(typeof(linesData.g_stroke)) // object
+        const gStroke        = rgbObjToHex(linesData.g_stroke)         // Uint8 RGB object to hex
+        const gOpacity       = uint8ToHex(linesData.g_opacity)         // Uint8 number to Hex
+        const gStrokeOpacity = uint8ToHex(linesData.g_stroke_opacity)  // Uint8 number to Hex
 
         // Merge
         colorsStr = gStroke + gOpacity + gStrokeOpacity
         console.log("colorsStr: ", colorsStr)
 
-        // Shorten if could, 10 chars => 5 chars
+        // Shorten if could, 10 chars => 6|5|3|1 chars
         colorsStr = hexShortenFromTen(colorsStr)
 
         // Set into Map

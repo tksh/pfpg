@@ -1,19 +1,23 @@
+export
+    { normalizedToHex
+    , uint8ToHex
+    , rgbObjToHex
+    }
+
 // 0から1の範囲に正規化された数値を引数として受け取り
 // 2桁のHEX文字列として返す関数
-export function normalizedToHex(num) {
+function normalizedToHex(num) {
     // 数値が0から1の範囲にあるかチェックする
     if (num < 0 || num > 1) {
         // 範囲外であればエラーを返す
         return "Invalid number";
     }
-    // 数値を255倍して整数にする
-    const int = Math.round(num * 255);
-    // 整数を16進数に変換する
-    const hex = int.toString(16);
-    // 16進数が一桁の場合は先頭に0を付ける
-    const padded = hex.length === 1 ? "0" + hex : hex;
-    // 大文字に変換して返す
-    return padded.toUpperCase();
+    // 数値を255倍して整数にし、16進数に変換、
+    // 2桁になるよう0埋めし、大文字に変換する
+    return Math.round(num * 255)
+        .toString(16)
+        .padStart(2, '0')
+        .toUpperCase();
 }
 
 // Test
@@ -21,3 +25,50 @@ export function normalizedToHex(num) {
 // console.log(normalizedToHex(0.8))  // CC
 // console.log(normalizedToHex(0.01)) // 03
 // console.log(normalizedToHex(0))    // 00
+
+
+
+// uint8（0から255の範囲の整数）を
+// 2桁のHEX文字列に変換する関数
+function uint8ToHex(num) {
+    // 数値がuint8の範囲（0から255）にあるかチェックする
+    if (num < 0 || num > 255 || !Number.isInteger(num)) {
+        // 範囲外または整数でない場合はエラーを返す
+        return "Invalid number";
+    }
+    // 整数を16進数に変換し、2桁になるよう0埋めし、大文字に変換する
+    return num
+        .toString(16)
+        .padStart(2, '0')
+        .toUpperCase();
+}
+
+// // Test
+// console.log(uint8ToHex(0))    // 00
+// console.log(uint8ToHex(1))    // 01
+// console.log(uint8ToHex(255))  // FF
+
+// // 0.0, 1.0 .., it does not make error.
+// console.log(uint8ToHex(0.0))  // 00
+// console.log(uint8ToHex(1.0))  // 01
+// // JavaScriptでは、小数点以下が存在しない場合（たとえば 1.0 や 2.0 など）
+// // その数値は整数と見なされ Number.isInteger(1.0) の結果が true になる
+
+
+
+function rgbObjToHex(rgbDict) {
+    const r = uint8ToHex(rgbDict.r)
+    const g = uint8ToHex(rgbDict.g)
+    const b = uint8ToHex(rgbDict.b)
+    return r + g + b
+}
+
+// Test
+const uint8_rgb_obj_1 = { 'r':0, 'g':0, 'b':0 }
+const uint8_rgb_obj_2 = { 'r':170, 'g':170, 'b':170 }
+const uint8_rgb_obj_3 = { 'r':255, 'g':255, 'b':255 }
+const uint8_rgb_obj_4 = { 'r':256, 'g':256, 'b':256 }
+console.log(rgbObjToHex(uint8_rgb_obj_1)) // 000000
+console.log(rgbObjToHex(uint8_rgb_obj_2)) // AAAAAA
+console.log(rgbObjToHex(uint8_rgb_obj_3)) // FFFFFF
+console.log(rgbObjToHex(uint8_rgb_obj_4)) // Invalid numberInvalid numberInvalid number
