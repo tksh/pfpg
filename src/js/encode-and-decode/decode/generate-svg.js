@@ -54,7 +54,7 @@ import { tryShortenAsHalf } from 'color-formatter/hex-shorten'
 
 
 
-export function generateSvg(isRelative, basicDataObj, linesDataMap, decodedRelDvalsMap, decodedAbsDvalsMap) {
+export function generateSvg(isRelative, basicDataObj, linesDataMap, relDvalsMap, absDvalsMap) {
 
     // Set the tab size
     const tabSpace = '    ' // Four spaces
@@ -76,8 +76,8 @@ export function generateSvg(isRelative, basicDataObj, linesDataMap, decodedRelDv
         isRelative,
         tabSpace,
         linesDataMap,
-        decodedRelDvalsMap,
-        decodedAbsDvalsMap
+        relDvalsMap,
+        absDvalsMap
     )
 
     // Merge the group-id-<g> tags and <path> tags
@@ -95,12 +95,12 @@ export function generateSvg(isRelative, basicDataObj, linesDataMap, decodedRelDv
 
 
 
-function generateRelPathTags(tabSpace, linesDataMap, decodedRelDvalsMap) {
+function generateRelPathTags(tabSpace, linesDataMap, relDvalsMap) {
 
     const relPathTagsByGroup = new Map()
 
     for (let [gId, v] of linesDataMap) {
-        const dvalsObj = decodedRelDvalsMap.get(gId)
+        const dvalsObj = relDvalsMap.get(gId)
         console.log('dvalsObj: ', dvalsObj) // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
 
         const widthArr     = v.widthAndCounts.width      // list of stroke-width
@@ -155,12 +155,12 @@ function generateRelPathTags(tabSpace, linesDataMap, decodedRelDvalsMap) {
 
 
 
-function generateAbsPathTags(tabSpace, linesDataMap, decodedAbsDvalsMap) {
+function generateAbsPathTags(tabSpace, linesDataMap, absDvalsMap) {
 
     const absPathTagsByGroup = new Map()
 
     for (let [gId, v] of linesDataMap) {
-        const dvalsObj = decodedAbsDvalsMap.get(gId)
+        const dvalsObj = absDvalsMap.get(gId)
         console.log('dvalsObj: ', dvalsObj) // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
 
         const widthArr     = v.widthAndCounts.width      // list of stroke-width
@@ -272,11 +272,11 @@ function generateGTagCloseByGroup(tabSpace, linesDataMap) {
 }
 
 
-function generatePathTags(isRelative, tabSpace, linesDataMap, decodedRelDvalsMap, decodedAbsDvalsMap) {
+function generatePathTags(isRelative, tabSpace, linesDataMap, relDvalsMap, absDvalsMap) {
     if (isRelative === true) {         // true = relative and merged
-        return generateRelPathTags(tabSpace, linesDataMap, decodedRelDvalsMap)
+        return generateRelPathTags(tabSpace, linesDataMap, relDvalsMap)
     } else if (isRelative === false) { // false = absolute and separated
-        return generateAbsPathTags(tabSpace, linesDataMap, decodedAbsDvalsMap)
+        return generateAbsPathTags(tabSpace, linesDataMap, absDvalsMap)
     }
 }
 

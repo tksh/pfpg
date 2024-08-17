@@ -13,7 +13,7 @@ export function decodeWidthAndCounts(encodedStr) {
 
     // Set the numbers and decoded strings into Map object
     // 配列のインデックス番号が2で割り切れる = 偶数 [0],[2],... の場合に 'width'要素を取得し キーとする
-    const widthArr = parts.filter((_, i) => i % 2 === 0).map((part => part));
+    const widthArr = parts.filter((_, i) => i % 2 === 0).map((part => Number(part)));
     console.log('widthArr: ', widthArr)
 
 
@@ -50,7 +50,7 @@ export function decodeWidthAndCounts(encodedStr) {
     return {
         firstline: firstlineArr,  // <Number>
         lastline : lastlineArr,   // <Number>
-        width    : widthArr       // <String>
+        width    : widthArr       // <Number>
     }
 }
 

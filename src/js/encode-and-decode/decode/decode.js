@@ -11,11 +11,16 @@ import { swap63Dec }              from 'enc-and-dec/lines-data/d-values/swap63/s
 import { outputToTextarea }       from 'common-utils/output-to-textarea'
 
 
+export
+    { decode
+    , decodeDvals
+    }
+
 // Decode to SVG string when page loaded.
 
 // And also will be called from '/js/page-specific/index/tab-line/path-mode.js' when 'path-mode' changed via option selector.
 
-export function decode(isRelative, isDataManipulatorPage) {
+function decode(isRelative, isDataManipulatorPage) {
     const startTime = performance.now()
     console.log('Start the decoding SVG ...')
 
@@ -30,22 +35,22 @@ export function decode(isRelative, isDataManipulatorPage) {
 
         const linesDataMap = urlParamsAsTwoMaps.linesData
         console.log("linesDataMap: ", linesDataMap)
-        // Map(5) {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
-        // key  : Group ID (seq num)
+        // Map() {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
+        // key  : Group ID (seq num start at 0)
         // value: Object
-        //            groupColors  : Object {g_stroke: '#000000', g_opacity: 1, g_stroke_opacity: 1}
-        //            {threeFlags  : Array(3)}
-        //            {widthAndCounts  : Map(1)}
-        //            {widthAndCounts  : Object { firstline: (4) […], lastline: (4) […], … }}
-        //            {encodedDvals: 'wyyvtuDwtzxifJxuvunv56nudvqm96wo9xuuucvvuzvzAwvvvyzxsvxDyVUSByqATCUWytEBzzAx'}
+        // groupColors:    decodedGroupColorsObj,
+        // threeFlags:     decodedThreeFlagsArray,
+        // widthAndCounts: decodedWidthAndCountsMap,
+        // relDvalsMap:    decodedRelDvalsMap,
+        // absDvalsMap:    decodedAbsDvalsMap
 
 
-        const decodedAbsAndRelDvalsMaps = decodeDvals(linesDataMap)
+        //const decodedAbsAndRelDvalsMaps = decodeDvals(linesDataMap)
 
-        const decodedRelDvalsMap = decodedAbsAndRelDvalsMaps.get('relative')
-        const decodedAbsDvalsMap = decodedAbsAndRelDvalsMaps.get('absolute')
+        //const relDvalsMap = decodedAbsAndRelDvalsMaps.absolute
+        //const absDvalsMap = decodedAbsAndRelDvalsMaps.relative
 
-        console.log("decodedRelDvalsMap: ", decodedRelDvalsMap) ///////////////////////////////////////////////
+        //console.log("relDvalsMap: ", relDvalsMap) ///////////////////////////////////////////////
         // Map(5) {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
         // [[Entries]]
         //     0: {1 => Object}
@@ -58,7 +63,7 @@ export function decode(isRelative, isDataManipulatorPage) {
         //         key: 2
         // ...
 
-        console.log("decodedAbsDvalsMap: ", decodedAbsDvalsMap)
+        //console.log("absDvalsMap: ", absDvalsMap)
         // Map(5) {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
         // [[Entries]]
         //     0: {1 => Object}
@@ -77,7 +82,8 @@ export function decode(isRelative, isDataManipulatorPage) {
 
         // Generate SVG string
 
-        const svgStr = generateSvg(isRelative, basicDataObj, linesDataMap, decodedRelDvalsMap, decodedAbsDvalsMap)
+        const svgStr = generateSvg(isRelative, basicDataObj, linesDataMap)
+        // const svgStr = generateSvg(isRelative, basicDataObj, linesDataMap, relDvalsMap, absDvalsMap)
 
         // Output to textarea
         const outputTextareaId = selectOutputTextareaId(isRelative, isDataManipulatorPage)
@@ -133,14 +139,22 @@ export function decode(isRelative, isDataManipulatorPage) {
 
 
 function decodeDvals(linesDataMap) {
-    const decodedAbsDvalsMap = new Map()
-    const decodedRelDvalsMap = new Map()
+    let decodedAbsDvalsMap = {}
+    let decodedRelDvalsMap = {}
+    // const decodedAbsDvalsMap = new Map()
+    // const decodedRelDvalsMap = new Map()
+
+    console.log("////linesDataMap: ", linesDataMap)
 
     for (const [gId, v] of linesDataMap) {
-        // console.log("v.encodedDvals: ", v.encodedDvals) // "x1 + y1 + x2 + y2"
+        console.log("gId: ", gId)
+        console.log("v: ", v)
+        // {groupColors: {…}, threeFlags: Array(3), widthAndCounts: {…}, relDvalsMap: Map(1), absDvalsMap: Map(1)}
+
+        console.log("v.encodedDvals: ", v.encodedDvals) // "x1 + y1 + x2 + y2"
         // e.g.: H5yJn8tIS6hWuVfFgdJIY10GsuwXo0w
 
-        console.log("v.threeFlags: ", v.threeFlags) //
+        console.log("v.threeFlags: ", v.threeFlags)     // e.g.: Array (3) ['0', '1', '3']
 
         let decodedAbsDvals = []
         let decodedRelDvals = []
@@ -165,28 +179,42 @@ function decodeDvals(linesDataMap) {
             console.log('Error! This group has unknown flag for encoding method.')
         }
 
-        // Set into Map
-        decodedAbsDvalsMap.set(
-            gId, {
+        // Set into Object
+        decodedAbsDvalsMap = {
             x1: decodedAbsDvals[0],
             y1: decodedAbsDvals[1],
             x2: decodedAbsDvals[2],
-            y2: decodedAbsDvals[3],
-        })
-        decodedRelDvalsMap.set(
-            gId, {
+            y2: decodedAbsDvals[3]
+        }
+        decodedRelDvalsMap = {
             x1: decodedRelDvals[0],
             y1: decodedRelDvals[1],
             x2: decodedRelDvals[2],
-            y2: decodedRelDvals[3],
-        })
+            y2: decodedRelDvals[3]
+        }
+
+        // // Set into Map
+        // decodedAbsDvalsMap.set(
+        //     gId, {
+        //     x1: decodedAbsDvals[0],
+        //     y1: decodedAbsDvals[1],
+        //     x2: decodedAbsDvals[2],
+        //     y2: decodedAbsDvals[3],
+        // })
+        // decodedRelDvalsMap.set(
+        //     gId, {
+        //     x1: decodedRelDvals[0],
+        //     y1: decodedRelDvals[1],
+        //     x2: decodedRelDvals[2],
+        //     y2: decodedRelDvals[3],
+        // })
 
     }
     console.log('decodedAbsDvalsMap: ', decodedAbsDvalsMap)
     console.log('decodedRelDvalsMap: ', decodedRelDvalsMap)
 
-    return new Map([
-        ['absolute', decodedAbsDvalsMap],
-        ['relative', decodedRelDvalsMap]
-    ])
+    return {
+        absolute: decodedAbsDvalsMap,
+        relative: decodedRelDvalsMap
+    }
 }

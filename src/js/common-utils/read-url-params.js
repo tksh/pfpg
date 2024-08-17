@@ -1,9 +1,10 @@
-import { hexExpandToTen }           from 'color-formatter/hex-expand'
-import { getBasicDataFromUrlParam } from 'enc-and-dec/basic-data/basic-data-dec'
+import { hexExpandToTen }            from 'color-formatter/hex-expand'
+import { getCanvasSize }             from 'decode/get-canvas-size'
 import { getBasicDataFromUrlParams } from 'enc-and-dec/basic-data/basic-data-dec'
-import { decodeGroupColors }        from 'enc-and-dec/lines-data/group-colors/group-colors-dec'
-import { decodeWidthAndCounts }     from 'enc-and-dec/lines-data/width-and-counts/width-and-counts-dec'
-import { isNonEmpty }               from 'common-utils/is-non-empty'
+import { decodeGroupColors }         from 'enc-and-dec/lines-data/group-colors/group-colors-dec'
+import { decodeWidthAndCounts }      from 'enc-and-dec/lines-data/width-and-counts/width-and-counts-dec'
+import { isNonEmpty }                from 'common-utils/is-non-empty'
+import { decodeDvals }               from 'decode/decode'
 
 export
     { readUrlParamsAsMaps
@@ -180,9 +181,7 @@ function decodeAsTwoMaps(urlSearchParams) {
         console.log("encodedDvalsStr: ", encodedDvalsStr)
         // BRY8zuZS6-yuj6xgi-u9utYvXoK0QEXoKySIqr46g3-9HxEs1eG2VMHxerRFrXM3mjZxLkf-wwSvNRnQb88G
 
-
-
-        // Set into Map by group ID
+        // Set into Map by group ID, temporary to decode the d values.
         linesDataMap.set(
             i,
             {
@@ -192,10 +191,30 @@ function decodeAsTwoMaps(urlSearchParams) {
                 encodedDvals:   encodedDvalsStr
             }
         )
+
+        // Decode the d values
+        const decodedAbsAndRelDvalsMaps = decodeDvals(linesDataMap)
+        const decodedRelDvalsMap = decodedAbsAndRelDvalsMaps.relative
+        const decodedAbsDvalsMap = decodedAbsAndRelDvalsMaps.absolute
+
+        // Set into Map by group ID, overwrite to return.
+        linesDataMap.set(
+            i,
+            {
+                groupColors:    decodedGroupColorsObj,
+                threeFlags:     decodedThreeFlagsArray,
+                widthAndCounts: decodedWidthAndCountsMap,
+                encodedDvals:   encodedDvalsStr,
+                relDvalsMap:    decodedRelDvalsMap,
+                absDvalsMap:    decodedAbsDvalsMap
+            }
+        )
+
     }
+    // Decode the data about canvas size from index = 0 line group
+    const sizeDataObj = getCanvasSize(linesDataMap.get(0))
 
-    return {basicData:basicDataObj, linesData:linesDataMap}
-
+    return { basicData:basicDataObj, linesData:linesDataMap, sizeData:sizeDataObj }
 }
 
 
