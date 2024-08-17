@@ -1,5 +1,5 @@
 import { toFixedTrimmed } from 'utils/number-rounding'
-import { readUrlParamsAsMaps } from 'common-utils/read-url-params'
+import { decodeUrlParams } from 'common-utils/read-url-params'
 
 export
     { svgWithNewShapeViewbox
@@ -89,8 +89,8 @@ function extractViewboxValues(inputSvg) {
 function viewboxUnSlimmed(inputSvg) {
     // Read original basic data from url params
     const isDataManipulatorPage = false
-    const urlParamsAsTwoMaps = readUrlParamsAsMaps(isDataManipulatorPage)
-    const basicDataObj = urlParamsAsTwoMaps.basicData
+    const decodedParams = decodeUrlParams(isDataManipulatorPage)
+    const basicDataObj = decodedParams.basicData
 
     // Generate new string with original viewBox size
     const originalViewboxString = basicDataObj.get('viewbox')                // e.g.: '0 0 31 31'

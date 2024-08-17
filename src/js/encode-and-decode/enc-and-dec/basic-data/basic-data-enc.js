@@ -1,4 +1,3 @@
-import { getUintN }                from 'enc-and-dec/basic-data/get-uint-n'
 import { showProcessingTime }      from 'enc-and-dec/show-result'
 import { showStringSize }          from 'encode/show-result'
 import { readTextarea }            from 'common-utils/read-textarea'

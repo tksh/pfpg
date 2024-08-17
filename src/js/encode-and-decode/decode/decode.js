@@ -1,4 +1,4 @@
-import { readUrlParamsAsMaps }    from 'common-utils/read-url-params'
+import { decodeUrlParams }    from 'common-utils/read-url-params'
 import { relToAbs }               from 'decode/rel-to-abs'
 import { absToRel }                   from 'enc-and-dec/lines-data/d-values/bigint64/abs-to-rel'
 import { selectOutputTextareaId } from 'common-utils/select-output-textarea'
@@ -24,16 +24,17 @@ function decode(isRelative, isDataManipulatorPage) {
     const startTime = performance.now()
     console.log('Start the decoding SVG ...')
 
-    const urlParamsAsTwoMaps = readUrlParamsAsMaps(isDataManipulatorPage)
+    const decodedParams = decodeUrlParams(isDataManipulatorPage)
+    // return { basicData: basicDataObj, linesData: linesDataMap, sizeData: sizeDataObj }
 
-    if (urlParamsAsTwoMaps != null) {
+    if (decodedParams != null) {
 
         // Extract the values
-        const basicDataObj = urlParamsAsTwoMaps.basicData
+        const basicDataObj = decodedParams.basicData
         console.log("basicDataObj: ", basicDataObj)
         // Map(6) { title → "202404_001", viewbox → "0 0 31 31", viewboxWidth → "31", viewboxHeight → "31", uintN → 5, rectFill → "fff" }
 
-        const linesDataMap = urlParamsAsTwoMaps.linesData
+        const linesDataMap = decodedParams.linesData
         console.log("linesDataMap: ", linesDataMap)
         // Map() {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
         // key  : Group ID (seq num start at 0)
@@ -41,49 +42,15 @@ function decode(isRelative, isDataManipulatorPage) {
         // groupColors:    decodedGroupColorsObj,
         // threeFlags:     decodedThreeFlagsArray,
         // widthAndCounts: decodedWidthAndCountsMap,
-        // relDvalsMap:    decodedRelDvalsMap,
-        // absDvalsMap:    decodedAbsDvalsMap
-
-
-        //const decodedAbsAndRelDvalsMaps = decodeDvals(linesDataMap)
-
-        //const relDvalsMap = decodedAbsAndRelDvalsMaps.absolute
-        //const absDvalsMap = decodedAbsAndRelDvalsMaps.relative
-
-        //console.log("relDvalsMap: ", relDvalsMap) ///////////////////////////////////////////////
-        // Map(5) {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
-        // [[Entries]]
-        //     0: {1 => Object}
-        //         key: 1
-        //         value: x1: (19) [1, 3, 3, 0, -2, -1, 8, 1, -2, 4, 2, -13, -16, 14, 2, -1, 0, -1, -8]
-        //                x2: (19) [0, 0, -1, 4, 0, 4, 5, 1, 0, 0, 0, 3, 4, 2, -3, 0, 2, 8, 3]
-        //                y1: (19) [0, -26, -25, -8, -1, -18, 0, -5, -9, -22, -25, 1, -7, -22, 2, -1, -1, -1, -19]
-        //                y2: (19) [26, 25, 23, 6, 3, -5, 5, 24, 7, 25, 27, 3, -2, 9, 6, 4, 4, 5, 2]
-        //     1: {2 => Object}
-        //         key: 2
-        // ...
-
-        //console.log("absDvalsMap: ", absDvalsMap)
-        // Map(5) {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
-        // [[Entries]]
-        //     0: {1 => Object}
-        //         key: 1
-        //         value:
-        //             x1: (19) [1, 4, 7, 6, 8, 7, 19, 25, 24, 28, 30, 17, 4, 22, 26, 22, 22, 23, 23]
-        //             x2: (19) [1, 4, 6, 10, 8, 11, 24, 26, 24, 28, 30, 20, 8, 24, 23, 22, 24, 31, 26]
-        //             y1: (19) [0, 0, 0, 15, 20, 5, 0, 0, 15, 0, 0, 28, 24, 0, 11, 16, 19, 22, 8]
-        //             y2: (19) [26, 25, 23, 21, 23, 0, 5, 24, 22, 25, 27, 31, 22, 9, 17, 20, 23, 27, 10]
-        //         [[Prototype]]: Object
-        //     1: {2 => Object}
-        //         key: 2
-        // ...
-
+        // encodedDvals:   encodedDvalsStr,
+        // relDvalsObj:    decodedRelDvalsObj,
+        // absDvalsObj:    decodedAbsDvalsObj
 
 
         // Generate SVG string
 
-        const svgStr = generateSvg(isRelative, basicDataObj, linesDataMap)
-        // const svgStr = generateSvg(isRelative, basicDataObj, linesDataMap, relDvalsMap, absDvalsMap)
+        const svgStr = generateSvg(isRelative, decodedParams)
+        // const svgStr = generateSvg(isRelative, basicDataObj, linesDataMap, relDvalsObj, absDvalsObj)
 
         // Output to textarea
         const outputTextareaId = selectOutputTextareaId(isRelative, isDataManipulatorPage)
@@ -116,7 +83,7 @@ function decode(isRelative, isDataManipulatorPage) {
         return svgStr
 
     } else {
-        // Stop decoding when urlParamsAsTwoMaps = null
+        // Stop decoding when decodedParams = null
         console.log('There is no url params to decode.')
 
         if (isDataManipulatorPage === false) {
@@ -133,28 +100,22 @@ function decode(isRelative, isDataManipulatorPage) {
             outputToTextarea(svgStr, outputTextareaId)
         }
     }
-
 }
 
 
-
 function decodeDvals(linesDataMap) {
-    let decodedAbsDvalsMap = {}
-    let decodedRelDvalsMap = {}
-    // const decodedAbsDvalsMap = new Map()
-    // const decodedRelDvalsMap = new Map()
-
-    console.log("////linesDataMap: ", linesDataMap)
+    let decodedAbsDvalsObj = {}
+    let decodedRelDvalsObj = {}
 
     for (const [gId, v] of linesDataMap) {
-        console.log("gId: ", gId)
-        console.log("v: ", v)
-        // {groupColors: {…}, threeFlags: Array(3), widthAndCounts: {…}, relDvalsMap: Map(1), absDvalsMap: Map(1)}
+        console.log("gId: ", gId)  // 0, 1, 2 ...
+        console.log("v: ", v)      // {groupColors: {…}, threeFlags: Array(3), widthAndCounts: {…}, relDvalsObj: Map(1), absDvalsObj: Map(1)}
 
-        console.log("v.encodedDvals: ", v.encodedDvals) // "x1 + y1 + x2 + y2"
+        console.log("v.encodedDvals: ", v.encodedDvals) // Encoded string:  x1 + y1 + x2 + y2
         // e.g.: H5yJn8tIS6hWuVfFgdJIY10GsuwXo0w
 
-        console.log("v.threeFlags: ", v.threeFlags)     // e.g.: Array (3) ['0', '1', '3']
+        console.log("v.threeFlags: ", v.threeFlags)     // Flag chars: [0] comp methods, [1] enc methods, [2] enc config values
+        // e.g.: Array (3) ['0', '1', '3']
 
         let decodedAbsDvals = []
         let decodedRelDvals = []
@@ -180,41 +141,25 @@ function decodeDvals(linesDataMap) {
         }
 
         // Set into Object
-        decodedAbsDvalsMap = {
+        decodedAbsDvalsObj = {
             x1: decodedAbsDvals[0],
             y1: decodedAbsDvals[1],
             x2: decodedAbsDvals[2],
             y2: decodedAbsDvals[3]
         }
-        decodedRelDvalsMap = {
+        decodedRelDvalsObj = {
             x1: decodedRelDvals[0],
             y1: decodedRelDvals[1],
             x2: decodedRelDvals[2],
             y2: decodedRelDvals[3]
         }
-
-        // // Set into Map
-        // decodedAbsDvalsMap.set(
-        //     gId, {
-        //     x1: decodedAbsDvals[0],
-        //     y1: decodedAbsDvals[1],
-        //     x2: decodedAbsDvals[2],
-        //     y2: decodedAbsDvals[3],
-        // })
-        // decodedRelDvalsMap.set(
-        //     gId, {
-        //     x1: decodedRelDvals[0],
-        //     y1: decodedRelDvals[1],
-        //     x2: decodedRelDvals[2],
-        //     y2: decodedRelDvals[3],
-        // })
-
     }
-    console.log('decodedAbsDvalsMap: ', decodedAbsDvalsMap)
-    console.log('decodedRelDvalsMap: ', decodedRelDvalsMap)
+
+    console.log('decodedAbsDvalsObj: ', decodedAbsDvalsObj)
+    console.log('decodedRelDvalsObj: ', decodedRelDvalsObj)
 
     return {
-        absolute: decodedAbsDvalsMap,
-        relative: decodedRelDvalsMap
+        absolute: decodedAbsDvalsObj,
+        relative: decodedRelDvalsObj
     }
 }

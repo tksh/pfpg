@@ -1,4 +1,4 @@
-import { getUintN } from 'enc-and-dec/basic-data/get-uint-n'
+import { getUintN } from 'common-utils/get-uint-n'
 
 function decodeProperty(encodedValue) {
     if (encodedValue.startsWith('~')) {
@@ -49,14 +49,14 @@ export function getBasicDataFromUrlParam(urlSearchParams) {
     const title = basicDataParam[0]              // 202308_001
 
     // Size
-    const viewboxShorten  = basicDataParam[1].split("-")[0]              // 31
-    const viewboxExpanded = viewboxExpander(viewboxShorten)              // '0_0_31_31'
-    const viewboxDelimitedBySpace = viewboxExpanded.replace(/_/g, ' ')   // '0 0 31 31'
+    const viewboxShorten  = basicDataParam[1].split("-")[0]              // e.g.: 31
+    const viewboxExpanded = viewboxExpander(viewboxShorten)              // e.g.: '0_0_31_31'
+    const viewboxDelimitedBySpace = viewboxExpanded.replace(/_/g, ' ')   // e.g.: '0 0 31 31'
 
-    const viewboxSplitted = viewboxExpanded.split('_') // (4) ['0', '0', '31', '31']
+    const viewboxSplitted = viewboxExpanded.split('_') // e.g.: (4) ['0', '0', '31', '31']
     const viewboxWH = viewboxSplitted.slice(-2)        // Extract 3rd (width) and 4th (height) elements
     const max = Math.max(...viewboxWH)
-    const uintN = getUintN(max)                        // 5 (2 の 何乗か？)
+    const uintN = getUintN(max)                        // e.g.: 5 (2 の 何乗か？)
 
     // Base color
     const rectFill = basicDataParam[1].split("-")[1] // 9999

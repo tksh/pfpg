@@ -7,16 +7,16 @@ import { isNonEmpty }                from 'common-utils/is-non-empty'
 import { decodeDvals }               from 'decode/decode'
 
 export
-    { readUrlParamsAsMaps
+    { decodeUrlParams
     , getUrlParams
     }
 
-function readUrlParamsAsMaps(isDataManipulatorPage) {
+function decodeUrlParams(isDataManipulatorPage) {
     // Get the url params from right source
     const params = getUrlParams(isDataManipulatorPage)
 
     if (params != null) {
-        return decodeAsTwoMaps(params)
+        return decodeAsThreeData(params)
     } else {
         console.log('There is NO url params to decode.')
     }
@@ -87,15 +87,14 @@ function tryDeleteQuestionAtStart(str) {
 
 
 
-function decodeAsTwoMaps(urlSearchParams) {
+function decodeAsThreeData(urlSearchParams) {
 
     // Get Basic Data as Map from url params
     // e.g.: ?202404_001=31-fff&
 
     const basicDataObj = getBasicDataFromUrlParams(urlSearchParams)
     console.log('basicDataObj: ', basicDataObj)
-    // Map(4) { title → "202404_001", viewbox → "0 0 31 31", uintN → 5, rectFill → "fff" }
-    //
+    // e.g.:
     // {title: '202401_001', desc: 'Portrait of a woman'}
     // [[Prototype]]: Object
 
@@ -120,19 +119,6 @@ function decodeAsTwoMaps(urlSearchParams) {
     console.log("linesDataKvArray.length: ", linesDataKvArray.length)
 
     const linesDataMap = new Map()
-    // key = gId (seq num)
-    // value = Object[
-    //                "groupColors"  => {
-    //                                 "g_stroke"         => "#000" <String>,
-    //                                 "g_opacity"        => 1 <Number>,
-    //                                 "g_stroke_opacity" => 1 <Number>
-    //                                },
-    //                threeFlags   => [Three Chars Array],
-    //                widthAndCounts   => {
-    //                                 "list_of_stroke_width" <Number> => "count_by_stroke_width" <Number> ...,
-    //                                },
-    //                encodedDvals => "Encoded_Strings" <String>
-    //               ]
 
     for (let i = 0; i < linesDataKvArray.length; ++i) {
         // `i` as a group ID (gId, "g_id") number.
@@ -193,9 +179,9 @@ function decodeAsTwoMaps(urlSearchParams) {
         )
 
         // Decode the d values
-        const decodedAbsAndRelDvalsMaps = decodeDvals(linesDataMap)
-        const decodedRelDvalsMap = decodedAbsAndRelDvalsMaps.relative
-        const decodedAbsDvalsMap = decodedAbsAndRelDvalsMaps.absolute
+        const decodedAbsAndRelDvals = decodeDvals(linesDataMap)
+        const decodedRelDvalsObj = decodedAbsAndRelDvals.relative
+        const decodedAbsDvalsObj = decodedAbsAndRelDvals.absolute
 
         // Set into Map by group ID, overwrite to return.
         linesDataMap.set(
@@ -205,16 +191,16 @@ function decodeAsTwoMaps(urlSearchParams) {
                 threeFlags:     decodedThreeFlagsArray,
                 widthAndCounts: decodedWidthAndCountsMap,
                 encodedDvals:   encodedDvalsStr,
-                relDvalsMap:    decodedRelDvalsMap,
-                absDvalsMap:    decodedAbsDvalsMap
+                relDvalsObj:    decodedRelDvalsObj,
+                absDvalsObj:    decodedAbsDvalsObj
             }
         )
 
     }
-    // Decode the data about canvas size from index = 0 line group
+    // Decode the data about canvas size from [0]-indexed (group ID = 0) lines group
     const sizeDataObj = getCanvasSize(linesDataMap.get(0))
 
-    return { basicData:basicDataObj, linesData:linesDataMap, sizeData:sizeDataObj }
+    return { basicData: basicDataObj, linesData: linesDataMap, sizeData: sizeDataObj }
 }
 
 

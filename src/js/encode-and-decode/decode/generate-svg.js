@@ -12,7 +12,6 @@ import { tryShortenAsHalf } from 'color-formatter/hex-shorten'
 //         </clipPath>
 //     </defs>
 //     <g clip-path="url(#shape-to-trim)">
-//         <rect width="31" height="31" fill="#9999" />
 //         <g stroke="#000000" opacity="1" stroke-opacity="1">
 //             <g stroke-width="3">
 //                 <path d="m1 0 0 26m3-26 0 25m3-25-1 ... 8 5m-8-19 3 2" />
@@ -38,7 +37,6 @@ import { tryShortenAsHalf } from 'color-formatter/hex-shorten'
 //         </clipPath>
 //     </defs>
 //     <g clip-path="url(#shape-to-trim)">
-//         <rect width="31" height="31" fill="#9999" />
 //         <g stroke="#000000" opacity="1" stroke-opacity="1">
 //             <g stroke-width="3">
 //                 <path d="M 1 0 L 1 26" />
@@ -54,35 +52,33 @@ import { tryShortenAsHalf } from 'color-formatter/hex-shorten'
 
 
 
-export function generateSvg(isRelative, basicDataObj, linesDataMap, relDvalsMap, absDvalsMap) {
+export function generateSvg(isRelative, decodedParams) {
 
     // Set the tab size
     const tabSpace = '    ' // Four spaces
 
 
     // Generate tags except stroke tags
-    const tagsBeforeStrokes = generateTagsBeforeStrokes(tabSpace, basicDataObj)
+    const tagsBeforeStrokes = generateTagsBeforeStrokes(tabSpace, decodedParams.basicData, decodedParams.sizeData)
     const tagsAfterStrokes = generateTagsAfterStrokes(tabSpace)
 
 
     // Strokes tags ( group-id-<g> and <path> )
 
     // Generate the open and close group-id-<g> tags
-    const gTagOpenByGroup = generateGTagOpenByGroup(tabSpace, linesDataMap)
-    const gTagCloseByGroup = generateGTagCloseByGroup(tabSpace, linesDataMap)
+    const gTagOpenByGroup = generateGTagOpenByGroup(tabSpace, decodedParams.linesData)
+    const gTagCloseByGroup = generateGTagCloseByGroup(tabSpace, decodedParams.linesData)
 
     // Generate the <path> tags (as relative or absolute, switched by isRelative)
     const pathTagsByGroup = generatePathTags(
         isRelative,
         tabSpace,
-        linesDataMap,
-        relDvalsMap,
-        absDvalsMap
+        decodedParams.linesData
     )
 
     // Merge the group-id-<g> tags and <path> tags
     const strokesTags = mergeGAndPathTags(
-        linesDataMap,
+        decodedParams.linesData,
         gTagOpenByGroup,
         pathTagsByGroup,
         gTagCloseByGroup
@@ -95,12 +91,12 @@ export function generateSvg(isRelative, basicDataObj, linesDataMap, relDvalsMap,
 
 
 
-function generateRelPathTags(tabSpace, linesDataMap, relDvalsMap) {
+function generateRelPathTags(tabSpace, linesDataMap) {
 
     const relPathTagsByGroup = new Map()
 
     for (let [gId, v] of linesDataMap) {
-        const dvalsObj = relDvalsMap.get(gId)
+        const dvalsObj = v.relDvalsObj
         console.log('dvalsObj: ', dvalsObj) // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
 
         const widthArr     = v.widthAndCounts.width      // list of stroke-width
@@ -142,25 +138,18 @@ function generateRelPathTags(tabSpace, linesDataMap, relDvalsMap) {
         relPathTagsByGroup.set(gId, wholeTagsUnderGroup)
     }
     console.log('relPathTagsByGroup: ', relPathTagsByGroup)
-    // Map(5) { 
-    //     1 => '            <g stroke-width="3">\n                <path d="m1 0 0 26m3 ... " />\n            </g>'
-    //     2 => '            <g stroke-width="2">\n                <path d="m0 0 31 1m- ... " />\n            </g>'
-    //     3 => '            <g stroke-width="1">\n                <path d="m1 26-1 1m7 ... " />\n            </g>'
-    //     4 => '            <g stroke-width="1">\n                <path d="m14 6-5 2m0 ... " />\n            </g>'
-    //     5 => '            <g stroke-width="1">\n                <path d="m12 21 0 2m ... " />\n            </g>'
-    // }
 
     return relPathTagsByGroup
 }
 
 
 
-function generateAbsPathTags(tabSpace, linesDataMap, absDvalsMap) {
+function generateAbsPathTags(tabSpace, linesDataMap) {
 
     const absPathTagsByGroup = new Map()
 
     for (let [gId, v] of linesDataMap) {
-        const dvalsObj = absDvalsMap.get(gId)
+        const dvalsObj = v.absDvalsObj
         console.log('dvalsObj: ', dvalsObj) // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
 
         const widthArr     = v.widthAndCounts.width      // list of stroke-width
@@ -205,22 +194,16 @@ function generateAbsPathTags(tabSpace, linesDataMap, absDvalsMap) {
         absPathTagsByGroup.set(gId, wholeTagsUnderGroup)
     }
     console.log('absPathTagsByGroup: ', absPathTagsByGroup)
-    // Map(5) {
-    //     1 => '            <path stroke-width="3" d="M 1 0 L 1 26" />\n                <path d="M 4 0  ... " />\n            </g>',
-    //     2 => '            <path stroke-width="2" d="M 0 0 L 31 1" />\n                <path d="M 9 3  ... " />\n            </g>',
-    //     3 => '            <path stroke-width="1" d="M 1 26 L 0 27" />\n                <path d="M 7 7 ... " />\n            </g>',
-    //     4 => '            <path stroke-width="1" d="M 14 6 L 9 8" />\n                <path d="M 9 6  ... " />\n            </g>',
-    //     5 => '            <path stroke-width="1" d="M 12 21 L 12 23" />\n                <path d="M 1 ... " />\n            </g>',
-    // }
+
     return absPathTagsByGroup
 }
 
 
 
-function generateTagsBeforeStrokes(tabSpace, basicDataObj) {
+function generateTagsBeforeStrokes(tabSpace, basicDataObj, sizeDataObj) {
 
-    const svgOpen = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${basicDataObj.get("viewbox")}" shape-rendering="crispEdges">`
-    const title = tabSpace.repeat(1) + `<title>${basicDataObj.get("title")}</title>`
+    const svgOpen = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${sizeDataObj.viewbox}" shape-rendering="crispEdges">`
+    const title = tabSpace.repeat(1) + `<title>${basicDataObj.title}</title>`
 
     // Trimming shape <defs> tag (has no variables)
     const trimmingShapeDefs =
@@ -232,9 +215,8 @@ function generateTagsBeforeStrokes(tabSpace, basicDataObj) {
 
     // clip-path: <rect> in <g>
     const clipPathGroupOpen = tabSpace.repeat(1) + '<g clip-path="url(#shape-to-trim)">'
-    const baseRect = tabSpace.repeat(2) + `<rect width="${basicDataObj.get("viewboxWidth")}" height="${basicDataObj.get("viewboxHeight")}" fill="#${basicDataObj.get("rectFill")}" />`
 
-    return [svgOpen, title, trimmingShapeDefs, clipPathGroupOpen, baseRect]
+    return [svgOpen, title, trimmingShapeDefs, clipPathGroupOpen]
 }
 
 function generateTagsAfterStrokes(tabSpace) {
@@ -272,11 +254,11 @@ function generateGTagCloseByGroup(tabSpace, linesDataMap) {
 }
 
 
-function generatePathTags(isRelative, tabSpace, linesDataMap, relDvalsMap, absDvalsMap) {
-    if (isRelative === true) {         // true = relative and merged
-        return generateRelPathTags(tabSpace, linesDataMap, relDvalsMap)
-    } else if (isRelative === false) { // false = absolute and separated
-        return generateAbsPathTags(tabSpace, linesDataMap, absDvalsMap)
+function generatePathTags(isRelative, tabSpace, linesDataMap) {
+    if (isRelative === true) {                                  // true = relative and merged
+        return generateRelPathTags(tabSpace, linesDataMap)
+    } else if (isRelative === false) {                          // false = absolute and separated
+        return generateAbsPathTags(tabSpace, linesDataMap)
     }
 }
 
