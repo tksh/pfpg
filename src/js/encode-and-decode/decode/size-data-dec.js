@@ -19,7 +19,7 @@ import { getUintN } from 'common-utils/get-uint-n'
 // Used in 'bruteforce53-enc.js' and 'bigint64-enc.js'.
 
 
-export function getCanvasSize(linesDataMapIndexZero) {
+export function sizeDataDec(linesDataMapIndexZero) {
     console.log('linesDataMapIndexZero: ', linesDataMapIndexZero)
     // absDvalsObj: {x1: Array(2), y1: Array(2), x2: Array(2), y2: Array(2)}
     // encodedDvals: "NWrTPcKpRSjaX"
@@ -32,23 +32,23 @@ export function getCanvasSize(linesDataMapIndexZero) {
     const absDvalsObj = linesDataMapIndexZero.absDvalsObj
 
     // Get the 'width' and 'height' attrs
-    let canvasSize = calculateCanvasSize(absDvalsObj)
+    let sizeDataObj = calculateCanvasSize(absDvalsObj)
 
     // Define the 'viewBox' value
     // viewboxStartX and viewboxStartY represent the starting position of the viewBox,
     // which is always at the origin (0,0) in this context.
     const viewboxStartX = 0; // Starting X position of the viewBox
     const viewboxStartY = 0; // Starting Y position of the viewBox
-    const viewboxStr = `${viewboxStartX} ${viewboxStartY} ${canvasSize.width} ${canvasSize.height}`
+    const viewboxStr = `${viewboxStartX} ${viewboxStartY} ${sizeDataObj.width} ${sizeDataObj.height}`
 
     // Get the uintN number
-    const longerSideValue = Math.max(canvasSize.width, canvasSize.height)
+    const longerSideValue = Math.max(sizeDataObj.width, sizeDataObj.height)
     const uintN = getUintN(longerSideValue)
 
     // Add the 'viewBox' and 'uintN' attrs and include 'width' and 'height' for completeness
-    canvasSize = { viewbox: viewboxStr, uintN: uintN, ...canvasSize }
+    sizeDataObj = { viewbox: viewboxStr, uintN: uintN, ...sizeDataObj }
 
-    return canvasSize
+    return sizeDataObj
 }
 
 

@@ -1,5 +1,5 @@
 import { hexExpandToTen }            from 'color-formatter/hex-expand'
-import { getCanvasSize }             from 'decode/get-canvas-size'
+import { sizeDataDec }             from 'decode/size-data-dec'
 import { getBasicDataFromUrlParams } from 'enc-and-dec/basic-data/basic-data-dec'
 import { decodeGroupColors }         from 'enc-and-dec/lines-data/group-colors/group-colors-dec'
 import { decodeWidthAndCounts }      from 'enc-and-dec/lines-data/width-and-counts/width-and-counts-dec'
@@ -201,7 +201,7 @@ function decodeAsThreeData(urlSearchParams) {
 
     }
     // Decode the data about canvas size from [0]-indexed (group ID = 0) lines group
-    const sizeDataObj = getCanvasSize(linesDataMap.get(0))
+    const sizeDataObj = sizeDataDec(linesDataMap.get(0))
 
     return { basicData: basicDataObj, linesData: linesDataMap, sizeData: sizeDataObj }
 }
