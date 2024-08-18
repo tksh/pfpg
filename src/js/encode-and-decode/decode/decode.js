@@ -29,13 +29,13 @@ function decode(isRelative, isDataManipulatorPage) {
 
     if (decodedParams != null) {
 
-        // Extract the values
-        const basicDataObj = decodedParams.basicData
-        console.log("basicDataObj: ", basicDataObj)
-        // Map(6) { title → "202404_001", viewbox → "0 0 31 31", viewboxWidth → "31", viewboxHeight → "31", uintN → 5, rectFill → "fff" }
+        // decodedParams has three data like:
 
-        const linesDataMap = decodedParams.linesData
-        console.log("linesDataMap: ", linesDataMap)
+        console.log("decodedParams.basicData: ", decodedParams.basicData)
+        // e.g.: {title: '202401_001', desc: 'Portrait of a woman'}
+
+        console.log("decodedParams.linesData: ", decodedParams.linesData)
+        // e.g.:
         // Map() {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
         // key  : Group ID (seq num start at 0)
         // value: Object
@@ -45,6 +45,10 @@ function decode(isRelative, isDataManipulatorPage) {
         // encodedDvals:   encodedDvalsStr,
         // relDvalsObj:    decodedRelDvalsObj,
         // absDvalsObj:    decodedAbsDvalsObj
+
+        console.log("decodedParams.sizeData: ", decodedParams.sizeData)
+        // e.g.:
+        // {viewbox: '0 0 127 127', uintN: 7, width: 127, height: 127}
 
 
         // Generate SVG string

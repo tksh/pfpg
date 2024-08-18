@@ -63,12 +63,12 @@ function rgbObjToHex(rgbDict) {
     return r + g + b
 }
 
-// Test
-const uint8_rgb_obj_1 = { 'r':0, 'g':0, 'b':0 }
-const uint8_rgb_obj_2 = { 'r':170, 'g':170, 'b':170 }
-const uint8_rgb_obj_3 = { 'r':255, 'g':255, 'b':255 }
-const uint8_rgb_obj_4 = { 'r':256, 'g':256, 'b':256 }
-console.log(rgbObjToHex(uint8_rgb_obj_1)) // 000000
-console.log(rgbObjToHex(uint8_rgb_obj_2)) // AAAAAA
-console.log(rgbObjToHex(uint8_rgb_obj_3)) // FFFFFF
-console.log(rgbObjToHex(uint8_rgb_obj_4)) // Invalid numberInvalid numberInvalid number
+//// Test
+//const uint8_rgb_obj_1 = { 'r':0, 'g':0, 'b':0 }
+//const uint8_rgb_obj_2 = { 'r':170, 'g':170, 'b':170 }
+//const uint8_rgb_obj_3 = { 'r':255, 'g':255, 'b':255 }
+//const uint8_rgb_obj_4 = { 'r':256, 'g':256, 'b':256 }
+//console.log(rgbObjToHex(uint8_rgb_obj_1)) // 000000
+//console.log(rgbObjToHex(uint8_rgb_obj_2)) // AAAAAA
+//console.log(rgbObjToHex(uint8_rgb_obj_3)) // FFFFFF
+//console.log(rgbObjToHex(uint8_rgb_obj_4)) // Invalid numberInvalid numberInvalid number

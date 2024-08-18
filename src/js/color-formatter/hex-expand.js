@@ -1,3 +1,6 @@
+import { normalizedToHex }      from 'color-formatter/normalized-to-hex'
+
+
 export
     { hexExpandToTen
     , hexExpandToEight
@@ -60,31 +63,35 @@ function hexExpandToTen(hex) {
 
 
 
+// For canvas-base color ([0]-indexed lines-group color)
 // Extend to 8 digits hex if in short style or no hex-code (value = 1)
 // Add opacity value '1' as 'FF' (7th and 8th chars)
 // Input with "#" but and output without "#"
-function hexExpandToEight(hexInputWithHash) {
+function hexExpandToEight(hexWithHash, opacity) {
 
-    let hex = hexInputWithHash.slice(1)                              // `#`記号 を除く文字列を取得
+    let hex = hexWithHash.slice(1)                              // `#`記号 を除く文字列を取得
     //console.log('hex.length: ', hex.length)                        // 3 | 4 | 6 | 8
+    hex = hexExpandToSix(hex)                      // 6 digits
+    const opacityAsHex = normalizedToHex(opacity)  // 2 digits
 
-    // Input hex has no opacity
-    if (hex.length === 3) {
-        hex = hex.split("").map((char) => char.repeat(2)).join("")   // RGB の各文字を2回繰り返す  3 => 6
-        return hex + 'FF'                                            // Add opacity value 'FF' 6 => 8
-    } else if (hex.length === 6) {
-        return hex + 'FF'                                            // Add opacity value 'FF' 6 => 8
-
-    // Input hex has opacity
-    } else if (hex.length === 4) {
-        return hex.split("").map((char) => char.repeat(2)).join("")  // RGBA の各文字を2回繰り返す 4 => 8
-    } else {
-        return hex                                                   // 8 => 8
-    }
+    return hex + opacityAsHex
+//    // Input hex has no opacity
+//    if (hex.length === 3) {
+//        hex = hex.split("").map((char) => char.repeat(2)).join("")   // RGB の各文字を2回繰り返す  3 => 6
+//        return hex + 'FF'                                            // Add opacity value 'FF' 6 => 8
+//    } else if (hex.length === 6) {
+//        return hex + 'FF'                                            // Add opacity value 'FF' 6 => 8
+//
+//    // Input hex has opacity
+//    } else if (hex.length === 4) {
+//        return hex.split("").map((char) => char.repeat(2)).join("")  // RGBA の各文字を2回繰り返す 4 => 8
+//    } else {
+//        return hex                                                   // 8 => 8
+//    }
 }
 // console.log(hexExpandToEight('#000'))    // 000000FF
-// console.log(hexExpandToEight('#000000')) // 000000FF
-// console.log(hexExpandToEight('#000000')) // 000000FF
+// console.log(hexExpandToEight('#000000', 1.0)) // 000000FF
+// console.log(hexExpandToEight('#000000', 1.0)) // 000000FF
 
 
 

@@ -1,6 +1,11 @@
-import { hexExpandToEight }       from 'color-formatter/hex-expand'
-import { getInitialOpacitySteps } from 'init/get-initial-opacity-steps'
-import { getInputSvg }            from 'download'
+import { hexExpandToEight }        from 'color-formatter/hex-expand'
+import { tryShortenAsHalf }        from 'color-formatter/hex-shorten'
+import { normalizedToHex }         from 'color-formatter/normalized-to-hex'
+import { tryAddHash }              from 'color-formatter/try-add-hash'
+import { getInitialOpacitySteps }  from 'init/get-initial-opacity-steps'
+import { getInputSvg }             from 'download'
+import { decodeUrlParams }         from 'common-utils/read-url-params'
+import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
 
 export async function setDefaultValueOfOptions() {
     console.log('setDefaultValueOfOptions() executed')
@@ -35,17 +40,29 @@ export async function setDefaultValueOfOptions() {
     // Color-picker: Base color (base rect fill color)
     function setDefaultOfBaseColor(inputSvg) {
 
+        const decodedParams = decodeUrlParams(isOnDataManipulatorPage())
+        const zeroIndexedGroupColors = decodedParams.linesData.get(0).groupColors  // [0]-indexed group colors
+        const sixDigitsHexColor   = zeroIndexedGroupColors.g_stroke.slice(1)
+        const twoDigitsHexOpacity = normalizedToHex(zeroIndexedGroupColors.g_opacity)
+        console.log("sixDigitsHexColor, twoDigitsHexOpacity: ", sixDigitsHexColor, " / ", twoDigitsHexOpacity) // AAAAAA  /  1
+
+        const eightDigitsHex = sixDigitsHexColor + twoDigitsHexOpacity
+        console.log("||||eightDigitsHex: ", eightDigitsHex)
+        const eightOrFourDigitsHex = tryShortenAsHalf(eightDigitsHex)
+        console.log("||||eightOrFourDigitsHex: ", eightOrFourDigitsHex)
+        const eightOrFourDigitsHexWithHash = tryAddHash(eightOrFourDigitsHex)
+
         // Get the base color (rect fill) hex code
 
-        const pattern = /<rect width="[^"]+" height="[^"]+" fill="([^"]+)"/g; // e.g.: <<rect width="255" height="255" fill="#fff9">
-        const matches = pattern.exec(inputSvg);                               // exec メソッドでマッチする部分を探す
-        console.log('matches(rect fill): ', matches)
-        // Array
-        // 0: '<rect width="255" height="255" fill="#ccc"'
-        // 1: "#ccc"
+        //const pattern = /<rect width="[^"]+" height="[^"]+" fill="([^"]+)"/g; // e.g.: <<rect width="255" height="255" fill="#fff9">
+        //const matches = pattern.exec(inputSvg);                               // exec メソッドでマッチする部分を探す
+        //console.log('matches(rect fill): ', matches)
+        //// Array
+        //// 0: '<rect width="255" height="255" fill="#ccc"'
+        //// 1: "#ccc"
 
-        // [1]の hex-code部分を 透明度を補完して 8桁のフォーマットに直す
-        const eightDigitsHexWithHash = '#' + hexExpandToEight(matches[1])
+        //// [1]の hex-code部分を 透明度を補完して 8桁のフォーマットに直す
+        //const eightDigitsHexWithHash = '#' + hexExpandToEight(matches[1])
 
 
         // Set as new value for <input>
@@ -57,9 +74,11 @@ export async function setDefaultValueOfOptions() {
         new JSColor('#base-rect-color-picker', {format:'hexa'}); // Force to visible the alpha slider even if value hasn't it.
 
         // input要素のvalue属性に新しい値を設定
-        inputElement.value = eightDigitsHexWithHash;
+        inputElement.value = eightOrFourDigitsHexWithHash;
+        // inputElement.value = eightDigitsHexWithHash;
 
-        console.log(`Default 'Base color' value is "${eightDigitsHexWithHash}"`)
+        console.log(`Default 'Base color' value is "${eightOrFourDigitsHexWithHash}"`)
+        // console.log(`Default 'Base color' value is "${eightDigitsHexWithHash}"`)
     }
 
 
