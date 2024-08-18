@@ -5,6 +5,7 @@ import { outputToTextarea }        from 'common-utils/output-to-textarea'
 import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
 import { isNonEmpty }              from 'common-utils/is-non-empty'
 
+import { BASIC_DATA_KEYS  } from 'constants'
 
 export
     { encodeBasicData
@@ -42,9 +43,7 @@ function encodeBasicData() {
     // Init the url params string to return
     let dataAsUrlParams = "?"
 
-    // Process each property
-    const properties = ['version', 'title', 'desc', 'metadata', 'colors'];
-    properties.forEach(prop => {
+    BASIC_DATA_KEYS.forEach(prop => {
         // Check the value of `data[prop]` exists actually to abbreviate if possible.
         if (prop in data && isNonEmpty(data[prop])) {
             dataAsUrlParams += processProperty(prop, data[prop]);

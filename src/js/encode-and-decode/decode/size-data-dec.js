@@ -1,5 +1,8 @@
 import { getUintN } from 'common-utils/get-uint-n'
 
+import { VIEWBOX_START_X, VIEWBOX_START_Y } from 'constants'
+
+
 // Return the object includes:
 //   - width
 //   - height
@@ -35,11 +38,7 @@ export function sizeDataDec(linesDataMapIndexZero) {
     let sizeDataObj = calculateCanvasSize(absDvalsObj)
 
     // Define the 'viewBox' value
-    // viewboxStartX and viewboxStartY represent the starting position of the viewBox,
-    // which is always at the origin (0,0) in this context.
-    const viewboxStartX = 0; // Starting X position of the viewBox
-    const viewboxStartY = 0; // Starting Y position of the viewBox
-    const viewboxStr = `${viewboxStartX} ${viewboxStartY} ${sizeDataObj.width} ${sizeDataObj.height}`
+    const viewboxStr = `${VIEWBOX_START_X} ${VIEWBOX_START_Y} ${sizeDataObj.width} ${sizeDataObj.height}`
 
     // Get the uintN number
     const longerSideValue = Math.max(sizeDataObj.width, sizeDataObj.height)

@@ -1,9 +1,11 @@
 import { hexExpandToTen }            from 'color-formatter/hex-expand'
-import { sizeDataDec }             from 'decode/size-data-dec'
+import { sizeDataDec }               from 'decode/size-data-dec'
 import { getBasicDataFromUrlParams } from 'enc-and-dec/basic-data/basic-data-dec'
 import { decodeGroupColors }         from 'enc-and-dec/lines-data/group-colors/group-colors-dec'
 import { decodeWidthAndCounts }      from 'enc-and-dec/lines-data/width-and-counts/width-and-counts-dec'
 import { decodeDvals }               from 'decode/decode'
+
+import { BASIC_DATA_KEYS  } from 'constants'
 
 export
     { decodeUrlParams
@@ -13,6 +15,9 @@ export
 function decodeUrlParams(isDataManipulatorPage) {
     // Get the url params from right source
     const params = getUrlParams(isDataManipulatorPage)
+    //console.log(params)
+    //console.log(params.get("title"))
+    //console.log(params.get("desc"))
 
     if (params != null) {
         return decodeAsThreeData(params)
@@ -102,11 +107,8 @@ function decodeAsThreeData(urlSearchParams) {
     // [[Prototype]]: Object
 
 
-    // Get Lines Data as Map
+    // Get the Lines Data as Map
     // ストローク情報の key, value を ループで取り出し
-
-    // 除外するキーのリスト
-    const excludeKeys = ['version', 'title', 'desc', 'metadata', 'colors'];
 
     // 結果を格納する配列（順序を保持するため）
     const linesDataKvArray = [];
@@ -114,7 +116,7 @@ function decodeAsThreeData(urlSearchParams) {
     // URLパラメータをイテレート
     for (const [key, value] of urlSearchParams.entries()) {
         // 除外リストに含まれていないキーのみを処理
-        if (!excludeKeys.includes(key)) {
+        if (!BASIC_DATA_KEYS.includes(key)) {
             linesDataKvArray.push([key, value]);
         }
     }

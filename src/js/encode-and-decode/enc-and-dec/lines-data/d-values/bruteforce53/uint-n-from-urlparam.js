@@ -1,6 +1,6 @@
 import { getUrlParams }            from 'common-utils/read-url-params'
 import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
-import { getBasicDataFromUrlParam } from 'enc-and-dec/basic-data/basic-data-dec'
+import { getBasicDataFromUrlParams } from 'enc-and-dec/basic-data/basic-data-dec'
 
 // Get the N number of UIntNPortray for Bruteforce53 decoding
 
@@ -15,7 +15,7 @@ export function getUintNFromUrlParams() {
   const urlSearchParams = getUrlParams(params, isDataManipulatorPage)
 
   // Get the basic data as Map
-  const basicDataObj = getBasicDataFromUrlParam(urlSearchParams)
+  const basicDataObj = getBasicDataFromUrlParams(urlSearchParams)
   console.log('basicDataObj: ', basicDataObj)
   // Map(4) { title → "202404_001", viewbox → "0 0 31 31", uintN → 5, rectFill → "fff" }
 

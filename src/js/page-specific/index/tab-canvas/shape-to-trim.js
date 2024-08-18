@@ -1,7 +1,6 @@
 import { svgWithNewShapeViewbox
        , extractViewboxValues
        }                      from 'tab-canvas/crop-side-margins'
-
 import { roundToTwoDecimals } from 'utils/number-rounding'
 
 export
@@ -23,7 +22,6 @@ function updateSvgWithSelectedShapePath(shape, inputSvg) {
 
     // Params for generating the 'Squircle' and 'Squircle, slimmed' shape path
     const gridSize = extractViewboxValues(inputSvg).get('h');
-    console.log('///gridSize: ', gridSize)
     const center = roundToTwoDecimals(gridSize / 2)
 
     // Generate new shape path to trim
