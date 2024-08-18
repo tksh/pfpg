@@ -45,9 +45,10 @@ import { initWidthValidatorListener } from 'tab-render/width-pixel-size';
 import { initViewScaleListener }      from 'tab-ui/view-scale'
 import { initCheckerPatternListener } from 'tab-ui/checker-pattern'
 import { initColorThemeListener
-       , setSchemeAsDefaultTheme
+           , setSchemeAsDefaultTheme
        }                              from 'tab-ui/color-theme'
 
+import { initSvgOptModal } from 'svg-opt-modal/svg-opt-modal'
 
 
 (async function () {
@@ -566,5 +567,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // First tab ('Line') activate
     // initFirstTab()
     initTabs()
+
+    // SVG optimize option modal
+    initSvgOptModal()
 
 });
