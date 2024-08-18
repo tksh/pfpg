@@ -1,7 +1,4 @@
-import { tryDeleteF }       from 'color-formatter/try-delete-f'
-import { tryShortenAsHalf } from 'color-formatter/hex-shorten'
-import { hexExpandToSix }   from 'color-formatter/hex-expand'
-
+import { hexExpandToSix }           from 'color-formatter/hex-expand'
 import { getInputSvg
        , countSvgSize
        , initDownloadButtons
@@ -9,16 +6,12 @@ import { getInputSvg
 import { measureSvg2pngTime
        , svg2png
        }                            from 'svg-to-png'
-
 import { getNumberOfGroups }        from 'utils/get-number-of-groups'
 import { replaceAtIndex }           from 'utils/replace-at-index'
-
 import { adjustBox }                from 'init/adjust-output-boxes-size'
 import { getInitialOpacitySteps }   from 'init/get-initial-opacity-steps'
 import { setDefaultValueOfOptions } from 'init/set-defaults'
 import { initTabs }                 from 'init/tab-setup'
-
-
 import { isOnDataManipulatorPage }  from 'common-utils/select-output-textarea'
 import { decode }                   from 'decode/decode'
 
@@ -258,10 +251,6 @@ import { initColorThemeListener
 
         // Canvas tab
 
-        // Base color (include opacity)
-        const patternBaseRectFill = /<rect.*fill=[^>]+>/
-        const matchOfBaseRectFill = currentPathModeSvg.match(patternBaseRectFill)
-        const valueOfBaseRectFill = matchOfBaseRectFill[0]  // e.g.: <rect width="31" height="31" fill="#fff" />
         // Shape to trim
         const patternShapeToTrim = /<clipPath id="shape-to-trim">[^>]*>/g
         const matchOfShapeToTrim = currentPathModeSvg.match(patternShapeToTrim)
@@ -293,8 +282,7 @@ import { initColorThemeListener
 
         // Anti-alias, Base color, Shape to trim, viewBox
         const recoverShapeRendering = recoverCurrentOptionValue(newPathModeSvg, patternShapeRendering, valueOfShapeRendering)
-        const recoverBaseRectFill   = recoverCurrentOptionValue(recoverShapeRendering, patternBaseRectFill, valueOfBaseRectFill)
-        const recoverShapeToTrim    = recoverCurrentOptionValue(recoverBaseRectFill, patternShapeToTrim, valueOfShapeToTrim)
+        const recoverShapeToTrim    = recoverCurrentOptionValue(recoverShapeRendering, patternShapeToTrim, valueOfShapeToTrim)
         const recoverViewbox        = recoverCurrentOptionValue(recoverShapeToTrim, patternViewbox, valueOfViewbox)
         // Group colors (stroke, opacity, stroke-opacity)
         const updatedSvg            = recoverCurrentGroupColorsValues(recoverViewbox, patternGroupColors, matchOfGroupColors)
@@ -337,48 +325,6 @@ import { initColorThemeListener
 
 
     // Options for 'Canvas' tab ///////////////////////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////////////////////////
-    /////////////////////////////// Base color ///////////////////////////////
-
-    // Color-picker: Base color (base rect fill color)
-    document.querySelector('#base-rect-color-picker').addEventListener('change', (event) => {
-
-        // console.log('event.target.value: ', event.target.value) // e.g: #60D7FF
-
-        // Get the selected color hex (includes alpha-channel values)
-        // via '.jscolor.toHEXAString()' instead of above '.value' method
-        const hexAColor = event.target.jscolor.toHEXAString();
-        console.log("Base color (hex includes alpha-channel): " + hexAColor);                 // e.g: #FFFFFF99
-
-        // Attempt to shorten the string after removing '#', then prepend '#' again
-        const hexAColorShorten = '#' + tryDeleteF(tryShortenAsHalf(hexAColor.substring(1)));
-        console.log("Base color (hex shorten): " + hexAColorShorten); // e.g: #FFF9
-
-
-        // SVGの <textarea>要素と テキストを 取得
-        const inputSvg = getInputSvg()
-
-        // 正規表現パターンを作成
-        const pattern = /<rect width="[^"]+" height="[^"]+" (fill="[^"]+")/g;
-        const matches = pattern.exec(inputSvg)
-        //console.log('matches: ', matches)
-        // Array [ '<rect width="31" height="31" fill="#fff"', 'fill="#fff"' ]
-        //   0: '<rect width="31" height="31" fill="#fff"'
-        //   1: 'fill="#fff"'
-
-        // 正規表現でマッチした部分を書き換える
-        const updatedSvg = inputSvg.replace(matches[1], `fill="${hexAColorShorten}"`);
-
-        // <textarea>のvalue属性を更新する
-        svgInputElement.value = updatedSvg;
-
-        // executeSvg2png関数を呼び出す
-        executeSvg2png({ target: { value: updatedSvg } })
-    })
-    /////////////////////////////// Base color ///////////////////////////////
-    //////////////////////////////////////////////////////////////////////////
-
 
     //////////////////////////////////////////////////////////////////////////
     ///////////////////////////// Shapes to trim /////////////////////////////

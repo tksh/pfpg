@@ -19,9 +19,9 @@ export
 function generateGroupColorsSvgTags(matches) {
     console.log('matches: ', matches) // e.g.: (4) [undefined, '#4E8D09', '0.6', '1']
 
-    const stroke        = tryShortenAsHalf(matches[1].slice(1));                                 // `#`記号 を除く文字列を取得
-    const opacity       = matches[2] !== undefined ? matches[2] : "1";       // opacity が明示的に指定されていない場合は 1 とみなす
-    const strokeOpacity = matches[3] !== undefined ? matches[3] : "1"; // strokeOpacity が明示的に指定されていない場合は 1 とみなす
+    const stroke        = tryShortenAsHalf(matches[1].slice(1));        // `#`記号 を除く文字列を取得
+    const opacity       = matches[2] !== undefined ? matches[2] : "1";  // opacity が明示的に指定されていない場合は 1 とみなす
+    const strokeOpacity = matches[3] !== undefined ? matches[3] : "1";  // strokeOpacity が明示的に指定されていない場合は 1 とみなす
     const groupElem = `<g stroke="#${stroke}" opacity="${opacity}" stroke-opacity="${strokeOpacity}">`
 
     console.log('groupElem: ', groupElem) // e.g.: <g stroke="#4E8D09" opacity="0.6" stroke-opacity="1">
@@ -62,7 +62,7 @@ function generateGroupColorsHtmlElements(step) {
         // label要素を作成
         const labelElement = document.createElement("label");
         labelElement.setAttribute('for', `group-colors-stroke-${i}`);
-        labelElement.textContent = `${i + 1}:`;
+        labelElement.textContent = `${i}:`;
         labelElement.classList.add('stroke');
 
         // input要素を作成

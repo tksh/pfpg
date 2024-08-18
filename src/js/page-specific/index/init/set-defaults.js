@@ -15,7 +15,6 @@ export async function setDefaultValueOfOptions() {
 
     // Get each attrs values, then set it as default
     setDefaultOfPathMode(inputSvg)  // Path mode selector
-    setDefaultOfBaseColor(inputSvg) // Base color picker
     setDefaultOfAntiAlias(inputSvg) // Anti-alias selector
     setDefaultOfOpacitySteps()      // Opacity steps
 
@@ -35,50 +34,6 @@ export async function setDefaultValueOfOptions() {
             console.log("Default 'Path mode' is 'relativeMerged'");
         }
 
-    }
-
-    // Color-picker: Base color (base rect fill color)
-    function setDefaultOfBaseColor(inputSvg) {
-
-        const decodedParams = decodeUrlParams(isOnDataManipulatorPage())
-        const zeroIndexedGroupColors = decodedParams.linesData.get(0).groupColors  // [0]-indexed group colors
-        const sixDigitsHexColor   = zeroIndexedGroupColors.g_stroke.slice(1)
-        const twoDigitsHexOpacity = normalizedToHex(zeroIndexedGroupColors.g_opacity)
-        console.log("sixDigitsHexColor, twoDigitsHexOpacity: ", sixDigitsHexColor, " / ", twoDigitsHexOpacity) // AAAAAA  /  1
-
-        const eightDigitsHex = sixDigitsHexColor + twoDigitsHexOpacity
-        console.log("||||eightDigitsHex: ", eightDigitsHex)
-        const eightOrFourDigitsHex = tryShortenAsHalf(eightDigitsHex)
-        console.log("||||eightOrFourDigitsHex: ", eightOrFourDigitsHex)
-        const eightOrFourDigitsHexWithHash = tryAddHash(eightOrFourDigitsHex)
-
-        // Get the base color (rect fill) hex code
-
-        //const pattern = /<rect width="[^"]+" height="[^"]+" fill="([^"]+)"/g; // e.g.: <<rect width="255" height="255" fill="#fff9">
-        //const matches = pattern.exec(inputSvg);                               // exec メソッドでマッチする部分を探す
-        //console.log('matches(rect fill): ', matches)
-        //// Array
-        //// 0: '<rect width="255" height="255" fill="#ccc"'
-        //// 1: "#ccc"
-
-        //// [1]の hex-code部分を 透明度を補完して 8桁のフォーマットに直す
-        //const eightDigitsHexWithHash = '#' + hexExpandToEight(matches[1])
-
-
-        // Set as new value for <input>
-
-        // Base color picker の input要素を 取得
-        const inputElement = document.getElementById("base-rect-color-picker");
-
-        // Creating new picker instance
-        new JSColor('#base-rect-color-picker', {format:'hexa'}); // Force to visible the alpha slider even if value hasn't it.
-
-        // input要素のvalue属性に新しい値を設定
-        inputElement.value = eightOrFourDigitsHexWithHash;
-        // inputElement.value = eightDigitsHexWithHash;
-
-        console.log(`Default 'Base color' value is "${eightOrFourDigitsHexWithHash}"`)
-        // console.log(`Default 'Base color' value is "${eightDigitsHexWithHash}"`)
     }
 
 

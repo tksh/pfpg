@@ -2,9 +2,7 @@ import { roundToOneDecimal }    from 'utils/number-rounding'
 import { extractViewboxValues } from 'tab-canvas/crop-side-margins'
 import { getGroupColorsValues } from 'tab-line/group-colors'
 import { normalizedToHex }      from 'color-formatter/normalized-to-hex'
-import { tryDeleteFs
-       , tryDeleteF
-       }                        from 'color-formatter/try-delete-f'
+import { tryDeleteFs }          from 'color-formatter/try-delete-f'
 import { tryShortenAsHalf }     from 'color-formatter/hex-shorten'
 
 export
@@ -108,15 +106,6 @@ function getCurrentStatus() {
     //  <option> value as 'relativeMerged' | 'absoluteSeparated' => filename as 'relMer' | 'absSep'
 
 
-    // Base color
-    const rectColorInput = document.getElementById('base-rect-color-picker')
-    const rectColorWithoutHash = rectColorInput.value.substring(1) // 要素の値は文字列として扱われる, 先頭の `#` を削除
-    // e.g.: 99999999
-    const rectColorShorten = tryDeleteF(tryShortenAsHalf(rectColorWithoutHash)) // 同じ値が連続していれば4桁に省略し さらに 最後が'F'or'f'なら削除し3桁にする
-    const rectColor = rectColorShorten.toUpperCase()
-    // e.g.: 9999
-
-
     // Anti-aliasing (shapeRendering)
     const antiAliasingSelect = document.getElementById('shape-rendering')
     const shapeRendering = antiAliasingSelect.value
@@ -142,7 +131,7 @@ function getCurrentStatus() {
 
 
     // Merge the all values of status
-    return `g_${groupColorsHexString}-p_${pathMode}-b_${rectColor}-t_${shapeToTrim}-r_${shapeRendering}`
+    return `g_${groupColorsHexString}-p_${pathMode}-t_${shapeToTrim}-r_${shapeRendering}`
 }
 
 
