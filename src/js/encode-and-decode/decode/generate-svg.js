@@ -1,4 +1,5 @@
 import { tryShortenAsHalf } from 'color-formatter/hex-shorten'
+import { isNonEmpty }       from 'common-utils/is-non-empty'
 
 // Output SVG string like:
 
@@ -203,7 +204,15 @@ function generateAbsPathTags(tabSpace, linesDataMap) {
 function generateTagsBeforeStrokes(tabSpace, basicDataObj, sizeDataObj) {
 
     const svgOpen = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${sizeDataObj.viewbox}" shape-rendering="crispEdges">`
-    const title = tabSpace.repeat(1) + `<title>${basicDataObj.title}</title>`
+
+    // Optional tags: <title>, <desc> and <metadata>
+    const optionalTags = [
+        { tag: 'title',    content: basicDataObj.title },
+        { tag: 'desc',     content: basicDataObj.desc },
+        { tag: 'metadata', content: basicDataObj.metadata },
+    ].filter(({ content }) => isNonEmpty(content))
+        .map(({ tag, content }) => tabSpace.repeat(1) + `<${tag}>${content}</${tag}>`);
+
 
     // Trimming shape <defs> tag (has no variables)
     const trimmingShapeDefs =
@@ -216,7 +225,7 @@ function generateTagsBeforeStrokes(tabSpace, basicDataObj, sizeDataObj) {
     // clip-path: <rect> in <g>
     const clipPathGroupOpen = tabSpace.repeat(1) + '<g clip-path="url(#shape-to-trim)">'
 
-    return [svgOpen, title, trimmingShapeDefs, clipPathGroupOpen]
+    return [svgOpen, ...optionalTags, trimmingShapeDefs, clipPathGroupOpen]
 }
 
 function generateTagsAfterStrokes(tabSpace) {
