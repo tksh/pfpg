@@ -1,5 +1,5 @@
-//   null and undefined: (data[prop] != null)。
-//   empty string      : (data[prop] !== '')。
+//   null and undefined: value != null)。
+//   empty string      : value !== '')。
 export function isNonEmpty(value) {
     return value != null && value !== '';
 }

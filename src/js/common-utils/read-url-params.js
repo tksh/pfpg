@@ -3,7 +3,6 @@ import { getCanvasSize }             from 'decode/get-canvas-size'
 import { getBasicDataFromUrlParams } from 'enc-and-dec/basic-data/basic-data-dec'
 import { decodeGroupColors }         from 'enc-and-dec/lines-data/group-colors/group-colors-dec'
 import { decodeWidthAndCounts }      from 'enc-and-dec/lines-data/width-and-counts/width-and-counts-dec'
-import { isNonEmpty }                from 'common-utils/is-non-empty'
 import { decodeDvals }               from 'decode/decode'
 
 export
@@ -23,26 +22,30 @@ function decodeUrlParams(isDataManipulatorPage) {
 }
 
 
-// Get the url params from right source
+// Retrieve URL parameters or fallback to alternative source
 
 function getUrlParams(isDataManipulatorPage) {
-    let paramsExists = isNonEmpty(new URLSearchParams(window.location.search))
+    // Check url params exists
+    const params = new URLSearchParams(window.location.search)
+    // toString() returns an empty string for no parameters, otherwise a truthy value.
+    const paramsExists = params.toString() !== '';
 
-    // If at index.html and there is no url params => get sample strings from textContent element
+    // index.html has url params               => decode it
+    // index.html has no url params            => decode the alternative text
+    // data-manipulator.html has url params    => decode it
+    // data-manipulator.html has no url params => do nothing
     if (paramsExists === true) {
-        // At both index.html or data-manipulator.html,
-        // Decode the url params if it exists.
-        return new URLSearchParams(window.location.search);
+        // At both index.html or data-manipulator.html
+        console.log(`There is a url params to decode.`)
+        return params
 
     } else if (isDataManipulatorPage === false) {
-        // At index.html and if there is No url params,
-        // Get the encoded string from '<script type="text/plain"> tag
+        console.log(`At index.html and there is no url params to decode, fetch the alternative text from the HTML element.`)
         const sampleArtworkEncodedStr = document.getElementById("sample-artwork-encoded-string").textContent
         return parseStrAsUrlParams(sampleArtworkEncodedStr)
 
     } else {
-        // At data-manipulator.html and if there is No url params,
-        // Do nothing.
+        console.log('At data-manipulator.html and there is no url params to decode, skipping processing.')
         return null
     }
 }
