@@ -10,26 +10,53 @@
 }
 
 .modal-content {
-    /* background-color: var(--color-text-input); */
-    background-color: rgba(238, 238, 238, 0.96);
-    /* opacity: 0.9; */
-    margin: 15% auto;
-    padding: 20px;
-    border: 2px solid rgba(238, 238, 238, 0.48);
-    width: 80%;
+    background-color: rgba(200, 200, 200, 1);
+    margin: 10% auto;
+    padding: 1rem;
+    border: 2px solid rgba(200, 200, 200, 0.48);
+    width: max-content;
+}
+
+code {
+    font-family: monospace;
+    /* または、具体的なフォント名を指定 */
+    /* font-family: Courier New, Courier, monospace; */
+}
+
+.arrow-color {
+    color: var(--color-text);
 }
 
 .arrow {
+    color: var(--color-text);
     display: block;
     padding-left: 1rem;
 }
 
-.modal-content > h2 {
+.modal-content>h2 {
     color: var(--color-text);
     font-size: 1rem;
 }
+
+
+.modal-content .example {
+    padding-top: 0.5rem;
+    padding-left: 1.5rem;
+}
+
 button#close-svg-opt-modal {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     padding: 0 1rem;
     min-width: 100%;
+}
+
+
+@media screen and (max-width: 512px) {
+    .modal-content {
+        padding: 1rem;
+        width: 90%;
+    }
+    .modal-content fieldset {
+        margin: 0;
+    }
 }

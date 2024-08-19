@@ -257,7 +257,7 @@ ul {
     padding-left: 2px;
 }
 
-.padding-left-for-dd {
+.padding-left-1 {
     padding-left: 1rem;
 }
 
@@ -319,6 +319,8 @@ div#samples figure {
     display: flex;
     /* Flexboxを使用, 要素を横並びに配置*/
 }
+
+
 
 @media screen and (max-width: 512px) {
 
@@ -392,10 +394,3 @@ div#samples figure {
         padding-left: 0.5rem;
     }
 }
-
-/* For modal content */
-code {
-    font-family: monospace;
-    /* または、具体的なフォント名を指定 */
-    /* font-family: Courier New, Courier, monospace; */
-  }
