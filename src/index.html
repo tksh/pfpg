@@ -428,26 +428,58 @@
         <!-- SVG optimization modal window content-->
         <div id="svg-opt-modal" class="modal">
             <div class="modal-content">
-                <h2>SVG strings optimization</h2>
-                <label><input type="checkbox" name="option" value="1"> Remove default opacity attributes</label><br>
-                <p>&lt;g stroke=&quot;rgb(0,0,0)&quot; opacity=&quot;1.0&quot; stroke-opacity=&quot;1.0&quot;&gt;</p>
-                <p>⬇<br>&lt;g stroke=&quot;rgb(0,0,0)&quot;&gt;</p>
+                <h2 class="text-align-center">SVG strings optimization</h2>
+                <form>
+                    <fieldset>
+                        <legend class="displayNone">Optimization options</legend>
 
-                <label><input type="checkbox" name="option" value="2"> Use hex for color value</label><br>
-                <p>"rgb(255,255,255)" ➡ "#FFF"</p>
-                <p>"rgb(18,52,86)" ➡ "#123456"</p>
+                        <div class="option-group padding-top">
+                            <input type="checkbox" id="remove-opacity" name="option" value="1">
+                            <label for="remove-opacity">Remove default opacity attributes</label>
+                            <div class="example padding-left-for-dd">
+                                <code>&lt;g stroke=&quot;rgb(0,0,0)&quot; opacity=&quot;1.0&quot; stroke-opacity=&quot;1.0&quot;&gt;</code>
+                                <span class="arrow">⬇</span>
+                                <code>&lt;g stroke=&quot;rgb(0,0,0)&quot;&gt;</code>
+                            </div>
+                        </div>
 
-                <label><input type="checkbox" name="option" value="3"> Remove new-lines</label><br>
-                <p>&lt;tag-1&gt;<br>&emsp;&lt;tag-2&gt;texts&lt;/tag-2&gt;<br>&lt;/tag-1&gt;</p>
-                <p>⬇<br>
-                    &lt;tag-1&gt;&lt;tag-2&gt;texts&lt;/tag-2&gt;&lt;/tag-1&gt;
-                </p>
+                        <div class="option-group padding-top">
+                            <input type="checkbox" id="use-hex" name="option" value="2">
+                            <label for="use-hex">Use hex for color value</label>
+                            <div class="example padding-left-for-dd">
+                                <code>"rgb(255,255,255)" ➡ "#FFF"</code><br>
+                                <code>"rgb(18,52,86)" ➡ "#123456"</code>
+                            </div>
+                        </div>
 
-                <label><input type="checkbox" name="option" value="4"> Remove extra spaces</label><br>
-                <p>&lt;path d="M 36 61 L 33 68" /&gt;
-                    <br>⬇<br>
-                    &lt;path d="M36 61L 33 68"/&gt;</p><br>
-                <button id="close-svg-opt-modal">閉じる</button>
+                        <div class="option-group padding-top">
+                            <input type="checkbox" id="remove-newlines" name="option" value="3">
+                            <label for="remove-newlines">Remove new-lines</label>
+                            <div class="example padding-left-for-dd">
+                                <code>
+                                    &lt;tag-1&gt;<br>
+                                    &emsp;&emsp;&lt;tag-2&gt;texts&lt;/tag-2&gt;<br>
+                                    &lt;/tag-1&gt;
+                                </code>
+                                <span class="arrow">⬇</span>
+                                <code>
+                                    &lt;tag-1&gt;&lt;tag-2&gt;texts&lt;/tag-2&gt;&lt;/tag-1&gt;
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="option-group padding-top">
+                            <input type="checkbox" id="remove-spaces" name="option" value="4">
+                            <label for="remove-spaces">Remove extra spaces</label>
+                            <div class="example padding-left-for-dd">
+                                <code>&lt;path d="M 36 61 L 33 68" /&gt;</code>
+                                <span class="arrow">⬇</span>
+                                <code>&lt;path d="M36 61L 33 68"/&gt;</code>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+                <button id="close-svg-opt-modal">Close</button>
             </div>
         </div>
 

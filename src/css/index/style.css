@@ -191,12 +191,6 @@ label.stroke {
     margin-right: 0.5rem
 }
 
-/* Base color */
-input.base-rect-color {
-    margin-top: 0;
-    width: 8rem;
-}
-
 /* Width pixel size */
 input#png-size-number {
     width: 4rem;
@@ -398,3 +392,10 @@ div#samples figure {
         padding-left: 0.5rem;
     }
 }
+
+/* For modal content */
+code {
+    font-family: monospace;
+    /* または、具体的なフォント名を指定 */
+    /* font-family: Courier New, Courier, monospace; */
+  }
