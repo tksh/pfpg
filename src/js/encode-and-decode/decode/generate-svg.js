@@ -243,7 +243,7 @@ function generateGTagOpenByGroup(tabSpace, linesDataMap) {
         const groupColors = v.groupColors
 
         const colorGroupTagOpen = tabSpace.repeat(2)
-            + `<g stroke="#${tryShortenAsHalf(groupColors.g_stroke.slice(1))}" opacity="${groupColors.g_opacity}" stroke-opacity="${groupColors.g_stroke_opacity}">`
+            + `<g stroke="${groupColors.g_stroke_rgb}" opacity="${groupColors.g_opacity}" stroke-opacity="${groupColors.g_stroke_opacity}">`
         //         <g stroke="#000000" opacity="1" stroke-opacity="1">
 
         gTagOpenByGroup.set(gId, colorGroupTagOpen)

@@ -1,78 +1,68 @@
-import { hexExpandToEight }        from 'color-formatter/hex-expand'
-import { tryShortenAsHalf }        from 'color-formatter/hex-shorten'
-import { normalizedToHex }         from 'color-formatter/normalized-to-hex'
-import { tryAddHash }              from 'color-formatter/try-add-hash'
-import { getInitialOpacitySteps }  from 'init/get-initial-opacity-steps'
-import { getInputSvg }             from 'download'
-import { decodeUrlParams }         from 'common-utils/read-url-params'
-import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
+import { getInitialOpacitySteps } from 'init/get-initial-opacity-steps'
+import { getInputSvg } from 'download'
 
 export async function setDefaultValueOfOptions() {
-    console.log('setDefaultValueOfOptions() executed')
+    console.log('setDefaultValueOfOptions(state) executed')
 
     // SVGのテキストを取得
     const inputSvg = getInputSvg()
 
     // Get each attrs values, then set it as default
-    setDefaultOfPathMode(inputSvg)  // Path mode selector
-    setDefaultOfAntiAlias(inputSvg) // Anti-alias selector
-    setDefaultOfOpacitySteps()      // Opacity steps
+    setDefaultOfPathMode(inputSvg)                      // Path mode selector
+    setDefaultOfAntiAlias(inputSvg)                     // Anti-alias selector
+    setDefaultOfOpacitySteps(getInitialOpacitySteps())  // Opacity steps selector
+}
 
-    // Selector: Path mode
-    function setDefaultOfPathMode(inputSvg) {
 
-        // Find the '<path d= ... M ... L ... >' to detect as 'absolute'
-        const pattern = /<path[^>]*d="[^"]*M[^"]*L[^"]*"[^>]*>/g;
-        const isAbsolute = pattern.test(inputSvg);
+// Selector: Path mode
+function setDefaultOfPathMode(inputSvg) {
 
-        // Set the 'Path mode' input element value
-        if (isAbsolute === true) {
-            document.getElementById("path-mode").value = 'absoluteSeparated'
-            console.log("Default 'Path mode' is 'Absolute and separated'");
+    // Find the '<path d= ... M ... L ... >' to detect as 'absolute'
+    const pattern = /<path[^>]*d="[^"]*M[^"]*L[^"]*"[^>]*>/g;
+    const isAbsolute = pattern.test(inputSvg);
+
+    // Set the 'Path mode' input element value
+    if (isAbsolute === true) {
+        document.getElementById("path-mode").value = 'absoluteSeparated'
+        console.log("Default 'Path mode' is 'Absolute and separated'");
+    } else {
+        document.getElementById("path-mode").value = 'Relative and merged'
+        console.log("Default 'Path mode' is 'relativeMerged'");
+    }
+}
+
+
+// Selector: Anti-aliasing (On (geometricPrecision) or Off (crispEdges))
+function setDefaultOfAntiAlias(inputSvg) {
+
+    // Get the 'shape-rendering' attr value
+    const pattern = /shape-rendering="(.*)">/;  // target: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" shape-rendering="geometricPrecision">
+    const matches = pattern.exec(inputSvg);     // exec メソッドでマッチする部分を探す
+    console.log('matches(for shape-rendering): ', matches)
+    // Array [ 'shape-rendering="geometricPrecision">', "geometricPrecision" ]
+    const defaultShapeRendering = matches[1]
+
+    // <select> 要素を取得
+    const selectElement = document.getElementById("shape-rendering");
+
+    // <option> 要素の selected 属性を設定する
+    for (let i = 0; i < selectElement.options.length; i++) { // <option> 要素をループ
+        if (selectElement.options[i].value === defaultShapeRendering) {
+            selectElement.options[i].selected = true;  // value が 変更したい値 defaultShapeRendering と 同じならば selected を 付ける
         } else {
-            document.getElementById("path-mode").value = 'Relative and merged'
-            console.log("Default 'Path mode' is 'relativeMerged'");
+            selectElement.options[i].selected = false; // value が 変更したい値 defaultShapeRendering と 違うならば selected を 付けない
         }
-
     }
 
-
-    // Selector: Anti-aliasing (On (geometricPrecision) or Off (crispEdges))
-    function setDefaultOfAntiAlias(inputSvg) {
-
-        // Get the 'shape-rendering' attr value
-        const pattern = /shape-rendering="(.*)">/; // target: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" shape-rendering="geometricPrecision">
-        const matches = pattern.exec(inputSvg); // exec メソッドでマッチする部分を探す
-        console.log('matches(for shape-rendering): ', matches)
-        // Array [ 'shape-rendering="geometricPrecision">', "geometricPrecision" ]
-        const defaultShapeRendering = matches[1]
-
-        // <select> 要素を取得
-        const selectElement = document.getElementById("shape-rendering");
-
-        // <option> 要素の selected 属性を設定する
-        for (let i = 0; i < selectElement.options.length; i++) { // <option> 要素をループ
-            if (selectElement.options[i].value === defaultShapeRendering) {
-                selectElement.options[i].selected = true; // value が 変更したい値 defaultShapeRendering と 同じならば selected を 付ける
-            } else {
-                selectElement.options[i].selected = false; // value が 変更したい値 defaultShapeRendering と 違うならば selected を 付けない
-            }
-        }
-
-        console.log(`Default 'shape-rendering' value is "${defaultShapeRendering}"`)
-    }
+    console.log(`Default 'shape-rendering' value is "${defaultShapeRendering}"`)
+}
 
 
-    // Number and Range input: Width pixel size
-    function setDefaultOfOpacitySteps() {
+// Number and Range input: Width pixel size
+function setDefaultOfOpacitySteps(opacitySteps) {
 
-        // Get initial opacity steps detected from original decoded SVG
-        const steps = getInitialOpacitySteps() // Number, 0.2 | 0.1 | 0.04
+    // Set as default value
+    document.getElementById("opacity-steps").value = opacitySteps
 
-        // Set as default value
-        document.getElementById("opacity-steps").value = steps
-
-        console.log(`Default 'Opacity steps' value is "${steps}"`)
-    }
-
+    console.log(`Default 'Opacity steps' value is "${opacitySteps}"`)
 }

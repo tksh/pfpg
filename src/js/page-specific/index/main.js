@@ -1,4 +1,3 @@
-import { hexExpandToSix }           from 'color-formatter/hex-expand'
 import { getInputSvg
        , countSvgSize
        , initDownloadButtons
@@ -10,7 +9,10 @@ import { getNumberOfGroups }        from 'utils/get-number-of-groups'
 import { replaceAtIndex }           from 'utils/replace-at-index'
 import { adjustBox }                from 'init/adjust-output-boxes-size'
 import { getInitialOpacitySteps }   from 'init/get-initial-opacity-steps'
-import { setDefaultValueOfOptions } from 'init/set-defaults'
+import { setDefaultValueOfOptions} from 'init/set-defaults'
+import { state
+       , updateState
+       , getState }                 from 'init/state'
 import { initTabs }                 from 'init/tab-setup'
 import { isOnDataManipulatorPage }  from 'common-utils/select-output-textarea'
 import { decode }                   from 'decode/decode'
@@ -59,7 +61,7 @@ import { initSvgOptModal
     decode(isRelative, isOnDataManipulatorPage())
 
     // Generate the HTML elements of group attrs color-pickers
-    generateGroupColorsHtmlElements(getInitialOpacitySteps())
+    generateGroupColorsHtmlElements(getState('colorFormat'), getInitialOpacitySteps())
 
     await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm')) // Path that relative from index.html
     const svgInputElement = document.querySelector('#input-svg') // <textarea id="input-svg" ... >
@@ -136,11 +138,11 @@ import { initSvgOptModal
 
     // Add multiple event listener for whole stroke colors
     const numberOfGroups = getNumberOfGroups(getInputSvg())
-    addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke')
-    addEventListenerForGroupColorsInputs(numberOfGroups, 'opacity')
-    addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke-opacity')
+    addEventListenerForGroupColorsInputs(state, numberOfGroups, 'stroke')
+    addEventListenerForGroupColorsInputs(state, numberOfGroups, 'opacity')
+    addEventListenerForGroupColorsInputs(state, numberOfGroups, 'stroke-opacity')
 
-    function addEventListenerForGroupColorsInputs(numberOfGroups, attrName) {
+    function addEventListenerForGroupColorsInputs(state, numberOfGroups, attrName) {
 
         // id `group-colors-${attrName}-N` の要素の変更を監視
         for (let i = 0; i < numberOfGroups; i++) {
@@ -165,11 +167,11 @@ import { initSvgOptModal
                 // Get the matches for <g> from current SVG string in textarea
                 const currentSvg = getInputSvg()
                 const matches = regexMatchesOfGroupColors(currentSvg)
-                // console.log('matches: ', matches)
+                console.log('||||matches: ', matches)
                 // e.g: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
 
                 // Get three group colors value
-                const stroke = '#' + hexExpandToSix(getStroke(matches[i]).slice(1)) // 6 digits hex (with hash mark)
+                const stroke = getStroke(matches[i]);
                 const opacity = getOpacity(matches[i])             // [0-1] number
                 const strokeOpacity = getStrokeOpacity(matches[i]) // [0-1] number
 
@@ -309,12 +311,15 @@ import { initSvgOptModal
     document.getElementById("opacity-steps").addEventListener("change", (event) => {
 
         // 選択されたセレクトメニューの値を取得
-        const step = Number(event.target.value);           // 0.04 | 0.1 | 0.2
+        const opacitySteps = Number(event.target.value);  // 0.04 | 0.1 | 0.2
+
+        // グローバルステート更新
+        updateState('opacitySteps', opacitySteps)
 
         // 新しいセレクトメニューに更新
-        changeOpacitySelectOptionsAsNewStep(step)
+        changeOpacitySelectOptionsAsNewStep(opacitySteps)
 
-        // 新しいセレクトメニューへの 更新で選ばれた その step での 一番近い値の表示と 元々のSVGの色情報が ずれてしまうので
+        // 新しいセレクトメニューへの 更新で選ばれた その opacitySteps での 一番近い値の表示と 元々のSVGの色情報が ずれてしまうので
         // 新しいセレクトメニューでの 値 を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
         const updatedSvg = updateSvgForNewStep()
 

@@ -15,8 +15,7 @@ export
 // For event listener of Opacity steps <select>
 
 // 'opacity' and 'stroke-opacity' values of entire groups will be changed as selected new steps.
-function changeOpacitySelectOptionsAsNewStep(step) {
-
+function changeOpacitySelectOptionsAsNewStep(opacitySteps) {
     const groupColorsValues = getGroupColorsValues();
     const numberOfGroups = groupColorsValues.get('number_of_groups')
     const opacity        = groupColorsValues.get('opacity_array')
@@ -24,14 +23,14 @@ function changeOpacitySelectOptionsAsNewStep(step) {
 
     // group colors の数だけ繰り返す
     for (let i = 0; i < numberOfGroups; i++) {
-        // 新しい step の <option>に 置き換える
+        // 新しい opacitySteps の <option>に 置き換える
         // selected は 新しい<option>の中から 現在の値に一番近いものに 変更する
-        replaceToNewStepOptions(i, step, 'opacity', opacity)
-        replaceToNewStepOptions(i, step, 'stroke-opacity', strokeOpacity)
+        replaceToNewStepOptions(i, opacitySteps, 'opacity', opacity)
+        replaceToNewStepOptions(i, opacitySteps, 'stroke-opacity', strokeOpacity)
     }
 }
 
-function replaceToNewStepOptions(i, step, attrName, attrValueArray) {
+function replaceToNewStepOptions(i, opacitySteps, attrName, attrValueArray) {
 
     // Get the elem to append the new <option>
     const selectElement = document.getElementById(`group-colors-${attrName}-${i}`);
@@ -45,11 +44,11 @@ function replaceToNewStepOptions(i, step, attrName, attrValueArray) {
     // Add new <option>
 
     // 選択肢となる数値のリストを作成
-    const values = numbersIncrementByStep(step)
+    const values = numbersIncrementByStep(opacitySteps)
     console.log('values: ', values)
-    // e.g.: step: 0.04 => (26) [0, 0.04, 0.08, 0.12, 0.16, 0.2, 0.24, ... 0.8, 0.84, 0.88, 0.92, 0.96, 1]
-    // e.g.: step: 0.1  => (11) [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
-    // e.g.: step: 0.2  =>  (6) [0, 0.2, 0.4, 0.6, 0.8, 1]
+    // e.g.: opacitySteps: 0.04 => (26) [0.0, 0.04, 0.08, 0.12, 0.16, 0.2, 0.24, ... 0.8, 0.84, 0.88, 0.92, 0.96, 1.0]
+    // e.g.: opacitySteps: 0.1  => (11) [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+    // e.g.: opacitySteps: 0.2  =>  (6) [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
 
     // 現在の値を設定
     let currentValue = attrValueArray[i]

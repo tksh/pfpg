@@ -96,6 +96,9 @@ function hexExpandToEight(hexWithHash, opacity) {
 
 
 function hexExpandToSix(hex) {
+    if (!hex) {
+        return undefined
+}
     if (hex.length === 6) {
         // 文字列の長さが 6 ならば そのまま 返す
         return hex;

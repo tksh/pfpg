@@ -1,13 +1,14 @@
 import { numbersIncrementByStep } from 'utils/number-generator'
-import { tryShortenAsHalf }       from 'color-formatter/hex-shorten'
-import { hexExpandToSix }         from 'color-formatter/hex-expand'
 import { getInputSvg }            from 'download'
+import { getState }               from 'init/state'
 
 export
     { generateGroupColorsSvgTags
     , generateGroupColorsHtmlElements
     , getGroupColorsValues
     , regexMatchesOfGroupColors
+    , getStrokeHex
+    , getStrokeRgb
     , getStroke
     , getOpacity
     , getStrokeOpacity
@@ -17,14 +18,14 @@ export
 
 // <g>タグを生成する
 function generateGroupColorsSvgTags(matches) {
-    console.log('matches: ', matches) // e.g.: (4) [undefined, '#4E8D09', '0.6', '1']
+    console.log('matches: ', matches) // e.g.: (4) [undefined, '#4E8D09', '0.6', '1.0']
 
-    const stroke        = tryShortenAsHalf(matches[1].slice(1));        // `#`記号 を除く文字列を取得
-    const opacity       = matches[2] !== undefined ? matches[2] : "1";  // opacity が明示的に指定されていない場合は 1 とみなす
-    const strokeOpacity = matches[3] !== undefined ? matches[3] : "1";  // strokeOpacity が明示的に指定されていない場合は 1 とみなす
-    const groupElem = `<g stroke="#${stroke}" opacity="${opacity}" stroke-opacity="${strokeOpacity}">`
+    const stroke        = matches[1]                                    // e.g.: "rgb(0,0,0)" | "#FFF"
+    const opacity       = matches[2] !== undefined ? matches[2] : "1.0";  // opacity が明示的に指定されていない場合は 1.0 とみなす
+    const strokeOpacity = matches[3] !== undefined ? matches[3] : "1.0";  // strokeOpacity が明示的に指定されていない場合は 1.0 とみなす
+    const groupElem = `<g stroke="${stroke}" opacity="${opacity}" stroke-opacity="${strokeOpacity}">`
 
-    console.log('groupElem: ', groupElem) // e.g.: <g stroke="#4E8D09" opacity="0.6" stroke-opacity="1">
+    console.log('groupElem: ', groupElem) // e.g.: <g stroke="#4E8D09" opacity="0.6" stroke-opacity="1.0">
     return groupElem
 }
 
@@ -33,8 +34,10 @@ function generateGroupColorsSvgTags(matches) {
 
 // Generate the strokes group color input HTML elements
 
-function generateGroupColorsHtmlElements(step) {
-    console.log(`generateGroupColorsHtmlElements() now started. (Opacity step = ${step})`)
+function generateGroupColorsHtmlElements(colorFormat, opacitySteps) {
+    // const opacitySteps = getState('opacitySteps')
+    // const colorFormat  = getState('colorFormat')
+    console.log(`generateGroupColorsHtmlElements() now started. (Opacity step = ${opacitySteps})`)
 
     const groupColorsValues = getGroupColorsValues();
     const numberOfGroups = groupColorsValues.get('number_of_groups')
@@ -67,11 +70,21 @@ function generateGroupColorsHtmlElements(step) {
 
         // input要素を作成
         const inputElement = document.createElement("input");
-        inputElement.classList.add('stroke');
+
+        // Change the color value input box size by format
+        if (colorFormat === "rgb") {
+            inputElement.classList.add('stroke');
+            inputElement.classList.add('stroke-rgb');
+        } else {  // (colorFormat === "hex")
+            inputElement.classList.add('stroke');
+            inputElement.classList.add('stroke-hex');
+        }
+        // inputElement.classList.add('stroke-rgb');
+
         inputElement.autocomplete = "off";
         inputElement.id = `group-colors-stroke-${i}`;
         inputElement.setAttribute('value', `${stroke[i]}`);
-        inputElement.setAttribute("data-jscolor", "{}");
+        inputElement.setAttribute("data-jscolor", `{format:${colorFormat}}`);  // format:'rgb' or format:'hex'
 
         // label, input要素を div要素の子として追加
         optsCellDiv.appendChild(labelElement)
@@ -79,8 +92,8 @@ function generateGroupColorsHtmlElements(step) {
 
 
         // Generate <select> elements for opacity and stroke-opacity
-        const opacitySelectElem = generateOpacityElements(i, step, 'opacity', opacity[i])
-        const strokeOpacitySelectElem = generateOpacityElements(i, step, 'stroke-opacity', strokeOpacity[i])
+        const opacitySelectElem = generateOpacityElements(i, opacitySteps, 'opacity', opacity[i])
+        const strokeOpacitySelectElem = generateOpacityElements(i, opacitySteps, 'stroke-opacity', strokeOpacity[i])
         console.log('opacitySelectElem: ', opacitySelectElem)
         console.log('strokeOpacitySelectElem: ', strokeOpacitySelectElem)
         optsCellDiv.appendChild(opacitySelectElem)
@@ -135,14 +148,12 @@ function getGroupColorsValues() {
 
     // Get the matches for <g> from current SVG string in textarea
     const currentSvg = getInputSvg()
-    console.log('|||currentSvg: ', currentSvg)
     const matches = regexMatchesOfGroupColors(currentSvg)
-    console.log('|||matches: ', matches)
-    // e.g.: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
+    // console.log('matches: ', matches)
+    // e.g.: (5) ['<g stroke="rgb(0,0,0)" opacity="1.0" stroke-opacity="1.0">', ...]
 
     // マッチした部分の数を取得
     const numberOfGroups = matches.length; // 配列の長さでマッチした部分の数を得る
-    console.log('|||numberOfGroups: ', numberOfGroups) // 5 (Number)
 
 
     // Get each color as hex code
@@ -153,9 +164,9 @@ function getGroupColorsValues() {
 
     for (let i = 0; i < matches.length; i++) { // i = group ID
         // Get three group colors value
-        const stroke = '#' + hexExpandToSix(getStroke(matches[i]).slice(1)) // 6 digits hex (delete '#' mark using '.slice(1)' before expand)
-        const opacity       = getOpacity(matches[i])                        // [0-1] number
-        const strokeOpacity = getStrokeOpacity(matches[i])                  // [0-1] number
+        const stroke        = getStroke(matches[i])             // string (rgb or hex)
+        const opacity       = getOpacity(matches[i])            // [0-1] number
+        const strokeOpacity = getStrokeOpacity(matches[i])      // [0-1] number
 
         // Set into each array
         strokeArray.push(stroke)
@@ -168,9 +179,9 @@ function getGroupColorsValues() {
     console.log('strokeOpacityArray: ', strokeOpacityArray)  // e.g.: (5) ['1', '1', '1', '1', '1']
 
     return new Map([
-        ['number_of_groups', numberOfGroups], // Number
-        ['stroke_array', strokeArray], // Array
-        ['opacity_array', opacityArray], // Array
+        ['number_of_groups', numberOfGroups],         // Number
+        ['stroke_array', strokeArray],                // Array
+        ['opacity_array', opacityArray],              // Array
         ['stroke_opacity_array', strokeOpacityArray]  // Array
     ])
 }
@@ -185,19 +196,31 @@ function regexMatchesOfGroupColors(inputSvg) {
 }
 // Get each attrs values
 function getStroke(inputStr) {
+    const colorFormat = getState('colorFormat')
+
+    if (colorFormat === "rgb") {
+        return getStrokeRgb(inputStr)
+    } else {  // (colorFormat === "hex")
+        return getStrokeRgb(inputStr)
+    }
+}
+function getStrokeHex(inputStr) {
     const pattern = /(#.*?)"/
     const matches = inputStr.match(pattern)
-    return matches[1]
+    return matches[1];
+}
+function getStrokeRgb(inputStr) {
+    const pattern = /(rgb\(.*?\))/
+    const matches = inputStr.match(pattern)
+    return matches[1];
 }
 function getOpacity(inputStr) {
     const pattern = /\sopacity="([^"]*)"/
     const matches = inputStr.match(pattern)
-    //console.log('matches[1]: ', matches[1])
     return matches[1]
 }
 function getStrokeOpacity(inputStr) {
     const pattern = /stroke-opacity="([^"]*)"/
     const matches = inputStr.match(pattern)
-    //console.log('matches[1]: ', matches[1])
     return matches[1]
 }

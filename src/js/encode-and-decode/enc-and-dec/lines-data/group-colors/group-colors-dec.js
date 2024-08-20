@@ -1,4 +1,5 @@
 import { normalizedFromHex } from 'color-formatter/normalized-from-hex'
+import { hexToRgbObj }       from 'color-formatter/normalized-from-hex'
 
 // Convert 10 digits hex to three group colors as Object
 
@@ -8,17 +9,20 @@ import { normalizedFromHex } from 'color-formatter/normalized-from-hex'
 // [8-9] g_stroke_opacity = [0-1] number
 
 // Input : "ffffffffff"
-// Output: groupColors: {g_stroke: '#ffffff', g_opacity: 1, g_stroke_opacity: 1}
+// Output: groupColors: {g_stroke_hex: '#ffffff', g_stroke_rgb: rgb(255,255,255), g_opacity: 1, g_stroke_opacity: 1}
 
 export function decodeGroupColors(tenDigitsHex) {
 
     // Convert
-    const stroke = '#' + tenDigitsHex.slice(0, 6)
+    const stroke_hex = tenDigitsHex.slice(0, 6)
+    const stroke_rgb_obj = hexToRgbObj(stroke_hex)
+    const stroke_rgb_str = `rgb(${stroke_rgb_obj.r},${stroke_rgb_obj.g},${stroke_rgb_obj.b})`
     const opacity = normalizedFromHex(tenDigitsHex.slice(6, 8))
     const strokeOpacity = normalizedFromHex(tenDigitsHex.slice(8))
 
     return {
-        g_stroke        : stroke,
+        g_stroke_hex    : '#' + stroke_hex,
+        g_stroke_rgb    : stroke_rgb_str,
         g_opacity       : opacity,
         g_stroke_opacity: strokeOpacity
     }
