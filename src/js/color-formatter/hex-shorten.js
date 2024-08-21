@@ -1,6 +1,7 @@
 export
     { hexShortenFromTen
     , tryShortenAsHalf
+    , tryDeleteHash
     }
 
 // 10桁の hex を受け取り 省略して 6|5|3|1桁 に変換する関数
@@ -112,3 +113,18 @@ function tryShortenAsHalf(hex) {
 //console.log(tryShortenAsHalf("aabbccffff")) // abcff
 //console.log(tryShortenAsHalf("112233ee00")) // 123e0
 //console.log(tryShortenAsHalf("123456ffff")) // 123456ffff
+
+
+function tryDeleteHash(hexStr) {
+    // 文字列の先頭が # ならば削除する
+    if (hexStr.startsWith("#")) {
+        // 先頭の1文字を除いた文字列を取得する
+        return hexStr.slice(1);
+    } else {
+        return hexStr
+    }
+}
+
+// Test
+// console.log(tryDeleteHash("#FFF"))     // FFF
+// console.log(tryDeleteHash("#FFFFFF"))  // FFFFFF

@@ -1,5 +1,6 @@
 import { getInitialOpacitySteps } from 'init/get-initial-opacity-steps'
 import { getInputSvg } from 'download'
+import { updateState } from 'init/state'
 
 export async function setDefaultValueOfOptions() {
     console.log('setDefaultValueOfOptions(state) executed')
@@ -63,6 +64,9 @@ function setDefaultOfOpacitySteps(opacitySteps) {
 
     // Set as default value
     document.getElementById("opacity-steps").value = opacitySteps
+
+    // Update the global state Map object
+    updateState('opacitySteps', opacitySteps)
 
     console.log(`Default 'Opacity steps' value is "${opacitySteps}"`)
 }

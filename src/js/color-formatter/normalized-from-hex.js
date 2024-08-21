@@ -1,7 +1,10 @@
+import { tryDeleteHash } from 'color-formatter/hex-shorten'
+
 export
     { normalizedFromHex
-    // , hexToUint8
-    , hexToRgbObj
+    , hexToUint8
+    , hexToRgbMap
+    , hexToRgb
     }
 
 
@@ -37,7 +40,7 @@ function hexToUint8(twoDigitsHex) {
 }
 
 // 6桁のHEX文字列をRGBオブジェクトに変換する関数
-function hexToRgbObj(sixDigitsHex) {
+function hexToRgbMap(sixDigitsHex) {
     // 入力が6桁の16進数文字列であることを確認
     if (!/^[0-9A-Fa-f]{6}$/.test(sixDigitsHex)) {
         return "Invalid hex string";
@@ -48,16 +51,22 @@ function hexToRgbObj(sixDigitsHex) {
     const b = sixDigitsHex.substring(4, 6);
 
     // 各色をuint8に変換してオブジェクトを作成
-    return {
-        'r': hexToUint8(r),
-        'g': hexToUint8(g),
-        'b': hexToUint8(b)
-    };
+    return new Map([
+        ['r', hexToUint8(r)],
+        ['g', hexToUint8(g)],
+        ['b', hexToUint8(b)]
+    ]);
 }
 
 // // テスト
 // console.log(hexToUint8("00"));  // 0
 // console.log(hexToUint8("FF"));  // 255
-// console.log(hexToRgbObj("000000"));  // { r: 0, g: 0, b: 0 }
-// console.log(hexToRgbObj("FFFFFF"));  // { r: 255, g: 255, b: 255 }
-// console.log(hexToRgbObj("FF8000"));  // { r: 255, g: 128, b: 0 }
+// console.log(hexToRgbMap("000000"));  // { r: 0, g: 0, b: 0 }
+// console.log(hexToRgbMap("FFFFFF"));  // { r: 255, g: 255, b: 255 }
+// console.log(hexToRgbMap("FF8000"));  // { r: 255, g: 128, b: 0 }
+
+function hexToRgb(hexStr) {
+    const rgbMap = hexToRgbMap(tryDeleteHash(hexStr))
+    return `rgb(${[...rgbMap.values()].join(',')})`;
+}
+

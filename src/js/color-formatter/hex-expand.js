@@ -1,10 +1,10 @@
 import { normalizedToHex }      from 'color-formatter/normalized-to-hex'
 
-
 export
     { hexExpandToTen
     , hexExpandToEight
     , hexExpandToSix
+    , tryAddHash
     }
 
 // 6|5|3|1桁 に変換された hex を 10桁に戻す関数
@@ -115,4 +115,12 @@ function hexExpandToSix(hex) {
     } else {
         return new Error("Invalid hex code");
     }
+}
+
+
+function tryAddHash(hexString) {
+    if (!hexString.startsWith('#')) {
+        return '#' + hexString;
+    }
+    return hexString;
 }

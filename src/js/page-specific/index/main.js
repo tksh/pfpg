@@ -1,21 +1,18 @@
 import { getInputSvg
        , countSvgSize
-       , initDownloadButtons
-       }                            from 'download'
+       , initDownloadButtons }       from 'download'
 import { measureSvg2pngTime
-       , svg2png
-       }                            from 'svg-to-png'
-import { getNumberOfGroups }        from 'utils/get-number-of-groups'
-import { replaceAtIndex }           from 'utils/replace-at-index'
-import { adjustBox }                from 'init/adjust-output-boxes-size'
-import { getInitialOpacitySteps }   from 'init/get-initial-opacity-steps'
-import { setDefaultValueOfOptions} from 'init/set-defaults'
-import { state
-       , updateState
-       , getState }                 from 'init/state'
-import { initTabs }                 from 'init/tab-setup'
-import { isOnDataManipulatorPage }  from 'common-utils/select-output-textarea'
-import { decode }                   from 'decode/decode'
+       , svg2png }                   from 'svg-to-png'
+import { getNumberOfGroups }         from 'utils/get-number-of-groups'
+import { replaceAtIndex }            from 'utils/replace-at-index'
+import { adjustBox }                 from 'init/adjust-output-boxes-size'
+import { getInitialOpacitySteps }    from 'init/get-initial-opacity-steps'
+import { setDefaultValueOfOptions }  from 'init/set-defaults'
+import { updateState
+       , getState }                  from 'init/state'
+import { initTabs }                  from 'init/tab-setup'
+import { isOnDataManipulatorPage }   from 'common-utils/select-output-textarea'
+import { decode }                    from 'decode/decode'
 
 // Tab - line
 import { generateGroupColorsSvgTags
@@ -23,36 +20,31 @@ import { generateGroupColorsSvgTags
        , regexMatchesOfGroupColors
        , getStroke
        , getOpacity
-       , getStrokeOpacity
-       }                              from 'tab-line/group-colors'
+       , getStrokeOpacity }                     from 'tab-line/group-colors'
+import { updateSvgAsNewColorFormat }            from 'tab-line/color-format'
 import { changeOpacitySelectOptionsAsNewStep
-       , updateSvgForNewStep
-       }                              from 'tab-line/opacity-steps'
+       , updateSvgForNewStep }                  from 'tab-line/opacity-steps'
 import { decodeAsSelectedPathMode
        , recoverCurrentOptionValue
-       , recoverCurrentGroupColorsValues
-       }                              from 'tab-line/path-mode'
+       , recoverCurrentGroupColorsValues }      from 'tab-line/path-mode'
 // Tab - Canvas
 import { toggleDisplay
-       , updateSvgWithSelectedShapePath
-       }                              from 'tab-canvas/shape-to-trim'
+       , updateSvgWithSelectedShapePath }       from 'tab-canvas/shape-to-trim'
 import { viewboxSlimmed
-       , viewboxUnSlimmed
-       }                              from 'tab-canvas/crop-side-margins'
+       , viewboxUnSlimmed }                     from 'tab-canvas/crop-side-margins'
 // Tab - Render
 import { syncWidthNum
-       , adjustWidthNum }             from 'tab-render/sync-number-and-range';
-import { initWidthValidatorListener } from 'tab-render/width-pixel-size';
+       , adjustWidthNum }                       from 'tab-render/sync-number-and-range';
+import { initWidthValidatorListener }           from 'tab-render/width-pixel-size';
 // Tab - UI
-import { initViewScaleListener }      from 'tab-ui/view-scale'
-import { initCheckerPatternListener } from 'tab-ui/checker-pattern'
+import { initViewScaleListener }                from 'tab-ui/view-scale'
+import { initCheckerPatternListener }           from 'tab-ui/checker-pattern'
 import { initColorThemeListener
-       , setSchemeAsDefaultTheme
-       }                              from 'tab-ui/color-theme'
+       , setSchemeAsDefaultTheme }              from 'tab-ui/color-theme'
+
 
 import { initSvgOptModal
-       , initSvgOptCheckbox
-       }                              from 'svg-opt-modal/svg-opt-modal'
+       , initSvgOptCheckbox } from 'svg-opt-modal/svg-opt-modal'
 
 
 (async function () {
@@ -138,11 +130,11 @@ import { initSvgOptModal
 
     // Add multiple event listener for whole stroke colors
     const numberOfGroups = getNumberOfGroups(getInputSvg())
-    addEventListenerForGroupColorsInputs(state, numberOfGroups, 'stroke')
-    addEventListenerForGroupColorsInputs(state, numberOfGroups, 'opacity')
-    addEventListenerForGroupColorsInputs(state, numberOfGroups, 'stroke-opacity')
+    addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke')
+    addEventListenerForGroupColorsInputs(numberOfGroups, 'opacity')
+    addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke-opacity')
 
-    function addEventListenerForGroupColorsInputs(state, numberOfGroups, attrName) {
+    function addEventListenerForGroupColorsInputs(numberOfGroups, attrName) {
 
         // id `group-colors-${attrName}-N` の要素の変更を監視
         for (let i = 0; i < numberOfGroups; i++) {
@@ -301,6 +293,37 @@ import { initSvgOptModal
     });
 
     /////////////////////////////// Path mode ////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+
+
+    //////////////////////////////////////////////////////////////////////////
+    /////////////////////////////// Color format ////////////////////////////////
+
+    //  Event listeners for 'Color format' selection changes
+    document.getElementById("color-format").addEventListener("change", (event) => {
+        // 選択されたセレクトメニューの値を 取得
+        const colorFormat = event.target.value  // rgb | hex
+        console.log('Color format: ', colorFormat)
+
+        // グローバルステートを 更新
+        updateState('colorFormat', colorFormat)
+
+        // HTMLを 新しい表示フォーマットの js-color input に更新
+        generateGroupColorsHtmlElements(colorFormat, getState('opacitySteps'))
+
+        // Add event listener for new format js-color inputs
+        addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke')
+
+        // 新しいセレクトメニューでの 値 を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
+        const updatedSvg = updateSvgAsNewColorFormat(colorFormat)
+        svgInputElement.value = updatedSvg
+
+        // Only update the SVG strings in the textarea.
+        // Do not execute `executeSvg2png({ target: { value: updatedSvg } })`,
+        // because the color format does not affect the appearance of the artwork.
+    });
+
+    /////////////////////////////// Color format ////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
 

@@ -1,6 +1,7 @@
 import { numbersIncrementByStep } from 'utils/number-generator'
 import { getInputSvg }            from 'download'
-import { getState }               from 'init/state'
+import { rgbToHex }               from 'color-formatter/normalized-to-hex'
+import { hexToRgb }               from 'color-formatter/normalized-from-hex'
 
 export
     { generateGroupColorsSvgTags
@@ -12,6 +13,7 @@ export
     , getStroke
     , getOpacity
     , getStrokeOpacity
+    , convertColorFormat
     }
 
 // SVG
@@ -20,7 +22,7 @@ export
 function generateGroupColorsSvgTags(matches) {
     console.log('matches: ', matches) // e.g.: (4) [undefined, '#4E8D09', '0.6', '1.0']
 
-    const stroke        = matches[1]                                    // e.g.: "rgb(0,0,0)" | "#FFF"
+    const stroke        = matches[1]                                      // e.g.: "rgb(0,0,0)" | "#FFF"
     const opacity       = matches[2] !== undefined ? matches[2] : "1.0";  // opacity が明示的に指定されていない場合は 1.0 とみなす
     const strokeOpacity = matches[3] !== undefined ? matches[3] : "1.0";  // strokeOpacity が明示的に指定されていない場合は 1.0 とみなす
     const groupElem = `<g stroke="${stroke}" opacity="${opacity}" stroke-opacity="${strokeOpacity}">`
@@ -41,7 +43,7 @@ function generateGroupColorsHtmlElements(colorFormat, opacitySteps) {
 
     const groupColorsValues = getGroupColorsValues();
     const numberOfGroups = groupColorsValues.get('number_of_groups')
-    const stroke         = groupColorsValues.get('stroke_array')
+    const stroke         = convertColorFormatForArray(groupColorsValues.get('stroke_array'), colorFormat)
     const opacity        = groupColorsValues.get('opacity_array')
     const strokeOpacity  = groupColorsValues.get('stroke_opacity_array')
 
@@ -57,8 +59,10 @@ function generateGroupColorsHtmlElements(colorFormat, opacitySteps) {
     for (let i = 0; i < numberOfGroups; i++) {
 
         const optsCellDiv = document.createElement('div');
+
         // クラスを追加
         optsCellDiv.classList.add('opts-cell-for-group-colors');
+
 
         // jscolor カラーピッカーを作成
 
@@ -71,20 +75,21 @@ function generateGroupColorsHtmlElements(colorFormat, opacitySteps) {
         // input要素を作成
         const inputElement = document.createElement("input");
 
-        // Change the color value input box size by format
+        // Input box size defined by css class by color format, 'rgb' or 'hex'
         if (colorFormat === "rgb") {
-            inputElement.classList.add('stroke');
             inputElement.classList.add('stroke-rgb');
         } else {  // (colorFormat === "hex")
-            inputElement.classList.add('stroke');
             inputElement.classList.add('stroke-hex');
         }
-        // inputElement.classList.add('stroke-rgb');
 
+        inputElement.classList.add('stroke');
         inputElement.autocomplete = "off";
         inputElement.id = `group-colors-stroke-${i}`;
-        inputElement.setAttribute('value', `${stroke[i]}`);
-        inputElement.setAttribute("data-jscolor", `{format:${colorFormat}}`);  // format:'rgb' or format:'hex'
+        inputElement.setAttribute('value', `${stroke[i]}`);  // value format should be fit to current selected colorFormat
+        inputElement.setAttribute("data-jscolor", `{format:'${colorFormat}'}`);  // format:'rgb' or format:'hex'
+
+        // JSColorの初期化
+        new jscolor(inputElement);
 
         // label, input要素を div要素の子として追加
         optsCellDiv.appendChild(labelElement)
@@ -92,6 +97,7 @@ function generateGroupColorsHtmlElements(colorFormat, opacitySteps) {
 
 
         // Generate <select> elements for opacity and stroke-opacity
+
         const opacitySelectElem = generateOpacityElements(i, opacitySteps, 'opacity', opacity[i])
         const strokeOpacitySelectElem = generateOpacityElements(i, opacitySteps, 'stroke-opacity', strokeOpacity[i])
         console.log('opacitySelectElem: ', opacitySelectElem)
@@ -101,6 +107,7 @@ function generateGroupColorsHtmlElements(colorFormat, opacitySteps) {
 
         groupColorsDiv.appendChild(optsCellDiv)
     }
+
 }
 
 
@@ -194,26 +201,24 @@ function regexMatchesOfGroupColors(inputSvg) {
     // e.g.: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
     return matches
 }
+
 // Get each attrs values
 function getStroke(inputStr) {
-    const colorFormat = getState('colorFormat')
-
-    if (colorFormat === "rgb") {
-        return getStrokeRgb(inputStr)
-    } else {  // (colorFormat === "hex")
-        return getStrokeRgb(inputStr)
-    }
+    const strokeRgb = getStrokeRgb(inputStr)
+    const strokeHex = getStrokeHex(inputStr)
+    return strokeRgb??strokeHex  // undefined ではない方を 返す
 }
 function getStrokeHex(inputStr) {
     const pattern = /(#.*?)"/
     const matches = inputStr.match(pattern)
-    return matches[1];
+    return matches?.[1];  // matches が null または undefined の場合に undefined を返し それ以外の場合には matches[1] の値
 }
 function getStrokeRgb(inputStr) {
     const pattern = /(rgb\(.*?\))/
     const matches = inputStr.match(pattern)
-    return matches[1];
+    return matches?.[1];  // matches が null または undefined の場合に undefined を返し それ以外の場合には matches[1] の値
 }
+
 function getOpacity(inputStr) {
     const pattern = /\sopacity="([^"]*)"/
     const matches = inputStr.match(pattern)
@@ -224,3 +229,30 @@ function getStrokeOpacity(inputStr) {
     const matches = inputStr.match(pattern)
     return matches[1]
 }
+
+
+// 単一の色情報の文字列を指定の形式に変換する
+function convertColorFormat(color, colorFormat) {
+    const currentFormat = detectColorFormat(color);
+    if (currentFormat === colorFormat) {
+        // 形式が一致している場合は何もせずに元の値を返す
+        return color;
+    } else {
+        // 形式が一致していない場合は変換処理を行う
+        if (colorFormat === 'rgb') {
+            return hexToRgb(color); // HEXからRGBへの変換関数を呼び出す
+        } else {
+            return rgbToHex(color); // RGBからHEXへの変換関数を呼び出す
+        }
+    }
+}
+
+// 色情報の文字列の配列を指定の形式に変換する
+function convertColorFormatForArray(stroke, colorFormat) {
+    return stroke.map(color => convertColorFormat(color, colorFormat));
+}
+
+// RGB形式かHEX形式かを判定する関数
+function detectColorFormat(colorString) {
+    return colorString.startsWith('rgb') ? 'rgb' : 'hex';
+};
