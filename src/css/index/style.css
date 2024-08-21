@@ -238,6 +238,9 @@ p {
 details {
     padding: 1rem 0;
 }
+div#customization details{
+    padding: 1.5rem 1rem 0.5rem 1.5rem;
+}
 
 dd {
     padding: 0.25rem 0.5rem 0.25rem 1rem;
