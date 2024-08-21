@@ -41,15 +41,6 @@ function initSvgOptCheckbox() {
             svg = svg.replace(/(opacity|stroke-opacity)="1(\.0)?"/g, '');
         }
 
-        if (document.getElementById('use-hex').checked) {
-            svg = svg.replace(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/g, function(match, r, g, b) {
-                r = parseInt(r).toString(16).padStart(2, '0');
-                g = parseInt(g).toString(16).padStart(2, '0');
-                b = parseInt(b).toString(16).padStart(2, '0');
-                return `#${r}${g}${b}`;
-            });
-        }
-
         if (document.getElementById('remove-newlines').checked) {
             svg = svg.replace(/>\s+</g, '><');
         }
