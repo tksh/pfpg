@@ -297,37 +297,6 @@ import { initSvgOptModal
 
 
     //////////////////////////////////////////////////////////////////////////
-    /////////////////////////////// Color format ////////////////////////////////
-
-    //  Event listeners for 'Color format' selection changes
-    document.getElementById("color-format").addEventListener("change", (event) => {
-        // 選択されたセレクトメニューの値を 取得
-        const colorFormat = event.target.value  // rgb | hex
-        console.log('Color format: ', colorFormat)
-
-        // グローバルステートを 更新
-        updateState('colorFormat', colorFormat)
-
-        // HTMLを 新しい表示フォーマットの js-color input に更新
-        generateGroupColorsHtmlElements(colorFormat, getState('opacitySteps'))
-
-        // Add event listener for new format js-color inputs
-        addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke')
-
-        // 新しいセレクトメニューでの 値 を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
-        const updatedSvg = updateSvgAsNewColorFormat(colorFormat)
-        svgInputElement.value = updatedSvg
-
-        // Only update the SVG strings in the textarea.
-        // Do not execute `executeSvg2png({ target: { value: updatedSvg } })`,
-        // because the color format does not affect the appearance of the artwork.
-    });
-
-    /////////////////////////////// Color format ////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////
-
-
-    //////////////////////////////////////////////////////////////////////////
     ////////////////////////////// Opacity steps /////////////////////////////
 
     // Event listeners for 'Opacity steps' value changes
@@ -353,6 +322,38 @@ import { initSvgOptModal
     ////////////////////////////// Opacity steps /////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
+
+    //////////////////////////////////////////////////////////////////////////
+    /////////////////////////////// Color format ////////////////////////////////
+
+    //  Event listeners for 'Color format' selection changes
+    document.getElementById("color-format").addEventListener("change", (event) => {
+        // 選択されたセレクトメニューの値を 取得
+        const colorFormat = event.target.value  // rgb | hex
+        console.log('Color format: ', colorFormat)
+
+        // グローバルステートを 更新
+        updateState('colorFormat', colorFormat)
+
+        // HTMLを 新しい表示フォーマットの js-color input に更新
+        generateGroupColorsHtmlElements(colorFormat, getState('opacitySteps'))
+
+        // Add event listener for new format js-color inputs and opacity selectors
+        addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke')
+        addEventListenerForGroupColorsInputs(numberOfGroups, 'opacity')
+        addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke-opacity')
+
+        // 新しいセレクトメニューでの 値 を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
+        const updatedSvg = updateSvgAsNewColorFormat(colorFormat)
+        svgInputElement.value = updatedSvg
+
+        // Only update the SVG strings in the textarea.
+        // Do not execute `executeSvg2png({ target: { value: updatedSvg } })`,
+        // because the color format does not affect the appearance of the artwork.
+    });
+
+    /////////////////////////////// Color format ////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
 
 
     // Options for 'Canvas' tab ///////////////////////////////////////////////////////////////////////////
