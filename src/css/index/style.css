@@ -170,6 +170,11 @@ select {
     border: none;
 }
 
+textarea#input-svg.no-wrap {
+    white-space: pre;
+    overflow-x: auto;
+}
+
 /* 'opacity', 'stroke-opacity' */
 select.opacity {
     margin-right: 2px;

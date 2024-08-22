@@ -40,6 +40,7 @@ import { initWidthValidatorListener }           from 'tab-render/width-pixel-siz
 // Tab - UI
 import { initViewScaleListener }                from 'tab-ui/view-scale'
 import { initCheckerPatternListener }           from 'tab-ui/checker-pattern'
+import { initTextWrappingCheckbox }             from 'tab-ui/text-wrapping'
 import { initColorThemeListener
        , setSchemeAsDefaultTheme }              from 'tab-ui/color-theme'
 
@@ -609,6 +610,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Tab - Render
     initWidthValidatorListener()
+
+    // Tab - UI
+    initTextWrappingCheckbox()
 
     // First tab ('Line') activate
     initTabs()
