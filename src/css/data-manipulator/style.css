@@ -53,10 +53,6 @@ button,                         /* <button> */
     height: 16rem;
 }
 
-.displayNone {
-    display: none;
-}
-
 .bg-0 {
     background-color: plum;
 }

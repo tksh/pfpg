@@ -1,7 +1,7 @@
 export function initViewScaleListener() {
 
     // セレクトメニューの要素を取得
-    const selectOfViewScale = document.getElementById("view-scale");
+    const selectOfViewScale = document.getElementById("view-scaling");
     console.log('selectOfViewScale.length is ', selectOfViewScale.length);
 
     // changeイベントを設定

@@ -1,7 +1,7 @@
 export function initCheckerPatternListener() {
 
     // セレクトメニューの要素を取得
-const selectOfCheckerPattern = document.getElementById("checker-pattern");
+const selectOfCheckerPattern = document.getElementById("checkerboard-bg");
 console.log('selectOfCheckerPattern.length is ', selectOfCheckerPattern.length); // 2
 
 // changeイベントを設定
@@ -23,5 +23,22 @@ selectOfCheckerPattern.addEventListener("change", () => {
         img.classList.remove("checker");
     }
 });
+
+}
+
+export function initShowCheckerboardBgCheckbox() {
+    const checkbox = document.querySelector('#checkerboard-bg');
+    const img = document.querySelector("img");
+    console.log("||||checkbox: ", checkbox)
+    console.log("||||img: ", img)
+
+    checkbox.addEventListener('change', () => {
+
+        if (checkbox.checked) {
+            img.classList.add("checker");
+        } else {
+            img.classList.remove("checker");
+        }
+    });
 
 }

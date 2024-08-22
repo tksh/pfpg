@@ -6,7 +6,7 @@ export
 function initColorThemeListener() {
 
     // セレクトメニューの要素を取得
-const colorThemeSelector = document.getElementById("color-theme");
+const colorThemeSelector = document.getElementById("theme-color");
 console.log('colorThemeSelector.length is ', colorThemeSelector.length); // 2
 
 // changeイベントを設定
@@ -36,7 +36,7 @@ colorThemeSelector.addEventListener("change", () => {
 
 function setSchemeAsDefaultTheme() {
     // セレクトメニューの要素を取得
-    const colorThemeSelector = document.getElementById("color-theme");
+    const colorThemeSelector = document.getElementById("theme-color");
 
     // 選択されたセレクトメニューの値を取得
 //    const selectedTheme = colorThemeSelector.value;

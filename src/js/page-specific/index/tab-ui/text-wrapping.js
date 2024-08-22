@@ -1,7 +1,6 @@
 export function initTextWrappingCheckbox() {
-    const svgInputElement = document.querySelector('#input-svg')
     const checkbox = document.querySelector('#text-wrapping');
-    console.log("checkbox: ", checkbox)
+    const svgInputElement = document.querySelector('#input-svg')
 
     checkbox.addEventListener('change', () => {
         if (checkbox.checked) {

@@ -38,11 +38,11 @@ import { syncWidthNum
        , adjustWidthNum }                       from 'tab-render/sync-number-and-range';
 import { initWidthValidatorListener }           from 'tab-render/width-pixel-size';
 // Tab - UI
-import { initViewScaleListener }                from 'tab-ui/view-scale'
-import { initCheckerPatternListener }           from 'tab-ui/checker-pattern'
+import { initViewScaleListener }                from 'tab-ui/view-scaling'
+import { initShowCheckerboardBgCheckbox }       from 'tab-ui/checkerboard-bg'
 import { initTextWrappingCheckbox }             from 'tab-ui/text-wrapping'
 import { initColorThemeListener
-       , setSchemeAsDefaultTheme }              from 'tab-ui/color-theme'
+       , setSchemeAsDefaultTheme }              from 'tab-ui/theme-color'
 
 // Modal - SVG optimization
 import { initSvgOptModal }   from 'svg-opt-modal/modal'
@@ -605,14 +605,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Tab - UI
     initViewScaleListener();
-    initCheckerPatternListener();
+    initShowCheckerboardBgCheckbox();
+    initTextWrappingCheckbox()
     initColorThemeListener();
 
     // Tab - Render
     initWidthValidatorListener()
 
-    // Tab - UI
-    initTextWrappingCheckbox()
 
     // First tab ('Line') activate
     initTabs()

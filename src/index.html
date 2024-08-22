@@ -114,10 +114,10 @@
                 "tab-render/width-pixel-size":      "./js/page-specific/index/tab-render/width-pixel-size.js",
                 "tab-render/sync-number-and-range": "./js/page-specific/index/tab-render/sync-number-and-range.js",
 
-                "tab-ui/view-scale":                "./js/page-specific/index/tab-ui/view-scale.js",
-                "tab-ui/checker-pattern":           "./js/page-specific/index/tab-ui/checker-pattern.js",
+                "tab-ui/view-scaling":                "./js/page-specific/index/tab-ui/view-scaling.js",
+                "tab-ui/checkerboard-bg":           "./js/page-specific/index/tab-ui/checkerboard-bg.js",
                 "tab-ui/text-wrapping":             "./js/page-specific/index/tab-ui/text-wrapping.js",
-                "tab-ui/color-theme":               "./js/page-specific/index/tab-ui/color-theme.js",
+                "tab-ui/theme-color":               "./js/page-specific/index/tab-ui/theme-color.js",
 
                 "svg-opt-modal/modal":      "./js/page-specific/index/svg-opt-modal/modal.js",
                 "svg-opt-modal/optimize-svg":      "./js/page-specific/index/svg-opt-modal/optimize-svg.js",
@@ -260,7 +260,7 @@
                     <!-- Three options for 'Squircle, slimmed' -->
 
                     <!-- Width narrowness -->
-                    <div id="width-narrowness-div" class="displayNone">
+                    <div id="width-narrowness-div" class="display-none">
                         <div class="opts-cell">
                             <label for="width-narrowness">- Width narrowness: </label>
                             <select name="width-narrowness" id="width-narrowness" autocomplete="off">
@@ -284,7 +284,7 @@
                     </div>
 
                     <!-- Top-heavy ratio -->
-                    <div id="top-heavy-ratio-div" class="displayNone">
+                    <div id="top-heavy-ratio-div" class="display-none">
                         <div class="opts-cell">
                             <label for="top-heavy-ratio">- Top-heavy ratio: </label>
                             <select name="top-heavy-ratio" id="top-heavy-ratio" autocomplete="off">
@@ -300,7 +300,7 @@
                     </div>
 
                     <!-- Crop side margins (Both applied to PNG and SVG) -->
-                    <div id="crop-side-margins-div" class="displayNone">
+                    <div id="crop-side-margins-div" class="display-none">
                         <div class="opts">
                             <div class="opts-cell">
                                 <label for="crop-side-margins">- Crop side margins:</label>
@@ -352,41 +352,38 @@
 
                 <div id="tab-4" class="tab-content"> <!-- UI -->
 
-                    <!-- View scale -->
+                    <!-- View scaling -->
                     <div class="opts">
                         <div class="opts-cell">
-                            <label for="view-scale">Scale: </label>
-                            <select name="view-scale" id="view-scale" autocomplete="off">
+                            <label for="view-scaling">View scaling: </label>
+                            <select name="view-scaling" id="view-scaling" autocomplete="off">
                                 <option value="fit" selected>Fit to display area</option>
                                 <option value="actual">Actual image size</option>
                             </select>
                         </div>
                     </div>
 
-                    <!-- Checker -->
+                    <!-- Checkerboard background -->
                     <div class="opts">
                         <div class="opts-cell">
-                            <label for="checker-pattern">Checker: </label>
-                            <select name="checker-pattern" id="checker-pattern" autocomplete="off">
-                                <option value="on" selected>On</option>
-                                <option value="off">Off</option>
-                            </select>
+                            <label for="checkerboard-bg">Checkerboard background: </label>
+                            <input type="checkbox" id="checkerboard-bg" name="checkerboard-bg" value="enabled" checked>
                         </div>
                     </div>
 
-                    <!-- Wrapping -->
+                    <!-- Text wrapping -->
                     <div class="opts">
                         <div class="opts-cell">
-                            <label for="text-wrapping">SVG text wrapping: </label>
-                            <input type="checkbox" id="text-wrapping" name="ui-option" value="wrapping" checked>
+                            <label for="text-wrapping">Text wrapping: </label>
+                            <input type="checkbox" id="text-wrapping" name="text-wrapping" value="enabled" checked>
                         </div>
                     </div>
 
                     <!-- Theme -->
                     <div class="opts">
                         <div class="opts-cell">
-                            <label for="color-theme">Theme: </label>
-                            <select name="color-theme" id="color-theme" autocomplete="off">
+                            <label for="theme-color">Theme color: </label>
+                            <select name="theme-color" id="theme-color" autocomplete="off">
                                 <option value="white">White</option>
                                 <option value="light">Light</option>
                                 <option value="dark">Dark</option>
@@ -401,7 +398,7 @@
 
 
         <!-- Crop by BBox | Disabled -->
-        <div class="displayNone">
+        <div class="display-none">
             <div class="opts-cell">
                 <label for="crop-by-bbox">Crop by BBox:</label>
                 <input type="checkbox" name="crop-by-bbox" id="crop-by-bbox" autocomplete="off">
@@ -459,10 +456,10 @@
                 <h2 class="text-align-center">SVG strings optimization</h2>
                 <form>
                     <fieldset>
-                        <legend class="displayNone">Optimization options</legend>
+                        <legend class="display-none">Optimization options</legend>
 
                         <div class="option-group padding-top">
-                            <input type="checkbox" id="remove-opacity" name="option" value="1">
+                            <input type="checkbox" id="remove-opacity" name="remove-opacity" value="enabled">
                             <label for="remove-opacity">Remove default opacity attributes</label>
                             <div class="example padding-left-1">
                                 <code>&lt;g stroke=&quot;rgb(0,0,0)&quot; opacity=&quot;1.0&quot; stroke-opacity=&quot;1.0&quot;&gt;</code>
@@ -472,7 +469,7 @@
                         </div>
 
                         <div class="option-group padding-top">
-                            <input type="checkbox" id="remove-newlines" name="option" value="3">
+                            <input type="checkbox" id="remove-newlines" name="remove-newlines" value="enabled">
                             <label for="remove-newlines">Remove new-lines</label>
                             <div class="example padding-left-1">
                                 <code>
@@ -488,7 +485,7 @@
                         </div>
 
                         <div class="option-group padding-top">
-                            <input type="checkbox" id="remove-spaces" name="option" value="4">
+                            <input type="checkbox" id="remove-spaces" name="remove-spaces" value="enabled">
                             <label for="remove-spaces">Remove extra spaces</label>
                             <div class="example padding-left-1">
                                 <code>&lt;path d="M 36 61 L 33 68" /&gt;</code>
