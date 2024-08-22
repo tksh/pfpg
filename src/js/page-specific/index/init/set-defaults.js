@@ -1,6 +1,8 @@
 import { getInitialOpacitySteps } from 'init/get-initial-opacity-steps'
-import { getInputSvg } from 'download'
-import { updateState } from 'init/state'
+import { updateState }            from 'init/state'
+import { getInputSvg }            from 'download'
+import { getSvgIndentation }      from 'svg-opt-modal/svg-opt-modal'
+
 
 export async function setDefaultValueOfOptions() {
     console.log('setDefaultValueOfOptions(state) executed')
@@ -12,6 +14,7 @@ export async function setDefaultValueOfOptions() {
     setDefaultOfPathMode(inputSvg)                      // Path mode selector
     setDefaultOfAntiAlias(inputSvg)                     // Anti-alias selector
     setDefaultOfOpacitySteps(getInitialOpacitySteps())  // Opacity steps selector
+
 }
 
 
@@ -26,10 +29,15 @@ function setDefaultOfPathMode(inputSvg) {
     if (isAbsolute === true) {
         document.getElementById("path-mode").value = 'absoluteSeparated'
         console.log("Default 'Path mode' is 'Absolute and separated'");
+        updateState('pathMode', 'absoluteSeparated')
     } else {
-        document.getElementById("path-mode").value = 'Relative and merged'
-        console.log("Default 'Path mode' is 'relativeMerged'");
+        document.getElementById("path-mode").value = 'relativeMerged'
+        console.log("Default 'Path mode' is 'Relative and merged'");
+        updateState('pathMode', 'relativeMerged')
     }
+
+    // Save indentation
+    updateState('indentByRow', getSvgIndentation(inputSvg))
 }
 
 

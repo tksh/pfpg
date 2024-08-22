@@ -8,7 +8,8 @@ import { replaceAtIndex }            from 'utils/replace-at-index'
 import { adjustBox }                 from 'init/adjust-output-boxes-size'
 import { getInitialOpacitySteps }    from 'init/get-initial-opacity-steps'
 import { setDefaultValueOfOptions }  from 'init/set-defaults'
-import { updateState
+import { state
+       , updateState
        , getState }                  from 'init/state'
 import { initTabs }                  from 'init/tab-setup'
 import { isOnDataManipulatorPage }   from 'common-utils/select-output-textarea'
@@ -44,7 +45,9 @@ import { initColorThemeListener
 
 
 import { initSvgOptModal
-       , initSvgOptCheckbox } from 'svg-opt-modal/svg-opt-modal'
+       , initSvgOptCheckbox
+       , getSvgIndentation
+       , optimizeSvg } from 'svg-opt-modal/svg-opt-modal'
 
 
 (async function () {
@@ -158,8 +161,9 @@ import { initSvgOptModal
 
                 // Get the matches for <g> from current SVG string in textarea
                 const currentSvg = getInputSvg()
+                console.log('currentSvg: ', currentSvg)
                 const matches = regexMatchesOfGroupColors(currentSvg)
-                console.log('||||matches: ', matches)
+                console.log('matches: ', matches)
                 // e.g: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
 
                 // Get three group colors value
@@ -268,12 +272,11 @@ import { initSvgOptModal
 
 
         // 選択された 'Path mode'の値を 取得
-        const valueOfPathMode = event.target.value  // 'relativeMerged' | 'absoluteSeparated'
-        console.log(`"${valueOfPathMode}" selected.`)
+        const pathMode = event.target.value  // 'relativeMerged' | 'absoluteSeparated'
+        console.log(`"${pathMode}" selected.`)
 
         // Re-decode as new 'Path mode' styled svg string from url params
-        const newPathModeSvg = decodeAsSelectedPathMode(valueOfPathMode)
-
+        const newPathModeSvg = decodeAsSelectedPathMode(pathMode)
 
         // レンダリングし直す前に 保存しておいた 設定の値を 元に戻す
 
@@ -285,8 +288,21 @@ import { initSvgOptModal
         const updatedSvg            = recoverCurrentGroupColorsValues(recoverViewbox, patternGroupColors, matchOfGroupColors)
 
 
-        // 保存しておいた設定の値を 全て元に戻した 最終的な新しいSVG文字列を <textarea>のvalue属性に挿入する
-        svgInputElement.value = updatedSvg
+        // Update the state
+        updateState('pathMode', pathMode)
+
+        // Count the number of indentations before removing them to preserve structural information.
+        updateState('indentByRow', getSvgIndentation(updatedSvg))
+
+
+        // 保存しておいた設定の値を 全て元に戻した 新しいSVG文字列を
+        // SVG最適化モーダルウィンドウでの 3つのチェックボックスの状態に応じた形にしてから
+        // <textarea>のvalue属性に 挿入する
+
+        // Optimize the SVG string using current three checkboxes status
+        const optimizedSvg = optimizeSvg(updatedSvg, state)
+
+        svgInputElement.value = optimizedSvg
 
         // executeSvg2png関数を呼び出す
         executeSvg2png({ target: { value: updatedSvg } })
@@ -557,7 +573,6 @@ import { initSvgOptModal
     // Startup initialize process
     async function init() {
 
-
         // Set default options values
         // Read the values from original decoded SVG, then apply them as each option elements.
         await setDefaultValueOfOptions()
@@ -596,7 +611,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initWidthValidatorListener()
 
     // First tab ('Line') activate
-    // initFirstTab()
     initTabs()
 
     // SVG optimization checkboxes in modal window
