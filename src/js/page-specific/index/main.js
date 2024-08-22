@@ -44,10 +44,10 @@ import { initColorThemeListener
        , setSchemeAsDefaultTheme }              from 'tab-ui/color-theme'
 
 
-import { initSvgOptModal
-       , initSvgOptCheckbox
+import { initSvgOptModal }   from 'svg-opt-modal/modal'
+import { initSvgOptCheckbox
        , getSvgIndentation
-       , optimizeSvg } from 'svg-opt-modal/svg-opt-modal'
+       , optimizeSvg }       from 'svg-opt-modal/optimize-svg'
 
 
 (async function () {

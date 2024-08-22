@@ -1,7 +1,7 @@
 import { getInitialOpacitySteps } from 'init/get-initial-opacity-steps'
 import { updateState }            from 'init/state'
 import { getInputSvg }            from 'download'
-import { getSvgIndentation }      from 'svg-opt-modal/svg-opt-modal'
+import { getSvgIndentation }      from 'svg-opt-modal/optimize-svg'
 
 
 export async function setDefaultValueOfOptions() {
