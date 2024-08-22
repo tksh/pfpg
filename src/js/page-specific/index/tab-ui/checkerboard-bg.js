@@ -26,7 +26,7 @@ selectOfCheckerPattern.addEventListener("change", () => {
 
 }
 
-export function initShowCheckerboardBgCheckbox() {
+export function initCheckerboardBgCheckbox() {
     const checkbox = document.querySelector('#checkerboard-bg');
     const img = document.querySelector("img");
     console.log("||||checkbox: ", checkbox)

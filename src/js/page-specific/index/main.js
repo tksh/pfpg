@@ -38,10 +38,10 @@ import { syncWidthNum
        , adjustWidthNum }                       from 'tab-render/sync-number-and-range';
 import { initWidthValidatorListener }           from 'tab-render/width-pixel-size';
 // Tab - UI
-import { initViewScaleListener }                from 'tab-ui/view-scaling'
-import { initShowCheckerboardBgCheckbox }       from 'tab-ui/checkerboard-bg'
+import { initViewScalingSelect }                from 'tab-ui/view-scaling'
+import { initCheckerboardBgCheckbox }       from 'tab-ui/checkerboard-bg'
 import { initTextWrappingCheckbox }             from 'tab-ui/text-wrapping'
-import { initColorThemeListener
+import { initThemeColorSelect
        , setSchemeAsDefaultTheme }              from 'tab-ui/theme-color'
 
 // Modal - SVG optimization
@@ -127,7 +127,7 @@ import { initSvgOptCheckbox
 
 
 
-    // Options for 'Line' tab /////////////////////////////////////////////////////////////////////////////
+    // Options for 'Lines' tab /////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////
     ///////// Group colors: 'stroke', 'opacity' and 'stroke-opacity' /////////
@@ -239,7 +239,7 @@ import { initSvgOptCheckbox
         const currentPathModeSvg = getInputSvg()
 
 
-        // Linestab
+        // Lines tab
 
         // Group colors
         const patternGroupColors = /<g stroke=[^>]*>/g
@@ -604,19 +604,18 @@ document.addEventListener('DOMContentLoaded', () => {
     initDownloadButtons();
 
     // Tab - UI
-    initViewScaleListener();
-    initShowCheckerboardBgCheckbox();
-    initTextWrappingCheckbox()
-    initColorThemeListener();
+    initViewScalingSelect();
+    initCheckerboardBgCheckbox();
+    initTextWrappingCheckbox();
+    initThemeColorSelect();
 
     // Tab - Render
     initWidthValidatorListener()
 
-
-    // First tab ('Line') activate
+    // First tab ('Lines') activate
     initTabs()
 
-    // SVG optimization checkboxes in modal window
+    // SVG optimization
     initSvgOptModal()
     initSvgOptCheckbox()
 
