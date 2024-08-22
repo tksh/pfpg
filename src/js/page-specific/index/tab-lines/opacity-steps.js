@@ -1,5 +1,5 @@
-import { getGroupColorsValues }       from 'tab-line/group-colors'
-import { generateGroupColorsSvgTags } from 'tab-line/group-colors'
+import { getGroupColorsValues }       from 'tab-lines/group-colors'
+import { generateGroupColorsSvgTags } from 'tab-lines/group-colors'
 import { numbersIncrementByStep }     from 'utils/number-generator'
 import { getNumberOfGroups }          from 'utils/get-number-of-groups'
 import { replaceAtIndex }             from 'utils/replace-at-index'

@@ -15,19 +15,19 @@ import { initTabs }                  from 'init/tab-setup'
 import { isOnDataManipulatorPage }   from 'common-utils/select-output-textarea'
 import { decode }                    from 'decode/decode'
 
-// Tab - line
+// Tab - Lines
 import { generateGroupColorsSvgTags
        , generateGroupColorsHtmlElements
        , regexMatchesOfGroupColors
        , getStroke
        , getOpacity
-       , getStrokeOpacity }                     from 'tab-line/group-colors'
-import { updateSvgAsNewColorFormat }            from 'tab-line/color-format'
+       , getStrokeOpacity }                     from 'tab-lines/group-colors'
+import { updateSvgAsNewColorFormat }            from 'tab-lines/color-format'
 import { changeOpacitySelectOptionsAsNewStep
-       , updateSvgForNewStep }                  from 'tab-line/opacity-steps'
+       , updateSvgForNewStep }                  from 'tab-lines/opacity-steps'
 import { decodeAsSelectedPathMode
        , recoverCurrentOptionValue
-       , recoverCurrentGroupColorsValues }      from 'tab-line/path-mode'
+       , recoverCurrentGroupColorsValues }      from 'tab-lines/path-mode'
 // Tab - Canvas
 import { toggleDisplay
        , updateSvgWithSelectedShapePath }       from 'tab-canvas/shape-to-trim'
@@ -43,7 +43,7 @@ import { initCheckerPatternListener }           from 'tab-ui/checker-pattern'
 import { initColorThemeListener
        , setSchemeAsDefaultTheme }              from 'tab-ui/color-theme'
 
-
+// Modal - SVG optimization
 import { initSvgOptModal }   from 'svg-opt-modal/modal'
 import { initSvgOptCheckbox
        , getSvgIndentation
@@ -238,7 +238,7 @@ import { initSvgOptCheckbox
         const currentPathModeSvg = getInputSvg()
 
 
-        // Line tab
+        // Linestab
 
         // Group colors
         const patternGroupColors = /<g stroke=[^>]*>/g

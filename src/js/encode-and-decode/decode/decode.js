@@ -18,7 +18,7 @@ export
 
 // Decode to SVG string when page loaded.
 
-// And also will be called from '/js/page-specific/index/tab-line/path-mode.js' when 'path-mode' changed via option selector.
+// And also will be called from '/js/page-specific/index/tab-lines/path-mode.js' when 'path-mode' changed via option selector.
 
 function decode(isRelative, isDataManipulatorPage) {
     const startTime = performance.now()

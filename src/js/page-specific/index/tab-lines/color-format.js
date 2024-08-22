@@ -1,9 +1,9 @@
 import { getInputSvg }                from 'download'
 import { getNumberOfGroups }          from 'utils/get-number-of-groups'
-import { generateGroupColorsSvgTags } from 'tab-line/group-colors'
+import { generateGroupColorsSvgTags } from 'tab-lines/group-colors'
 import { replaceAtIndex }             from 'utils/replace-at-index'
-import { convertColorFormat }         from 'tab-line/group-colors'
-import { getElementValueById }        from 'tab-line/opacity-steps'
+import { convertColorFormat }         from 'tab-lines/group-colors'
+import { getElementValueById }        from 'tab-lines/opacity-steps'
 
 
 export function updateSvgAsNewColorFormat(colorFormat) {
