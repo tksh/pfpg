@@ -1,15 +1,16 @@
 import { getGroupColorsValues }       from 'tab-lines/group-colors'
 import { generateGroupColorsSvgTags } from 'tab-lines/group-colors'
-import { numbersIncrementByStep }     from 'utils/number-generator'
 import { getNumberOfGroups }          from 'utils/get-number-of-groups'
 import { replaceAtIndex }             from 'utils/replace-at-index'
 import { getInputSvg }                from 'download'
+import { formatAsFloatString }        from 'common-utils/format-as-float'
 
 export
     { changeOpacitySelectOptionsAsNewStep
     , replaceToNewStepOptions
     , updateSvgForNewStep
     , getElementValueById
+    , numbersIncrementByStep
     }
 
 // For event listener of Opacity steps <select>
@@ -45,10 +46,6 @@ function replaceToNewStepOptions(i, opacitySteps, attrName, attrValueArray) {
 
     // 選択肢となる数値のリストを作成
     const values = numbersIncrementByStep(opacitySteps)
-    console.log('values: ', values)
-    // e.g.: opacitySteps: 0.04 => (26) [0.0, 0.04, 0.08, 0.12, 0.16, 0.2, 0.24, ... 0.8, 0.84, 0.88, 0.92, 0.96, 1.0]
-    // e.g.: opacitySteps: 0.1  => (11) [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-    // e.g.: opacitySteps: 0.2  =>  (6) [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
 
     // 現在の値を設定
     let currentValue = attrValueArray[i]
@@ -70,6 +67,24 @@ function replaceToNewStepOptions(i, opacitySteps, attrName, attrValueArray) {
         selectElement.appendChild(optionElement);
     });
 }
+
+// Get the strings array of incremental numbers for selector option value
+function numbersIncrementByStep(step) {
+    let numbers = [];
+    // 0から100までの整数を (step * 100)の間隔で 配列に格納
+    for (let i = 0; i <= 100; i += step * 100) {
+        // 整数を100で割って小数に戻す
+        numbers.push((i / 100));
+    }
+    return formatAsFloatString(numbers.reverse()) // `.reverse()`で 一番上に表示される選びやすい<option>が 0 ではなく 1 になるように 逆順にする
+}
+// console.log(numbersIncrementByStep(0.04))
+// console.log(numbersIncrementByStep(0.1))
+// console.log(numbersIncrementByStep(0.2))
+// Array(26) [ "1.0", "0.96", "0.92", "0.88", "0.84", "0.8", "0.76", "0.72", "0.68", "0.64", … "0.0" ]
+// Array(11) [ "1.0", "0.9", "0.8", "0.7", "0.6", "0.5", "0.4", "0.3", "0.2", "0.1", … "0.0" ]
+// Array (6) [ "1.0", "0.8", "0.6", "0.4", "0.2", "0.0" ]
+
 
 
 // Update SVG

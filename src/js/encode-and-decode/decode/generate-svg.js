@@ -1,4 +1,3 @@
-import { tryShortenAsHalf } from 'color-formatter/hex-shorten'
 import { isNonEmpty }       from 'common-utils/is-non-empty'
 
 // Output SVG string like:

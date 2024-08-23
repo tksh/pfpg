@@ -1,7 +1,7 @@
-import { numbersIncrementByStep } from 'utils/number-generator'
 import { getInputSvg }            from 'download'
 import { rgbToHex }               from 'color-formatter/normalized-to-hex'
 import { hexToRgb }               from 'color-formatter/normalized-from-hex'
+import { numbersIncrementByStep } from 'tab-lines/opacity-steps'
 
 export
     { generateGroupColorsSvgTags

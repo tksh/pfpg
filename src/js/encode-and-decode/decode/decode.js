@@ -1,14 +1,14 @@
-import { decodeUrlParams }    from 'common-utils/read-url-params'
-import { relToAbs }               from 'decode/rel-to-abs'
-import { absToRel }                   from 'enc-and-dec/lines-data/d-values/bigint64/abs-to-rel'
+import { outputToTextarea }       from 'common-utils/output-to-textarea'
+import { decodeUrlParams }        from 'common-utils/read-url-params'
 import { selectOutputTextareaId } from 'common-utils/select-output-textarea'
+import { relToAbs }               from 'decode/rel-to-abs'
 import { generateSvg }            from 'decode/generate-svg'
 import { showProcessingTime }     from 'enc-and-dec/show-result'
+import { absToRel }               from 'enc-and-dec/lines-data/d-values/bigint64/abs-to-rel'
 import { bigint64Dec }            from 'enc-and-dec/lines-data/d-values/bigint64/bigint64-dec'
 import { bruteforce53Dec }        from 'enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-dec'
 import { diffToRel }              from 'enc-and-dec/lines-data/d-values/bruteforce53/diff-to-rel'
 import { swap63Dec }              from 'enc-and-dec/lines-data/d-values/swap63/swap63-dec'
-import { outputToTextarea }       from 'common-utils/output-to-textarea'
 
 
 export
