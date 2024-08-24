@@ -60,15 +60,15 @@ export function bigint64Enc() {
 
 
     // Whole group strings joined with '&' (ampersand sign)
-    const wholeGroupsJoined = joinWithAmpersand(compressedByGroup)
+    const wholeGroupJoined = joinWithAmpersand(compressedByGroup)
 
 
     // Output to textarea
-    outputToTextarea(wholeGroupsJoined, 'textarea-lines-data-encoded')
+    outputToTextarea(wholeGroupJoined, 'textarea-lines-data-encoded')
     // 0=129CaJGsAQK33q3FDaoQNuZs6u8XQW_EYegViBcDQ0gxtk-YqavrFw0V3KXggctKtnLfj_rl3ZzTzitfvmVp-Wz09Um3k4e8YyZ9kGHG0aT&0=129ziJH ...
 
     // Show the size of result in html and console
-    showStringSize('Lines Data', wholeGroupsJoined, 'encoded-strokes-values-size')
+    showStringSize('Lines Data', wholeGroupJoined, 'encoded-strokes-values-size')
 
     // Show the processing time in html and console
     const endTime = performance.now()

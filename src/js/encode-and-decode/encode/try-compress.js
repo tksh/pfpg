@@ -1,57 +1,73 @@
-import
-    { addGroupColorPrefix
-    , addPrefixToShorter } from 'encode/add-prefix'
+import { flagsMap }            from 'constants'
 
 
-export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMethodName, valueFor3rdChar) {
+export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMethodName, charOf3rdFlag) {
     const encodedWidthAndCounts = encodedAttrsExceptsDvals.widthAndCounts
     const encodedGroupColors    = encodedAttrsExceptsDvals.groupColors
 
-    const wholeEncodedValues = new Map();
+    const wholeGroupValues = new Map();
     let lengthBeforeURLComp = [];
     let lengthAfterURLComp = [];
     const groupCount = encodedDval.size;
     const ampersandCount = groupCount - 1;
 
     for (const [gId, dvalEncodedStr] of encodedDval) {
+        const charOf2ndFlag = flagsMap.get('2nd').get(encodingMethodName)
         const widthAndCountsEncoded = encodedWidthAndCounts.get(gId);
-        const widthAndCountsAndDval = widthAndCountsEncoded + '-' + dvalEncodedStr;
+        const uncompressed = charOf2ndFlag + charOf3rdFlag + widthAndCountsEncoded + '-' + dvalEncodedStr;
 
-        const {compressed, shouldApply} = compressAndCompare(widthAndCountsAndDval, gId);
+        const {compressed, shouldApply} = compressAndCompare(uncompressed, gId);
 
-        const shorterStrWithPrefix   = addPrefixToShorter(shouldApply, compressed, widthAndCountsAndDval, encodingMethodName, valueFor3rdChar);
-        const groupColorsPrefixAdded = addGroupColorPrefix(encodedGroupColors, gId, shorterStrWithPrefix);
+        const encodedWidthAndDvalsAsValue   = add1stFlagToShorter(shouldApply, compressed, uncompressed);
 
-        wholeEncodedValues.set(gId, groupColorsPrefixAdded);
+        // [Key(group-colors)]=[Value(width-and-dvals)]
+        const valueAsKvPair = addColorAsKey(encodedGroupColors, gId, encodedWidthAndDvalsAsValue);
 
-        lengthBeforeURLComp.push(groupColorsPrefixAdded.length + 3);
-        lengthAfterURLComp.push(compressed.length + 3);
+        wholeGroupValues.set(gId, valueAsKvPair);
+
+        lengthBeforeURLComp.push(uncompressed.length + 1);  // `+ 1` means 1st char length
+        lengthAfterURLComp.push(compressed.length + 1);
     }
 
     // Calculate and compare the length of finished strings to output to console.
     calculateLengths(lengthBeforeURLComp, lengthAfterURLComp, ampersandCount);
 
-    return wholeEncodedValues;
+    return wholeGroupValues;
 }
 
-function compressAndCompare(widthAndCountsAndDval, gId) {
+
+function compressAndCompare(uncompressed, gId) {
     // Compress and compare
-    const compressed = URLCompressor.compress(widthAndCountsAndDval);
-    const shouldApply = compressed.length < widthAndCountsAndDval.length
+    const compressed = URLCompressor.compress(uncompressed);
+    const shouldApply = compressed.length < uncompressed.length
 
     // Output the result details
     if (shouldApply === true) {
         // before の方が長い場合 = URLCompressor が効果的である場合
-        console.log(`URLCompressor is effective for group #${gId}, so should be applied it:`, widthAndCountsAndDval.length, '=>', compressed.length)
+        console.log(`URLCompressor is effective for group #${gId}, so should be applied it:`, uncompressed.length, '=>', compressed.length)
     } else {
         // before の方が短いか 同じ 場合 = URLCompressor が効果的ではない場合
-        console.log(`URLCompressor is not effective for group #${gId}, so should be passed it:`, widthAndCountsAndDval.length, '=>', compressed.length)
+        console.log(`URLCompressor is not effective for group #${gId}, so should be passed it:`, uncompressed.length, '=>', compressed.length)
     }
 
     return {compressed, shouldApply};
 }
 
+function add1stFlagToShorter(shouldApply, compressed, uncompressed) {
+    if (shouldApply === true) {  // Compression applied
+        return flagsMap.get('1st').get('URLCompressor') + compressed
+    } else {                     // Compression not applied
+        return flagsMap.get('1st').get('uncompressed') + uncompressed
+    }
+}
+
+function addColorAsKey(encodedColors, gId, shorterStrWithPrefix) {
+    return `${encodedColors.get(gId)}=${shorterStrWithPrefix}`;
+}
+
+
 // Calculate and compare the length of finished strings to output to console.
+
 function calculateLengths(lengthBeforeURLComp, lengthAfterURLComp, ampersandCount) {
     const totalLengthBefore = lengthBeforeURLComp.reduce((a, b) => a + b, ampersandCount);
     const totalLengthAfter = lengthAfterURLComp.reduce((a, b) => a + b, ampersandCount);

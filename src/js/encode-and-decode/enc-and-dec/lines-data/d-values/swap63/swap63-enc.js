@@ -60,16 +60,16 @@ export function swap63Enc() {
 
 
     // Whole group strings joined with '&' (ampersand sign)
-    const wholeGroupsJoined = joinWithAmpersand(compressedByGroup)
+    const wholeGroupJoined = joinWithAmpersand(compressedByGroup)
 
 
 
     // Output to textarea
-    outputToTextarea(wholeGroupsJoined, 'textarea-lines-data-encoded')
+    outputToTextarea(wholeGroupJoined, 'textarea-lines-data-encoded')
     // 000=19gUZa0HMswFYl ... lCLwK3WhT
 
     // Show the size of result in html and console
-    showStringSize('Lines Data', wholeGroupsJoined, 'encoded-strokes-values-size')
+    showStringSize('Lines Data', wholeGroupJoined, 'encoded-strokes-values-size')
 
     // Show the processing time in html and console
     const endTime = performance.now()

@@ -192,12 +192,15 @@ export function bruteforce53Enc() {
         // Get the encoded strings of width-and-counts and group-colors
         const encodedAttrsExceptsDvals = getEncodedAttrsExceptsDvals()
 
+        // Encode the baseXNumber to embed as 3rd flag using base53Enc
+        const charOf3rdFlag = base53Enc(baseXNumber)
+
         // Choose shorter one between URLComp applied or not, by each group
         const compressedByGroup = tryCompress(
             encodedDvals,
             encodedAttrsExceptsDvals,
             'bruteforce53-enc',
-            baseXNumber
+            charOf3rdFlag
         )
         console.log(`baseXNumber = ${baseXNumber}, compressedByGroup: `, compressedByGroup)
         //  Map(5) {'1' => '0=129CaIjMCzLAFox3gEVYTdnymbAmwP-UWDCnew3h-Aqsd6rQsPf7nuc97B-Tyl896LIItSqsH-0_igZRCKY265Ta0zzD8-axd0B3NgagFJ2rRrUWcULFyn1IwBi', '2' => '0=129zi ...
