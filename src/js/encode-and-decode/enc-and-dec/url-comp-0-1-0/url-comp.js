@@ -333,6 +333,7 @@ const URLCompressor=(()=>{
     } // if
 
     const mode=getMode(str); // モードの取得
+    console.log('Selected mode to compress: ', mode)
     const _symbolNum=symbolNum[mode]; // シンボル数の取得
     const _DIC=DIC[mode]; // スライド辞書用シンボルの取得
     const _EOF=EOF[mode]; // データ終端用シンボルの取得
@@ -515,6 +516,7 @@ const URLCompressor=(()=>{
     code=codeBuf[0];
 
     const mode=getMode(); // modeの取得
+    console.log('Selected mode to expand: ', mode)
     const _symbolNum=symbolNum[mode]; // シンボルの種類の取得
     const _DIC=DIC[mode]; // スライド辞書用シンボルの取得
     const _EOF=EOF[mode]; // データ終端用のシンボルの取得

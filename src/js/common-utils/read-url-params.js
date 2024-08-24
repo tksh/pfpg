@@ -98,13 +98,15 @@ function tryDeleteQuestionAtStart(str) {
 function decodeAsThreeData(urlSearchParams) {
 
     // Get Basic Data as Map from url params
-    // e.g.: ?202404_001=31-fff&
+    // e.g.: ?title=~202401_001&desc=001kObPFhaNkBHUZJE0kMCGBFCDo8j7lBr_44z9CIqW3Ba7eLr9kVIlASMdS4&metadata=01p0oU...
 
     const basicDataObj = getBasicDataFromUrlParams(urlSearchParams)
     console.log('basicDataObj: ', basicDataObj)
     // e.g.:
-    // {title: '202401_001', desc: 'Portrait of a woman'}
-    // [[Prototype]]: Object
+    // {title: '202401_001',
+    //  desc: 'A portrait of a woman based on an image from the Unsplash website',
+    //  metadata: '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-r…   </rdf:Description>\n    </dc:source>\n</rdf:RDF>'
+    // }
 
 
     // Get the Lines Data as Map
@@ -149,7 +151,7 @@ function decodeAsThreeData(urlSearchParams) {
         //console.log("linesData(Before URLComp expand): ", linesData)
         // 3t-BRY8zuZS6-yuj6xgi-u9utYvXoK0QEXoKySIqr46g3-9HxEs1eG2VMHxerRFrXM3mjZxLkf-wwSvNRnQb88G
 
-        if (Number(decodedThreeFlagsArray[0]) === 1) { // Decompress if URLCompressor applied
+        if (decodedThreeFlagsArray[0] === '0') { // Decompress if URLCompressor applied
             linesData = URLCompressor.expand(linesData)
         }
 

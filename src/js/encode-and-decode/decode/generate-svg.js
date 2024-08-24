@@ -208,7 +208,7 @@ function generateTagsBeforeStrokes(tabSpace, basicDataObj, sizeDataObj) {
     const optionalTags = [
         { tag: 'title',    content: basicDataObj.title },
         { tag: 'desc',     content: basicDataObj.desc },
-        { tag: 'metadata', content: basicDataObj.metadata },
+        { tag: 'metadata', content: addNewlineAndIndentation(basicDataObj.metadata, tabSpace) },
     ].filter(({ content }) => isNonEmpty(content))
         .map(({ tag, content }) => tabSpace.repeat(1) + `<${tag}>${content}</${tag}>`);
 
@@ -225,6 +225,21 @@ function generateTagsBeforeStrokes(tabSpace, basicDataObj, sizeDataObj) {
     const clipPathGroupOpen = tabSpace.repeat(1) + '<g clip-path="url(#shape-to-trim)">'
 
     return [svgOpen, ...optionalTags, trimmingShapeDefs, clipPathGroupOpen]
+}
+
+// Indentation justify for <metadata> contents
+function addNewlineAndIndentation(inputLines, tabSpace) {
+    // inputLinesが文字列の場合は配列に変換
+    let lines = typeof inputLines === 'string' ? inputLines.split('\n') : inputLines;
+
+    // 各行の先頭に インデントを追加
+    const indentedLines = lines.map(line => `${tabSpace.repeat(2)}${line}`);
+
+    // 先頭と最後に 改行を追加して 結合後
+    // `</metadata>`を 一つ分下げる為のインデントを 最後の改行の後に 加える
+    const result = `\n${indentedLines.join('\n')}\n${tabSpace.repeat(1)}`;
+
+    return result;
 }
 
 function generateTagsAfterStrokes(tabSpace) {

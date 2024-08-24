@@ -8,19 +8,21 @@ export function getBasicDataFromUrlParams(urlParams) {
     BASIC_DATA_KEYS.forEach(key => {
         if (urlParams.has(key)) {
             let value = urlParams.get(key);
-            result[key] = tryExpandURLCompressedStr(value);
+            result[key] = tryExpandCompressedStr(value);
         }
     });
 
     return result;
 }
 
-function tryExpandURLCompressedStr(value) {
+function tryExpandCompressedStr(value) {
     if (value.startsWith('~')) {
-        // チルダで始まる場合はデコードする
+        // チルダ で始まる場合は チルダ以降を そのまま 返す
+        return value.slice(1);
+    } else if (value.startsWith('0')) {
+        // '0' で始まる場合は URLCompressorデコード する
         return URLCompressor.expand(value.slice(1));
     } else {
-        // チルダがない場合はそのまま返す
-        return value;
+        console.error("Not valid string.");
     }
 }

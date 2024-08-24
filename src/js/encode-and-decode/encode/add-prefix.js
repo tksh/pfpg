@@ -41,14 +41,16 @@ function addPrefixToShorter(shouldApply, compressed, original, encodingMethodNam
 
 
     if (shouldApply === true) { // Compression applied
-        shorterStrWithPrefix = addPrefixAsFlags(compressed,
-            1,            // Flag for 1st char as URLComp applied
+        shorterStrWithPrefix = addPrefixAsFlags(
+            compressed,
+            "0",          // Flag for 1st char as URLComp applied
             numOf2ndChar, // Flag for 2nd char as swap63Enc applied
             numOf3rdChar  // No flag needed for 3rd char when swap63Enc applied
         )
     } else { // Compression not applied
-        shorterStrWithPrefix = addPrefixAsFlags(original,
-            0,            // Flag for 1st char as URLComp not applied
+        shorterStrWithPrefix = addPrefixAsFlags(
+            original,
+            "~",          // Flag for 1st char as URLComp not applied
             numOf2ndChar, // Flag for 2nd char as swap63Enc applied
             numOf3rdChar  // No flag needed for 3rd char when swap63Enc applied
         )
@@ -101,11 +103,11 @@ function addPrefixAsFlags(inputStr, numOf1stChar, numOf2ndChar, numOf3rdChar) {
 
 
     // Add 1st char
-    if (numOf1stChar >= 2) {
-        console.log("Invalid number for 1st flag.")
-    } else {
+//    if (numOf1stChar >= 2) {
+//        console.log("Invalid number for 1st flag.")
+//    } else {
         strWithFlag = `${numOf1stChar}` + strWithFlag
-    }
+//    }
 
 
     return strWithFlag
