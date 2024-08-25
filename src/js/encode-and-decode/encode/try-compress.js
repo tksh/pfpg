@@ -1,4 +1,4 @@
-import { flagsMap }            from 'constants'
+import { flagsMap } from 'constants'
 
 
 export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMethodName, charOf3rdFlag) {
@@ -12,21 +12,23 @@ export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMetho
     const ampersandCount = groupCount - 1;
 
     for (const [gId, dvalEncodedStr] of encodedDval) {
+        // Merge the width, dvals and flags like: [2nd flag][2nd flag][width(stroke-width values and counts)]-[d values]
         const charOf2ndFlag = flagsMap.get('2nd').get(encodingMethodName)
         const widthAndCountsEncoded = encodedWidthAndCounts.get(gId);
         const uncompressed = charOf2ndFlag + charOf3rdFlag + widthAndCountsEncoded + '-' + dvalEncodedStr;
 
-        const {compressed, shouldApply} = compressAndCompare(uncompressed, gId);
+        // Try compress with all compression methods, and add 1st flag into best result.
+        const { bestCompressedData, bestMethodName } = compressAndSelectBest(uncompressed);
+        console.log(`In group ID ${gId}, best compression result made by: `, bestMethodName)
+        const encodedWidthAndDvalsAsValue   = add1stFlag(bestCompressedData, bestMethodName);
 
-        const encodedWidthAndDvalsAsValue   = add1stFlagToShorter(shouldApply, compressed, uncompressed);
-
-        // [Key(group-colors)]=[Value(width-and-dvals)]
+        // Prepend the color value like: [key(group colors)]=[value(width and dvals)]
         const valueAsKvPair = addColorAsKey(encodedGroupColors, gId, encodedWidthAndDvalsAsValue);
 
         wholeGroupValues.set(gId, valueAsKvPair);
 
         lengthBeforeURLComp.push(uncompressed.length + 1);  // `+ 1` means 1st char length
-        lengthAfterURLComp.push(compressed.length + 1);
+        lengthAfterURLComp.push(bestCompressedData.length + 1);
     }
 
     // Calculate and compare the length of finished strings to output to console.
@@ -36,29 +38,36 @@ export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMetho
 }
 
 
-function compressAndCompare(uncompressed, gId) {
-    // Compress and compare
-    const compressed = URLCompressor.compress(uncompressed);
-    const shouldApply = compressed.length < uncompressed.length
+function compressAndSelectBest(inputString) {
+    // Methods list
+    const compressionMethods = {
+         'uncompressed': inputString,
+        'URLCompressor': URLCompressor.compress(inputString)
+    };
 
-    // Output the result details
-    if (shouldApply === true) {
-        // before の方が長い場合 = URLCompressor が効果的である場合
-        console.log(`URLCompressor is effective for group #${gId}, so should be applied it:`, uncompressed.length, '=>', compressed.length)
-    } else {
-        // before の方が短いか 同じ 場合 = URLCompressor が効果的ではない場合
-        console.log(`URLCompressor is not effective for group #${gId}, so should be passed it:`, uncompressed.length, '=>', compressed.length)
+    // To store best method name and size
+    let bestMethodName = 'uncompressed';
+    let smallestSize = inputString.length;
+
+    // Find best result size and method name
+    for (const [method, compressedData] of Object.entries(compressionMethods)) {
+
+        console.log(`Method name: ${method} \t Result string length: ${compressedData.length}`)
+
+        if (compressedData.length < smallestSize) {
+            smallestSize = compressedData.length;
+            bestMethodName = method;
+        }
     }
 
-    return {compressed, shouldApply};
+    // Get best result string
+    const bestCompressedData = compressionMethods[bestMethodName];
+
+    return { bestCompressedData, bestMethodName };
 }
 
-function add1stFlagToShorter(shouldApply, compressed, uncompressed) {
-    if (shouldApply === true) {  // Compression applied
-        return flagsMap.get('1st').get('URLCompressor') + compressed
-    } else {                     // Compression not applied
-        return flagsMap.get('1st').get('uncompressed') + uncompressed
-    }
+function add1stFlag(bestCompressedData, bestMethodName) {
+    return flagsMap.get('1st').get(bestMethodName) + bestCompressedData
 }
 
 function addColorAsKey(encodedColors, gId, shorterStrWithPrefix) {
@@ -71,7 +80,7 @@ function addColorAsKey(encodedColors, gId, shorterStrWithPrefix) {
 function calculateLengths(lengthBeforeURLComp, lengthAfterURLComp, ampersandCount) {
     const totalLengthBefore = lengthBeforeURLComp.reduce((a, b) => a + b, ampersandCount);
     const totalLengthAfter = lengthAfterURLComp.reduce((a, b) => a + b, ampersandCount);
-    console.log('Before URLComp (Total encoded string length): ', totalLengthBefore);
-    console.log('After URLComp  (Total encoded string length): ', totalLengthAfter);
+    console.log('Before compressed (Total encoded string length): ', totalLengthBefore);
+    console.log('After compressed  (Total encoded string length): ', totalLengthAfter);
     console.log("Ratio (totalLengthAfter / totalLengthBefore): ", totalLengthAfter / totalLengthBefore);
 }
