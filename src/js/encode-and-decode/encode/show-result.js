@@ -1,4 +1,6 @@
-import { base53Dec }           from 'enc-and-dec/base-n/base-53-dec'
+import { flagsMap, resultInfo } from 'constants'
+import { zip }                  from 'decode/rel-to-abs'
+
 
 export
     { showStringSize
@@ -16,47 +18,80 @@ function showStringSize(nameOfInput, inputStr, outputElemId) {
     console.log(`Encoded as ${nameOfInput} successfully, Size: `, inputStr.length);
 }
 
-function showDetailsByGroup(nameOfInput, encodedStrByGroupMap) {
+function showDetailsByGroup(nameOfInput, encodedStrByGroupMap, encodingMethodName) {
+    console.log('encodedStrByGroupMap: ', encodedStrByGroupMap)
+    /*
+        Map(2) {'0' => Array(3), '1' => Array(3)}
+            key: "0"
+            value: (3) ['A=08T6FAhdHhNtMe0ws2FHUnU6v', 23, 'bigint64']
+            ...
+    */
+
     // Get the details of encoding result
     const keys = [...encodedStrByGroupMap.keys()]
     const values = [...encodedStrByGroupMap.values()]
-    const lengthOfValues = values.map((value) => value.length)                        // `=`までの部分を切り出し
-    const groupColors = values.map((value) => value.split('=')[0])                    // `=`までの部分を切り出し
-    const threeCharsAsFlag = values.map((value) => value.split('=')[1].slice(0, 3))   // `=`の直後から3文字目までの部分を切り出し
-    const flag1CompressionMethodName = threeCharsAsFlag.map((value) => {              // 1st char value
-        if (Number(value[0]) === 0) {
-            return 'None(Uncompressed)'
-        } else if (Number(value[0]) === 1) {
-            return 'URLCompressor'
-        }
-    })
-    const flag2EncodingMethodName = threeCharsAsFlag.map((value) => {                 // 2nd char value
-        if (Number(value[1]) === 0) {
-            return 'bruteforce53'
-        } else if (Number(value[1]) === 1) {
-            return 'bigint64'
-        } else if (Number(value[1]) === 2) {
-            return 'swap63'
-        }
-    })
-    const flag3ConfigurationValue = threeCharsAsFlag.map((value, index) => {          // 3rd char value
-        if (flag2EncodingMethodName[index] === 'bruteforce53') {
-            return base53Dec(value[2])
-        } else {
-            return value[2]
-        }
-    })
+    console.log('values: ', values)  //
+    /*
+    values:
+        (2) [Array(3), Array(3)]
+            0: (3) ['A=08T6FAhdHhNtMe0ws2FHUnU6v', 23, 'bigint64']
+            1: (3) ['0=~135n3ap2bI1fR-IBdbrkwCjiFCdD1xVpRSu8eawc5qq9t6C…eXDtFc728YUzwUS9wpcbPT8RRUZwIqqJyZUTTsTWf9JUhitGE', 2336, 'bruteforce53']
+            length: 2
+    */
+
+    const lengthOfValues = values.map((value) => value[1])
+    const groupColors    = values.map((value) => value[0].split('=')[0])
+    const appliedMethod  = values.map((value) => value[2])
+
+
+    // Extract actually applied flags for each group.
+    // Only for when executed as best-mix encoding.
+    if (encodingMethodName === 'best-mix') {
+        //console.log("resultInfo: ", resultInfo)  // e.g.: Map(2) {'bruteforce53' => Map(1), 'bigint64' => Map(1)}
+        //console.log("appliedMethod: ", appliedMethod)  // e.g.: (3) ['bigint64', 'bruteforce53', 'bruteforce53']
+
+        // 実際に適用された圧縮メソッドに対応する フラグ文字列の配列だけを取り出すための 新しい配列
+        let appliedFlagsByGroup = [];
+
+        // appliedMethod配列をループし、対応するフラグ文字列の配列を取得して appliedFlagsByGroupに追加
+        appliedMethod.forEach((methodName, index) => {
+            const flagsMap = resultInfo.get(methodName);
+            if (flagsMap) {
+                const flagsArray = flagsMap.get('flags');
+                if (flagsArray && index < flagsArray.length) { // indexを使用して対応するフラグ配列を取得
+                    appliedFlagsByGroup.push(flagsArray[index]);
+                }
+            }
+        });
+
+        console.log("appliedFlagsByGroup: ", appliedFlagsByGroup)  // e.g.: (3) [Array(3), Array(3), Array(3)]
+        const appliedFlagsMap = new Map()
+        appliedFlagsMap.set('flags', appliedFlagsByGroup)
+        resultInfo.set(`${encodingMethodName}`, appliedFlagsMap)
+    }
+
+
+    console.log("resultInfo: ", resultInfo)
+
+    const flagsByGroup = resultInfo.get(`${encodingMethodName}`).get('flags')
+
+    // Decode the flags from char to method name
+    const flagsByKinds = zip(...Array.from(flagsByGroup))  // transpose the array structure
+    const flag1 = flagsByKinds[0]
+    const flag2 = flagsByKinds[1]
+    const flag3 = flagsByKinds[2]
+    const flag1Name = flag1.map(char => flagsMap.get('rev_1st').get(`${char}`))
+    const flag2Name = flag2.map(char => flagsMap.get('rev_2nd').get(`${char}`))
 
     // Show in console
     console.log(`//////////////////////// Result of ${nameOfInput} encoding details by group ////////////////////////`)
-    console.log('Group key numbers: ', keys)                                             // e.g.: (5) ['1', '2', '3', '4', '5']
-    console.log('Group colors encoded: ', groupColors)                                   // e.g.: (5) ['0', '0', '0', 'e', 'f']
-    console.log('Length of encoded strings: ', lengthOfValues)
-    console.log('3 chars prefix as flag: ', threeCharsAsFlag)                            // e.g.: (5) ['10Z', '10i', '10X', '10b', '10Z']
-    console.log('flag 1, Compression method name', flag1CompressionMethodName)           // e.g.: (5) 
-    console.log('flag 2, Encoding method name', flag2EncodingMethodName)                 // e.g.: (5)
-    console.log('flag 3, Configuration value for encoding indicates: Base X number for bruteforce53-enc | Chunk size for bigint64-enc | \'n\' (=null, skip it for decoding) for swap63-enc')
-    console.log('flag 3, Configuration value for encoding', flag3ConfigurationValue)     // e.g.: (5)
+    console.log('Group key numbers: ', keys)                               // e.g.: (3) [0, 1, 2]
+    console.log('Group colors encoded: ', groupColors)                     // e.g.: (3) ['A', '0', 'F']
+    console.log('Length of encoded strings: ', lengthOfValues)             // e.g.: (3) [23, 3910, 161]
+    console.log('Flags: ', flagsByGroup)                                   // e.g.: (3) [Array(3), Array(3), Array(3)]
+    console.log('1st flags, Compression method name',          flag1Name)  // e.g.: (3) ['uncompressed', 'uncompressed', 'uncompressed']
+    console.log('2nd flags, Encoding method name',             flag2Name)  // e.g.: (3) ['bigint64', 'bigint64', 'bigint64']
+    console.log('3rd flags, Configuration value for encoding', flag3)      // e.g.: (3) [3, 3, 3]
 
 
     // Return the values to show also in html when call this function from best mix encoding (bestMixFromNMethods()).
@@ -64,9 +99,9 @@ function showDetailsByGroup(nameOfInput, encodedStrByGroupMap) {
         ['gId', keys],
         ['colors', groupColors],
         ['length', lengthOfValues],
-        ['flags', threeCharsAsFlag],
-        ['flag1', flag1CompressionMethodName],
-        ['flag2', flag2EncodingMethodName],
-        ['flag3', flag3ConfigurationValue]
+        ['flags', flagsByGroup],
+        ['flag1', flag1],
+        ['flag2', flag2],
+        ['flag3', flag3]
     ]);
 }

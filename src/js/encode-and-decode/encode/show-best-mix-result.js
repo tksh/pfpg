@@ -1,4 +1,5 @@
-import { zip } from 'decode/rel-to-abs'
+import { zip }      from 'decode/rel-to-abs'
+import { flagsMap } from 'constants';
 
 // For best mix [2|3] encoding by each group
 export function showBestMixResult(dataToShow, textareaId) {
@@ -17,8 +18,10 @@ export function showBestMixResult(dataToShow, textareaId) {
     // Generate the text contents of encoded result, by group.
     transposed.map(v => {
         totalLength += v[2]
-        const lengthPadded = v[2].toString().padStart(5, ' ').replace(/ /g, '&nbsp;')
-        entireGroupInfo.push(`&nbsp;&nbsp;g_id: ${v[0]} / length:${lengthPadded} / compressed by: ${v[4]} / encoded by: ${v[5]} `)
+        const lengthPadded = v[2].toString().padStart(6, ' ').replace(/ /g, '&nbsp;')
+        const compressionMethodName = flagsMap.get('rev_1st').get(`${v[4]}`)  // flag => name
+        const encodingMethodName    = flagsMap.get('rev_2nd').get(`${v[5]}`)  // flag => name
+        entireGroupInfo.push(`&nbsp;&nbsp;g_id: ${v[0]} / length:${lengthPadded} / compressed by: ${compressionMethodName} / encoded by: ${encodingMethodName} `)
     })
 
     // Output to console

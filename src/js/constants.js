@@ -33,3 +33,31 @@ export const flagsMap = new Map([
             ])
     ]
 ]);
+
+// Add KV reversed maps of 1st and 2nd into `flagsMap`,
+// to indicate the method names to console
+
+// 1st
+const reverse1st = new Map();
+flagsMap.get('1st').forEach((value, key) => {
+    reverse1st.set(value, key);
+});
+flagsMap.set('rev_1st', reverse1st)
+
+// 2nd
+const reverse2nd = new Map();
+flagsMap.get('2nd').forEach((value, key) => {
+    reverse2nd.set(value, key);
+});
+flagsMap.set('rev_2nd', reverse2nd)
+
+
+
+// 3rd flag - Configuration value for each encoding methods:
+//   Base X number (base53Enc applied) for bruteforce53-enc [0]
+//   Chunk size number for bigint64-enc [1]
+//   'n' (=null, skip it for decoding) for swap63-enc [2]
+
+
+
+export const resultInfo = new Map()

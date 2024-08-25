@@ -1,4 +1,5 @@
 import { showProcessingTime }                 from 'enc-and-dec/show-result'
+import { base53Enc }                          from 'enc-and-dec/base-n/base-53-enc'
 import { parseBasicData }                     from 'enc-and-dec/basic-data/basic-data-enc'
 import { getActualCodebookSize }              from 'enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size'
 import { createCodebookToEncodeFrequentDiff } from 'enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc'
@@ -199,7 +200,7 @@ export function bruteforce53Enc() {
         const compressedByGroup = tryCompress(
             encodedDvals,
             encodedAttrsExceptsDvals,
-            'bruteforce53-enc',
+            'bruteforce53',
             charOf3rdFlag
         )
         console.log(`baseXNumber = ${baseXNumber}, compressedByGroup: `, compressedByGroup)
@@ -244,7 +245,7 @@ export function bruteforce53Enc() {
     showProcessingTime('bruteforce53Enc()', elapsedTime, 'encoded-strokes-values-time', isOnDataManipulatorPage())
 
     // Show the encoding result of each group in console
-    showDetailsByGroup('Lines Data', currentShortest)
+    showDetailsByGroup('Lines Data', currentShortest, 'bruteforce53')
 
     return currentShortest
 }

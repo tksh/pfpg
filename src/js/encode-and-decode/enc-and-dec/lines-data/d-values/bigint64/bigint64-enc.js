@@ -51,7 +51,7 @@ export function bigint64Enc() {
     const compressedByGroup = tryCompress(
         encodedDvals,
         encodedAttrsExceptsDvals,
-        'bigint64-enc',
+        'bigint64',
         digitsPerChunk
     )
     //console.log('compressedByGroup: ', compressedByGroup)
@@ -76,7 +76,7 @@ export function bigint64Enc() {
     showProcessingTime('bigint64Enc()', elapsedTime, 'encoded-strokes-values-time', isOnDataManipulatorPage())
 
     // Show the encoding result of each group in console
-    showDetailsByGroup('Lines Data', compressedByGroup)
+    showDetailsByGroup('Lines Data', compressedByGroup, 'bigint64')
 
     return compressedByGroup
 }

@@ -4,10 +4,10 @@ import { swap63Enc }          from 'enc-and-dec/lines-data/d-values/swap63/swap6
 import { joinWithAmpersand }  from 'encode/join-with-ampersand'
 import { showStringSize
        , showDetailsByGroup } from 'encode/show-result'
-import { storeShorter }       from 'encode/store-shorter'
+import { storeShortest }      from 'encode/store-shorter'
 import { showBestMixResult }  from 'encode/show-best-mix-result'
 import { outputToTextarea }   from 'common-utils/output-to-textarea'
-
+import { flagsMap }           from 'constants'
 
 /**
  * Selects the best mix of encoding methods based on the given number of methods.
@@ -25,18 +25,25 @@ function bestMixFromNMethods(numberOfMethods) {
     }
 
     // Compare and get the shortest one by group
-    let bestMixShortest;
+    let shortestByGroup;
+
+    // Encoding method names list
+    const encodingMethodsMap = flagsMap.get('2nd')
+    // e.g.: Map(3) {'bruteforce53' => '0', 'bigint64' => '1', 'swap63' => '2'}
+    const encodingMethodNamesArr = Array.from(encodingMethodsMap.keys())
+    // e.g.: (3) ['bruteforce53', bigint64', 'swap63']
+
+
     if (numberOfMethods === 3) {
-        // When considering 3 methods, compare all three
-        const firstCompareShortest = storeShorter(bruteforce53Map, bigint64Map);
-        bestMixShortest = storeShorter(firstCompareShortest, swap63Map);
+        // When considering 3 methods
+        shortestByGroup = storeShortest([bruteforce53Map, bigint64Map, swap63Map], encodingMethodNamesArr);
     } else { // numberOfMethods === 2
-        // When considering 2 methods, compare just the two
-        bestMixShortest = storeShorter(bruteforce53Map, bigint64Map);
+        // When considering 2 methods
+        shortestByGroup = storeShortest([bruteforce53Map, bigint64Map], encodingMethodNamesArr);
     }
 
     // Join the shortest group strings with '&' (ampersand sign)
-    const shortestJoined = joinWithAmpersand(bestMixShortest);
+    const shortestJoined = joinWithAmpersand(shortestByGroup);
 
     // Output the joined string to a textarea
     outputToTextarea(shortestJoined, 'textarea-lines-data-encoded');
@@ -48,10 +55,10 @@ function bestMixFromNMethods(numberOfMethods) {
     showStringSize(messagePrefix, shortestJoined, 'encoded-strokes-values-size');
 
     // Show the details of the encoding result by group in the console
-    showDetailsByGroup('Lines Data', bestMixShortest);
+    //showDetailsByGroup('Lines Data', shortestByGroup);
 
     // Show the details of the encoding result by group in the console, and return the data to indicate in HTML
-    const dataToShow = showDetailsByGroup('Lines Data', bestMixShortest);
+    const dataToShow = showDetailsByGroup('Lines Data', shortestByGroup, 'best-mix');
     showBestMixResult(dataToShow, 'encoded-strokes-values-size');
 
     // Clear the inaccurate processing time text

@@ -50,7 +50,7 @@ export function swap63Enc() {
     const compressedByGroup = tryCompress(
         encodedDval,
         encodedAttrsExceptsDvals,
-        'swap63-enc',
+        'swap63',
         null  // value for 3rd flag char, swap63-enc needs no 3rd flag char to encode
     )
     console.log('compressedByGroup: ', compressedByGroup)
@@ -77,7 +77,7 @@ export function swap63Enc() {
     showProcessingTime('swap63Enc()', elapsedTime, 'encoded-strokes-values-time', isOnDataManipulatorPage())
 
     // Show the encoding result of each group in console
-    showDetailsByGroup('Lines Data', compressedByGroup)
+    showDetailsByGroup('Lines Data', compressedByGroup, 'swap63')
 
     return compressedByGroup
 }
