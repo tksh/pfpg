@@ -18,6 +18,7 @@ export
 
 /*
 {
+    "n": "~7",
     "version": "~0.9.0",
     "title": "~202401_001",
     "desc": "001kObPFhaNkBHUZJE0kMCGBFCDo8j7lBr_44z9CIqW3Ba7eLr9kVIlASMdS4",
@@ -75,11 +76,12 @@ function parseBasicData() {
 
     const result = {};
 
-    if ('version' in json) result.version = json.version;
-    if ('title' in json) result.title = json.title;
-    if ('desc' in json) result.desc = json.desc;
+    if ('n'        in json) result.n        = json.n;
+    if ('version'  in json) result.version  = json.version;
+    if ('title'    in json) result.title    = json.title;
+    if ('desc'     in json) result.desc     = json.desc;
     if ('metadata' in json) result.metadata = json.metadata;
-    if ('colors' in json) result.colors = json.colors;
+    if ('colors'   in json) result.colors   = json.colors;
 
     return result;
 }

@@ -1,9 +1,10 @@
 import { hexExpandToTen }            from 'color-formatter/hex-expand'
-import { sizeDataDec }               from 'decode/size-data-dec'
 import { getBasicDataFromUrlParams } from 'enc-and-dec/basic-data/basic-data-dec'
 import { decodeGroupColors }         from 'enc-and-dec/lines-data/group-colors/group-colors-dec'
 import { decodeWidthAndCounts }      from 'enc-and-dec/lines-data/width-and-counts/width-and-counts-dec'
 import { decodeDvals }               from 'decode/decode'
+import { sizeDataDec }               from 'decode/size-data-dec'
+import { tryDecompress  }            from 'encode/try-decompress'
 
 import { BASIC_DATA_KEYS  } from 'constants'
 
@@ -15,9 +16,6 @@ export
 function decodeUrlParams(isDataManipulatorPage) {
     // Get the url params from right source
     const params = getUrlParams(isDataManipulatorPage)
-    //console.log(params)
-    //console.log(params.get("title"))
-    //console.log(params.get("desc"))
 
     if (params != null) {
         return decodeAsThreeData(params)
@@ -140,35 +138,29 @@ function decodeAsThreeData(urlSearchParams) {
         const decodedGroupColorsObj = decodeGroupColors(hex10Chars)  // Return as Object with three attrs
         // groupColors: {g_stroke: '#ffffff', g_opacity: 1, g_stroke_opacity: 1}
 
-        // 3 chars flag as Array
-        const decodedThreeFlagsArray = linesDataKvArray[i][1].slice(0, 3).split('')   // ['1', '2', 'n']
-        // threeFlags: (3) ['1', '2', 'n']
+        // Decode the Lines data string
+        // Structure: [1st flag][2nd flag][3rd flag][width(stroke-width values and counts)]-[d values]
 
-        // Lines data encoded string
-        //   stroke-width and coordinates data joined with '-' like:
-        //   [encoded-width-data]-[encoded-coordinates-data]
-        let linesData = linesDataKvArray[i][1].slice(3)
-        //console.log("linesData(Before URLComp expand): ", linesData)
-        // 3t-BRY8zuZS6-yuj6xgi-u9utYvXoK0QEXoKySIqr46g3-9HxEs1eG2VMHxerRFrXM3mjZxLkf-wwSvNRnQb88G
+        // See 1st char, and decompress the string of 2nd char to end
+        // Skip decompress if 1st char is '~'
+        const linesData = tryDecompress(linesDataKvArray[i][1])
 
-        if (decodedThreeFlagsArray[0] === '0') { // Decompress if URLCompressor applied
-            linesData = URLCompressor.expand(linesData)
-        }
+        // Get the two chars for flags
+        const decodedTwoCharsFlagsArr = [linesData[0], linesData[1]]
+        // e.g.: (2) ['1', '3']
 
-        // Lines data decoded string
-        console.log("linesData(After URLComp expand): ", linesData)
 
-        // Extract the encoded width data ('stroke-width' values and counts)
-        const encodedWidthAndCounts = linesData.split('-')[0]
-        console.log("encodedWidthAndCounts: ", encodedWidthAndCounts)
-        // e.g.: 3t
+        // Extract the width related values encoded ('stroke-width' values and counts)
+        const encodedWidthAndCounts = extractBeforeFirstHyphen(linesData.slice(2))
 
+        // Decode the width width related values
         // 'stroke-width' values and generated firstline and lastline indices as Map
         const decodedWidthAndCountsMap = decodeWidthAndCounts(encodedWidthAndCounts)
         console.log("decodedWidthAndCountsMap: ", decodedWidthAndCountsMap)
         // e.g.: Map(1) {3 => 19}
 
-        // Coordinates data ('d' value) encoded
+
+        // Coordinates data (d value) encoded
         // It has own structure by its encoding method (defined by second char of flag)
         const encodedDvalsStr = extractAfterFirstHyphen(linesData)
         console.log("encodedDvalsStr: ", encodedDvalsStr)
@@ -179,14 +171,14 @@ function decodeAsThreeData(urlSearchParams) {
             i,
             {
                 groupColors:    decodedGroupColorsObj,
-                threeFlags:     decodedThreeFlagsArray,
+                twoFlags:       decodedTwoCharsFlagsArr,
                 widthAndCounts: decodedWidthAndCountsMap,
                 encodedDvals:   encodedDvalsStr
             }
         )
 
         // Decode the d values
-        const decodedAbsAndRelDvals = decodeDvals(linesDataMap)
+        const decodedAbsAndRelDvals = decodeDvals(linesDataMap, basicDataObj.n)
         const decodedRelDvalsObj = decodedAbsAndRelDvals.relative
         const decodedAbsDvalsObj = decodedAbsAndRelDvals.absolute
 
@@ -195,7 +187,7 @@ function decodeAsThreeData(urlSearchParams) {
             i,
             {
                 groupColors:    decodedGroupColorsObj,
-                threeFlags:     decodedThreeFlagsArray,
+                twoFlags:  decodedTwoCharsFlagsArr,
                 widthAndCounts: decodedWidthAndCountsMap,
                 encodedDvals:   encodedDvalsStr,
                 relDvalsObj:    decodedRelDvalsObj,
@@ -211,9 +203,16 @@ function decodeAsThreeData(urlSearchParams) {
 }
 
 
+function extractBeforeFirstHyphen(str) {
+    // ハイフンの位置を取得
+    const indexOfHyphen = str.indexOf("-");
+    // 文字列の先頭から ハイフンの直前まで を切り出す
+    return str.slice(0, indexOfHyphen);
+}
+
 function extractAfterFirstHyphen(str) {
     // ハイフンの位置を取得
     const indexOfHyphen = str.indexOf("-");
-    // ハイフンの次の位置から末尾までを切り出す
+    // ハイフンの直後から 末尾まで を切り出す
     return str.slice(indexOfHyphen + 1);
 }

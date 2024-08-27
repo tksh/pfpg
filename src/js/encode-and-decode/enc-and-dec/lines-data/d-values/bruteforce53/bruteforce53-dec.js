@@ -4,11 +4,9 @@ import { createCodebookToDecodeFrequentDiff } from 'enc-and-dec/lines-data/d-val
 import { decodeDiff }                         from 'enc-and-dec/lines-data/d-values/bruteforce53/decode-diff'
 
 
-export function bruteforce53Dec(encodedDvalsStr, threeFlags) {
-    //console.log("threeFlags: ", threeFlags)
-    //console.log("encodedDvalsStr: ", encodedDvalsStr)
+export function bruteforce53Dec(encodedDvalsStr, thirdFlag) {
 
-    const baseX = base53Dec(threeFlags[2]) // 3rd char indicates Base X number
+    const baseX = base53Dec(thirdFlag) // 3rd flag indicates Base X number
     const maxCodebookSize = 52 - baseX
     console.log('baseX: ', baseX)
     console.log('maxCodebookSize: ', maxCodebookSize)

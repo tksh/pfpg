@@ -1,5 +1,5 @@
-import { getUintNFromUrlParams } from 'enc-and-dec/lines-data/d-values/bruteforce53/uint-n-from-urlparam'
-import { parseBasicData }        from 'enc-and-dec/basic-data/basic-data-enc'
+import { uintN }       from 'decode/get-uint-n'
+
 
 export
     { addToEliminateNegativeBeforeEncode
@@ -59,13 +59,13 @@ function calculateMinimumPossibleDiffValueFromUintN(uintN) {
 
 // For encode
 function getMinimumPossibleDiffForEnc() {
-    const uintN = parseBasicData().uintN   // Get uintN from *textarea* at data-manipulator
+    // Use `uintN` from extracted (via textarea)
+    const uintN = encodeBasicData().n
     return calculateMinimumPossibleDiffValueFromUintN(uintN)
 }
 // For decode
 function getMinimumPossibleDiffForDec() {
-    const uintN = getUintNFromUrlParams()  // Get uintN from *url params* at index.html, data-manipulator
-    // or from *hidden sample text* at index.html when there is no url params.
+    // Use `uintN` from imported (via url params)
     return calculateMinimumPossibleDiffValueFromUintN(uintN)
 }
 

@@ -1,5 +1,8 @@
 import { recoverOriginalZeroPadding } from 'enc-and-dec/lines-data/d-values/bigint64/recover-zero-padding'
+import { getDigitsPerChunk }          from 'enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk'
 import { base64UrlDec }               from 'enc-and-dec/base-n/base-64url-dec'
+
+import { uintN } from 'decode/get-uint-n'
 
 export
     { bigint64Dec
@@ -7,7 +10,11 @@ export
     , chunk
     }
 
-function bigint64Dec(encodedDvalsStr, threeFlags) {
+function bigint64Dec(encodedDvalsStr) {
+
+    // encodedDvalsStr
+    // e.g.: str:  NWrTPcKpRSjaX,23,bigint64
+    //       NWrTPcKpRSjaX => 63064000000063064127127n
 
     // Decode as bigint
     const decodedDvalsBigint = base64UrlDec(encodedDvalsStr)
@@ -19,8 +26,8 @@ function bigint64Dec(encodedDvalsStr, threeFlags) {
     //console.log("bigintAsStr: ", bigintAsStr)
     // 1040706080719252428301704222622222323000000152005000015000028 ... 32710
 
-    // Determine the number of digits per chunk based on the third flag
-    const digitsPerChunk = Number(threeFlags[2])
+    // Determine the number of digits per chunk based on the uintN from url params
+    const digitsPerChunk = getDigitsPerChunk(uintN)
 
     // Recover the original zero-padded string
     const originalZeroPaddedStr = recoverOriginalZeroPadding(bigintAsStr, digitsPerChunk)

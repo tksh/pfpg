@@ -15,7 +15,7 @@ export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMetho
     const ampersandCount = groupCount - 1;
 
     for (const [gId, dvalEncodedStr] of encodedDval) {
-        // Merge the width, dvals and flags like: [2nd flag][2nd flag][width(stroke-width values and counts)]-[d values]
+        // Merge the width, dvals and flags like: [2nd flag][3rd flag][width(stroke-width values and counts)]-[d values]
         const charOf2ndFlag = flagsMap.get('2nd').get(encodingMethodName)
         const widthAndCountsEncoded = encodedWidthAndCounts.get(gId);
         const uncompressed = charOf2ndFlag + charOf3rdFlag + widthAndCountsEncoded + '-' + dvalEncodedStr;

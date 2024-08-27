@@ -25,7 +25,7 @@ function bestMixFromNMethods(numberOfMethods) {
     }
 
     // Compare and get the shortest one by group
-    let shortestByGroup;
+    let shortestArrByGroup;
 
     // Encoding method names list
     const encodingMethodsMap = flagsMap.get('2nd')
@@ -36,14 +36,18 @@ function bestMixFromNMethods(numberOfMethods) {
 
     if (numberOfMethods === 3) {
         // When considering 3 methods
-        shortestByGroup = storeShortest([bruteforce53Map, bigint64Map, swap63Map], encodingMethodNamesArr);
+        shortestArrByGroup = storeShortest([bruteforce53Map, bigint64Map, swap63Map], encodingMethodNamesArr);
     } else { // numberOfMethods === 2
         // When considering 2 methods
-        shortestByGroup = storeShortest([bruteforce53Map, bigint64Map], encodingMethodNamesArr);
+        shortestArrByGroup = storeShortest([bruteforce53Map, bigint64Map], encodingMethodNamesArr);
     }
 
+    // Extract encoded strings as an array
+    // [[shortestStr, minLength, methodName], ... ] => [shortestStr, shortestStr, ... ] for each Map() values
+    const shortestStrArr = [...shortestArrByGroup.values()].map(elements => elements[0])
+
     // Join the shortest group strings with '&' (ampersand sign)
-    const shortestJoined = joinWithAmpersand(shortestByGroup);
+    const shortestJoined = joinWithAmpersand(shortestStrArr);
 
     // Output the joined string to a textarea
     outputToTextarea(shortestJoined, 'textarea-lines-data-encoded');
@@ -55,10 +59,10 @@ function bestMixFromNMethods(numberOfMethods) {
     showStringSize(messagePrefix, shortestJoined, 'encoded-strokes-values-size');
 
     // Show the details of the encoding result by group in the console
-    //showDetailsByGroup('Lines Data', shortestByGroup);
+    //showDetailsByGroup('Lines Data', shortestArrByGroup);
 
     // Show the details of the encoding result by group in the console, and return the data to indicate in HTML
-    const dataToShow = showDetailsByGroup('Lines Data', shortestByGroup, 'best-mix');
+    const dataToShow = showDetailsByGroup('Lines Data', shortestArrByGroup, 'best-mix');
     showBestMixResult(dataToShow, 'encoded-strokes-values-size');
 
     // Clear the inaccurate processing time text

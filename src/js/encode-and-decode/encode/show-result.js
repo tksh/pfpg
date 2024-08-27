@@ -18,8 +18,8 @@ function showStringSize(nameOfInput, inputStr, outputElemId) {
     console.log(`Encoded as ${nameOfInput} successfully, Size: `, inputStr.length);
 }
 
-function showDetailsByGroup(nameOfInput, encodedStrByGroupMap, encodingMethodName) {
-    console.log('encodedStrByGroupMap: ', encodedStrByGroupMap)
+function showDetailsByGroup(nameOfInput, encodedArrByGroupMap, encodingMethodName) {
+    console.log('encodedArrByGroupMap: ', encodedArrByGroupMap)
     /*
         Map(2) {'0' => Array(3), '1' => Array(3)}
             key: "0"
@@ -28,8 +28,8 @@ function showDetailsByGroup(nameOfInput, encodedStrByGroupMap, encodingMethodNam
     */
 
     // Get the details of encoding result
-    const keys = [...encodedStrByGroupMap.keys()]
-    const values = [...encodedStrByGroupMap.values()]
+    const keys = [...encodedArrByGroupMap.keys()]
+    const values = [...encodedArrByGroupMap.values()]
     console.log('values: ', values)  //
     /*
     values:

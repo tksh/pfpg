@@ -1,13 +1,15 @@
-import { getUintN } from 'common-utils/get-uint-n'
-
 import { VIEWBOX_START_X, VIEWBOX_START_Y } from 'constants'
+
+export
+    { sizeDataDec
+    , calculateCanvasSize
+    }
 
 
 // Return the object includes:
 //   - width
 //   - height
 //   - viewbox
-//   - uintN
 
 // viewbox: string
 // String value for 'viewBox'.
@@ -16,19 +18,14 @@ import { VIEWBOX_START_X, VIEWBOX_START_Y } from 'constants'
 // Values are calculated from absolute coordinates.
 // Used in 'crop-side-margin.js'.
 
-// uintN: number
-// The 'N' in 'UIntNPortray'.
-// Smallest power of two (in bits) that can represent the longer side length of the canvas.
-// Used in 'bruteforce53-enc.js' and 'bigint64-enc.js'.
 
-
-export function sizeDataDec(linesDataMapIndexZero) {
+function sizeDataDec(linesDataMapIndexZero) {
     console.log('linesDataMapIndexZero: ', linesDataMapIndexZero)
     // absDvalsObj: {x1: Array(2), y1: Array(2), x2: Array(2), y2: Array(2)}
     // encodedDvals: "NWrTPcKpRSjaX"
     // groupColors: {g_stroke: '#AAAAAA', g_opacity: 1, g_stroke_opacity: 1}
     // relDvalsObj: {x1: Array(2), y1: Array(2), x2: Array(2), y2: Array(2)}
-    // threeFlags: (3) ['0', '1', '3']
+    // twoFlags: (2) ['1', '3']
     // widthAndCounts: {firstline: Array(1), lastline: Array(1), width: Array(1)}
     // [[Prototype]]: Object
 
@@ -40,12 +37,8 @@ export function sizeDataDec(linesDataMapIndexZero) {
     // Define the 'viewBox' value
     const viewboxStr = `${VIEWBOX_START_X} ${VIEWBOX_START_Y} ${sizeDataObj.width} ${sizeDataObj.height}`
 
-    // Get the uintN number
-    const longerSideValue = Math.max(sizeDataObj.width, sizeDataObj.height)
-    const uintN = getUintN(longerSideValue)
-
-    // Add the 'viewBox' and 'uintN' attrs and include 'width' and 'height' for completeness
-    sizeDataObj = { viewbox: viewboxStr, uintN: uintN, ...sizeDataObj }
+    // Add the 'viewBox' and include 'width' and 'height' for completeness
+    sizeDataObj = { viewbox: viewboxStr, ...sizeDataObj }
 
     return sizeDataObj
 }

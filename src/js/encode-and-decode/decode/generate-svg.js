@@ -229,6 +229,11 @@ function generateTagsBeforeStrokes(tabSpace, basicDataObj, sizeDataObj) {
 
 // Indentation justify for <metadata> contents
 function addNewlineAndIndentation(inputLines, tabSpace) {
+    // If there is no metadata content, keep it as it.
+    if (!isNonEmpty(inputLines)) {
+        return undefined
+    }
+
     // inputLinesが文字列の場合は配列に変換
     let lines = typeof inputLines === 'string' ? inputLines.split('\n') : inputLines;
 

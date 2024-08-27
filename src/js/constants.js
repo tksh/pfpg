@@ -1,6 +1,13 @@
 
 // The keys in this array are optional. If a key does not exist, it will be ignored.
-export const BASIC_DATA_KEYS = ['version', 'title', 'desc', 'metadata', 'colors'];
+export const BASIC_DATA_KEYS = [
+    'n',         // required for bruteforce53|bigint64 decoding
+    'version',
+    'title',     // SVG tag content
+    'desc',      // SVG tag content
+    'metadata',  // SVG tag content
+    'colors'
+];
 
 
 // VIEWBOX_START_X and VIEWBOX_START_Y represent the starting position of the viewBox,

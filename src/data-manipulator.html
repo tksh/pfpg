@@ -29,8 +29,10 @@
 
                 "decode/decode":                 "./js/encode-and-decode/decode/decode.js",
                 "decode/generate-svg":           "./js/encode-and-decode/decode/generate-svg.js",
+                "decode/get-uint-n":             "./js/encode-and-decode/decode/get-uint-n.js",
                 "decode/rel-to-abs":             "./js/encode-and-decode/decode/rel-to-abs.js",
                 "decode/size-data-dec":          "./js/encode-and-decode/decode/size-data-dec.js",
+                "encode/try-decompress":         "./js/encode-and-decode/decode/try-decompress.js",
 
                 "enc-and-dec/show-result": "./js/encode-and-decode/enc-and-dec/show-result.js",
 
@@ -64,7 +66,6 @@
                 "enc-and-dec/lines-data/d-values/bruteforce53/encode-diff":            "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/encode-diff.js",
                 "enc-and-dec/lines-data/d-values/bruteforce53/encode-ref-dict":        "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/encode-ref-dict.js",
                 "enc-and-dec/lines-data/d-values/bruteforce53/specific-alphabets":     "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/specific-alphabets.js",
-                "enc-and-dec/lines-data/d-values/bruteforce53/uint-n-from-urlparam":   "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/uint-n-from-urlparam.js",
 
                 "enc-and-dec/lines-data/d-values/swap63/create-codebook":              "./js/encode-and-decode/enc-and-dec/lines-data/d-values/swap63/create-codebook.js",
                 "enc-and-dec/lines-data/d-values/swap63/swap63-dec":                   "./js/encode-and-decode/enc-and-dec/lines-data/d-values/swap63/swap63-dec.js",
@@ -81,6 +82,7 @@
                 "encode/join-with-ampersand":     "./js/encode-and-decode/encode/join-with-ampersand.js",
                 "encode/show-best-mix-result":    "./js/encode-and-decode/encode/show-best-mix-result.js",
                 "encode/show-result":             "./js/encode-and-decode/encode/show-result.js",
+                "encode/size-data-enc":           "./js/encode-and-decode/encode/size-data-enc.js",
                 "encode/store-shorter":           "./js/encode-and-decode/encode/store-shorter.js",
                 "encode/try-compress":            "./js/encode-and-decode/encode/try-compress.js",
                 "encode/json-to-map-obj":         "./js/encode-and-decode/encode/json-to-map-obj.js",
@@ -101,14 +103,14 @@
                 "tab-canvas/crop-side-margins":     "./js/page-specific/index/tab-canvas/crop-side-margins.js",
                 "tab-canvas/shape-to-trim":         "./js/page-specific/index/tab-canvas/shape-to-trim.js",
 
-                "tab-lines/group-colors":            "./js/page-specific/index/tab-lines/group-colors.js",
-                "tab-lines/opacity-steps":           "./js/page-specific/index/tab-lines/opacity-steps.js",
-                "tab-lines/path-mode":               "./js/page-specific/index/tab-lines/path-mode.js",
+                "tab-lines/group-colors":           "./js/page-specific/index/tab-lines/group-colors.js",
+                "tab-lines/opacity-steps":          "./js/page-specific/index/tab-lines/opacity-steps.js",
+                "tab-lines/path-mode":              "./js/page-specific/index/tab-lines/path-mode.js",
 
                 "tab-render/width-pixel-size":      "./js/page-specific/index/tab-render/width-pixel-size.js",
                 "tab-render/sync-number-and-range": "./js/page-specific/index/tab-render/sync-number-and-range.js",
 
-                "tab-ui/view-scaling":                "./js/page-specific/index/tab-ui/view-scaling.js",
+                "tab-ui/view-scaling":              "./js/page-specific/index/tab-ui/view-scaling.js",
                 "tab-ui/checkerboard-bg":           "./js/page-specific/index/tab-ui/checkerboard-bg.js",
                 "tab-ui/theme-color":               "./js/page-specific/index/tab-ui/theme-color.js",
 
@@ -151,6 +153,7 @@
 
         <!-- Textarea to input the basic data json -->
         <textarea id="textarea-basic-data-uploaded" class="height-1" placeholder="./json_extracted/%{ARTWORK_ID}_basic_data.json">{
+            "n": "~7",
             "version": "~0.9.0",
             "title": "~202401_001",
             "desc": "001kObPFhaNkBHUZJE0kMCGBFCDo8j7lBr_44z9CIqW3Ba7eLr9kVIlASMdS4",

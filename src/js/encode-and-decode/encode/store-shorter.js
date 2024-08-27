@@ -18,7 +18,7 @@ export function storeShorter(currentShortestByGroup, encodedStrByGroup, baseXNum
 export function storeShortest(encodedResultsArr, encodingMethodNamesArr) {
     //console.log('currentShortestByGroup, encodedStrByGroup: ', currentShortestByGroup, encodedStrByGroup)
 
-    const shortestByGroup = new Map()
+    const shortestArrByGroup = new Map()
 
     // number of lines-group
     // console.log(encodedResultsArr[0].size)  // e.g.: 3
@@ -58,7 +58,7 @@ export function storeShortest(encodedResultsArr, encodingMethodNamesArr) {
 
 
         // Store the shortest results values with group ID as key
-        shortestByGroup.set(
+        shortestArrByGroup.set(
             `${i}`, [         // Group ID
                 shortestStr,  // shortest encoded string
                 minLength,    // shortest encoded string's length
@@ -67,5 +67,5 @@ export function storeShortest(encodedResultsArr, encodingMethodNamesArr) {
         )
     }
 
-    return shortestByGroup
+    return shortestArrByGroup
 }

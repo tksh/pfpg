@@ -37,14 +37,14 @@ function decode(isRelative, isDataManipulatorPage) {
         console.log("decodedParams.linesData: ", decodedParams.linesData)
         // e.g.:
         // Map() {1 => {…}, 2 => {…}, 3 => {…}, 4 => {…}, 5 => {…}}
-        // key  : Group ID (seq num start at 0)
-        // value: Object
-        // groupColors:    decodedGroupColorsObj,
-        // threeFlags:     decodedThreeFlagsArray,
-        // widthAndCounts: decodedWidthAndCountsMap,
-        // encodedDvals:   encodedDvalsStr,
-        // relDvalsObj:    decodedRelDvalsObj,
-        // absDvalsObj:    decodedAbsDvalsObj
+        //   key  : Group ID (seq num start at 0)
+        //   value: Object
+        //   groupColors:    decodedGroupColorsObj,
+        //   twoCharFlags:   decodedTwoCharsFlagsArr,
+        //   widthAndCounts: decodedWidthAndCountsMap,
+        //   encodedDvals:   encodedDvalsStr,
+        //   relDvalsObj:    decodedRelDvalsObj,
+        //   absDvalsObj:    decodedAbsDvalsObj
 
         console.log("decodedParams.sizeData: ", decodedParams.sizeData)
         // e.g.:
@@ -113,29 +113,30 @@ function decodeDvals(linesDataMap) {
 
     for (const [gId, v] of linesDataMap) {
         console.log("gId: ", gId)  // 0, 1, 2 ...
-        console.log("v: ", v)      // {groupColors: {…}, threeFlags: Array(3), widthAndCounts: {…}, relDvalsObj: Map(1), absDvalsObj: Map(1)}
+        console.log("v: ", v)      // {groupColors: {…}, twoFlags: Array(3), widthAndCounts: {…}, relDvalsObj: Map(1), absDvalsObj: Map(1)}
 
         console.log("v.encodedDvals: ", v.encodedDvals) // Encoded string:  x1 + y1 + x2 + y2
         // e.g.: H5yJn8tIS6hWuVfFgdJIY10GsuwXo0w
 
-        console.log("v.threeFlags: ", v.threeFlags)     // Flag chars: [0] comp methods, [1] enc methods, [2] enc config values
-        // e.g.: Array (3) ['0', '1', '3']
+        console.log("v.twoFlags: ", v.twoFlags)         // Flag chars: [0] enc method, [1] enc config value
+        // e.g.: Array (2) ['1', '3']
+        const thirdFlag = v.twoFlags[1]
 
         let decodedAbsDvals = []
         let decodedRelDvals = []
 
-        if (v.threeFlags[1] === '0') {
+        if (v.twoFlags[0] === '0') {
             console.log(`Group ${gId} has encoded with 'bruteforce53-enc'`)
-            const decodedDiffDvals = bruteforce53Dec(v.encodedDvals, v.threeFlags)
+            const decodedDiffDvals = bruteforce53Dec(v.encodedDvals, thirdFlag)
             decodedRelDvals = decodedDiffDvals.map(column => diffToRel(column))
             decodedAbsDvals = relToAbs(decodedRelDvals, v.widthAndCounts)
 
-        } else if (v.threeFlags[1] === '1') {
+        } else if (v.twoFlags[0] === '1') {
             console.log("This group has encoded with 'bigint64-enc'")
-            decodedAbsDvals = bigint64Dec(v.encodedDvals, v.threeFlags)
+            decodedAbsDvals = bigint64Dec(v.encodedDvals)
             decodedRelDvals = absToRel(decodedAbsDvals, v.widthAndCounts)
 
-        } else if (v.threeFlags[1] === '2') {
+        } else if (v.twoFlags[0] === '2') {
             console.log("This group has encoded with 'swap63-enc'")
             decodedRelDvals = swap63Dec(v.encodedDvals)
             decodedAbsDvals = relToAbs(decodedRelDvals, v.widthAndCounts)
