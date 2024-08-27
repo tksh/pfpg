@@ -40,7 +40,7 @@ function decode(isRelative, isDataManipulatorPage) {
         //   key  : Group ID (seq num start at 0)
         //   value: Object
         //   groupColors:    decodedGroupColorsObj,
-        //   twoCharFlags:   decodedTwoCharsFlagsArr,
+        //   twoCharFlags:   decodedEncodingMethodFlagChar,
         //   widthAndCounts: decodedWidthAndCountsMap,
         //   encodedDvals:   encodedDvalsStr,
         //   relDvalsObj:    decodedRelDvalsObj,
@@ -108,35 +108,34 @@ function decode(isRelative, isDataManipulatorPage) {
 
 
 function decodeDvals(linesDataMap) {
+    console.log("||||linesDataMap: ", linesDataMap)
     let decodedAbsDvalsObj = {}
     let decodedRelDvalsObj = {}
 
     for (const [gId, v] of linesDataMap) {
         console.log("gId: ", gId)  // 0, 1, 2 ...
-        console.log("v: ", v)      // {groupColors: {…}, twoFlags: Array(3), widthAndCounts: {…}, relDvalsObj: Map(1), absDvalsObj: Map(1)}
+        console.log("v: ", v)      // {groupColors: {…}, encodingMethodFlag: '0', widthAndCounts: {…}, relDvalsObj: Map(1), absDvalsObj: Map(1)}
 
         console.log("v.encodedDvals: ", v.encodedDvals) // Encoded string:  x1 + y1 + x2 + y2
         // e.g.: H5yJn8tIS6hWuVfFgdJIY10GsuwXo0w
-
-        console.log("v.twoFlags: ", v.twoFlags)         // Flag chars: [0] enc method, [1] enc config value
-        // e.g.: Array (2) ['1', '3']
-        const thirdFlag = v.twoFlags[1]
+        console.log("v.encodingMethodFlag: ", v.encodingMethodFlag)
+        // 
 
         let decodedAbsDvals = []
         let decodedRelDvals = []
 
-        if (v.twoFlags[0] === '0') {
+        if (v.encodingMethodFlag === '0') {
             console.log(`Group ${gId} has encoded with 'bruteforce53-enc'`)
-            const decodedDiffDvals = bruteforce53Dec(v.encodedDvals, thirdFlag)
+            const decodedDiffDvals = bruteforce53Dec(v.encodedDvals)
             decodedRelDvals = decodedDiffDvals.map(column => diffToRel(column))
             decodedAbsDvals = relToAbs(decodedRelDvals, v.widthAndCounts)
 
-        } else if (v.twoFlags[0] === '1') {
+        } else if (v.encodingMethodFlag === '1') {
             console.log("This group has encoded with 'bigint64-enc'")
             decodedAbsDvals = bigint64Dec(v.encodedDvals)
             decodedRelDvals = absToRel(decodedAbsDvals, v.widthAndCounts)
 
-        } else if (v.twoFlags[0] === '2') {
+        } else if (v.encodingMethodFlag === '2') {
             console.log("This group has encoded with 'swap63-enc'")
             decodedRelDvals = swap63Dec(v.encodedDvals)
             decodedAbsDvals = relToAbs(decodedRelDvals, v.widthAndCounts)

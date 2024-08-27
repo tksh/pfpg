@@ -25,7 +25,7 @@ function sizeDataDec(linesDataMapIndexZero) {
     // encodedDvals: "NWrTPcKpRSjaX"
     // groupColors: {g_stroke: '#AAAAAA', g_opacity: 1, g_stroke_opacity: 1}
     // relDvalsObj: {x1: Array(2), y1: Array(2), x2: Array(2), y2: Array(2)}
-    // twoFlags: (2) ['1', '3']
+    // encodingMethodFlag: '1'
     // widthAndCounts: {firstline: Array(1), lastline: Array(1), width: Array(1)}
     // [[Prototype]]: Object
 

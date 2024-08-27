@@ -50,8 +50,7 @@ export function swap63Enc() {
     const compressedByGroup = tryCompress(
         encodedDval,
         encodedAttrsExceptsDvals,
-        'swap63',
-        null  // value for 3rd flag char, swap63-enc needs no 3rd flag char to encode
+        'swap63'
     )
     console.log('compressedByGroup: ', compressedByGroup)
     // Map { 000 → (2) […] }

@@ -64,7 +64,7 @@ function showDetailsByGroup(nameOfInput, encodedArrByGroupMap, encodingMethodNam
             }
         });
 
-        console.log("appliedFlagsByGroup: ", appliedFlagsByGroup)  // e.g.: (3) [Array(3), Array(3), Array(3)]
+        console.log("appliedFlagsByGroup: ", appliedFlagsByGroup)  // e.g.: (3) [Array(2), Array(2), Array(2)]
         const appliedFlagsMap = new Map()
         appliedFlagsMap.set('flags', appliedFlagsByGroup)
         resultInfo.set(`${encodingMethodName}`, appliedFlagsMap)
@@ -79,7 +79,6 @@ function showDetailsByGroup(nameOfInput, encodedArrByGroupMap, encodingMethodNam
     const flagsByKinds = zip(...Array.from(flagsByGroup))  // transpose the array structure
     const flag1 = flagsByKinds[0]
     const flag2 = flagsByKinds[1]
-    const flag3 = flagsByKinds[2]
     const flag1Name = flag1.map(char => flagsMap.get('rev_1st').get(`${char}`))
     const flag2Name = flag2.map(char => flagsMap.get('rev_2nd').get(`${char}`))
 
@@ -91,7 +90,6 @@ function showDetailsByGroup(nameOfInput, encodedArrByGroupMap, encodingMethodNam
     console.log('Flags: ', flagsByGroup)                                   // e.g.: (3) [Array(3), Array(3), Array(3)]
     console.log('1st flags, Compression method name',          flag1Name)  // e.g.: (3) ['uncompressed', 'uncompressed', 'uncompressed']
     console.log('2nd flags, Encoding method name',             flag2Name)  // e.g.: (3) ['bigint64', 'bigint64', 'bigint64']
-    console.log('3rd flags, Configuration value for encoding', flag3)      // e.g.: (3) [3, 3, 3]
 
 
     // Return the values to show also in html when call this function from best mix encoding (bestMixFromNMethods()).
@@ -101,7 +99,6 @@ function showDetailsByGroup(nameOfInput, encodedArrByGroupMap, encodingMethodNam
         ['length', lengthOfValues],
         ['flags', flagsByGroup],
         ['flag1', flag1],
-        ['flag2', flag2],
-        ['flag3', flag3]
+        ['flag2', flag2]
     ]);
 }

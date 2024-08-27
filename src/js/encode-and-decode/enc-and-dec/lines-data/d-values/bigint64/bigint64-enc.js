@@ -1,5 +1,6 @@
 import { showProcessingTime }          from 'enc-and-dec/show-result'
 import { base64UrlEnc }                from 'enc-and-dec/base-n/base-64url-enc'
+import { parseBasicData }              from 'enc-and-dec/basic-data/basic-data-enc'
 import { getDigitsPerChunk }           from 'enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk'
 import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
 import { joinWithAmpersand }           from 'encode/join-with-ampersand'
@@ -14,12 +15,6 @@ import { isOnDataManipulatorPage }     from 'common-utils/select-output-textarea
 export function bigint64Enc() {
     const startTime = performance.now()
 
-    // Get digits of chunk for padding
-    const uintN = encodeBasicData().n
-    const digitsPerChunk = getDigitsPerChunk(uintN)
-    console.log("digitsPerChunk: ", digitsPerChunk) // e.g.: 2
-
-
     // Get the lines data
 
     // Read the relative d values from .json as Map()
@@ -29,6 +24,7 @@ export function bigint64Enc() {
 
     // Bigint64 encoding apply to absolute d values
 
+    const digitsPerChunk = getDigitsPerChunk(parseBasicData().n)
     const encodedDvals = base64UrlEncAfterJoinAsBigint(linesDataMap, digitsPerChunk)
     //console.log("encodedDvals: ", encodedDvals)
     // Map { 1 → "BsmvdfXHD12-EB_BesTenvoA_x-Nt6Ir73u4cAK5rBuSbnWTQPkCe-GP6Yh ... " }
@@ -51,13 +47,10 @@ export function bigint64Enc() {
     const compressedByGroup = tryCompress(
         encodedDvals,
         encodedAttrsExceptsDvals,
-        'bigint64',
-        digitsPerChunk
+        'bigint64'
     )
     //console.log('compressedByGroup: ', compressedByGroup)
     // Map(5) {'1' => '0=129CaJGsAQK33q3FDaoQNuZs6u8XQW_EYegViBcDQ0gxtk-YqavrFw0V3KXggctKtnLfj_rl3ZzTzitfvmVp-Wz09Um3k4e8YyZ9kGHG0aT', '2' => '0=129ziJH ...
-
-
 
     // Whole group strings joined with '&' (ampersand sign)
     const wholeGroupJoined = joinWithAmpersand(compressedByGroup)
@@ -76,7 +69,14 @@ export function bigint64Enc() {
     showProcessingTime('bigint64Enc()', elapsedTime, 'encoded-strokes-values-time', isOnDataManipulatorPage())
 
     // Show the encoding result of each group in console
-    showDetailsByGroup('Lines Data', compressedByGroup, 'bigint64')
+    const encodedArrByGroup = new Map(
+        Array.from(compressedByGroup, ([key, value]) => [
+            key,
+            [value, value.length, 'bigint64']
+        ])
+    );
+
+    showDetailsByGroup('Lines Data', encodedArrByGroup, 'bigint64')
 
     return compressedByGroup
 }

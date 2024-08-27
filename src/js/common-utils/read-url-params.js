@@ -139,19 +139,18 @@ function decodeAsThreeData(urlSearchParams) {
         // groupColors: {g_stroke: '#ffffff', g_opacity: 1, g_stroke_opacity: 1}
 
         // Decode the Lines data string
-        // Structure: [1st flag][2nd flag][3rd flag][width(stroke-width values and counts)]-[d values]
+        // Structure: [1st flag][2nd flag][width(stroke-width values and counts)]-[d values]
 
         // See 1st char, and decompress the string of 2nd char to end
         // Skip decompress if 1st char is '~'
         const linesData = tryDecompress(linesDataKvArray[i][1])
 
-        // Get the two chars for flags
-        const decodedTwoCharsFlagsArr = [linesData[0], linesData[1]]
-        // e.g.: (2) ['1', '3']
+        // Get the char for encoding method flags
+        const decodedEncodingMethodFlagChar = linesData[0]
 
 
         // Extract the width related values encoded ('stroke-width' values and counts)
-        const encodedWidthAndCounts = extractBeforeFirstHyphen(linesData.slice(2))
+        const encodedWidthAndCounts = extractBeforeFirstHyphen(linesData.slice(1))
 
         // Decode the width width related values
         // 'stroke-width' values and generated firstline and lastline indices as Map
@@ -170,15 +169,15 @@ function decodeAsThreeData(urlSearchParams) {
         linesDataMap.set(
             i,
             {
-                groupColors:    decodedGroupColorsObj,
-                twoFlags:       decodedTwoCharsFlagsArr,
-                widthAndCounts: decodedWidthAndCountsMap,
-                encodedDvals:   encodedDvalsStr
+                groupColors:        decodedGroupColorsObj,
+                encodingMethodFlag: decodedEncodingMethodFlagChar,
+                widthAndCounts:     decodedWidthAndCountsMap,
+                encodedDvals:       encodedDvalsStr
             }
         )
 
         // Decode the d values
-        const decodedAbsAndRelDvals = decodeDvals(linesDataMap, basicDataObj.n)
+        const decodedAbsAndRelDvals = decodeDvals(linesDataMap)
         const decodedRelDvalsObj = decodedAbsAndRelDvals.relative
         const decodedAbsDvalsObj = decodedAbsAndRelDvals.absolute
 
@@ -186,12 +185,12 @@ function decodeAsThreeData(urlSearchParams) {
         linesDataMap.set(
             i,
             {
-                groupColors:    decodedGroupColorsObj,
-                twoFlags:  decodedTwoCharsFlagsArr,
-                widthAndCounts: decodedWidthAndCountsMap,
-                encodedDvals:   encodedDvalsStr,
-                relDvalsObj:    decodedRelDvalsObj,
-                absDvalsObj:    decodedAbsDvalsObj
+                groupColors:        decodedGroupColorsObj,
+                encodingMethodFlag: decodedEncodingMethodFlagChar,
+                widthAndCounts:     decodedWidthAndCountsMap,
+                encodedDvals:       encodedDvalsStr,
+                relDvalsObj:        decodedRelDvalsObj,
+                absDvalsObj:        decodedAbsDvalsObj
             }
         )
 

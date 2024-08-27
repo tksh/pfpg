@@ -59,12 +59,5 @@ flagsMap.get('2nd').forEach((value, key) => {
 flagsMap.set('rev_2nd', reverse2nd)
 
 
-
-// 3rd flag - Configuration value for each encoding methods:
-//   Base X number (base53Enc applied) for bruteforce53-enc [0]
-//   Chunk size number for bigint64-enc [1]
-//   'n' (=null, skip it for decoding) for swap63-enc [2]
-
-
-
+// To store the info for console output
 export const resultInfo = new Map()

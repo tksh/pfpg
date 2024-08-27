@@ -35,14 +35,14 @@ export function bruteforce53Enc() {
     const startTime = performance.now()
 
     // To store the shortest encoded string of each group
-    let currentShortest = new Map()
+    let currentShortestByGroup = new Map()
 
     const maxCodebookSizeStartAt = 0
     const maxCodebookSizeEndAt = 52
 
     // min|max diff value (Just for indicating to console at function calculateLimitsForBaseXSkipRange(baseXNumber))
-    const minimumDiffValue = 0 - (2 ** parseBasicData().uintN - 1) * 4
-    const maximumDiffValue =     (2 ** parseBasicData().uintN - 1) * 4
+    const minimumDiffValue = 0 - (2 ** parseBasicData().n - 1) * 4
+    const maximumDiffValue =     (2 ** parseBasicData().n - 1) * 4
 
     // Loop 1. Max dict size from 0 to 52
 
@@ -171,8 +171,11 @@ export function bruteforce53Enc() {
             // Join four columns to form: '[x1]-[y1]-[x2]-[y2]'
             const refDictAndDiffEncodedFourColumnsJoined = refDictAndDiffEncodedFourColumns.join('-')
 
-            // Set the encoded d values ([refDict]-[encodedDiff]) into map as value with group ID key
-            encodedDvals.set(aggData.g_id, refDictAndDiffEncodedFourColumnsJoined)
+            // Encode the baseXNumber to prepend
+            const baseXEncoded = base53Enc(baseXNumber)
+
+            // Set the encoded d values ([baseX][refDict]-[encodedDiff]) into map as value with group ID key
+            encodedDvals.set(aggData.g_id, baseXEncoded + refDictAndDiffEncodedFourColumnsJoined)
 
         }
         console.log('encodedDvals: ', encodedDvals)
@@ -193,15 +196,11 @@ export function bruteforce53Enc() {
         // Get the encoded strings of width-and-counts and group-colors
         const encodedAttrsExceptsDvals = getEncodedAttrsExceptsDvals()
 
-        // Encode the baseXNumber to embed as 3rd flag using base53Enc
-        const charOf3rdFlag = base53Enc(baseXNumber)
-
         // Choose shorter one between URLComp applied or not, by each group
         const compressedByGroup = tryCompress(
             encodedDvals,
             encodedAttrsExceptsDvals,
-            'bruteforce53',
-            charOf3rdFlag
+            'bruteforce53'
         )
         console.log(`baseXNumber = ${baseXNumber}, compressedByGroup: `, compressedByGroup)
         //  Map(5) {'1' => '0=129CaIjMCzLAFox3gEVYTdnymbAmwP-UWDCnew3h-Aqsd6rQsPf7nuc97B-Tyl896LIItSqsH-0_igZRCKY265Ta0zzD8-axd0B3NgagFJ2rRrUWcULFyn1IwBi', '2' => '0=129zi ...
@@ -213,13 +212,13 @@ export function bruteforce53Enc() {
         // For first loop, init the map with current value
         if (maxCodebookSize === maxCodebookSizeStartAt) {
             console.log('maxCodebookSize in first loop: ', maxCodebookSize) // 0
-            currentShortest = compressedByGroup
-            console.log('currentShortest in first loop: ', currentShortest)
+            currentShortestByGroup = compressedByGroup
+            console.log('currentShortestByGroup in first loop: ', currentShortestByGroup)
         }
 
         // For after second loop
         // baseXNumber will be used for just indicating to console when updated the current shortest.
-        currentShortest = storeShorter(currentShortest, compressedByGroup, baseXNumber)
+        currentShortestByGroup = storeShorter(currentShortestByGroup, compressedByGroup, baseXNumber)
 
     }
     // End of Loop for every baseX values: [0-52]
@@ -228,10 +227,10 @@ export function bruteforce53Enc() {
 
 
     // Result map
-    console.log('currentShortest: ', currentShortest)
+    console.log('currentShortestByGroup: ', currentShortestByGroup)
 
     // Whole group strings joined with '&' (ampersand sign)
-    const shortestJoined = joinWithAmpersand(currentShortest)
+    const shortestJoined = joinWithAmpersand(currentShortestByGroup)
 
     // Output to textarea
     outputToTextarea(shortestJoined, 'textarea-lines-data-encoded')
@@ -245,7 +244,13 @@ export function bruteforce53Enc() {
     showProcessingTime('bruteforce53Enc()', elapsedTime, 'encoded-strokes-values-time', isOnDataManipulatorPage())
 
     // Show the encoding result of each group in console
-    showDetailsByGroup('Lines Data', currentShortest, 'bruteforce53')
+    const encodedArrByGroup = new Map(
+        Array.from(currentShortestByGroup, ([key, value]) => [
+            key,
+            [value, value.length, 'bigint64']
+        ])
+    );
+    showDetailsByGroup('Lines Data', encodedArrByGroup, 'bruteforce53')
 
-    return currentShortest
+    return currentShortestByGroup
 }

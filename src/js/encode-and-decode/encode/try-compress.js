@@ -1,7 +1,7 @@
 import { flagsMap, resultInfo } from 'constants'
 
 
-export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMethodName, charOf3rdFlag) {
+export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMethodName) {
     const encodedWidthAndCounts = encodedAttrsExceptsDvals.widthAndCounts
     const encodedGroupColors    = encodedAttrsExceptsDvals.groupColors
 
@@ -15,10 +15,10 @@ export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMetho
     const ampersandCount = groupCount - 1;
 
     for (const [gId, dvalEncodedStr] of encodedDval) {
-        // Merge the width, dvals and flags like: [2nd flag][3rd flag][width(stroke-width values and counts)]-[d values]
+        // Merge the width, dvals and flags to form: [2nd flag][width(stroke-width values and counts)]-[d values]
         const charOf2ndFlag = flagsMap.get('2nd').get(encodingMethodName)
         const widthAndCountsEncoded = encodedWidthAndCounts.get(gId);
-        const uncompressed = charOf2ndFlag + charOf3rdFlag + widthAndCountsEncoded + '-' + dvalEncodedStr;
+        const uncompressed = charOf2ndFlag + widthAndCountsEncoded + '-' + dvalEncodedStr;
 
         // Try compress with all compression methods,
         // And add 1st flag into best result.
@@ -27,13 +27,13 @@ export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMetho
         const charOf1stFlag = flagsMap.get('1st').get(bestMethodName)
         const encodedWidthAndDvalsAsValue   = charOf1stFlag + bestCompressedData
 
-        // Prepend the color value like: [key(group colors)]=[value(width and dvals)]
+        // Prepend the color value to form: [key(group colors)]=[value(width and dvals)]
         const encodedAsKvPair = addColorAsKey(encodedGroupColors, gId, encodedWidthAndDvalsAsValue);
 
         wholeGroupValues.set(gId, encodedAsKvPair);
 
         // Info for console.log output
-        flagsArr.push([charOf1stFlag, charOf2ndFlag, charOf3rdFlag])
+        flagsArr.push([charOf1stFlag, charOf2ndFlag])
         lengthBeforeComp.push(uncompressed.length + 1);  // `+ 1` means 1st char length
         lengthAfterComp.push(bestCompressedData.length + 1);
     }

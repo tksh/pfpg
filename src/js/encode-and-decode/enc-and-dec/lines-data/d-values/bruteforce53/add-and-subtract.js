@@ -1,3 +1,5 @@
+import { parseBasicData } from 'enc-and-dec/basic-data/basic-data-enc'
+
 import { uintN }       from 'decode/get-uint-n'
 
 
@@ -60,7 +62,7 @@ function calculateMinimumPossibleDiffValueFromUintN(uintN) {
 // For encode
 function getMinimumPossibleDiffForEnc() {
     // Use `uintN` from extracted (via textarea)
-    const uintN = encodeBasicData().n
+    const uintN = parseBasicData().n
     return calculateMinimumPossibleDiffValueFromUintN(uintN)
 }
 // For decode
