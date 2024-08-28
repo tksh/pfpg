@@ -3,6 +3,7 @@ import { base53Enc }                          from 'enc-and-dec/base-n/base-53-e
 import { parseBasicData }                     from 'enc-and-dec/basic-data/basic-data-enc'
 import { getActualCodebookSize }              from 'enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size'
 import { createCodebookToEncodeFrequentDiff } from 'enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc'
+import { storeShorter }                       from 'enc-and-dec/lines-data/d-values/bruteforce53/store-shorter'
 import { handleSingleDigit
        , handleFrequencyDiff
        , calculateLimitsForBaseXSkipRange
@@ -11,9 +12,9 @@ import { handleSingleDigit
 import { encodeFreqDiffAsRefDict }            from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-ref-dict'
 import { getEncodedAttrsExceptsDvals }        from 'encode/get-attrs-excepts-dvals'
 import { joinWithAmpersand }                  from 'encode/join-with-ampersand'
+import { simplifyMap }                        from 'encode/simplify-map'
 import { showStringSize
        , showDetailsByGroup }                 from 'encode/show-result'
-import { storeShorter }                       from 'encode/store-shorter'
 import { tryCompress }                        from 'encode/try-compress'
 import { tryDecompress }                      from 'encode/try-decompress'
 import { jsonToMapObj }                       from 'encode/json-to-map-obj'
@@ -220,18 +221,18 @@ export function bruteforce53Enc() {
         // baseXNumber will be used for just indicating to console when updated the current shortest.
         currentShortestByGroup = storeShorter(currentShortestByGroup, compressedByGroup, baseXNumber)
 
-    }
-    // End of Loop for every baseX values: [0-52]
-    // 'for (let i = maxCodebookSizeStartAt; i <= maxCodebookSizeEndAt; i++) {'
-
+    } // End of Loop for every baseX values: [0-52]
 
 
     // Result map
     console.log('currentShortestByGroup: ', currentShortestByGroup)
 
+    // simplify the value of Map, [string, length, baseX] => string
+    const shortestStrByGroup = simplifyMap(currentShortestByGroup)
+
     // Whole group strings joined with '&' (ampersand sign)
-    const shortestStrByGroup = simplifyMap(currentShortestByGroup)  // simplify the value of Map, [string, length, baseX] => string
     const shortestJoined = joinWithAmpersand(shortestStrByGroup)
+
 
     // Output to textarea
     outputToTextarea(shortestJoined, 'textarea-lines-data-encoded')
@@ -244,41 +245,7 @@ export function bruteforce53Enc() {
     const elapsedTime = Math.floor(endTime - startTime)
     showProcessingTime('bruteforce53Enc()', elapsedTime, 'encoded-strokes-values-time', isOnDataManipulatorPage())
 
-    // Show the encoding result of each group in console
-//    const encodedArrByGroup = new Map(
-//        Array.from(currentShortestByGroup, ([key, value]) => [
-//            key,
-//            [value, value.length, 'bigint64']
-//        ])
-//    );
     showDetailsByGroup('Lines Data', currentShortestByGroup, 'bruteforce53')
 
     return currentShortestByGroup
 }
-
-
-function simplifyMap(complexMap) {
-    return new Map(
-        Array.from(complexMap, ([key, [value]]) => [key, value])
-    );
-}
-
-/*
-
-// 使用例
-const complexMap = new Map([
-    ['1', ['some', 4, 'STRING']],
-    ['2', ['thing', 5, 'STRING']],
-    ['3', ['to write', 8, 'STRING']]
-]);
-
-const simplifiedMap = simplifyMap(complexMap);
-console.log(simplifiedMap);
-
-Map(3) {
-    '1' => 'some',
-    '2' => 'thing',
-    '3' => 'to write'
-}
-
-*/

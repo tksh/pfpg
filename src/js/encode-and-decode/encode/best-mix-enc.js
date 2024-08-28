@@ -4,10 +4,12 @@ import { swap63Enc }          from 'enc-and-dec/lines-data/d-values/swap63/swap6
 import { joinWithAmpersand }  from 'encode/join-with-ampersand'
 import { showStringSize
        , showDetailsByGroup } from 'encode/show-result'
-import { storeShortest }      from 'encode/store-shorter'
+import { simplifyMap }        from 'encode/simplify-map'
+import { storeShortest }      from 'encode/store-shortest'
 import { showBestMixResult }  from 'encode/show-best-mix-result'
 import { outputToTextarea }   from 'common-utils/output-to-textarea'
 import { flagsMap }           from 'constants'
+
 
 /**
  * Selects the best mix of encoding methods based on the given number of methods.
@@ -42,9 +44,11 @@ function bestMixFromNMethods(numberOfMethods) {
         shortestArrByGroup = storeShortest([bruteforce53Map, bigint64Map], encodingMethodNamesArr);
     }
 
+    // [[shortestStr, method-name, configuration-value], [ ... ]] => [shortestStr, shortestStr, ... ] for each Map() values
+    const shortestStrByGroup = simplifyMap(shortestArrByGroup)
+
     // Extract encoded strings as an array
-    // [[shortestStr, minLength, methodName], ... ] => [shortestStr, shortestStr, ... ] for each Map() values
-    const shortestStrArr = [...shortestArrByGroup.values()]
+    const shortestStrArr = [...shortestStrByGroup.values()]
     // const shortestStrArr = [...shortestArrByGroup.values()].map(elements => elements[0])
 
     // Join the shortest group strings with '&' (ampersand sign)
@@ -58,9 +62,6 @@ function bestMixFromNMethods(numberOfMethods) {
 
     // Show the size of the result in HTML and console
     showStringSize(messagePrefix, shortestJoined, 'encoded-strokes-values-size');
-
-    // Show the details of the encoding result by group in the console
-    //showDetailsByGroup('Lines Data', shortestArrByGroup);
 
     // Show the details of the encoding result by group in the console, and return the data to indicate in HTML
     const dataToShow = showDetailsByGroup('Lines Data', shortestArrByGroup, 'best-mix');

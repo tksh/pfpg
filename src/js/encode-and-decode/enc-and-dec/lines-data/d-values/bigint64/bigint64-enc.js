@@ -70,11 +70,9 @@ export function bigint64Enc() {
 
     // Convert the structure of values
     // from:
-    //     Key: group ID
     //     Values: encoded string
     // to:
-    //     Key: group ID
-    //     Values: [encoded string, encoding-method name, configuration value object]
+    //     Values: [encoded string, encoding-method name, configuration-value object]
     const encodedArrByGroup = new Map(
         Array.from(compressedByGroup, ([key, value]) => [
             key, [value, 'bigint64', { digitsPerChunk }]

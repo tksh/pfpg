@@ -15,10 +15,6 @@ export function bruteforce53Dec(encodedDvalsStr) {
     // Split into eight elements: [x1RefDict]-[x1Diff]-[y1RefDict]-[y1Diff]-[x2RefDict]-[x2Diff]-[y2RefDict]-[y2Diff]
     const refDictAndDiff = encodedDvalsStr.slice(1).split('-')
 
-    console.log("||||encodedDvalsStr: ", encodedDvalsStr)
-    console.log("||||encodedDvalsStr.slice(1): ", encodedDvalsStr.slice(1))
-    console.log("||||refDictAndDiff: ", refDictAndDiff)
-
     // Split into two arrays: Reference dictionary and encoded diff
     const { refDictByColumn, diffByColumn } = refDictAndDiff.reduce((acc, val, index) => {
         if (index % 2 === 0) {
@@ -44,9 +40,6 @@ export function bruteforce53Dec(encodedDvalsStr) {
         console.log("actualCodebookSize: ", actualCodebookSize)
         const codebook = createCodebookToDecodeFrequentDiff(refDictByColumn[i], actualCodebookSize)
         console.log("codebook: ", codebook)
-        /////////////////// !!!!!!!!!!!!!!!!!!!!! Map(2) {'W' => -508, 'X' => -508}
-
-
 
         // Decode the diff
         const decodedDiffArr = decodeDiff(

@@ -73,9 +73,9 @@ function showDetailsByGroup(nameOfInput, encodedArrByGroupMap, encodingMethodNam
     // e.g.: A=08fEKQ-VoisNalNhZy9GsmZzPU, ...
 
     // Extract from each group array's [0]-indexed array
-    let groupColors    = values.map((value) => value[0].split('=')[0])
-    let lengthOfValues = values.map((value) => value[1])
-    let appliedMethod  = values.map((value) => value[2])
+    const groupColors    = values.map((value) => value[0].split('=')[0])
+    const lengthOfValues = values.map((value) => value[1])
+    const appliedMethod  = values.map((value) => value[2])
 
     if (encodingMethodName === 'test') {
     // if (encodingMethodName === 'best-mix') {
@@ -108,14 +108,6 @@ function showDetailsByGroup(nameOfInput, encodedArrByGroupMap, encodingMethodNam
 
 
     }
-//    else {  // single encoding method execution
-//
-//        // Extract from each group array
-//        groupColors    = values.map((value) => value[0].split('=')[0])
-//        lengthOfValues = values.map((value) => value[1])
-//        appliedMethod  = values.map((value) => value[2])
-//    }
-
 
     console.log("resultInfo: ", resultInfo)
 

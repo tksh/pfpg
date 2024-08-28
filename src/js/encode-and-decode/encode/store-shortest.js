@@ -2,22 +2,6 @@ import { flagsMap, resultInfo } from 'constants'
 
 // Compare and store the shortest length string by each group
 
-export function storeShorter(currentShortestByGroup, encodedStrByGroup, baseXNumber) {
-    //console.log('currentShortestByGroup, encodedStrByGroup: ', currentShortestByGroup, encodedStrByGroup)
-    for (let [gId, encodedStr] of encodedStrByGroup) {
-        if (encodedStr.length < currentShortestByGroup.get(gId).length) {
-            // これまでよりも 今回の方がサイズが 小さければ 値を更新する
-            console.log(`Updated: Current encoded string (encodedStr) is shorter than before: baseXNumber=${baseXNumber}, g_id=${gId}, ${encodedStr.length} (current) < ${currentShortestByGroup.get(gId).length} (before)`)
-            currentShortestByGroup.set(gId, [encodedStr, 'bruteforce53', { baseXNumber }])
-            // Values : [encoded string, encoding-method name, configuration value object]
-        }
-        // これまでよりも 今回の方が サイズが 同じか より大きければ 何もしない
-    }
-    return currentShortestByGroup
-}
-
-
-// bestMixShortest = storeShorter([bruteforce53Map, bigint64Map], encodingMethodNames);
 export function storeShortest(encodedResultsArr, encodingMethodNamesArr) {
     //console.log('currentShortestByGroup, encodedStrByGroup: ', currentShortestByGroup, encodedStrByGroup)
 
@@ -33,37 +17,25 @@ export function storeShortest(encodedResultsArr, encodingMethodNamesArr) {
     for (let i = 0; i < encodedResultsArr[0].size; i++) {
 
         console.log("encodedResultsArr: ", encodedResultsArr)
-        /*
-        e.g.: bestMixFrom2methods()
-       (2) [Map(3), Map(3)]                                                        // Two maps = [bruteforce53Map, bigint64Map]
-            0: Map(3)                                                              // bruteforce53Map
-                [[Entries]]
-                0: {0 => Array(3)}
-                    key: 0
-                    value: (3) ['A=08fEKQ-VoisNalNhZy9GsmZzPU', 28, 51]
-                1: {1 => Array(3)}
-                2: {2 => Array(3)}
-                size: 3
-                [[Prototype]]: Map
-            1: Map(3) {0 => 'A=~1127b-NWrTPcKpRSjaX', 1 => '0=~15n3a ... pUnRU'}   // bigint64Map
-                [[Entries]]
-                0: {0 => "A=~1127b-NWrTPcKpRSjaX"}
-                1: {1 => "0=~15n3ap2bI1fR-IBdbr ... -jtGE"}
-                2: {2 => "F=~11w-B2a ... B7pUnRU"}
-                size: 3
-                [[Prototype]]: Map
-            length: 2
-            [[Prototype]]: Array(0)
-        */
+        // e.g.:
+        //   Executed with bestMixFrom2methods().
+        //     (2) [Map(3), Map(3)]  // Two maps = [bruteforce53Map, bigint64Map]
 
         // Use index number 'i' as key(group ID) of Map to get the array of encoded string length
         const strArrByMethod = encodedResultsArr.map(mapObjByMethod => mapObjByMethod.get(i))
         console.log(strArrByMethod)
-        // Structures are not same by each encoding methods
+        // Structures of values are same by each encoding methods like
+        //     Values: [encoded string, encoding-method name, configuration-value object]
         // e.g.:
-        //     0 (bruteforce53): Array (3) ['0=08cJqY-3JMVTyH83WQ8fKCNJA3CGg5VQzdLGzfyFclSCIDR6…nnh0D6N-j_h82wSYB7kmuAVW9PZgTnAaaHuIXiam3qZcphrSl', 2646, 51]
-        //     1 (bigint64)    : String "0=~15n3ap2bI1fR-IBdbrkwCjiFCdD1xVpRSu8eawc
-
+        //   Executed with bestMixFrom2methods().
+        //     0 (bruteforce53): Array (3) 
+        //         0: "F=08fOlodlaFekVCp-ARYvkXHvz8Poh25aTRmW8j4v5qf1vC0WgNdp-DzgDfJBgsiMsmTOlLs0YNpVslBnQadartJipZ5Mhi6HMRYbqTTAObPe0swdgXfDGdXUdpTApsIEDP"
+        //         1: "bruteforce53"
+        //         2: {baseXNumber: 51}
+        //     1 (bigint64)    : Array (3) [['F=~11w-B2a4FogqwwB0aX-PwIQtlN3FjLk8D68fbZbNuvslJVj…udYdSGZkUg5U-CYP3gwmqXyKxYy9aBzjCyh5cpP3tFB7pUnRU', 'bigint64', {…}]]
+        //         0: "F=~11w-B2a4FogqwwB0aX-PwIQtlN3FjLk8D68fbZbNuvslJVjZor6QKA8WlmJ8pDpmwHnJNc5QTH2b56y2NXBd1RT4Ti1cMis0dVIK1VGHehPMudYdSGZkUg5U-CYP3gwmqXyKxYy9aBzjCyh5cpP3tFB7pUnRU"
+        //         1: "bigint64"
+        //         2: {digitsPerChunk: 3}
         const strLengthArrByMethod = strArrByMethod.map(str => str.length)
         console.log(strLengthArrByMethod)  // e.g.: (2) [27(bruteforce53), 23(bigint64)]
 
@@ -104,14 +76,7 @@ export function storeShortest(encodedResultsArr, encodingMethodNamesArr) {
     // Store result info
     const bestMixFlags = new Map([['flags', [...flagsArr]]])
     console.log("bestMixFlags: ", bestMixFlags)  // key: "flags", value: Array(3)
+    resultInfo.set('best-mix', bestMixFlags)
 
-//    const testMap = new Map([
-//        ['flags', [[0,0],[0,0],[0,0]]]
-//    ])
-//    resultInfo.set('best-mix', testMap)  // 'resultInfo' is imported Map
-    resultInfo.set('best-mix', bestMixFlags)  // 'resultInfo' is imported Map
-    console.log("resultInfo: ", resultInfo)  // Map under 'best-mix' has key "flags", but value is Array(0)
-
-    console.log("||||shortestArrByGroup: ", shortestArrByGroup)
     return shortestArrByGroup
 }

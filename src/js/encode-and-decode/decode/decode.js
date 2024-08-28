@@ -108,7 +108,7 @@ function decode(isRelative, isDataManipulatorPage) {
 
 
 function decodeDvals(linesDataMap) {
-    console.log("||||linesDataMap: ", linesDataMap)
+
     let decodedAbsDvalsObj = {}
     let decodedRelDvalsObj = {}
 
@@ -119,7 +119,6 @@ function decodeDvals(linesDataMap) {
         console.log("v.encodedDvals: ", v.encodedDvals) // Encoded string:  x1 + y1 + x2 + y2
         // e.g.: H5yJn8tIS6hWuVfFgdJIY10GsuwXo0w
         console.log("v.encodingMethodFlag: ", v.encodingMethodFlag)
-        // 
 
         let decodedAbsDvals = []
         let decodedRelDvals = []
