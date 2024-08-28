@@ -10,10 +10,8 @@ export function createCodebookToDecodeFrequentDiff(encodedRefDict, maxCodebookSi
 
     // Alphabets
     const alphabets = getAlphabetsForCodebook(maxCodebookSize)
-
     // Decode the reference dictionary
     const refDict = decodeFreqDiffAsRefDict(encodedRefDict)
-
     // Set the kv pair into Map()
     const codebook = new Map();
 
