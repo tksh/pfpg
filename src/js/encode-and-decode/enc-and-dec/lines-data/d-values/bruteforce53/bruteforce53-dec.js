@@ -15,6 +15,10 @@ export function bruteforce53Dec(encodedDvalsStr) {
     // Split into eight elements: [x1RefDict]-[x1Diff]-[y1RefDict]-[y1Diff]-[x2RefDict]-[x2Diff]-[y2RefDict]-[y2Diff]
     const refDictAndDiff = encodedDvalsStr.slice(1).split('-')
 
+    console.log("||||encodedDvalsStr: ", encodedDvalsStr)
+    console.log("||||encodedDvalsStr.slice(1): ", encodedDvalsStr.slice(1))
+    console.log("||||refDictAndDiff: ", refDictAndDiff)
+
     // Split into two arrays: Reference dictionary and encoded diff
     const { refDictByColumn, diffByColumn } = refDictAndDiff.reduce((acc, val, index) => {
         if (index % 2 === 0) {
@@ -27,7 +31,7 @@ export function bruteforce53Dec(encodedDvalsStr) {
 
     //console.log("refDictByColumn: ", refDictByColumn) // 頻出数値が無い column の場合には 空の文字列が 返ってくる
     // Array(4) [ "ctcscpcrbWcmcocKcZ", "cscrctcncocpcjclcqcH", "ctcscr", "ctcscr" ]
-    //console.log("diffByColumn: ", diffByColumn)
+    console.log("diffByColumn: ", diffByColumn)
     // Array(4) [ "21XZVVZfccd80UdeYS3Ybj90fjdcRWhgajfb501T5RR10200TR308W1001RS1U43eg3T4X55S0dj8R10SRfedi30UT461R0010Reb5U5S", "gjbjR ... " ]
 
 
@@ -37,8 +41,10 @@ export function bruteforce53Dec(encodedDvalsStr) {
 
         // Get the codebook as actual size
         const actualCodebookSize = getActualCodebookSize(maxCodebookSize, refDictByColumn[i])
+        console.log("actualCodebookSize: ", actualCodebookSize)
         const codebook = createCodebookToDecodeFrequentDiff(refDictByColumn[i], actualCodebookSize)
         console.log("codebook: ", codebook)
+        /////////////////// !!!!!!!!!!!!!!!!!!!!! Map(2) {'W' => -508, 'X' => -508}
 
 
 

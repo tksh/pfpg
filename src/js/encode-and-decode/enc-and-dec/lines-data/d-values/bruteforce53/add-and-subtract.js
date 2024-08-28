@@ -1,6 +1,7 @@
 import { parseBasicData } from 'enc-and-dec/basic-data/basic-data-enc'
+import { tryDecompress }  from 'encode/try-decompress'
 
-import { uintN }       from 'decode/get-uint-n'
+import { uintN }          from 'decode/get-uint-n'
 
 
 export
@@ -62,7 +63,7 @@ function calculateMinimumPossibleDiffValueFromUintN(uintN) {
 // For encode
 function getMinimumPossibleDiffForEnc() {
     // Use `uintN` from extracted (via textarea)
-    const uintN = parseBasicData().n
+    const uintN = tryDecompress(parseBasicData().n)
     return calculateMinimumPossibleDiffValueFromUintN(uintN)
 }
 // For decode

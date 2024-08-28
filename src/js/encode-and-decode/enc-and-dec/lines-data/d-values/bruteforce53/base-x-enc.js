@@ -35,7 +35,7 @@ import { getAlphabetsForBaseX } from 'enc-and-dec/lines-data/d-values/bruteforce
 export function baseXEnc(numOriginal, baseX) {
     // Add some numbers to shift each number above zero
     let numWithoutMinus = addNumBeforeEncode(numOriginal, baseX)
-    console.log("numOriginal, numWithoutMinus: ", numOriginal, numWithoutMinus)
+    //console.log("numOriginal, numWithoutMinus: ", numOriginal, numWithoutMinus)
 
     const alphabet = getAlphabetsForBaseX(baseX)
     let base = alphabet.length;

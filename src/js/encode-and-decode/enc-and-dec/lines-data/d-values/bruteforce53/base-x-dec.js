@@ -10,9 +10,9 @@ export function baseXDec(str, baseX) {
     let base = alphabet.length;
     let decoded = 0;
 
-    console.log('baseX: ', baseX)
-    console.log('str: ', str)
-    console.log('alphabet: ', alphabet)
+    //console.log('baseX: ', baseX)
+    //console.log('str: ', str)
+    //console.log('alphabet: ', alphabet)
 
     for (let i = 0; i < str.length; i++) {
         let index = alphabet.indexOf(str[i]);

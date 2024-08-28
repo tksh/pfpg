@@ -44,7 +44,8 @@ function bestMixFromNMethods(numberOfMethods) {
 
     // Extract encoded strings as an array
     // [[shortestStr, minLength, methodName], ... ] => [shortestStr, shortestStr, ... ] for each Map() values
-    const shortestStrArr = [...shortestArrByGroup.values()].map(elements => elements[0])
+    const shortestStrArr = [...shortestArrByGroup.values()]
+    // const shortestStrArr = [...shortestArrByGroup.values()].map(elements => elements[0])
 
     // Join the shortest group strings with '&' (ampersand sign)
     const shortestJoined = joinWithAmpersand(shortestStrArr);

@@ -28,25 +28,61 @@ function showDetailsByGroup(nameOfInput, encodedArrByGroupMap, encodingMethodNam
     */
 
     // Get the details of encoding result
-    const keys = [...encodedArrByGroupMap.keys()]
+    const keys   = [...encodedArrByGroupMap.keys()]
     const values = [...encodedArrByGroupMap.values()]
     console.log('values: ', values)  //
     /*
     values:
-        (2) [Array(3), Array(3)]
-            0: (3) ['A=08T6FAhdHhNtMe0ws2FHUnU6v', 23, 'bigint64']
-            1: (3) ['0=~135n3ap2bI1fR-IBdbrkwCjiFCdD1xVpRSu8eawc5qq9t6C…eXDtFc728YUzwUS9wpcbPT8RRUZwIqqJyZUTTsTWf9JUhitGE', 2336, 'bruteforce53']
-            length: 2
+        Execute via bruteforce53Enc():
+            (3) [Array(3), Array(3), Array(3)]
+                0: Array(3)
+                    0: "A=08fEKQ-VoisNalNhZy9GsmZzPU"   // string
+                    1: 28                               // length of string
+                    2: 51                               // number of baseX
+                    length: 3
+                1: Array(3)
+                    ...
+                2: Array(3)
+                    ...
+
+        Execute via bigint64Enc():
+            (3) [Array(3), Array(3), Array(3)]
+                0: Array(3)
+                    0: "A=~1127b-NWrTPcKpRSjaX"         // string
+                    1: 22                               // length of string
+                    2: "bigint64"                       // encoding method name
+                    length: 3
+                1: Array(3)
+                    ...
+                2: Array(3)
+                    ...
+
+        Execute via bestMixFrom2Methods():
+            (3) [Array(3), Array(3), Array(3)]
+                0: Array(3)
+                    0: (3) ['A=08fEKQ-VoisNalNhZy9GsmZzPU', 28, 51]  // array like result of single encoding method execution
+                    1: 3                                             // number of elements of [0]-indexed array
+                    2: "bruteforce53"                                // encoding method name
+                    length: 3
+                1: Array(3)
+                    ...
+                2: Array(3)
+                    ...
     */
+    values.map((value) => console.log("value in .map(): ", value))
+    // e.g.: A=08fEKQ-VoisNalNhZy9GsmZzPU, ...
 
-    const lengthOfValues = values.map((value) => value[1])
-    const groupColors    = values.map((value) => value[0].split('=')[0])
-    const appliedMethod  = values.map((value) => value[2])
+    // Extract from each group array's [0]-indexed array
+    let groupColors    = values.map((value) => value[0].split('=')[0])
+    let lengthOfValues = values.map((value) => value[1])
+    let appliedMethod  = values.map((value) => value[2])
 
+    if (encodingMethodName === 'test') {
+    // if (encodingMethodName === 'best-mix') {
 
-    // Extract actually applied flags for each group.
-    // Only for when executed as best-mix encoding.
-    if (encodingMethodName === 'best-mix') {
+        // Extract actually applied flags for each group.
+        // Only for when executed as best-mix encoding.
+
         //console.log("resultInfo: ", resultInfo)  // e.g.: Map(2) {'bruteforce53' => Map(1), 'bigint64' => Map(1)}
         //console.log("appliedMethod: ", appliedMethod)  // e.g.: (3) ['bigint64', 'bruteforce53', 'bruteforce53']
 
@@ -68,12 +104,23 @@ function showDetailsByGroup(nameOfInput, encodedArrByGroupMap, encodingMethodNam
         const appliedFlagsMap = new Map()
         appliedFlagsMap.set('flags', appliedFlagsByGroup)
         resultInfo.set(`${encodingMethodName}`, appliedFlagsMap)
+
+
+
     }
+//    else {  // single encoding method execution
+//
+//        // Extract from each group array
+//        groupColors    = values.map((value) => value[0].split('=')[0])
+//        lengthOfValues = values.map((value) => value[1])
+//        appliedMethod  = values.map((value) => value[2])
+//    }
 
 
     console.log("resultInfo: ", resultInfo)
 
     const flagsByGroup = resultInfo.get(`${encodingMethodName}`).get('flags')
+    console.log("flagsByGroup: ", flagsByGroup)
 
     // Decode the flags from char to method name
     const flagsByKinds = zip(...Array.from(flagsByGroup))  // transpose the array structure
@@ -84,12 +131,12 @@ function showDetailsByGroup(nameOfInput, encodedArrByGroupMap, encodingMethodNam
 
     // Show in console
     console.log(`//////////////////////// Result of ${nameOfInput} encoding details by group ////////////////////////`)
-    console.log('Group key numbers: ', keys)                               // e.g.: (3) [0, 1, 2]
-    console.log('Group colors encoded: ', groupColors)                     // e.g.: (3) ['A', '0', 'F']
-    console.log('Length of encoded strings: ', lengthOfValues)             // e.g.: (3) [23, 3910, 161]
-    console.log('Flags: ', flagsByGroup)                                   // e.g.: (3) [Array(3), Array(3), Array(3)]
-    console.log('1st flags, Compression method name',          flag1Name)  // e.g.: (3) ['uncompressed', 'uncompressed', 'uncompressed']
-    console.log('2nd flags, Encoding method name',             flag2Name)  // e.g.: (3) ['bigint64', 'bigint64', 'bigint64']
+    console.log('Group key numbers: ', keys)                      // e.g.: (3) [0, 1, 2]
+    console.log('Group colors encoded: ', groupColors)            // e.g.: (3) ['A', '0', 'F']
+    console.log('Length of encoded strings: ', lengthOfValues)    // e.g.: (3) [23, 3910, 161]
+    console.log('Flags: ', flagsByGroup)                          // e.g.: (3) [Array(3), Array(3), Array(3)]
+    console.log('1st flags, Compression method name', flag1Name)  // e.g.: (3) ['uncompressed', 'uncompressed', 'uncompressed']
+    console.log('2nd flags, Encoding method name',    flag2Name)  // e.g.: (3) ['bigint64', 'bigint64', 'bigint64']
 
 
     // Return the values to show also in html when call this function from best mix encoding (bestMixFromNMethods()).

@@ -68,17 +68,23 @@ export function bigint64Enc() {
     const elapsedTime = Math.floor(endTime - startTime)
     showProcessingTime('bigint64Enc()', elapsedTime, 'encoded-strokes-values-time', isOnDataManipulatorPage())
 
-    // Show the encoding result of each group in console
+    // Convert the structure of values
+    // from:
+    //     Key: group ID
+    //     Values: encoded string
+    // to:
+    //     Key: group ID
+    //     Values: [encoded string, encoding-method name, configuration value object]
     const encodedArrByGroup = new Map(
         Array.from(compressedByGroup, ([key, value]) => [
-            key,
-            [value, value.length, 'bigint64']
+            key, [value, 'bigint64', { digitsPerChunk }]
         ])
-    );
+    )
 
+    // Show the encoding result of each group in console
     showDetailsByGroup('Lines Data', encodedArrByGroup, 'bigint64')
 
-    return compressedByGroup
+    return encodedArrByGroup
 }
 
 

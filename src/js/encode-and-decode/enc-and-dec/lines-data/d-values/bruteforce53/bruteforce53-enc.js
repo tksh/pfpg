@@ -15,10 +15,10 @@ import { showStringSize
        , showDetailsByGroup }                 from 'encode/show-result'
 import { storeShorter }                       from 'encode/store-shorter'
 import { tryCompress }                        from 'encode/try-compress'
+import { tryDecompress }                      from 'encode/try-decompress'
 import { jsonToMapObj }                       from 'encode/json-to-map-obj'
 import { outputToTextarea }                   from 'common-utils/output-to-textarea'
 import { isOnDataManipulatorPage }            from 'common-utils/select-output-textarea'
-
 
 ////////////////////////////////// Input: //////////////////////////////////
 
@@ -41,8 +41,9 @@ export function bruteforce53Enc() {
     const maxCodebookSizeEndAt = 52
 
     // min|max diff value (Just for indicating to console at function calculateLimitsForBaseXSkipRange(baseXNumber))
-    const minimumDiffValue = 0 - (2 ** parseBasicData().n - 1) * 4
-    const maximumDiffValue =     (2 ** parseBasicData().n - 1) * 4
+    const uintN = tryDecompress(parseBasicData().n)
+    const minimumDiffValue = 0 - (2 ** uintN - 1) * 4
+    const maximumDiffValue =     (2 ** uintN - 1) * 4
 
     // Loop 1. Max dict size from 0 to 52
 
@@ -105,13 +106,14 @@ export function bruteforce53Enc() {
 
                 // Create the codebook to encode
                 const codebookToEncodeFreqDiff = createCodebookToEncodeFrequentDiff(freqDiffArrActualCodebookSized, actualCodebookSize)
-                console.log('codebookToEncodeFreqDiff: ', codebookToEncodeFreqDiff)
+                console.log('maxCodebookSize and codebookToEncodeFreqDiff: ', maxCodebookSize, codebookToEncodeFreqDiff)
                 // e.g.: Map(29) {-2 => 'x', -1 => 'y', -4 => 'z', -7 => 'A', -3 => 'B', …}
 
 
                 // Create the reference dictionary
                 //   Encode the array of frequency diff values as a string to attach
                 const freqDiffAsRefDict = encodeFreqDiffAsRefDict(freqDiffArrActualCodebookSized)
+                console.log('maxCodebookSize and freqDiffAsRefDict: ', maxCodebookSize, freqDiffAsRefDict)
 
                 try {
                     // Encode the diff values
@@ -146,8 +148,6 @@ export function bruteforce53Enc() {
 
                     //console.log('diffArrEncoded: ', diffArrEncoded);
                     // e.g.: (484) [7, 'ln', 'B', 'B', 'D', 'N', 'X', 6, 'nl', 'U', 8, ...
-
-                    //return diffArrEncoded;
 
                     // Join the encoded diff values as a string
                     const diffEncodedJoined = diffArrEncoded.join('')
@@ -230,7 +230,8 @@ export function bruteforce53Enc() {
     console.log('currentShortestByGroup: ', currentShortestByGroup)
 
     // Whole group strings joined with '&' (ampersand sign)
-    const shortestJoined = joinWithAmpersand(currentShortestByGroup)
+    const shortestStrByGroup = simplifyMap(currentShortestByGroup)  // simplify the value of Map, [string, length, baseX] => string
+    const shortestJoined = joinWithAmpersand(shortestStrByGroup)
 
     // Output to textarea
     outputToTextarea(shortestJoined, 'textarea-lines-data-encoded')
@@ -244,13 +245,40 @@ export function bruteforce53Enc() {
     showProcessingTime('bruteforce53Enc()', elapsedTime, 'encoded-strokes-values-time', isOnDataManipulatorPage())
 
     // Show the encoding result of each group in console
-    const encodedArrByGroup = new Map(
-        Array.from(currentShortestByGroup, ([key, value]) => [
-            key,
-            [value, value.length, 'bigint64']
-        ])
-    );
-    showDetailsByGroup('Lines Data', encodedArrByGroup, 'bruteforce53')
+//    const encodedArrByGroup = new Map(
+//        Array.from(currentShortestByGroup, ([key, value]) => [
+//            key,
+//            [value, value.length, 'bigint64']
+//        ])
+//    );
+    showDetailsByGroup('Lines Data', currentShortestByGroup, 'bruteforce53')
 
     return currentShortestByGroup
 }
+
+
+function simplifyMap(complexMap) {
+    return new Map(
+        Array.from(complexMap, ([key, [value]]) => [key, value])
+    );
+}
+
+/*
+
+// 使用例
+const complexMap = new Map([
+    ['1', ['some', 4, 'STRING']],
+    ['2', ['thing', 5, 'STRING']],
+    ['3', ['to write', 8, 'STRING']]
+]);
+
+const simplifiedMap = simplifyMap(complexMap);
+console.log(simplifiedMap);
+
+Map(3) {
+    '1' => 'some',
+    '2' => 'thing',
+    '3' => 'to write'
+}
+
+*/
