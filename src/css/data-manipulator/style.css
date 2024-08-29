@@ -5,11 +5,13 @@
 h2 {
     padding-left: 1rem;
     font-size: 2rem;
+    font-weight: normal;
 }
 h2 .no-wrap {
     white-space: nowrap;
     padding-left: 1rem;
     font-size: 2rem;
+    font-weight: bold;
 }
 
 h3 {
