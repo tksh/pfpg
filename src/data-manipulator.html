@@ -143,11 +143,11 @@
 
 <body>
     <h1>data-manipulator</h1>
-    <h2>Encoding: <span class="no-wrap">JSONs → query string</span></h2>
+    <h2>Encoding: <span class="display-block">JSONs → query string</span></h2>
     <div class="bg-0 pad">
         <h3>Encode the Basic Data:</h3>
 
-        <h4>1. ⬆ Basic Data: <span>./json_extracted/%{ARTWORK_ID}_basic_data.json</span></h4>
+        <h4>1. ⬆ Basic Data:</h4>
         <label for="select-file-basic-data" class="custom-file-upload-button">Select the JSON file that contains n(required), version, title, desc, metadata, colors</label>
         <br />
         <input type="file" id="select-file-basic-data" onchange="selectFileToInput('select-file-basic-data', 'textarea-basic-data-uploaded')" />
@@ -189,7 +189,7 @@
     <div class="bg-1 pad">
         <h3>Encode the Lines Data:</h3>
 
-        <h4>2.1 ⬆ Lines Data: <span>./json_extracted/%{ARTWORK_ID}_lines_data.json</span></h4>
+        <h4>2.1 ⬆ Lines Data:</h4>
         <label for="select-file-lines-data">Select the JSON file that contains the grouped lines data extracted from SVG</label>
         <br />
         <input type="file" id="select-file-lines-data" onchange="selectFileToInput('select-file-lines-data', 'textarea-lines-data-uploaded')" />
@@ -277,7 +277,7 @@
         </textarea>
         <br />
 
-        <h4>2.2 ⬆ Lines Data Aggregated for Encoding: <span>./json_extracted/%{ARTWORK_ID}_liens_data_aggregated_for_encoding.json</span></h4>
+        <h4>2.2 ⬆ Lines Data Aggregated for Encoding:</h4>
         <label for="select-file-agg-data-for-comp">Select the JSON file that contains the data aggregated from grouped lines data</label>
         <br />
         <input type="file" id="select-file-agg-data-for-comp" onchange="selectFileToInput('select-file-agg-data-for-comp', 'textarea-agg-data-for-comp-uploaded')" />
@@ -487,7 +487,7 @@
 
     </div>
     <br>
-    <h2>Decoding: <span class="no-wrap">query string → SVG</span></h2>
+    <h2>Decoding: <span class="display-block">query string → SVG</span></h2>
     <div class="bg-3 pad">
         <h3>Decode the url params to generate the SVG string</h3>
 

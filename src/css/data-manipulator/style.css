@@ -7,11 +7,15 @@ h2 {
     font-size: 2rem;
     font-weight: normal;
 }
-h2 .no-wrap {
-    white-space: nowrap;
-    padding-left: 1rem;
+h2 .display-block {
     font-size: 2rem;
     font-weight: bold;
+}
+@media screen and (max-width: 512px) {
+    h2 .display-block {
+        display: block;
+        padding-left: 1rem;
+    }
 }
 
 h3 {
@@ -25,6 +29,7 @@ h4 {
     background-color: #fff6;
     padding-left: .2rem;
 }
+
 
 button,
 input[type="file"]::file-selector-button {
@@ -83,10 +88,4 @@ button,                         /* <button> */
 
 .pad {
     padding: 1rem;
-}
-
-h3 span,
-h4 span {
-    font-weight: normal;
-    font-style: italic;
 }
