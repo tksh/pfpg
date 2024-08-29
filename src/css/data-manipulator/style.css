@@ -6,6 +6,12 @@ h2 {
     padding-left: 1rem;
     font-size: 2rem;
 }
+h2 .no-wrap {
+    white-space: nowrap;
+    padding-left: 1rem;
+    font-size: 2rem;
+}
+
 h3 {
     background-color: #0009;
     color: white;
