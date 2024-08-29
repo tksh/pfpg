@@ -7,6 +7,9 @@ h2 {
     font-size: 2rem;
     font-weight: normal;
 }
+h2 .no-wrap {
+    white-space: nowrap;
+}
 h2 .display-block {
     font-size: 2rem;
     font-weight: bold;
