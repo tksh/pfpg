@@ -1,7 +1,8 @@
 import { outputToTextarea } from 'common-utils/output-to-textarea'
 import { readTextarea }     from 'common-utils/read-textarea'
+import { isNonEmpty }       from 'common-utils/is-non-empty'
 
-export { mergeBasicDataAndStrokesValues }
+export { mergeBasicDataAndLinesData }
 
 
 // function to download encoded url params string
@@ -129,22 +130,32 @@ function getTitle() {
 
 //// Only on data-manipulator.html
 //if (isOnDataManipulatorPage()) {
-//    document.getElementById('button-to-merge-as-url-params').addEventListener('click', mergeBasicDataAndStrokesValues);
+//    document.getElementById('button-to-merge-as-url-params').addEventListener('click', mergeBasicDataAndLinesData);
 //}
 
-async function mergeBasicDataAndStrokesValues(){
+async function mergeBasicDataAndLinesData(){
     // Basic Data encoded string from textarea
     const basicDataStr = readTextarea(`textarea-basic-data-encoded`)
 
     // Lines Data encoded string from textarea
     const linesDataStr = readTextarea(`textarea-lines-data-encoded`)
 
-    // Merge as a string
-    const urlParamsStr = basicDataStr + linesDataStr
+    // Check if both strings are present
+    if (isNonEmpty(basicDataStr) && isNonEmpty(linesDataStr)) {
 
-    // Output to textarea
-    outputToTextarea(urlParamsStr, 'textarea-encoded-url-params')
+        // Merge as a string
+        const urlParamsStr = basicDataStr + linesDataStr
 
+        // Output to textarea
+        outputToTextarea(urlParamsStr, 'textarea-encoded-url-params')
+
+    } else {
+
+        // Output error message if either or both strings are missing
+        const errorMessage = "Error: Both basic data and lines data must be provided.";
+        outputToTextarea(errorMessage, 'textarea-encoded-url-params');
+
+    }
 
     // Check the size after ZSTD compression
     const blobSize = await getBlobSize(urlParamsStr);

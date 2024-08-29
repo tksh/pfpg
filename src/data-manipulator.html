@@ -143,11 +143,12 @@
 
 <body>
     <h1>data-manipulator</h1>
+    <h2>Encoding: JSONs → query string</h2>
     <div class="bg-0 pad">
-        <h2>Encode the Basic Data: <span>For the first element of encoded url params</span></h2>
+        <h3>Encode the Basic Data:</h3>
 
-        <h3>1. ⬆ Basic Data:</h3>
-        <label for="select-file-basic-data" class="custom-file-upload-button">Select the JSON file that contains title, viewbox and base color (rect fill)</label>
+        <h4>1. ⬆ Basic Data: <span>./json_extracted/%{ARTWORK_ID}_basic_data.json</span></h4>
+        <label for="select-file-basic-data" class="custom-file-upload-button">Select the JSON file that contains n(required), version, title, desc, metadata, colors</label>
         <br />
         <input type="file" id="select-file-basic-data" onchange="selectFileToInput('select-file-basic-data', 'textarea-basic-data-uploaded')" />
         <br />
@@ -173,10 +174,10 @@
 
     </div>
     <div class="bg-1 pad">
-        <h2>Encode the Lines Data: <span>For the second element of encoded url params</span></h2>
+        <h3>Encode the Lines Data:</h3>
 
-        <h3>2.1 ⬆ Lines Data</h3>
-        <label for="select-file-lines-data">Select the JSON file that contains the lines data extracted from SVG</label>
+        <h4>2.1 ⬆ Lines Data: <span>./json_extracted/%{ARTWORK_ID}_lines_data.json</span></h4>
+        <label for="select-file-lines-data">Select the JSON file that contains the grouped lines data extracted from SVG</label>
         <br />
         <input type="file" id="select-file-lines-data" onchange="selectFileToInput('select-file-lines-data', 'textarea-lines-data-uploaded')" />
         <br />
@@ -263,8 +264,8 @@
         </textarea>
         <br />
 
-        <h3>2.2 ⬆ Lines Data Aggregated for Encoding</h3>
-        <label for="select-file-agg-data-for-comp">Select the JSON file that contains the data aggregated from lines data</label>
+        <h4>2.2 ⬆ Lines Data Aggregated for Encoding: <span>./json_extracted/%{ARTWORK_ID}_liens_data_aggregated_for_encoding.json</span></h4>
+        <label for="select-file-agg-data-for-comp">Select the JSON file that contains the data aggregated from grouped lines data</label>
         <br />
         <input type="file" id="select-file-agg-data-for-comp" onchange="selectFileToInput('select-file-agg-data-for-comp', 'textarea-agg-data-for-comp-uploaded')" />
         <br />
@@ -421,7 +422,7 @@
         <br />
 
         <!-- Buttons to encode the strokes values -->
-        <h3>Select: Encoding Methods</h3>
+        <h4>Select: Encoding Methods</h4>
 
         <button id="encode-lines-data-as-bruteforce53">Encode via <b>bruteforce53Enc()</b></button>
         <p>For: UInt[5-14]Portray<br>With: Lines Data Aggregated for Encoding (stroke_width.list_of, stroke_width.count_by, d.relative.diff_by_row, d.relative.frequent_diff_values_sorted and d.relative.frequent_diff_counts_sorted)</p>
@@ -436,7 +437,7 @@
         <br />
 
 
-        <h3>Try Above Multiple Encoding Methods and Get Shortest Result By Group</h3>
+        <h4>Try Above Multiple Encoding Methods and Get Shortest Result By Group</h4>
 
         <button class="mix-encode-button" data-methods="3">Encode via <b>bestMixFrom3Methods()</b></button>
         <p>For: UInt[<b>5</b>-14]Portray<br>Methods: bruteforce53Enc(), bigint64Enc() and swap63Enc()</p>
@@ -455,11 +456,11 @@
 
     </div>
     <div class="bg-2 pad">
-        <h2>Merge the Encoded Basic Data and Lines Data</h2>
+        <h3>Merge the encoded Basic Data and Lines Data</h3>
 
-        <h3>3. ⬇ Finished url params:</h3>
-        <button id="button-to-merge-as-url-params">Merge via <b>mergeBasicDataAndStrokesValues()</b></button>
-        <textarea id="textarea-encoded-url-params" class="height-2" placeholder="Encoded url params"></textarea>
+        <h4>3. ⬇ Finished query string:</h4>
+        <button id="button-to-merge-as-url-params">Merge via <b>mergeBasicDataAndLinesData()</b></button>
+        <textarea id="textarea-encoded-url-params" class="height-2" placeholder="Finished query string = encoded Basic Data url params + encoded Lines Data url params"></textarea>
 
         <!-- Button to copy -->
         <button class="copy-button" data-textarea-id="textarea-encoded-url-params">Copy to clipboard</button>
@@ -473,16 +474,17 @@
 
     </div>
     <br>
+    <h2>Decoding: query string → SVG</h2>
     <div class="bg-3 pad">
-        <h2>Decode the url params and Generate the SVG String</h2>
+        <h3>Decode the url params to generate the SVG string</h3>
 
-        <h3>⬇ Path style: Relative and Merged</h3>
+        <h4>⬇ Path mode: Relative and Merged</h4>
         <textarea id="textarea-decoded-svg-as-rel" class="height-2" placeholder="If inputted text at address bar includes the url params like /data-manipulator.html?..., Decoding to SVG is automatically starts when page loaded and result text will export here."></textarea>
         <button class="copy-button" data-textarea-id="textarea-decoded-svg-as-rel">Copy to clipboard</button>
         <p id="encoded-size-compare-for-rel"></p>
         <p id="encoded-strokes-values-time-for-rel"></p>
 
-        <h3>⬇ Path style: Absolute and Separated</h3>
+        <h4>⬇ Path mode: Absolute and Separated</h4>
         <textarea id="textarea-decoded-svg-as-abs" class="height-2" placeholder="If inputted text at address bar includes the url params like /data-manipulator.html?..., Decoding to SVG is automatically starts when page loaded and result text will export here."></textarea>
         <button class="copy-button" data-textarea-id="textarea-decoded-svg-as-abs">Copy to clipboard</button>
         <p id="encoded-size-compare-for-abs"></p>

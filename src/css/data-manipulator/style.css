@@ -3,13 +3,17 @@
 }
 
 h2 {
+    padding-left: 1rem;
+    font-size: 2rem;
+}
+h3 {
     background-color: #0009;
     color: white;
     letter-spacing: .1rem;
     padding-left: .2rem;
 }
 
-h3 {
+h4 {
     background-color: #fff6;
     padding-left: .2rem;
 }
@@ -54,7 +58,7 @@ button,                         /* <button> */
 }
 
 .bg-0 {
-    background-color: plum;
+    background-color: pink;
 }
 
 .bg-1 {
@@ -62,7 +66,7 @@ button,                         /* <button> */
 }
 
 .bg-2 {
-    background-color: pink;
+    background-color: plum;
 }
 
 .bg-3 {
@@ -73,7 +77,8 @@ button,                         /* <button> */
     padding: 1rem;
 }
 
-h2 span {
+h3 span,
+h4 span {
     font-weight: normal;
     font-style: italic;
 }

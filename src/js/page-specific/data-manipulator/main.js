@@ -5,7 +5,7 @@ import { bruteforce53Enc }                from 'enc-and-dec/lines-data/d-values/
 import { bigint64Enc }                    from 'enc-and-dec/lines-data/d-values/bigint64/bigint64-enc'
 import { swap63Enc }                      from 'enc-and-dec/lines-data/d-values/swap63/swap63-enc'
 import { setupMixEncodingButtons }        from 'encode/best-mix-enc'
-import { mergeBasicDataAndStrokesValues } from 'io/download-url-params'
+import { mergeBasicDataAndLinesData } from 'io/download-url-params'
 import { setupCopyButtons }               from 'io/copy-textarea'
 
 // Decode from url params to SVG when page loaded.
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupMixEncodingButtons()
 
     // Buttons to merge
-    initButtons('button-to-merge-as-url-params',     mergeBasicDataAndStrokesValues);
+    initButtons('button-to-merge-as-url-params',     mergeBasicDataAndLinesData);
 
     // Buttons to copy the text value of textarea of
     //   1. 'Encoded url params',
