@@ -1,12 +1,15 @@
-import { isOnDataManipulatorPage }        from 'common-utils/select-output-textarea'
-import { decode }                         from 'decode/decode'
-import { encodeBasicData }                from 'enc-and-dec/basic-data/basic-data-enc'
-import { bruteforce53Enc }                from 'enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc'
-import { bigint64Enc }                    from 'enc-and-dec/lines-data/d-values/bigint64/bigint64-enc'
-import { swap63Enc }                      from 'enc-and-dec/lines-data/d-values/swap63/swap63-enc'
-import { setupMixEncodingButtons }        from 'encode/best-mix-enc'
+import { isOnDataManipulatorPage }    from 'common-utils/select-output-textarea'
+import { decode }                     from 'decode/decode'
+import { setupMixEncodingButtons }    from 'encode/best-mix-enc'
+import { encodeBasicData
+       , parseBasicData
+       , updateCheckboxStates
+       , initBasicDataTextarea }      from 'enc-and-dec/basic-data/basic-data-enc'
+import { bruteforce53Enc }            from 'enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc'
+import { bigint64Enc }                from 'enc-and-dec/lines-data/d-values/bigint64/bigint64-enc'
+import { swap63Enc }                  from 'enc-and-dec/lines-data/d-values/swap63/swap63-enc'
 import { mergeBasicDataAndLinesData } from 'io/download-url-params'
-import { setupCopyButtons }               from 'io/copy-textarea'
+import { setupCopyButtons }           from 'io/copy-textarea'
 
 // Decode from url params to SVG when page loaded.
 // If there is no url params at index.html, Decode from sample hidden text.
@@ -51,4 +54,10 @@ document.addEventListener('DOMContentLoaded', () => {
     //   3. 'Decode SVG String (absolute)'
     setupCopyButtons();
 
+    // Initialize checkbox states based on pre-inputted sample Basic Data json
+    const data = parseBasicData()
+    updateCheckboxStates(data)
+
+    // textarea of Basic Data
+    initBasicDataTextarea()
 });

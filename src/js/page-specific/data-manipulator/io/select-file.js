@@ -1,3 +1,6 @@
+import { updateCheckboxStates
+       , parseBasicData }       from 'enc-and-dec/basic-data/basic-data-enc'
+
 export function selectFileToInput(selectFileId, textAreaId){
     // FileListオブジェクト取得
     const selectFiles = document.querySelector(`#${selectFileId}`).files
@@ -12,6 +15,13 @@ export function selectFileToInput(selectFileId, textAreaId){
     // ファイル読み込み完了時の処理
     reader.onload = () => {
         document.querySelector(`#${textAreaId}`).innerHTML = reader.result
+
+        // Update checkboxes status for Basic Data decoding
+        if (textAreaId === 'textarea-basic-data-uploaded') {
+            // Update checkbox states based on data
+            const data = parseBasicData();
+            updateCheckboxStates(data);
+        }
     }
 
     // ファイル読み込みエラー時の処理

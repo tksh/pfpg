@@ -10,7 +10,9 @@ import { BASIC_DATA_KEYS  } from 'constants'
 export
     { encodeBasicData
     , parseBasicData
-    }
+    , updateCheckboxStates
+    , initBasicDataTextarea
+}
 
 ////////////////////////////////// Input: //////////////////////////////////
 
@@ -30,7 +32,7 @@ export
 
 ////////////////////////////////// Output: //////////////////////////////////
 
-// output: ?version=~0.9.0&title=~202401_001&desc=001kObPFhaNkBHUZJE0kMCGBFCDo8j7lBr_44z9CIqW3Ba7eLr9kVIlASMdS4&metadata=01p0oUdqIa ... jH6Mp&
+// output: ?version=~0.9.0&title=~202401_001&desc=001kObPFha ... SMdS4&metadata=01p0o ... jH6Mp&
 
 
 
@@ -43,12 +45,14 @@ function encodeBasicData() {
     // Init the url params string to return
     let dataAsUrlParams = "?"
 
-    BASIC_DATA_KEYS.forEach(prop => {
-        // Check the value of `data[prop]` exists actually to abbreviate if possible.
+    // Get selected fields
+    const selectedFields = Array.from(document.querySelectorAll('#basic-data-options input[type="checkbox"]:checked')).map(cb => cb.id.replace('include-', ''))
+
+    selectedFields.forEach(prop => {
         if (prop in data && isNonEmpty(data[prop])) {
             dataAsUrlParams += processProperty(prop, data[prop]);
         } else {
-            console.log(`${prop} is missing`);
+            console.log(`${prop} is missing or empty`);
         }
     });
 
@@ -66,25 +70,44 @@ function encodeBasicData() {
 }
 
 
+function updateCheckboxStates(data) {
+    BASIC_DATA_KEYS.forEach(key => {
+        if (key !== 'n') {  // Skip 'n' as it's always required
+            const checkbox = document.getElementById(`include-${key}`)
+            const label = checkbox.nextElementSibling
+
+            if (!(key in data) || data[key] === '') {
+                checkbox.checked = false
+                checkbox.disabled = true
+                label.textContent = `${key} (value not found in JSON)`
+            } else {
+                checkbox.checked = true
+                checkbox.disabled = false
+                label.textContent = key
+            }
+        }
+    })
+}
+
+
 // Parse and manipulate the basic data JSON
 
 function parseBasicData() {
-
     // Read from textarea
     const rawStr = readTextarea('textarea-basic-data-uploaded')
     const json = JSON.parse(rawStr)
 
     const result = {};
 
-    if ('n'        in json) result.n        = json.n;
-    if ('version'  in json) result.version  = json.version;
-    if ('title'    in json) result.title    = json.title;
-    if ('desc'     in json) result.desc     = json.desc;
-    if ('metadata' in json) result.metadata = json.metadata;
-    if ('colors'   in json) result.colors   = json.colors;
+    BASIC_DATA_KEYS.forEach(key => {
+        if (key in json && json[key] !== '') {
+            result[key] = json[key];
+        }
+    });
 
     return result;
 }
+
 
 // Is valid string as URI
 // https://www.rfc-editor.org/rfc/rfc3986#section-2.3
@@ -114,4 +137,13 @@ function processProperty(propertyName, value) {
         console.log(`"${value}" is NOT valid, it needs to be encoded using URLCompressor.`);
         return `${propertyName}=~${URLCompressor.compress(value)}&`;
     }
+}
+
+
+// Add event listener for textare
+function initBasicDataTextarea() {
+    document.getElementById('textarea-basic-data-uploaded').addEventListener('input', () => {
+        const data = parseBasicData()
+        updateCheckboxStates(data)
+    });
 }
