@@ -8,18 +8,17 @@ h2 {
     font-weight: normal;
 }
 h2 .display-block {
-    font-size: 2rem;
+    font-size: inherit;
     font-weight: bold;
+}
+h2 .no-wrap {
+    font-size: inherit;
+    white-space: nowrap;
 }
 @media screen and (max-width: 512px) {
     h2 .display-block {
         display: block;
         padding-left: 1rem;
-        font-size: 2rem;
-    }
-    h2 .no-wrap {
-        font-size: 2rem;
-        white-space: nowrap;
     }
 }
 
