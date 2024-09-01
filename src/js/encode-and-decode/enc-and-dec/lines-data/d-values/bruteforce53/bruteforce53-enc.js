@@ -12,6 +12,8 @@ import { handleSingleDigit
 import { encodeFreqDiffAsRefDict }            from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-ref-dict'
 import { getEncodedAttrsExceptsDvals }        from 'encode/get-attrs-excepts-dvals'
 import { joinWithAmpersand }                  from 'encode/join-with-ampersand'
+import { createMapFromNestedArrays
+       , mergeArrays }                        from 'encode/transform-array'
 import { simplifyMap }                        from 'encode/simplify-map'
 import { showStringSize
        , showDetailsByGroup }                 from 'encode/show-result'
@@ -21,6 +23,7 @@ import { jsonToMapObj }                       from 'encode/json-to-map-obj'
 import { outputToTextarea }                   from 'common-utils/output-to-textarea'
 import { isOnDataManipulatorPage }            from 'common-utils/select-output-textarea'
 
+import { resultInfo }                         from 'constants'
 ////////////////////////////////// Input: //////////////////////////////////
 
 // Basic Data
@@ -37,6 +40,9 @@ export function bruteforce53Enc() {
 
     // To store the shortest encoded string of each group
     let currentShortestByGroup = new Map()
+
+    // To store info
+    let resultArrWholeBaseX = []
 
     const maxCodebookSizeStartAt = 0
     const maxCodebookSizeEndAt = 52
@@ -55,6 +61,8 @@ export function bruteforce53Enc() {
         console.log('////////////////////////////////// baseXNumber: ', baseXNumber, ' //////////////////////////////////') // 52, 51, ... 1, 0
 
         const encodedDvals = new Map()
+        // To store info
+        let resultNumArrByGroup = []
 
         const aggDataMap = jsonToMapObj(`textarea-agg-data-for-comp-uploaded`)
 
@@ -63,17 +71,15 @@ export function bruteforce53Enc() {
         const baseXRangeLimits = calculateLimitsForBaseXSkipRange(baseXNumber, minimumDiffValue, maximumDiffValue)
         // Object { baseXSkipRangeLowerLimit, baseXSkipRangeUpperLimit }
 
-
         // Loop 2. Each lines-group (.g_id) from '1' to group size
-
+        
         for (const aggData of aggDataMap.values()) {
             //console.log('aggData.g_id: ', aggData.g_id)
             // 1
             //console.log('aggData.d.relative: ', aggData.d.relative)
             // Object { diff_by_row: {…}, frequent_diff_values_sorted: {…}, frequent_diff_counts_sorted: {…} }
-
+            
             let refDictAndDiffEncodedFourColumns = []
-
 
             // Loop 3. Four columns from 'x1' to 'y2'
 
@@ -162,7 +168,7 @@ export function bruteforce53Enc() {
                     // 外側のエラーハンドリングでキャッチし、処理を中断する
                     console.error("An error occurred during encoding:", error.message);
                     return null; // 処理を中断し、nullを返す
-            }
+                }
 
             }
 
@@ -175,11 +181,21 @@ export function bruteforce53Enc() {
             // Encode the baseXNumber to prepend
             const baseXEncoded = base53Enc(baseXNumber)
 
-            // Set the encoded d values ([baseX][refDict]-[encodedDiff]) into map as value with group ID key
-            encodedDvals.set(aggData.g_id, baseXEncoded + refDictAndDiffEncodedFourColumnsJoined)
+            // Final encoded d value form to: [baseX][refDict]-[encodedDiff]
+            const encodedDvalStr = baseXEncoded + refDictAndDiffEncodedFourColumnsJoined
 
+            // Set the encoded d values into map as value with group ID key
+            encodedDvals.set(aggData.g_id, encodedDvalStr)
+
+
+            // Store info
+            resultNumArrByGroup.push([aggData.g_id, baseXNumber, encodedDvalStr.length])
         }
-        console.log('encodedDvals: ', encodedDvals)
+
+        // Store info
+        //resultArrWholeBaseX.push(...resultNumArrByGroup)
+
+        console.log('resultArrWholeBaseX: ', resultArrWholeBaseX)
         // e.g.: Map(5) {'1' => 'crcscn-120yZ19zy6ZlqyMKlSy1lxz-cr-0lL1Md7lpMElvlWlrzMIlUlqMHz00lP-cpcqct-00z5Z41Zz0031lXy326y-crcscd-MIlxZzylUMAMezME2lMlvMayZ01', '2' => '-0lNM ...
         // e.g.: x1からy2まで 全てに頻出数値が無い場合: '5' => '-lmlF3lL10lK--lRLPlp4lk4lj--0lk1lL130--21lL1lk00'}
 
@@ -198,7 +214,7 @@ export function bruteforce53Enc() {
         const encodedAttrsExceptsDvals = getEncodedAttrsExceptsDvals()
 
         // Choose shorter one between URLComp applied or not, by each group
-        const compressedByGroup = tryCompress(
+        const { compressedByGroup, compressingResultArr } = tryCompress(
             encodedDvals,
             encodedAttrsExceptsDvals,
             'bruteforce53'
@@ -207,19 +223,44 @@ export function bruteforce53Enc() {
         //  Map(5) {'1' => '0=129CaIjMCzLAFox3gEVYTdnymbAmwP-UWDCnew3h-Aqsd6rQsPf7nuc97B-Tyl896LIItSqsH-0_igZRCKY265Ta0zzD8-axd0B3NgagFJ2rRrUWcULFyn1IwBi', '2' => '0=129zi ...
 
 
+        const resultArr = mergeArrays(resultNumArrByGroup, compressingResultArr)
+        // input:
+        // resultNumArrByGroup
+        //     0: (3) [0, 52, 20]
+        //     1: (3) [1, 52, 3497]
+        //     2: (3) [2, 52, 144]
+        //      ...
+        // compressingResultArr
+        //     0: (3) [27, 27, 'uncompressed']
+        //     1: (3) [3511, 2709, 'URLCompressor']
+        //     2: (3) [149, 133, 'URLCompressor']
+        //      ...
+        console.log("resultArr: ", resultArr)
+        // output:
+        //     (3) [Array(6), Array(6), Array(6)]
+        //         0: (6) [0, 52, 20, 27, 27, 'uncompressed']
+        //         1: (6) [1, 52, 3497, 3511, 2709, 'URLCompressor']
+        //         2: (6) [2, 52, 144, 149, 133, 'URLCompressor']
+        //         length: 3
+
+        resultArrWholeBaseX.push(...resultArr)
+
 
         // Store the shortest string by each group
 
-        // For first loop, init the map with current value
+        // At first loop, init the map with current value and change the structure
         if (maxCodebookSize === maxCodebookSizeStartAt) {
-            console.log('maxCodebookSize in first loop: ', maxCodebookSize) // 0
-            currentShortestByGroup = compressedByGroup
-            console.log('currentShortestByGroup in first loop: ', currentShortestByGroup)
+
+            currentShortestByGroup = transformMap(compressedByGroup, baseXNumber)
+
+            console.log(
+                `currentShortestByGroup in first loop (maxCodebookSize: ${maxCodebookSize}, baseX: ${baseXNumber}): `,
+                currentShortestByGroup
+            )
         }
 
-        // For after second loop
-        // baseXNumber will be used for just indicating to console when updated the current shortest.
-        currentShortestByGroup = storeShorter(currentShortestByGroup, compressedByGroup, baseXNumber)
+        // After second loop
+        currentShortestByGroup = storeShorter(currentShortestByGroup, transformMap(compressedByGroup, baseXNumber), baseXNumber)
 
     } // End of Loop for every baseX values: [0-52]
 
@@ -247,5 +288,26 @@ export function bruteforce53Enc() {
 
     showDetailsByGroup('Lines Data', currentShortestByGroup, 'bruteforce53')
 
+
+    // Set result info with 'bruteforce53-analytics--...'
+    // the relations of each baseX numbers and result string length
+    const resultByGroup = createMapFromNestedArrays(resultArrWholeBaseX)
+    resultInfo.set('bruteforce53-analytics--0_baseX-1_encodedDvals-2_uncompressed-3_bestCompressed-4_bestMethod', resultByGroup)
+
     return currentShortestByGroup
+}
+
+
+
+// 値を 文字列から3要素の配列に変更し storeShorter() の返り値と同じ構造にする
+// 最初の要素に元の値の文字列を入れる
+function transformMap(map, baseXNumber) {
+    const newMap = new Map();
+
+    map.forEach((value, key) => {
+        const newArray = [value, 'bruteforce53', baseXNumber];
+        newMap.set(key, newArray);
+    });
+
+    return newMap;
 }

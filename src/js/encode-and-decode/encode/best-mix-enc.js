@@ -1,3 +1,9 @@
+/**
+ * Module for encoding and processing data using various methods.
+ * This module provides functionality to encode data using different methods,
+ * compare the results, and display the best mix of encoding methods.
+ */
+
 import { bigint64Enc }        from 'enc-and-dec/lines-data/d-values/bigint64/bigint64-enc'
 import { bruteforce53Enc }    from 'enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc'
 import { swap63Enc }          from 'enc-and-dec/lines-data/d-values/swap63/swap63-enc'
@@ -12,69 +18,93 @@ import { flagsMap }           from 'constants'
 
 
 /**
- * Selects the best mix of encoding methods based on the given number of methods.
- * @param {number} numberOfMethods - The number of encoding methods to consider (2 or 3).
+ * Object containing all available encoding methods.
+ * Each method is a function that returns a Map of encoded data.
  */
-function bestMixFromNMethods(numberOfMethods) {
-    // Read the result of whole encoding methods
-    const bruteforce53Map = bruteforce53Enc(); // Bruteforce 53 encoding
-    const bigint64Map = bigint64Enc();         // Bigint 64 encoding
+const ENCODING_METHODS = {
+    bruteforce53: bruteforce53Enc,
+    bigint64: bigint64Enc,
+    swap63: swap63Enc,
+};
 
-    // Optional third method
-    let swap63Map;
-    if (numberOfMethods === 3) {
-        swap63Map = swap63Enc(); // Swap 63 encoding
-    }
+/**
+ * Retrieves a subset of encoding methods based on the specified number.
+ * @param {number} numberOfMethods - The number of encoding methods to retrieve.
+ * @returns {Array<Function>} An array of encoding method functions.
+ */
+const getEncodingMethods = (numberOfMethods) => {
+    const methods = ['bruteforce53', 'bigint64', 'swap63'].slice(0, numberOfMethods);
+    return methods.map(method => ENCODING_METHODS[method]);
+};
 
-    // Compare and get the shortest one by group
-    let shortestArrByGroup;
+/**
+ * Retrieves the names of encoding methods based on the specified number.
+ * @param {number} numberOfMethods - The number of encoding method names to retrieve.
+ * @returns {Array<string>} An array of encoding method names.
+ */
+const getEncodingMethodNames = (numberOfMethods) => {
+    return Array.from(flagsMap.get('2nd').keys()).slice(0, numberOfMethods);
+};
 
-    // Encoding method names list
-    const encodingMethodsMap = flagsMap.get('2nd')
-    // e.g.: Map(3) {'bruteforce53' => '0', 'bigint64' => '1', 'swap63' => '2'}
-    const encodingMethodNamesArr = Array.from(encodingMethodsMap.keys())
-    // e.g.: (3) ['bruteforce53', bigint64', 'swap63']
+/**
+ * Applies each encoding method to the data.
+ * @param {Array<Function>} methods - An array of encoding method functions.
+ * @returns {Array<Map>} An array of Maps containing the encoded data from each method.
+ */
+const encodeWithMethods = (methods) => {
+    return methods.map(method => method());
+};
 
+/**
+ * Processes the encoded data to find the shortest encoding for each group.
+ * @param {Array<Map>} encodedMaps - An array of Maps containing encoded data.
+ * @param {Array<string>} methodNames - An array of encoding method names.
+ * @returns {Array} An array containing the shortest encoded data and its associated information.
+ */
+const processEncodedData = (encodedMaps, methodNames) => {
+    const shortestArrByGroup = storeShortest(encodedMaps, methodNames);
+    const shortestStrByGroup = simplifyMap(shortestArrByGroup);
+    const shortestStrArr = [...shortestStrByGroup.values()];
+    return [shortestArrByGroup, shortestStrArr];
+};
 
-    if (numberOfMethods === 3) {
-        // When considering 3 methods
-        shortestArrByGroup = storeShortest([bruteforce53Map, bigint64Map, swap63Map], encodingMethodNamesArr);
-    } else { // numberOfMethods === 2
-        // When considering 2 methods
-        shortestArrByGroup = storeShortest([bruteforce53Map, bigint64Map], encodingMethodNamesArr);
-    }
-
-    // [[shortestStr, method-name, configuration-value], [ ... ]] => [shortestStr, shortestStr, ... ] for each Map() values
-    const shortestStrByGroup = simplifyMap(shortestArrByGroup)
-
-    // Extract encoded strings as an array
-    const shortestStrArr = [...shortestStrByGroup.values()]
-    // const shortestStrArr = [...shortestArrByGroup.values()].map(elements => elements[0])
-
-    // Join the shortest group strings with '&' (ampersand sign)
-    const shortestJoined = joinWithAmpersand(shortestStrArr);
-
-    // Output the joined string to a textarea
+/**
+ * Displays the results of the encoding process.
+ * @param {string} shortestJoined - The joined string of the shortest encodings.
+ * @param {Map} shortestArrByGroup - A Map containing the shortest encodings by group.
+ * @param {number} numberOfMethods - The number of encoding methods used.
+ */
+const displayResults = (shortestJoined, shortestArrByGroup, numberOfMethods) => {
     outputToTextarea(shortestJoined, 'textarea-lines-data-encoded');
-
-    // Determine the prefix message based on the number of methods considered
     const messagePrefix = `Lines Data (Best mix from ${numberOfMethods} methods)`;
-
-    // Show the size of the result in HTML and console
     showStringSize(messagePrefix, shortestJoined, 'encoded-strokes-values-size');
-
-    // Show the details of the encoding result by group in the console, and return the data to indicate in HTML
     const dataToShow = showDetailsByGroup('Lines Data', shortestArrByGroup, 'best-mix');
     showBestMixResult(dataToShow, 'encoded-strokes-values-size');
-
-    // Clear the inaccurate processing time text
+    // Clear the processing time display
     document.getElementById('encoded-strokes-values-time').innerHTML = '';
+};
+
+/**
+ * Performs the best mix encoding process using the specified number of methods.
+ * @param {number} numberOfMethods - The number of encoding methods to use.
+ */
+function bestMixFromNMethods(numberOfMethods) {
+    const methods = getEncodingMethods(numberOfMethods);
+    const methodNames = getEncodingMethodNames(numberOfMethods);
+    const encodedMaps = encodeWithMethods(methods);
+    const [shortestArrByGroup, shortestStrArr] = processEncodedData(encodedMaps, methodNames);
+    const shortestJoined = joinWithAmpersand(shortestStrArr);
+    displayResults(shortestJoined, shortestArrByGroup, numberOfMethods);
 }
 
+/**
+ * Sets up event listeners for the mix encoding buttons.
+ * This function should be called once the DOM is fully loaded.
+ */
 export function setupMixEncodingButtons() {
     const buttons = document.querySelectorAll('.mix-encode-button');
     buttons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const methodCount = parseInt(this.getAttribute('data-methods'));
             bestMixFromNMethods(methodCount);
         });

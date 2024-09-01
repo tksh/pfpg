@@ -47,7 +47,7 @@ export function swap63Enc() {
     const encodedAttrsExceptsDvals = getEncodedAttrsExceptsDvals()
 
     // Choose shorter one between URLComp applied or not, by each group
-    const compressedByGroup = tryCompress(
+    const { compressedByGroup, compressingResultArr } = tryCompress(
         encodedDval,
         encodedAttrsExceptsDvals,
         'swap63'

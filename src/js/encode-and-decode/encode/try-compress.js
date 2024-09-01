@@ -1,11 +1,13 @@
-import { flagsMap, resultInfo } from 'constants'
+import { createMapFromNestedArrays } from 'encode/transform-array'
+
+import { flagsMap, resultInfo }      from 'constants'
 
 
 export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMethodName) {
     const encodedWidthAndCounts = encodedAttrsExceptsDvals.widthAndCounts
     const encodedGroupColors    = encodedAttrsExceptsDvals.groupColors
 
-    const wholeGroupValues = new Map();
+    const compressedByGroup = new Map();
 
     // For storing result info
     let flagsArr = []
@@ -13,6 +15,9 @@ export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMetho
     let lengthAfterComp = [];
     const groupCount = encodedDval.size;
     const ampersandCount = groupCount - 1;
+
+    // To store info
+    let compressingResultArr = []
 
     for (const [gId, dvalEncodedStr] of encodedDval) {
         // Merge the width, dvals and flags to form: [2nd flag][width(stroke-width values and counts)]-[d values]
@@ -30,12 +35,15 @@ export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMetho
         // Prepend the color value to form: [key(group colors)]=[value(width and dvals)]
         const encodedAsKvPair = addColorAsKey(encodedGroupColors, gId, encodedWidthAndDvalsAsValue);
 
-        wholeGroupValues.set(gId, encodedAsKvPair);
+        compressedByGroup.set(gId, encodedAsKvPair);
 
         // Info for console.log output
         flagsArr.push([charOf1stFlag, charOf2ndFlag])
         lengthBeforeComp.push(uncompressed.length + 1);  // `+ 1` means 1st char length
         lengthAfterComp.push(bestCompressedData.length + 1);
+
+        // [length-of-uncompressed, length-of-best-result, name-of-best-method
+        compressingResultArr.push([uncompressed.length + 1, bestCompressedData.length + 1, bestMethodName])
     }
 
     // Calculate and compare the length of finished strings to output to console.
@@ -46,7 +54,13 @@ export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMetho
     flags.set('flags', flagsArr)
     resultInfo.set(encodingMethodName, flags)
 
-    return wholeGroupValues;
+    // Set result info with 'bruteforce53-analytics--...'
+    // the relations of each baseX numbers and result string length
+//    const resultByGroup = createMapFromNestedArrays(compressingResultArr)
+//    resultInfo.set('bruteforce53-analytics--group_id-base_x_number-encoded_lines_data_length-best_compressed_length-comp_method_name', resultByGroup)
+
+
+    return { compressedByGroup, compressingResultArr };
 }
 
 

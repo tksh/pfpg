@@ -127,8 +127,9 @@ function showDetailsByGroup(nameOfInput, encodedArrByGroupMap, encodingMethodNam
     console.log('Group colors encoded: ', groupColors)            // e.g.: (3) ['A', '0', 'F']
     console.log('Length of encoded strings: ', lengthOfValues)    // e.g.: (3) [23, 3910, 161]
     console.log('Flags: ', flagsByGroup)                          // e.g.: (3) [Array(3), Array(3), Array(3)]
-    console.log('1st flags, Compression method name', flag1Name)  // e.g.: (3) ['uncompressed', 'uncompressed', 'uncompressed']
-    console.log('2nd flags, Encoding method name',    flag2Name)  // e.g.: (3) ['bigint64', 'bigint64', 'bigint64']
+    console.log('1st flags, Compression method name: ', flag1Name)  // e.g.: (3) ['uncompressed', 'uncompressed', 'uncompressed']
+    console.log('2nd flags, Encoding method name: ',    flag2Name)  // e.g.: (3) ['bigint64', 'bigint64', 'bigint64']
+    console.log('Configuration value for encoding: ',    appliedMethod)
 
 
     // Return the values to show also in html when call this function from best mix encoding (bestMixFromNMethods()).
