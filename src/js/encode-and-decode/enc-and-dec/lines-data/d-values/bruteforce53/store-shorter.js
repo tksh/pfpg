@@ -13,7 +13,7 @@ export function storeShorter(currentShortestByGroup, encodedStrByGroup, baseXNum
                 + `baseXNumber=${baseXNumber}, g_id=${gId}, `
                 + `${encodedStr[0].length} (current) < ${currentShortestByGroup.get(gId)[0].length} (before)`
             )
-            currentShortestByGroup.set(gId, [encodedStr[0], 'bruteforce53', baseXNumber])
+            currentShortestByGroup.set(gId, [encodedStr[0], 'bruteforce53', { baseXNumber }])
             // Values : [encoded string, encoding-method name, configuration-value object]
 
         }

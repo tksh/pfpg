@@ -32,7 +32,7 @@ import { resultInfo }                         from 'constants'
 
 
 // for-loop 1: Max dict size from 0 to 52
-// for-loop 2: Each lines-group (.g_id) from '1' to group size
+// for-loop 2: Each lines-group (.g_id) from 0 to group size
 // for-loop 3: Four columns from 'x1' to 'y2'
 
 export function bruteforce53Enc() {
@@ -61,6 +61,7 @@ export function bruteforce53Enc() {
         console.log('////////////////////////////////// baseXNumber: ', baseXNumber, ' //////////////////////////////////') // 52, 51, ... 1, 0
 
         const encodedDvals = new Map()
+
         // To store info
         let resultNumArrByGroup = []
 
@@ -72,13 +73,13 @@ export function bruteforce53Enc() {
         // Object { baseXSkipRangeLowerLimit, baseXSkipRangeUpperLimit }
 
         // Loop 2. Each lines-group (.g_id) from '1' to group size
-        
+
         for (const aggData of aggDataMap.values()) {
             //console.log('aggData.g_id: ', aggData.g_id)
             // 1
             //console.log('aggData.d.relative: ', aggData.d.relative)
             // Object { diff_by_row: {…}, frequent_diff_values_sorted: {…}, frequent_diff_counts_sorted: {…} }
-            
+
             let refDictAndDiffEncodedFourColumns = []
 
             // Loop 3. Four columns from 'x1' to 'y2'
@@ -305,7 +306,7 @@ function transformMap(map, baseXNumber) {
     const newMap = new Map();
 
     map.forEach((value, key) => {
-        const newArray = [value, 'bruteforce53', baseXNumber];
+        const newArray = [value, 'bruteforce53', { baseXNumber }];
         newMap.set(key, newArray);
     });
 
