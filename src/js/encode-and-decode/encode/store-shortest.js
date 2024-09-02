@@ -36,6 +36,7 @@ export function storeShortest(encodedResultsArr, encodingMethodNamesArr) {
         //         0: "F=~11w-B2a4FogqwwB0aX-PwIQtlN3FjLk8D68fbZbNuvslJVjZor6QKA8WlmJ8pDpmwHnJNc5QTH2b56y2NXBd1RT4Ti1cMis0dVIK1VGHehPMudYdSGZkUg5U-CYP3gwmqXyKxYy9aBzjCyh5cpP3tFB7pUnRU"
         //         1: "bigint64"
         //         2: {digitsPerChunk: 3}
+
         const strLengthArrByMethod = strArrByMethod.map(str => str.length)
         console.log(strLengthArrByMethod)  // e.g.: (2) [27(bruteforce53), 23(bigint64)]
 
@@ -53,29 +54,24 @@ export function storeShortest(encodedResultsArr, encodingMethodNamesArr) {
 
         // Get shortest elements array
         const shortestArr = strArrByMethod[minIndex]
-        console.log(shortestArr)  // e.g.: // (3) ['A=08fEKQ-VoisNalNhZy9GsmZzPU', 28, 51]
+        console.log(shortestArr)  // e.g.: // (3) ['A=08fEKQ-VoisNalNhZy9GsmZzPU', 'bruteforce53', {baseXNumber: 20}]
 
-        // Get shortest string
-        const shortestStr = shortestArr[0]
-        console.log(shortestArr)  // 'A=08fEKQ-VoisNalNhZy9GsmZzPU'
-
-        // Store the shortest results values with group ID as key
-        shortestArrByGroup.set(`${i}`, [shortestStr, shortestStr.length, methodName])
+        // Set the shortest results values with group ID as key
+        shortestArrByGroup.set(`${i}`, shortestArr)
 
 
-        console.log("shortestStr.split('='): ", shortestStr.split('='))  // e.g.: (2) ['A', '08fEKQ-VoisNalNhZy9GsmZzPU']
-        // Store for console output
-        const charOf1stFlag = shortestStr.split('=')[1][0]          // the 1st char after '=' is compression method flag
-        console.log(charOf1stFlag)                                  // e.g.: 0 (= URLCompressor applied)
+        // Store flags info for console output
+        // console.log(shortestArr[0].split('='))  // [0]: group colors , [1]: lines data except colors, e.g. (2) ['A', '08fEKQ-VoisNalNhZy9GsmZzPU']
+        const charOf1stFlag = shortestArr[0].split('=')[1][0]          // the 1st char after '=' is compression method flag
+        // e.g.: 0 (= URLCompressor applied)
         const charOf2ndFlag = flagsMap.get('2nd').get(methodName)   // the 2nd char is encoding method flag that got from its name
-        console.log(charOf2ndFlag)                                  // e.g.: 0 (= bruteforce53 applied)
+        // e.g.: 0 (= bruteforce53 applied)
 
         flagsArr.push([charOf1stFlag, charOf2ndFlag])
     }
 
-    // Store result info
+    // Store flags info for console output
     const bestMixFlags = new Map([['flags', [...flagsArr]]])
-    console.log("bestMixFlags: ", bestMixFlags)  // key: "flags", value: Array(3)
     resultInfo.set('best-mix', bestMixFlags)
 
     return shortestArrByGroup

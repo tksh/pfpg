@@ -36,9 +36,9 @@ function showDetailsByGroup(nameOfInput, encodedArrByGroupMap, encodingMethodNam
         Execute via bruteforce53Enc():
             (3) [Array(3), Array(3), Array(3)]
                 0: Array(3)
-                    0: "A=08fEKQ-VoisNalNhZy9GsmZzPU"   // string
-                    1: 28                               // length of string
-                    2: 51                               // number of baseX
+                    0: "A=08fEKQ-VoisNalNhZy9GsmZzPU"   // String: lines group encoded
+                    1: "bruteforce53"                   // String: encoding method name
+                    2: {baseXNumber: 51}                // Object: encoding config value
                     length: 3
                 1: Array(3)
                     ...
@@ -48,9 +48,9 @@ function showDetailsByGroup(nameOfInput, encodedArrByGroupMap, encodingMethodNam
         Execute via bigint64Enc():
             (3) [Array(3), Array(3), Array(3)]
                 0: Array(3)
-                    0: "A=~1127b-NWrTPcKpRSjaX"         // string
-                    1: 22                               // length of string
-                    2: "bigint64"                       // encoding method name
+                    0: "A=~1127b-NWrTPcKpRSjaX"         // String: lines group encoded
+                    1: 22                               // String: encoding method name
+                    2: {digitsPerChunk: 3}              // Object: encoding config value
                     length: 3
                 1: Array(3)
                     ...
