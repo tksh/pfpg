@@ -8,12 +8,12 @@ function createMapFromNestedArrays(array) {
     const map = new Map();
 
     array.forEach(subArray => {
-        const [key, ...rest] = subArray;  // キーと残りの要素を分割
+        const [key, ...rest] = subArray;     // キーと残りの要素を分割
 
-        if (!map.has(key)) {              // キーが存在しなければ、新しい配列を作成
+        if (!map.has(key)) {                 // キーが存在しなければ、新しい配列を作成
             map.set(key, []);
         }
-        map.get(key).push(rest);          // 値を配列に追加
+        map.get(key).push(rest);             // 値を配列に追加
     });
 
     return map;
