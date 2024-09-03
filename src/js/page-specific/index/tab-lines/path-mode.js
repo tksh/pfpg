@@ -27,7 +27,7 @@ function decodeAsSelectedPathMode(pathMode) {
 //  - Shape to trim
 
 function recoverCurrentOptionValue(svgString, regexPattern, valueString) {
-    return svgString.replace(regexPattern, valueString);
+    return svgString.replace(regexPattern, valueString)
 }
 
 

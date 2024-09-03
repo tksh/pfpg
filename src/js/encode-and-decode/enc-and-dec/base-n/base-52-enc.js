@@ -7,20 +7,20 @@ export function base52Enc(num) {
     const alphabet = getAlphabets52()
     // 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-    let base = alphabet.length;
-    let encoded = '';
+    let base = alphabet.length
+    let encoded = ''
 
     if (num === 0) {
-        return alphabet[0];
+        return alphabet[0]
     }
 
     while (num) {
-        let remainder = num % base;
-        num = Math.floor(num / base);
-        encoded = alphabet[remainder] + encoded;
+        let remainder = num % base
+        num = Math.floor(num / base)
+        encoded = alphabet[remainder] + encoded
     }
 
-    return encoded;
+    return encoded
 }
 
 // console.log('0: ',      base52Enc(0))      // a

@@ -50,11 +50,11 @@ function encodeBasicData() {
 
     selectedFields.forEach(prop => {
         if (prop in data && isNonEmpty(data[prop])) {
-            dataAsUrlParams += processProperty(prop, data[prop]);
+            dataAsUrlParams += processProperty(prop, data[prop])
         } else {
-            console.log(`${prop} is missing or empty`);
+            console.log(`${prop} is missing or empty`)
         }
-    });
+    })
 
 
     // Output to textarea
@@ -97,15 +97,15 @@ function parseBasicData() {
     const rawStr = readTextarea('textarea-basic-data-uploaded')
     const json = JSON.parse(rawStr)
 
-    const result = {};
+    const result = {}
 
     BASIC_DATA_KEYS.forEach(key => {
         if (key in json && json[key] !== '') {
-            result[key] = json[key];
+            result[key] = json[key]
         }
-    });
+    })
 
-    return result;
+    return result
 }
 
 
@@ -114,28 +114,28 @@ function parseBasicData() {
 // Characters that are allowed in a URI but do not have a reserved.
 // unreserved  = ALPHA / DIGIT / "-" / "." / "_" / "~"
 function isValidStringAsUri(str) {
-    const regex = /^[0-9a-zA-Z_\-\.~]+$/;
-    return regex.test(str);
+    const regex = /^[0-9a-zA-Z_\-\.~]+$/
+    return regex.test(str)
 }
 
 
 
 function processProperty(propertyName, value) {
-    console.log(`${propertyName}: ${value}`);
+    console.log(`${propertyName}: ${value}`)
 
     // Check if the value is a valid URI
-    const isValidAsUri = isValidStringAsUri(value);
+    const isValidAsUri = isValidStringAsUri(value)
 
     // Log the validity of the value as a URI
-    console.log(`"${value}" is valid string as URI (true) or not (false): `, isValidAsUri);
+    console.log(`"${value}" is valid string as URI (true) or not (false): `, isValidAsUri)
 
     // Provide feedback based on the validity
     if (isValidAsUri) {
-        console.log(`"${value}" is valid, it does not need to encode.`);
-        return `${propertyName}=${value}&`;
+        console.log(`"${value}" is valid, it does not need to encode.`)
+        return `${propertyName}=${value}&`
     } else {
-        console.log(`"${value}" is NOT valid, it needs to be encoded using URLCompressor.`);
-        return `${propertyName}=~${URLCompressor.compress(value)}&`;
+        console.log(`"${value}" is NOT valid, it needs to be encoded using URLCompressor.`)
+        return `${propertyName}=~${URLCompressor.compress(value)}&`
     }
 }
 
@@ -145,5 +145,5 @@ function initBasicDataTextarea() {
     document.getElementById('textarea-basic-data-uploaded').addEventListener('input', () => {
         const data = parseBasicData()
         updateCheckboxStates(data)
-    });
+    })
 }

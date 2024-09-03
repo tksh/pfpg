@@ -66,12 +66,12 @@ function decode(isRelative, isDataManipulatorPage) {
 
 
         // Compare the data size of url params and generated SVG
-        const queryString = window.location.search;
+        const queryString = window.location.search
         const compRatio = queryString.length / svgStr.length
 
         // Show the result in html
-        const postfix = isRelative ? 'rel' : 'abs';
-        const resultTextElem = document.getElementById(`encoded-size-compare-for-${postfix}`);
+        const postfix = isRelative ? 'rel' : 'abs'
+        const resultTextElem = document.getElementById(`encoded-size-compare-for-${postfix}`)
         if (resultTextElem) {
             const text = `Size of url params: <b>${queryString.length}</b> characters (bytes)<br>
         Size of SVG string: <b>${svgStr.length}</b> characters (bytes)<br>

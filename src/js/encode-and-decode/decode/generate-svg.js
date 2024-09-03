@@ -210,7 +210,7 @@ function generateTagsBeforeStrokes(tabSpace, basicDataObj, sizeDataObj) {
         { tag: 'desc',     content: basicDataObj.desc },
         { tag: 'metadata', content: addNewlineAndIndentation(basicDataObj.metadata, tabSpace) },
     ].filter(({ content }) => isNonEmpty(content))
-        .map(({ tag, content }) => tabSpace.repeat(1) + `<${tag}>${content}</${tag}>`);
+        .map(({ tag, content }) => tabSpace.repeat(1) + `<${tag}>${content}</${tag}>`)
 
 
     // Trimming shape <defs> tag (has no variables)
@@ -235,16 +235,16 @@ function addNewlineAndIndentation(inputLines, tabSpace) {
     }
 
     // inputLinesが文字列の場合は配列に変換
-    let lines = typeof inputLines === 'string' ? inputLines.split('\n') : inputLines;
+    let lines = typeof inputLines === 'string' ? inputLines.split('\n') : inputLines
 
     // 各行の先頭に インデントを追加
-    const indentedLines = lines.map(line => `${tabSpace.repeat(2)}${line}`);
+    const indentedLines = lines.map(line => `${tabSpace.repeat(2)}${line}`)
 
     // 先頭と最後に 改行を追加して 結合後
     // `</metadata>`を 一つ分下げる為のインデントを 最後の改行の後に 加える
-    const result = `\n${indentedLines.join('\n')}\n${tabSpace.repeat(1)}`;
+    const result = `\n${indentedLines.join('\n')}\n${tabSpace.repeat(1)}`
 
-    return result;
+    return result
 }
 
 function generateTagsAfterStrokes(tabSpace) {

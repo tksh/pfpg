@@ -13,10 +13,10 @@ export function createCodebookToDecodeFrequentDiff(encodedRefDict, maxCodebookSi
     // Decode the reference dictionary
     const refDict = decodeFreqDiffAsRefDict(encodedRefDict)
     // Set the kv pair into Map()
-    const codebook = new Map();
+    const codebook = new Map()
 
     for (let i = 0; i < refDict.length; i++) {
-        codebook.set(alphabets[i], refDict[i]);
+        codebook.set(alphabets[i], refDict[i])
     }
     return codebook
 }
@@ -31,12 +31,12 @@ function decodeFreqDiffAsRefDict(diffStr) {
     //   '_' アンダースコアは それを含む 4文字
     //   その他 (小文字の連なり)は 2文字ずつ
 
-    const splitted = diffStr.match(/(_.{3})|(.{2})/g);  // 2 or 4文字ずつ取り出す
+    const splitted = diffStr.match(/(_.{3})|(.{2})/g)  // 2 or 4文字ずつ取り出す
     console.log('splitted: ', splitted)                 // 頻出数値が無い column の場合には 'splitted:  null' となる
 
     // Regex test
     //const strTEST = 'abcd_efg_hij_klmnopqrstu'
-    //const splittedTEST = strTEST.match(/(_.{3})|(.{2})/g);
+    //const splittedTEST = strTEST.match(/(_.{3})|(.{2})/g)
     //console.log(splittedTEST)
     //Array(9) [ "ab", "cd", "_efg", "_hij", "_klm", "no", "pq", "rs", "tu" ]
 

@@ -12,8 +12,8 @@ export
 // Function to toggle display of elements
 function toggleDisplay(elements, display) {
     elements.forEach(element => {
-        document.getElementById(element).style.display = display;
-    });
+        document.getElementById(element).style.display = display
+    })
 }
 
 
@@ -21,7 +21,7 @@ function toggleDisplay(elements, display) {
 function updateSvgWithSelectedShapePath(shape, inputSvg) {
 
     // Params for generating the 'Squircle' and 'Squircle, slimmed' shape path
-    const gridSize = extractViewboxValues(inputSvg).get('h');
+    const gridSize = extractViewboxValues(inputSvg).get('h')
     const center = roundToTwoDecimals(gridSize / 2)
 
     // Generate new shape path to trim
@@ -31,15 +31,15 @@ function updateSvgWithSelectedShapePath(shape, inputSvg) {
             ? `<rect width="100%" height="100%" />`
             : shape === 'circle'
                 ? `<circle cx="50%" cy="50%" r="50%" />`
-                : `<path d="M 0,${center}Q 0,0 ${center},0T ${gridSize},${center} ${center},${gridSize} 0,${center}" />`; // shape === 'squircle'
+                : `<path d="M 0,${center}Q 0,0 ${center},0T ${gridSize},${center} ${center},${gridSize} 0,${center}" />` // shape === 'squircle'
 
     // Replace to new shape <clipPath>
-    const patternForClippathShape = /<clipPath id="shape-to-trim">\n.*\n.*<\/clipPath>/g;
-    const newClippathSvg = inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">\n\t\t${shapePath}\n\t</clipPath>`);
+    const patternForClippathShape = /<clipPath id="shape-to-trim">\n.*\n.*<\/clipPath>/g
+    const newClippathSvg = inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">\n\t\t${shapePath}\n\t</clipPath>`)
 
     // Update the <textarea>
-    const hasCropSideMargins = getBoolOfCropSideMargins();
-    const clippathAndViewboxUpdatedSvg = svgWithNewShapeViewbox(shape, hasCropSideMargins, newClippathSvg);
+    const hasCropSideMargins = getBoolOfCropSideMargins()
+    const clippathAndViewboxUpdatedSvg = svgWithNewShapeViewbox(shape, hasCropSideMargins, newClippathSvg)
 
     return clippathAndViewboxUpdatedSvg
 }
@@ -52,8 +52,8 @@ function generateClippathShapeOfSquircleSlimmed(inputSvg, widthNarrowness, topHe
     // function generateClippathShapeOfSquircleSlimmed(widthNarrowness, topHeavyRatio) {
     console.log('widthNarrowness, topHeavyRatio: ', widthNarrowness, topHeavyRatio)
 
-    const gridSize = extractViewboxValues(inputSvg).get('h');
-    const center = getCenter(gridSize);
+    const gridSize = extractViewboxValues(inputSvg).get('h')
+    const center = getCenter(gridSize)
 
     // generate the path of squircle slimmed
     const eachSideWidthForNarrowing = ((gridSize / 100) * (widthNarrowness / 2))
@@ -76,16 +76,16 @@ function getCenter(gridSize) {
 
 // Width narrowness
 function getWidthNarrowness() {
-    const selectWidthNarrowness = document.getElementById('width-narrowness');
+    const selectWidthNarrowness = document.getElementById('width-narrowness')
     console.log('typeof(getWidthNarrowness): ', typeof (selectWidthNarrowness))
-    return selectWidthNarrowness.value;
+    return selectWidthNarrowness.value
 }
 
 // Top-heavy ratio
 function getTopHeavyRatio() {
-    const selectTopHeavyRatio = document.getElementById('top-heavy-ratio');
+    const selectTopHeavyRatio = document.getElementById('top-heavy-ratio')
     console.log('typeof(getTopHeavyRatio): ', typeof (selectTopHeavyRatio))
-    return selectTopHeavyRatio.value;
+    return selectTopHeavyRatio.value
 }
 
 // 'Crop side margins' checked or not
@@ -94,10 +94,10 @@ function getBoolOfCropSideMargins() {
 
     // チェックボックスがチェックされているかどうかを確認
     if (cropCheckbox.checked) {
-        console.log('"Crop side margins: " checkbox has checked');
+        console.log('"Crop side margins: " checkbox has checked')
         return true
     } else {
-        console.log('"Crop side margins: " checkbox has un-checked');
+        console.log('"Crop side margins: " checkbox has un-checked')
         return false
     }
 }

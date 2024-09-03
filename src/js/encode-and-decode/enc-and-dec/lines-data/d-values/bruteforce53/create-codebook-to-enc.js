@@ -8,7 +8,7 @@ export function createCodebookToEncodeFrequentDiff(freqDiffArrActualCodebookSize
     // From 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
     // Set the source symbol and codeword pair into Map()
-    const codebookToEncodeFreqDiff = new Map();
+    const codebookToEncodeFreqDiff = new Map()
 
     // Create codebook (each column has own size)
 
@@ -16,7 +16,7 @@ export function createCodebookToEncodeFrequentDiff(freqDiffArrActualCodebookSize
         // Mapオブジェクトに Source Symbol(頻出数値) と Codeword(置換用アルファベット) のペアを追加する
         console.log('typeof(freqDiffArrActualCodebookSized[i], alphabetsActualCodebookSized[i]), freqDiffArrActualCodebookSized[i], alphabetsActualCodebookSized[i]: ', typeof (freqDiffArrActualCodebookSized[i]), typeof (alphabetsActualCodebookSized[i]), freqDiffArrActualCodebookSized[i], alphabetsActualCodebookSized[i])
         // e.g.: number string -2 I
-        codebookToEncodeFreqDiff.set(freqDiffArrActualCodebookSized[i], alphabetsActualCodebookSized[i]);
+        codebookToEncodeFreqDiff.set(freqDiffArrActualCodebookSized[i], alphabetsActualCodebookSized[i])
     }
     return codebookToEncodeFreqDiff
 }

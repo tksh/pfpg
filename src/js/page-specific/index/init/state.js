@@ -19,15 +19,15 @@ const state = new Map([
     ['cropSideMargins', false],     // canvas tab |
     ['shapeRendering',  'crispEdge'],  // render tab | 'crispEdge' / 'geometricPrecision'
     ['widthPixelSize',  256],          // render tab |
-]);
+])
 
 
 
 
 function updateState(key, value) {
-    state.set(key, value);
+    state.set(key, value)
 }
 
 function getState(key) {
-    return state.get(key);
+    return state.get(key)
 }

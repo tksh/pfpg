@@ -89,12 +89,12 @@ export function bigint64Enc() {
 // Bigint64 encode
 
 function padZero(number, targetLength) {
-    return String(number).padStart(targetLength, '0');
+    return String(number).padStart(targetLength, '0')
 }
 
 
 function base64UrlEncAfterJoinAsBigint(linesDataMap, digitsPerChunk) {
-    const encodedDvals = new Map();
+    const encodedDvals = new Map()
 
     for (const linesData of linesDataMap.values()) {
 
@@ -102,11 +102,11 @@ function base64UrlEncAfterJoinAsBigint(linesDataMap, digitsPerChunk) {
         const absDvals = linesData.d.absolute
 
         // Pad and join
-        let joinedDvalsStr = ""; // x1, y1, x2, y2, joined without spaces
+        let joinedDvalsStr = "" // x1, y1, x2, y2, joined without spaces
 
         for (const key in absDvals) {
             const dval = absDvals[key]
-            //console.log(dval); // (19) [1, 4, 7, 6, 8, 7, 19, 25, 24, 28, 30, 17, 4, 22, 26, 22, 22, 23, 23]
+            //console.log(dval) // (19) [1, 4, 7, 6, 8, 7, 19, 25, 24, 28, 30, 17, 4, 22, 26, 22, 22, 23, 23]
 
             // Pad
             const paddedDval = dval.map(number => padZero(number, digitsPerChunk))

@@ -16,14 +16,14 @@ function normalizedToHex(num) {
     // 数値が0から1の範囲にあるかチェックする
     if (num < 0 || num > 1) {
         // 範囲外であればエラーを返す
-        return "Invalid number";
+        return "Invalid number"
     }
     // 数値を255倍して整数にし、16進数に変換、
     // 2桁になるよう0埋めし、大文字に変換する
     return Math.round(num * 255)
         .toString(16)
         .padStart(2, '0')
-        .toUpperCase();
+        .toUpperCase()
 }
 
 // Test
@@ -40,13 +40,13 @@ function uint8ToHex(num) {
     // 数値がuint8の範囲（0から255）にあるかチェックする
     if (num < 0 || num > 255 || !Number.isInteger(num)) {
         // 範囲外または整数でない場合はエラーを返す
-        return "Invalid number";
+        return "Invalid number"
     }
     // 整数を16進数に変換し、2桁になるよう0埋めし、大文字に変換する
     return num
         .toString(16)
         .padStart(2, '0')
-        .toUpperCase();
+        .toUpperCase()
 }
 
 // // Test
@@ -82,30 +82,30 @@ function rgbObjToHex(rgbDict) {
 
 function rgbStrToMap(rgbString) {
     // 正規表現でRGB文字列の形式をチェック
-    const regex = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/;
-    const match = rgbString.match(regex);
+    const regex = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/
+    const match = rgbString.match(regex)
 
     if (!match) {
-        return "Invalid RGB string format";
+        return "Invalid RGB string format"
     }
 
     // 正規表現の結果からRGB値を抽出し、オブジェクトを作成
-    const [, r, g, b] = match;
+    const [, r, g, b] = match
 
     return new Map([
         ['r', parseInt(r)],
         ['g', parseInt(g)],
         ['b', parseInt(b)]
-    ]);
+    ])
 }
 
 // // テスト
-// console.log(rgbStrToMap("rgb(170,170,170)"));      // Map(3) {'r' => 170, 'g' => 170, 'b' => 170}
-// console.log(rgbStrToMap("rgb(255, 0, 0)"));        // Map(3) {'r' => 255, 'g' => 0, 'b' => 0}
-// console.log(rgbStrToMap("rgb(0,255,0)"));          // Map(3) {'r' => 0, 'g' => 255, 'b' => 0}
-// console.log(rgbStrToMap("rgb(0, 0, 255)"));        // Map(3) {'r' => 0, 'g' => 0, 'b' => 255}
-// console.log(rgbStrToMap("rgb(256,0,0)"));          // Map(3) {'r' => 256, 'g' => 0, 'b' => 0}  (Does NOT validate that the values are within the range of 0 to 255.)
-// console.log(rgbStrToMap("rgba(255,255,255,0.5)")); // "Invalid RGB string format"
+// console.log(rgbStrToMap("rgb(170,170,170)"))      // Map(3) {'r' => 170, 'g' => 170, 'b' => 170}
+// console.log(rgbStrToMap("rgb(255, 0, 0)"))        // Map(3) {'r' => 255, 'g' => 0, 'b' => 0}
+// console.log(rgbStrToMap("rgb(0,255,0)"))          // Map(3) {'r' => 0, 'g' => 255, 'b' => 0}
+// console.log(rgbStrToMap("rgb(0, 0, 255)"))        // Map(3) {'r' => 0, 'g' => 0, 'b' => 255}
+// console.log(rgbStrToMap("rgb(256,0,0)"))          // Map(3) {'r' => 256, 'g' => 0, 'b' => 0}  (Does NOT validate that the values are within the range of 0 to 255.)
+// console.log(rgbStrToMap("rgba(255,255,255,0.5)")) // "Invalid RGB string format"
 
 
 // Map object with uint8 rgb values convert to 6 digits hex string

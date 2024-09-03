@@ -1,29 +1,36 @@
-import { showProcessingTime }                 from 'enc-and-dec/show-result'
+import {
+       calculateLimitsForBaseXSkipRange,
+       handleBase52EncodingWithPrefix,
+       handleBaseXEncoding,
+       handleFrequencyDiff,
+       handleSingleDigit
+}                from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
+import {
+       createMapFromNestedArrays,
+       mergeArrays
+}                        from 'encode/transform-array'
+import {
+       showDetailsByGroup,
+       showStringSize
+}                 from 'encode/show-result'
+
 import { base53Enc }                          from 'enc-and-dec/base-n/base-53-enc'
-import { parseBasicData }                     from 'enc-and-dec/basic-data/basic-data-enc'
-import { getActualCodebookSize }              from 'enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size'
 import { createCodebookToEncodeFrequentDiff } from 'enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc'
-import { storeShorter }                       from 'enc-and-dec/lines-data/d-values/bruteforce53/store-shorter'
-import { handleSingleDigit
-       , handleFrequencyDiff
-       , calculateLimitsForBaseXSkipRange
-       , handleBase52EncodingWithPrefix
-       , handleBaseXEncoding }                from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
 import { encodeFreqDiffAsRefDict }            from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-ref-dict'
+import { getActualCodebookSize }              from 'enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size'
 import { getEncodedAttrsExceptsDvals }        from 'encode/get-attrs-excepts-dvals'
+import { isOnDataManipulatorPage }            from 'common-utils/select-output-textarea'
 import { joinWithAmpersand }                  from 'encode/join-with-ampersand'
-import { createMapFromNestedArrays
-       , mergeArrays }                        from 'encode/transform-array'
-import { simplifyMap }                        from 'encode/simplify-map'
-import { showStringSize
-       , showDetailsByGroup }                 from 'encode/show-result'
-import { tryCompress }                        from 'encode/try-compress'
-import { tryDecompress }                      from 'encode/try-decompress'
 import { jsonToMapObj }                       from 'encode/json-to-map-obj'
 import { outputToTextarea }                   from 'common-utils/output-to-textarea'
-import { isOnDataManipulatorPage }            from 'common-utils/select-output-textarea'
-
+import { parseBasicData }                     from 'enc-and-dec/basic-data/basic-data-enc'
 import { resultInfo }                         from 'constants'
+import { showProcessingTime }                 from 'enc-and-dec/show-result'
+import { simplifyMap }                        from 'encode/simplify-map'
+import { storeShorter }                       from 'enc-and-dec/lines-data/d-values/bruteforce53/store-shorter'
+import { tryCompress }                        from 'encode/try-compress'
+import { tryDecompress }                      from 'encode/try-decompress'
+
 ////////////////////////////////// Input: //////////////////////////////////
 
 // Basic Data
@@ -87,10 +94,13 @@ export function bruteforce53Enc() {
             for (const column of ['x1', 'y1', 'x2', 'y2']) {
                 console.log('//////// column: ', column, '////////')
 
-                let diffArr     = aggData.d.relative.diff_by_row[column]                    // Diff-by-row original
-                let freqDiffArr = aggData.d.relative.frequent_diff_values_sorted[column]    // Diff-by-row sorted by frequency and remove the values that only once appeared
-                //console.log('diffArr: ', diffArr)         // (19) [1, 2, 0, -3, -2, 1, 9, -7, -3, 6, -2, -15, -3, 30, -12, -3, 1, -1, -7]
-                //console.log('freqDiffArr: ', freqDiffArr) // (3) [-3, -2, -7]
+                // Diff-by-row original
+                let diffArr = aggData.d.relative.diff_by_row[column]
+                // e.g.: (19) [1, 2, 0, -3, -2, 1, 9, -7, -3, 6, -2, -15, -3, 30, -12, -3, 1, -1, -7]
+
+                // Diff-by-row sorted by frequency and removed the values that only once appeared
+                let freqDiffArr = aggData.d.relative.frequent_diff_values_sorted[column]
+                // e.g.: (3) [-3, -2, -7]
 
 
                 // Generate the codebook to encode frequent diff_by_row values
@@ -109,7 +119,7 @@ export function bruteforce53Enc() {
 
                 // ${actualCodebookSize}個の数値を切り出したい時には [0]...[${actualCodebookSize} - 1]が ${actualCodebookSize}個なので
                 // `.slice(0, ${actualCodebookSize})` とする (`.slice`の 第二引数の終了位置は切り出されない)
-                const freqDiffArrActualCodebookSized = freqDiffArr.slice(0, actualCodebookSize);
+                const freqDiffArrActualCodebookSized = freqDiffArr.slice(0, actualCodebookSize)
                 // If actualCodebookSize is 0, Empty array `[]` will be returned
 
                 // Create the codebook to encode
@@ -128,33 +138,33 @@ export function bruteforce53Enc() {
                     const diffArrEncoded = diffArr.map((diff) => {
 
                         // [0-9] の一桁の正の数は そのままにする
-                        let result = handleSingleDigit(diff);
-                        if (result !== undefined) return result;
+                        let result = handleSingleDigit(diff)
+                        if (result !== undefined) return result
 
                         // 頻出数値が codebookに キーとして存在するかどうか を確認し 存在する場合にのみ 対応する アルファベット1文字 に 置換する
-                        result = handleFrequencyDiff(diff, codebookToEncodeFreqDiff);
-                        if (result !== undefined) return result;
+                        result = handleFrequencyDiff(diff, codebookToEncodeFreqDiff)
+                        if (result !== undefined) return result
 
                         // 数値が [大き|小さ]過ぎて BaseX で 2桁 にエンコードできないものは base52エンコードしてから アンダースコア を先頭にフラグとして 条件に応じて [1|2|3|4]個 付ける
                         //   上の Codebook と 下の BaseX は それぞれ重複しないアルファベットを 切り出して使っているが
                         //   Base52 は 両方ともと同じ種類の文字を使っているので デコード時にそれらと区別できるようにするため フラグを付ける
                         try {
                             // Encode and append
-                            result = handleBase52EncodingWithPrefix(diff, baseXNumber, baseXRangeLimits);
+                            result = handleBase52EncodingWithPrefix(diff, baseXNumber, baseXRangeLimits)
                         } catch (error) {
                             // Throw error if diff value is not within the range [-65532 - 65532]
                             const errorMessage = `Error encoding dval for column ${column}: ${error.message}`
-                            console.error(errorMessage);
+                            console.error(errorMessage)
                             outputToTextarea(errorMessage, 'textarea-lines-data-encoded')
-                            throw error; // 例外を再スローして処理を中断する
+                            throw error // 例外を再スローして処理を中断する
                         }
-                        if (result !== undefined) return result;
+                        if (result !== undefined) return result
 
                         // 上記 3条件 いずれでもなければ baseX で アルファベット2文字 に エンコードする
-                        return handleBaseXEncoding(diff, baseXNumber);
-                    });
+                        return handleBaseXEncoding(diff, baseXNumber)
+                    })
 
-                    //console.log('diffArrEncoded: ', diffArrEncoded);
+                    //console.log('diffArrEncoded: ', diffArrEncoded)
                     // e.g.: (484) [7, 'ln', 'B', 'B', 'D', 'N', 'X', 6, 'nl', 'U', 8, ...
 
                     // Join the encoded diff values as a string
@@ -167,8 +177,8 @@ export function bruteforce53Enc() {
 
                 } catch (error) {
                     // 外側のエラーハンドリングでキャッチし、処理を中断する
-                    console.error("An error occurred during encoding:", error.message);
-                    return null; // 処理を中断し、nullを返す
+                    console.error("An error occurred during encoding:", error.message)
+                    return null // 処理を中断し、nullを返す
                 }
 
             }
@@ -251,9 +261,7 @@ export function bruteforce53Enc() {
 
         // At first loop, init the map with current value and change the structure
         if (maxCodebookSize === maxCodebookSizeStartAt) {
-
             currentShortestByGroup = transformMap(compressedByGroup, baseXNumber)
-
             console.log(
                 `currentShortestByGroup in first loop (maxCodebookSize: ${maxCodebookSize}, baseX: ${baseXNumber}): `,
                 currentShortestByGroup
@@ -261,7 +269,11 @@ export function bruteforce53Enc() {
         }
 
         // After second loop
-        currentShortestByGroup = storeShorter(currentShortestByGroup, transformMap(compressedByGroup, baseXNumber), baseXNumber)
+        currentShortestByGroup = storeShorter(
+            currentShortestByGroup,
+            transformMap(compressedByGroup, baseXNumber),
+            baseXNumber
+        )
 
     } // End of Loop for every baseX values: [0-52]
 
@@ -293,7 +305,10 @@ export function bruteforce53Enc() {
     // Set result info with 'bruteforce53-analytics--...'
     // the relations of each baseX numbers and result string length
     const resultByGroup = createMapFromNestedArrays(resultArrWholeBaseX)
-    resultInfo.set('bruteforce53-analytics--0_baseX-1_encodedDvals-2_uncompressed-3_bestCompressed-4_bestMethod', resultByGroup)
+    resultInfo.set(
+        'bruteforce53-analytics--0_baseX-1_encodedDvals-2_uncompressed-3_bestCompressed-4_bestMethod',
+        resultByGroup
+    )
 
     return currentShortestByGroup
 }
@@ -303,12 +318,12 @@ export function bruteforce53Enc() {
 // 値を 文字列から3要素の配列に変更し storeShorter() の返り値と同じ構造にする
 // 最初の要素に元の値の文字列を入れる
 function transformMap(map, baseXNumber) {
-    const newMap = new Map();
+    const newMap = new Map()
 
     map.forEach((value, key) => {
-        const newArray = [value, 'bruteforce53', { baseXNumber }];
-        newMap.set(key, newArray);
-    });
+        const newArray = [value, 'bruteforce53', { baseXNumber }]
+        newMap.set(key, newArray)
+    })
 
-    return newMap;
+    return newMap
 }

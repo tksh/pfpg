@@ -7,13 +7,13 @@ export const BASIC_DATA_KEYS = [
     'desc',      // SVG tag content
     'metadata',  // SVG tag content
     'colors'
-];
+]
 
 
 // VIEWBOX_START_X and VIEWBOX_START_Y represent the starting position of the viewBox,
 // which is always at the origin (0,0).
-export const VIEWBOX_START_X = 0;
-export const VIEWBOX_START_Y = 0;
+export const VIEWBOX_START_X = 0
+export const VIEWBOX_START_Y = 0
 
 
 // Map object to get 1st and 2nd flag char:
@@ -39,23 +39,23 @@ export const flagsMap = new Map([
                 ['swap63',       '2']
             ])
     ]
-]);
+])
 
 // Add KV reversed maps of 1st and 2nd into `flagsMap`,
 // to indicate the method names to console
 
 // 1st
-const reverse1st = new Map();
+const reverse1st = new Map()
 flagsMap.get('1st').forEach((value, key) => {
-    reverse1st.set(value, key);
-});
+    reverse1st.set(value, key)
+})
 flagsMap.set('rev_1st', reverse1st)
 
 // 2nd
-const reverse2nd = new Map();
+const reverse2nd = new Map()
 flagsMap.get('2nd').forEach((value, key) => {
-    reverse2nd.set(value, key);
-});
+    reverse2nd.set(value, key)
+})
 flagsMap.set('rev_2nd', reverse2nd)
 
 

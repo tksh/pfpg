@@ -15,7 +15,7 @@ function showStringSize(nameOfInput, inputStr, outputElemId) {
     outputTextElem.textContent = `Encoded ${nameOfInput} size: ${inputStr.length} characters (bytes)`
 
     // Show the size in console
-    console.log(`Encoded as ${nameOfInput} successfully, Size: `, inputStr.length);
+    console.log(`Encoded as ${nameOfInput} successfully, Size: `, inputStr.length)
 }
 
 function showDetailsByGroup(nameOfInput, encodedArrByGroupMap, encodingMethodName) {
@@ -104,5 +104,5 @@ function showDetailsByGroup(nameOfInput, encodedArrByGroupMap, encodingMethodNam
         ['flags', flagsByGroup],
         ['flag1', flag1],
         ['flag2', flag2]
-    ]);
+    ])
 }

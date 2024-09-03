@@ -20,23 +20,23 @@ export
 function hexShortenFromTen(hex) {
     // hexが10桁でない場合はエラーを返す
     if (hex.length !== 10) {
-        return "Invalid hex code";
+        return "Invalid hex code"
     }
 
     // To 5:
     // 省略形に変換できるかどうかを判定するフラグ
-    let canShorten = true;
+    let canShorten = true
     // 省略形に変換した結果を格納する変数
-    let result = "";
+    let result = ""
     // hexの各2桁ごとにループ
     for (let i = 0; i < hex.length; i += 2) {
         // 2桁が同じであれば 1桁だけ result に追加する
         if (hex[i] === hex[i + 1]) {
-            result += hex[i];
+            result += hex[i]
         } else {
             // 2桁が異なれば 省略形に変換できないと判定し ループを抜ける
-            canShorten = false;
-            break;
+            canShorten = false
+            break
         }
     }
 
@@ -50,7 +50,7 @@ function hexShortenFromTen(hex) {
             && result[4].toLowerCase() === "f"
         ) {
             // もしそうであれば resultの 4,5桁目を 削除する
-            result = result.slice(0, -2);
+            result = result.slice(0, -2)
 
             // TO 1:
             // さらに もし 色情報の3桁全てが同じならば 1桁だけに 省略する
@@ -59,7 +59,7 @@ function hexShortenFromTen(hex) {
             }
         }
         // resultを返す
-        return result;
+        return result
     }
 
     // To 6:
@@ -70,42 +70,42 @@ function hexShortenFromTen(hex) {
             && hex[9].toLowerCase() === "f"
         ) {
             // もしそうであれば result の 7,8,9,10桁目を 削除する
-            result = hex.slice(0, -4);
-            return result;
+            result = hex.slice(0, -4)
+            return result
         } else {
             // 省略形に変換できず 二つの透明度情報も省略できなかった 場合は 元の 10桁の hex を返す
-            return hex;
+            return hex
         }
     }
 }
 
 // Test
-//console.log(hexShortenFromTen("AABBCCFF99")); // ABCF9
-//console.log(hexShortenFromTen("AABBCCFFff")); // ABC
-//console.log(hexShortenFromTen("112233ff88")); // 123f8
-//console.log(hexShortenFromTen("112233eeee")); // 123ee
-//console.log(hexShortenFromTen("123456ffff")); // 123456
-//console.log(hexShortenFromTen("AABBCCabcd")); // AABBCCabcd
-//console.log(hexShortenFromTen("1122334455")); // 12345
-//console.log(hexShortenFromTen("112233FFFF")); // 123
-//console.log(hexShortenFromTen("111111ffFF")); // 1
-//console.log(hexShortenFromTen("AAAAAAFFFF")); // A
-//console.log(hexShortenFromTen("aaaaaaffff")); // a
+//console.log(hexShortenFromTen("AABBCCFF99")) // ABCF9
+//console.log(hexShortenFromTen("AABBCCFFff")) // ABC
+//console.log(hexShortenFromTen("112233ff88")) // 123f8
+//console.log(hexShortenFromTen("112233eeee")) // 123ee
+//console.log(hexShortenFromTen("123456ffff")) // 123456
+//console.log(hexShortenFromTen("AABBCCabcd")) // AABBCCabcd
+//console.log(hexShortenFromTen("1122334455")) // 12345
+//console.log(hexShortenFromTen("112233FFFF")) // 123
+//console.log(hexShortenFromTen("111111ffFF")) // 1
+//console.log(hexShortenFromTen("AAAAAAFFFF")) // A
+//console.log(hexShortenFromTen("aaaaaaffff")) // a
 
 
 
 // hexコードを受け取り 半分のサイズの省略形に 変換する関数
 // 各2桁が同じであれば 1桁だけにする
 function tryShortenAsHalf(hex) {
-    let result = "";
+    let result = ""
     for (let i = 0; i < hex.length - 1; i += 2) {
         if (hex[i] === hex[i + 1]) {
-            result += hex[i];
+            result += hex[i]
         } else {
-            return hex;
+            return hex
         }
     }
-    return result;
+    return result
 }
 // Test
 //console.log(tryShortenAsHalf("ffffff"))     // fff
@@ -119,7 +119,7 @@ function tryDeleteHash(hexStr) {
     // 文字列の先頭が # ならば削除する
     if (hexStr.startsWith("#")) {
         // 先頭の1文字を除いた文字列を取得する
-        return hexStr.slice(1);
+        return hexStr.slice(1)
     } else {
         return hexStr
     }

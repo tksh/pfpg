@@ -18,12 +18,12 @@ export function bruteforce53Dec(encodedDvalsStr) {
     // Split into two arrays: Reference dictionary and encoded diff
     const { refDictByColumn, diffByColumn } = refDictAndDiff.reduce((acc, val, index) => {
         if (index % 2 === 0) {
-            acc.refDictByColumn.push(val);  // Even index number elements
+            acc.refDictByColumn.push(val)  // Even index number elements
         } else {
-            acc.diffByColumn.push(val);     // Odd index number elements
+            acc.diffByColumn.push(val)     // Odd index number elements
         }
-        return acc;
-    }, { refDictByColumn: [], diffByColumn: [] });
+        return acc
+    }, { refDictByColumn: [], diffByColumn: [] })
 
     //console.log("refDictByColumn: ", refDictByColumn) // 頻出数値が無い column の場合には 空の文字列が 返ってくる
     // Array(4) [ "ctcscpcrbWcmcocKcZ", "cscrctcncocpcjclcqcH", "ctcscr", "ctcscr" ]

@@ -31,7 +31,7 @@ function getUrlParams(isDataManipulatorPage) {
     // Check url params exists
     const params = new URLSearchParams(window.location.search)
     // toString() returns an empty string for no parameters, otherwise a truthy value.
-    const paramsExists = params.toString() !== '';
+    const paramsExists = params.toString() !== ''
 
     // index.html has url params               => decode it
     // index.html has no url params            => decode the alternative text
@@ -64,10 +64,10 @@ function parseStrAsUrlParams(str) {
     const splitByEqual = splitByAmpersand.map(entry => entry.split('='))
 
     // Set into Map object to keep order of elements
-    const map = new Map();
+    const map = new Map()
     splitByEqual.forEach(([key, value]) => {
-        map.set(key, value);
-    });
+        map.set(key, value)
+    })
 
     return new URLSearchParams(map)
 }
@@ -76,7 +76,7 @@ function tryDeleteQuestionAtStart(str) {
     // 文字列の先頭が?ならば削除する
     if (str.startsWith("?")) {
         // 先頭の1文字を除いた文字列を取得する
-        return str.slice(1);
+        return str.slice(1)
     } else {
         return str
     }
@@ -111,13 +111,13 @@ function decodeAsThreeData(urlSearchParams) {
     // ストローク情報の key, value を ループで取り出し
 
     // 結果を格納する配列（順序を保持するため）
-    const linesDataKvArray = [];
+    const linesDataKvArray = []
 
     // URLパラメータをイテレート
     for (const [key, value] of urlSearchParams.entries()) {
         // 除外リストに含まれていないキーのみを処理
         if (!BASIC_DATA_KEYS.includes(key)) {
-            linesDataKvArray.push([key, value]);
+            linesDataKvArray.push([key, value])
         }
     }
 
@@ -204,14 +204,14 @@ function decodeAsThreeData(urlSearchParams) {
 
 function extractBeforeFirstHyphen(str) {
     // ハイフンの位置を取得
-    const indexOfHyphen = str.indexOf("-");
+    const indexOfHyphen = str.indexOf("-")
     // 文字列の先頭から ハイフンの直前まで を切り出す
-    return str.slice(0, indexOfHyphen);
+    return str.slice(0, indexOfHyphen)
 }
 
 function extractAfterFirstHyphen(str) {
     // ハイフンの位置を取得
-    const indexOfHyphen = str.indexOf("-");
+    const indexOfHyphen = str.indexOf("-")
     // ハイフンの直後から 末尾まで を切り出す
-    return str.slice(indexOfHyphen + 1);
+    return str.slice(indexOfHyphen + 1)
 }

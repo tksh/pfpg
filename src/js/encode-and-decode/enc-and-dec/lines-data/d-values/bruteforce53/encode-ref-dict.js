@@ -16,13 +16,13 @@ export function encodeFreqDiffAsRefDict(freqDiffArrActualCodebookSized) {
 
 
 function base52EncodeForRefDict(num) {
-    const encoded = base52Enc(addToEliminateNegativeBeforeEncode(num));
+    const encoded = base52Enc(addToEliminateNegativeBeforeEncode(num))
 
     // base52エンコードした結果が 3文字の場合 先頭に アンダースコアを追加
     if (encoded.length === 3) {
-        return '_' + encoded;
+        return '_' + encoded
     }
 
     // それ以外の場合 結果の文字列を 二文字に揃える
-    return encoded.padStart(2, 'a');
+    return encoded.padStart(2, 'a')
 }

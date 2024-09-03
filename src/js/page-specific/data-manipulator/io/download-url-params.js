@@ -8,7 +8,7 @@ export { mergeBasicDataAndLinesData }
 // function to download encoded url params string
 // as `000_0000.txt` or `000_0000.txt.zst`
 
-import Zstd from 'https://cdn.skypack.dev/numcodecs/zstd?min';
+import Zstd from 'https://cdn.skypack.dev/numcodecs/zstd?min'
 
 import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
 
@@ -19,23 +19,23 @@ import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
 // Only on data-manipulator.html
 if (isOnDataManipulatorPage()) {
     document.getElementById('button-to-download-url-params-as-txt-zstd').onclick = function () {
-        downloadUrlParamsAsTxtZstd('textarea-encoded-url-params');
-    };
+        downloadUrlParamsAsTxtZstd('textarea-encoded-url-params')
+    }
 }
 
 async function downloadUrlParamsAsTxtZstd(textareaId) {
 
     // Get the text content from textarea
-    const textContent = document.getElementById(textareaId).value;
+    const textContent = document.getElementById(textareaId).value
 
     // Compress the text content to a Blob
     const blob = await compressStringToBlob(textContent)
     //console.log(blob) //e.g.: Blob { size: 298, type: "application/zstd" }
 
     // Convert the Blob to a ObjectURL
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
 
 
     // Generate the filename
@@ -43,14 +43,14 @@ async function downloadUrlParamsAsTxtZstd(textareaId) {
     // Get artwork ID and size
     const idAndSizeStr = getTitle()
     // Set the filename
-    link.download = `${idAndSizeStr}.txt.zst`;
+    link.download = `${idAndSizeStr}.txt.zst`
 
 
     // Download
-    link.click();
+    link.click()
 
     // Clean up the ObjectURL after the download
-    URL.revokeObjectURL(url);
+    URL.revokeObjectURL(url)
 }
 
 // Compressed using Zstandard before download
@@ -58,18 +58,18 @@ async function downloadUrlParamsAsTxtZstd(textareaId) {
 export async function compressStringToBlob(string) {
 
     // Convert the input string to a Uint8Array
-    const inputArray = new TextEncoder().encode(string);
-    console.log('inputArray: ', inputArray);      // e.g.: Uint8Array(488) [ 63, 50, 48, 50, 51, 48, 56, 95, 48, 48, … ]
+    const inputArray = new TextEncoder().encode(string)
+    console.log('inputArray: ', inputArray)      // e.g.: Uint8Array(488) [ 63, 50, 48, 50, 51, 48, 56, 95, 48, 48, … ]
 
     // Encode with Zstandard
     const codec = new Zstd()
-    const encoded = await codec.encode(inputArray);
-    console.log('encoded: ', encoded);            // e.g.:Uint8Array(415) [ 40, 181, 47, 253, 96, 232, 0, 173, 12, 0, … ]
+    const encoded = await codec.encode(inputArray)
+    console.log('encoded: ', encoded)            // e.g.:Uint8Array(415) [ 40, 181, 47, 253, 96, 232, 0, 173, 12, 0, … ]
 
     // Convert the Uint8Array to a Blob
-    const blob = new Blob([encoded], { type: 'application/zstd' });
-    console.log('typeof(blob): ', typeof (blob)); // object
-    console.log('blob: ', blob);                  // e.g.: Blob { size: 415, type: "application/zstd" }
+    const blob = new Blob([encoded], { type: 'application/zstd' })
+    console.log('typeof(blob): ', typeof (blob)) // object
+    console.log('blob: ', blob)                  // e.g.: Blob { size: 415, type: "application/zstd" }
     return blob
 }
 
@@ -81,20 +81,20 @@ export async function compressStringToBlob(string) {
 // Only on data-manipulator.html
 if (isOnDataManipulatorPage()) {
         document.getElementById('button-to-download-url-params-as-txt').onclick = function () {
-        downloadUrlParamsAsTxt('textarea-encoded-url-params');
-    };
+        downloadUrlParamsAsTxt('textarea-encoded-url-params')
+    }
 }
 
 function downloadUrlParamsAsTxt(textareaId) { // ('textarea-encoded-url-params')
 
     // Get text content from textarea
-    const textContent = document.getElementById(textareaId).value;
-    const blob = new Blob([textContent], { type: 'text/plain' });
-    console.log('typeof(blob): ', typeof (blob)); // object
-    console.log('blob: ', blob);                 // Blob { size: 488, type: "text/plain" }
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
+    const textContent = document.getElementById(textareaId).value
+    const blob = new Blob([textContent], { type: 'text/plain' })
+    console.log('typeof(blob): ', typeof (blob)) // object
+    console.log('blob: ', blob)                 // Blob { size: 488, type: "text/plain" }
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
 
 
     // Generate the filename
@@ -102,11 +102,11 @@ function downloadUrlParamsAsTxt(textareaId) { // ('textarea-encoded-url-params')
     // Get artwork ID and size
     const idAndSizeStr = getTitle()
     // Set the filename
-    link.download = `${idAndSizeStr}.txt`;
+    link.download = `${idAndSizeStr}.txt`
 
 
     // Download
-    link.click();
+    link.click()
 }
 
 
@@ -130,7 +130,7 @@ function getTitle() {
 
 //// Only on data-manipulator.html
 //if (isOnDataManipulatorPage()) {
-//    document.getElementById('button-to-merge-as-url-params').addEventListener('click', mergeBasicDataAndLinesData);
+//    document.getElementById('button-to-merge-as-url-params').addEventListener('click', mergeBasicDataAndLinesData)
 //}
 
 async function mergeBasicDataAndLinesData(){
@@ -152,14 +152,14 @@ async function mergeBasicDataAndLinesData(){
     } else {
 
         // Output error message if either or both strings are missing
-        const errorMessage = "Error: Both basic data and lines data must be provided.";
-        outputToTextarea(errorMessage, 'textarea-encoded-url-params');
+        const errorMessage = "Error: Both basic data and lines data must be provided."
+        outputToTextarea(errorMessage, 'textarea-encoded-url-params')
 
     }
 
     // Check the size after ZSTD compression
-    const blobSize = await getBlobSize(urlParamsStr);
-    console.log(`Blob size: ${blobSize} bytes`);
+    const blobSize = await getBlobSize(urlParamsStr)
+    console.log(`Blob size: ${blobSize} bytes`)
 
 
     // Show the result
@@ -177,6 +177,6 @@ async function mergeBasicDataAndLinesData(){
 
 // Get the Blob size
 async function getBlobSize(string) {
-    const blob = await compressStringToBlob(string);
-    return blob.size;
+    const blob = await compressStringToBlob(string)
+    return blob.size
 }

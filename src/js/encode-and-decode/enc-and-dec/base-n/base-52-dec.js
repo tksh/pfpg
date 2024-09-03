@@ -12,15 +12,15 @@ function base52Dec(str) {
     const alphabet = getAlphabets52()
     // 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-    let base = alphabet.length;
-    let decoded = 0;
+    let base = alphabet.length
+    let decoded = 0
 
     for (let i = 0; i < str.length; i++) {
-        let index = alphabet.indexOf(str[i]);
-        decoded += index * Math.pow(base, str.length - i - 1);
+        let index = alphabet.indexOf(str[i])
+        decoded += index * Math.pow(base, str.length - i - 1)
     }
 
-    return decoded;
+    return decoded
 }
 
 // console.log(base52Dec('a'))    // 0
@@ -51,7 +51,7 @@ function base52DecodeForRefDict(str) {
     }
 
     // Base52 decode
-    const rawDecoded = base52Dec(encodedStr);
+    const rawDecoded = base52Dec(encodedStr)
 
     // UIntX の値に応じた 正の数だけにするために 加えていた数値を 取り除く
     const decoded = subtractToRestoreOriginalAfterDecode(rawDecoded)

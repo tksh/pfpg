@@ -5,19 +5,19 @@ export {
 
 
 function createMapFromNestedArrays(array) {
-    const map = new Map();
+    const map = new Map()
 
     array.forEach(subArray => {
-        const [key, ...rest] = subArray;     // キーと残りの要素を分割
+        const [key, ...rest] = subArray     // キーと残りの要素を分割
 
-        if (!map.has(key)) {                 // キーが存在しなければ、新しい配列を作成
-            map.set(key, []);
+        if (!map.has(key)) {                // キーが存在しなければ、新しい配列を作成
+            map.set(key, [])
         }
-        map.get(key).push(rest);             // 値を配列に追加
-    });
+        map.get(key).push(rest)             // 値を配列に追加
+    })
 
-    return map;
-}
+    return map
+}              // test comment
 
 /*
 // Test:
@@ -31,10 +31,10 @@ const inputArray = [
     [0, 50, 20],
     [1, 50, 3082],
     [2, 50, 139]
-];
+]
 
-const result = createMapFromNestedArrays(inputArray);
-console.log(result);
+const result = createMapFromNestedArrays(inputArray)
+console.log(result)
 
 // 出力結果:
 // Map(3) {
@@ -48,8 +48,8 @@ console.log(result);
 
 function mergeArrays(arr1, arr2) {
     return arr1.map((subArray, index) => {
-        return [...subArray, ...arr2[index]];
-    });
+        return [...subArray, ...arr2[index]]
+    })
 }
 
 /*
@@ -59,17 +59,17 @@ const resultNumArrByGroup = [
     [1, 52, 3497],
     [2, 52, 144],
     // 他の要素...
-];
+]
 
 const compressingResultArr = [
     [27, 27, 'uncompressed'],
     [3511, 2709, 'URLCompressor'],
     [149, 133, 'URLCompressor'],
     // 他の要素...
-];
+]
 
-const mergedResult = mergeArrays(resultNumArrByGroup, compressingResultArr);
-console.log(mergedResult);
+const mergedResult = mergeArrays(resultNumArrByGroup, compressingResultArr)
+console.log(mergedResult)
 
 // 出力結果:
 // [

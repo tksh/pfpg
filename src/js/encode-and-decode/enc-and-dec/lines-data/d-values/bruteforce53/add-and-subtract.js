@@ -29,7 +29,7 @@ export
  * @returns {number} The adjusted value after adding the **minimum** possible value.
  */
 function addToEliminateNegativeBeforeEncode(num) {
-    return num + Math.abs(getMinimumPossibleDiffForEnc());
+    return num + Math.abs(getMinimumPossibleDiffForEnc())
 }
 
 /**
@@ -39,7 +39,7 @@ function addToEliminateNegativeBeforeEncode(num) {
  * @returns {number} The original value after subtracting the added value.
  */
 function subtractToRestoreOriginalAfterDecode(num) {
-    return num - Math.abs(getMinimumPossibleDiffForDec());
+    return num - Math.abs(getMinimumPossibleDiffForDec())
 }
 
 // Get the minimum possible diff value

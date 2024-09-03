@@ -61,7 +61,7 @@ async function svg2png(svgString, opts, hasCrop) {
     const pngBuffer = pngData.asPng()
 
     // PNGデータの長さ（バイト数）を取得
-    const pngSize = pngBuffer.length;
+    const pngSize = pngBuffer.length
     const pngSizeAsKb = roundToOneDecimal(pngSize / 1024)
 
     // Create a blob and its url
@@ -89,54 +89,54 @@ async function svg2png(svgString, opts, hasCrop) {
 // Processing from SVG to PNG and measuring the time
 async function measureSvg2pngTime(svgString, opts, hasCrop, renderingStatusElements) {
     // 処理中メッセージを表示
-    await updateRenderingStatus("Now rendering ...<br> Please wait a moment :)", renderingStatusElements.get('pngDownloadButton'));
+    await updateRenderingStatus("Now rendering ...<br> Please wait a moment :)", renderingStatusElements.get('pngDownloadButton'))
 
     // setTimeoutを使用して 非同期処理を実行
     return new Promise((resolve, reject) => {
         setTimeout(async () => {
             // 開始時刻を記録
-            const startTime = performance.now();
+            const startTime = performance.now()
             console.log('svg2png startTime: ', startTime)
 
 
             try {
                 // svg2png関数を呼び出す
-                const result = await svg2png(svgString, opts, hasCrop);
+                const result = await svg2png(svgString, opts, hasCrop)
 
                 // 終了時刻を記録
-                const endTime = performance.now();
+                const endTime = performance.now()
                 console.log('svg2png endTime: ', endTime)
 
 
                 // 処理時間を計算
-                const elapsedTime = Math.floor(endTime - startTime);
+                const elapsedTime = Math.floor(endTime - startTime)
 
                 // 処理時間をコンソールに出力
-                console.log(`svg2png rendering time: ${elapsedTime} ms`);
+                console.log(`svg2png rendering time: ${elapsedTime} ms`)
 
                 // 処理完了メッセージを表示
-                await updateRenderingStatus(`Last rendering time: ${elapsedTime} milliseconds`, renderingStatusElements.get('lastRenderingTimeP'));
+                await updateRenderingStatus(`Last rendering time: ${elapsedTime} milliseconds`, renderingStatusElements.get('lastRenderingTimeP'))
 
                 // 処理結果を返す
-                resolve(result);
+                resolve(result)
 
             } catch (error) {
                 // エラー処理
-                console.error('An error occurred during the processing of svg2png:', error);
-                await updateRenderingStatus("An error occurred", pngDownloadButtonElement);
-                reject(error);
+                console.error('An error occurred during the processing of svg2png:', error)
+                await updateRenderingStatus("An error occurred", pngDownloadButtonElement)
+                reject(error)
             }
-        }, 0); // 0ミリ秒後に実行
-    });
+        }, 0) // 0ミリ秒後に実行
+    })
 }
 
 // Update .innerHtml text
 async function updateRenderingStatus(text, element) {
     return new Promise((resolve) => {
         // メッセージを更新し、次のフレームで反映させる
-        element.innerHTML = text;
+        element.innerHTML = text
         requestAnimationFrame(() => {
-            resolve();
-        });
-    });
+            resolve()
+        })
+    })
 }

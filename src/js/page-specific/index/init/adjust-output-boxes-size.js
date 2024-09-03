@@ -3,35 +3,35 @@ export async function adjustBox() {
     // Get the element rect sizes
 
     // window.innerHeightを使用してビューポートの高さを取得
-    const windowInnerHeight = window.innerHeight;
+    const windowInnerHeight = window.innerHeight
     console.log('windowInnerHeight: ', windowInnerHeight) // 1004
 
     // <body>
-    const bodyElem = document.querySelector('body');
-    const bodyRect = bodyElem.getBoundingClientRect();
-    console.log('body: ', bodyRect.width, bodyRect.height);
+    const bodyElem = document.querySelector('body')
+    const bodyRect = bodyElem.getBoundingClientRect()
+    console.log('body: ', bodyRect.width, bodyRect.height)
 
     // <header>
-    const headerElem = document.querySelector('header');
-    const headerRect = headerElem.getBoundingClientRect();
+    const headerElem = document.querySelector('header')
+    const headerRect = headerElem.getBoundingClientRect()
     console.log('headerRect.height: ', headerRect.height)
 
     // <main>
-    const mainElem = document.querySelector('main');
-    const mainRect = mainElem.getBoundingClientRect();
-    console.log('main: ', mainRect.width, mainRect.height);
+    const mainElem = document.querySelector('main')
+    const mainRect = mainElem.getBoundingClientRect()
+    console.log('main: ', mainRect.width, mainRect.height)
 
     // Get the output rect boxes to resize
 
     // <div id="img-box">
-    const imgBoxElem = document.getElementById('img-box');
-    const imgBoxRect = imgBoxElem.getBoundingClientRect();
-    console.log('img-box: ', imgBoxRect.width, imgBoxRect.height);
+    const imgBoxElem = document.getElementById('img-box')
+    const imgBoxRect = imgBoxElem.getBoundingClientRect()
+    console.log('img-box: ', imgBoxRect.width, imgBoxRect.height)
 
     // <div id="textarea-box">
-    const textareaBoxElem = document.getElementById('textarea-box');
-    const textareaBoxRect = textareaBoxElem.getBoundingClientRect();
-    console.log('textarea-box: ', textareaBoxRect.width, textareaBoxRect.height);
+    const textareaBoxElem = document.getElementById('textarea-box')
+    const textareaBoxRect = textareaBoxElem.getBoundingClientRect()
+    console.log('textarea-box: ', textareaBoxRect.width, textareaBoxRect.height)
 
 
     // Calc

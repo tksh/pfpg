@@ -19,7 +19,7 @@ export function swap63Enc() {
 
     // Codebook to encode from number to character
     const codebookForEncoding = createCodebook(get63Numbers(), get63Characters())
-    console.log('codebookForEncoding: ', codebookForEncoding);
+    console.log('codebookForEncoding: ', codebookForEncoding)
     // Map(63) { -31 → "0", -30 → "1", -29 → "2", -28 → "3", -27 → "4", -26 → "5", -25 → "6", -24 → "7", -23 → "8", -22 → "9", … }
 
 
@@ -85,7 +85,7 @@ export function swap63Enc() {
 
 // Get the encoded string of d values as Map
 function swapToEncode(dictMap, linesDataMap) {
-    //console.log(dictMap); // Map(63) {-31 => '0', -30 => '1', -29 => '2',  …  29 => 'Y', 30 => 'Z', 31 => '_'}
+    //console.log(dictMap) // Map(63) {-31 => '0', -30 => '1', -29 => '2',  …  29 => 'Y', 30 => 'Z', 31 => '_'}
 
     const encodedDvals = new Map()
 
@@ -105,7 +105,7 @@ function swapToEncode(dictMap, linesDataMap) {
         for (let key in relDvals) {
             //console.log('key: ', key)  // x1, y1, x2, y2
             const dval = relDvals[key]
-            //e.g.: console.log(dval); // (19) [1, 3, 3, 0, -2, -1, 8, 1, -2, 4, 2, -13, -16, 14, 2, -1, 0, -1, -8]
+            //e.g.: console.log(dval) // (19) [1, 3, 3, 0, -2, -1, 8, 1, -2, 4, 2, -13, -16, 14, 2, -1, 0, -1, -8]
 
             try {
                 // Encode and append
@@ -113,9 +113,9 @@ function swapToEncode(dictMap, linesDataMap) {
             } catch (error) {
                 // Stop processing if d value is not within the range
                 const errorMessage = `Error encoding dval for key ${key}: ${error.message}`
-                console.error(errorMessage);
+                console.error(errorMessage)
                 outputToTextarea(errorMessage, 'textarea-lines-data-encoded')
-                return;
+                return
             }
         }
 
@@ -132,14 +132,14 @@ function swapFromNumberToCharacter(dval, numberOfPath, dictMap) {
 
     // Use the original d value as an index to look up a character from the keys list and append it to the symbol string variable
     for (let i = 0; i < numberOfPath; i++) {
-        const originalNumber = dval[i];
+        const originalNumber = dval[i]
 
         // Check if original d value number is within the range -31 to 31
         if (originalNumber < -31 || originalNumber > 31) {
-            throw new Error(`Value out of range: ${originalNumber}. Must be between -31 and 31.`);
+            throw new Error(`Value out of range: ${originalNumber}. Must be between -31 and 31.`)
         }
 
-        const encodedChar = dictMap.get(originalNumber);
+        const encodedChar = dictMap.get(originalNumber)
         dvalEncoded += encodedChar
     }
 

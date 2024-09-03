@@ -9,15 +9,15 @@ export function base53Dec(str) {
     const alphabet = getBase53Characters()
     // '_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-    let base = alphabet.length;
-    let decoded = 0;
+    let base = alphabet.length
+    let decoded = 0
 
     for (let i = 0; i < str.length; i++) {
-        let index = alphabet.indexOf(str[i]);
-        decoded += index * Math.pow(base, str.length - i - 1);
+        let index = alphabet.indexOf(str[i])
+        decoded += index * Math.pow(base, str.length - i - 1)
     }
 
-    return decoded;
+    return decoded
 }
 
 // console.log(base53Dec('_')) // 0

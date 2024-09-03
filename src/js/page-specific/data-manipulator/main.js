@@ -30,29 +30,29 @@ for (const boolean of [true, false]) {
 // Attach event listener
 
 function initButtons(buttonId, functionName) {
-    const buttonElem = document.getElementById(`${buttonId}`);
-    buttonElem.addEventListener('click', functionName);
+    const buttonElem = document.getElementById(`${buttonId}`)
+    buttonElem.addEventListener('click', functionName)
 }
 
 document.addEventListener('DOMContentLoaded', () => {
 
     // Buttons to encode
-    initButtons('encode-basic-data',                 encodeBasicData);
+    initButtons('encode-basic-data',                 encodeBasicData)
 
-    initButtons('encode-lines-data-as-bruteforce53', bruteforce53Enc);
-    initButtons('encode-lines-data-as-bigint64',     bigint64Enc);
-    initButtons('encode-lines-data-as-swap63',       swap63Enc);
+    initButtons('encode-lines-data-as-bruteforce53', bruteforce53Enc)
+    initButtons('encode-lines-data-as-bigint64',     bigint64Enc)
+    initButtons('encode-lines-data-as-swap63',       swap63Enc)
 
     setupMixEncodingButtons()
 
     // Buttons to merge
-    initButtons('button-to-merge-as-url-params',     mergeBasicDataAndLinesData);
+    initButtons('button-to-merge-as-url-params',     mergeBasicDataAndLinesData)
 
     // Buttons to copy the text value of textarea of
     //   1. 'Encoded url params',
     //   2. 'Decode SVG String (relative)' and
     //   3. 'Decode SVG String (absolute)'
-    setupCopyButtons();
+    setupCopyButtons()
 
     // Initialize checkbox states based on pre-inputted sample Basic Data json
     const data = parseBasicData()
@@ -60,4 +60,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // textarea of Basic Data
     initBasicDataTextarea()
-});
+})

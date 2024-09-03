@@ -12,7 +12,7 @@ export
 function hexExpandToTen(hex) {
     // 文字列の長さが 10 ならば そのまま 返す
     if (hex.length === 10) {
-        return hex;
+        return hex
         // 文字列の長さが 6 ならば 2種類の透明度を それぞれ ff(1.0) として 返す
     } else if (hex.length === 6) {
         return hex + 'ffff'
@@ -22,14 +22,14 @@ function hexExpandToTen(hex) {
     // 結果の長さが 6 ならば 2種類の透明度を それぞれ ff(1.0) として 返す
     else if (hex.length === 3 || hex.length === 5) {
         // 文字列を1文字ずつ分割して配列にする
-        let chars = hex.split("");
+        let chars = hex.split("")
         // 配列の各要素を2回繰り返して結合する
-        let expanded = chars.map(char => char.repeat(2)).join("");
+        let expanded = chars.map(char => char.repeat(2)).join("")
         // 結果を返す
         if (expanded.length === 6) {
             return expanded + 'ffff'
         } else { // length = 10
-            return expanded;
+            return expanded
         }
     }
 
@@ -41,24 +41,24 @@ function hexExpandToTen(hex) {
 
     // 文字列の長さが 1,3,5,6,10 以外の場合は error
     else {
-        return new Error("Invalid hex code");
+        return new Error("Invalid hex code")
     }
 
 }
 
 // Test
 // // 1 => 10
-// console.log(hexExpandToTen("a"));          // "aaaaaaffff"
+// console.log(hexExpandToTen("a"))          // "aaaaaaffff"
 // // 3 => 10
-// console.log(hexExpandToTen("123"));        // "112233ffff"
+// console.log(hexExpandToTen("123"))        // "112233ffff"
 // // 5 => 10
-// console.log(hexExpandToTen("abcde"));      // "aabbccddee"
+// console.log(hexExpandToTen("abcde"))      // "aabbccddee"
 // // 6 => 10
-// console.log(hexExpandToTen("ffffff"));     // ffffffffff
+// console.log(hexExpandToTen("ffffff"))     // ffffffffff
 // // 10 => 10
-// console.log(hexExpandToTen("ffffffeedd")); // ffffffeedd
+// console.log(hexExpandToTen("ffffffeedd")) // ffffffeedd
 // // Invalid
-// console.log(hexExpandToTen("ff"));         // Error: Invalid hex string
+// console.log(hexExpandToTen("ff"))         // Error: Invalid hex string
 // console.log(hexExpandToTen(""))            // Error: Invalid hex string
 
 
@@ -101,26 +101,26 @@ function hexExpandToSix(hex) {
 }
     if (hex.length === 6) {
         // 文字列の長さが 6 ならば そのまま 返す
-        return hex;
+        return hex
 
     } else if (hex.length === 3) {
         // 文字列の長さが 3 ならば 各要素を 2回繰り返す
 
         // 文字列を1文字ずつ分割して配列にする
-        let chars = hex.split("");
+        let chars = hex.split("")
         // 配列の各要素を2回繰り返して結合する
-        let expanded = chars.map(char => char.repeat(2)).join("");
+        let expanded = chars.map(char => char.repeat(2)).join("")
         // 結果を返す
-        return expanded;
+        return expanded
     } else {
-        return new Error("Invalid hex code");
+        return new Error("Invalid hex code")
     }
 }
 
 
 function tryAddHash(hexString) {
     if (!hexString.startsWith('#')) {
-        return '#' + hexString;
+        return '#' + hexString
     }
-    return hexString;
+    return hexString
 }

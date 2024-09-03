@@ -19,6 +19,6 @@ export function diffToRel(diffArray) {
             let original = originalArray[index - 1] + parseInt(diff, 10)
             originalArray.push(original)
         }
-    });
-    return originalArray;
+    })
+    return originalArray
 }

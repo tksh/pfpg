@@ -42,15 +42,15 @@ function viewboxSlimmed(inputSvg) {
     console.log('newViewboxString: ', newViewboxString) // e.g.: viewBox="1.55 0 27.9 31"
 
     // Replace the viewBox string with new one
-    const patternForViewboxStr = /viewBox="[^"]+"/;  // viewBox属性 全体 を抽出する正規表現
-    return inputSvg.replace(patternForViewboxStr, newViewboxString);
+    const patternForViewboxStr = /viewBox="[^"]+"/  // viewBox属性 全体 を抽出する正規表現
+    return inputSvg.replace(patternForViewboxStr, newViewboxString)
 }
 
 
 // Get the slimmed width size and 'x' position (= same number as how much reduced each sides)
 function getSlimmedViewboxXW(inputSvg) {
-    const patternToGetSquircleSlimmedPathStr = /<path d="M ([\d\.]+),.*Q.*T ([\d\.]+),/; // viewBox属性を抽出する正規表現
-    const matches = patternToGetSquircleSlimmedPathStr.exec(inputSvg);
+    const patternToGetSquircleSlimmedPathStr = /<path d="M ([\d\.]+),.*Q.*T ([\d\.]+),/ // viewBox属性を抽出する正規表現
+    const matches = patternToGetSquircleSlimmedPathStr.exec(inputSvg)
     //console.log('matches: ', matches)       // e.g.: Array(3) [ '<path d="M 1.55,15.5Q 1.24,0 15.5,0T 29.45,', "1.55", "29.45" ]
     //console.log('matches[1]: ', matches[1]) // e.g.: 1.55
     //console.log('matches[2]: ', matches[2]) // e.g.: 29.45
@@ -58,13 +58,13 @@ function getSlimmedViewboxXW(inputSvg) {
     return new Map([
         ['x', toFixedTrimmed(parseFloat(matches[1]))             ], // viewBox start position | e.g.: 1.55
         ['w', toFixedTrimmed(parseFloat(matches[2] - matches[1]))]  // new viewBox width size | e.g.: 27.9 (= 29.45 - 1.55)
-    ]);
+    ])
 }
 
 // Get viewBox four number values as Map object
 function extractViewboxValues(inputSvg) {
     // Use a regular expression to match the four number values in the viewBox string
-    const match = inputSvg.match(/viewBox="([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)"/);
+    const match = inputSvg.match(/viewBox="([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)"/)
 
     // Check if the match was successful
     if (match && match.length === 5) {
@@ -74,10 +74,10 @@ function extractViewboxValues(inputSvg) {
             ['y', parseFloat(match[2])],
             ['w', parseFloat(match[3])],
             ['h', parseFloat(match[4])]
-        ]);
+        ])
     } else {
         // Return null or throw an error if the match was not successful
-        return null;
+        return null
     }
 }
 // e.g.: 'viewBox="2.325 0 26.35 31"' => Object { x: 2.325, y: 0, w: 26.35, h: 31 }
@@ -97,7 +97,7 @@ function viewboxUnSlimmed(inputSvg) {
 
     // Replace the viewBox string with new one
     const patternForViewboxStr = /viewBox="([^"]+)"/
-    const matchesForViewboxStr = patternForViewboxStr.exec(inputSvg);        // e.g.: 'viewBox="0 0 31 31"'
+    const matchesForViewboxStr = patternForViewboxStr.exec(inputSvg)        // e.g.: 'viewBox="0 0 31 31"'
     const matchForViewboxValueStr = matchesForViewboxStr[1]                  // e.g.: '0 0 31 31'
     return inputSvg.replace(matchForViewboxValueStr, originalViewboxString)
 }

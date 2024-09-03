@@ -9,10 +9,10 @@ export
 
 function isOnDataManipulatorPage() {
     // 現在のURLを取得する
-    const url = window.location.href; // url: 検索対象の文字列
+    const url = window.location.href // url: 検索対象の文字列
 
     const target = 'data-manipulator' // target: 検索したい文字列
-    return url.includes(target);
+    return url.includes(target)
 }
 
 

@@ -7,20 +7,20 @@ export function base64UrlEnc(num) {
     const alphabet = getBase64UrlCharacters()
     // 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
 
-    let base = BigInt(alphabet.length);
-    let encoded = '';
+    let base = BigInt(alphabet.length)
+    let encoded = ''
 
     if (num === 0n) {
-        return alphabet[0];
+        return alphabet[0]
     }
 
     while (num) {
-        let remainder = num % base;
-        num = num / base;
-        encoded = alphabet[Number(remainder)] + encoded;
+        let remainder = num % base
+        num = num / base
+        encoded = alphabet[Number(remainder)] + encoded
     }
 
-    return encoded;
+    return encoded
 }
 
 //console.log(   base64UrlEnc(0n)) // A

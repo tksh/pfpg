@@ -1,54 +1,91 @@
-import { getInputSvg
-       , countSvgSize
-       , initDownloadButtons }       from 'download'
-import { measureSvg2pngTime
-       , svg2png }                   from 'svg-to-png'
-import { getNumberOfGroups }         from 'utils/get-number-of-groups'
-import { replaceAtIndex }            from 'utils/replace-at-index'
+import {
+       adjustWidthNum,
+       syncWidthNum
+}                       from 'tab-render/sync-number-and-range'
+import {
+       changeOpacitySelectOptionsAsNewStep,
+       updateSvgForNewStep
+}                  from 'tab-lines/opacity-steps'
+import {
+       countSvgSize,
+       getInputSvg,
+       initDownloadButtons
+}       from 'download'
+import {
+       decodeAsSelectedPathMode,
+       recoverCurrentGroupColorsValues,
+       recoverCurrentOptionValue
+}      from 'tab-lines/path-mode'
+import {
+       generateGroupColorsHtmlElements,
+       generateGroupColorsSvgTags,
+       getOpacity,
+       getStroke,
+       getStrokeOpacity,
+       regexMatchesOfGroupColors
+}                     from 'tab-lines/group-colors'
+import {
+       getState,
+       state,
+       updateState
+}                  from 'init/state'
+import {
+       getSvgIndentation,
+       initSvgOptCheckbox,
+       optimizeSvg
+}       from 'svg-opt-modal/optimize-svg'
+import {
+       initThemeColorSelect,
+       setSchemeAsDefaultTheme
+}              from 'tab-ui/theme-color'
+import {
+       measureSvg2pngTime,
+       svg2png
+}                   from 'svg-to-png'
+import {
+       toggleDisplay,
+       updateSvgWithSelectedShapePath
+}       from 'tab-canvas/shape-to-trim'
+import {
+       viewboxSlimmed,
+       viewboxUnSlimmed
+}                     from 'tab-canvas/crop-side-margins'
+
 import { adjustBox }                 from 'init/adjust-output-boxes-size'
-import { getInitialOpacitySteps }    from 'init/get-initial-opacity-steps'
-import { setDefaultValueOfOptions }  from 'init/set-defaults'
-import { state
-       , updateState
-       , getState }                  from 'init/state'
-import { initTabs }                  from 'init/tab-setup'
-import { isOnDataManipulatorPage }   from 'common-utils/select-output-textarea'
 import { decode }                    from 'decode/decode'
+import { getInitialOpacitySteps }    from 'init/get-initial-opacity-steps'
+import { getNumberOfGroups }         from 'utils/get-number-of-groups'
+import { initCheckerboardBgCheckbox }           from 'tab-ui/checkerboard-bg'
+import { initSvgOptModal }   from 'svg-opt-modal/modal'
+import { initTabs }                  from 'init/tab-setup'
+import { initTextWrappingCheckbox }             from 'tab-ui/text-wrapping'
+import { initViewScalingSelect }                from 'tab-ui/view-scaling'
+import { initWidthValidatorListener }           from 'tab-render/width-pixel-size'
+import { isOnDataManipulatorPage }   from 'common-utils/select-output-textarea'
+import { replaceAtIndex }            from 'utils/replace-at-index'
+import { setDefaultValueOfOptions }  from 'init/set-defaults'
+import { updateSvgAsNewColorFormat }            from 'tab-lines/color-format'
 
 // Tab - Lines
-import { generateGroupColorsSvgTags
-       , generateGroupColorsHtmlElements
-       , regexMatchesOfGroupColors
-       , getStroke
-       , getOpacity
-       , getStrokeOpacity }                     from 'tab-lines/group-colors'
-import { updateSvgAsNewColorFormat }            from 'tab-lines/color-format'
-import { changeOpacitySelectOptionsAsNewStep
-       , updateSvgForNewStep }                  from 'tab-lines/opacity-steps'
-import { decodeAsSelectedPathMode
-       , recoverCurrentOptionValue
-       , recoverCurrentGroupColorsValues }      from 'tab-lines/path-mode'
+
+
+
+
 // Tab - Canvas
-import { toggleDisplay
-       , updateSvgWithSelectedShapePath }       from 'tab-canvas/shape-to-trim'
-import { viewboxSlimmed
-       , viewboxUnSlimmed }                     from 'tab-canvas/crop-side-margins'
+
+
 // Tab - Render
-import { syncWidthNum
-       , adjustWidthNum }                       from 'tab-render/sync-number-and-range';
-import { initWidthValidatorListener }           from 'tab-render/width-pixel-size';
+
+
 // Tab - UI
-import { initViewScalingSelect }                from 'tab-ui/view-scaling'
-import { initCheckerboardBgCheckbox }       from 'tab-ui/checkerboard-bg'
-import { initTextWrappingCheckbox }             from 'tab-ui/text-wrapping'
-import { initThemeColorSelect
-       , setSchemeAsDefaultTheme }              from 'tab-ui/theme-color'
+
+
+
+
 
 // Modal - SVG optimization
-import { initSvgOptModal }   from 'svg-opt-modal/modal'
-import { initSvgOptCheckbox
-       , getSvgIndentation
-       , optimizeSvg }       from 'svg-opt-modal/optimize-svg'
+
+
 
 
 (async function () {
@@ -96,19 +133,19 @@ import { initSvgOptCheckbox
         // Processing from SVG to PNG and measuring the time
         measureSvg2pngTime(svgString, resvgOpts, hasCrop, renderingStatusElements)
             .then((result) => {
-                console.log('result: ', result); // undefined
+                console.log('result: ', result) // undefined
 
                 // 処理結果を利用する
-                console.log('svg2png processing has completed.');
+                console.log('svg2png processing has completed.')
 
             })
             .catch((error) => {
-                console.error('An error occurred during the processing of svg2png:', error);
-            });
+                console.error('An error occurred during the processing of svg2png:', error)
+            })
 
         // SVGファイルサイズを ダウンロードボタンに 表示する
         countSvgSize(svgString)
-    };
+    }
 
 
     //////////////////////////////////////////////////////////////////////////
@@ -118,7 +155,7 @@ import { initSvgOptCheckbox
     function addMultipleEventListener(element, events, handler) {
         events.forEach(e => element.addEventListener(e, handler))
     }
-    addMultipleEventListener(svgInputElement, ['change', 'keyup', 'paste'], executeSvg2png);
+    addMultipleEventListener(svgInputElement, ['change', 'keyup', 'paste'], executeSvg2png)
 
     //////////////////////////////// textarea ////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -142,21 +179,21 @@ import { initSvgOptCheckbox
 
         // id `group-colors-${attrName}-N` の要素の変更を監視
         for (let i = 0; i < numberOfGroups; i++) {
-            const elementId = `group-colors-${attrName}-${i}`;
+            const elementId = `group-colors-${attrName}-${i}`
             console.log('elementId: ', elementId) // group-colors-${attrName}-0
 
-            const element = document.querySelector(`#${elementId}`);
+            const element = document.querySelector(`#${elementId}`)
             console.log('i, element: ', i, element) // 0 <input type=​"number" min=​"0" max=​"1" step=​"0.1" value=​"1" id=​"group-colors-${attrName}-0">​
 
             element.addEventListener('change', function (event) {
 
-                const inputValue = event.target.value;  // 'attrName' の input値を 取得
+                const inputValue = event.target.value  // 'attrName' の input値を 取得
                 console.log(`'${attrName}' changes to ${inputValue}`)
 
-                if (!inputValue) return;
+                if (!inputValue) return
 
                 // elementId最後の idの数値のみ を抽出して 変更されたグループの indexナンバー を特定
-                const gId = elementId.replace(`group-colors-${attrName}-`, '');
+                const gId = elementId.replace(`group-colors-${attrName}-`, '')
                 //console.log('gId: ', gId)                 // e.g: '0', '1', '2' ...
                 //console.log('typeof(gId): ', typeof(gId)) // string
 
@@ -168,13 +205,13 @@ import { initSvgOptCheckbox
                 // e.g: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
 
                 // Get three group colors value
-                const stroke = getStroke(matches[i]);
+                const stroke = getStroke(matches[i])
                 const opacity = getOpacity(matches[i])             // [0-1] number
                 const strokeOpacity = getStrokeOpacity(matches[i]) // [0-1] number
 
 
                 // Generate the array with input value, as structure like regex 'match' object
-                let valueAsMatchesStructure = [];
+                let valueAsMatchesStructure = []
 
                 if (attrName === 'stroke') {
 
@@ -211,15 +248,15 @@ import { initSvgOptCheckbox
 
 
                 // Replace the changed <g> elements via group ID
-                const pattern = /<g stroke=[^>]*>/g;
+                const pattern = /<g stroke=[^>]*>/g
                 const updatedSvg = replaceAtIndex(currentSvg, pattern, changedGroupElem, gId)
 
                 // Update the SVG string in <textarea>
-                svgInputElement.value = updatedSvg;
+                svgInputElement.value = updatedSvg
 
                 // Rendering the PNG image
                 executeSvg2png({ target: { value: updatedSvg } })
-            });
+            })
         }
     }
 
@@ -307,7 +344,7 @@ import { initSvgOptCheckbox
 
         // executeSvg2png関数を呼び出す
         executeSvg2png({ target: { value: updatedSvg } })
-    });
+    })
 
     /////////////////////////////// Path mode ////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -320,7 +357,7 @@ import { initSvgOptCheckbox
     document.getElementById("opacity-steps").addEventListener("change", (event) => {
 
         // 選択されたセレクトメニューの値を取得
-        const opacitySteps = Number(event.target.value);  // 0.04 | 0.1 | 0.2
+        const opacitySteps = Number(event.target.value)  // 0.04 | 0.1 | 0.2
 
         // グローバルステート更新
         updateState('opacitySteps', opacitySteps)
@@ -334,7 +371,7 @@ import { initSvgOptCheckbox
 
         svgInputElement.value = updatedSvg                 // Update textarea
         executeSvg2png({ target: { value: updatedSvg } })  // Rendering to PNG
-    });
+    })
 
     ////////////////////////////// Opacity steps /////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -367,7 +404,7 @@ import { initSvgOptCheckbox
         // Only update the SVG strings in the textarea.
         // Do not execute `executeSvg2png({ target: { value: updatedSvg } })`,
         // because the color format does not affect the appearance of the artwork.
-    });
+    })
 
     /////////////////////////////// Color format ////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -379,43 +416,43 @@ import { initSvgOptCheckbox
     ///////////////////////////// Shapes to trim /////////////////////////////
 
     document.getElementById('width-narrowness').addEventListener('change', () => {
-        const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getInputSvg());
+        const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getInputSvg())
         svgInputElement.value = updatedSvg                 // Update textarea
         executeSvg2png({ target: { value: updatedSvg } })  // Render to PNG
-    });
+    })
 
     document.getElementById('top-heavy-ratio').addEventListener('change', () => {
-        const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getInputSvg());
+        const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getInputSvg())
         svgInputElement.value = updatedSvg                 // Update textarea
         executeSvg2png({ target: { value: updatedSvg } })  // Render to PNG
-    });
+    })
 
 
     // 'shape-to-trim' changeイベントリスナーを設定
     document.getElementById('shape-to-trim').addEventListener("change", (event) => {
 
         // 選択された値を取得
-        const shape = event.target.value; // square|circle|squircle|squircleSlimmed
+        const shape = event.target.value // square|circle|squircle|squircleSlimmed
 
         // 'squircleSlimmed'が 選ばれた時だけ表示される
         // 2つのオプション選択用の<select>要素 と 横幅クロップ用の<label>&<input>要素 を取得し 表示または非表示にする
-        const elementsToToggle = ['width-narrowness-div', 'top-heavy-ratio-div', 'crop-side-margins-div'];
+        const elementsToToggle = ['width-narrowness-div', 'top-heavy-ratio-div', 'crop-side-margins-div']
 
         if (shape === 'squircleSlimmed') {
-            toggleDisplay(elementsToToggle, 'inline');
+            toggleDisplay(elementsToToggle, 'inline')
         } else {
-            toggleDisplay(elementsToToggle, 'none');
+            toggleDisplay(elementsToToggle, 'none')
         }
 
         const inputSvg = getInputSvg()
 
         // Update thee SVG string with new clip shape path and viewBox
-        const updatedSvg = updateSvgWithSelectedShapePath(shape, inputSvg);
+        const updatedSvg = updateSvgWithSelectedShapePath(shape, inputSvg)
 
         svgInputElement.value = updatedSvg                 // Update textarea
         executeSvg2png({ target: { value: updatedSvg } })  // Render to PNG
 
-    });
+    })
     ///////////////////////////// Shapes to trim /////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
@@ -440,7 +477,7 @@ import { initSvgOptCheckbox
             svgInputElement.value = updatedSvg
             executeSvg2png({ target: { value: updatedSvg } })
         }
-    });
+    })
     //////////////////////////// Crop side margins ///////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
@@ -454,19 +491,19 @@ import { initSvgOptCheckbox
     // Event listeners for 'shape-rendering' type changes
     document.getElementById("shape-rendering").addEventListener("change", (event) => {
         // 選択された値を取得
-        const value = event.target.value; // 'geometricPrecision' | 'crispEdges'
+        const value = event.target.value // 'geometricPrecision' | 'crispEdges'
         // <textarea>のvalue属性を取得
-        const svgString = svgInputElement.value;
+        const svgString = svgInputElement.value
 
         // 正規表現パターンを作成
-        const patternForShapeRendering = /shape-rendering="[^"]*"/g;
+        const patternForShapeRendering = /shape-rendering="[^"]*"/g
         // 正規表現でマッチした部分を書き換える
-        const updatedSvg = svgString.replace(patternForShapeRendering, `shape-rendering="${value}"`);
+        const updatedSvg = svgString.replace(patternForShapeRendering, `shape-rendering="${value}"`)
         // <textarea>のvalue属性を更新する
-        svgInputElement.value = updatedSvg;
+        svgInputElement.value = updatedSvg
         // executeSvg2png関数を呼び出す
         executeSvg2png({ target: { value: updatedSvg } })
-    });
+    })
 
     ////////////////////////////// Anti-aliasing /////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -477,38 +514,38 @@ import { initSvgOptCheckbox
 
     // Function to update resvgOpts and convert SVG
     const updateAndConvert = (value) => {
-        console.log("New value of 'Width pixel size':", value);
+        console.log("New value of 'Width pixel size':", value)
         Object.assign(resvgOpts, {
             fitTo: {
                 mode: 'height',
                 value: parseInt(value, 10),
             }
-        });
+        })
         executeSvg2png({ target: { value: svgInputElement.value.trim() } })
-    };
+    }
 
     // Event listener for both png-size-number and png-size-range
     const pngSizeElement = (event) => {
-        syncWidthNum(event.target);
-        updateAndConvert(event.target.value);
-    };
+        syncWidthNum(event.target)
+        updateAndConvert(event.target.value)
+    }
 
     // Function to handle button clicks
     const handleButtonClick = (step) => {
-        const value = adjustWidthNum(step);
+        const value = adjustWidthNum(step)
         if (value !== null) {
-            updateAndConvert(value);
+            updateAndConvert(value)
         }
-    };
+    }
 
     // Attach event listeners
 
     // input-box and slider
-    document.querySelector('#png-size-number').addEventListener('change', pngSizeElement);
-    document.querySelector('#png-size-range').addEventListener('change', pngSizeElement);
+    document.querySelector('#png-size-number').addEventListener('change', pngSizeElement)
+    document.querySelector('#png-size-range').addEventListener('change', pngSizeElement)
     // Increment and decrement buttons
-    document.querySelector('#width-size-dec').addEventListener('click', () => handleButtonClick(-1));
-    document.querySelector('#width-size-inc').addEventListener('click', () => handleButtonClick(1));
+    document.querySelector('#width-size-dec').addEventListener('click', () => handleButtonClick(-1))
+    document.querySelector('#width-size-inc').addEventListener('click', () => handleButtonClick(1))
 
     //////////////////////////// Width pixel size ////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -565,8 +602,8 @@ import { initSvgOptCheckbox
             })
 
             // Set the width number of input area with argument value
-            document.querySelector('#png-size-number').value = value;
-            document.querySelector('#png-size-range').value = value;
+            document.querySelector('#png-size-number').value = value
+            document.querySelector('#png-size-range').value = value
             console.log(`Set 'Width pixel size' initial value as "${value}"`)
     }
 
@@ -590,10 +627,10 @@ import { initSvgOptCheckbox
         await adjustBox()
 
         await setSchemeAsDefaultTheme()
-    };
+    }
     init()
 
-})(); // `(async function () {` の 即時実行関数
+})() // `(async function () {` の 即時実行関数
 
 
 // IIFEの外にDOMContentLoadedイベントリスナーを設定
@@ -601,13 +638,13 @@ import { initSvgOptCheckbox
 document.addEventListener('DOMContentLoaded', () => {
 
     // Download buttons for SVG and PNG
-    initDownloadButtons();
+    initDownloadButtons()
 
     // Tab - UI
-    initViewScalingSelect();
-    initCheckerboardBgCheckbox();
-    initTextWrappingCheckbox();
-    initThemeColorSelect();
+    initViewScalingSelect()
+    initCheckerboardBgCheckbox()
+    initTextWrappingCheckbox()
+    initThemeColorSelect()
 
     // Tab - Render
     initWidthValidatorListener()
@@ -619,4 +656,4 @@ document.addEventListener('DOMContentLoaded', () => {
     initSvgOptModal()
     initSvgOptCheckbox()
 
-});
+})

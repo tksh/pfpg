@@ -1,44 +1,44 @@
 export function initCheckerPatternListener() {
 
     // セレクトメニューの要素を取得
-const selectOfCheckerPattern = document.getElementById("checkerboard-bg");
-console.log('selectOfCheckerPattern.length is ', selectOfCheckerPattern.length); // 2
+const selectOfCheckerPattern = document.getElementById("checkerboard-bg")
+console.log('selectOfCheckerPattern.length is ', selectOfCheckerPattern.length) // 2
 
 // changeイベントを設定
 selectOfCheckerPattern.addEventListener("change", () => {
 
     // 選択されたセレクトメニューの値を取得
-    const value = selectOfCheckerPattern.value;
-    //console.log('selectOfCheckerPattern.value is ', value); // on|off
+    const value = selectOfCheckerPattern.value
+    //console.log('selectOfCheckerPattern.value is ', value) // on|off
 
     // img要素を取得
-    const img = document.querySelector("img");
+    const img = document.querySelector("img")
 
     // Switch the class for img
     if (value == "on") {
         console.log('selectOfCheckerPattern.value is ', selectOfCheckerPattern.value)
-        img.classList.add("checker");
+        img.classList.add("checker")
     } else if (value == "off") {
         console.log('selectOfCheckerPattern.value is ', selectOfCheckerPattern.value)
-        img.classList.remove("checker");
+        img.classList.remove("checker")
     }
-});
+})
 
 }
 
 export function initCheckerboardBgCheckbox() {
-    const checkbox = document.querySelector('#checkerboard-bg');
-    const img = document.querySelector("img");
+    const checkbox = document.querySelector('#checkerboard-bg')
+    const img = document.querySelector("img")
     //console.log("checkbox: ", checkbox)  // input#checkerboard-bg
     //console.log("img: ", img)            // img#img.checker.fit-to-display-area
 
     checkbox.addEventListener('change', () => {
 
         if (checkbox.checked) {
-            img.classList.add("checker");
+            img.classList.add("checker")
         } else {
-            img.classList.remove("checker");
+            img.classList.remove("checker")
         }
-    });
+    })
 
 }
