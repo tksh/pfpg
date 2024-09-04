@@ -1,91 +1,69 @@
+import { isOnDataManipulatorPage }    from "common-utils/select-output-textarea"
+import { decode }                     from "decode/decode"
 import {
-       adjustWidthNum,
-       syncWidthNum
-}                       from 'tab-render/sync-number-and-range'
+  countSvgSize,
+  getInputSvg,
+  initDownloadButtons,
+}                                     from "download"
+import { adjustBox }                  from "init/adjust-output-boxes-size"
+import { getInitialOpacitySteps }     from "init/get-initial-opacity-steps"
+import { setDefaultValueOfOptions }   from "init/set-defaults"
 import {
-       changeOpacitySelectOptionsAsNewStep,
-       updateSvgForNewStep
-}                  from 'tab-lines/opacity-steps'
+  getState,
+  state,
+  updateState,
+}                                     from "init/state"
+import { initTabs }                   from "init/tab-setup"
+import { initSvgOptModal }            from "svg-opt-modal/modal"
 import {
-       countSvgSize,
-       getInputSvg,
-       initDownloadButtons
-}       from 'download'
+  getSvgIndentation,
+  initSvgOptCheckbox,
+  optimizeSvg,
+}                                     from "svg-opt-modal/optimize-svg"
 import {
-       decodeAsSelectedPathMode,
-       recoverCurrentGroupColorsValues,
-       recoverCurrentOptionValue
-}      from 'tab-lines/path-mode'
+  measureSvg2pngTime,
+  svg2png,
+}                                     from "svg-to-png"
 import {
-       generateGroupColorsHtmlElements,
-       generateGroupColorsSvgTags,
-       getOpacity,
-       getStroke,
-       getStrokeOpacity,
-       regexMatchesOfGroupColors
-}                     from 'tab-lines/group-colors'
+  viewboxSlimmed,
+  viewboxUnSlimmed,
+}                                     from "tab-canvas/crop-side-margins"
 import {
-       getState,
-       state,
-       updateState
-}                  from 'init/state'
+  toggleDisplay,
+  updateSvgWithSelectedShapePath,
+}                                     from "tab-canvas/shape-to-trim"
+import { updateSvgAsNewColorFormat }  from "tab-lines/color-format"
 import {
-       getSvgIndentation,
-       initSvgOptCheckbox,
-       optimizeSvg
-}       from 'svg-opt-modal/optimize-svg'
+  generateGroupColorsHtmlElements,
+  generateGroupColorsSvgTags,
+  getOpacity,
+  getStroke,
+  getStrokeOpacity,
+  regexMatchesOfGroupColors,
+}                                     from "tab-lines/group-colors"
 import {
-       initThemeColorSelect,
-       setSchemeAsDefaultTheme
-}              from 'tab-ui/theme-color'
+  changeOpacitySelectOptionsAsNewStep,
+  updateSvgForNewStep,
+}                                     from "tab-lines/opacity-steps"
 import {
-       measureSvg2pngTime,
-       svg2png
-}                   from 'svg-to-png'
+  decodeAsSelectedPathMode,
+  recoverCurrentGroupColorsValues,
+  recoverCurrentOptionValue,
+}                                     from "tab-lines/path-mode"
 import {
-       toggleDisplay,
-       updateSvgWithSelectedShapePath
-}       from 'tab-canvas/shape-to-trim'
+  adjustWidthNum,
+  syncWidthNum,
+}                                     from "tab-render/sync-number-and-range"
+import { initWidthValidatorListener } from "tab-render/width-pixel-size"
+import { initCheckerboardBgCheckbox } from "tab-ui/checkerboard-bg"
+import { initTextWrappingCheckbox }   from "tab-ui/text-wrapping"
 import {
-       viewboxSlimmed,
-       viewboxUnSlimmed
-}                     from 'tab-canvas/crop-side-margins'
-
-import { adjustBox }                 from 'init/adjust-output-boxes-size'
-import { decode }                    from 'decode/decode'
-import { getInitialOpacitySteps }    from 'init/get-initial-opacity-steps'
-import { getNumberOfGroups }         from 'utils/get-number-of-groups'
-import { initCheckerboardBgCheckbox }           from 'tab-ui/checkerboard-bg'
-import { initSvgOptModal }   from 'svg-opt-modal/modal'
-import { initTabs }                  from 'init/tab-setup'
-import { initTextWrappingCheckbox }             from 'tab-ui/text-wrapping'
-import { initViewScalingSelect }                from 'tab-ui/view-scaling'
-import { initWidthValidatorListener }           from 'tab-render/width-pixel-size'
-import { isOnDataManipulatorPage }   from 'common-utils/select-output-textarea'
-import { replaceAtIndex }            from 'utils/replace-at-index'
-import { setDefaultValueOfOptions }  from 'init/set-defaults'
-import { updateSvgAsNewColorFormat }            from 'tab-lines/color-format'
-
-// Tab - Lines
-
-
-
-
-// Tab - Canvas
-
-
-// Tab - Render
-
-
-// Tab - UI
-
-
-
-
-
-// Modal - SVG optimization
-
-
+  initThemeColorSelect,
+  setSchemeAsDefaultTheme,
+}                                     from "tab-ui/theme-color"
+import { initViewScalingSelect }      from "tab-ui/view-scaling"
+import { getNumberOfGroups }          from "utils/get-number-of-groups"
+import { replaceAtIndex }             from "utils/replace-at-index"
 
 
 (async function () {
@@ -630,7 +608,7 @@ import { updateSvgAsNewColorFormat }            from 'tab-lines/color-format'
     }
     init()
 
-})() // `(async function () {` の 即時実行関数
+})() // `(async function () { ... })` 無名即時実行関数
 
 
 // IIFEの外にDOMContentLoadedイベントリスナーを設定
