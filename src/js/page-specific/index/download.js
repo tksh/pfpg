@@ -15,18 +15,6 @@ function getInputSvg() {
     return document.querySelector('#input-svg').value.trim() // '.trim()' => 文字列の両端の空白を削除
 }
 
-// Get the <textarea> element and its `.value` string of SVG
-function getInputSvgElemAndVal() {
-    const svgTextarea = document.querySelector('#input-svg')
-    const svgString = svgTextarea.value.trim()               // <textarea>のvalue属性を取得
-    return new Map([
-        ['textareaElement', svgTextarea],
-        ['stringValue',     svgString]
-    ])
-}
-
-
-
 // Get the artwork ID
 function getArtworkId() {
     const inputSvg = getInputSvg()
@@ -68,6 +56,7 @@ function getPixelSizeWxH() {
 function getCurrentStatus() {
 
     // Lines group attributes (stroke, opacity, stroke-opacity)
+    // `stroke` will always be converted to HEX format, even if RGB is selected
     const groupColorsValues = getGroupColorsValues()
     const stArray = convertColorFormatForArray(groupColorsValues.get('stroke_array'))
     const opArray = groupColorsValues.get('opacity_array')
