@@ -1,16 +1,14 @@
-import { roundToOneDecimal }    from 'utils/number-rounding'
-import { extractViewboxValues } from 'tab-canvas/crop-side-margins'
-import { getGroupColorsValues } from 'tab-lines/group-colors'
-import { normalizedToHex }      from 'color-formatter/normalized-to-hex'
-import { tryDeleteFs }          from 'color-formatter/try-delete-f'
-import { tryShortenAsHalf }     from 'color-formatter/hex-shorten'
+import { tryShortenAsHalf }     from "color-formatter/hex-shorten"
+import { normalizedToHex }      from "color-formatter/normalized-to-hex"
+import { tryDeleteFs }          from "color-formatter/try-delete-f"
+import { extractViewboxValues } from "tab-canvas/crop-side-margins"
+import {
+  convertColorFormatForArray,
+  getGroupColorsValues,
+}                               from "tab-lines/group-colors"
+import { roundToOneDecimal }    from "utils/number-rounding"
 
-export
-    { getInputSvg
-    , initDownloadButtons
-    , countSvgSize
-    }
-
+export { countSvgSize, getInputSvg, initDownloadButtons }
 
 // Get the svg string from <textarea> element
 function getInputSvg() {
@@ -71,7 +69,7 @@ function getCurrentStatus() {
 
     // Lines group attributes (stroke, opacity, stroke-opacity)
     const groupColorsValues = getGroupColorsValues()
-    const stArray = groupColorsValues.get('stroke_array')
+    const stArray = convertColorFormatForArray(groupColorsValues.get('stroke_array'))
     const opArray = groupColorsValues.get('opacity_array')
     const soArray = groupColorsValues.get('stroke_opacity_array')
     console.log(stArray) // Type: String | e.g.: Array(5) [ "#97FF6E", "#000000", "#8ACAFF", "#eeeeee", "#ffffff" ]
@@ -102,8 +100,8 @@ function getCurrentStatus() {
 
     // Path mode
     const pathModeSelect = document.getElementById('path-mode')
-    const pathMode = pathModeSelect.value.slice(0, 3) + pathModeSelect.value.slice(8, 11)
-    //  <option> value as 'relativeMerged' | 'absoluteSeparated' => filename as 'relMer' | 'absSep'
+    const pathMode = pathModeSelect.value
+    //  <option> value: 'relativeMerged' | 'absoluteSeparated'
 
 
     // Anti-aliasing (shapeRendering)

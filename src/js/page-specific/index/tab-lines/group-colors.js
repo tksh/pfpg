@@ -1,20 +1,21 @@
-import { getInputSvg }            from 'download'
-import { rgbToHex }               from 'color-formatter/normalized-to-hex'
-import { hexToRgb }               from 'color-formatter/normalized-from-hex'
-import { numbersIncrementByStep } from 'tab-lines/opacity-steps'
+import { hexToRgb }               from "color-formatter/normalized-from-hex"
+import { rgbToHex }               from "color-formatter/normalized-to-hex"
+import { getInputSvg }            from "download"
+import { numbersIncrementByStep } from "tab-lines/opacity-steps"
 
-export
-    { generateGroupColorsSvgTags
-    , generateGroupColorsHtmlElements
-    , getGroupColorsValues
-    , regexMatchesOfGroupColors
-    , getStrokeHex
-    , getStrokeRgb
-    , getStroke
-    , getOpacity
-    , getStrokeOpacity
-    , convertColorFormat
-    }
+export {
+  convertColorFormat,
+  convertColorFormatForArray,
+  generateGroupColorsHtmlElements,
+  generateGroupColorsSvgTags,
+  getGroupColorsValues,
+  getOpacity,
+  getStroke,
+  getStrokeHex,
+  getStrokeOpacity,
+  getStrokeRgb,
+  regexMatchesOfGroupColors,
+}
 
 // SVG
 
@@ -248,8 +249,8 @@ function convertColorFormat(color, colorFormat) {
 }
 
 // 色情報の文字列の配列を指定の形式に変換する
-function convertColorFormatForArray(stroke, colorFormat) {
-    return stroke.map(color => convertColorFormat(color, colorFormat))
+function convertColorFormatForArray(strokeArr, colorFormat) {
+    return strokeArr.map(color => convertColorFormat(color, colorFormat))
 }
 
 // RGB形式かHEX形式かを判定する関数

@@ -120,7 +120,7 @@ function convertOriginal()
   const percentStr   =percentEncode(original.value)
   const base64urlStr =base64urlEncode(original.value)
   const compressedStr=URLCompressor.compress(original.value,true)
-  
+
   percent   .value=percentStr
   base64url .value=base64urlStr
   compressed.value=compressedStr
