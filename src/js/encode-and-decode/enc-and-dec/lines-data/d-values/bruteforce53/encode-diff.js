@@ -37,11 +37,11 @@ function handleFrequencyDiff(diff, codebookToEncodeFreqDiff) {
 
 
 
-// Base52 encode (with prefix) for too small|big numbers
+// Base52 encode with some '_' prefix for too small|big numbers
 
 // Rules:
 //     大小両極の数字は baseX で 2文字以内に エンコード出来ないので baseXエンコードしない
-//     代わりに Base52 でアルファベットにエンコードし Codebookを使って頻出数値から 一文字に変換をしたアルファベットと 区別するために アンダースコア('_')を 先頭に 1|2|3|4個 フラグとして付ける
+//     代わりに Base52 でアルファベットにエンコードし Codebookを使って頻出数値から 一文字に変換をしたアルファベットと 区別するために アンダースコア('_')を 先頭に いくつか フラグとして付ける
 //
 //         エンコード後の文字数が 2文字 になった場合:
 //             正の数値は 前に アンダースコアを 1個 付ける
@@ -49,12 +49,40 @@ function handleFrequencyDiff(diff, codebookToEncodeFreqDiff) {
 //         エンコード後の文字数が 3文字 になった場合:
 //             正の数値は 前に アンダースコアを 3個 付ける
 //             負の数値は 前に アンダースコアを 4個 付ける
+//         エンコード後の文字数が 4文字 になった場合:
+//             正の数値は 前に アンダースコアを 5個 付ける
+//             負の数値は 前に アンダースコアを 6個 付ける
 
-// Limit:
-//     52*52   =  2704 なので 数値が   2703(ZZ)  までは 2文字に変換できる
-//     52*52*52=140608 なので 数値が 140607(ZZZ) までは 3文字に変換できる
-//     UInt8Portray (grid size: 0-255)   までは diff の負の数を消した時に取り得る最大値 (2044)   を 2文字でカバーできる
-//     UInt14Portray(grid size: 0-16383) までは diff の負の数を消した時に取り得る最大値 (131064) を 3文字でカバーできる
+// Formula:
+//     (エンコード後の文字数 - 1) * 2 - 1 = 正の数値に付ける アンダースコアの 個数
+//     (エンコード後の文字数 - 1) * 2     = 負の数値に付ける アンダースコアの 個数
+function getNumberOfUnderscorePrefix(str, isPositive) {
+    const lengthBasedValue = (str.length - 1) * 2;
+
+    console.log("str is too long|short", str, lengthBasedValue - 1, lengthBasedValue)
+
+    if (isPositive) {
+        return lengthBasedValue - 1; // 正の数値に付ける アンダースコアの個数
+    } else {
+        return lengthBasedValue;     // 負の数値に付ける アンダースコアの個数
+    }
+}
+
+// Prepend some underscore signs
+function prependUnderscores(str, isPositive) {
+    const numberOfUnderscores = getNumberOfUnderscorePrefix(str, isPositive);
+    const underscorePrefix = '_'.repeat(numberOfUnderscores);
+    console.log("str is too long|short", str, isPositive, underscorePrefix)
+    return underscorePrefix + str;
+}
+
+// Limits:
+//     52*52       =    2704 なので 数値が    2703(ZZ)   までは 2文字に変換できる
+//     52*52*52    =  140608 なので 数値が  140607(ZZZ)  までは 3文字に変換できる
+//     52*52*52*52 = 7311616 なので 数値が 7311615(ZZZZ) までは 4文字に変換できる
+//     UInt8Portray (grid size: 0 -     255) までは diff の負の数を消した時に取り得る最大値 (    2,044) を 2文字でカバーできる
+//     UInt14Portray(grid size: 0 -  16,383) までは diff の負の数を消した時に取り得る最大値 (  131,064) を 3文字でカバーできる
+//     UInt19Portray(grid size: 0 - 524,287) までは diff の負の数を消した時に取り得る最大値 (4,194,296) を 4文字でカバーできる
 
 
 // Calculate the threshold for target range of BaseX ans Base52
@@ -63,7 +91,7 @@ function calculateLimitsForBaseXSkipRange(baseXNumber, minimumDiffValue, maximum
     const baseXTargetRangeStart = 0 - getHalfOfBaseXRange(baseXNumber)
     const baseXTargetRangeEnd   =     getHalfOfBaseXRange(baseXNumber) + 9
     console.log(`Range to target for Base${baseXNumber} encoding: ${baseXTargetRangeStart} ... 0 / 9 ... ${baseXTargetRangeEnd}`)
-    // e.g: // -40  < 0 | 9 <  49
+    // e.g: -40  < 0 | 9 <  49
 
     // Get the range to skip BaseX encoding (values outside this range will be skipped and Base52 encoding will be applied)
     const baseXSkipRangeLowerLimit = baseXTargetRangeStart - 1
@@ -92,31 +120,20 @@ function handleBase52EncodingWithPrefix(diff, baseXNumber, baseXRangeLimits) {
 
     // Encode
     if (diff <= baseXRangeLimits.baseXSkipRangeLowerLimit || baseXRangeLimits.baseXSkipRangeUpperLimit <= diff) {
-        // base52エンコードして 2桁に'a'でパディングしたあと いくつかのアンダースコアを接頭辞として付加
+        // base52エンコードして 2桁に'a'でパディングしたあと いくつかのアンダースコアを 接頭辞として付加
         const diffEncoded = base52Enc(Math.abs(diff)).padStart(2, 'a')
         const diffEncodedWithUnderscorePrefix = prependUnderscores(diffEncoded, diff > 0)
         console.log(
-            `diff ${diff} は Base${baseXNumber} エンコード範囲外なので Base52エンコード ('_'を [1|2|3|4]個 フラグとして付ける): `,
+            `diff ${diff} は Base${baseXNumber} エンコード範囲外なので Base52エンコード ('_'を いくつか フラグとして付ける): `,
             diffEncodedWithUnderscorePrefix
         )
         return diffEncodedWithUnderscorePrefix
     }
 }
 
-// Prepend some underscore signs
-function prependUnderscores(str, isPositive) {
-    if (str.length === 2) { // Uncaught TypeError: Cannot assign to read only property 'length' of string 'cp'
-        const prefix = isPositive ? '_' : '__'
-        return prefix + str
-    } else {  // str.length = 3
-        const prefix = isPositive ? '___' : '____'
-        return prefix + str
-    }
-}
 
 
-
-// BaseX encode for excepts above.
+// BaseX encode will be applied for excepts above cases.
 
 // baseXエンコード可能な範囲にある場合 => BaseX でアルファベット2文字にエンコード
 function handleBaseXEncoding(diff, baseXNumber) {

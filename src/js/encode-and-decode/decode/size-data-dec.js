@@ -46,12 +46,21 @@ function sizeDataDec(linesDataMapIndexZero) {
 
 function calculateCanvasSize(d) {
     //console.log('d: ', d)
-    // e.g.:
+
+    // e.g.: 127 x 127
     // x1: (2) [63, 64]
     // x2: (2) [63, 64]
     // y1: (2) [0, 0]
     // y2: (2) [127, 127]
     // [[Prototype]]: Object
+
+    // e.g.: 128 x 128
+    // x1: (1) [128],
+    // x2: (1) [64],
+    // y1: (1) [0],
+    // y2: (1) [64]
+    // [[Prototype]]: Object
+
 
     let width, height
 

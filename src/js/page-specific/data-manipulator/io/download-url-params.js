@@ -149,14 +149,6 @@ async function mergeBasicDataAndLinesData(){
         // Output to textarea
         outputToTextarea(urlParamsStr, 'textarea-encoded-url-params')
 
-    } else {
-
-        // Output error message if either or both strings are missing
-        const errorMessage = "Error: Both basic data and lines data must be provided."
-        outputToTextarea(errorMessage, 'textarea-encoded-url-params')
-
-    }
-
     // Check the size after ZSTD compression
     const blobSize = await getBlobSize(urlParamsStr)
     console.log(`Blob size: ${blobSize} bytes`)
@@ -172,6 +164,14 @@ async function mergeBasicDataAndLinesData(){
     `Size of original url params string: <b>${urlParamsStr.length}</b> characters(bytes) (.txt)<br>
     Size of after Zstandard compression: <b>${blobSize}</b> bytes (.txt.zst)<br>
     Ratio: ${blobSize} / ${urlParamsStr.length} = <b>${compRatio}</b>`
+
+    } else {
+
+        // Output error message if either or both strings are missing
+        const errorMessage = "Error: Both basic data and lines data must be provided."
+        outputToTextarea(errorMessage, 'textarea-encoded-url-params')
+
+    }
 
 }
 
