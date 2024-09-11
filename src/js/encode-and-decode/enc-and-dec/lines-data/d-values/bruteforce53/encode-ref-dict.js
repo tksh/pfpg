@@ -9,7 +9,7 @@ import { addToEliminateNegativeBeforeEncode } from 'enc-and-dec/lines-data/d-val
 //   結果が 1文字の場合は `.padStart(2, 'a')` で 長さを 2文字 に揃える
 //   結果が 3文字の場合は 先頭にアンダースコア '_' をひとつ付ける ( 'abc' => '_abc' )
 
-export function encodeFreqDiffAsRefDict(freqDiffArrActualCodebookSized) {
+export function encodeFreqDiff(freqDiffArrActualCodebookSized) {
     const refDict = freqDiffArrActualCodebookSized.map((value) => base52EncodeForRefDict(value))
     return refDict.join('') // return after joined as a string
 }

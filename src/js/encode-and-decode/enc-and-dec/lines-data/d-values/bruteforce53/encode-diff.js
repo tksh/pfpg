@@ -30,7 +30,7 @@ function handleSingleDigit(diff) {
 
 function handleFrequencyDiff(diff, codebookToEncodeFreqDiff) {
     if (codebookToEncodeFreqDiff.has(diff)) {
-        //console.log('Diff value has included in codebook. diff => codebookToEncodeFreqDiff.get(diff): ', diff, ' => ', codebookToEncodeFreqDiff.get(diff))
+        console.log('Diff value has included in codebook. diff => codebookToEncodeFreqDiff.get(diff): ', diff, ' => ', codebookToEncodeFreqDiff.get(diff))
         return codebookToEncodeFreqDiff.get(diff)
     }
 }
@@ -59,7 +59,7 @@ function handleFrequencyDiff(diff, codebookToEncodeFreqDiff) {
 function getNumberOfUnderscorePrefix(str, isPositive) {
     const lengthBasedValue = (str.length - 1) * 2;
 
-    console.log("str is too long|short", str, lengthBasedValue - 1, lengthBasedValue)
+    console.log("str is too long|short", str, lengthBasedValue - 1, lengthBasedValue)//////////////////////////////////////////////////////
 
     if (isPositive) {
         return lengthBasedValue - 1; // 正の数値に付ける アンダースコアの個数
@@ -72,7 +72,7 @@ function getNumberOfUnderscorePrefix(str, isPositive) {
 function prependUnderscores(str, isPositive) {
     const numberOfUnderscores = getNumberOfUnderscorePrefix(str, isPositive);
     const underscorePrefix = '_'.repeat(numberOfUnderscores);
-    console.log("str is too long|short", str, isPositive, underscorePrefix)
+    console.log("str is too long|short", str, isPositive, underscorePrefix)/////////////////////////////////////////////////////
     return underscorePrefix + str;
 }
 

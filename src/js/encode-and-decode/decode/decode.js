@@ -126,7 +126,7 @@ function decodeDvals(linesDataMap) {
         if (v.encodingMethodFlag === '0') {
             console.log(`Group ${gId} has encoded with 'bruteforce53-enc'`)
             const decodedDiffDvals = bruteforce53Dec(v.encodedDvals)
-            decodedRelDvals = decodedDiffDvals.map(column => diffToRel(column))
+            decodedRelDvals = decodedDiffDvals.map(coord => diffToRel(coord))
             decodedAbsDvals = relToAbs(decodedRelDvals, v.widthAndCounts)
 
         } else if (v.encodingMethodFlag === '1') {

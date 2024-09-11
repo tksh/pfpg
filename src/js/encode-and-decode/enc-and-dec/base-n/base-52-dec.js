@@ -56,7 +56,7 @@ function base52DecodeForRefDict(str) {
     // UIntX の値に応じた 正の数だけにするために 加えていた数値を 取り除く
     const decoded = subtractToRestoreOriginalAfterDecode(rawDecoded)
 
-    //console.log('decoded, rawDecoded, encodeStr: ', decoded, rawDecoded, encodedStr) // -2 1018 tE
+    console.log('decoded, rawDecoded, encodeStr: ', decoded, rawDecoded, encodedStr) // -2 1018 tE
 
     return decoded
 }

@@ -4,19 +4,18 @@ import { getAlphabetsForCodebook } from 'enc-and-dec/lines-data/d-values/brutefo
 
 // Create the codebook
 
-export function createCodebookToDecodeFrequentDiff(encodedRefDict, maxCodebookSize) {
+export function createCodebookToDecodeFrequentDiff(freqDiffArr, actualCodebookSize) {
     // Key  : Alphabets
-    // Value: Frequent diff value from reference dictionary
+    // Value: Frequent diff value
 
     // Alphabets
-    const alphabets = getAlphabetsForCodebook(maxCodebookSize)
-    // Decode the reference dictionary
-    const refDict = decodeFreqDiffAsRefDict(encodedRefDict)
+    const alphabets = getAlphabetsForCodebook(actualCodebookSize)
+
     // Set the kv pair into Map()
     const codebook = new Map()
 
-    for (let i = 0; i < refDict.length; i++) {
-        codebook.set(alphabets[i], refDict[i])
+    for (let i = 0; i < freqDiffArr.length; i++) {
+        codebook.set(alphabets[i], freqDiffArr[i])
     }
     return codebook
 }
@@ -24,7 +23,7 @@ export function createCodebookToDecodeFrequentDiff(encodedRefDict, maxCodebookSi
 
 // Decode the reference dictionary (frequent diff value)
 
-function decodeFreqDiffAsRefDict(diffStr) {
+export function decodeFreqDiffAsRefDict(diffStr) {
     // Base52デコードした 数値の配列を返す
 
     // Base52エンコードされた文字列を 以下のルールで区切る
@@ -32,7 +31,7 @@ function decodeFreqDiffAsRefDict(diffStr) {
     //   その他 (小文字の連なり)は 2文字ずつ
 
     const splitted = diffStr.match(/(_.{3})|(.{2})/g)  // 2 or 4文字ずつ取り出す
-    console.log('splitted: ', splitted)                 // 頻出数値が無い column の場合には 'splitted:  null' となる
+    console.log('splitted: ', splitted)                 // 頻出数値が無い coord の場合には 'splitted:  null' となる
 
     // Regex test
     //const strTEST = 'abcd_efg_hij_klmnopqrstu'
@@ -43,7 +42,7 @@ function decodeFreqDiffAsRefDict(diffStr) {
     if (splitted !== null) {
         return splitted.map(twoChars => base52DecodeForRefDict(twoChars))
     } else {
-        return [] // 頻出数値が無い column の場合には 空の配列を 返す
+        return [] // 頻出数値が無い coord の場合には 空の配列を 返す
     }
     // e.g.: (29) [-2, -1, -7, -5, -3, -4, 11, 10, 12, -8, -11, -6, 16, -10, 13, 24, -27, -9, 14, 15, 17, 20, 73, -38, -37, -25, -24, -23, -22]
 }

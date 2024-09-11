@@ -40,7 +40,7 @@ function relToAbs(relativeDvals, widthAndCounts) {
 
     // Convert the array structure to same as original relative values array.
     // From: [x1, y1, x2, y2] * length
-    // To  : [x1, x1, ... x1] * 4 columns
+    // To  : [x1, x1, ... x1] * 4 coords
     const absoluteDvals = zip(...absoluteCoordinates)
 
     return absoluteDvals

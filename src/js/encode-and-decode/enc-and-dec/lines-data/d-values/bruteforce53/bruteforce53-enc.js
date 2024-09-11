@@ -16,7 +16,7 @@ import {
 
 import { base53Enc }                          from 'enc-and-dec/base-n/base-53-enc'
 import { createCodebookToEncodeFrequentDiff } from 'enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc'
-import { encodeFreqDiffAsRefDict }            from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-ref-dict'
+import { encodeFreqDiff }            from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-ref-dict'
 import { getActualCodebookSize }              from 'enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size'
 import { getEncodedAttrsExceptsDvals }        from 'encode/get-attrs-excepts-dvals'
 import { isOnDataManipulatorPage }            from 'common-utils/select-output-textarea'
@@ -40,7 +40,7 @@ import { tryDecompress }                      from 'encode/try-decompress'
 
 // for-loop 1: Max dict size from 0 to 52
 // for-loop 2: Each lines-group (.g_id) from 0 to group size
-// for-loop 3: Four columns from 'x1' to 'y2'
+// for-loop 3: Coordinate set from 'x1' to 'y2'
 
 export function bruteforce53Enc() {
     const startTime = performance.now()
@@ -87,19 +87,19 @@ export function bruteforce53Enc() {
             //console.log('aggData.d.relative: ', aggData.d.relative)
             // Object { diff_by_row: {…}, frequent_diff_values_sorted: {…}, frequent_diff_counts_sorted: {…} }
 
-            let refDictAndDiffEncodedFourColumns = []
+            let freqDiffAndDiffFourCoords = []
 
-            // Loop 3. Four columns from 'x1' to 'y2'
+            // Loop 3. Coordinate set from 'x1' to 'y2'
 
-            for (const column of ['x1', 'y1', 'x2', 'y2']) {
-                console.log('//////// column: ', column, '////////')
+            for (const coord of ['x1', 'y1', 'x2', 'y2']) {
+                console.log('//////// coord: ', coord, '////////')
 
                 // Diff-by-row original
-                let diffArr = aggData.d.relative.diff_by_row[column]
+                let diffArr = aggData.d.relative.diff_by_row[coord]
                 // e.g.: (19) [1, 2, 0, -3, -2, 1, 9, -7, -3, 6, -2, -15, -3, 30, -12, -3, 1, -1, -7]
 
                 // Diff-by-row sorted by frequency and removed the values that only once appeared
-                let freqDiffArr = aggData.d.relative.frequent_diff_values_sorted[column]
+                let freqDiffArr = aggData.d.relative.frequent_diff_values_sorted[coord]
                 // e.g.: (3) [-3, -2, -7]
 
 
@@ -112,7 +112,7 @@ export function bruteforce53Enc() {
                 // If      freqDiffArr.length is OVER maxCodebookSize,  => actualCodebookSize.length is maxCodebookSize
                 // Else if freqDiffArr.length is UNDER maxCodebookSize, => actualCodebookSize.length equals freqDiffArr.length
 
-                // Get the number of actual codebook length in this column
+                // Get the number of actual codebook length in this coord
                 const actualCodebookSize = getActualCodebookSize(maxCodebookSize, freqDiffArr)
 
                 // Extract top ${maxCodebookSize} elements of numerical numbers
@@ -128,14 +128,14 @@ export function bruteforce53Enc() {
                 // e.g.: Map(29) {-2 => 'x', -1 => 'y', -4 => 'z', -7 => 'A', -3 => 'B', …}
 
 
-                // Create the reference dictionary
-                //   Encode the array of frequency diff values as a string to attach
-                const freqDiffAsRefDict = encodeFreqDiffAsRefDict(freqDiffArrActualCodebookSized)
-                console.log('maxCodebookSize and freqDiffAsRefDict: ', maxCodebookSize, freqDiffAsRefDict)
+                // Encode the array of frequent diff values as a string to attach
+                const freqDiffEncoded = encodeFreqDiff(freqDiffArrActualCodebookSized)
+                console.log('maxCodebookSize and freqDiffEncoded: ', maxCodebookSize, freqDiffEncoded)
 
                 try {
                     // Encode the diff values
                     const diffArrEncoded = diffArr.map((diff) => {
+                        console.log('||||diff: ', diff)////////////////////////////////////////
 
                         // [0-9] の一桁の正の数は そのままにする
                         let result = handleSingleDigit(diff)
@@ -145,7 +145,7 @@ export function bruteforce53Enc() {
                         result = handleFrequencyDiff(diff, codebookToEncodeFreqDiff)
                         if (result !== undefined) return result
 
-                        // 数値が [大き|小さ]過ぎて BaseX で 2桁 にエンコードできないものは base52エンコードしてから アンダースコア を先頭にフラグとして 条件に応じて [1|2|3|4]個 付ける
+                        // 数値が [大き|小さ]過ぎて BaseX で 2桁 にエンコードできないものは base52エンコードしてから アンダースコア を先頭にフラグとして 条件に応じて いくつか 付ける
                         //   上の Codebook と 下の BaseX は それぞれ重複しないアルファベットを 切り出して使っているが
                         //   Base52 は 両方ともと同じ種類の文字を使っているので デコード時にそれらと区別できるようにするため フラグを付ける
                         try {
@@ -153,7 +153,7 @@ export function bruteforce53Enc() {
                             result = handleBase52EncodingWithPrefix(diff, baseXNumber, baseXRangeLimits)
                         } catch (error) {
                             // Throw error if diff value is not within the range [-65532 - 65532]
-                            const errorMessage = `Error encoding dval for column ${column}: ${error.message}`
+                            const errorMessage = `Error encoding dval for coord ${coord}: ${error.message}`
                             console.error(errorMessage)
                             outputToTextarea(errorMessage, 'textarea-lines-data-encoded')
                             throw error // 例外を再スローして処理を中断する
@@ -161,19 +161,20 @@ export function bruteforce53Enc() {
                         if (result !== undefined) return result
 
                         // 上記 3条件 いずれでもなければ baseX で アルファベット2文字 に エンコードする
+                        console.log(`Apply base${baseXNumber} for: ${diff}, result: ${handleBaseXEncoding(diff, baseXNumber)}`)
                         return handleBaseXEncoding(diff, baseXNumber)
                     })
 
-                    //console.log('diffArrEncoded: ', diffArrEncoded)
+                    console.log('diffArrEncoded: ', diffArrEncoded)
                     // e.g.: (484) [7, 'ln', 'B', 'B', 'D', 'N', 'X', 6, 'nl', 'U', 8, ...
 
                     // Join the encoded diff values as a string
                     const diffEncodedJoined = diffArrEncoded.join('')
-                    // Combine the dictionary and diff to form: '[encoded reference_dictionary]-[encoded diff_by_row]'
-                    const mergeEncodedRefDictAndDiff = freqDiffAsRefDict + '-' + diffEncodedJoined
+                    // Join the frequent diff and diff to form: '[encoded frequent_diff]-[encoded diff_by_row]'
+                    const freqDiffAndDiff = freqDiffEncoded + '-' + diffEncodedJoined
 
-                    // Push to merge four columns into one array: [x1, y1, x2, y2]
-                    refDictAndDiffEncodedFourColumns.push(mergeEncodedRefDictAndDiff)
+                    // Push to merge coordinate set into one array: [x1, y1, x2, y2]
+                    freqDiffAndDiffFourCoords.push(freqDiffAndDiff)
 
                 } catch (error) {
                     // 外側のエラーハンドリングでキャッチし、処理を中断する
@@ -183,17 +184,17 @@ export function bruteforce53Enc() {
 
             }
 
-            //console.log('refDictAndDiffEncodedFourColumns: ', refDictAndDiffEncodedFourColumns)
+            //console.log('freqDiffAndDiffFourCoords: ', freqDiffAndDiffFourCoords)
             // 頻出数値が無い場合 hyphen始まりになる (4) ['-0lalO44lHlqlflh75lklJ5lLlg', 'crbR-0260Z0zlrlVz2ZlGlNlIlk', 'cr-lWLWz0lL100001z1z22', 'cqct-1ZlKlNlH130z011Z21z']
 
-            // Join four columns to form: '[x1]-[y1]-[x2]-[y2]'
-            const refDictAndDiffEncodedFourColumnsJoined = refDictAndDiffEncodedFourColumns.join('-')
+            // Join coordinate set to form: '[x1]-[y1]-[x2]-[y2]'
+            const freqDiffAndDiffFourCoordsJoined = freqDiffAndDiffFourCoords.join('-')
 
             // Encode the baseXNumber to prepend
             const baseXEncoded = base53Enc(baseXNumber)
 
             // Final encoded d value form to: [baseX][refDict]-[encodedDiff]
-            const encodedDvalStr = baseXEncoded + refDictAndDiffEncodedFourColumnsJoined
+            const encodedDvalStr = baseXEncoded + freqDiffAndDiffFourCoordsJoined
 
             // Set the encoded d values into map as value with group ID key
             encodedDvals.set(aggData.g_id, encodedDvalStr)

@@ -92,7 +92,7 @@ function swapToEncode(dictMap, linesDataMap) {
     for (const linesData of linesDataMap.values()) {
 
         // A variable to store the encoded string of d values
-        // Joined whole columns (x1, y1, x2, y2) without spaces
+        // Joined whole coords (x1, y1, x2, y2) without spaces
         let encodedDval = ""
 
         // relative d values array in obj, x1 to y2
