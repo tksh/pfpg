@@ -1,6 +1,6 @@
 export function storeShorter(currentShortestByGroups, encodedStrByGroups, baseXNumber) {
 
-    console.log('||||encodedStrByGroups: ', encodedStrByGroups)
+    console.log('encodedStrByGroups: ', encodedStrByGroups)
     // Map(3) {0 => string, 1 => string, 2 => string}
 
     for (let [gId, encodedStr] of encodedStrByGroups) {
@@ -9,7 +9,7 @@ export function storeShorter(currentShortestByGroups, encodedStrByGroups, baseXN
 
             // これまでよりも 今回の方がサイズが 小さければ 値を更新する
             console.log(
-                '||||Updated: Current encoded string (encodedStr[0]) is shorter than before: '
+                'Updated: Current encoded string (encodedStr[0]) is shorter than before: '
                 + `baseXNumber=${baseXNumber}, g_id=${gId}, `
                 + `${encodedStr[0].length} (current) < ${currentShortestByGroups.get(gId)[0].length} (before)`
             )

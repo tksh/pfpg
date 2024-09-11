@@ -83,7 +83,7 @@ function prependUnderscores(str, isPositive) {
 //     UInt19Portray(grid size: 0 - 524,287) までは diff の負の数を消した時に取り得る最大値 (4,194,296) を 4文字でカバーできる
 
 
-// Calculate the threshold for target range of BaseX ans Base52
+// Calculate the threshold for target range of BaseX and Base52
 function calculateLimitsForBaseXSkipRange(baseXNumber, minimumDiffValue, maximumDiffValue) {
     // Get the baseX encoding target range (values within this range will be encoded)
     const baseXTargetRangeStart = 0 - getHalfOfBaseXRange(baseXNumber)
