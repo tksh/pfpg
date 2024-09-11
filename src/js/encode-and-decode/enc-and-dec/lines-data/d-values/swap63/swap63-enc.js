@@ -5,7 +5,7 @@ import { createCodebook
 import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
 import { joinWithAmpersand }           from 'encode/join-with-ampersand'
 import { showStringSize
-       , showDetailsByGroup }          from 'encode/show-result'
+       , showDetailsByGroups }          from 'encode/show-result'
 import { tryCompress }                 from 'encode/try-compress'
 import { jsonToMapObj }                from 'encode/json-to-map-obj'
 import { outputToTextarea }            from 'common-utils/output-to-textarea'
@@ -47,19 +47,19 @@ export function swap63Enc() {
     const encodedAttrsExceptsDvals = getEncodedAttrsExceptsDvals()
 
     // Choose shorter one between URLComp applied or not, by each group
-    const { compressedByGroup, compressingResultArr } = tryCompress(
+    const { compressedByGroups, compressingResultArr } = tryCompress(
         encodedDval,
         encodedAttrsExceptsDvals,
         'swap63'
     )
-    console.log('compressedByGroup: ', compressedByGroup)
+    console.log('compressedByGroups: ', compressedByGroups)
     // Map { 000 → (2) […] }
     //     0: 000 → Array [ 400, "000=13xbqDCEgLL7jANz5XKXua ... LiAh5KEXgVutC" ]
 
 
 
     // Whole group strings joined with '&' (ampersand sign)
-    const wholeGroupJoined = joinWithAmpersand(compressedByGroup)
+    const wholeGroupJoined = joinWithAmpersand(compressedByGroups)
 
 
 
@@ -76,9 +76,9 @@ export function swap63Enc() {
     showProcessingTime('swap63Enc()', elapsedTime, 'encoded-strokes-values-time', isOnDataManipulatorPage())
 
     // Show the encoding result of each group in console
-    showDetailsByGroup('Lines Data', compressedByGroup, 'swap63')
+    showDetailsByGroups('Lines Data', compressedByGroups, 'swap63')
 
-    return compressedByGroup
+    return compressedByGroups
 }
 
 

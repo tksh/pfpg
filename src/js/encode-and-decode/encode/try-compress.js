@@ -4,7 +4,7 @@ export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMetho
     const encodedWidthAndCounts = encodedAttrsExceptsDvals.widthAndCounts
     const encodedGroupColors    = encodedAttrsExceptsDvals.groupColors
 
-    const compressedByGroup = new Map()
+    const compressedByGroups = new Map()
 
     // For storing result info
     let flagsArr = []
@@ -32,7 +32,7 @@ export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMetho
         // Prepend the color value to form: [key(group colors)]=[value(width and dvals)]
         const encodedAsKvPair = addColorAsKey(encodedGroupColors, gId, encodedWidthAndDvalsAsValue)
 
-        compressedByGroup.set(gId, encodedAsKvPair)
+        compressedByGroups.set(gId, encodedAsKvPair)
 
         // Info for console.log output
         flagsArr.push([charOf1stFlag, charOf2ndFlag])
@@ -53,11 +53,11 @@ export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMetho
 
     // Set result info with 'bruteforce53-analytics--...'
     // the relations of each baseX numbers and result string length
-//    const resultByGroup = createMapFromNestedArrays(compressingResultArr)
-//    resultInfo.set('bruteforce53-analytics--group_id-base_x_number-encoded_lines_data_length-best_compressed_length-comp_method_name', resultByGroup)
+//    const resultByGroups = createMapFromNestedArrays(compressingResultArr)
+//    resultInfo.set('bruteforce53-analytics--group_id-base_x_number-encoded_lines_data_length-best_compressed_length-comp_method_name', resultByGroups)
 
 
-    return { compressedByGroup, compressingResultArr }
+    return { compressedByGroups, compressingResultArr }
 }
 
 

@@ -33,8 +33,8 @@ export function showBestMixResult(dataToShow, textareaId) {
     // Output to html
     totalLength += transposed.length - 1  // Add the value of (group number - 1) for counting '&' sign chars
     const totalLengthText = 'Encoded Lines Data size: ' + totalLength + ' characters (bytes)'  // Total size
-    const detailsByGroup = 'Details by group(id, length, compressed by, encoded by):'  // Total size
-    const joined = totalLengthText + '<br><br>' + detailsByGroup  + '<br>' + entireGroupInfo.join('<br>')
+    const detailsByGroups = 'Details by group(id, length, compressed by, encoded by):'  // Total size
+    const joined = totalLengthText + '<br><br>' + detailsByGroups  + '<br>' + entireGroupInfo.join('<br>')
     const outputTextElem = document.getElementById(textareaId)
     outputTextElem.innerHTML = joined
 }

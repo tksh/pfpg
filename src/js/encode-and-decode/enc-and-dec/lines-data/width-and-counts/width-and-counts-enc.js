@@ -6,7 +6,7 @@ export function encodeWidthAndCounts() {
     // Read the Lines Data Aggregated for Encoding from .json as Map()
     const aggDataMap = jsonToMapObj(`textarea-agg-data-for-comp-uploaded`)
 
-    const encodedStrByGroup = new Map()
+    const encodedStrByGroups = new Map()
 
     for (let agg of aggDataMap.values()) {
         const widthArr  = agg.stroke_width.list_of
@@ -18,7 +18,7 @@ export function encodeWidthAndCounts() {
             widthAndCountsStr += widthArr[i]
             widthAndCountsStr += base53Enc(countsArr[i])
         }
-        encodedStrByGroup.set(agg.g_id, widthAndCountsStr)
+        encodedStrByGroups.set(agg.g_id, widthAndCountsStr)
     }
-    return encodedStrByGroup
+    return encodedStrByGroups
 }

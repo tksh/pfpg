@@ -10,7 +10,7 @@ import {
        mergeArrays
 }                        from 'encode/transform-array'
 import {
-       showDetailsByGroup,
+       showDetailsByGroups,
        showStringSize
 }                 from 'encode/show-result'
 
@@ -46,7 +46,7 @@ export function bruteforce53Enc() {
     const startTime = performance.now()
 
     // To store the shortest encoded string of each group
-    let currentShortestByGroup = new Map()
+    let currentShortestByGroups = new Map()
 
     // To store info
     let resultArrWholeBaseX = []
@@ -70,7 +70,7 @@ export function bruteforce53Enc() {
         const encodedDvals = new Map()
 
         // To store info
-        let resultNumArrByGroup = []
+        let resultNumArrByGroups = []
 
         const aggDataMap = jsonToMapObj(`textarea-agg-data-for-comp-uploaded`)
 
@@ -201,11 +201,11 @@ export function bruteforce53Enc() {
 
 
             // Store info
-            resultNumArrByGroup.push([aggData.g_id, baseXNumber, encodedDvalStr.length])
+            resultNumArrByGroups.push([aggData.g_id, baseXNumber, encodedDvalStr.length])
         }
 
         // Store info
-        //resultArrWholeBaseX.push(...resultNumArrByGroup)
+        //resultArrWholeBaseX.push(...resultNumArrByGroups)
 
         console.log('resultArrWholeBaseX: ', resultArrWholeBaseX)
         // e.g.: Map(5) {'1' => 'crcscn-120yZ19zy6ZlqyMKlSy1lxz-cr-0lL1Md7lpMElvlWlrzMIlUlqMHz00lP-cpcqct-00z5Z41Zz0031lXy326y-crcscd-MIlxZzylUMAMezME2lMlvMayZ01', '2' => '-0lNM ...
@@ -226,18 +226,18 @@ export function bruteforce53Enc() {
         const encodedAttrsExceptsDvals = getEncodedAttrsExceptsDvals()
 
         // Choose shorter one between URLComp applied or not, by each group
-        const { compressedByGroup, compressingResultArr } = tryCompress(
+        const { compressedByGroups, compressingResultArr } = tryCompress(
             encodedDvals,
             encodedAttrsExceptsDvals,
             'bruteforce53'
         )
-        console.log(`baseXNumber = ${baseXNumber}, compressedByGroup: `, compressedByGroup)
+        console.log(`baseXNumber = ${baseXNumber}, compressedByGroups: `, compressedByGroups)
         //  Map(5) {'1' => '0=129CaIjMCzLAFox3gEVYTdnymbAmwP-UWDCnew3h-Aqsd6rQsPf7nuc97B-Tyl896LIItSqsH-0_igZRCKY265Ta0zzD8-axd0B3NgagFJ2rRrUWcULFyn1IwBi', '2' => '0=129zi ...
 
 
-        const resultArr = mergeArrays(resultNumArrByGroup, compressingResultArr)
+        const resultArr = mergeArrays(resultNumArrByGroups, compressingResultArr)
         // input:
-        // resultNumArrByGroup
+        // resultNumArrByGroups
         //     0: (3) [0, 52, 20]
         //     1: (3) [1, 52, 3497]
         //     2: (3) [2, 52, 144]
@@ -262,17 +262,17 @@ export function bruteforce53Enc() {
 
         // At first loop, init the map with current value and change the structure
         if (maxCodebookSize === maxCodebookSizeStartAt) {
-            currentShortestByGroup = transformMap(compressedByGroup, baseXNumber)
+            currentShortestByGroups = transformMap(compressedByGroups, baseXNumber)
             console.log(
-                `currentShortestByGroup in first loop (maxCodebookSize: ${maxCodebookSize}, baseX: ${baseXNumber}): `,
-                currentShortestByGroup
+                `currentShortestByGroups in first loop (maxCodebookSize: ${maxCodebookSize}, baseX: ${baseXNumber}): `,
+                currentShortestByGroups
             )
         }
 
         // After second loop
-        currentShortestByGroup = storeShorter(
-            currentShortestByGroup,
-            transformMap(compressedByGroup, baseXNumber),
+        currentShortestByGroups = storeShorter(
+            currentShortestByGroups,
+            transformMap(compressedByGroups, baseXNumber),
             baseXNumber
         )
 
@@ -280,13 +280,13 @@ export function bruteforce53Enc() {
 
 
     // Result map
-    console.log('currentShortestByGroup: ', currentShortestByGroup)
+    console.log('currentShortestByGroups: ', currentShortestByGroups)
 
     // simplify the value of Map, [string, length, baseX] => string
-    const shortestStrByGroup = simplifyMap(currentShortestByGroup)
+    const shortestStrByGroups = simplifyMap(currentShortestByGroups)
 
     // Whole group strings joined with '&' (ampersand sign)
-    const shortestJoined = joinWithAmpersand(shortestStrByGroup)
+    const shortestJoined = joinWithAmpersand(shortestStrByGroups)
 
 
     // Output to textarea
@@ -300,18 +300,18 @@ export function bruteforce53Enc() {
     const elapsedTime = Math.floor(endTime - startTime)
     showProcessingTime('bruteforce53Enc()', elapsedTime, 'encoded-strokes-values-time', isOnDataManipulatorPage())
 
-    showDetailsByGroup('Lines Data', currentShortestByGroup, 'bruteforce53')
+    showDetailsByGroups('Lines Data', currentShortestByGroups, 'bruteforce53')
 
 
     // Set result info with 'bruteforce53-analytics--...'
     // the relations of each baseX numbers and result string length
-    const resultByGroup = createMapFromNestedArrays(resultArrWholeBaseX)
+    const resultByGroups = createMapFromNestedArrays(resultArrWholeBaseX)
     resultInfo.set(
         'bruteforce53-analytics--0_baseX-1_encodedDvals-2_uncompressed-3_bestCompressed-4_bestMethod',
-        resultByGroup
+        resultByGroups
     )
 
-    return currentShortestByGroup
+    return currentShortestByGroups
 }
 
 

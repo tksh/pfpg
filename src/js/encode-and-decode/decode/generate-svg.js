@@ -66,11 +66,11 @@ export function generateSvg(isRelative, decodedParams) {
     // Strokes tags ( group-id-<g> and <path> )
 
     // Generate the open and close group-id-<g> tags
-    const gTagOpenByGroup = generateGTagOpenByGroup(tabSpace, decodedParams.linesData)
-    const gTagCloseByGroup = generateGTagCloseByGroup(tabSpace, decodedParams.linesData)
+    const gTagOpenByGroups = generateGTagOpenByGroups(tabSpace, decodedParams.linesData)
+    const gTagCloseByGroups = generateGTagCloseByGroups(tabSpace, decodedParams.linesData)
 
     // Generate the <path> tags (as relative or absolute, switched by isRelative)
-    const pathTagsByGroup = generatePathTags(
+    const pathTagsByGroups = generatePathTags(
         isRelative,
         tabSpace,
         decodedParams.linesData
@@ -79,9 +79,9 @@ export function generateSvg(isRelative, decodedParams) {
     // Merge the group-id-<g> tags and <path> tags
     const strokesTags = mergeGAndPathTags(
         decodedParams.linesData,
-        gTagOpenByGroup,
-        pathTagsByGroup,
-        gTagCloseByGroup
+        gTagOpenByGroups,
+        pathTagsByGroups,
+        gTagCloseByGroups
     )
 
     // Join the whole tags
@@ -93,7 +93,7 @@ export function generateSvg(isRelative, decodedParams) {
 
 function generateRelPathTags(tabSpace, linesDataMap) {
 
-    const relPathTagsByGroup = new Map()
+    const relPathTagsByGroups = new Map()
 
     for (let [gId, v] of linesDataMap) {
         const dvalsObj = v.relDvalsObj
@@ -135,18 +135,18 @@ function generateRelPathTags(tabSpace, linesDataMap) {
         }
         // Set whole tags string that under same color group as value with group ID key
         const wholeTagsUnderGroup = pathTagUnderGroup.join('\n')
-        relPathTagsByGroup.set(gId, wholeTagsUnderGroup)
+        relPathTagsByGroups.set(gId, wholeTagsUnderGroup)
     }
-    console.log('relPathTagsByGroup: ', relPathTagsByGroup)
+    console.log('relPathTagsByGroups: ', relPathTagsByGroups)
 
-    return relPathTagsByGroup
+    return relPathTagsByGroups
 }
 
 
 
 function generateAbsPathTags(tabSpace, linesDataMap) {
 
-    const absPathTagsByGroup = new Map()
+    const absPathTagsByGroups = new Map()
 
     for (let [gId, v] of linesDataMap) {
         const dvalsObj = v.absDvalsObj
@@ -191,11 +191,11 @@ function generateAbsPathTags(tabSpace, linesDataMap) {
         }
         // Set whole tags string that under same color group as value with group ID key
         const wholeTagsUnderGroup = gAndPathTagsUnderGroup.join('\n')
-        absPathTagsByGroup.set(gId, wholeTagsUnderGroup)
+        absPathTagsByGroups.set(gId, wholeTagsUnderGroup)
     }
-    console.log('absPathTagsByGroup: ', absPathTagsByGroup)
+    console.log('absPathTagsByGroups: ', absPathTagsByGroups)
 
-    return absPathTagsByGroup
+    return absPathTagsByGroups
 }
 
 
@@ -255,8 +255,8 @@ function generateTagsAfterStrokes(tabSpace) {
 }
 
 
-function generateGTagOpenByGroup(tabSpace, linesDataMap) {
-    const gTagOpenByGroup = new Map()
+function generateGTagOpenByGroups(tabSpace, linesDataMap) {
+    const gTagOpenByGroups = new Map()
     for (let [gId, v] of linesDataMap) {
         // Generate stroke color group
         const groupColors = v.groupColors
@@ -265,20 +265,20 @@ function generateGTagOpenByGroup(tabSpace, linesDataMap) {
             + `<g stroke="${groupColors.g_stroke_rgb}" opacity="${groupColors.g_opacity}" stroke-opacity="${groupColors.g_stroke_opacity}">`
         //         <g stroke="#000000" opacity="1" stroke-opacity="1">
 
-        gTagOpenByGroup.set(gId, colorGroupTagOpen)
+        gTagOpenByGroups.set(gId, colorGroupTagOpen)
 
     }
-    return gTagOpenByGroup
+    return gTagOpenByGroups
 }
 
-function generateGTagCloseByGroup(tabSpace, linesDataMap) {
-    const gTagCloseByGroup = new Map()
+function generateGTagCloseByGroups(tabSpace, linesDataMap) {
+    const gTagCloseByGroups = new Map()
     for (let [gId, v] of linesDataMap) {
         const colorGroupTagClose = tabSpace.repeat(2) + '</g>'
         //         </g>
-        gTagCloseByGroup.set(gId, colorGroupTagClose)
+        gTagCloseByGroups.set(gId, colorGroupTagClose)
     }
-    return gTagCloseByGroup
+    return gTagCloseByGroups
 }
 
 
@@ -290,13 +290,13 @@ function generatePathTags(isRelative, tabSpace, linesDataMap) {
     }
 }
 
-function mergeGAndPathTags(linesDataMap, gTagOpenByGroup, pathTagsByGroup, gTagCloseByGroup) {
+function mergeGAndPathTags(linesDataMap, gTagOpenByGroups, pathTagsByGroups, gTagCloseByGroups) {
     const gId = linesDataMap.keys()
     let strokesTags = []
     for (let id of gId) {
-        strokesTags.push(gTagOpenByGroup.get(id))
-        strokesTags.push(pathTagsByGroup.get(id))
-        strokesTags.push(gTagCloseByGroup.get(id))
+        strokesTags.push(gTagOpenByGroups.get(id))
+        strokesTags.push(pathTagsByGroups.get(id))
+        strokesTags.push(gTagCloseByGroups.get(id))
     }
     return strokesTags
 }

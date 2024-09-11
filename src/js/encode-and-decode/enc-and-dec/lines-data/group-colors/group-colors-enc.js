@@ -8,7 +8,7 @@ export function encodeGroupColors(){
     // Read the lines data from .json as Map()
     const linesDataMap = jsonToMapObj('textarea-lines-data-uploaded')
 
-    const encodedStrByGroup = new Map()
+    const encodedStrByGroups = new Map()
 
     for (let linesData of linesDataMap.values()) {
 
@@ -28,7 +28,7 @@ export function encodeGroupColors(){
         colorsStr = hexShortenFromTen(colorsStr)
 
         // Set into Map
-        encodedStrByGroup.set(linesData.g_id, colorsStr)
+        encodedStrByGroups.set(linesData.g_id, colorsStr)
     }
-    return encodedStrByGroup
+    return encodedStrByGroups
 }

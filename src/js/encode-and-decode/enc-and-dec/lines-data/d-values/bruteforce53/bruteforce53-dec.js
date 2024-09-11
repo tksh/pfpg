@@ -17,18 +17,18 @@ export function bruteforce53Dec(encodedDvalsStr) {
     const freqDiffAndDiff = encodedDvalsStr.slice(1).split('-')
 
     // Split into two arrays: Reference dictionary and encoded diff
-    const { freqDiffByColumn, diffByColumn } = freqDiffAndDiff.reduce((acc, val, index) => {
+    const { freqDiffByCoords, diffByCoords } = freqDiffAndDiff.reduce((acc, val, index) => {
         if (index % 2 === 0) {
-            acc.freqDiffByColumn.push(val)  // Even index number elements
+            acc.freqDiffByCoords.push(val)  // Even index number elements
         } else {
-            acc.diffByColumn.push(val)     // Odd index number elements
+            acc.diffByCoords.push(val)     // Odd index number elements
         }
         return acc
-    }, { freqDiffByColumn: [], diffByColumn: [] })
+    }, { freqDiffByCoords: [], diffByCoords: [] })
 
-    console.log("freqDiffByColumn: ", freqDiffByColumn) // 頻出数値が無い coord の場合には 空の文字列が 返ってくる
+    console.log("freqDiffByCoords: ", freqDiffByCoords) // 頻出数値が無い coord の場合には 空の文字列が 返ってくる
     // Array(4) [ "ctcscpcrbWcmcocKcZ", "cscrctcncocpcjclcqcH", "ctcscr", "ctcscr" ]
-    console.log("diffByColumn: ", diffByColumn)
+    console.log("diffByCoords: ", diffByCoords)
     // Array(4) [ "21XZVVZfccd80UdeYS3Ybj90fjdcRWhgajfb501T5RR10200TR308W1001RS1U43eg3T4X55S0dj8R10SRfedi30UT461R0010Reb5U5S", "gjbjR ... " ]
 
 
@@ -37,7 +37,7 @@ export function bruteforce53Dec(encodedDvalsStr) {
     for (let i = 0; i < 4; i++) {
 
         // Get the codebook as actual size
-        const freqDiffEncodedStr = freqDiffByColumn[i]
+        const freqDiffEncodedStr = freqDiffByCoords[i]
         const freqDiffDecodedArr = decodeFreqDiff(freqDiffEncodedStr)
         const actualCodebookSize = getActualCodebookSize(maxCodebookSize, freqDiffDecodedArr)
         const codebook = createCodebookToDec(freqDiffDecodedArr, actualCodebookSize)
@@ -45,7 +45,7 @@ export function bruteforce53Dec(encodedDvalsStr) {
 
         // Decode the diff
         const decodedDiffArr = decodeDiff(
-            diffByColumn[i],
+            diffByCoords[i],
             codebook,
             baseX,
         )

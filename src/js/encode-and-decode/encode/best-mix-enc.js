@@ -5,7 +5,7 @@
  */
 
 import {
-    showDetailsByGroup,
+    showDetailsByGroups,
     showStringSize
 }                            from "encode/show-result"
 
@@ -64,23 +64,23 @@ function encodeWithMethods (methods) {
  * @returns {Array} An array containing the shortest encoded data and its associated information.
  */
 function processEncodedData (encodedMaps, methodNames) {
-    const shortestArrByGroup = storeShortest(encodedMaps, methodNames)
-    const shortestStrByGroup = simplifyMap(shortestArrByGroup)
-    const shortestStrArr = [...shortestStrByGroup.values()]
-    return [shortestArrByGroup, shortestStrArr]
+    const shortestArrByGroups = storeShortest(encodedMaps, methodNames)
+    const shortestStrByGroups = simplifyMap(shortestArrByGroups)
+    const shortestStrArr = [...shortestStrByGroups.values()]
+    return [shortestArrByGroups, shortestStrArr]
 }
 
 /**
  * Displays the results of the encoding process.
  * @param {string} shortestJoined - The joined string of the shortest encodings.
- * @param {Map} shortestArrByGroup - A Map containing the shortest encodings by group.
+ * @param {Map} shortestArrByGroups - A Map containing the shortest encodings by group.
  * @param {number} numberOfMethods - The number of encoding methods used.
  */
-function displayResults (shortestJoined, shortestArrByGroup, numberOfMethods) {
+function displayResults (shortestJoined, shortestArrByGroups, numberOfMethods) {
     outputToTextarea(shortestJoined, "textarea-lines-data-encoded")
     const messagePrefix = `Lines Data (Best mix from ${numberOfMethods} methods)`
     showStringSize(messagePrefix, shortestJoined, "encoded-strokes-values-size")
-    const dataToShow = showDetailsByGroup("Lines Data", shortestArrByGroup, "best-mix")
+    const dataToShow = showDetailsByGroups("Lines Data", shortestArrByGroups, "best-mix")
     showBestMixResult(dataToShow, "encoded-strokes-values-size")
     // Clear the processing time display
     document.getElementById("encoded-strokes-values-time").innerHTML = ""
@@ -94,9 +94,9 @@ function bestMixFromNMethods(numberOfMethods) {
     const methods     = getEncodingMethods(numberOfMethods)
     const methodNames = getEncodingMethodNames(numberOfMethods)
     const encodedMaps = encodeWithMethods(methods)
-    const [shortestArrByGroup, shortestStrArr] = processEncodedData(encodedMaps, methodNames)
+    const [shortestArrByGroups, shortestStrArr] = processEncodedData(encodedMaps, methodNames)
     const shortestJoined = joinWithAmpersand(shortestStrArr)
-    displayResults(shortestJoined, shortestArrByGroup, numberOfMethods)
+    displayResults(shortestJoined, shortestArrByGroups, numberOfMethods)
 }
 
 /**

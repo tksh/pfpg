@@ -2,8 +2,7 @@ import { base52Enc }                          from 'enc-and-dec/base-n/base-52-e
 import { addToEliminateNegativeBeforeEncode } from 'enc-and-dec/lines-data/d-values/bruteforce53/add-and-subtract'
 
 
-// Create the reference dictionary
-//   Encode the array of frequent diff values as a string to attach
+// Encode the array of frequent diff values as a string to attach
 
 // 頻出数値の配列 を base52Encode して ひとつの文字列にまとめる
 //   結果が 1文字の場合は `.padStart(2, 'a')` で 長さを 2文字 に揃える

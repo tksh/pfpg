@@ -54,7 +54,7 @@ function mergeArrays(arr1, arr2) {
 
 /*
 // 使用例:
-const resultNumArrByGroup = [
+const resultNumArrByGroups = [
     [0, 52, 20],
     [1, 52, 3497],
     [2, 52, 144],
@@ -68,7 +68,7 @@ const compressingResultArr = [
     // 他の要素...
 ]
 
-const mergedResult = mergeArrays(resultNumArrByGroup, compressingResultArr)
+const mergedResult = mergeArrays(resultNumArrByGroups, compressingResultArr)
 console.log(mergedResult)
 
 // 出力結果:

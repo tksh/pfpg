@@ -5,7 +5,7 @@ import { getDigitsPerChunk }           from 'enc-and-dec/lines-data/d-values/big
 import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
 import { joinWithAmpersand }           from 'encode/join-with-ampersand'
 import { showStringSize
-       , showDetailsByGroup }          from 'encode/show-result'
+       , showDetailsByGroups }          from 'encode/show-result'
 import { tryCompress }                 from 'encode/try-compress'
 import { jsonToMapObj }                from 'encode/json-to-map-obj'
 import { outputToTextarea }            from 'common-utils/output-to-textarea'
@@ -44,16 +44,16 @@ export function bigint64Enc() {
     const encodedAttrsExceptsDvals = getEncodedAttrsExceptsDvals()
 
     // Choose shorter one between URLComp applied or not, by each group
-    const { compressedByGroup, compressingResultArr } = tryCompress(
+    const { compressedByGroups, compressingResultArr } = tryCompress(
         encodedDvals,
         encodedAttrsExceptsDvals,
         'bigint64'
     )
-    //console.log('compressedByGroup: ', compressedByGroup)
+    //console.log('compressedByGroups: ', compressedByGroups)
     // Map(5) {'1' => '0=129CaJGsAQK33q3FDaoQNuZs6u8XQW_EYegViBcDQ0gxtk-YqavrFw0V3KXggctKtnLfj_rl3ZzTzitfvmVp-Wz09Um3k4e8YyZ9kGHG0aT', '2' => '0=129ziJH ...
 
     // Whole group strings joined with '&' (ampersand sign)
-    const wholeGroupJoined = joinWithAmpersand(compressedByGroup)
+    const wholeGroupJoined = joinWithAmpersand(compressedByGroups)
 
 
     // Output to textarea
@@ -73,16 +73,16 @@ export function bigint64Enc() {
     //     Values: encoded string
     // to:
     //     Values: [encoded string, encoding-method name, configuration-value object]
-    const encodedArrByGroup = new Map(
-        Array.from(compressedByGroup, ([key, value]) => [
+    const encodedArrByGroups = new Map(
+        Array.from(compressedByGroups, ([key, value]) => [
             key, [value, 'bigint64', { digitsPerChunk }]
         ])
     )
 
     // Show the encoding result of each group in console
-    showDetailsByGroup('Lines Data', encodedArrByGroup, 'bigint64')
+    showDetailsByGroups('Lines Data', encodedArrByGroups, 'bigint64')
 
-    return encodedArrByGroup
+    return encodedArrByGroups
 }
 
 

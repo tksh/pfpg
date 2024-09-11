@@ -4,7 +4,7 @@ import { zip }                  from 'decode/rel-to-abs'
 
 export
     { showStringSize
-    , showDetailsByGroup
+    , showDetailsByGroups
     }
 
 function showStringSize(nameOfInput, inputStr, outputElemId) {
@@ -18,8 +18,8 @@ function showStringSize(nameOfInput, inputStr, outputElemId) {
     console.log(`Encoded as ${nameOfInput} successfully, Size: `, inputStr.length)
 }
 
-function showDetailsByGroup(nameOfInput, encodedArrByGroupMap, encodingMethodName) {
-    console.log('encodedArrByGroupMap: ', encodedArrByGroupMap)
+function showDetailsByGroups(nameOfInput, encodedArrByGroupsMap, encodingMethodName) {
+    console.log('encodedArrByGroupsMap: ', encodedArrByGroupsMap)
     /*
         Map(2) {'0' => Array(3), '1' => Array(3)}
             key: "0"
@@ -28,8 +28,8 @@ function showDetailsByGroup(nameOfInput, encodedArrByGroupMap, encodingMethodNam
     */
 
     // Get the details of encoding result
-    const keys   = [...encodedArrByGroupMap.keys()]
-    const values = [...encodedArrByGroupMap.values()]
+    const keys   = [...encodedArrByGroupsMap.keys()]
+    const values = [...encodedArrByGroupsMap.values()]
     console.log('values: ', values)  //
     /*
     values:
@@ -76,8 +76,8 @@ function showDetailsByGroup(nameOfInput, encodedArrByGroupMap, encodingMethodNam
     const configValue    = values.map((value) => value[2])
 
     // Decode the flags from char to method name
-    const flagsByGroup = resultInfo.get(`${encodingMethodName}`).get('flags')
-    const flagsByKinds = zip(...Array.from(flagsByGroup))  // transpose the array structure
+    const flagsByGroups = resultInfo.get(`${encodingMethodName}`).get('flags')
+    const flagsByKinds = zip(...Array.from(flagsByGroups))  // transpose the array structure
     const flag1 = flagsByKinds[0]
     const flag2 = flagsByKinds[1]
     const flag1Name = flag1.map(char => flagsMap.get('rev_1st').get(`${char}`))
@@ -88,7 +88,7 @@ function showDetailsByGroup(nameOfInput, encodedArrByGroupMap, encodingMethodNam
     console.log('Group ID: ', keys)                                     // e.g.: (3) [0, 1, 2]
     console.log('Group colors encoded: ', groupColors)                  // e.g.: (3) ['A', '0', 'F']
     console.log('Length of encoded strings: ', lengthOfValues)          // e.g.: (3) [23, 3910, 161]
-    console.log('Flags: ', flagsByGroup)                                // e.g.: (3) [Array(3), Array(3), Array(3)]
+    console.log('Flags: ', flagsByGroups)                                // e.g.: (3) [Array(3), Array(3), Array(3)]
     console.log('1st flags, Compression method name: ', flag1Name)      // e.g.: (3) ['uncompressed', 'uncompressed', 'uncompressed']
     console.log('2nd flags, Encoding method name: ',    flag2Name)      // e.g.: (3) ['bigint64', 'bigint64', 'bigint64']
     console.log('Configuration value for encoding: ',   configValue)  // bruteforce => baseXNumber, bigint64 => digitsPerChunk
@@ -101,7 +101,7 @@ function showDetailsByGroup(nameOfInput, encodedArrByGroupMap, encodingMethodNam
         ['gId', keys],
         ['colors', groupColors],
         ['length', lengthOfValues],
-        ['flags', flagsByGroup],
+        ['flags', flagsByGroups],
         ['flag1', flag1],
         ['flag2', flag2]
     ])

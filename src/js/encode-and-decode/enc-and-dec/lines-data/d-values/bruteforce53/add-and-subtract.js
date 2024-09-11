@@ -1,6 +1,6 @@
-import { parseBasicData }        from 'enc-and-dec/basic-data/basic-data-enc'
-import { tryDecompress }         from 'encode/try-decompress'
 import { getUintNFromUrlParams } from 'decode/get-uint-n'
+import { tryDecompress }         from 'encode/try-decompress'
+import { parseBasicData }        from 'enc-and-dec/basic-data/basic-data-enc'
 
 
 export
@@ -13,7 +13,7 @@ export
 
 // For base52 encoding for reference dict
 
-// Shift the entire range of reference dictionary (frequent diff values) to the positive side,
+// Shift the entire range of frequent diff values to the positive side,
 // as Base52 encoding cannot handle negative numbers.
 
 // Before encoding:
@@ -59,13 +59,13 @@ function calculateMinimumPossibleDiffValueFromUintN(uintN) {
 }
 
 
-// For encode
+// For encoding
 function getMinimumPossibleDiffForEnc() {
     // `uintN` via textarea
     const uintN = tryDecompress(parseBasicData().n)
     return calculateMinimumPossibleDiffValueFromUintN(uintN)
 }
-// For decode
+// For decoding
 function getMinimumPossibleDiffForDec() {
     // `uintN` via url params
     const uintN = getUintNFromUrlParams()

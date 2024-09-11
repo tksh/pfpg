@@ -3,9 +3,9 @@ import { flagsMap, resultInfo } from 'constants'
 // Compare and store the shortest length string by each group
 
 export function storeShortest(encodedResultsArr, encodingMethodNamesArr) {
-    //console.log('currentShortestByGroup, encodedStrByGroup: ', currentShortestByGroup, encodedStrByGroup)
+    //console.log('currentShortestByGroups, encodedStrByGroups: ', currentShortestByGroups, encodedStrByGroups)
 
-    const shortestArrByGroup = new Map()
+    const shortestArrByGroups = new Map()
 
     // For storing result info
     let flagsArr= []
@@ -57,7 +57,7 @@ export function storeShortest(encodedResultsArr, encodingMethodNamesArr) {
         console.log(shortestArr)  // e.g.: // (3) ['A=08fEKQ-VoisNalNhZy9GsmZzPU', 'bruteforce53', {baseXNumber: 20}]
 
         // Set the shortest results values with group ID as key
-        shortestArrByGroup.set(`${i}`, shortestArr)
+        shortestArrByGroups.set(`${i}`, shortestArr)
 
 
         // Store flags info for console output
@@ -74,5 +74,5 @@ export function storeShortest(encodedResultsArr, encodingMethodNamesArr) {
     const bestMixFlags = new Map([['flags', [...flagsArr]]])
     resultInfo.set('best-mix', bestMixFlags)
 
-    return shortestArrByGroup
+    return shortestArrByGroups
 }

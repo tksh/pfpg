@@ -25,7 +25,7 @@ function createCodebookToDec(freqDiffArr, actualCodebookSize) {
 }
 
 
-// Decode the reference dictionary (frequent diff value)
+// Decode the frequent diff values
 
 function decodeFreqDiff(diffStr) {
     // Base52デコードした 数値の配列を返す
