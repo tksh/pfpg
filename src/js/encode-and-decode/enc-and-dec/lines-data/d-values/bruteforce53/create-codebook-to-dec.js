@@ -28,25 +28,39 @@ function createCodebookToDec(freqDiffArr, actualCodebookSize) {
 // Decode the frequent diff values
 
 function decodeFreqDiff(diffStr) {
-    // Base52デコードした 数値の配列を返す
+    // Base52デコードした数値の配列を返す
 
-    // Base52エンコードされた文字列を 以下のルールで区切る
-    //   '_' アンダースコアは それを含む 4文字
-    //   その他 (小文字の連なり)は 2文字ずつ
-
-    const splitted = diffStr.match(/(_.{3})|(.{2})/g)  // 2 or 4文字ずつ取り出す
-    console.log('splitted: ', splitted)                 // 頻出数値が無い coord の場合には 'splitted:  null' となる
-
-    // Regex test
-    //const strTEST = 'abcd_efg_hij_klmnopqrstu'
-    //const splittedTEST = strTEST.match(/(_.{3})|(.{2})/g)
-    //console.log(splittedTEST)
-    //Array(9) [ "ab", "cd", "_efg", "_hij", "_klm", "no", "pq", "rs", "tu" ]
-
-    if (splitted !== null) {
-        return splitted.map(twoChars => base52DecodeForFreqDiff(twoChars))
-    } else {
-        return [] // 頻出数値が無い coord の場合には 空の配列を 返す
+    if (!diffStr) {
+        return []; // 空文字列 (頻出数値が無い coord) の場合は 空配列を返す
     }
-    // e.g.: (29) [-2, -1, -7, -5, -3, -4, 11, 10, 12, -8, -11, -6, 16, -10, 13, 24, -27, -9, 14, 15, 17, 20, 73, -38, -37, -25, -24, -23, -22]
+
+    const chunks = [];
+    let i = 0;
+
+    while (i < diffStr.length) {
+        if (diffStr[i] === '_') {
+            // アンダースコアで始まる場合
+            let underscoreCount = 0;
+            while (diffStr[i] === '_' && i < diffStr.length) {
+                underscoreCount++;
+                i++;
+            }
+            // アンダースコア数 + 2 文字を取得
+            chunks.push(diffStr.slice(i, i + underscoreCount + 2));
+            i += underscoreCount + 2;
+        } else {
+            // 通常の2文字
+            chunks.push(diffStr.slice(i, i + 2));
+            i += 2;
+        }
+    }
+
+    console.log('chunks: ', chunks);
+
+    return chunks.map(chunk => base52DecodeForFreqDiff(chunk));
 }
+
+// // test
+// const str = '__abcd_efg_hij_klmnopq___rstuv'
+// console.log(decodeFreqDiff(str))
+// // Array(7) [ "abcd", "efg", "hij", "klm", "no", "pq", "rstuv" ]

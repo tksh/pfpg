@@ -42,21 +42,14 @@ function base52Dec(str) {
 
 // To decode the number of freq dict
 
-function base52DecodeForFreqDiff(str) {
-    let encodedStr = str
-
-    // base52エンコードした結果が3文字の場合に付けた 先頭のアンダースコアを削除
-    if (str.length === 4) {
-        encodedStr = encodedStr.slice(1)
-    }
-
+function base52DecodeForFreqDiff(chunk) {
     // Base52 decode
-    const rawDecoded = base52Dec(encodedStr)
+    const rawDecoded = base52Dec(chunk)
 
-    // UIntX の値に応じた 正の数だけにするために 加えていた数値を 取り除く
+    // uintX の値に応じた 正の数だけにするために 加えていた数値を 取り除く
     const decoded = subtractToRestoreOriginalAfterDecode(rawDecoded)
 
-    console.log('decoded, rawDecoded, encodeStr: ', decoded, rawDecoded, encodedStr) // -2 1018 tE
+    console.log('decoded, rawDecoded, chunk: ', decoded, rawDecoded, chunk) // -2 1018 tE
 
     return decoded
 }

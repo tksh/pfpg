@@ -16,7 +16,7 @@ import {
 
 import { base53Enc }                          from 'enc-and-dec/base-n/base-53-enc'
 import { createCodebookToEnc } from 'enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc'
-import { encodeFreqDiff }            from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-ref-dict'
+import { encodeFreqDiff }            from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-freq-diff'
 import { getActualCodebookSize }              from 'enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size'
 import { getEncodedAttrsExceptsDvals }        from 'encode/get-attrs-excepts-dvals'
 import { isOnDataManipulatorPage }            from 'common-utils/select-output-textarea'
