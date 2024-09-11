@@ -15,7 +15,7 @@ import {
 }                 from 'encode/show-result'
 
 import { base53Enc }                          from 'enc-and-dec/base-n/base-53-enc'
-import { createCodebookToEncodeFrequentDiff } from 'enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc'
+import { createCodebookToEnc } from 'enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc'
 import { encodeFreqDiff }            from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-ref-dict'
 import { getActualCodebookSize }              from 'enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size'
 import { getEncodedAttrsExceptsDvals }        from 'encode/get-attrs-excepts-dvals'
@@ -123,7 +123,7 @@ export function bruteforce53Enc() {
                 // If actualCodebookSize is 0, Empty array `[]` will be returned
 
                 // Create the codebook to encode
-                const codebookToEncodeFreqDiff = createCodebookToEncodeFrequentDiff(freqDiffArrActualCodebookSized, actualCodebookSize)
+                const codebookToEncodeFreqDiff = createCodebookToEnc(freqDiffArrActualCodebookSized, actualCodebookSize)
                 console.log('maxCodebookSize and codebookToEncodeFreqDiff: ', maxCodebookSize, codebookToEncodeFreqDiff)
                 // e.g.: Map(29) {-2 => 'x', -1 => 'y', -4 => 'z', -7 => 'A', -3 => 'B', …}
 
@@ -193,7 +193,7 @@ export function bruteforce53Enc() {
             // Encode the baseXNumber to prepend
             const baseXEncoded = base53Enc(baseXNumber)
 
-            // Final encoded d value form to: [baseX][refDict]-[encodedDiff]
+            // Final encoded d value form to: [baseX][freqDiff]-[encodedDiff]
             const encodedDvalStr = baseXEncoded + freqDiffAndDiffFourCoordsJoined
 
             // Set the encoded d values into map as value with group ID key

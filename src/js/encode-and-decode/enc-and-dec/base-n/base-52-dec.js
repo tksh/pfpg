@@ -3,7 +3,7 @@ import { getAlphabets52 }                       from 'enc-and-dec/lines-data/d-v
 
 export
     { base52Dec
-    , base52DecodeForRefDict
+    , base52DecodeForFreqDiff
     }
 
     // For the number value of freq dict to embed for bruteforce53-enc
@@ -42,7 +42,7 @@ function base52Dec(str) {
 
 // To decode the number of freq dict
 
-function base52DecodeForRefDict(str) {
+function base52DecodeForFreqDiff(str) {
     let encodedStr = str
 
     // base52エンコードした結果が3文字の場合に付けた 先頭のアンダースコアを削除

@@ -1,7 +1,7 @@
 import { getAlphabetsForCodebook } from 'enc-and-dec/lines-data/d-values/bruteforce53/specific-alphabets'
 
 
-export function createCodebookToEncodeFrequentDiff(freqDiffArrActualCodebookSized) {
+export function createCodebookToEnc(freqDiffArrActualCodebookSized) {
 
     const alphabetsActualCodebookSized = getAlphabetsForCodebook(freqDiffArrActualCodebookSized.length)
     console.log('alphabetsActualCodebookSized: ', alphabetsActualCodebookSized)

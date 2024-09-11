@@ -1,10 +1,14 @@
-import { base52DecodeForRefDict }  from 'enc-and-dec/base-n/base-52-dec'
+import { base52DecodeForFreqDiff }  from 'enc-and-dec/base-n/base-52-dec'
 import { getAlphabetsForCodebook } from 'enc-and-dec/lines-data/d-values/bruteforce53/specific-alphabets'
 
+export {
+    createCodebookToDec,
+    decodeFreqDiff
+}
 
 // Create the codebook
 
-export function createCodebookToDecodeFrequentDiff(freqDiffArr, actualCodebookSize) {
+function createCodebookToDec(freqDiffArr, actualCodebookSize) {
     // Key  : Alphabets
     // Value: Frequent diff value
 
@@ -23,7 +27,7 @@ export function createCodebookToDecodeFrequentDiff(freqDiffArr, actualCodebookSi
 
 // Decode the reference dictionary (frequent diff value)
 
-export function decodeFreqDiffAsRefDict(diffStr) {
+function decodeFreqDiff(diffStr) {
     // Base52デコードした 数値の配列を返す
 
     // Base52エンコードされた文字列を 以下のルールで区切る
@@ -40,7 +44,7 @@ export function decodeFreqDiffAsRefDict(diffStr) {
     //Array(9) [ "ab", "cd", "_efg", "_hij", "_klm", "no", "pq", "rs", "tu" ]
 
     if (splitted !== null) {
-        return splitted.map(twoChars => base52DecodeForRefDict(twoChars))
+        return splitted.map(twoChars => base52DecodeForFreqDiff(twoChars))
     } else {
         return [] // 頻出数値が無い coord の場合には 空の配列を 返す
     }

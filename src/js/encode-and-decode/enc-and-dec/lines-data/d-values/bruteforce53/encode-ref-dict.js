@@ -10,12 +10,12 @@ import { addToEliminateNegativeBeforeEncode } from 'enc-and-dec/lines-data/d-val
 //   結果が 3文字の場合は 先頭にアンダースコア '_' をひとつ付ける ( 'abc' => '_abc' )
 
 export function encodeFreqDiff(freqDiffArrActualCodebookSized) {
-    const refDict = freqDiffArrActualCodebookSized.map((value) => base52EncodeForRefDict(value))
-    return refDict.join('') // return after joined as a string
+    const freqDiff = freqDiffArrActualCodebookSized.map((value) => base52EncodeForFreqDiff(value))
+    return freqDiff.join('') // return after joined as a string
 }
 
 
-function base52EncodeForRefDict(num) {
+function base52EncodeForFreqDiff(num) {
     const encoded = base52Enc(addToEliminateNegativeBeforeEncode(num))
 
     // base52エンコードした結果が 3文字の場合 先頭に アンダースコアを追加

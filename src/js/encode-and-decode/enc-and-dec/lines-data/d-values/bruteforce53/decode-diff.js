@@ -8,9 +8,9 @@ export function decodeDiff(diffStr, codebook, baseX) {
 
     for (let i = 0; i < diffStr.length; i++) {
 
-        if (isInRefDict(diffStr[i], codebook)) {
+        if (isInFreqDiff(diffStr[i], codebook)) {
             // Codebook に含まれるアルファベットならば 1文字ごとに diffStr[i]をキーにして 対応する数値を得て 配列に格納
-            console.log(`Decode diff: isInRefDict = true, ${diffStr[i]} => ${codebook.get(diffStr[i])}`)
+            console.log(`Decode diff: isInFreqDiff = true, ${diffStr[i]} => ${codebook.get(diffStr[i])}`)
             decodedDiffArr.push(codebook.get(diffStr[i]))
 
 
@@ -64,13 +64,13 @@ export function decodeDiff(diffStr, codebook, baseX) {
 
 
 // 辞書文字列 (Reference dictionary) に含まれているなら `true` を返す
-function isInRefDict(char, codebook) {
+function isInFreqDiff(char, codebook) {
     // 判定用文字列
     // Mapオブジェクトのキーのみを 配列として取り出し 区切り無しでjoinして ひとつの文字列にする
-    const refDict = [...codebook.keys()].join('')
+    const freqDiff = [...codebook.keys()].join('')
 
     // 文字 char が 判定用文字列に 含まれているかどうか を判定する => 含まれている場合は true が返る
-    const bool = refDict.indexOf(char) !== -1
+    const bool = freqDiff.indexOf(char) !== -1
     return bool
 }
 
