@@ -135,7 +135,6 @@ export function bruteforce53Enc() {
                 try {
                     // Encode the diff values
                     const diffArrEncoded = diffArr.map((diff) => {
-                        console.log('||||diff: ', diff)////////////////////////////////////////
 
                         // [0-9] の一桁の正の数は そのままにする
                         let result = handleSingleDigit(diff)
@@ -148,16 +147,7 @@ export function bruteforce53Enc() {
                         // 数値が [大き|小さ]過ぎて BaseX で 2桁 にエンコードできないものは base52エンコードしてから アンダースコア を先頭にフラグとして 条件に応じて いくつか 付ける
                         //   上の Codebook と 下の BaseX は それぞれ重複しないアルファベットを 切り出して使っているが
                         //   Base52 は 両方ともと同じ種類の文字を使っているので デコード時にそれらと区別できるようにするため フラグを付ける
-                        try {
-                            // Encode and append
-                            result = handleBase52EncodingWithPrefix(diff, baseXNumber, baseXRangeLimits)
-                        } catch (error) {
-                            // Throw error if diff value is not within the range [-65532 - 65532]
-                            const errorMessage = `Error encoding dval for coord ${coord}: ${error.message}`
-                            console.error(errorMessage)
-                            outputToTextarea(errorMessage, 'textarea-lines-data-encoded')
-                            throw error // 例外を再スローして処理を中断する
-                        }
+                        result = handleBase52EncodingWithPrefix(diff, baseXNumber, baseXRangeLimits)
                         if (result !== undefined) return result
 
                         // 上記 3条件 いずれでもなければ baseX で アルファベット2文字 に エンコードする

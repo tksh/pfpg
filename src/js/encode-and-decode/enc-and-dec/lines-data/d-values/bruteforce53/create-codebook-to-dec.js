@@ -1,4 +1,4 @@
-import { base52DecodeForFreqDiff }  from 'enc-and-dec/base-n/base-52-dec'
+import { base52DecodeForFreqDiff } from 'enc-and-dec/base-n/base-52-dec'
 import { getAlphabetsForCodebook } from 'enc-and-dec/lines-data/d-values/bruteforce53/specific-alphabets'
 
 export {

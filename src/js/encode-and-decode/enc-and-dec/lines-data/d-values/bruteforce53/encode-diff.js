@@ -16,7 +16,7 @@ export
 
 function handleSingleDigit(diff) {
     if (diff >= 0 && diff <= 9) {
-        //console.log('Value in [0-9]: ', diff)
+        console.log('Value in [0-9]: ', diff)
         return diff
     }
 }
@@ -43,6 +43,7 @@ function handleFrequencyDiff(diff, codebookToEncodeFreqDiff) {
 //     大小両極の数字は baseX で 2文字以内に エンコード出来ないので baseXエンコードしない
 //     代わりに Base52 でアルファベットにエンコードし Codebookを使って頻出数値から 一文字に変換をしたアルファベットと 区別するために アンダースコア('_')を 先頭に いくつか フラグとして付ける
 //
+//     e.g.:
 //         エンコード後の文字数が 2文字 になった場合:
 //             正の数値は 前に アンダースコアを 1個 付ける
 //             負の数値は 前に アンダースコアを 2個 付ける
@@ -92,7 +93,7 @@ function calculateLimitsForBaseXSkipRange(baseXNumber, minimumDiffValue, maximum
 
     // Get the range to skip BaseX encoding (values outside this range will be skipped and Base52 encoding will be applied)
     const baseXSkipRangeLowerLimit = baseXTargetRangeStart - 1
-    const baseXSkipRangeUpperLimit = baseXTargetRangeEnd + 1
+    const baseXSkipRangeUpperLimit = baseXTargetRangeEnd   + 1
     console.log(`Range to skip for Base${baseXNumber} encoding: minimum diff value = ${minimumDiffValue} ... ${baseXSkipRangeLowerLimit} / ${baseXSkipRangeUpperLimit} ... ${maximumDiffValue} = maximum diff value`)
     // e.g.: -124  <  -41  |  50  <  124
 
@@ -104,26 +105,17 @@ function calculateLimitsForBaseXSkipRange(baseXNumber, minimumDiffValue, maximum
 
 // Base52 encode
 function handleBase52EncodingWithPrefix(diff, baseXNumber, baseXRangeLimits) {
-
-    // Check if original d value number is within the range -65532 and 65532,
-    // this is max diff value range for bruteforce53 with UInt14Portray
-    //   UInt14Portray range:
-    //     Absolute => [     0 - 16383] (2 ** 14 = 16384)
-    //     Relative => [-32766 - 32766]
-    //     Diff     => [-65532 - 65532]
-    if (diff < -65532 || diff > 65532) {
-        throw new Error(`Value out of range: ${diff}. Must be between -65532 and 65532.`)
-    }
-
-    // Encode
     if (diff <= baseXRangeLimits.baseXSkipRangeLowerLimit || baseXRangeLimits.baseXSkipRangeUpperLimit <= diff) {
+
         // base52エンコードして 2桁に'a'でパディングしたあと いくつかのアンダースコアを 接頭辞として付加
         const diffEncoded = base52Enc(Math.abs(diff)).padStart(2, 'a')
         const diffEncodedWithUnderscorePrefix = prependUnderscores(diffEncoded, diff > 0)
+
         console.log(
             `diff ${diff} は Base${baseXNumber} エンコード範囲外なので Base52エンコード ('_'を いくつか フラグとして付ける): `,
             diffEncodedWithUnderscorePrefix
         )
+
         return diffEncodedWithUnderscorePrefix
     }
 }
@@ -135,6 +127,6 @@ function handleBase52EncodingWithPrefix(diff, baseXNumber, baseXRangeLimits) {
 // baseXエンコード可能な範囲にある場合 => BaseX でアルファベット2文字にエンコード
 function handleBaseXEncoding(diff, baseXNumber) {
     const baseXEncoded = baseXEnc(diff, baseXNumber)
-    //console.log(`diff ${diff} は baseXエンコード可能な範囲にあるので Base${baseXNumber} でアルファベット2文字にエンコード:`, baseXEncoded)
+    console.log(`diff ${diff} は baseXエンコード可能な範囲にあるので Base${baseXNumber} でアルファベット2文字にエンコード:`, baseXEncoded)
     return baseXEncoded
 }
