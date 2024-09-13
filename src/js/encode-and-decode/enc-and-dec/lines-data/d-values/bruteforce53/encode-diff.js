@@ -78,9 +78,9 @@ function prependUnderscores(str, isPositive) {
 //     52*52       =    2704 なので 数値が    2703(ZZ)   までは 2文字に変換できる
 //     52*52*52    =  140608 なので 数値が  140607(ZZZ)  までは 3文字に変換できる
 //     52*52*52*52 = 7311616 なので 数値が 7311615(ZZZZ) までは 4文字に変換できる
-//     UInt8Portray (grid size: 0 -     255) までは diff の負の数を消した時に取り得る最大値 (    2,044) を 2文字でカバーできる
-//     UInt14Portray(grid size: 0 -  16,383) までは diff の負の数を消した時に取り得る最大値 (  131,064) を 3文字でカバーできる
-//     UInt19Portray(grid size: 0 - 524,287) までは diff の負の数を消した時に取り得る最大値 (4,194,296) を 4文字でカバーできる
+//     UInt9Portray (grid size: 0 -     511) までは diff の負の数を消した時に取り得る最大値 (    2,044) を 2文字でカバーできる
+//     UInt15Portray(grid size: 0 -  16,383) までは diff の負の数を消した時に取り得る最大値 (  131,072) を 3文字でカバーできる
+//     UInt20Portray(grid size: 0 - 524,287) までは diff の負の数を消した時に取り得る最大値 (4,194,300) を 4文字でカバーできる
 
 
 // Calculate the threshold for target range of BaseX and Base52
