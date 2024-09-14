@@ -1,7 +1,7 @@
 import { hexExpandToTen }            from 'color-formatter/hex-expand'
 import { getBasicDataFromUrlParams } from 'enc-and-dec/basic-data/basic-data-dec'
 import { decodeGroupColors }         from 'enc-and-dec/lines-data/group-colors/group-colors-dec'
-import { decodeWidthAndCounts }      from 'enc-and-dec/lines-data/width-and-counts/width-and-counts-dec'
+import { decodeWidthsAndCounts }      from 'enc-and-dec/lines-data/widths-and-counts/widths-and-counts-dec'
 import { decodeDvals }               from 'decode/decode'
 import { sizeDataDec }               from 'decode/size-data-dec'
 import { tryDecompress  }            from 'encode/try-decompress'
@@ -136,7 +136,7 @@ function decodeAsThreeData(urlSearchParams) {
         // Group-colors as Object
         const hex10Chars = hexExpandToTen(linesDataKvArray[i][0])    // e.g.: 000000ffff
         const decodedGroupColorsObj = decodeGroupColors(hex10Chars)  // Return as Object with three attrs
-        // groupColors: {g_stroke: '#ffffff', g_opacity: 1, g_stroke_opacity: 1}
+        // groupColors: {g_stroke: '#ffffff', gOpacity: 1, gStrokeOpacity: 1}
 
         // Decode the Lines data string
         // Structure: [1st flag][2nd flag][width(stroke-width values and counts)]-[d values]
@@ -150,12 +150,12 @@ function decodeAsThreeData(urlSearchParams) {
 
 
         // Extract the width related values encoded ('stroke-width' values and counts)
-        const encodedWidthAndCounts = extractBeforeFirstHyphen(linesData.slice(1))
+        const encodedWidthsAndCounts = extractBeforeFirstHyphen(linesData.slice(1))
 
         // Decode the width width related values
         // 'stroke-width' values and generated firstline and lastline indices as Map
-        const decodedWidthAndCountsMap = decodeWidthAndCounts(encodedWidthAndCounts)
-        console.log("decodedWidthAndCountsMap: ", decodedWidthAndCountsMap)
+        const decodedWidthsAndCountsMap = decodeWidthsAndCounts(encodedWidthsAndCounts)
+        console.log("decodedWidthsAndCountsMap: ", decodedWidthsAndCountsMap)
         // e.g.: Map(1) {3 => 19}
 
 
@@ -171,7 +171,7 @@ function decodeAsThreeData(urlSearchParams) {
             {
                 groupColors:        decodedGroupColorsObj,
                 encodingMethodFlag: decodedEncodingMethodFlagChar,
-                widthAndCounts:     decodedWidthAndCountsMap,
+                widthsAndCounts:     decodedWidthsAndCountsMap,
                 encodedDvals:       encodedDvalsStr
             }
         )
@@ -187,7 +187,7 @@ function decodeAsThreeData(urlSearchParams) {
             {
                 groupColors:        decodedGroupColorsObj,
                 encodingMethodFlag: decodedEncodingMethodFlagChar,
-                widthAndCounts:     decodedWidthAndCountsMap,
+                widthsAndCounts:     decodedWidthsAndCountsMap,
                 encodedDvals:       encodedDvalsStr,
                 relDvalsObj:        decodedRelDvalsObj,
                 absDvalsObj:        decodedAbsDvalsObj

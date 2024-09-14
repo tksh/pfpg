@@ -2,10 +2,10 @@
 
 // 絶対座標データの配列を相対座標データの配列に変換する関数
 
-export function absToRel(absoluteDvals, widthAndCounts) {
+export function absToRel(absoluteDvals, widthsAndCounts) {
     // Get the firstline indices of each stroke-width in this group
-    const firstlineArr      = widthAndCounts.firstline      // e.g.: Arr(4) [ 1, 4, 8, 25 ]
-    const firstlineIndexArr = firstlineArr.map(n => n - 1)  // e.g.: Arr(4) [ 0, 3, 7, 24 ]
+    const firstlineIndices      = widthsAndCounts.firstlineIndices      // e.g.: Arr(4) [ 1, 4, 8, 25 ]
+    const firstlineIndexArr = firstlineIndices.map(n => n - 1)  // e.g.: Arr(4) [ 0, 3, 7, 24 ]
 
     // Initialize
     const temp = []

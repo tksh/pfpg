@@ -209,10 +209,10 @@ export function bruteforce53Enc() {
         // 2. Compress the combined string using URLCompressor and choose the shorter version.
         // 3. Prepend the encoded group-colors value to the chosen string (compressed or original).
 
-        // Format: [group-colors]=[width-and-counts]-[d-values]
+        // Format: [group-colors]=[widths-and-counts]-[d-values]
 
 
-        // Get the encoded strings of width-and-counts and group-colors
+        // Get the encoded strings of widths-and-counts and group-colors
         const encodedAttrsExceptsDvals = getEncodedAttrsExceptsDvals()
 
         // Choose shorter one between URLComp applied or not, by each group

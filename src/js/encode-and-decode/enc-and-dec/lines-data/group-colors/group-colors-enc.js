@@ -17,8 +17,8 @@ export function encodeGroupColors(){
         // Normalize three color values
         // console.log(typeof(linesData.g_stroke)) // object
         const gStroke        = rgbObjToHex(linesData.g_stroke)         // Uint8 RGB object to hex
-        const gOpacity       = uint8ToHex(linesData.g_opacity)         // Uint8 number to Hex
-        const gStrokeOpacity = uint8ToHex(linesData.g_stroke_opacity)  // Uint8 number to Hex
+        const gOpacity       = uint8ToHex(linesData.gOpacity)         // Uint8 number to Hex
+        const gStrokeOpacity = uint8ToHex(linesData.gStrokeOpacity)  // Uint8 number to Hex
 
         // Merge
         colorsStr = gStroke + gOpacity + gStrokeOpacity

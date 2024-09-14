@@ -1,7 +1,7 @@
 import { flagsMap, resultInfo } from 'constants'
 
 export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMethodName) {
-    const encodedWidthAndCounts = encodedAttrsExceptsDvals.widthAndCounts
+    const encodedWidthsAndCounts = encodedAttrsExceptsDvals.widthsAndCounts
     const encodedGroupColors    = encodedAttrsExceptsDvals.groupColors
 
     const compressedByGroups = new Map()
@@ -19,8 +19,8 @@ export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMetho
     for (const [gId, dvalEncodedStr] of encodedDval) {
         // Merge the width, dvals and flags to form: [2nd flag][width(stroke-width values and counts)]-[d values]
         const charOf2ndFlag = flagsMap.get('2nd').get(encodingMethodName)
-        const widthAndCountsEncoded = encodedWidthAndCounts.get(gId)
-        const uncompressed = charOf2ndFlag + widthAndCountsEncoded + '-' + dvalEncodedStr
+        const widthsAndCountsEncoded = encodedWidthsAndCounts.get(gId)
+        const uncompressed = charOf2ndFlag + widthsAndCountsEncoded + '-' + dvalEncodedStr
 
         // Try compress with all compression methods,
         // And add 1st flag into best result.

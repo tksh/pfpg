@@ -1,6 +1,7 @@
 import { outputToTextarea }       from 'common-utils/output-to-textarea'
 import { decodeUrlParams }        from 'common-utils/read-url-params'
 import { selectOutputTextareaId } from 'common-utils/select-output-textarea'
+import { calculateArtworkId }     from 'decode/calc-artwork-id'
 import { relToAbs }               from 'decode/rel-to-abs'
 import { generateSvg }            from 'decode/generate-svg'
 import { showProcessingTime }     from 'enc-and-dec/show-result'
@@ -41,7 +42,7 @@ function decode(isRelative, isDataManipulatorPage) {
         //   value: Object
         //   groupColors:    decodedGroupColorsObj,
         //   twoCharFlags:   decodedEncodingMethodFlagChar,
-        //   widthAndCounts: decodedWidthAndCountsMap,
+        //   widthsAndCounts: decodedWidthsAndCountsMap,
         //   encodedDvals:   encodedDvalsStr,
         //   relDvalsObj:    decodedRelDvalsObj,
         //   absDvalsObj:    decodedAbsDvalsObj
@@ -50,6 +51,9 @@ function decode(isRelative, isDataManipulatorPage) {
         // e.g.:
         // {viewbox: '0 0 127 127', uintN: 7, width: 127, height: 127}
 
+
+        // Calculate the artwork_id
+        const artworkId = calculateArtworkId(decodedParams.linesData)
 
         // Generate SVG string
 
@@ -114,7 +118,7 @@ function decodeDvals(linesDataMap) {
 
     for (const [gId, v] of linesDataMap) {
         console.log("gId: ", gId)  // 0, 1, 2 ...
-        console.log("v: ", v)      // {groupColors: {…}, encodingMethodFlag: '0', widthAndCounts: {…}, relDvalsObj: Map(1), absDvalsObj: Map(1)}
+        console.log("v: ", v)      // {groupColors: {…}, encodingMethodFlag: '0', widthsAndCounts: {…}, relDvalsObj: Map(1), absDvalsObj: Map(1)}
 
         console.log("v.encodedDvals: ", v.encodedDvals) // Encoded string:  x1 + y1 + x2 + y2
         // e.g.: H5yJn8tIS6hWuVfFgdJIY10GsuwXo0w
@@ -127,17 +131,17 @@ function decodeDvals(linesDataMap) {
             console.log(`Group ${gId} has encoded with 'bruteforce53-enc'`)
             const decodedDiffDvals = bruteforce53Dec(v.encodedDvals)
             decodedRelDvals = decodedDiffDvals.map(coord => diffToRel(coord))
-            decodedAbsDvals = relToAbs(decodedRelDvals, v.widthAndCounts)
+            decodedAbsDvals = relToAbs(decodedRelDvals, v.widthsAndCounts)
 
         } else if (v.encodingMethodFlag === '1') {
             console.log("This group has encoded with 'bigint64-enc'")
             decodedAbsDvals = bigint64Dec(v.encodedDvals)
-            decodedRelDvals = absToRel(decodedAbsDvals, v.widthAndCounts)
+            decodedRelDvals = absToRel(decodedAbsDvals, v.widthsAndCounts)
 
         } else if (v.encodingMethodFlag === '2') {
             console.log("This group has encoded with 'swap63-enc'")
             decodedRelDvals = swap63Dec(v.encodedDvals)
-            decodedAbsDvals = relToAbs(decodedRelDvals, v.widthAndCounts)
+            decodedAbsDvals = relToAbs(decodedRelDvals, v.widthsAndCounts)
 
         } else {
             console.log('Error! This group has unknown flag for encoding method.')

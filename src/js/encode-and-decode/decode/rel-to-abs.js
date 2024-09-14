@@ -3,7 +3,7 @@ export
     , zip
     }
 
-function relToAbs(relativeDvals, widthAndCounts) {
+function relToAbs(relativeDvals, widthsAndCounts) {
 
     const x1Arr = relativeDvals[0] // [x1, x1, x1 ...]
     const y1Arr = relativeDvals[1] // [y1, y1, y1 ...]
@@ -11,8 +11,8 @@ function relToAbs(relativeDvals, widthAndCounts) {
     const y2Arr = relativeDvals[3] // [y2, y2, y2 ...]
 
     // Get the array of firstline indices for each stroke-width
-    const firstlineArr      = widthAndCounts.firstline      // e.g.: Arr(4) [ 1, 4, 8, 25 ]
-    const firstlineIndexArr = firstlineArr.map(n => n - 1)  // e.g.: Arr(4) [ 0, 3, 7, 24 ]
+    const firstlineIndices      = widthsAndCounts.firstlineIndices      // e.g.: Arr(4) [ 1, 4, 8, 25 ]
+    const firstlineIndexArr = firstlineIndices.map(n => n - 1)  // e.g.: Arr(4) [ 0, 3, 7, 24 ]
 
     let absoluteCoordinates = [] // [[x1, y1, x2, y2], [x1, y1, x2, y2], ...]
 

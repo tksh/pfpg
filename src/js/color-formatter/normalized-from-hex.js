@@ -41,14 +41,16 @@ function hexToUint8(twoDigitsHex) {
 
 // 6桁のHEX文字列をRGBオブジェクトに変換する関数
 function hexToRgbMap(sixDigitsHex) {
+    const sixDigitsHexWithoutHash = tryDeleteHash(sixDigitsHex)
+
     // 入力が6桁の16進数文字列であることを確認
-    if (!/^[0-9A-Fa-f]{6}$/.test(sixDigitsHex)) {
+    if (!/^[0-9A-Fa-f]{6}$/.test(sixDigitsHexWithoutHash)) {
         return "Invalid hex string"
     }
     // 文字列を2桁ずつに分割
-    const r = sixDigitsHex.substring(0, 2)
-    const g = sixDigitsHex.substring(2, 4)
-    const b = sixDigitsHex.substring(4, 6)
+    const r = sixDigitsHexWithoutHash.substring(0, 2)
+    const g = sixDigitsHexWithoutHash.substring(2, 4)
+    const b = sixDigitsHexWithoutHash.substring(4, 6)
 
     // 各色をuint8に変換してオブジェクトを作成
     return new Map([

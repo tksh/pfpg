@@ -2,7 +2,7 @@ import { base53Dec } from 'enc-and-dec/base-n/base-53-dec'
 
 
 // Decode the count and width, and generate the firstline and lastline
-export function decodeWidthAndCounts(encodedStr) {
+export function decodeWidthsAndCounts(encodedStr) {
 
     // Split the string into alternating numbers and base53 encoded strings
     const parts = encodedStr.match(/\d+|[_a-zA-Z]+/g)
@@ -13,16 +13,16 @@ export function decodeWidthAndCounts(encodedStr) {
 
     // Set the numbers and decoded strings into Map object
     // 配列のインデックス番号が2で割り切れる = 偶数 [0],[2],... の場合に 'width'要素を取得し キーとする
-    const widthArr = parts.filter((_, i) => i % 2 === 0).map((part => Number(part)))
-    console.log('widthArr: ', widthArr)
+    const widths = parts.filter((_, i) => i % 2 === 0).map((part => Number(part)))
+    console.log('widths: ', widths)
 
 
     // Counts (count by stroke-width)
 
     // Decode each base53 encoded string to a decimal number
     // インデックスiを2で割った余りが1と等しい = 2で割り切れるない= 奇数 の場合に要素を取得し デコードする
-    const countsArr = parts.filter((_, i) => i % 2 === 1).map(part => base53Dec(part))
-    console.log('countsArr: ', countsArr) // Arr(7) [ 104, 168, 183, 92, 12, 5, 37 ]
+    const counts = parts.filter((_, i) => i % 2 === 1).map(part => base53Dec(part))
+    console.log('counts: ', counts) // Arr(7) [ 104, 168, 183, 92, 12, 5, 37 ]
 
 
     // Firstline indices
@@ -30,10 +30,10 @@ export function decodeWidthAndCounts(encodedStr) {
     const reducer = (acc, cur) => acc + cur
     const initialValueOne = 1 // firstline number
 
-    let firstlineArr = runningReduce(countsArr, reducer, initialValueOne)
-    firstlineArr.unshift(1) // Add first element with Number 1
-    firstlineArr.pop()      // Delete last element
-    //console.log('firstlineArr: ', firstlineArr)
+    let firstlineIndices = runningReduce(counts, reducer, initialValueOne)
+    firstlineIndices.unshift(1) // Add first element with Number 1
+    firstlineIndices.pop()      // Delete last element
+    //console.log('firstlineIndices: ', firstlineIndices)
     // e.g.: Arr(4) [ 1, 4, 8, 25 ]
 
 
@@ -41,16 +41,16 @@ export function decodeWidthAndCounts(encodedStr) {
 
     const initialValueZero = 0 // firstline number
 
-    let lastlineArr = runningReduce(countsArr, reducer, initialValueZero)
-    //console.log('lastlineArr: ', lastlineArr)
+    let lastlineIndices = runningReduce(counts, reducer, initialValueZero)
+    //console.log('lastlineIndices: ', lastlineIndices)
     // e.g.: Arr(4) [ 3, 7, 24, 91 ]
 
 
-    // Return as Object
     return {
-        firstline: firstlineArr,  // <Number>
-        lastline : lastlineArr,   // <Number>
-        width    : widthArr       // <Number>
+        firstlineIndices,  // number[]
+        lastlineIndices,   // number[]
+        widths,            // number[]
+        counts             // number[]
     }
 }
 

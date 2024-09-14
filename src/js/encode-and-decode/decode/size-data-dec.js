@@ -23,10 +23,10 @@ function sizeDataDec(linesDataMapIndexZero) {
     console.log('linesDataMapIndexZero: ', linesDataMapIndexZero)
     // absDvalsObj: {x1: Array(2), y1: Array(2), x2: Array(2), y2: Array(2)}
     // encodedDvals: "NWrTPcKpRSjaX"
-    // groupColors: {g_stroke: '#AAAAAA', g_opacity: 1, g_stroke_opacity: 1}
+    // groupColors: {g_stroke: '#AAAAAA', gOpacity: 1, gStrokeOpacity: 1}
     // relDvalsObj: {x1: Array(2), y1: Array(2), x2: Array(2), y2: Array(2)}
     // encodingMethodFlag: '1'
-    // widthAndCounts: {firstline: Array(1), lastline: Array(1), width: Array(1)}
+    // widthsAndCounts: {firstline: Array(1), lastline: Array(1), width: Array(1)}
     // [[Prototype]]: Object
 
     const absDvalsObj = linesDataMapIndexZero.absDvalsObj

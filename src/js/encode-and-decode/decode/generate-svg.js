@@ -99,16 +99,16 @@ function generateRelPathTags(tabSpace, linesDataMap) {
         const dvalsObj = v.relDvalsObj
         console.log('dvalsObj: ', dvalsObj) // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
 
-        const widthArr     = v.widthAndCounts.width      // list of stroke-width
-        const firstlineArr = v.widthAndCounts.firstline  // e.g.: Array(4) [ 1, 4, 8, 25 ]
-        const lastlineArr  = v.widthAndCounts.lastline   // e.g.: Array(4) [ 3, 7, 24, 91 ]
+        const widths     = v.widthsAndCounts.widths     // list of stroke-width
+        const firstlineIndices = v.widthsAndCounts.firstlineIndices  // e.g.: Array(4) [ 1, 4, 8, 25 ]
+        const lastlineIndices  = v.widthsAndCounts.lastlineIndices   // e.g.: Array(4) [ 3, 7, 24, 91 ]
 
         let pathTagUnderGroup = [] // Group has one or more number of stroke-width
 
-        for (let i = 0; i < widthArr.length; i++) { // loop for each stroke-width
-            const width = widthArr[i]
-            const firstlineIndex = firstlineArr[i] - 1 // Subtract 1 to convert as index number
-            const lastlineIndex = lastlineArr[i] - 1   // Subtract 1 to convert as index number
+        for (let i = 0; i < widths.length; i++) { // loop for each stroke-width
+            const width = widths[i]
+            const firstlineIndex = firstlineIndices[i] - 1 // Subtract 1 to convert as index number
+            const lastlineIndex = lastlineIndices[i] - 1   // Subtract 1 to convert as index number
 
 
             // Open and close <path> tag
@@ -152,16 +152,16 @@ function generateAbsPathTags(tabSpace, linesDataMap) {
         const dvalsObj = v.absDvalsObj
         console.log('dvalsObj: ', dvalsObj) // {x1: Array(19), y1: Array(19), x2: Array(19), y2: Array(19)}
 
-        const widthArr     = v.widthAndCounts.width      // list of stroke-width
-        const firstlineArr = v.widthAndCounts.firstline  // e.g.: Array(4) [ 1, 4, 8, 25 ]
-        const lastlineArr  = v.widthAndCounts.lastline   // e.g.: Array(4) [ 3, 7, 24, 91 ]
+        const widths     = v.widthsAndCounts.widths     // list of stroke-width
+        const firstlineIndices = v.widthsAndCounts.firstlineIndices  // e.g.: Array(4) [ 1, 4, 8, 25 ]
+        const lastlineIndices  = v.widthsAndCounts.lastlineIndices   // e.g.: Array(4) [ 3, 7, 24, 91 ]
 
         let gAndPathTagsUnderGroup = [] // Group has one or more number of stroke-width
 
-        for (let i = 0; i < widthArr.length; i++) {      // loop for each stroke-width
-            const width = widthArr[i]
-            const firstlineIndex = firstlineArr[i] - 1   // Subtract 1 to convert as index number
-            const lastlineIndex = lastlineArr[i] - 1     // Subtract 1 to convert as index number
+        for (let i = 0; i < widths.length; i++) {      // loop for each stroke-width
+            const width = widths[i]
+            const firstlineIndex = firstlineIndices[i] - 1   // Subtract 1 to convert as index number
+            const lastlineIndex = lastlineIndices[i] - 1     // Subtract 1 to convert as index number
 
             // Generate open and close <g> tags
             const widthGTagOpen = tabSpace.repeat(3) + `<g stroke-width="${width}">`
@@ -262,7 +262,7 @@ function generateGTagOpenByGroups(tabSpace, linesDataMap) {
         const groupColors = v.groupColors
 
         const colorGroupTagOpen = tabSpace.repeat(2)
-            + `<g stroke="${groupColors.g_stroke_rgb}" opacity="${groupColors.g_opacity}" stroke-opacity="${groupColors.g_stroke_opacity}">`
+            + `<g stroke="${groupColors.gStrokeRgbStr}" opacity="${groupColors.gOpacity}" stroke-opacity="${groupColors.gStrokeOpacity}">`
         //         <g stroke="#000000" opacity="1" stroke-opacity="1">
 
         gTagOpenByGroups.set(gId, colorGroupTagOpen)
