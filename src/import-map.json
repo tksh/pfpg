@@ -1,7 +1,0 @@
-<script type="importmap">
-  {
-    "imports": {
-      "normalized-to-hex": "./js/color-formatter/normalized-to-hex.js"
-    }
-  }
-</script>
