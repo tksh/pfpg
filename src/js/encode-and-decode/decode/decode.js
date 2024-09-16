@@ -21,7 +21,7 @@ export
 
 // And also will be called from '/js/page-specific/index/tab-lines/path-mode.js' when 'path-mode' changed via option selector.
 
-function decode(isRelative, isDataManipulatorPage) {
+async function decode(isRelative, isDataManipulatorPage) {
     const startTime = performance.now()
     console.log('Start the decoding SVG ...')
 
@@ -53,7 +53,14 @@ function decode(isRelative, isDataManipulatorPage) {
 
 
         // Calculate the artwork_id
-        const artworkId = calculateArtworkId(decodedParams.linesData)
+        const artworkId = await calculateArtworkId(decodedParams.linesData)
+        console.log("artworkId.hexHash: ", artworkId.hexHash)
+        console.log("artworkId.bech32Hash: ", artworkId.bech32Hash)
+        console.log("artworkId.bech32mHash: ", artworkId.bech32mHash)
+        // e.g.:
+        // hexHash:     "9f4c7b73e27ae5c198aec93a687d9d82d471d5ad34c5ce6a4f08f0e52d4ef755" (64 chars)
+        // bech32Hash:  "uinp1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs"  (63 chars)
+        // bech32mHash: "uinp1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2sk8xjjj"  (63 chars)
 
         // Generate SVG string
 

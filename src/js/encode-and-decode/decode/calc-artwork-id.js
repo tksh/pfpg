@@ -1,9 +1,13 @@
-export function calculateArtworkId(linesData) {
+import { bech32, bech32m } from 'decode/bech32-and-bech32m'
+
+export async function calculateArtworkId(linesData) {
+
     const compositeSequence = generateCompositeSequence(linesData);
     console.log("compositeSequence: ", compositeSequence)                // 01701701702552551272_6364 ...
     console.log("compositeSequence.length: ", compositeSequence.length)  // e.g.: 7578 (202404_001)
-//    const hashed = hashViaSha256(compositeSequence);
-//    return encodeViaBech32(hashed);
+
+    const { hexHash, bech32Hash, bech32mHash } = await sha256ThenBech32(compositeSequence)
+    return { hexHash, bech32Hash, bech32mHash }
 }
 
 function generateCompositeSequence(linesData) {
@@ -18,7 +22,7 @@ function createGroupSequence(key, value) {
         const {         gIdVal,         gIdDig } = getSequenceOfGroupId(key)
         const {      colorsVal,      colorsDig } = getSequenceOfColors(value.groupColors)
         const { strokeWidthVal, strokeWidthDig } = getSequenceOfStrokeWidth(value.widthsAndCounts)
-        const {    absDvalsVal,    absDvalsDig } = getSequenceOfAbsDvalues(value.absDvalsObj)
+        const {    absDvalsVal,    absDvalsDig } = getSequenceOfAbsDvals(value.absDvalsObj)
 
         // Join whole sequences to form:
         //   values: [g_id] [g_stroke] [g_opacity] [g_stroke_opacity] [widths] [counts] "_" [abs_x1] [abs_y1] [abs_x2] [abs_y2]
@@ -71,7 +75,7 @@ function getSequenceOfStrokeWidth(widthsAndCounts) {
     return { strokeWidthVal, strokeWidthDig }
 }
 
-function getSequenceOfAbsDvalues(absDvalsObj) {
+function getSequenceOfAbsDvals(absDvalsObj) {
     // values
     const absDValX1 = [...absDvalsObj.x1.values()].join('')            // e.g.: 6364
     const absDValY1 = [...absDvalsObj.y1.values()].join('')            // e.g.: 00
@@ -89,3 +93,34 @@ function getSequenceOfAbsDvalues(absDvalsObj) {
     return { absDvalsVal, absDvalsDig }
 }
 
+
+async function sha256ThenBech32(inputStr, hrp = 'uinp') {
+
+    // 文字列を UTF-8エンコーディング された ArrayBuffer に変換
+    const encoder = new TextEncoder()
+    const utf8 = encoder.encode(inputStr)
+
+    // SHA-256ハッシュを 計算
+    const hashBuffer = await crypto.subtle.digest('SHA-256', utf8)
+
+    // 結果の ArrayBuffer を Uint8Array に変換
+    const hashArray = Array.from(new Uint8Array(hashBuffer))
+
+    // 16進数形式の文字列 を生成
+    const hexHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
+    //console.log("hexHash: ", hexHash)  // e.g.: 9f4c7b73e27ae5c198aec93a687d9d82d471d5ad34c5ce6a4f08f0e52d4ef755
+
+    // Bech32用の words に変換
+    const words = bech32.toWords(hashArray)
+    //console.log("words: ", words)  // e.g.: (52) [19, 29, 6, 7, 22, 28, 31, ...
+
+    // Bech32エンコード
+    const bech32Hash = bech32.encode(hrp, words)
+    //console.log("bech32Hash: ", bech32Hash)  // e.g.: uinp1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs
+
+    // Bech32mエンコード
+    const bech32mHash = bech32m.encode(hrp, words)
+    //console.log("bech32mHash: ", bech32mHash)  // e.g.: uinp1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs
+
+    return { hexHash, bech32Hash, bech32mHash }
+}
