@@ -3,3 +3,13 @@ node-modules/
 
 src/js/encode-and-decode/enc-and-dec/url-comp-0-1-0
 temp/
+
+# Yarn v4
+# Not using Zero-Installs
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
