@@ -52,20 +52,22 @@ async function decode(isRelative, isDataManipulatorPage) {
         // {viewbox: '0 0 127 127', uintN: 7, width: 127, height: 127}
 
 
-        // Calculate the artwork_id
-        const artworkId = await calculateArtworkId(decodedParams.linesData)
-        console.log("artworkId.hexHash: ", artworkId.hexHash)
-        console.log("artworkId.bech32Hash: ", artworkId.bech32Hash)
-        console.log("artworkId.bech32mHash: ", artworkId.bech32mHash)
-        // e.g.:
-        // hexHash:     "9f4c7b73e27ae5c198aec93a687d9d82d471d5ad34c5ce6a4f08f0e52d4ef755" (64 chars)
-        // bech32Hash:  "uinp1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs"  (63 chars)
-        // bech32mHash: "uinp1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2sk8xjjj"  (63 chars)
+        // Removing uncomment to get the artwork ID
+        // // Calculate the artwork ID from absolute lines data
+        // const artworkId = await calculateArtworkId(decodedParams.linesData)
+        // console.log("artworkId.hexHash: ", artworkId.hexHash)
+        // console.log("artworkId.bech32Hash: ", artworkId.bech32Hash)
+        // console.log("artworkId.bech32mHash: ", artworkId.bech32mHash)
+        // // e.g.: (202401_001)
+        // // hexHash:     "9f4c7b73e27ae5c198aec93a687d9d82d471d5ad34c5ce6a4f08f0e52d4ef755" (64 chars)
+        // // bech32Hash:  "uinp1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs"  (63 chars)
+        // // bech32mHash: "uinp1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2sk8xjjj"  (63 chars)
+
 
         // Generate SVG string
 
-        const svgStr = generateSvg(isRelative, decodedParams)
-        // const svgStr = generateSvg(isRelative, basicDataObj, linesDataMap, relDvalsObj, absDvalsObj)
+        const svgString = generateSvg(isRelative, decodedParams)
+        // const svgString = generateSvg(isRelative, basicDataObj, linesDataMap, relDvalsObj, absDvalsObj)
 
         // Output to textarea
         const outputTextareaId = selectOutputTextareaId(isRelative, isDataManipulatorPage)
@@ -73,20 +75,20 @@ async function decode(isRelative, isDataManipulatorPage) {
         // index.html: 'input-svg'
         // data-manipulator.html: 'textarea-decoded-svg-as-rel' | 'textarea-decoded-svg-as-abs'
 
-        outputToTextarea(svgStr, outputTextareaId)
+        outputToTextarea(svgString, outputTextareaId)
 
 
         // Compare the data size of url params and generated SVG
         const queryString = window.location.search
-        const compRatio = queryString.length / svgStr.length
+        const compRatio = queryString.length / svgString.length
 
         // Show the result in html
         const postfix = isRelative ? 'rel' : 'abs'
         const resultTextElem = document.getElementById(`encoded-size-compare-for-${postfix}`)
         if (resultTextElem) {
             const text = `Size of url params: <b>${queryString.length}</b> characters (bytes)<br>
-        Size of SVG string: <b>${svgStr.length}</b> characters (bytes)<br>
-        Ratio: ${queryString.length} / ${svgStr.length} = <b>${compRatio}</b>`
+        Size of SVG string: <b>${svgString.length}</b> characters (bytes)<br>
+        Ratio: ${queryString.length} / ${svgString.length} = <b>${compRatio}</b>`
             resultTextElem.innerHTML = text
         }
 
@@ -95,7 +97,7 @@ async function decode(isRelative, isDataManipulatorPage) {
         const elapsedTime = Math.floor(endTime - startTime)
         showProcessingTime('SVG decoding', elapsedTime, `encoded-strokes-values-time-for-${postfix}`, isDataManipulatorPage)
 
-        return svgStr
+        return svgString
 
     } else {
         // Stop decoding when decodedParams = null
@@ -107,12 +109,12 @@ async function decode(isRelative, isDataManipulatorPage) {
             const svgTextarea = document.querySelector('#input-svg') // Select <textarea id="input-svg" ...
 
             // <textarea>のvalue属性を取得
-            const svgStr = svgTextarea.value.trim() // '.trim()' = 文字列の両端の空白を削除
+            const svgString = svgTextarea.value.trim() // '.trim()' = 文字列の両端の空白を削除
 
             // Get textarea ID
             const outputTextareaId = selectOutputTextareaId(isRelative, isDataManipulatorPage)
 
-            outputToTextarea(svgStr, outputTextareaId)
+            outputToTextarea(svgString, outputTextareaId)
         }
     }
 }
