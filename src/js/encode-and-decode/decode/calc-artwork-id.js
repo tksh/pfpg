@@ -2,11 +2,21 @@ import { bech32, bech32m } from 'decode/bech32-and-bech32m'
 
 export async function calculateArtworkId(linesData) {
 
+    // Start time
+    const calcArtworkIdStartTime = performance.now()
+    console.log('Start the calculating artwork ID ...')
+
     const compositeSequence = generateCompositeSequence(linesData);
     console.log("compositeSequence: ", compositeSequence)                // 01701701702552551272_6364 ...
     console.log("compositeSequence.length: ", compositeSequence.length)  // e.g.: 7578 (202404_001)
 
     const { hexHash, bech32Hash, bech32mHash } = await sha256ThenBech32(compositeSequence)
+
+    // End time
+    const calcArtworkIdEndTime = performance.now()
+    const elapsedTime = Math.floor(calcArtworkIdEndTime - calcArtworkIdStartTime)
+    console.log('elapsedTime of calculating artwork ID: ', elapsedTime, ' ms')
+
     return { hexHash, bech32Hash, bech32mHash }
 }
 
