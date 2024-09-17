@@ -14,10 +14,10 @@ export { getInitialOpacitySteps }
 
 
 // Get initial opacity steps detected from original decoded SVG
-function getInitialOpacitySteps() {
+function getInitialOpacitySteps(svgString) {
 
     // get whole group 'opacity' and 'stroke-opacity' values
-    const groupColorsValues = getGroupColorsValues()
+    const groupColorsValues = getGroupColorsValues(svgString)
     const opNumArray = groupColorsValues.get('opacity_array').map(value => Number(value))
     const soNumArray = groupColorsValues.get('stroke_opacity_array').map(value => Number(value))
 

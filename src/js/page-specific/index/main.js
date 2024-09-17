@@ -69,10 +69,10 @@ import { replaceAtIndex }             from "utils/replace-at-index"
 (async function () {
     // Initial decoding from url param to svg
     const isRelative = false   // Default value of path-mode is 'Absolute and separated'
-    decode(isRelative, isOnDataManipulatorPage())
+    const svgString = await decode(isRelative, isOnDataManipulatorPage())
 
     // Generate the HTML elements of group attrs color-pickers
-    generateGroupColorsHtmlElements(getState('colorFormat'), getInitialOpacitySteps())
+    generateGroupColorsHtmlElements(getState('colorFormat'), getInitialOpacitySteps(svgString))
 
     await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm')) // Path that relative from index.html
     const svgInputElement = document.querySelector('#input-svg') // <textarea id="input-svg" ... >

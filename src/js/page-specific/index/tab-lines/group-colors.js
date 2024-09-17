@@ -149,15 +149,13 @@ function generateOpacityElements(i, step, attrName, attrValue) {
 }
 
 
-function getGroupColorsValues() {
+function getGroupColorsValues(svgString = getInputSvg()) {
     console.log(`getGroupColorsValues now started.`)
 
     // Find whole group colors elements
 
     // Get the matches for <g> from current SVG string in textarea
-    const currentSvg = getInputSvg()
-    const matches = regexMatchesOfGroupColors(currentSvg)
-    // console.log('matches: ', matches)
+    const matches = regexMatchesOfGroupColors(svgString)
     // e.g.: (5) ['<g stroke="rgb(0,0,0)" opacity="1.0" stroke-opacity="1.0">', ...]
 
     // マッチした部分の数を取得

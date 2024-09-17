@@ -17,6 +17,7 @@ import { setupCopyButtons }           from 'io/copy-textarea'
 const isDataManipulatorPage = isOnDataManipulatorPage()
 
 
+// decode() function will be executed twice at page loaded
 // 'isDataManipulatorPage = true' will export the generated relative and absolute style SVGs into each textarea.
 
 for (const boolean of [true, false]) {

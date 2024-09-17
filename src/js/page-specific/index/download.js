@@ -12,6 +12,8 @@ export { countSvgSize, getInputSvg, initDownloadButtons }
 
 // Get the svg string from <textarea> element
 function getInputSvg() {
+    console.log("||||document.querySelector('#input-svg'): ", document.querySelector('#input-svg'))
+    console.log("||||document.querySelector('#input-svg').value: ", document.querySelector('#input-svg').value)
     return document.querySelector('#input-svg').value.trim() // '.trim()' => 文字列の両端の空白を削除
 }
 
