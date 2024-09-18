@@ -307,7 +307,7 @@ import { replaceAtIndex }             from "utils/replace-at-index"
         // Count the number of indentations before removing them to preserve structural information.
         updateState('indentByRow', getSvgIndentation(updatedSvg))
 
-        // 保存しておいた設定の値を 全て元に戻した 新しいSVG文字列を
+        // 保存しておいた設定の値を 全て元に戻した 新しいSVG文字列 を
         // SVG最適化モーダルウィンドウでの 3つのチェックボックスの状態に応じた形にしてから
         // <textarea>のvalue属性に 挿入する
 
@@ -315,7 +315,6 @@ import { replaceAtIndex }             from "utils/replace-at-index"
         const svgOptState = new Map([
             ['removeOpacity',  getState('removeOpacity') ],  // SVG optimization modal
             ['removeNewlines', getState('removeNewlines')],  // SVG optimization modal
-            ['indentByRow',    getState('indentByRow')   ],  //   For restoring the new-lines
             ['removeSpaces',   getState('removeSpaces')  ],  // SVG optimization modal
         ])
         const optimizedSvg = optimizeSvg(updatedSvg, svgOptState)

@@ -30,7 +30,6 @@ function initSvgOptCheckbox() {
             svg = removeOpacity(svg)
             updateState('removeOpacity', true)
         } else {
-            // チェックを外したときの処理
             svg = restoreOpacity(svg)
             updateState('removeOpacity', false)
         }
@@ -47,7 +46,6 @@ function initSvgOptCheckbox() {
             svg = removeSpaces(svg)
             updateState('removeSpaces', true)
         } else {
-            // スペースを復元する処理
             svg = restoreSpaces(svg)
             updateState('removeSpaces', false)
         }
