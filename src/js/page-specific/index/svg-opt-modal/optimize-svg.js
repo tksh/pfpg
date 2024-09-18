@@ -1,7 +1,8 @@
 import { getInputSvg
-       , countSvgSize }       from 'download'
+       , countSvgSize } from 'download'
 import { updateState
-        , getState }          from 'init/state'
+       , getState }    from 'init/state'
+import { tabSpace }     from 'constants'
 
 
 export
@@ -91,7 +92,7 @@ function restoreNewlines(svg) {
 
     const indentedLines = lines.map((line, index) => {
         const indentCount = indentCounts[index] || 0
-        return '    '.repeat(indentCount) + line.trim()
+        return tabSpace.repeat(indentCount) + line.trim()
     })
 
     return indentedLines.join('\n')

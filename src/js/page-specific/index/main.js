@@ -10,7 +10,6 @@ import { getInitialOpacitySteps }     from "init/get-initial-opacity-steps"
 import { setDefaultValueOfOptions }   from "init/set-defaults"
 import {
   getState,
-  state,
   updateState,
 }                                     from "init/state"
 import { initTabs }                   from "init/tab-setup"
@@ -246,7 +245,7 @@ import { replaceAtIndex }             from "utils/replace-at-index"
     /////////////////////////////// Path mode ////////////////////////////////
 
     //  Event listeners for 'Path mode' selection changes
-    document.getElementById("path-mode").addEventListener("change", (event) => {
+    document.getElementById("path-mode").addEventListener("change", async (event) => {
 
         // 現在の設定の値を保存しておく
 
@@ -283,7 +282,7 @@ import { replaceAtIndex }             from "utils/replace-at-index"
         // Anti-aliasing (shape-rendering)
         const patternShapeRendering = /shape-rendering="[^"]*"/g
         const matchOfShapeRendering = currentPathModeSvg.match(patternShapeRendering)
-        const valueOfShapeRendering = matchOfShapeRendering[0] // 'geometricPrecision' | 'crispEdges'
+        const valueOfShapeRendering = matchOfShapeRendering[0]  // 'shape-rendering="geometricPrecision"' | 'shape-rendering="crispEdges"'
 
 
 
@@ -292,7 +291,7 @@ import { replaceAtIndex }             from "utils/replace-at-index"
         console.log(`"${pathMode}" selected.`)
 
         // Re-decode as new 'Path mode' styled svg string from url params
-        const newPathModeSvg = decodeAsSelectedPathMode(pathMode)
+        const newPathModeSvg = await decodeAsSelectedPathMode(pathMode)
 
         // レンダリングし直す前に 保存しておいた 設定の値を 元に戻す
 
@@ -300,9 +299,7 @@ import { replaceAtIndex }             from "utils/replace-at-index"
         const recoverShapeRendering = recoverCurrentOptionValue(newPathModeSvg, patternShapeRendering, valueOfShapeRendering)
         const recoverShapeToTrim    = recoverCurrentOptionValue(recoverShapeRendering, patternShapeToTrim, valueOfShapeToTrim)
         const recoverViewbox        = recoverCurrentOptionValue(recoverShapeToTrim, patternViewbox, valueOfViewbox)
-        // Group colors (stroke, opacity, stroke-opacity)
         const updatedSvg            = recoverCurrentGroupColorsValues(recoverViewbox, patternGroupColors, matchOfGroupColors)
-
 
         // Update the state
         updateState('pathMode', pathMode)
@@ -310,13 +307,18 @@ import { replaceAtIndex }             from "utils/replace-at-index"
         // Count the number of indentations before removing them to preserve structural information.
         updateState('indentByRow', getSvgIndentation(updatedSvg))
 
-
         // 保存しておいた設定の値を 全て元に戻した 新しいSVG文字列を
         // SVG最適化モーダルウィンドウでの 3つのチェックボックスの状態に応じた形にしてから
         // <textarea>のvalue属性に 挿入する
 
         // Optimize the SVG string using current three checkboxes status
-        const optimizedSvg = optimizeSvg(updatedSvg, state)
+        const svgOptState = new Map([
+            ['removeOpacity',  getState('removeOpacity') ],  // SVG optimization modal
+            ['removeNewlines', getState('removeNewlines')],  // SVG optimization modal
+            ['indentByRow',    getState('indentByRow')   ],  //   For restoring the new-lines
+            ['removeSpaces',   getState('removeSpaces')  ],  // SVG optimization modal
+        ])
+        const optimizedSvg = optimizeSvg(updatedSvg, svgOptState)
 
         svgInputElement.value = optimizedSvg
 
