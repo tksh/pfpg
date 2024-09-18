@@ -498,6 +498,8 @@ import { replaceAtIndex }             from "utils/replace-at-index"
     // Function to update resvgOpts and convert SVG
     const updateAndConvert = (value) => {
         console.log("New value of 'Width pixel size':", value)
+        updateState('widthPixelSize', value)  // グローバルステート更新
+
         Object.assign(resvgOpts, {
             fitTo: {
                 mode: 'height',
