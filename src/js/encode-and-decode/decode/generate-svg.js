@@ -1,4 +1,5 @@
-import { isNonEmpty }       from 'common-utils/is-non-empty'
+import { isNonEmpty } from 'common-utils/is-non-empty'
+import { tabSpace }   from 'constants'
 
 // Output SVG string like:
 
@@ -54,25 +55,20 @@ import { isNonEmpty }       from 'common-utils/is-non-empty'
 
 export function generateSvg(isRelative, decodedParams) {
 
-    // Set the tab size
-    const tabSpace = '    ' // Four spaces
-
-
     // Generate tags except stroke tags
-    const tagsBeforeStrokes = generateTagsBeforeStrokes(tabSpace, decodedParams.basicData, decodedParams.sizeData)
-    const tagsAfterStrokes = generateTagsAfterStrokes(tabSpace)
+    const tagsBeforeStrokes = generateTagsBeforeStrokes(decodedParams.basicData, decodedParams.sizeData)
+    const tagsAfterStrokes = generateTagsAfterStrokes()
 
 
     // Strokes tags ( group-id-<g> and <path> )
 
     // Generate the open and close group-id-<g> tags
-    const gTagOpenByGroups = generateGTagOpenByGroups(tabSpace, decodedParams.linesData)
-    const gTagCloseByGroups = generateGTagCloseByGroups(tabSpace, decodedParams.linesData)
+    const gTagOpenByGroups = generateGTagOpenByGroups(decodedParams.linesData)
+    const gTagCloseByGroups = generateGTagCloseByGroups(decodedParams.linesData)
 
     // Generate the <path> tags (as relative or absolute, switched by isRelative)
     const pathTagsByGroups = generatePathTags(
         isRelative,
-        tabSpace,
         decodedParams.linesData
     )
 
@@ -91,7 +87,7 @@ export function generateSvg(isRelative, decodedParams) {
 
 
 
-function generateRelPathTags(tabSpace, linesDataMap) {
+function generateRelPathTags(linesDataMap) {
 
     const relPathTagsByGroups = new Map()
 
@@ -144,7 +140,7 @@ function generateRelPathTags(tabSpace, linesDataMap) {
 
 
 
-function generateAbsPathTags(tabSpace, linesDataMap) {
+function generateAbsPathTags(linesDataMap) {
 
     const absPathTagsByGroups = new Map()
 
@@ -200,7 +196,7 @@ function generateAbsPathTags(tabSpace, linesDataMap) {
 
 
 
-function generateTagsBeforeStrokes(tabSpace, basicDataObj, sizeDataObj) {
+function generateTagsBeforeStrokes(basicDataObj, sizeDataObj) {
 
     const svgOpen = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${sizeDataObj.viewbox}" shape-rendering="crispEdges">`
 
@@ -208,7 +204,7 @@ function generateTagsBeforeStrokes(tabSpace, basicDataObj, sizeDataObj) {
     const optionalTags = [
         { tag: 'title',    content: basicDataObj.title },
         { tag: 'desc',     content: basicDataObj.desc },
-        { tag: 'metadata', content: addNewlineAndIndentation(basicDataObj.metadata, tabSpace) },
+        { tag: 'metadata', content: addNewlineAndIndentation(basicDataObj.metadata) },
     ].filter(({ content }) => isNonEmpty(content))
         .map(({ tag, content }) => tabSpace.repeat(1) + `<${tag}>${content}</${tag}>`)
 
@@ -228,7 +224,7 @@ function generateTagsBeforeStrokes(tabSpace, basicDataObj, sizeDataObj) {
 }
 
 // Indentation justify for <metadata> contents
-function addNewlineAndIndentation(inputLines, tabSpace) {
+function addNewlineAndIndentation(inputLines) {
     // If there is no metadata content, keep it as it.
     if (!isNonEmpty(inputLines)) {
         return undefined
@@ -247,7 +243,7 @@ function addNewlineAndIndentation(inputLines, tabSpace) {
     return result
 }
 
-function generateTagsAfterStrokes(tabSpace) {
+function generateTagsAfterStrokes() {
     // Close </g> tag for clip-path
     const clipPathGroupClose = tabSpace.repeat(1) + '</g>'
     const svgClose = '</svg>'
@@ -255,7 +251,7 @@ function generateTagsAfterStrokes(tabSpace) {
 }
 
 
-function generateGTagOpenByGroups(tabSpace, linesDataMap) {
+function generateGTagOpenByGroups(linesDataMap) {
     const gTagOpenByGroups = new Map()
     for (let [gId, v] of linesDataMap) {
         // Generate stroke color group
@@ -271,7 +267,7 @@ function generateGTagOpenByGroups(tabSpace, linesDataMap) {
     return gTagOpenByGroups
 }
 
-function generateGTagCloseByGroups(tabSpace, linesDataMap) {
+function generateGTagCloseByGroups(linesDataMap) {
     const gTagCloseByGroups = new Map()
     for (let [gId, v] of linesDataMap) {
         const colorGroupTagClose = tabSpace.repeat(2) + '</g>'
@@ -282,11 +278,11 @@ function generateGTagCloseByGroups(tabSpace, linesDataMap) {
 }
 
 
-function generatePathTags(isRelative, tabSpace, linesDataMap) {
+function generatePathTags(isRelative, linesDataMap) {
     if (isRelative === true) {                                  // true = relative and merged
-        return generateRelPathTags(tabSpace, linesDataMap)
+        return generateRelPathTags(linesDataMap)
     } else if (isRelative === false) {                          // false = absolute and separated
-        return generateAbsPathTags(tabSpace, linesDataMap)
+        return generateAbsPathTags(linesDataMap)
     }
 }
 

@@ -10,6 +10,9 @@ export const BASIC_DATA_KEYS = [
 ]
 
 
+// Spaces in SVg string
+export const tabSpace = '    ' // Four spaces
+
 // VIEWBOX_START_X and VIEWBOX_START_Y represent the starting position of the viewBox,
 // which is always at the origin (0,0).
 export const VIEWBOX_START_X = 0
