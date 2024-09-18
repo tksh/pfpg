@@ -594,7 +594,7 @@ import { replaceAtIndex }             from "utils/replace-at-index"
 
 
     // Startup initialize process
-    async function init() {
+    const init = async () => {
 
         // Set default options values
         // Read the values from original decoded SVG, then apply them as each option elements.

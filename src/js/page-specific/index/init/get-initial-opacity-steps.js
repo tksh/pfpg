@@ -1,7 +1,5 @@
 import { getGroupColorsValues } from 'tab-lines/group-colors'
 
-export { getInitialOpacitySteps }
-
 // getInitialOpacitySteps() function used twice at main.js ...
 //
 //   1.
@@ -12,9 +10,8 @@ export { getInitialOpacitySteps }
 //     For setting the default opacity steps
 //       at main.js: async function () < init() < setDefaultValueOfOptions() < setDefaultOfOpacitySteps() < getInitialOpacitySteps()
 
-
 // Get initial opacity steps detected from original decoded SVG
-function getInitialOpacitySteps(svgString) {
+export function getInitialOpacitySteps(svgString) {
 
     // get whole group 'opacity' and 'stroke-opacity' values
     const groupColorsValues = getGroupColorsValues(svgString)

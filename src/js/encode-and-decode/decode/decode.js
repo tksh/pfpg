@@ -1,7 +1,6 @@
 import { outputToTextarea }       from 'common-utils/output-to-textarea'
 import { decodeUrlParams }        from 'common-utils/read-url-params'
 import { selectOutputTextareaId } from 'common-utils/select-output-textarea'
-import { calculateArtworkId }     from 'decode/calc-artwork-id'
 import { relToAbs }               from 'decode/rel-to-abs'
 import { generateSvg }            from 'decode/generate-svg'
 import { showProcessingTime }     from 'enc-and-dec/show-result'
@@ -67,7 +66,6 @@ async function decode(isRelative, isDataManipulatorPage) {
         // Generate SVG string
 
         const svgString = generateSvg(isRelative, decodedParams)
-        // const svgString = generateSvg(isRelative, basicDataObj, linesDataMap, relDvalsObj, absDvalsObj)
 
         // Output to textarea
         const outputTextareaId = selectOutputTextareaId(isRelative, isDataManipulatorPage)
@@ -84,8 +82,10 @@ async function decode(isRelative, isDataManipulatorPage) {
 
         // Show the result in html
         const postfix = isRelative ? 'rel' : 'abs'
-        const resultTextElem = document.getElementById(`encoded-size-compare-for-${postfix}`)
-        if (resultTextElem) {
+
+        // When at data-manipulator.html
+        if (isDataManipulatorPage) {
+            const resultTextElem = document.getElementById(`encoded-size-compare-for-${postfix}`)
             const text = `Size of url params: <b>${queryString.length}</b> characters (bytes)<br>
         Size of SVG string: <b>${svgString.length}</b> characters (bytes)<br>
         Ratio: ${queryString.length} / ${svgString.length} = <b>${compRatio}</b>`
@@ -131,7 +131,7 @@ function decodeDvals(linesDataMap) {
 
         console.log("v.encodedDvals: ", v.encodedDvals) // Encoded string:  x1 + y1 + x2 + y2
         // e.g.: H5yJn8tIS6hWuVfFgdJIY10GsuwXo0w
-        console.log("v.encodingMethodFlag: ", v.encodingMethodFlag)
+        console.log("v.encodingMethodFlag: ", v.encodingMethodFlag)  // e.g.: 0
 
         let decodedAbsDvals = []
         let decodedRelDvals = []

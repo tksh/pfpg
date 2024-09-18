@@ -1,7 +1,9 @@
+import { tabSpace }           from 'constants'
 import { svgWithNewShapeViewbox
        , extractViewboxValues
        }                      from 'tab-canvas/crop-side-margins'
 import { roundToTwoDecimals } from 'utils/number-rounding'
+import { getState }          from 'init/state'
 
 export
     { toggleDisplay
@@ -33,9 +35,13 @@ function updateSvgWithSelectedShapePath(shape, inputSvg) {
                 ? `<circle cx="50%" cy="50%" r="50%" />`
                 : `<path d="M 0,${center}Q 0,0 ${center},0T ${gridSize},${center} ${center},${gridSize} 0,${center}" />` // shape === 'squircle'
 
+
     // Replace to new shape <clipPath>
-    const patternForClippathShape = /<clipPath id="shape-to-trim">\n.*\n.*<\/clipPath>/g
-    const newClippathSvg = inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">\n\t\t${shapePath}\n\t</clipPath>`)
+    const patternForClippathShape = /<clipPath id="shape-to-trim">(\n?).*(\n?).*<\/clipPath>/g
+    const removeNewlines = getState('removeNewlines')
+    const newClippathSvg = removeNewlines
+        ? inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">${shapePath}</clipPath>`)
+        : inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">\n${tabSpace.repeat(3)}${shapePath}\n${tabSpace.repeat(2)}</clipPath>`)
 
     // Update the <textarea>
     const hasCropSideMargins = getBoolOfCropSideMargins()
