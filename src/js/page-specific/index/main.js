@@ -443,13 +443,18 @@ import { replaceAtIndex }             from "utils/replace-at-index"
         if (event.target.checked) {
             // チェックボックスがチェックされた場合、クロップ処理を実行
             console.log('Crop side margins: [x]')
+            updateState('cropSideMargins', true)  // グローバルステート更新
+
             const inputSvg = getInputSvg()
             const updatedSvg = viewboxSlimmed(inputSvg)
             svgInputElement.value = updatedSvg
             executeSvg2png({ target: { value: updatedSvg } })
+
         } else {
             // チェックボックスが外れた場合、元のデータと同じ矩形のサイズに戻す
             console.log('Crop side margins: [ ]')
+            updateState('cropSideMargins', false)  // グローバルステート更新
+
             const inputSvg = getInputSvg()
             const updatedSvg = viewboxUnSlimmed(inputSvg)
             svgInputElement.value = updatedSvg

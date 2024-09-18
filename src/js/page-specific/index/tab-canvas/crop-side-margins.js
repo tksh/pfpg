@@ -1,5 +1,5 @@
-import { toFixedTrimmed } from 'utils/number-rounding'
 import { decodeUrlParams } from 'common-utils/read-url-params'
+import { toFixedTrimmed }  from 'utils/number-rounding'
 
 export
     { svgWithNewShapeViewbox
