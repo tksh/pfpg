@@ -127,17 +127,15 @@ main {
 
 /* PNG image */
 div#img-box img {
-    height: 100%;
     width: auto;
 }
 
 .fit-to-display-area {
     image-rendering: pixelated;
-    width: 100%;
+    height: 100%;
 }
 
 .actual-image-size {
-    width: 100%;
     height: fit-content;
     object-fit: none;
 }
