@@ -52,7 +52,7 @@ export function swap63Enc() {
         encodedAttrsExceptsDvals,
         'swap63'
     )
-    console.log('compressedByGroups: ', compressedByGroups)
+    //console.log('compressedByGroups: ', compressedByGroups)
     // Map { 000 → (2) […] }
     //     0: 000 → Array [ 400, "000=13xbqDCEgLL7jANz5XKXua ... LiAh5KEXgVutC" ]
 
@@ -75,10 +75,23 @@ export function swap63Enc() {
     const elapsedTime = Math.floor(endTime - startTime)
     showProcessingTime('swap63Enc()', elapsedTime, 'encoded-strokes-values-time', isOnDataManipulatorPage())
 
-    // Show the encoding result of each group in console
-    showDetailsByGroups('Lines Data', compressedByGroups, 'swap63')
+    // Convert the structure of values
+    // from:
+    //     Values: encoded string
+    // to:
+    //     Values: [encoded string, encoding-method name, configuration-value object]
+    const swap53HasNoOptionValue = undefined
 
-    return compressedByGroups
+    const encodedArrByGroups = new Map(
+        Array.from(compressedByGroups, ([key, value]) => [
+            key, [value, 'swap63', { swap53HasNoOptionValue }]
+        ])
+    )
+
+    // Show the encoding result of each group in console
+    showDetailsByGroups('Lines Data', encodedArrByGroups, 'swap63')
+
+    return encodedArrByGroups
 }
 
 

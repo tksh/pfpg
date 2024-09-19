@@ -2,7 +2,7 @@ import { flagsMap, resultInfo } from 'constants'
 
 // Compare and store the shortest length string by each group
 
-export function storeShortest(encodedResultsArr, encodingMethodNamesArr) {
+export function storeShortest(encodedArrByMethods, encodingMethodNamesArr) {
     //console.log('currentShortestByGroups, encodedStrByGroups: ', currentShortestByGroups, encodedStrByGroups)
 
     const shortestArrByGroups = new Map()
@@ -11,19 +11,21 @@ export function storeShortest(encodedResultsArr, encodingMethodNamesArr) {
     let flagsArr= []
 
     // number of lines-group
-    // console.log(encodedResultsArr[0].size)  // e.g.: 3
+    // console.log(encodedArrByMethods[0].size)  // e.g.: 3
 
     // Looping for each lines-group
-    for (let i = 0; i < encodedResultsArr[0].size; i++) {
+    for (let i = 0; i < encodedArrByMethods[0].size; i++) {
 
-        console.log("encodedResultsArr: ", encodedResultsArr)
+        console.log("encodedArrByMethods: ", encodedArrByMethods)
         // e.g.:
         //   Executed with bestMixFrom2methods().
-        //     (2) [Map(3), Map(3)]  // Two maps = [bruteforce53Map, bigint64Map]
+        //     (2) [Map(3), Map(3)]          //   Two maps = [bruteforce53Map, bigint64Map]
+        //   Executed with bestMixFrom3methods().
+        //     (3) [Map(2), Map(2), Map(2)]  // Three maps = [bruteforce53Map, bigint64Map, swap63]
 
         // Use index number 'i' as key(group ID) of Map to get the array of encoded string length
-        const strArrByMethod = encodedResultsArr.map(mapObjByMethod => mapObjByMethod.get(i))
-        console.log(strArrByMethod)
+        const encodedArrExtractWithGroupId = encodedArrByMethods.map(encodedArr => encodedArr.get(i))
+        console.log("encodedArrExtractWithGroupId: ", encodedArrExtractWithGroupId)
         // Structures of values are same by each encoding methods like
         //     Values: [encoded string, encoding-method name, configuration-value object]
         // e.g.:
@@ -37,15 +39,15 @@ export function storeShortest(encodedResultsArr, encodingMethodNamesArr) {
         //         1: "bigint64"
         //         2: {digitsPerChunk: 3}
 
-        const strLengthArrByMethod = strArrByMethod.map(str => str.length)
-        console.log(strLengthArrByMethod)  // e.g.: (2) [27(bruteforce53), 23(bigint64)]
+        const strLengthByMethods = encodedArrExtractWithGroupId.map(str => str[0].length)
+        console.log(strLengthByMethods)  // e.g.: (3) [311, 319, 241]
 
         // Select shortest string
-        const minLength = Math.min(...strLengthArrByMethod)
+        const minLength = Math.min(...strLengthByMethods)
         console.log(minLength)    // e.g.: 23(bigint64)
 
         // Get the index of minLength
-        const minIndex = strLengthArrByMethod.indexOf(minLength)
+        const minIndex = strLengthByMethods.indexOf(minLength)
         console.log(minIndex)     // e.g.: 1
 
         // Get the name of encoding method
@@ -53,7 +55,7 @@ export function storeShortest(encodedResultsArr, encodingMethodNamesArr) {
         console.log(methodName)   // e.g.: 'bruteforce53'
 
         // Get shortest elements array
-        const shortestArr = strArrByMethod[minIndex]
+        const shortestArr = encodedArrExtractWithGroupId[minIndex]
         console.log(shortestArr)  // e.g.: // (3) ['A=08fEKQ-VoisNalNhZy9GsmZzPU', 'bruteforce53', {baseXNumber: 20}]
 
         // Set the shortest results values with group ID as key
