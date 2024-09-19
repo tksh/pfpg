@@ -29,7 +29,7 @@ import { showProcessingTime }                 from 'enc-and-dec/show-result'
 import { simplifyMap }                        from 'encode/simplify-map'
 import { storeShorter }                       from 'enc-and-dec/lines-data/d-values/bruteforce53/store-shorter'
 import { tryCompress }                        from 'encode/try-compress'
-import { tryDecompress }                      from 'encode/try-decompress'
+import { tryDecompress }                      from 'decode/try-decompress'
 
 ////////////////////////////////// Input: //////////////////////////////////
 

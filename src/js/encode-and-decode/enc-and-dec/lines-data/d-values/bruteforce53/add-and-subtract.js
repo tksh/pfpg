@@ -1,5 +1,5 @@
 import { getUintNFromUrlParams } from 'decode/get-uint-n'
-import { tryDecompress }         from 'encode/try-decompress'
+import { tryDecompress }         from 'decode/try-decompress'
 import { parseBasicData }        from 'enc-and-dec/basic-data/basic-data-enc'
 
 

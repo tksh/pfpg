@@ -1,5 +1,5 @@
 import { BASIC_DATA_KEYS } from 'constants'
-import { tryDecompress }   from 'encode/try-decompress'
+import { tryDecompress }   from 'decode/try-decompress'
 
 export function getBasicDataFromUrlParams(urlParams) {
     // 結果を格納するオブジェクト

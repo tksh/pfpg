@@ -27,6 +27,7 @@ function bigint64Dec(encodedDvalsStr) {
 
     // Determine the number of digits per chunk based on the uintN from url params
     const digitsPerChunk = getDigitsPerChunk(getUintNFromUrlParams())
+    console.log("digitsPerChunk: ", digitsPerChunk)
 
     // Recover the original zero-padded string
     const originalZeroPaddedStr = recoverOriginalZeroPadding(bigintAsStr, digitsPerChunk)

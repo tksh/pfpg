@@ -1,3 +1,6 @@
+import { outputToTextarea }            from 'common-utils/output-to-textarea'
+import { isOnDataManipulatorPage }     from 'common-utils/select-output-textarea'
+import { tryDecompress }               from 'decode/try-decompress'
 import { showProcessingTime }          from 'enc-and-dec/show-result'
 import { base64UrlEnc }                from 'enc-and-dec/base-n/base-64url-enc'
 import { parseBasicData }              from 'enc-and-dec/basic-data/basic-data-enc'
@@ -5,11 +8,9 @@ import { getDigitsPerChunk }           from 'enc-and-dec/lines-data/d-values/big
 import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
 import { joinWithAmpersand }           from 'encode/join-with-ampersand'
 import { showStringSize
-       , showDetailsByGroups }          from 'encode/show-result'
+       , showDetailsByGroups }         from 'encode/show-result'
 import { tryCompress }                 from 'encode/try-compress'
 import { jsonToMapObj }                from 'encode/json-to-map-obj'
-import { outputToTextarea }            from 'common-utils/output-to-textarea'
-import { isOnDataManipulatorPage }     from 'common-utils/select-output-textarea'
 
 
 export function bigint64Enc() {
@@ -24,7 +25,8 @@ export function bigint64Enc() {
 
     // Bigint64 encoding apply to absolute d values
 
-    const digitsPerChunk = getDigitsPerChunk(parseBasicData().n)
+    const digitsPerChunk = getDigitsPerChunk(Number(tryDecompress(parseBasicData().n)))
+    // console.log("digitsPerChunk: ", digitsPerChunk)
     const encodedDvals = base64UrlEncAfterJoinAsBigint(linesDataMap, digitsPerChunk)
     //console.log("encodedDvals: ", encodedDvals)
     // Map { 1 → "BsmvdfXHD12-EB_BesTenvoA_x-Nt6Ir73u4cAK5rBuSbnWTQPkCe-GP6Yh ... " }

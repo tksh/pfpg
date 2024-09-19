@@ -4,7 +4,7 @@ import { decodeGroupColors }         from 'enc-and-dec/lines-data/group-colors/g
 import { decodeWidthsAndCounts }      from 'enc-and-dec/lines-data/widths-and-counts/widths-and-counts-dec'
 import { decodeDvals }               from 'decode/decode'
 import { sizeDataDec }               from 'decode/size-data-dec'
-import { tryDecompress  }            from 'encode/try-decompress'
+import { tryDecompress  }            from 'decode/try-decompress'
 
 import { BASIC_DATA_KEYS  } from 'constants'
 
