@@ -9,8 +9,8 @@ export function encodeWidthsAndCounts() {
     const encodedStrByGroups = new Map()
 
     for (let agg of aggDataMap.values()) {
-        const widths = agg.stroke_width.list_of
-        const counts = agg.stroke_width.count_by
+        const widths = agg.stroke_width.widths
+        const counts = agg.stroke_width.counts
 
         // Merge into a string
         let widthsAndCountsStr = ""
