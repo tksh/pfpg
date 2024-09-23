@@ -1,7 +1,5 @@
-import { baseXDec }  from 'enc-and-dec/lines-data/d-values/bruteforce53/base-x-dec'
 import { base52Dec } from 'enc-and-dec/base-n/base-52-dec'
-
-// Functions to decode the diff
+import { baseXDec }  from 'enc-and-dec/lines-data/d-values/bruteforce53/base-x-dec'
 
 export function decodeDiff(diffStr, codebook, baseX) {
     let decodedDiffArr = [];

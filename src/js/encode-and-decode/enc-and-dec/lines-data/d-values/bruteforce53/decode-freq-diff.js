@@ -1,7 +1,5 @@
 import { base52DecodeForFreqDiff } from 'enc-and-dec/base-n/base-52-dec'
 
-// Decode the frequent diff values
-
 export function decodeFreqDiff(diffStr) {
     // Base52デコードした数値の配列を返す
 

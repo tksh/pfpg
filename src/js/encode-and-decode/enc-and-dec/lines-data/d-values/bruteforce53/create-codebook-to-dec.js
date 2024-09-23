@@ -1,7 +1,5 @@
 import { getAlphabetsForCodebook } from 'enc-and-dec/lines-data/d-values/bruteforce53/specific-alphabets'
 
-// Create the codebook
-
 export function createCodebookToDec(freqDiffArr, actualCodebookSize) {
     // Key  : Alphabets
     // Value: Frequent diff value

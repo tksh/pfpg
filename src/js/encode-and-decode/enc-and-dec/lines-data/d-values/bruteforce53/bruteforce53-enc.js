@@ -1,35 +1,34 @@
+import { outputToTextarea }            from 'common-utils/output-to-textarea'
+import { isOnDataManipulatorPage }     from 'common-utils/select-output-textarea'
+import { resultInfo }                  from 'constants'
+import { tryDecompress }               from 'decode/try-decompress'
+import { base53Enc }                   from 'enc-and-dec/base-n/base-53-enc'
+import { parseBasicData }              from 'enc-and-dec/basic-data/basic-data-enc'
+import { getActualCodebookSize }       from 'enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size'
+import { createCodebookToEnc }         from 'enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc'
 import {
-       calculateLimitsForBaseXSkipRange,
-       handleBase52EncodingWithPrefix,
-       handleBaseXEncoding,
-       handleFrequencyDiff,
-       handleSingleDigit
-}                from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
+    calculateLimitsForBaseXSkipRange,
+    handleBase52EncodingWithPrefix,
+    handleBaseXEncoding,
+    handleFrequencyDiff,
+    handleSingleDigit
+}                                      from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
+import { encodeFreqDiff }              from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-freq-diff'
+import { storeShorter }                from 'enc-and-dec/lines-data/d-values/bruteforce53/store-shorter'
+import { showProcessingTime }          from 'enc-and-dec/show-result'
+import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
+import { joinWithAmpersand }           from 'encode/join-with-ampersand'
+import { jsonToMapObj }                from 'encode/json-to-map-obj'
 import {
-       createMapFromNestedArrays,
-       mergeArrays
-}                        from 'encode/transform-array'
+    showDetailsByGroups,
+    showStringSize
+}                                      from 'encode/show-result'
+import { simplifyMap }                 from 'encode/simplify-map'
+import { tryCompress }                 from 'encode/try-compress'
 import {
-       showDetailsByGroups,
-       showStringSize
-}                 from 'encode/show-result'
-
-import { base53Enc }                          from 'enc-and-dec/base-n/base-53-enc'
-import { createCodebookToEnc } from 'enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc'
-import { encodeFreqDiff }            from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-freq-diff'
-import { getActualCodebookSize }              from 'enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size'
-import { getEncodedAttrsExceptsDvals }        from 'encode/get-attrs-excepts-dvals'
-import { isOnDataManipulatorPage }            from 'common-utils/select-output-textarea'
-import { joinWithAmpersand }                  from 'encode/join-with-ampersand'
-import { jsonToMapObj }                       from 'encode/json-to-map-obj'
-import { outputToTextarea }                   from 'common-utils/output-to-textarea'
-import { parseBasicData }                     from 'enc-and-dec/basic-data/basic-data-enc'
-import { resultInfo }                         from 'constants'
-import { showProcessingTime }                 from 'enc-and-dec/show-result'
-import { simplifyMap }                        from 'encode/simplify-map'
-import { storeShorter }                       from 'enc-and-dec/lines-data/d-values/bruteforce53/store-shorter'
-import { tryCompress }                        from 'encode/try-compress'
-import { tryDecompress }                      from 'decode/try-decompress'
+    createMapFromNestedArrays,
+    mergeArrays
+}                                      from 'encode/transform-array'
 
 ////////////////////////////////// Input: //////////////////////////////////
 
