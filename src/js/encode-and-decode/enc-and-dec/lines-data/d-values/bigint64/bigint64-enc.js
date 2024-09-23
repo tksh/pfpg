@@ -1,16 +1,18 @@
 import { outputToTextarea }            from 'common-utils/output-to-textarea'
 import { isOnDataManipulatorPage }     from 'common-utils/select-output-textarea'
 import { tryDecompress }               from 'decode/try-decompress'
-import { showProcessingTime }          from 'enc-and-dec/show-result'
 import { base64UrlEnc }                from 'enc-and-dec/base-n/base-64url-enc'
 import { parseBasicData }              from 'enc-and-dec/basic-data/basic-data-enc'
 import { getDigitsPerChunk }           from 'enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk'
+import { showProcessingTime }          from 'enc-and-dec/show-result'
 import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
 import { joinWithAmpersand }           from 'encode/join-with-ampersand'
-import { showStringSize
-       , showDetailsByGroups }         from 'encode/show-result'
-import { tryCompress }                 from 'encode/try-compress'
 import { jsonToMapObj }                from 'encode/json-to-map-obj'
+import {
+    showDetailsByGroups,
+    showStringSize
+}                                      from 'encode/show-result'
+import { tryCompress }                 from 'encode/try-compress'
 
 
 export function bigint64Enc() {
