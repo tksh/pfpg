@@ -1,4 +1,4 @@
-import { normalizedToHex }      from 'color-formatter/normalized-to-hex'
+import { normalizedToHex } from 'color-formatter/normalized-to-hex'
 
 export
     { hexExpandToTen

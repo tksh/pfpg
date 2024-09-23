@@ -1,14 +1,15 @@
-import { flagsMap, resultInfo } from 'constants'
+import { flagsMap
+       , resultInfo} from 'constants'
 
 export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMethodName) {
     const encodedWidthsAndCounts = encodedAttrsExceptsDvals.widthsAndCounts
-    const encodedGroupColors    = encodedAttrsExceptsDvals.groupColors
+    const encodedGroupColors     = encodedAttrsExceptsDvals.groupColors
 
     const compressedByGroups = new Map()
 
     // For storing result info
     let flagsArr = []
-    let lengthBeforeComp = []                 // comment
+    let lengthBeforeComp = []
     let lengthAfterComp = []
     const groupCount = encodedDval.size
     const ampersandCount = groupCount - 1
@@ -50,12 +51,6 @@ export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMetho
     const flags = new Map()
     flags.set('flags', flagsArr)
     resultInfo.set(encodingMethodName, flags)
-
-    // Set result info with 'bruteforce53-analytics--...'
-    // the relations of each baseX numbers and result string length
-//    const resultByGroups = createMapFromNestedArrays(compressingResultArr)
-//    resultInfo.set('bruteforce53-analytics--group_id-base_x_number-encoded_lines_data_length-best_compressed_length-comp_method_name', resultByGroups)
-
 
     return { compressedByGroups, compressingResultArr }
 }

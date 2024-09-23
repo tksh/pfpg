@@ -4,19 +4,17 @@
  * compare the results, and display the best mix of encoding methods.
  */
 
-import { outputToTextarea }  from "common-utils/output-to-textarea"
-import { flagsMap }          from "constants"
-import {
-    showDetailsByGroups,
-    showStringSize
-}                            from "encode/show-result"
-import { joinWithAmpersand } from "encode/join-with-ampersand"
-import { showBestMixResult } from "encode/show-best-mix-result"
-import { simplifyMap }       from "encode/simplify-map"
-import { storeShortest }     from "encode/store-shortest"
-import { bigint64Enc }       from "enc-and-dec/lines-data/d-values/bigint64/bigint64-enc"
-import { bruteforce53Enc }   from "enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc"
-import { swap63Enc }         from "enc-and-dec/lines-data/d-values/swap63/swap63-enc"
+import { outputToTextarea }  from 'common-utils/output-to-textarea'
+import { flagsMap }          from 'constants'
+import { showDetailsByGroups
+       , showStringSize}     from 'encode/show-result'
+import { joinWithAmpersand } from 'encode/join-with-ampersand'
+import { showBestMixResult } from 'encode/show-best-mix-result'
+import { simplifyMap }       from 'encode/simplify-map'
+import { storeShortest }     from 'encode/store-shortest'
+import { bigint64Enc }       from 'enc-and-dec/lines-data/d-values/bigint64/bigint64-enc'
+import { bruteforce53Enc }   from 'enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc'
+import { swap63Enc }         from 'enc-and-dec/lines-data/d-values/swap63/swap63-enc'
 
 /**
  * Object containing all available encoding methods.

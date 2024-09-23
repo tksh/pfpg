@@ -1,5 +1,6 @@
-import { flagsMap, resultInfo } from 'constants'
-import { zip }                  from 'decode/rel-to-abs'
+import { flagsMap
+       , resultInfo} from 'constants'
+import { zip }       from 'decode/rel-to-abs'
 
 
 export

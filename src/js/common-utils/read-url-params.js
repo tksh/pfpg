@@ -1,17 +1,18 @@
 import { hexExpandToTen }            from 'color-formatter/hex-expand'
-import { getBasicDataFromUrlParams } from 'enc-and-dec/basic-data/basic-data-dec'
-import { decodeGroupColors }         from 'enc-and-dec/lines-data/group-colors/group-colors-dec'
-import { decodeWidthsAndCounts }      from 'enc-and-dec/lines-data/widths-and-counts/widths-and-counts-dec'
 import { decodeDvals }               from 'decode/decode'
 import { sizeDataDec }               from 'decode/size-data-dec'
-import { tryDecompress  }            from 'decode/try-decompress'
+import { tryDecompress }             from 'decode/try-decompress'
+import { getBasicDataFromUrlParams } from 'enc-and-dec/basic-data/basic-data-dec'
+import { decodeGroupColors }         from 'enc-and-dec/lines-data/group-colors/group-colors-dec'
+import { decodeWidthsAndCounts }     from 'enc-and-dec/lines-data/widths-and-counts/widths-and-counts-dec'
 
-import { BASIC_DATA_KEYS  } from 'constants'
+import { BASIC_DATA_KEYS } from 'constants'
 
 export
     { decodeUrlParams
     , getUrlParams
     }
+
 
 function decodeUrlParams(isDataManipulatorPage) {
     // Get the url params from right source

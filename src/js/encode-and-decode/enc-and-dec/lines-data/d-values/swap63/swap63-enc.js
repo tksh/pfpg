@@ -1,15 +1,15 @@
-import { showProcessingTime }          from 'enc-and-dec/show-result'
-import { createCodebook
-       , get63Numbers
-       , get63Characters }             from 'enc-and-dec/lines-data/d-values/swap63/create-codebook'
-import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
-import { joinWithAmpersand }           from 'encode/join-with-ampersand'
-import { showStringSize
-       , showDetailsByGroups }          from 'encode/show-result'
-import { tryCompress }                 from 'encode/try-compress'
-import { jsonToMapObj }                from 'encode/json-to-map-obj'
 import { outputToTextarea }            from 'common-utils/output-to-textarea'
 import { isOnDataManipulatorPage }     from 'common-utils/select-output-textarea'
+import { createCodebook
+       , get63Characters
+       , get63Numbers}                 from 'enc-and-dec/lines-data/d-values/swap63/create-codebook'
+import { showProcessingTime }          from 'enc-and-dec/show-result'
+import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
+import { joinWithAmpersand }           from 'encode/join-with-ampersand'
+import { jsonToMapObj }                from 'encode/json-to-map-obj'
+import { showDetailsByGroups
+       , showStringSize}               from 'encode/show-result'
+import { tryCompress }                 from 'encode/try-compress'
 
 
 // Replace each number of relative d values (-31 to 31) with a character from the set [0-9, a-z, A-Z, _]

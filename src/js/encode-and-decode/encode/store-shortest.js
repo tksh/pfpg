@@ -1,4 +1,5 @@
-import { flagsMap, resultInfo } from 'constants'
+import { flagsMap
+       , resultInfo} from 'constants'
 
 // Compare and store the shortest length string by each group
 

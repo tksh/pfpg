@@ -1,4 +1,5 @@
-import { VIEWBOX_START_X, VIEWBOX_START_Y } from 'constants'
+import { VIEWBOX_START_X
+       , VIEWBOX_START_Y} from 'constants'
 
 export
     { sizeDataDec

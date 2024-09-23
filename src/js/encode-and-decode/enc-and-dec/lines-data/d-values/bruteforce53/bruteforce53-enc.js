@@ -6,29 +6,23 @@ import { base53Enc }                   from 'enc-and-dec/base-n/base-53-enc'
 import { parseBasicData }              from 'enc-and-dec/basic-data/basic-data-enc'
 import { getActualCodebookSize }       from 'enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size'
 import { createCodebookToEnc }         from 'enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc'
-import {
-    calculateLimitsForBaseXSkipRange,
-    handleBase52EncodingWithPrefix,
-    handleBaseXEncoding,
-    handleFrequencyDiff,
-    handleSingleDigit
-}                                      from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
+import { calculateLimitsForBaseXSkipRange
+       , handleBase52EncodingWithPrefix
+       , handleBaseXEncoding
+       , handleFrequencyDiff
+       , handleSingleDigit}            from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
 import { encodeFreqDiff }              from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-freq-diff'
 import { storeShorter }                from 'enc-and-dec/lines-data/d-values/bruteforce53/store-shorter'
 import { showProcessingTime }          from 'enc-and-dec/show-result'
 import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
 import { joinWithAmpersand }           from 'encode/join-with-ampersand'
 import { jsonToMapObj }                from 'encode/json-to-map-obj'
-import {
-    showDetailsByGroups,
-    showStringSize
-}                                      from 'encode/show-result'
+import { showDetailsByGroups
+       , showStringSize}               from 'encode/show-result'
 import { simplifyMap }                 from 'encode/simplify-map'
 import { tryCompress }                 from 'encode/try-compress'
-import {
-    createMapFromNestedArrays,
-    mergeArrays
-}                                      from 'encode/transform-array'
+import { createMapFromNestedArrays
+       , mergeArrays}                  from 'encode/transform-array'
 
 ////////////////////////////////// Input: //////////////////////////////////
 

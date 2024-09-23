@@ -7,5 +7,4 @@ export function showProcessingTime(nameOfInput, inputNum, outputElemId, isDataMa
         const outputTextElem = document.getElementById(`${outputElemId}`)
         outputTextElem.textContent = `Processing time of ${nameOfInput}: ${inputNum} milliseconds`
     }
-
 }

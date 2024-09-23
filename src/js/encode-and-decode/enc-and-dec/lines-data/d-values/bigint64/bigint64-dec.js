@@ -3,11 +3,12 @@ import { base64UrlDec }               from 'enc-and-dec/base-n/base-64url-dec'
 import { getDigitsPerChunk }          from 'enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk'
 import { recoverOriginalZeroPadding } from 'enc-and-dec/lines-data/d-values/bigint64/recover-zero-padding'
 
-export {
-    bigint64Dec,
-    chunk,
-    findNearestMultipleOfFourX
-}
+export
+    { bigint64Dec
+    , chunk
+    , findNearestMultipleOfFourX
+    }
+
 
 function bigint64Dec(encodedDvalsStr) {
 

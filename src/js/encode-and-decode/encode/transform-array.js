@@ -1,7 +1,8 @@
-export {
-    createMapFromNestedArrays,
-    mergeArrays
-}
+export
+    { createMapFromNestedArrays
+    , mergeArrays
+    }
+
 
 
 function createMapFromNestedArrays(array) {

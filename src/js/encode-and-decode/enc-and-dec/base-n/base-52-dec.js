@@ -6,7 +6,8 @@ export
     , base52DecodeForFreqDiff
     }
 
-    // For the number value of freq dict to embed for bruteforce53-enc
+
+// For the number value of freq dict to embed for bruteforce53-enc
 
 function base52Dec(str) {
     const alphabet = getAlphabets52()

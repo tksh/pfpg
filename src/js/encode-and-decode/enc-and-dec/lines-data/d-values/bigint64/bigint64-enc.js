@@ -8,10 +8,8 @@ import { showProcessingTime }          from 'enc-and-dec/show-result'
 import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
 import { joinWithAmpersand }           from 'encode/join-with-ampersand'
 import { jsonToMapObj }                from 'encode/json-to-map-obj'
-import {
-    showDetailsByGroups,
-    showStringSize
-}                                      from 'encode/show-result'
+import { showDetailsByGroups
+       , showStringSize}               from 'encode/show-result'
 import { tryCompress }                 from 'encode/try-compress'
 
 

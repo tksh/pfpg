@@ -12,7 +12,7 @@ export
     , parseBasicData
     , updateCheckboxStates
     , initBasicDataTextarea
-}
+    }
 
 ////////////////////////////////// Input: //////////////////////////////////
 
