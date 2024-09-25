@@ -1,6 +1,7 @@
 export
     { getBase53Characters
     , getBase64UrlCharacters
+    , getFour16CharsSets
     }
 
 
@@ -80,7 +81,8 @@ function getBase64UrlCharacters() {
 // 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
 
 
-// four16
+
+// four16-enc
 
 /** Four sets of 16 chars
  * P1 - 16 chars of [a-p]                       : Positive value represents with 1 digit [0-15]          (16)
@@ -88,6 +90,15 @@ function getBase64UrlCharacters() {
  * P2 - 16 chars of [q-z(10), 0-5(6)]           : Positive value represents with 2 digit [16-255]       (240)
  * N2 - 16 chars of [Q-Z(10), 6-9(4), '-', '_'] : Negative value represents with 2 digit [(-16)-(-255)] (240)
  */
+
+function getFour16CharsSets() {
+    const p1 = get16CharsOfP1()
+    const n1 = get16CharsOfN1()
+    const p2 = get16CharsOfP2()
+    const n2 = get16CharsOfN2()
+
+    return { p1, n1, p2, n2 }
+}
 
 function get16CharsOfP1() {
     // Init
