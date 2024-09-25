@@ -8,6 +8,7 @@ import { encodeBasicData
 import { bruteforce53Enc }            from 'enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc'
 import { bigint64Enc }                from 'enc-and-dec/lines-data/d-values/bigint64/bigint64-enc'
 import { swap63Enc }                  from 'enc-and-dec/lines-data/d-values/swap63/swap63-enc'
+import { four16Enc }                  from 'enc-and-dec/lines-data/d-values/four16/four16-enc'
 import { mergeBasicDataAndLinesData } from 'io/download-url-params'
 import { setupCopyButtons }           from 'io/copy-textarea'
 
@@ -43,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initButtons('encode-lines-data-as-bruteforce53', bruteforce53Enc)
     initButtons('encode-lines-data-as-bigint64',     bigint64Enc)
     initButtons('encode-lines-data-as-swap63',       swap63Enc)
+    initButtons('encode-lines-data-as-four16',       four16Enc)
 
     setupMixEncodingButtons()
 

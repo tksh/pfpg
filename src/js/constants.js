@@ -32,13 +32,14 @@ export const VIEWBOX_START_Y = 0
 export const flagsMap = new Map([
     ['1st', new Map([
                 ['uncompressed',  '~'],
-                ['URLCompressor', '0']
+                ['URLCompressor', '0'],
             ])
     ],
     ['2nd', new Map([
                 ['bruteforce53', '0'],
                 ['bigint64',     '1'],
-                ['swap63',       '2']
+                ['swap63',       '2'],
+                ['four16',       '3'],
             ])
     ]
 ])
