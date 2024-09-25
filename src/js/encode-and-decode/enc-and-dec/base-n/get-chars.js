@@ -85,10 +85,10 @@ function getBase64UrlCharacters() {
 // four16-enc
 
 /** Four sets of 16 chars
- * P1 - 16 chars of [a-p]                       : Positive value represents with 1 digit [0-15]          (16)
- * N1 - 16 chars of [A-P]                       : Negative value represents with 1 digit [(-1)-(-15)]    (15)
- * P2 - 16 chars of [q-z(10), 0-5(6)]           : Positive value represents with 2 digit [16-255]       (240)
- * N2 - 16 chars of [Q-Z(10), 6-9(4), '-', '_'] : Negative value represents with 2 digit [(-16)-(-255)] (240)
+ * P1 - 16 chars of [a-p]                       : Positive value represents with 1 digit [0:15]      (16)
+ * N1 - 16 chars of [A-P]                       : Negative value represents with 1 digit [-15:-1]    (15)
+ * P2 - 16 chars of [q-z(10), 0-5(6)]           : Positive value represents with 2 digit [16:255]   (240)
+ * N2 - 16 chars of [Q-Z(10), 6-9(4), '-', '_'] : Negative value represents with 2 digit [-255:-16] (240)
  */
 
 function getFour16CharsSets() {

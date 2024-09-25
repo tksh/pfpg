@@ -8,6 +8,7 @@ import { absToRel }               from 'enc-and-dec/lines-data/d-values/bigint64
 import { bigint64Dec }            from 'enc-and-dec/lines-data/d-values/bigint64/bigint64-dec'
 import { bruteforce53Dec }        from 'enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-dec'
 import { diffToRel }              from 'enc-and-dec/lines-data/d-values/bruteforce53/diff-to-rel'
+import { four16Dec }              from 'enc-and-dec/lines-data/d-values/four16/four16-dec'
 import { swap63Dec }              from 'enc-and-dec/lines-data/d-values/swap63/swap63-dec'
 
 
@@ -150,6 +151,11 @@ function decodeDvals(linesDataMap) {
         } else if (v.encodingMethodFlag === '2') {
             console.log("This group has encoded with 'swap63-enc'")
             decodedRelDvals = swap63Dec(v.encodedDvals)
+            decodedAbsDvals = relToAbs(decodedRelDvals, v.widthsAndCounts)
+
+        } else if (v.encodingMethodFlag === '3') {
+            console.log("This group has encoded with 'four16-enc'")
+            decodedRelDvals = four16Dec(v.encodedDvals)
             decodedAbsDvals = relToAbs(decodedRelDvals, v.widthsAndCounts)
 
         } else {

@@ -29,10 +29,8 @@ export function four16Enc() {
         const diffValues = aggDataMap.entries()           // MapIterator {'0' => {…}, '1' => {…}}
 
         diffValues.forEach(([gId, values]) => {
-            //console.log('values: ', values)             // {g_id: 0, stroke_width: {…}, d: {…}}
             const coords = values.d.relative.diff_by_row  // {x1: Array(2), y1: Array(2), x2: Array(2), y2: Array(2)}
             const encodedCoords = encodeCoordsWithFourBase16(coords, charsSets)
-            console.log("encodedCoords: ", encodedCoords) // e.g.: lKaBHaabha
 
             encodedDvals.set(Number(gId), encodedCoords)  // Group ID keys converted to integer
         })

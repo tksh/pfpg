@@ -21,11 +21,11 @@ export function encodeCoordsWithFourBase16(coords, charsSets) {
             if (result !== undefined) return result
 
             // 正の数 [16:255]   は P2 文字列セット で 2桁に エンコードする
-            result = handlePositiveToBeDoubleDigits(num, charsSets.p1)
+            result = handlePositiveToBeDoubleDigits(num, charsSets.p2)
             if (result !== undefined) return result
 
             // 負の数 [-255:-16] は N2 文字列セット で 2桁に エンコードする
-            result = handleNegativeToBeDoubleDigits(num, charsSets.n1)
+            result = handleNegativeToBeDoubleDigits(num, charsSets.n2)
             if (result !== undefined) return result
         })
         //console.log("encodedArr: ", encodedArr)  // e.g.: (2) ['l', 'K']
@@ -59,28 +59,24 @@ export function customBase16Enc(num, charsSet) {
 // [0:15]
 function handlePositiveToBeSingleDigit(num, charsSet) {
     if (num >= 0 && num <= 15) {
-        console.log('Value in [0:15]: ', num)
         return customBase16Enc(num, charsSet)
     }
 }
 // [-15:-1]
 function handleNegativeToBeSingleDigit(num, charsSet) {
     if (num >= -15 && num <= -1) {
-        console.log('Value in [-15:-1]: ', num)
         return customBase16Enc(Math.abs(num), charsSet)
     }
 }
 // [16:255]
 function handlePositiveToBeDoubleDigits(num, charsSet) {
     if (num >= 16 && num <= 255) {
-        console.log('Value in [16:255]: ', num)
         return customBase16Enc(num, charsSet)
     }
 }
 // [-255:-16]
 function handleNegativeToBeDoubleDigits(num, charsSet) {
     if (num >= -255 && num <= -16) {
-        console.log('Value in [-255:-16]: ', num)
         return customBase16Enc(Math.abs(num), charsSet)
     }
 }
