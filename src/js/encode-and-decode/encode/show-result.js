@@ -1,12 +1,41 @@
+import { outputToTextarea }        from 'common-utils/output-to-textarea'
+import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
 import { flagsMap
-       , resultInfo} from 'constants'
-import { zip }       from 'decode/rel-to-abs'
-
+       , resultInfo }              from 'constants'
+import { zip }                     from 'decode/rel-to-abs'
+import { showProcessingTime }      from 'enc-and-dec/show-result'
 
 export
-    { showStringSize
+    { showResult
+    , showStringSize
     , showDetailsByGroups
     }
+
+/**
+ * Show the encoded result and processing time to html and console
+ * @param {string} encodingMethodName -
+ * @param {string} inputName          -
+ * @param {number} startTime          -
+ * @param {string} encodedStrJoined   -
+ * @param {Map}    encodedArrByGroups -
+ */
+function showResult(encodingMethodName, inputName, startTime, encodedStrJoined, encodedArrByGroups) {
+
+    // Output the encoded string to textarea
+    outputToTextarea(encodedStrJoined, 'textarea-lines-data-encoded')
+
+    // Show the size of result in html and console
+    showStringSize(inputName, encodedStrJoined, 'encoded-strokes-values-size')
+
+    // Show the processing time in html and console
+    const endTime = performance.now()
+    const elapsedTime = Math.floor(endTime - startTime)
+    showProcessingTime(`${encodingMethodName}Enc()`, elapsedTime, 'encoded-strokes-values-time', isOnDataManipulatorPage())
+
+    // Show the encoding result of each group in console
+    showDetailsByGroups(inputName, encodedArrByGroups, encodingMethodName)
+}
+
 
 function showStringSize(nameOfInput, inputStr, outputElemId) {
     console.log(`//////////////////////// Result of ${nameOfInput} encoding ////////////////////////`)

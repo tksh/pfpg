@@ -1,20 +1,19 @@
-import { outputToTextarea }            from 'common-utils/output-to-textarea'
-import { isOnDataManipulatorPage }     from 'common-utils/select-output-textarea'
+import { outputToTextarea }  from 'common-utils/output-to-textarea'
 import { createCodebook
        , get63Characters
-       , get63Numbers}                 from 'enc-and-dec/lines-data/d-values/swap63/create-codebook'
-import { showProcessingTime }          from 'enc-and-dec/show-result'
-import { joinWithAmpersand }           from 'encode/join-with-ampersand'
-import { jsonToMapObj }                from 'encode/json-to-map-obj'
-import { showDetailsByGroups
-       , showStringSize}               from 'encode/show-result'
-import { tryCompress }                 from 'encode/try-compress'
+       , get63Numbers}       from 'enc-and-dec/lines-data/d-values/swap63/create-codebook'
+import { joinWithAmpersand } from 'encode/join-with-ampersand'
+import { jsonToMapObj }      from 'encode/json-to-map-obj'
+import { showResult }        from 'encode/show-result'
+import { tryCompress }       from 'encode/try-compress'
 
 
 // Replace each number of relative d values (-31 to 31) with a character from the set [0-9, a-z, A-Z, _]
 
 export function swap63Enc() {
     const startTime = performance.now()
+
+    const encodingMethodName = 'swap63'
 
     // Codebook to encode from number to character
     const codebookForEncoding = createCodebook(get63Numbers(), get63Characters())
@@ -44,30 +43,16 @@ export function swap63Enc() {
     // Choose shorter one between URLComp applied or not, by each group
     const { compressedByGroups, compressingResultArr } = tryCompress(
         encodedDval,
-        'swap63'
+        encodingMethodName
     )
     //console.log('compressedByGroups: ', compressedByGroups)
     // Map { 000 → (2) […] }
     //     0: 000 → Array [ 400, "000=13xbqDCEgLL7jANz5XKXua ... LiAh5KEXgVutC" ]
 
 
-
     // Whole group strings joined with '&' (ampersand sign)
     const wholeGroupJoined = joinWithAmpersand(compressedByGroups)
 
-
-
-    // Output to textarea
-    outputToTextarea(wholeGroupJoined, 'textarea-lines-data-encoded')
-    // 000=19gUZa0HMswFYl ... lCLwK3WhT
-
-    // Show the size of result in html and console
-    showStringSize('Lines Data', wholeGroupJoined, 'encoded-strokes-values-size')
-
-    // Show the processing time in html and console
-    const endTime = performance.now()
-    const elapsedTime = Math.floor(endTime - startTime)
-    showProcessingTime('swap63Enc()', elapsedTime, 'encoded-strokes-values-time', isOnDataManipulatorPage())
 
     // Convert the structure of values
     // from:
@@ -78,12 +63,16 @@ export function swap63Enc() {
 
     const encodedArrByGroups = new Map(
         Array.from(compressedByGroups, ([key, value]) => [
-            key, [value, 'swap63', { swap53HasNoOptionValue }]
+            key, [value, encodingMethodName, { swap53HasNoOptionValue }]
         ])
     )
 
-    // Show the encoding result of each group in console
-    showDetailsByGroups('Lines Data', encodedArrByGroups, 'swap63')
+    // Show the encoded result and processing time to html and console
+    showResult(
+        encodingMethodName, 'Lines Data',       // names
+        startTime,                              // time to calculate
+        wholeGroupJoined, encodedArrByGroups    // encoded data
+    )
 
     return encodedArrByGroups
 }

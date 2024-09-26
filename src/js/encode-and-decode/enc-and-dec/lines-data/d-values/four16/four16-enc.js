@@ -1,20 +1,17 @@
-import { outputToTextarea }            from 'common-utils/output-to-textarea'
-import { isOnDataManipulatorPage }     from 'common-utils/select-output-textarea'
 import { tryDecompress }               from 'decode/try-decompress'
 import { getFour16CharsSets }          from 'enc-and-dec/base-n/get-chars'
 import { parseBasicData }              from 'enc-and-dec/basic-data/basic-data-enc'
 import { encodeCoordsWithFourBase16 }  from 'enc-and-dec/lines-data/d-values/four16/encode-with-four-base16'
-import { showProcessingTime }          from 'enc-and-dec/show-result'
 import { joinWithAmpersand }           from 'encode/join-with-ampersand'
 import { jsonToMapObj }                from 'encode/json-to-map-obj'
-import { showDetailsByGroups
-       , showStringSize}               from 'encode/show-result'
+import { showResult }                  from 'encode/show-result'
 import { tryCompress }                 from 'encode/try-compress'
 
 
-export function four16Enc(encMethodName) {
+export function four16Enc() {
     const startTime = performance.now()
 
+    const encodingMethodName = 'four16'
     const uintN = tryDecompress(parseBasicData().n)  // e.g.: 5
     const charsSets = getFour16CharsSets()           // e.g.: abcdefghijklmnop
 
@@ -59,7 +56,7 @@ export function four16Enc(encMethodName) {
     // Choose shorter one between URLComp applied or not, by each group
     const { compressedByGroups, compressingResultArr } = tryCompress(
         encodedDvals,
-        encMethodName
+        encodingMethodName
     )
     console.log('compressedByGroups: ', compressedByGroups)
     // e.g.:  Map(2) {0 => 'F=~323b-lKaBHaabha', 1 => '0=09MCN ...
@@ -68,19 +65,6 @@ export function four16Enc(encMethodName) {
     // Whole group strings joined with '&' (ampersand sign)
     const wholeGroupJoined = joinWithAmpersand(compressedByGroups)
 
-
-
-    // Output to textarea
-    outputToTextarea(wholeGroupJoined, 'textarea-lines-data-encoded')
-    // 000=19gUZa0HMswFYl ... lCLwK3WhT
-
-    // Show the size of result in html and console
-    showStringSize('Lines Data', wholeGroupJoined, 'encoded-strokes-values-size')
-
-    // Show the processing time in html and console
-    const endTime = performance.now()
-    const elapsedTime = Math.floor(endTime - startTime)
-    showProcessingTime(`${encMethodName}Enc()`, elapsedTime, 'encoded-strokes-values-time', isOnDataManipulatorPage())
 
     // Convert the structure of values
     // from:
@@ -91,12 +75,16 @@ export function four16Enc(encMethodName) {
 
     const encodedArrByGroups = new Map(
         Array.from(compressedByGroups, ([key, value]) => [
-            key, [value, encMethodName, { four16HasNoOptionValue }]
+            key, [value, encodingMethodName, { four16HasNoOptionValue }]
         ])
     )
 
-    // Show the encoding result of each group in console
-    showDetailsByGroups('Lines Data', encodedArrByGroups, encMethodName)
+    // Show the encoded result and processing time to html and console
+    showResult(
+        encodingMethodName, 'Lines Data',       // names
+        startTime,                              // time to calculate
+        wholeGroupJoined, encodedArrByGroups    // encoded data
+    )
 
     return encodedArrByGroups
 

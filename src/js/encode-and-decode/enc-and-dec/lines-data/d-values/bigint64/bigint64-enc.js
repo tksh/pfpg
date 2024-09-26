@@ -1,19 +1,17 @@
-import { outputToTextarea }            from 'common-utils/output-to-textarea'
-import { isOnDataManipulatorPage }     from 'common-utils/select-output-textarea'
-import { tryDecompress }               from 'decode/try-decompress'
-import { base64UrlEnc }                from 'enc-and-dec/base-n/base-64url-enc'
-import { parseBasicData }              from 'enc-and-dec/basic-data/basic-data-enc'
-import { getDigitsPerChunk }           from 'enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk'
-import { showProcessingTime }          from 'enc-and-dec/show-result'
-import { joinWithAmpersand }           from 'encode/join-with-ampersand'
-import { jsonToMapObj }                from 'encode/json-to-map-obj'
-import { showDetailsByGroups
-       , showStringSize}               from 'encode/show-result'
-import { tryCompress }                 from 'encode/try-compress'
+import { tryDecompress }     from 'decode/try-decompress'
+import { base64UrlEnc }      from 'enc-and-dec/base-n/base-64url-enc'
+import { parseBasicData }    from 'enc-and-dec/basic-data/basic-data-enc'
+import { getDigitsPerChunk } from 'enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk'
+import { joinWithAmpersand } from 'encode/join-with-ampersand'
+import { jsonToMapObj }      from 'encode/json-to-map-obj'
+import { showResult }        from 'encode/show-result'
+import { tryCompress }       from 'encode/try-compress'
 
 
 export function bigint64Enc() {
     const startTime = performance.now()
+
+    const encodingMethodName = 'bigint64'
 
     // Get the lines data
 
@@ -43,7 +41,7 @@ export function bigint64Enc() {
     // Choose shorter one between URLComp applied or not, by each group
     const { compressedByGroups, compressingResultArr } = tryCompress(
         encodedDvals,
-        'bigint64'
+        encodingMethodName
     )
     //console.log('compressedByGroups: ', compressedByGroups)
     // Map(5) {'1' => '0=129CaJGsAQK33q3FDaoQNuZs6u8XQW_EYegViBcDQ0gxtk-YqavrFw0V3KXggctKtnLfj_rl3ZzTzitfvmVp-Wz09Um3k4e8YyZ9kGHG0aT', '2' => '0=129ziJH ...
@@ -52,18 +50,6 @@ export function bigint64Enc() {
     const wholeGroupJoined = joinWithAmpersand(compressedByGroups)
 
 
-    // Output to textarea
-    outputToTextarea(wholeGroupJoined, 'textarea-lines-data-encoded')
-    // 0=129CaJGsAQK33q3FDaoQNuZs6u8XQW_EYegViBcDQ0gxtk-YqavrFw0V3KXggctKtnLfj_rl3ZzTzitfvmVp-Wz09Um3k4e8YyZ9kGHG0aT&0=129ziJH ...
-
-    // Show the size of result in html and console
-    showStringSize('Lines Data', wholeGroupJoined, 'encoded-strokes-values-size')
-
-    // Show the processing time in html and console
-    const endTime = performance.now()
-    const elapsedTime = Math.floor(endTime - startTime)
-    showProcessingTime('bigint64Enc()', elapsedTime, 'encoded-strokes-values-time', isOnDataManipulatorPage())
-
     // Convert the structure of values
     // from:
     //     Values: encoded string
@@ -71,15 +57,20 @@ export function bigint64Enc() {
     //     Values: [encoded string, encoding-method name, configuration-value object]
     const encodedArrByGroups = new Map(
         Array.from(compressedByGroups, ([key, value]) => [
-            key, [value, 'bigint64', { digitsPerChunk }]
+            key, [value, encodingMethodName, { digitsPerChunk }]
         ])
     )
 
-    // Show the encoding result of each group in console
-    showDetailsByGroups('Lines Data', encodedArrByGroups, 'bigint64')
+    // Show the encoded result and processing time to html and console
+    showResult(
+        encodingMethodName, 'Lines Data',       // names
+        startTime,                              // time to calculate
+        wholeGroupJoined, encodedArrByGroups    // encoded data
+    )
 
     return encodedArrByGroups
 }
+
 
 
 // Bigint64 encode
