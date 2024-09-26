@@ -1,11 +1,12 @@
-import { tryDecompress }     from 'decode/try-decompress'
-import { base64UrlEnc }      from 'enc-and-dec/base-n/base-64url-enc'
-import { parseBasicData }    from 'enc-and-dec/basic-data/basic-data-enc'
-import { getDigitsPerChunk } from 'enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk'
-import { joinWithAmpersand } from 'encode/join-with-ampersand'
-import { jsonToMapObj }      from 'encode/json-to-map-obj'
-import { showResult }        from 'encode/show-result'
-import { tryCompress }       from 'encode/try-compress'
+import { tryDecompress }                from 'decode/try-decompress'
+import { base64UrlEnc }                 from 'enc-and-dec/base-n/base-64url-enc'
+import { parseBasicData }               from 'enc-and-dec/basic-data/basic-data-enc'
+import { getDigitsPerChunk }            from 'enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk'
+import { joinWithAmpersand }            from 'encode/join-with-ampersand'
+import { jsonToMapObj }                 from 'encode/json-to-map-obj'
+import { showResult }                   from 'encode/show-result'
+import { convertResultsFromStrToArray } from 'encode/transform-encoded-result'
+import { tryCompress }                  from 'encode/try-compress'
 
 
 export function bigint64Enc() {
@@ -39,7 +40,7 @@ export function bigint64Enc() {
     // Format: [group-colors]=[widths-and-counts]-[d-values]
 
     // Choose shorter one between URLComp applied or not, by each group
-    const { compressedByGroups, compressingResultArr } = tryCompress(
+    const { compressedByGroups, _ } = tryCompress(
         encodedDvals,
         encodingMethodName
     )
@@ -49,17 +50,8 @@ export function bigint64Enc() {
     // Whole group strings joined with '&' (ampersand sign)
     const wholeGroupJoined = joinWithAmpersand(compressedByGroups)
 
-
     // Convert the structure of values
-    // from:
-    //     Values: encoded string
-    // to:
-    //     Values: [encoded string, encoding-method name, configuration-value object]
-    const encodedArrByGroups = new Map(
-        Array.from(compressedByGroups, ([key, value]) => [
-            key, [value, encodingMethodName, { digitsPerChunk }]
-        ])
-    )
+    const encodedArrByGroups = convertResultsFromStrToArray(compressedByGroups, encodingMethodName, digitsPerChunk)
 
     // Show the encoded result and processing time to html and console
     showResult(

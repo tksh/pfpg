@@ -1,11 +1,12 @@
-import { tryDecompress }               from 'decode/try-decompress'
-import { getFour16CharsSets }          from 'enc-and-dec/base-n/get-chars'
-import { parseBasicData }              from 'enc-and-dec/basic-data/basic-data-enc'
-import { encodeCoordsWithFourBase16 }  from 'enc-and-dec/lines-data/d-values/four16/encode-with-four-base16'
-import { joinWithAmpersand }           from 'encode/join-with-ampersand'
-import { jsonToMapObj }                from 'encode/json-to-map-obj'
-import { showResult }                  from 'encode/show-result'
-import { tryCompress }                 from 'encode/try-compress'
+import { tryDecompress }                from 'decode/try-decompress'
+import { getFour16CharsSets }           from 'enc-and-dec/base-n/get-chars'
+import { parseBasicData }               from 'enc-and-dec/basic-data/basic-data-enc'
+import { encodeCoordsWithFourBase16 }   from 'enc-and-dec/lines-data/d-values/four16/encode-with-four-base16'
+import { joinWithAmpersand }            from 'encode/join-with-ampersand'
+import { jsonToMapObj }                 from 'encode/json-to-map-obj'
+import { showResult }                   from 'encode/show-result'
+import { convertResultsFromStrToArray } from 'encode/transform-encoded-result'
+import { tryCompress }                  from 'encode/try-compress'
 
 
 export function four16Enc() {
@@ -54,7 +55,7 @@ export function four16Enc() {
 
 
     // Choose shorter one between URLComp applied or not, by each group
-    const { compressedByGroups, compressingResultArr } = tryCompress(
+    const { compressedByGroups, _ } = tryCompress(
         encodedDvals,
         encodingMethodName
     )
@@ -65,19 +66,9 @@ export function four16Enc() {
     // Whole group strings joined with '&' (ampersand sign)
     const wholeGroupJoined = joinWithAmpersand(compressedByGroups)
 
-
     // Convert the structure of values
-    // from:
-    //     Values: encoded string
-    // to:
-    //     Values: [encoded string, encoding-method name, configuration-value object]
-    const four16HasNoOptionValue = undefined
-
-    const encodedArrByGroups = new Map(
-        Array.from(compressedByGroups, ([key, value]) => [
-            key, [value, encodingMethodName, { four16HasNoOptionValue }]
-        ])
-    )
+    const configValue = undefined
+    const encodedArrByGroups = convertResultsFromStrToArray(compressedByGroups, encodingMethodName, configValue)
 
     // Show the encoded result and processing time to html and console
     showResult(

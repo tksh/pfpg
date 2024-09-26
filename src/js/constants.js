@@ -29,6 +29,7 @@ export const VIEWBOX_START_Y = 0
 //     [0] bruteforce53-enc
 //     [1] bigint64-enc
 //     [2] swap63-enc
+//     [3] four16-enc
 export const flagsMap = new Map([
     ['1st', new Map([
                 ['uncompressed',  '~'],
@@ -60,6 +61,28 @@ flagsMap.get('2nd').forEach((value, key) => {
     reverse2nd.set(value, key)
 })
 flagsMap.set('rev_2nd', reverse2nd)
+
+// Result
+console.log("flagsMap: ", flagsMap)
+// flagsMap:
+// Map(4) { 1st → Map(2), 2nd → Map(4), rev_1st → Map(2), rev_2nd → Map(4) }
+//   ​size: 4
+//   ​<entries>
+//     ​​0: 1st → Map { uncompressed → "~", URLCompressor → "0" }
+//     ​​1: 2nd → Map(4) { bruteforce53 → "0", bigint64 → "1", swap63 → "2", … }
+//     ​​2: rev_1st → Map { "~" → "uncompressed", 0 → "URLCompressor" }
+//     ​​3: rev_2nd → Map(4) { 0 → "bruteforce53", 1 → "bigint64", 2 → "swap63", … }
+
+
+// The sets of encoding method name and its configuration value
+export const encodingMethodAndConfig = new Map([
+    ['bruteforce53', 'baseXNumber'],
+    ['bigint64',     'digitsPerChunk'],
+    ['swap63',       'swap53HasNoConfigValue'],
+    ['four16',       'four16HasNoConfigValue'],
+])
+
+
 
 
 // To store the info for console output

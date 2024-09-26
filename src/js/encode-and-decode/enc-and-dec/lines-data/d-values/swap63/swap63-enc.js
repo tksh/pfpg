@@ -1,11 +1,12 @@
-import { outputToTextarea }  from 'common-utils/output-to-textarea'
+import { outputToTextarea }             from 'common-utils/output-to-textarea'
 import { createCodebook
        , get63Characters
-       , get63Numbers}       from 'enc-and-dec/lines-data/d-values/swap63/create-codebook'
-import { joinWithAmpersand } from 'encode/join-with-ampersand'
-import { jsonToMapObj }      from 'encode/json-to-map-obj'
-import { showResult }        from 'encode/show-result'
-import { tryCompress }       from 'encode/try-compress'
+       , get63Numbers}                  from 'enc-and-dec/lines-data/d-values/swap63/create-codebook'
+import { joinWithAmpersand }            from 'encode/join-with-ampersand'
+import { jsonToMapObj }                 from 'encode/json-to-map-obj'
+import { showResult }                   from 'encode/show-result'
+import { convertResultsFromStrToArray } from 'encode/transform-encoded-result'
+import { tryCompress }                  from 'encode/try-compress'
 
 
 // Replace each number of relative d values (-31 to 31) with a character from the set [0-9, a-z, A-Z, _]
@@ -41,7 +42,7 @@ export function swap63Enc() {
     // Format: [group-colors]=[widths-and-counts]-[d-values]
 
     // Choose shorter one between URLComp applied or not, by each group
-    const { compressedByGroups, compressingResultArr } = tryCompress(
+    const { compressedByGroups, _ } = tryCompress(
         encodedDval,
         encodingMethodName
     )
@@ -53,19 +54,9 @@ export function swap63Enc() {
     // Whole group strings joined with '&' (ampersand sign)
     const wholeGroupJoined = joinWithAmpersand(compressedByGroups)
 
-
     // Convert the structure of values
-    // from:
-    //     Values: encoded string
-    // to:
-    //     Values: [encoded string, encoding-method name, configuration-value object]
-    const swap53HasNoOptionValue = undefined
-
-    const encodedArrByGroups = new Map(
-        Array.from(compressedByGroups, ([key, value]) => [
-            key, [value, encodingMethodName, { swap53HasNoOptionValue }]
-        ])
-    )
+    const configValue = undefined
+    const encodedArrByGroups = convertResultsFromStrToArray(compressedByGroups, encodingMethodName, configValue)
 
     // Show the encoded result and processing time to html and console
     showResult(

@@ -4,7 +4,6 @@ export
     }
 
 
-
 function createMapFromNestedArrays(array) {
     const map = new Map()
 
@@ -18,7 +17,7 @@ function createMapFromNestedArrays(array) {
     })
 
     return map
-}              // test comment
+}
 
 /*
 // Test:
