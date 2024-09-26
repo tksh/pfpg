@@ -1,9 +1,11 @@
 import { flagsMap
-       , resultInfo} from 'constants'
+       , resultInfo}                   from 'constants'
+import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
 
-export function tryCompress(encodedDval, encodedAttrsExceptsDvals, encodingMethodName) {
-    const encodedWidthsAndCounts = encodedAttrsExceptsDvals.widthsAndCounts
-    const encodedGroupColors     = encodedAttrsExceptsDvals.groupColors
+
+export function tryCompress(encodedDval, encodingMethodName) {
+    const encodedWidthsAndCounts = getEncodedAttrsExceptsDvals().widthsAndCounts
+    const encodedGroupColors     = getEncodedAttrsExceptsDvals().groupColors
 
     const compressedByGroups = new Map()
 

@@ -14,7 +14,6 @@ import { calculateLimitsForBaseXSkipRange
 import { encodeFreqDiff }              from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-freq-diff'
 import { storeShorter }                from 'enc-and-dec/lines-data/d-values/bruteforce53/store-shorter'
 import { showProcessingTime }          from 'enc-and-dec/show-result'
-import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
 import { joinWithAmpersand }           from 'encode/join-with-ampersand'
 import { jsonToMapObj }                from 'encode/json-to-map-obj'
 import { showDetailsByGroups
@@ -205,13 +204,9 @@ export function bruteforce53Enc() {
         // Format: [group-colors]=[widths-and-counts]-[d-values]
 
 
-        // Get the encoded strings of widths-and-counts and group-colors
-        const encodedAttrsExceptsDvals = getEncodedAttrsExceptsDvals()
-
         // Choose shorter one between URLComp applied or not, by each group
         const { compressedByGroups, compressingResultArr } = tryCompress(
             encodedDvals,
-            encodedAttrsExceptsDvals,
             'bruteforce53'
         )
         console.log(`baseXNumber = ${baseXNumber}, compressedByGroups: `, compressedByGroups)

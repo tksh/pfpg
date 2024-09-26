@@ -15,6 +15,7 @@ import { storeShortest }     from 'encode/store-shortest'
 import { bigint64Enc }       from 'enc-and-dec/lines-data/d-values/bigint64/bigint64-enc'
 import { bruteforce53Enc }   from 'enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc'
 import { swap63Enc }         from 'enc-and-dec/lines-data/d-values/swap63/swap63-enc'
+import { four16Enc }         from 'enc-and-dec/lines-data/d-values/four16/four16-enc'
 
 /**
  * Object containing all available encoding methods.
@@ -24,6 +25,7 @@ const ENCODING_METHODS = {
     bruteforce53: bruteforce53Enc,
     bigint64    : bigint64Enc,
     swap63      : swap63Enc,
+    four16      : four16Enc,
 }
 
 /**
@@ -32,7 +34,8 @@ const ENCODING_METHODS = {
  * @returns {Array<Function>} An array of encoding method functions.
  */
 function getEncodingMethods (numberOfMethods) {
-    const methods = ["bruteforce53", "bigint64", "swap63"].slice(0, numberOfMethods)
+    const methods = Object.keys(ENCODING_METHODS).slice(0, numberOfMethods)
+    // const methods = ["bruteforce53", "bigint64", "swap63"].slice(0, numberOfMethods)
     return methods.map((method) => ENCODING_METHODS[method])
 }
 

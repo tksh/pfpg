@@ -5,7 +5,6 @@ import { getFour16CharsSets }          from 'enc-and-dec/base-n/get-chars'
 import { parseBasicData }              from 'enc-and-dec/basic-data/basic-data-enc'
 import { encodeCoordsWithFourBase16 }  from 'enc-and-dec/lines-data/d-values/four16/encode-with-four-base16'
 import { showProcessingTime }          from 'enc-and-dec/show-result'
-import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
 import { joinWithAmpersand }           from 'encode/join-with-ampersand'
 import { jsonToMapObj }                from 'encode/json-to-map-obj'
 import { showDetailsByGroups
@@ -13,7 +12,7 @@ import { showDetailsByGroups
 import { tryCompress }                 from 'encode/try-compress'
 
 
-export function four16Enc() {
+export function four16Enc(encMethodName) {
     const startTime = performance.now()
 
     const uintN = tryDecompress(parseBasicData().n)  // e.g.: 5
@@ -56,14 +55,11 @@ export function four16Enc() {
     //console.log('encodedDvals: ', encodedDvals)  // e.g.: Map(2) {0 => 'lKaBHaabha', 1 => 'babfB ...
 
 
-    // Get the encoded strings of widths-and-counts and group-colors
-    const encodedAttrsExceptsDvals = getEncodedAttrsExceptsDvals()
 
     // Choose shorter one between URLComp applied or not, by each group
     const { compressedByGroups, compressingResultArr } = tryCompress(
         encodedDvals,
-        encodedAttrsExceptsDvals,
-        'four16'
+        encMethodName
     )
     console.log('compressedByGroups: ', compressedByGroups)
     // e.g.:  Map(2) {0 => 'F=~323b-lKaBHaabha', 1 => '0=09MCN ...
@@ -84,7 +80,7 @@ export function four16Enc() {
     // Show the processing time in html and console
     const endTime = performance.now()
     const elapsedTime = Math.floor(endTime - startTime)
-    showProcessingTime('four16Enc()', elapsedTime, 'encoded-strokes-values-time', isOnDataManipulatorPage())
+    showProcessingTime(`${encMethodName}Enc()`, elapsedTime, 'encoded-strokes-values-time', isOnDataManipulatorPage())
 
     // Convert the structure of values
     // from:
@@ -95,12 +91,12 @@ export function four16Enc() {
 
     const encodedArrByGroups = new Map(
         Array.from(compressedByGroups, ([key, value]) => [
-            key, [value, 'four16', { four16HasNoOptionValue }]
+            key, [value, encMethodName, { four16HasNoOptionValue }]
         ])
     )
 
     // Show the encoding result of each group in console
-    showDetailsByGroups('Lines Data', encodedArrByGroups, 'four16')
+    showDetailsByGroups('Lines Data', encodedArrByGroups, encMethodName)
 
     return encodedArrByGroups
 

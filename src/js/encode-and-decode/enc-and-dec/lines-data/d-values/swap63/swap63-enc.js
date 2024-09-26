@@ -4,7 +4,6 @@ import { createCodebook
        , get63Characters
        , get63Numbers}                 from 'enc-and-dec/lines-data/d-values/swap63/create-codebook'
 import { showProcessingTime }          from 'enc-and-dec/show-result'
-import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
 import { joinWithAmpersand }           from 'encode/join-with-ampersand'
 import { jsonToMapObj }                from 'encode/json-to-map-obj'
 import { showDetailsByGroups
@@ -42,14 +41,9 @@ export function swap63Enc() {
 
     // Format: [group-colors]=[widths-and-counts]-[d-values]
 
-
-    // Get the encoded strings of widths-and-counts and group-colors
-    const encodedAttrsExceptsDvals = getEncodedAttrsExceptsDvals()
-
     // Choose shorter one between URLComp applied or not, by each group
     const { compressedByGroups, compressingResultArr } = tryCompress(
         encodedDval,
-        encodedAttrsExceptsDvals,
         'swap63'
     )
     //console.log('compressedByGroups: ', compressedByGroups)

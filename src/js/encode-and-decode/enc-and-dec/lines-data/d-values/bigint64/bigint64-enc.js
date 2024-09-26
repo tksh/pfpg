@@ -5,7 +5,6 @@ import { base64UrlEnc }                from 'enc-and-dec/base-n/base-64url-enc'
 import { parseBasicData }              from 'enc-and-dec/basic-data/basic-data-enc'
 import { getDigitsPerChunk }           from 'enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk'
 import { showProcessingTime }          from 'enc-and-dec/show-result'
-import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
 import { joinWithAmpersand }           from 'encode/join-with-ampersand'
 import { jsonToMapObj }                from 'encode/json-to-map-obj'
 import { showDetailsByGroups
@@ -41,14 +40,9 @@ export function bigint64Enc() {
 
     // Format: [group-colors]=[widths-and-counts]-[d-values]
 
-
-    // Get the encoded strings of widths-and-counts and group-colors
-    const encodedAttrsExceptsDvals = getEncodedAttrsExceptsDvals()
-
     // Choose shorter one between URLComp applied or not, by each group
     const { compressedByGroups, compressingResultArr } = tryCompress(
         encodedDvals,
-        encodedAttrsExceptsDvals,
         'bigint64'
     )
     //console.log('compressedByGroups: ', compressedByGroups)
