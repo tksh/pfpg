@@ -38,7 +38,7 @@ function get63Numbers() {
 
 function get63Characters() {
     let zeroToNine = []
-    for (i = 0; i < 10; i++) {
+    for (let i = 0; i < 10; i++) {
         zeroToNine.push(i.toString())
     }
     //console.log(zeroToNine)
