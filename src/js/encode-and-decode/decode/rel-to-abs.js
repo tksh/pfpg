@@ -13,7 +13,7 @@ export function relToAbs(relativeDvals, widthsAndCounts) {
 
     let absoluteCoordinates = [] // [[x1, y1, x2, y2], [x1, y1, x2, y2], ...]
 
-    for (i = 0; i < x1Arr.length; i++) {
+    for (let i = 0; i < x1Arr.length; i++) {
         if (firstlineIndexArr.includes(i)) {
 
             // x1 and y1 of each stroke-width's firstline is already as absolute value
