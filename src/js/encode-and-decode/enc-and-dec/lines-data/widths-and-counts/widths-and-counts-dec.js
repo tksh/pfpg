@@ -1,4 +1,5 @@
-import { base53Dec } from 'enc-and-dec/base-n/base-53-dec'
+import { base53Dec }     from 'enc-and-dec/base-n/base-53-dec'
+import { runningReduce } from'libs/deno-std/running-reduce'
 
 
 // Decode the count and width, and generate the firstline and lastline
@@ -52,18 +53,4 @@ export function decodeWidthsAndCounts(encodedStr) {
         widths,            // number[]
         counts             // number[]
     }
-}
-
-
-
-// Convert to Javascript from Deno standard library running_reduce.ts
-
-// https://github.com/denoland/deno_std/blob/main/collections/running_reduce.ts
-// Copyright 2018-2023 the Deno authors. All rights reserved. MIT license.
-
-function runningReduce(array, reducer, initialValue) {
-    let currentResult = initialValue
-    return array.map((el, currentIndex) =>
-        currentResult = reducer(currentResult, el, currentIndex)
-    )
 }

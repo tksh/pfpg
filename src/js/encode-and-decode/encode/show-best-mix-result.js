@@ -1,5 +1,5 @@
 import { flagsMap } from 'constants'
-import { zip }      from 'decode/rel-to-abs'
+import { zip }      from 'libs/deno-std/zip'
 
 // For best mix [2|3] encoding by each group
 export function showBestMixResult(dataToShow, textareaId) {

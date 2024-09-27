@@ -1,8 +1,8 @@
 import { getUintNFromUrlParams } from 'decode/get-uint-n'
 import { getFour16CharsSets }    from 'enc-and-dec/base-n/get-chars'
-import { chunk }                 from 'enc-and-dec/lines-data/d-values/bigint64/bigint64-dec'
 import { diffToRel }             from 'enc-and-dec/lines-data/d-values/bruteforce53/diff-to-rel'
 import { decodeWithFourBase16 }  from 'enc-and-dec/lines-data/d-values/four16/decode-with-four-base16'
+import { chunk }                 from 'libs/deno-std/chunk'
 
 export function four16Dec(encodedDvalsStr) {
 
