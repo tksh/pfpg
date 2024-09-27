@@ -84,7 +84,7 @@ function prependUnderscores(str, isPositive) {
 
 
 // Calculate the threshold for target range of BaseX and Base52
-function calculateLimitsForBaseXSkipRange(baseXNumber, minimumDiffValue, maximumDiffValue) {
+function calculateLimitsForBaseXSkipRange(baseXNumber, diffValueRange) {
     // Get the baseX encoding target range (values within this range will be encoded)
     const baseXTargetRangeStart = 0 - getHalfOfBaseXRange(baseXNumber)
     const baseXTargetRangeEnd   =     getHalfOfBaseXRange(baseXNumber) + 9
@@ -94,7 +94,7 @@ function calculateLimitsForBaseXSkipRange(baseXNumber, minimumDiffValue, maximum
     // Get the range to skip BaseX encoding (values outside this range will be skipped and Base52 encoding will be applied)
     const baseXSkipRangeLowerLimit = baseXTargetRangeStart - 1
     const baseXSkipRangeUpperLimit = baseXTargetRangeEnd   + 1
-    console.log(`Range to skip for Base${baseXNumber} encoding: minimum diff value = ${minimumDiffValue} ... ${baseXSkipRangeLowerLimit} / ${baseXSkipRangeUpperLimit} ... ${maximumDiffValue} = maximum diff value`)
+    console.log(`Range to skip for Base${baseXNumber} encoding: minimum diff value = ${diffValueRange.min} ... ${baseXSkipRangeLowerLimit} / ${baseXSkipRangeUpperLimit} ... ${diffValueRange.max} = maximum diff value`)
     // e.g.: -124  <  -41  |  50  <  124
 
     return {

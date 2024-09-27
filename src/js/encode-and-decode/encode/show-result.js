@@ -50,13 +50,6 @@ function showStringSize(inputName, inputStr, outputElemId) {
 }
 
 function showDetailsByGroups(inputName, encodedArrByGroupsMap, encodingMethodName) {
-    console.log('encodedArrByGroupsMap: ', encodedArrByGroupsMap)
-    /*
-        Map(2) {'0' => Array(3), '1' => Array(3)}
-            key: "0"
-            value: (3) ['A=08T6FAhdHhNtMe0ws2FHUnU6v', 23, 'bigint64']
-            ...
-    */
 
     // Get the details of encoding result
     const keys   = [...encodedArrByGroupsMap.keys()]

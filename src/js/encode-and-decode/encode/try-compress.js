@@ -1,9 +1,10 @@
 import { flagsMap
        , resultInfo}                   from 'constants'
 import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
+import { URLCompressor }               from 'libs/url-comp-0-1-0/url-comp'
 
 
-export function tryCompress(encodedDval, encodingMethodName) {
+export function tryCompress(encodedDval, encodingMethodName, baseXNumber) {
     const encodedWidthsAndCounts = getEncodedAttrsExceptsDvals().widthsAndCounts
     const encodedGroupColors     = getEncodedAttrsExceptsDvals().groupColors
 
@@ -42,8 +43,13 @@ export function tryCompress(encodedDval, encodingMethodName) {
         lengthBeforeComp.push(uncompressed.length + 1)
         lengthAfterComp.push(bestCompressedData.length + 1)
 
-        // [length-of-uncompressed, length-of-best-result, name-of-best-method
-        compressingResultArr.push([uncompressed.length + 1, bestCompressedData.length + 1, bestMethodName])
+        // [group ID, length of uncompressed encoded lines data, length of best compression result of encoded lines data, name of best compression method]
+        compressingResultArr.push([gId, uncompressed.length + 1, bestCompressedData.length + 1, bestMethodName])
+
+        // Append the data to Map with group ID key like `bruteforce53_gId=${gId}`
+        const previousBaseXData = resultInfo.get(`bruteforce53_gId=${gId}`) ?? [['gId', 'baseXNumber', 'unCompressed', 'bestCompressed', 'bestMethodName']]
+        const currentBaseXDataAdded = [...previousBaseXData, [gId, baseXNumber, uncompressed.length + 1, bestCompressedData.length + 1, bestMethodName]]
+        resultInfo.set(`bruteforce53_gId=${gId}`, currentBaseXDataAdded)
     }
 
     // Calculate and compare the length of finished strings to output to console.

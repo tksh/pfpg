@@ -8,18 +8,18 @@ export function simplifyMap(complexMap) {
 
 // 使用例
 const complexMap = new Map([
-    ['1', ['some',     4, 'STRING']],
-    ['2', ['thing',    5, 'STRING']],
-    ['3', ['to write', 8, 'STRING']]
+    ['1', ['the',     4, object]],
+    ['2', ['encoded', 7, object]],
+    ['3', ['string',  6, object]]
 ])
 
 const simplifiedMap = simplifyMap(complexMap)
 console.log(simplifiedMap)
 
 Map(3) {
-    '1' => 'some',
-    '2' => 'thing',
-    '3' => 'to write'
+    '1' => 'the',
+    '2' => 'encoded',
+    '3' => 'string'
 }
 
 */

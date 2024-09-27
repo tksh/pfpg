@@ -21,9 +21,9 @@ export function four16Enc() {
     // For under UInt7Portray, Input the diff-by-row values
     if (uintN <= 7) {
         // Lines Data Aggregated for Encoding
-        const aggDataMap = jsonToMapObj(`textarea-agg-data-for-comp-uploaded`)
-        //console.log('aggDataMap: ', aggDataMap)         // Map(2) {'0' => {…}, '1' => {…}} <- Group ID keys are string
-        const diffValues = aggDataMap.entries()           // MapIterator {'0' => {…}, '1' => {…}}
+        const aggDataByGroups = jsonToMapObj(`textarea-agg-data-for-comp-uploaded`)
+        //console.log('aggDataByGroups: ', aggDataByGroups)         // Map(2) {'0' => {…}, '1' => {…}} <- Group ID keys are string
+        const diffValues = aggDataByGroups.entries()           // MapIterator {'0' => {…}, '1' => {…}}
 
         diffValues.forEach(([gId, values]) => {
             const coords = values.d.relative.diff_by_row  // {x1: Array(2), y1: Array(2), x2: Array(2), y2: Array(2)}

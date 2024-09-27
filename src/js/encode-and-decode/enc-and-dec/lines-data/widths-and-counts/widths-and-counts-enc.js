@@ -4,11 +4,11 @@ import { jsonToMapObj } from 'encode/json-to-map-obj'
 
 export function encodeWidthsAndCounts() {
     // Read the Lines Data Aggregated for Encoding from .json as Map()
-    const aggDataMap = jsonToMapObj(`textarea-agg-data-for-comp-uploaded`)
+    const aggDataByGroups = jsonToMapObj(`textarea-agg-data-for-comp-uploaded`)
 
     const encodedStrByGroups = new Map()
 
-    for (let agg of aggDataMap.values()) {
+    for (let agg of aggDataByGroups.values()) {
         const widths = agg.stroke_width.widths
         const counts = agg.stroke_width.counts
 
