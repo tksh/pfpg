@@ -60,16 +60,13 @@ export function four16Enc() {
         encodingMethodName
     )
     console.log('compressedByGroups: ', compressedByGroups)
-    // e.g.:  Map(2) {0 => 'F=~323b-lKaBHaabha', 1 => '0=09MCN ...
-
 
     // Whole group strings joined with '&' (ampersand sign)
     const wholeGroupJoined = joinWithAmpersand(compressedByGroups)
-    console.log('||||wholeGroupJoined: ', wholeGroupJoined)
+
     // Convert the structure of values
     const configValue = undefined
     const encodedArrByGroups = convertResultsFromStrToArray(compressedByGroups, encodingMethodName, configValue)
-    console.log('||||encodedArrByGroups: ', encodedArrByGroups)
 
     // Show the encoded result and processing time to html and console
     showResult(
