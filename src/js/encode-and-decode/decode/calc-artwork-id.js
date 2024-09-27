@@ -1,4 +1,4 @@
-import { bech32, bech32m } from 'decode/bech32-and-bech32m'
+import { bech32, bech32m } from 'libs/bech32-and-bech32m'
 
 export async function calculateArtworkId(linesData) {
 

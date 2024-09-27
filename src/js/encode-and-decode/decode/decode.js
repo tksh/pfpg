@@ -1,6 +1,7 @@
 import { outputToTextarea }       from 'common-utils/output-to-textarea'
 import { decodeUrlParams }        from 'common-utils/read-url-params'
 import { selectOutputTextareaId } from 'common-utils/select-output-textarea'
+import { calculateArtworkId }     from 'decode/calc-artwork-id'
 import { relToAbs }               from 'decode/rel-to-abs'
 import { generateSvg }            from 'decode/generate-svg'
 import { showProcessingTime }     from 'enc-and-dec/show-result'
@@ -52,7 +53,7 @@ async function decode(isRelative, isDataManipulatorPage) {
         // {viewbox: '0 0 127 127', uintN: 7, width: 127, height: 127}
 
 
-        // Removing uncomment to get the artwork ID
+        // Uncomment to get the artwork ID
         // // Calculate the artwork ID from absolute lines data
         // const artworkId = await calculateArtworkId(decodedParams.linesData)
         // console.log("artworkId.hexHash: ", artworkId.hexHash)
