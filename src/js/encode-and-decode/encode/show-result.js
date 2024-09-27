@@ -13,42 +13,43 @@ export
 
 /**
  * Show the encoded result and processing time to html and console
- * @param {string} encodingMethodName -
- * @param {string} inputName          -
- * @param {number} startTime          -
- * @param {string} encodedStrJoined   -
- * @param {Map}    encodedArrByGroups -
+ * @param {string} encodingMethodName - e.g.: 'bruteforce53', 'bigint64'
+ * @param {number} startTime
+ * @param {string} encodedStrJoined   - e.g.: 'F=~323b-lKaRXaarxa&0=09MCNiZae ... YlU'
+ * @param {Map}    encodedArrByGroups - e.g.: Map(2) {0 => Array(3), 1 => Array(3)}
+ *                                              Array(3) contains [encoded data {string}, method name {string}, config value {object}]
  */
-function showResult(encodingMethodName, inputName, startTime, encodedStrJoined, encodedArrByGroups) {
+function showResult(encodingMethodName, startTime, encodedStrJoined, encodedArrByGroups) {
+    const inputName = 'Lines Data'
 
     // Output the encoded string to textarea
     outputToTextarea(encodedStrJoined, 'textarea-lines-data-encoded')
 
     // Show the size of result in html and console
-    showStringSize(inputName, encodedStrJoined, 'encoded-strokes-values-size')
+    showStringSize(inputName, encodedStrJoined, 'encoded-lines-data-size')
 
     // Show the processing time in html and console
     const endTime = performance.now()
     const elapsedTime = Math.floor(endTime - startTime)
-    showProcessingTime(`${encodingMethodName}Enc()`, elapsedTime, 'encoded-strokes-values-time', isOnDataManipulatorPage())
+    showProcessingTime(`${encodingMethodName}Enc()`, elapsedTime, 'encoded-lines-data-time', isOnDataManipulatorPage())
 
     // Show the encoding result of each group in console
     showDetailsByGroups(inputName, encodedArrByGroups, encodingMethodName)
 }
 
 
-function showStringSize(nameOfInput, inputStr, outputElemId) {
-    console.log(`//////////////////////// Result of ${nameOfInput} encoding ////////////////////////`)
+function showStringSize(inputName, inputStr, outputElemId) {
+    console.log(`//////////////////////// Result of ${inputName} encoding ////////////////////////`)
 
     // Show the size in html
     const outputTextElem = document.getElementById(`${outputElemId}`)
-    outputTextElem.textContent = `Encoded ${nameOfInput} size: ${inputStr.length} characters (bytes)`
+    outputTextElem.textContent = `Encoded ${inputName} size: ${inputStr.length} characters (bytes)`
 
     // Show the size in console
-    console.log(`Encoded as ${nameOfInput} successfully, Size: `, inputStr.length)
+    console.log(`Encoded as ${inputName} successfully, Size: `, inputStr.length)
 }
 
-function showDetailsByGroups(nameOfInput, encodedArrByGroupsMap, encodingMethodName) {
+function showDetailsByGroups(inputName, encodedArrByGroupsMap, encodingMethodName) {
     console.log('encodedArrByGroupsMap: ', encodedArrByGroupsMap)
     /*
         Map(2) {'0' => Array(3), '1' => Array(3)}
@@ -114,7 +115,7 @@ function showDetailsByGroups(nameOfInput, encodedArrByGroupsMap, encodingMethodN
     const flag2Name = flag2.map(char => flagsMap.get('rev_2nd').get(`${char}`))
 
     // Show in console
-    console.log(`//////////////////////// Result of ${nameOfInput} encoding details by group ////////////////////////`)
+    console.log(`//////////////////////// Result of ${inputName} encoding details by group ////////////////////////`)
     console.log('Group ID: ', keys)                                     // e.g.: (3) [0, 1, 2]
     console.log('Group colors encoded: ', groupColors)                  // e.g.: (3) ['A', '0', 'F']
     console.log('Length of encoded strings: ', lengthOfValues)          // e.g.: (3) [23, 3910, 161]

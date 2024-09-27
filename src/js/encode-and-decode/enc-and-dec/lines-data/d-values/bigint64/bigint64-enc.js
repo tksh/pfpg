@@ -45,7 +45,6 @@ export function bigint64Enc() {
         encodingMethodName
     )
     //console.log('compressedByGroups: ', compressedByGroups)
-    // Map(5) {'1' => '0=129CaJGsAQK33q3FDaoQNuZs6u8XQW_EYegViBcDQ0gxtk-YqavrFw0V3KXggctKtnLfj_rl3ZzTzitfvmVp-Wz09Um3k4e8YyZ9kGHG0aT', '2' => '0=129ziJH ...
 
     // Whole group strings joined with '&' (ampersand sign)
     const wholeGroupJoined = joinWithAmpersand(compressedByGroups)
@@ -55,9 +54,9 @@ export function bigint64Enc() {
 
     // Show the encoded result and processing time to html and console
     showResult(
-        encodingMethodName, 'Lines Data',       // names
-        startTime,                              // time to calculate
-        wholeGroupJoined, encodedArrByGroups    // encoded data
+        encodingMethodName,
+        startTime,
+        wholeGroupJoined, encodedArrByGroups  // encoded data
     )
 
     return encodedArrByGroups

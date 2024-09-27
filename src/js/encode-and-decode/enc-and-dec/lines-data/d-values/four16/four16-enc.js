@@ -65,16 +65,17 @@ export function four16Enc() {
 
     // Whole group strings joined with '&' (ampersand sign)
     const wholeGroupJoined = joinWithAmpersand(compressedByGroups)
-
+    console.log('||||wholeGroupJoined: ', wholeGroupJoined)
     // Convert the structure of values
     const configValue = undefined
     const encodedArrByGroups = convertResultsFromStrToArray(compressedByGroups, encodingMethodName, configValue)
+    console.log('||||encodedArrByGroups: ', encodedArrByGroups)
 
     // Show the encoded result and processing time to html and console
     showResult(
-        encodingMethodName, 'Lines Data',       // names
-        startTime,                              // time to calculate
-        wholeGroupJoined, encodedArrByGroups    // encoded data
+        encodingMethodName,
+        startTime,
+        wholeGroupJoined, encodedArrByGroups  // encoded data
     )
 
     return encodedArrByGroups

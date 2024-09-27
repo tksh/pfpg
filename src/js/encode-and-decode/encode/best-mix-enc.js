@@ -79,11 +79,11 @@ function processEncodedData (encodedMaps, methodNames) {
 function displayResults (shortestJoined, shortestArrByGroups, numberOfMethods) {
     outputToTextarea(shortestJoined, "textarea-lines-data-encoded")
     const messagePrefix = `Lines Data (Best mix from ${numberOfMethods} methods)`
-    showStringSize(messagePrefix, shortestJoined, "encoded-strokes-values-size")
+    showStringSize(messagePrefix, shortestJoined, "encoded-lines-data-size")
     const dataToShow = showDetailsByGroups("Lines Data", shortestArrByGroups, "best-mix")
-    showBestMixResult(dataToShow, "encoded-strokes-values-size")
+    showBestMixResult(dataToShow, "encoded-lines-data-size")
     // Clear the processing time display
-    document.getElementById("encoded-strokes-values-time").innerHTML = ""
+    document.getElementById("encoded-lines-data-time").innerHTML = ""
 }
 
 /**

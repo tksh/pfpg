@@ -264,9 +264,9 @@ export function bruteforce53Enc() {
 
     // Show the encoded result and processing time to html and console
     showResult(
-        encodingMethodName, 'Lines Data',         // names
-        startTime,                                // time to calculate
-        wholeGroupJoined, currentShortestByGroups // encoded data
+        encodingMethodName,
+        startTime,
+        wholeGroupJoined, currentShortestByGroups  // encoded data
     )
 
     // Set result info with 'bruteforce53-analytics--...'

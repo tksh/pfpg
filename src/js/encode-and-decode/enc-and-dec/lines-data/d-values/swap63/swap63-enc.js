@@ -60,9 +60,9 @@ export function swap63Enc() {
 
     // Show the encoded result and processing time to html and console
     showResult(
-        encodingMethodName, 'Lines Data',       // names
-        startTime,                              // time to calculate
-        wholeGroupJoined, encodedArrByGroups    // encoded data
+        encodingMethodName,
+        startTime,
+        wholeGroupJoined, encodedArrByGroups  // encoded data
     )
 
     return encodedArrByGroups
