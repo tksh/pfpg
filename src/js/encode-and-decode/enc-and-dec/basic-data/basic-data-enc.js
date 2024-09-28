@@ -11,7 +11,7 @@ import { BASIC_DATA_KEYS  } from 'constants'
 export
     { encodeBasicData
     , parseBasicData
-    , updateCheckboxStates
+    , updateBasicDataKeysCheckboxStates
     }
 
 ////////////////////////////////// Input: //////////////////////////////////
@@ -72,13 +72,13 @@ function encodeBasicData() {
 }
 
 
-function updateCheckboxStates(data) {
+function updateBasicDataKeysCheckboxStates(basicData) {
     BASIC_DATA_KEYS.forEach(key => {
         if (key !== 'n') {  // Skip 'n' as it's always required
             const checkbox = document.getElementById(`include-${key}`)
             const label = checkbox.nextElementSibling
 
-            if (!(key in data) || data[key] === '') {
+            if (!(key in basicData) || basicData[key] === '') {
                 checkbox.checked = false
                 checkbox.disabled = true
                 label.textContent = `${key} (value not found in JSON)`

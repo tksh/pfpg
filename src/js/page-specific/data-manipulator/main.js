@@ -1,9 +1,10 @@
 import { isOnDataManipulatorPage }    from 'common-utils/select-output-textarea'
 import { decode }                     from 'decode/decode'
 import { setupMixEncodingButtons }    from 'encode/best-mix-enc'
+import { updateEncodingMethodsCheckboxStates }    from 'encode/best-mix-enc'
 import { encodeBasicData
        , parseBasicData
-       , updateCheckboxStates }      from 'enc-and-dec/basic-data/basic-data-enc'
+       , updateBasicDataKeysCheckboxStates }      from 'enc-and-dec/basic-data/basic-data-enc'
 import { bruteforce53Enc }            from 'enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc'
 import { bigint64Enc }                from 'enc-and-dec/lines-data/d-values/bigint64/bigint64-enc'
 import { swap63Enc }                  from 'enc-and-dec/lines-data/d-values/swap63/swap63-enc'
@@ -37,8 +38,9 @@ function initButtons(buttonId, functionName) {
 
 function initBasicDataTextarea() {
     document.getElementById('textarea-basic-data-uploaded').addEventListener('input', () => {
-        const data = parseBasicData()
-        updateCheckboxStates(data)
+        const basicData = parseBasicData()
+        updateBasicDataKeysCheckboxStates(basicData)
+        updateEncodingMethodsCheckboxStates(basicData)
     })
 }
 
@@ -64,8 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
     setupCopyButtons()
 
     // Initialize checkbox states based on pre-inputted sample Basic Data json
-    const data = parseBasicData()
-    updateCheckboxStates(data)
+    const basicData = parseBasicData()
+    updateBasicDataKeysCheckboxStates(basicData)
+    updateEncodingMethodsCheckboxStates(basicData)
 
     // textarea of Basic Data
     initBasicDataTextarea()

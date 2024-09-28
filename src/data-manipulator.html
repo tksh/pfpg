@@ -377,11 +377,12 @@
         <br />
 
         <hr>
+        <p>Choose the encoding methods to apply</p>
         <div id="best-mix-enc-options">
             <div><input type="checkbox" id="apply-bruteforce53" checked><label for="apply-bruteforce53">bruteforce53</label></div>
             <div><input type="checkbox" id="apply-bigint64" checked><label for="apply-bigint64">bigint64</label></div>
-            <div><input type="checkbox" id="apply-swap63" checked><label for="apply-swap63">swap63 (max grid size: 31)</label></div>
-            <div><input type="checkbox" id="apply-four16" checked><label for="apply-four16">four16 (max grid size: 255)</label></div>
+            <div><input type="checkbox" id="apply-swap63" checked><label for="apply-swap63">swap63 (max grid size: 31, UInt5Portray)</label></div>
+            <div><input type="checkbox" id="apply-four16" checked><label for="apply-four16">four16 (max grid size: 255, UInt8Portray)</label></div>
         </div>
 
         <button class="mix-encode-button" data-methods="2">Encode via <b>bestMixEnc()</b></button>

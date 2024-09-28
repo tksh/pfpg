@@ -1,4 +1,4 @@
-import { updateCheckboxStates
+import { updateBasicDataKeysCheckboxStates
        , parseBasicData }       from 'enc-and-dec/basic-data/basic-data-enc'
 
 export function selectFileToInput(selectFileId, textAreaId){
@@ -19,8 +19,8 @@ export function selectFileToInput(selectFileId, textAreaId){
         // Update checkboxes status for Basic Data decoding
         if (textAreaId === 'textarea-basic-data-uploaded') {
             // Update checkbox states based on data
-            const data = parseBasicData()
-            updateCheckboxStates(data)
+            const basicData = parseBasicData()
+            updateBasicDataKeysCheckboxStates(basicData)
         }
     }
 
