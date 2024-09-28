@@ -30,7 +30,6 @@ export function bigint64Enc() {
     // Map { 1 → "BsmvdfXHD12-EB_BesTenvoA_x-Nt6Ir73u4cAK5rBuSbnWTQPkCe-GP6Yh ... " }
 
 
-
     // Try compress and add prefix
 
     // 1. Prepend the encoded stroke-width value and counts to the beginning of encoded d values
@@ -40,10 +39,7 @@ export function bigint64Enc() {
     // Format: [group-colors]=[widths-and-counts]-[d-values]
 
     // Choose shorter one between URLComp applied or not, by each group
-    const { compressedByGroups, _ } = tryCompress(
-        encodedDvals,
-        encodingMethodName
-    )
+    const { compressedByGroups, _ } = tryCompress(encodedDvals, encodingMethodName, digitsPerChunk)
     //console.log('compressedByGroups: ', compressedByGroups)
 
     // Whole group strings joined with '&' (ampersand sign)

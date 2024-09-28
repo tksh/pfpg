@@ -35,7 +35,7 @@ const ENCODING_METHODS = {
  */
 function getEncodingMethods (numberOfMethods) {
     const methods = Object.keys(ENCODING_METHODS).slice(0, numberOfMethods)
-    // const methods = ["bruteforce53", "bigint64", "swap63"].slice(0, numberOfMethods)
+    // const methods = ['bruteforce53', 'bigint64', 'swap63'].slice(0, numberOfMethods)
     return methods.map((method) => ENCODING_METHODS[method])
 }
 
@@ -45,7 +45,7 @@ function getEncodingMethods (numberOfMethods) {
  * @returns {Array<string>} An array of encoding method names.
  */
 function getEncodingMethodNames (numberOfMethods) {
-    return Array.from(flagsMap.get("2nd").keys()).slice(0, numberOfMethods)
+    return Array.from(flagsMap.get('2nd').keys()).slice(0, numberOfMethods)
 }
 
 /**
@@ -77,13 +77,13 @@ function processEncodedData (encodedMaps, methodNames) {
  * @param {number} numberOfMethods - The number of encoding methods used.
  */
 function displayResults (shortestJoined, shortestArrByGroups, numberOfMethods) {
-    outputToTextarea(shortestJoined, "textarea-lines-data-encoded")
-    const messagePrefix = `Lines Data (Best mix from ${numberOfMethods} methods)`
-    showStringSize(messagePrefix, shortestJoined, "encoded-lines-data-size")
-    const dataToShow = showDetailsByGroups("Lines Data", shortestArrByGroups, "best-mix")
-    showBestMixResult(dataToShow, "encoded-lines-data-size")
+    outputToTextarea(shortestJoined, 'textarea-lines-data-encoded')
+    const inputDataTitle = `Lines Data encoding via 'best-mix' from ${numberOfMethods} methods`
+    showStringSize(inputDataTitle, shortestJoined, 'encoded-lines-data-size')
+    const dataToShow = showDetailsByGroups(shortestArrByGroups, 'best-mix')
+    showBestMixResult(dataToShow, 'encoded-lines-data-size')
     // Clear the processing time display
-    document.getElementById("encoded-lines-data-time").innerHTML = ""
+    document.getElementById('encoded-lines-data-time').innerHTML = ''
 }
 
 /**
@@ -104,10 +104,10 @@ function bestMixFromNMethods(numberOfMethods) {
  * This function should be called once the DOM is fully loaded.
  */
 export function setupMixEncodingButtons() {
-    const buttons = document.querySelectorAll(".mix-encode-button")
+    const buttons = document.querySelectorAll('.mix-encode-button')
     buttons.forEach((button) => {
-        button.addEventListener("click", function () {
-            const methodCount = parseInt(this.getAttribute("data-methods"))
+        button.addEventListener('click', function () {
+            const methodCount = parseInt(this.getAttribute('data-methods'))
             bestMixFromNMethods(methodCount)
         })
     })

@@ -15,6 +15,7 @@ export function swap63Enc() {
     const startTime = performance.now()
 
     const encodingMethodName = 'swap63'
+    const configValue = undefined
 
     // Codebook to encode from number to character
     const codebookForEncoding = createCodebook(get63Numbers(), get63Characters())
@@ -42,20 +43,17 @@ export function swap63Enc() {
     // Format: [group-colors]=[widths-and-counts]-[d-values]
 
     // Choose shorter one between URLComp applied or not, by each group
-    const { compressedByGroups, _ } = tryCompress(
-        encodedDval,
-        encodingMethodName
-    )
+    const { compressedByGroups, _ } = tryCompress(encodedDval, encodingMethodName, configValue)
     //console.log('compressedByGroups: ', compressedByGroups)
-    // Map { 000 → (2) […] }
-    //     0: 000 → Array [ 400, "000=13xbqDCEgLL7jANz5XKXua ... LiAh5KEXgVutC" ]
+    // e.g.:
+    //     Map { 000 → (2) […] }
+    //         0: 000 → Array [ 400, "000=13xbqDCEgLL7jANz5XKXua ... LiAh5KEXgVutC" ]
 
 
     // Whole group strings joined with '&' (ampersand sign)
     const wholeGroupJoined = joinWithAmpersand(compressedByGroups)
 
     // Convert the structure of values
-    const configValue = undefined
     const encodedArrByGroups = convertResultsFromStrToArray(compressedByGroups, encodingMethodName, configValue)
 
     // Show the encoded result and processing time to html and console

@@ -75,7 +75,7 @@ export function storeShortest(encodedArrByMethods, encodingMethodNamesArr) {
 
     // Store flags info for console output
     const bestMixFlags = new Map([['flags', [...flagsArr]]])
-    resultInfo.set('best-mix', bestMixFlags)
+    resultInfo.set('best-mix Flags', flagsArr)
 
     return shortestArrByGroups
 }

@@ -1,10 +1,19 @@
 import { flagsMap
-       , resultInfo}                   from 'constants'
+       , resultInfo
+       , encodingMethodAndConfig }     from 'constants'
 import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
 import { URLCompressor }               from 'libs/url-comp-0-1-0/url-comp'
 
 
-export function tryCompress(encodedDval, encodingMethodName, baseXNumber) {
+// Try compress, choose shorter, then add prefix to form:
+//   [group_colors]=[encoding_method_flag][widths_and_counts]-[d_values]
+//
+//   1. Prepend the [encoded stroke-width values and counts] and [encoding method flag]
+//        to the beginning of [encoded d values].
+//   2. Compress the above combined string and choose the shorter one.
+//   3. Prepend the [encoded group-colors value] to the chosen string.
+
+export function tryCompress(encodedDval, encodingMethodName, encodingConfigValue) {
     const encodedWidthsAndCounts = getEncodedAttrsExceptsDvals().widthsAndCounts
     const encodedGroupColors     = getEncodedAttrsExceptsDvals().groupColors
 
@@ -21,22 +30,26 @@ export function tryCompress(encodedDval, encodingMethodName, baseXNumber) {
     let compressingResultArr = []
 
     for (const [gId, dvalEncodedStr] of encodedDval) {
-        // Merge the width, dvals and flags to form: [2nd flag][width(stroke-width values and counts)]-[d values]
+        // Merge to form: [2nd_flag_for_encoding_method][widths_and_counts]-[d_values]
         const charOf2ndFlag = flagsMap.get('2nd').get(encodingMethodName)
         const widthsAndCountsEncoded = encodedWidthsAndCounts.get(gId)
         const uncompressed = charOf2ndFlag + widthsAndCountsEncoded + '-' + dvalEncodedStr
 
         // Try compress with all compression methods,
-        // And add 1st flag into best result.
         const { bestCompressedData, bestMethodName } = compressAndSelectBest(uncompressed)
         console.log(`In group ID ${gId}, best compression result made by: `, bestMethodName)
+
+        // Prepend 1st flag to best result to form:
+        //   [1st_flag_for_compression_method][2nd_flag_for_encoding_method][widths_and_counts]-[d_values]
         const charOf1stFlag = flagsMap.get('1st').get(bestMethodName)
         const encodedWidthAndDvalsAsValue   = charOf1stFlag + bestCompressedData
 
-        // Prepend the color value to form: [key(group colors)]=[value(width and dvals)]
+        // Prepend the color value as key to form: [key(group_colors)]=[value(width_and_dvals)]
         const encodedAsKvPair = addColorAsKey(encodedGroupColors, gId, encodedWidthAndDvalsAsValue)
 
+        // Set it as value into Map with group ID key
         compressedByGroups.set(gId, encodedAsKvPair)
+
 
         // Info for console.log output
         flagsArr.push([charOf1stFlag, charOf2ndFlag])
@@ -46,19 +59,18 @@ export function tryCompress(encodedDval, encodingMethodName, baseXNumber) {
         // [group ID, length of uncompressed encoded lines data, length of best compression result of encoded lines data, name of best compression method]
         compressingResultArr.push([gId, uncompressed.length + 1, bestCompressedData.length + 1, bestMethodName])
 
-        // Append the data to Map with group ID key like `bruteforce53_gId=${gId}`
-        const previousBaseXData = resultInfo.get(`bruteforce53_gId=${gId}`) ?? [['gId', 'baseXNumber', 'unCompressed', 'bestCompressed', 'bestMethodName']]
-        const currentBaseXDataAdded = [...previousBaseXData, [gId, baseXNumber, uncompressed.length + 1, bestCompressedData.length + 1, bestMethodName]]
-        resultInfo.set(`bruteforce53_gId=${gId}`, currentBaseXDataAdded)
+        // Append the data to Map with group ID key like `bruteforce53_gId=0`
+        const previousBaseXData = resultInfo.get(`${encodingMethodName} gId=${gId}`)
+            ?? [['gId', `${encodingMethodAndConfig.get(encodingMethodName)}`, 'uncompressed', 'bestCompressed', 'bestMethodName']]
+        const currentBaseXDataAdded = [...previousBaseXData, [gId, encodingConfigValue, uncompressed.length + 1, bestCompressedData.length + 1, bestMethodName]]
+        resultInfo.set(`${encodingMethodName} gId=${gId}`, currentBaseXDataAdded)
     }
 
     // Calculate and compare the length of finished strings to output to console.
     calculateLengths(lengthBeforeComp, lengthAfterComp, ampersandCount)
 
     // Store result info
-    const flags = new Map()
-    flags.set('flags', flagsArr)
-    resultInfo.set(encodingMethodName, flags)
+    resultInfo.set(`${encodingMethodName} Flags`, flagsArr)
 
     return { compressedByGroups, compressingResultArr }
 }

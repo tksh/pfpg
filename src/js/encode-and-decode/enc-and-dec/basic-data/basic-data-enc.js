@@ -40,6 +40,8 @@ export
 function encodeBasicData() {
     const startTime = performance.now()
 
+    const functionName = 'encodeBasicData()'
+
     // Parse the basic data JSON from textarea
     const data = parseBasicData()
 
@@ -62,12 +64,12 @@ function encodeBasicData() {
     outputToTextarea(dataAsUrlParams, 'textarea-basic-data-encoded')
 
     // Show the size of result in html and console
-    showStringSize('Basic Data', dataAsUrlParams, 'encoded-basic-data-size')
+    showStringSize(functionName, dataAsUrlParams, 'encoded-basic-data-size')
 
     // Show the processing time in html and console
     const endTime = performance.now()
     const elapsedTime = Math.floor(endTime - startTime)
-    showProcessingTime('encodeBasicData()', elapsedTime, 'encoded-basic-data-time', isOnDataManipulatorPage())
+    showProcessingTime(functionName, elapsedTime, 'encoded-basic-data-time', isOnDataManipulatorPage())
 }
 
 

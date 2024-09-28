@@ -110,11 +110,10 @@ function encodeGroupData(freqDiffAndDiffFourCoords, baseXNumber) {
     return baseXEncoded + joined  // Encoded d-values structure: [baseX encoded][x1]-[y1]-[x2]-[y2]
 }
 
-// Try compress and choose shorter one then add prefix
-//   1. Prepend the encoded stroke-width value and counts to the beginning of encoded d values
-//   2. Compress the combined string using URLCompressor and choose the shorter version.
-//   3. Prepend the encoded group-colors value to the chosen string (compressed or original).
-// Structure: [group-colors]=[widths-and-counts]-[d-values]
+// Try compress, choose shorter, then add prefix to form: [group_colors]=[widths_and_counts]-[d_values]
+//   1. Prepend the [encoded stroke-width values and counts] to the beginning of [encoded d values].
+//   2. Compress the above combined string and choose the shorter one.
+//   3. Prepend the [encoded group-colors value] to the chosen string.
 function compressAndStore(encodedDvals, encodingMethodName, baseXNumber) {
     const { compressedByGroups, compressingResultArr } = tryCompress(encodedDvals, encodingMethodName, baseXNumber);
     return { compressedByGroups, compressingResultArr };
@@ -135,8 +134,8 @@ function finalizeResults(currentShortestByGroups, encodingMethodName, startTime)
 }
 
 
-// 値を 文字列 から 3要素から成る配列 に変更し storeShorter() の返り値と 同じ構造にする
-// 最初の要素に 元の値の 文字列 を入れる
+// 入力されたマップオブジェクトの値を '文字列' から 3要素から成る '配列' に変更し storeShorter() の返り値と 同じ構造にする
+// [0]の要素に 元の値の 文字列 を入れる
 function transformMap(map, baseXNumber) {
     return new Map(
         Array.from(map.entries()).map(([key, value]) => [key, [value, 'encodingMethodName', { baseXNumber }]])

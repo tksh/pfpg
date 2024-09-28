@@ -13,6 +13,8 @@ export function four16Enc() {
     const startTime = performance.now()
 
     const encodingMethodName = 'four16'
+    const configValue = undefined
+
     const uintN = tryDecompress(parseBasicData().n)  // e.g.: 5
     const charsSets = getFour16CharsSets()           // e.g.: abcdefghijklmnop
 
@@ -55,17 +57,13 @@ export function four16Enc() {
 
 
     // Choose shorter one between URLComp applied or not, by each group
-    const { compressedByGroups, _ } = tryCompress(
-        encodedDvals,
-        encodingMethodName
-    )
+    const { compressedByGroups, _ } = tryCompress(encodedDvals,encodingMethodName, configValue)
     console.log('compressedByGroups: ', compressedByGroups)
 
     // Whole group strings joined with '&' (ampersand sign)
     const wholeGroupJoined = joinWithAmpersand(compressedByGroups)
 
     // Convert the structure of values
-    const configValue = undefined
     const encodedArrByGroups = convertResultsFromStrToArray(compressedByGroups, encodingMethodName, configValue)
 
     // Show the encoded result and processing time to html and console
