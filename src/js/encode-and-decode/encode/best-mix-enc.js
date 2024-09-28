@@ -16,8 +16,7 @@ import { bigint64Enc }       from 'enc-and-dec/lines-data/d-values/bigint64/bigi
 import { bruteforce53Enc }   from 'enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc'
 import { swap63Enc }         from 'enc-and-dec/lines-data/d-values/swap63/swap63-enc'
 import { four16Enc }         from 'enc-and-dec/lines-data/d-values/four16/four16-enc'
-import { tryDecompress }                from 'decode/try-decompress'
-import { parseBasicData }               from 'enc-and-dec/basic-data/basic-data-enc'
+import { tryDecompress }     from 'decode/try-decompress'
 
 /**
  * Object containing all available encoding methods.
@@ -119,41 +118,20 @@ export function setupMixEncodingButtons() {
 // Checkboxes to enable each encoding methods
 
 export function updateEncodingMethodsCheckboxStates(basicData) {
-    const uintN = tryDecompress(basicData.n)
+    const uintN = tryDecompress(basicData.n);
+    const checkboxes = Object.keys(ENCODING_METHODS).reduce((acc, id) => {
+        acc[id] = document.getElementById(`apply-${id}`);
+        return acc;
+    }, {});
 
-    const bruteforce53Checkbox = document.getElementById(`apply-bruteforce53`)
-    const     bigint64Checkbox = document.getElementById(`apply-bigint64`)
-    const       swap63Checkbox = document.getElementById(`apply-swap63`)
-    const       four16Checkbox = document.getElementById(`apply-four16`)
+    const settings = {
+        bruteforce53: { checked: true, disabled: false },
+        bigint64: { checked: true, disabled: false },
+        swap63: { checked: uintN <= 5, disabled: uintN > 5 },
+        four16: { checked: uintN <= 8, disabled: uintN > 8 }
+    };
 
-    if (uintN <= 5) {
-        bruteforce53Checkbox.checked  = true
-        bruteforce53Checkbox.disabled = false
-            bigint64Checkbox.checked  = true
-            bigint64Checkbox.disabled = false
-              swap63Checkbox.checked  = true
-              swap63Checkbox.disabled = false
-              four16Checkbox.checked  = true
-              four16Checkbox.disabled = false
-
-    } else if (uintN <= 8) {
-        bruteforce53Checkbox.checked  = true
-        bruteforce53Checkbox.disabled = false
-            bigint64Checkbox.checked  = true
-            bigint64Checkbox.disabled = false
-              swap63Checkbox.checked  = false  // unchecked
-              swap63Checkbox.disabled = true   // disabled
-              four16Checkbox.checked  = true
-              four16Checkbox.disabled = false
-
-    } else {
-        bruteforce53Checkbox.checked  = true
-        bruteforce53Checkbox.disabled = false
-            bigint64Checkbox.checked  = true
-            bigint64Checkbox.disabled = false
-              swap63Checkbox.checked  = false  // unchecked
-              swap63Checkbox.disabled = true   // disabled
-              four16Checkbox.checked  = false  // unchecked
-              four16Checkbox.disabled = true   // disabled
-    }
+    Object.entries(settings).forEach(([id, state]) => {
+        Object.assign(checkboxes[id], state);
+    });
 }
