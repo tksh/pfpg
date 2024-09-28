@@ -1,6 +1,6 @@
 import { isOnDataManipulatorPage }             from 'common-utils/select-output-textarea'
 import { decode }                              from 'decode/decode'
-import { setupMixEncodingButtons }             from 'encode/best-mix-enc'
+import { bestMixEnc }                          from 'encode/best-mix-enc'
 import { updateEncodingMethodsCheckboxStates } from 'encode/best-mix-enc'
 import { encodeBasicData
        , parseBasicData
@@ -47,14 +47,13 @@ function initBasicDataTextarea() {
 document.addEventListener('DOMContentLoaded', () => {
 
     // Buttons to encode
-    initButtons('encode-basic-data',                 encodeBasicData)
+    initButtons('encode-basic-data',                  encodeBasicData)
+    initButtons('encode-lines-data-via-bruteforce53', bruteforce53Enc)
+    initButtons('encode-lines-data-via-bigint64',     bigint64Enc)
+    initButtons('encode-lines-data-via-swap63',       swap63Enc)
+    initButtons('encode-lines-data-via-four16',       four16Enc)
+    initButtons('encode-lines-data-via-best-mix',     bestMixEnc)
 
-    initButtons('encode-lines-data-as-bruteforce53', bruteforce53Enc)
-    initButtons('encode-lines-data-as-bigint64',     bigint64Enc)
-    initButtons('encode-lines-data-as-swap63',       swap63Enc)
-    initButtons('encode-lines-data-as-four16',       four16Enc)
-
-    setupMixEncodingButtons()
 
     // Buttons to merge
     initButtons('button-to-merge-as-url-params',     mergeBasicDataAndLinesData)

@@ -344,22 +344,22 @@
         <!-- Buttons to encode the strokes values -->
         <h4>Select: Encoding Methods</h4>
 
-        <button id="encode-lines-data-as-bruteforce53">Encode via <b>bruteforce53Enc()</b></button>
+        <button id="encode-lines-data-via-bruteforce53">Encode via <b>bruteforce53Enc()</b></button>
         <p>For: UIntNPortray<br>
             With: Lines Data Aggregated for Encoding (stroke_width.list_of, stroke_width.counts, d.relative.diff_by_row, d.relative.frequent_diff_values_sorted and d.relative.frequent_diff_counts_sorted)</p>
         <br />
 
-        <button id="encode-lines-data-as-bigint64">Encode via <b>bigint64Enc()</b></button>
+        <button id="encode-lines-data-via-bigint64">Encode via <b>bigint64Enc()</b></button>
         <p>For: UIntNPortray<br>
             With: Lines Data (d.absolute) and Lines Data Aggregated for Encoding (stroke_width.list_of and stroke_width.counts)</p>
         <br />
 
-        <button id="encode-lines-data-as-swap63">Encode via <b>swap63Enc()</b></button>
+        <button id="encode-lines-data-via-swap63">Encode via <b>swap63Enc()</b></button>
         <p>For: <b>Under UInt5Portray</b> (viewbox: 31 x 31)<br>
             With: Lines Data (d.relative) and Lines Data Aggregated for Encoding (stroke_width.list_of and stroke_width.counts)</p>
         <br />
 
-        <button id="encode-lines-data-as-four16">Encode via <b>four16Enc()</b></button>
+        <button id="encode-lines-data-via-four16">Encode via <b>four16Enc()</b></button>
         <p>For: <b>Under UInt8Portray</b> (viewbox: 255 x 255)<br>
             With (UInt8Portray): Lines Data (d.relative) and Lines Data Aggregated for Encoding (stroke_width.list_of and stroke_width.counts)<br>
             With (UInt7Portray): Lines Data Aggregated for Encoding (d.relative.diff_by_row, stroke_width.list_of and stroke_width.counts)</p>
@@ -377,7 +377,7 @@
         </div>
 
         <br />
-        <button class="mix-encode-button" data-methods="2">Encode via <b>bestMixEnc()</b></button>
+        <button id="encode-lines-data-via-best-mix">Encode via <b>bestMixEnc()</b></button>
         <br />
 
         <!-- Textarea to output the lines data encoded -->

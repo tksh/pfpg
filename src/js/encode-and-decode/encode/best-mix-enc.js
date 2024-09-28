@@ -18,7 +18,7 @@ import { four16Enc }         from 'enc-and-dec/lines-data/d-values/four16/four16
 import { tryDecompress }     from 'decode/try-decompress'
 
 export
-    { setupMixEncodingButtons
+    { bestMixEnc
     , updateEncodingMethodsCheckboxStates
     }
 
@@ -84,7 +84,7 @@ function displayResults (shortestJoined, shortestArrByGroups, checkedMethodNames
 /**
  * Performs the best mix encoding process using the specified methods.
  */
-function bestMixFromNMethods() {
+function bestMixEnc() {
     // Get the methods checked
     const checkedMethodNames = getCheckedEncodingMethodNames()  // e.g.: (3) ['bruteforce53', 'swap63', 'four16']
     const checkedMethodFunctions = checkedMethodNames.map((name) => ENCODING_METHODS[name])  // e.g.: (3) [ƒ, ƒ, ƒ]
@@ -94,20 +94,6 @@ function bestMixFromNMethods() {
     const shortestJoined = joinWithAmpersand(shortestStrArr)
     // Show the results
     displayResults(shortestJoined, shortestArrByGroups, checkedMethodNames)
-}
-
-/**
- * Sets up event listeners for the mix encoding buttons.
- * This function should be called once the DOM is fully loaded.
- */
-function setupMixEncodingButtons() {
-    const buttons = document.querySelectorAll('.mix-encode-button')
-    buttons.forEach((button) => {
-        button.addEventListener('click', function () {
-            const methodCount = parseInt(this.getAttribute('data-methods'))
-            bestMixFromNMethods(methodCount)
-        })
-    })
 }
 
 

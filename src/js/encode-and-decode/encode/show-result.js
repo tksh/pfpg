@@ -82,7 +82,7 @@ function showDetailsByGroups(encodedArrByGroupsMap, encodingMethodName) {
     console.log("resultInfo: ", resultInfo)
 
 
-    // Return the values to show also in html when call this function from best mix encoding (bestMixFromNMethods()).
+    // Return the values to show also in html when call this function from best mix encoding (bestMixEnc()).
     return new Map([
         ['gId', keys],
         ['colors', groupColors],
