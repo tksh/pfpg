@@ -5,7 +5,6 @@
  */
 
 import { outputToTextarea }  from 'common-utils/output-to-textarea'
-import { flagsMap }          from 'constants'
 import { showDetailsByGroups
        , showStringSize}     from 'encode/show-result'
 import { joinWithAmpersand } from 'encode/join-with-ampersand'
@@ -17,6 +16,12 @@ import { bruteforce53Enc }   from 'enc-and-dec/lines-data/d-values/bruteforce53/
 import { swap63Enc }         from 'enc-and-dec/lines-data/d-values/swap63/swap63-enc'
 import { four16Enc }         from 'enc-and-dec/lines-data/d-values/four16/four16-enc'
 import { tryDecompress }     from 'decode/try-decompress'
+
+export
+    { setupMixEncodingButtons
+    , updateEncodingMethodsCheckboxStates
+    }
+
 
 /**
  * Object containing all available encoding methods.
@@ -30,23 +35,12 @@ const ENCODING_METHODS = {
 }
 
 /**
- * Retrieves a subset of encoding methods based on the specified number.
- * @param   {number} numberOfMethods - The number of encoding methods to retrieve.
- * @returns {Array<Function>} An array of encoding method functions.
+ * Retrieves the names of encoding methods
  */
-function getEncodingMethods (numberOfMethods) {
-    const methods = Object.keys(ENCODING_METHODS).slice(0, numberOfMethods)
-    // const methods = ['bruteforce53', 'bigint64', 'swap63'].slice(0, numberOfMethods)
-    return methods.map((method) => ENCODING_METHODS[method])
-}
-
-/**
- * Retrieves the names of encoding methods based on the specified number.
- * @param   {number} numberOfMethods - The number of encoding method names to retrieve.
- * @returns {Array<string>} An array of encoding method names.
- */
-function getEncodingMethodNames (numberOfMethods) {
-    return Array.from(flagsMap.get('2nd').keys()).slice(0, numberOfMethods)
+function getCheckedEncodingMethodNames () {
+    return Object.keys(ENCODING_METHODS)
+        .filter(id => document.getElementById(`apply-${id}`).checked)
+        .map(id => id.replace('apply-', ''));
 }
 
 /**
@@ -77,9 +71,9 @@ function processEncodedData (encodedMaps, methodNames) {
  * @param {Map} shortestArrByGroups - A Map containing the shortest encodings by group.
  * @param {number} numberOfMethods - The number of encoding methods used.
  */
-function displayResults (shortestJoined, shortestArrByGroups, numberOfMethods) {
+function displayResults (shortestJoined, shortestArrByGroups, checkedMethodNames) {
     outputToTextarea(shortestJoined, 'textarea-lines-data-encoded')
-    const inputDataTitle = `Lines Data encoding via 'best-mix' from ${numberOfMethods} methods`
+    const inputDataTitle = `Lines Data encoding via 'bestMixEnc()' includes ${checkedMethodNames.join(', ')}`
     showStringSize(inputDataTitle, shortestJoined, 'encoded-lines-data-size')
     const dataToShow = showDetailsByGroups(shortestArrByGroups, 'best-mix')
     showBestMixResult(dataToShow, 'encoded-lines-data-size')
@@ -88,23 +82,25 @@ function displayResults (shortestJoined, shortestArrByGroups, numberOfMethods) {
 }
 
 /**
- * Performs the best mix encoding process using the specified number of methods.
- * @param {number} numberOfMethods - The number of encoding methods to use.
+ * Performs the best mix encoding process using the specified methods.
  */
-function bestMixFromNMethods(numberOfMethods) {
-    const methods     = getEncodingMethods(numberOfMethods)
-    const methodNames = getEncodingMethodNames(numberOfMethods)
-    const encodedMaps = encodeWithMethods(methods)
-    const [shortestArrByGroups, shortestStrArr] = processEncodedData(encodedMaps, methodNames)
+function bestMixFromNMethods() {
+    // Get the methods checked
+    const checkedMethodNames = getCheckedEncodingMethodNames()  // e.g.: (3) ['bruteforce53', 'swap63', 'four16']
+    const checkedMethodFunctions = checkedMethodNames.map((name) => ENCODING_METHODS[name])  // e.g.: (3) [ƒ, ƒ, ƒ]
+    // Encode and choose the best result by groups
+    const encodedMaps = encodeWithMethods(checkedMethodFunctions)
+    const [shortestArrByGroups, shortestStrArr] = processEncodedData(encodedMaps, checkedMethodNames)
     const shortestJoined = joinWithAmpersand(shortestStrArr)
-    displayResults(shortestJoined, shortestArrByGroups, numberOfMethods)
+    // Show the results
+    displayResults(shortestJoined, shortestArrByGroups, checkedMethodNames)
 }
 
 /**
  * Sets up event listeners for the mix encoding buttons.
  * This function should be called once the DOM is fully loaded.
  */
-export function setupMixEncodingButtons() {
+function setupMixEncodingButtons() {
     const buttons = document.querySelectorAll('.mix-encode-button')
     buttons.forEach((button) => {
         button.addEventListener('click', function () {
@@ -115,9 +111,10 @@ export function setupMixEncodingButtons() {
 }
 
 
+
 // Checkboxes to enable each encoding methods
 
-export function updateEncodingMethodsCheckboxStates(basicData) {
+function updateEncodingMethodsCheckboxStates(basicData) {
     const uintN = tryDecompress(basicData.n);
     const checkboxes = Object.keys(ENCODING_METHODS).reduce((acc, id) => {
         acc[id] = document.getElementById(`apply-${id}`);

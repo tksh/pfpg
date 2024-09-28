@@ -26,7 +26,7 @@ export function showBestMixResult(dataToShow, textareaId) {
 
     // Output to html
     totalLength += transposed.length - 1  // Add the value of (group number - 1) for counting '&' sign chars
-    const totalLengthText = 'Result length of Lines Data encoding via bestMixFrom(N)Methods(): ' + totalLength + ' characters (bytes)'  // Total size
+    const totalLengthText = 'Result length of Lines Data encoding via bestMixEnc(): ' + totalLength + ' characters (bytes)'  // Total size
     const detailsByGroups = 'Details by groups:'
     const joined = totalLengthText + '<br><br>' + detailsByGroups  + '<br>' + entireGroupInfo.join('<br>')
     const outputTextElem = document.getElementById(textareaId)
