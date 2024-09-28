@@ -3,8 +3,7 @@ import { decode }                     from 'decode/decode'
 import { setupMixEncodingButtons }    from 'encode/best-mix-enc'
 import { encodeBasicData
        , parseBasicData
-       , updateCheckboxStates
-       , initBasicDataTextarea }      from 'enc-and-dec/basic-data/basic-data-enc'
+       , updateCheckboxStates }      from 'enc-and-dec/basic-data/basic-data-enc'
 import { bruteforce53Enc }            from 'enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc'
 import { bigint64Enc }                from 'enc-and-dec/lines-data/d-values/bigint64/bigint64-enc'
 import { swap63Enc }                  from 'enc-and-dec/lines-data/d-values/swap63/swap63-enc'
@@ -34,6 +33,13 @@ for (const boolean of [true, false]) {
 function initButtons(buttonId, functionName) {
     const buttonElem = document.getElementById(`${buttonId}`)
     buttonElem.addEventListener('click', functionName)
+}
+
+function initBasicDataTextarea() {
+    document.getElementById('textarea-basic-data-uploaded').addEventListener('input', () => {
+        const data = parseBasicData()
+        updateCheckboxStates(data)
+    })
 }
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -12,7 +12,6 @@ export
     { encodeBasicData
     , parseBasicData
     , updateCheckboxStates
-    , initBasicDataTextarea
     }
 
 ////////////////////////////////// Input: //////////////////////////////////
@@ -143,10 +142,3 @@ function processProperty(propertyName, value) {
 }
 
 
-// Add event listener for textare
-function initBasicDataTextarea() {
-    document.getElementById('textarea-basic-data-uploaded').addEventListener('input', () => {
-        const data = parseBasicData()
-        updateCheckboxStates(data)
-    })
-}

@@ -376,6 +376,17 @@
         <p>For: UInt[<b>6</b>-14]Portray<br>Methods: bruteforce53Enc() and bigint64Enc()</p>
         <br />
 
+        <hr>
+        <div id="best-mix-enc-options">
+            <div><input type="checkbox" id="apply-bruteforce53" checked><label for="apply-bruteforce53">bruteforce53</label></div>
+            <div><input type="checkbox" id="apply-bigint64" checked><label for="apply-bigint64">bigint64</label></div>
+            <div><input type="checkbox" id="apply-swap63" checked><label for="apply-swap63">swap63 (max grid size: 31)</label></div>
+            <div><input type="checkbox" id="apply-four16" checked><label for="apply-four16">four16 (max grid size: 255)</label></div>
+        </div>
+
+        <button class="mix-encode-button" data-methods="2">Encode via <b>bestMixEnc()</b></button>
+        <br />
+
         <!-- Textarea to output the lines data encoded -->
         <textarea id="textarea-lines-data-encoded" class="height-1" placeholder="Lines Data encoded"></textarea>
         <!-- Show the result -->
