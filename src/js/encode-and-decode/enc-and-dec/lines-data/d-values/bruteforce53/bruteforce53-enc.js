@@ -23,67 +23,67 @@ import { tryCompress }           from 'encode/try-compress'
 //   3.     .map: Coordinate from 'x1' to 'y2'
 
 // Constants
-const MAX_CODEBOOK_SIZE_START = 0;
-const MAX_CODEBOOK_SIZE_END = 52;
-const COORDINATES = ['x1', 'y1', 'x2', 'y2'];
+const MAX_CODEBOOK_SIZE_START = 0
+const MAX_CODEBOOK_SIZE_END = 52
+const COORDINATES = ['x1', 'y1', 'x2', 'y2']
 
 
 // Main function
 export function bruteforce53Enc() {
-    const startTime = performance.now();
-    const encodingMethodName = 'bruteforce53';
-    let currentShortestByGroups = new Map();
+    const startTime = performance.now()
+    const encodingMethodName = 'bruteforce53'
+    let currentShortestByGroups = new Map()
 
     // Get the range of diff value to calculate the baseXRangeLimits value
     const uintN = tryDecompress(parseBasicData().n)
-    const diffValueRange = calculateDiffLimits(uintN);
+    const diffValueRange = calculateDiffLimits(uintN)
 
     // Bruteforce encoding for 53 patterns (Max codebook size: 0 -> 52, BaseX number: 52 -> 0)
     for (let maxCodebookSize = MAX_CODEBOOK_SIZE_START; maxCodebookSize <= MAX_CODEBOOK_SIZE_END; maxCodebookSize++) {
-        const baseXNumber = 52 - maxCodebookSize;
-        console.log(`///////////////// maxCodebookSize: ${maxCodebookSize}, baseXNumber: ${baseXNumber} /////////////////`);
+        const baseXNumber = 52 - maxCodebookSize
+        console.log(`///////////////// maxCodebookSize: ${maxCodebookSize}, baseXNumber: ${baseXNumber} /////////////////`)
 
-        const encodedDvals = processGroups(baseXNumber, diffValueRange);
-        const compressResult = compressAndStore(encodedDvals, encodingMethodName, baseXNumber);
+        const encodedDvals = processGroups(baseXNumber, diffValueRange)
+        const compressResult = compressAndStore(encodedDvals, encodingMethodName, baseXNumber)
 
-        currentShortestByGroups = updateShortestByGroups(currentShortestByGroups, compressResult.compressedByGroups, baseXNumber, maxCodebookSize);
+        currentShortestByGroups = updateShortestByGroups(currentShortestByGroups, compressResult.compressedByGroups, baseXNumber, maxCodebookSize)
     }
 
-    return finalizeResults(currentShortestByGroups, encodingMethodName, startTime);
+    return finalizeResults(currentShortestByGroups, encodingMethodName, startTime)
 }
 
 function processGroups(baseXNumber, diffValueRange) {
-    const aggDataByGroups = jsonToMapObj(`textarea-agg-data-for-comp-uploaded`);
+    const aggDataByGroups = jsonToMapObj(`textarea-agg-data-for-comp-uploaded`)
 
     // Get the lower and upper limits for baseX exclusion for handleBase52EncodingWithPrefix()
-    const baseXRangeLimits = calculateLimitsForBaseXSkipRange(baseXNumber, diffValueRange);
+    const baseXRangeLimits = calculateLimitsForBaseXSkipRange(baseXNumber, diffValueRange)
 
     // Process each lines group (g_id ranges from 0 to group size - 1)
     return new Map(
         Array.from(aggDataByGroups.values()).map(aggData => {
-            const freqDiffAndDiffFourCoords = processCoordinates(aggData, baseXNumber, baseXRangeLimits);
-            const encodedDvalStr = encodeGroupData(freqDiffAndDiffFourCoords, baseXNumber);
-            return [aggData.g_id, encodedDvalStr];
+            const freqDiffAndDiffFourCoords = processCoordinates(aggData, baseXNumber, baseXRangeLimits)
+            const encodedDvalStr = encodeGroupData(freqDiffAndDiffFourCoords, baseXNumber)
+            return [aggData.g_id, encodedDvalStr]
         })
-    );
+    )
 }
 
 function processCoordinates(aggData, baseXNumber, baseXRangeLimits) {
     return COORDINATES.map(coord => {
         // Get the values
-        const diffArr = aggData.d.relative.diff_by_row[coord];
-        const freqDiffArr = aggData.d.relative.frequent_diff_values_sorted[coord];
+        const diffArr = aggData.d.relative.diff_by_row[coord]
+        const freqDiffArr = aggData.d.relative.frequent_diff_values_sorted[coord]
 
         // Create the codebook
-        const actualCodebookSize = getActualCodebookSize(baseXNumber, freqDiffArr);
-        const codebookToEncodeFreqDiff = createCodebookToEnc(freqDiffArr.slice(0, actualCodebookSize), actualCodebookSize);
+        const actualCodebookSize = getActualCodebookSize(baseXNumber, freqDiffArr)
+        const codebookToEncodeFreqDiff = createCodebookToEnc(freqDiffArr.slice(0, actualCodebookSize), actualCodebookSize)
 
         // Encode the values
-        const freqDiffEncoded = encodeFreqDiff(freqDiffArr.slice(0, actualCodebookSize));
-        const diffArrEncoded = encodeDiffArray(diffArr, codebookToEncodeFreqDiff, baseXNumber, baseXRangeLimits);
+        const freqDiffEncoded = encodeFreqDiff(freqDiffArr.slice(0, actualCodebookSize))
+        const diffArrEncoded = encodeDiffArray(diffArr, codebookToEncodeFreqDiff, baseXNumber, baseXRangeLimits)
 
-        return `${freqDiffEncoded}-${diffArrEncoded.join('')}`;
-    });
+        return `${freqDiffEncoded}-${diffArrEncoded.join('')}`
+    })
 }
 
 function encodeDiffArray(diffArr, codebook, baseXNumber, baseXRangeLimits) {
@@ -101,7 +101,7 @@ function encodeDiffArray(diffArr, codebook, baseXNumber, baseXRangeLimits) {
 
         // 上記 3条件 いずれでもなければ baseX で アルファベット2文字 に エンコードする
         handleBaseXEncoding(diff, baseXNumber)
-    );
+    )
 }
 
 function encodeGroupData(freqDiffAndDiffFourCoords, baseXNumber) {
@@ -115,22 +115,22 @@ function encodeGroupData(freqDiffAndDiffFourCoords, baseXNumber) {
 //   2. Compress the above combined string and choose the shorter one.
 //   3. Prepend the [encoded group-colors value] to the chosen string.
 function compressAndStore(encodedDvals, encodingMethodName, baseXNumber) {
-    const { compressedByGroups, compressingResultArr } = tryCompress(encodedDvals, encodingMethodName, baseXNumber);
-    return { compressedByGroups, compressingResultArr };
+    const { compressedByGroups, compressingResultArr } = tryCompress(encodedDvals, encodingMethodName, baseXNumber)
+    return { compressedByGroups, compressingResultArr }
 }
 
 function updateShortestByGroups(currentShortestByGroups, compressedByGroups, baseXNumber, maxCodebookSize) {
-    const transformedMap = transformMap(compressedByGroups, baseXNumber);
+    const transformedMap = transformMap(compressedByGroups, baseXNumber)
     return maxCodebookSize === MAX_CODEBOOK_SIZE_START
         ? transformedMap  // At first loop (maxCodebookSize: 0, baseXNumber: 52), init the Map with current value
         : storeShorter(currentShortestByGroups, transformedMap, baseXNumber) // After second loop
 }
 
 function finalizeResults(currentShortestByGroups, encodingMethodName, startTime) {
-    const shortestStrByGroups = simplifyMap(currentShortestByGroups);  // simplify the value of Map, [string, length, baseX] => string
-    const wholeGroupJoined = joinWithAmpersand(shortestStrByGroups);
-    showResult(encodingMethodName, startTime, wholeGroupJoined, currentShortestByGroups);
-    return currentShortestByGroups;
+    const shortestStrByGroups = simplifyMap(currentShortestByGroups)  // simplify the value of Map, [string, length, baseX] => string
+    const wholeGroupJoined = joinWithAmpersand(shortestStrByGroups)
+    showResult(encodingMethodName, startTime, wholeGroupJoined, currentShortestByGroups)
+    return currentShortestByGroups
 }
 
 
@@ -139,7 +139,7 @@ function finalizeResults(currentShortestByGroups, encodingMethodName, startTime)
 function transformMap(map, baseXNumber) {
     return new Map(
         Array.from(map.entries()).map(([key, value]) => [key, [value, 'encodingMethodName', { baseXNumber }]])
-    );
+    )
 }
 
 // Get the range of diff value

@@ -6,7 +6,7 @@ export async function calculateArtworkId(linesData) {
     const calcArtworkIdStartTime = performance.now()
     console.log('Start the calculating artwork ID ...')
 
-    const compositeSequence = generateCompositeSequence(linesData);
+    const compositeSequence = generateCompositeSequence(linesData)
     console.log("compositeSequence: ", compositeSequence)                // 01701701702552551272_6364 ...
     console.log("compositeSequence.length: ", compositeSequence.length)  // e.g.: 7578 (202404_001)
 
@@ -24,7 +24,7 @@ function generateCompositeSequence(linesData) {
     // Join whole groups sequences with underscore '_' to form:
     // [group_0_values] "_" [group_0_digits] "_" [group_1_values] "_" [group_1_digits] ...
 
-    return Array.from(linesData).map(([key, value]) => createGroupSequence(key, value)).join('_');
+    return Array.from(linesData).map(([key, value]) => createGroupSequence(key, value)).join('_')
 }
 
 function createGroupSequence(key, value) {
