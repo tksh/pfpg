@@ -2,59 +2,59 @@ import { base52Dec } from 'enc-and-dec/base-n/base-52-dec'
 import { baseXDec }  from 'enc-and-dec/lines-data/d-values/bruteforce53/base-x-dec'
 
 export function decodeDiff(diffStr, codebook, baseX) {
-    let decodedDiffArr = [];
-    let i = 0;
+    let decodedDiffArr = []
+    let i = 0
 
     while (i < diffStr.length) {
 
         if (isInFreqDiff(diffStr[i], codebook)) {
             // Codebook に含まれるアルファベットならば 1文字ごとに diffStr[i]をキーにして 対応する数値を得て 配列に格納
-            console.log(`Decode diff: isInFreqDiff = true, ${diffStr[i]} => ${codebook.get(diffStr[i])}`);
-            decodedDiffArr.push(codebook.get(diffStr[i]));
-            i++;
+            console.log(`Decode diff: isInFreqDiff = true, ${diffStr[i]} => ${codebook.get(diffStr[i])}`)
+            decodedDiffArr.push(codebook.get(diffStr[i]))
+            i++
 
         } else if (isNumber(diffStr[i])) {
             // 整数[0-9] ならば 1文字ごとに そのまま 配列に格納
-            console.log(`Decode diff: isNumber = true, ${diffStr[i]} => ${diffStr[i]}`);
-            decodedDiffArr.push(parseInt(diffStr[i], 10));
-            i++;
+            console.log(`Decode diff: isNumber = true, ${diffStr[i]} => ${diffStr[i]}`)
+            decodedDiffArr.push(parseInt(diffStr[i], 10))
+            i++
 
         } else if (diffStr[i] === '_') {
             // '_'が １個見つかったら その次に更に '_'が何個続くか を調べて それに応じた処理をする
-            let underscoreCount = 0;
+            let underscoreCount = 0
             while (diffStr[i] === '_' && i < diffStr.length) {
-                underscoreCount++;
-                i++;
+                underscoreCount++
+                i++
             }
 
-            let decodedValue;
-            let encodedChunk;
-            let encodedLength;
+            let decodedValue
+            let encodedChunk
+            let encodedLength
 
             if (underscoreCount % 2 === 1) {                          // 奇数個のアンダースコア: 元の値は 正の数なので そのまま 配列に格納
-                encodedLength = Math.floor(underscoreCount / 2) + 2;
-                encodedChunk = diffStr.slice(i, i + encodedLength);
-                decodedValue = base52Dec(encodedChunk);
+                encodedLength = Math.floor(underscoreCount / 2) + 2
+                encodedChunk = diffStr.slice(i, i + encodedLength)
+                decodedValue = base52Dec(encodedChunk)
             } else {                                                  // 偶数個のアンダースコア: 元の値は 負の数なので マイナス記号を付けてから 配列に格納
-                encodedLength = (underscoreCount / 2) + 1;
-                encodedChunk = diffStr.slice(i, i + encodedLength);
-                decodedValue = -base52Dec(encodedChunk);
+                encodedLength = (underscoreCount / 2) + 1
+                encodedChunk = diffStr.slice(i, i + encodedLength)
+                decodedValue = -base52Dec(encodedChunk)
             }
 
-            console.log(`'_' found: ${'_'.repeat(underscoreCount)}${encodedChunk} => ${decodedValue}`);
-            decodedDiffArr.push(decodedValue);
-            i += encodedLength;
+            console.log(`'_' found: ${'_'.repeat(underscoreCount)}${encodedChunk} => ${decodedValue}`)
+            decodedDiffArr.push(decodedValue)
+            i += encodedLength
 
         } else {
             // 残りは BaseXでエンコードされた 2文字ずつ のみ なので それを baseXDec()して  配列に格納
-            const toBaseXDecode = diffStr.slice(i, i + 2);
-            console.log(`Decode diff: toBaseXDecode: ${toBaseXDecode} => `, baseXDec(toBaseXDecode, baseX));
-            decodedDiffArr.push(baseXDec(toBaseXDecode, baseX));
-            i += 2;
+            const toBaseXDecode = diffStr.slice(i, i + 2)
+            console.log(`Decode diff: toBaseXDecode: ${toBaseXDecode} => `, baseXDec(toBaseXDecode, baseX))
+            decodedDiffArr.push(baseXDec(toBaseXDecode, baseX))
+            i += 2
         }
     }
 
-    return decodedDiffArr;
+    return decodedDiffArr
 }
 
 

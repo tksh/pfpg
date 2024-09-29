@@ -58,20 +58,20 @@ function handleFrequencyDiff(diff, codebookToEncodeFreqDiff) {
 //     (エンコード後の文字数 - 1) * 2 - 1 = 正の数値に付ける アンダースコアの 個数
 //     (エンコード後の文字数 - 1) * 2     = 負の数値に付ける アンダースコアの 個数
 function getNumberOfUnderscorePrefix(str, isPositive) {
-    const lengthBasedValue = (str.length - 1) * 2;
+    const lengthBasedValue = (str.length - 1) * 2
 
     if (isPositive) {
-        return lengthBasedValue - 1; // 正の数値に付ける アンダースコアの個数
+        return lengthBasedValue - 1 // 正の数値に付ける アンダースコアの個数
     } else {
-        return lengthBasedValue;     // 負の数値に付ける アンダースコアの個数
+        return lengthBasedValue     // 負の数値に付ける アンダースコアの個数
     }
 }
 
 // Prepend some underscore signs
 function prependUnderscores(str, isPositive) {
-    const numberOfUnderscores = getNumberOfUnderscorePrefix(str, isPositive);
-    const underscorePrefix = '_'.repeat(numberOfUnderscores);
-    return underscorePrefix + str;
+    const numberOfUnderscores = getNumberOfUnderscorePrefix(str, isPositive)
+    const underscorePrefix = '_'.repeat(numberOfUnderscores)
+    return underscorePrefix + str
 }
 
 // Limits:

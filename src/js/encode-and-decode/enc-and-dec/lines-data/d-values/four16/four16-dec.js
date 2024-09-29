@@ -25,8 +25,8 @@ export function four16Dec(encodedDvalsStr) {
 function decodeAsCoords(str) {
     const charsSets = getFour16CharsSets()
 
-    let splitted = [];
-    let i = 0;
+    let splitted = []
+    let i = 0
 
     while (i < str.length) {
         console.log(`Processing character at index ${i}: ${str[i]}`)
@@ -51,7 +51,7 @@ function decodeAsCoords(str) {
             }
         } catch (error) {
             console.error("Error in decodeAsCoords:", error)
-            break;
+            break
         }
     }
 

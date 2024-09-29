@@ -40,7 +40,7 @@ const ENCODING_METHODS = {
 function getCheckedEncodingMethodNames () {
     return Object.keys(ENCODING_METHODS)
         .filter(id => document.getElementById(`apply-${id}`).checked)
-        .map(id => id.replace('apply-', ''));
+        .map(id => id.replace('apply-', ''))
 }
 
 /**
@@ -101,20 +101,20 @@ function bestMixEnc() {
 // Checkboxes to enable each encoding methods
 
 function updateEncodingMethodsCheckboxStates(basicData) {
-    const uintN = tryDecompress(basicData.n);
+    const uintN = tryDecompress(basicData.n)
     const checkboxes = Object.keys(ENCODING_METHODS).reduce((acc, id) => {
-        acc[id] = document.getElementById(`apply-${id}`);
-        return acc;
-    }, {});
+        acc[id] = document.getElementById(`apply-${id}`)
+        return acc
+    }, {})
 
     const settings = {
         bruteforce53: { checked: true, disabled: false },
         bigint64: { checked: true, disabled: false },
         swap63: { checked: uintN <= 5, disabled: uintN > 5 },
         four16: { checked: uintN <= 8, disabled: uintN > 8 }
-    };
+    }
 
     Object.entries(settings).forEach(([id, state]) => {
-        Object.assign(checkboxes[id], state);
-    });
+        Object.assign(checkboxes[id], state)
+    })
 }
