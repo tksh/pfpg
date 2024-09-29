@@ -1,68 +1,46 @@
-import { isOnDataManipulatorPage }    from "common-utils/select-output-textarea"
-import { decode }                     from "decode/decode"
-import {
-  countSvgSize,
-  getInputSvg,
-  initDownloadButtons,
-}                                     from "download"
-import { adjustBox }                  from "init/adjust-output-boxes-size"
-import { getInitialOpacitySteps }     from "init/get-initial-opacity-steps"
-import { setDefaultValueOfOptions }   from "init/set-defaults"
-import {
-  getState,
-  updateState,
-}                                     from "init/state"
-import { initTabs }                   from "init/tab-setup"
-import { initSvgOptModal }            from "svg-opt-modal/modal"
-import {
-  getSvgIndentation,
-  initSvgOptCheckbox,
-  optimizeSvg,
-}                                     from "svg-opt-modal/optimize-svg"
-import {
-  measureSvg2pngTime,
-  svg2png,
-}                                     from "svg-to-png"
-import {
-  viewboxSlimmed,
-  viewboxUnSlimmed,
-}                                     from "tab-canvas/crop-side-margins"
-import {
-  toggleDisplay,
-  updateSvgWithSelectedShapePath,
-}                                     from "tab-canvas/shape-to-trim"
-import { updateSvgAsNewColorFormat }  from "tab-lines/color-format"
-import {
-  generateGroupColorsHtmlElements,
-  generateGroupColorsSvgTags,
-  getOpacity,
-  getStroke,
-  getStrokeOpacity,
-  regexMatchesOfGroupColors,
-}                                     from "tab-lines/group-colors"
-import {
-  changeOpacitySelectOptionsAsNewStep,
-  updateSvgForNewStep,
-}                                     from "tab-lines/opacity-steps"
-import {
-  decodeAsSelectedPathMode,
-  recoverCurrentGroupColorsValues,
-  recoverCurrentOptionValue,
-}                                     from "tab-lines/path-mode"
-import {
-  adjustWidthNum,
-  syncWidthNum,
-}                                     from "tab-render/sync-number-and-range"
-import { initWidthValidatorListener } from "tab-render/width-pixel-size"
-import { initCheckerboardBgCheckbox } from "tab-ui/checkerboard-bg"
-import { initTextWrappingCheckbox }   from "tab-ui/text-wrapping"
-import {
-  initThemeColorSelect,
-  setSchemeAsDefaultTheme,
-}                                     from "tab-ui/theme-color"
-import { initViewScalingSelect }      from "tab-ui/view-scaling"
-import { getNumberOfGroups }          from "utils/get-number-of-groups"
-import { replaceAtIndex }             from "utils/replace-at-index"
+import { isOnDataManipulatorPage }       from 'common-utils/select-output-textarea'
+import { decode }                        from 'decode/decode'
+import { countSvgSize
+       , getInputSvg
+       , initDownloadButtons}            from 'download'
+import { adjustBox }                     from 'init/adjust-output-boxes-size'
+import { getInitialOpacitySteps }        from 'init/get-initial-opacity-steps'
+import { setDefaultValueOfOptions }      from 'init/set-defaults'
+import { getState
+       , updateState}                    from 'init/state'
+import { initTabs }                      from 'init/tab-setup'
+import { initSvgOptModal }               from 'svg-opt-modal/modal'
+import { getSvgIndentation
+       , initSvgOptCheckbox
+       , optimizeSvg}                    from 'svg-opt-modal/optimize-svg'
+import { measureSvg2pngTime
+       , svg2png}                        from 'svg-to-png'
+import { viewboxSlimmed
+       , viewboxUnSlimmed}               from 'tab-canvas/crop-side-margins'
+import { toggleDisplay
+       , updateSvgWithSelectedShapePath} from 'tab-canvas/shape-to-trim'
+import { updateSvgAsNewColorFormat }     from 'tab-lines/color-format'
+import { generateGroupColorsHtmlElements
+       , generateGroupColorsSvgTags
+       , getOpacity
+       , getStroke
+       , getStrokeOpacity
+       , regexMatchesOfGroupColors}      from 'tab-lines/group-colors'
+import { changeOpacitySelectOptionsAsNewStep
+       , updateSvgForNewStep}            from 'tab-lines/opacity-steps'
+import { decodeAsSelectedPathMode
+       , recoverCurrentGroupColorsValues
+       , recoverCurrentOptionValue}      from 'tab-lines/path-mode'
+import { adjustWidthNum
+       , syncWidthNum}                   from 'tab-render/sync-number-and-range'
+import { initWidthValidatorListener }    from 'tab-render/width-pixel-size'
+import { initCheckerboardBgCheckbox }    from 'tab-ui/checkerboard-bg'
+import { initTextWrappingCheckbox }      from 'tab-ui/text-wrapping'
+import { initThemeColorSelect
+       , setSchemeAsDefaultTheme}        from 'tab-ui/theme-color'
+import { initViewScalingSelect }         from 'tab-ui/view-scaling'
+import { getNumberOfGroups }             from 'utils/get-number-of-groups'
+import { replaceAtIndex }                from 'utils/replace-at-index'
 
 
 (async function () {
