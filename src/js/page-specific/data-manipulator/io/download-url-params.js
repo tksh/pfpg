@@ -1,6 +1,7 @@
-import { outputToTextarea } from 'common-utils/output-to-textarea'
-import { readTextarea }     from 'common-utils/read-textarea'
-import { isNonEmpty }       from 'common-utils/is-non-empty'
+import { outputToTextarea }        from 'common-utils/output-to-textarea'
+import { readTextarea }            from 'common-utils/read-textarea'
+import { isNonEmpty }              from 'common-utils/is-non-empty'
+import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
 
 export { mergeBasicDataAndLinesData }
 
@@ -10,7 +11,6 @@ export { mergeBasicDataAndLinesData }
 
 import Zstd from 'https://cdn.skypack.dev/numcodecs/zstd?min'
 
-import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
 
 
 // Download as .txt.zst
@@ -55,7 +55,7 @@ async function downloadUrlParamsAsTxtZstd(textareaId) {
 
 // Compressed using Zstandard before download
 
-export async function compressStringToBlob(string) {
+async function compressStringToBlob(string) {
 
     // Convert the input string to a Uint8Array
     const inputArray = new TextEncoder().encode(string)

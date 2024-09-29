@@ -26,7 +26,7 @@ async function decode(isRelative, isDataManipulatorPage) {
     const startTime = performance.now()
     console.log('Start the decoding SVG ...')
 
-    const decodedParams = decodeUrlParams(isDataManipulatorPage)
+    const decodedParams = decodeUrlParams()
     // return { basicData: basicDataObj, linesData: linesDataMap, sizeData: sizeDataObj }
 
     if (decodedParams != null) {

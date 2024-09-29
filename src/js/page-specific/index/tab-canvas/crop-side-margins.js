@@ -88,16 +88,15 @@ function extractViewboxValues(inputSvg) {
 
 function viewboxUnSlimmed(inputSvg) {
     // Read original basic data from url params
-    const isDataManipulatorPage = false
-    const decodedParams = decodeUrlParams(isDataManipulatorPage)
+    const decodedParams = decodeUrlParams()
     const sizeDataObj = decodedParams.sizeData
 
     // Generate new string with original viewBox size
-    const originalViewboxString = sizeDataObj.viewbox                // e.g.: '0 0 31 31'
+    const originalViewboxString = sizeDataObj.viewbox                       // e.g.: '0 0 31 31'
 
     // Replace the viewBox string with new one
     const patternForViewboxStr = /viewBox="([^"]+)"/
     const matchesForViewboxStr = patternForViewboxStr.exec(inputSvg)        // e.g.: 'viewBox="0 0 31 31"'
-    const matchForViewboxValueStr = matchesForViewboxStr[1]                  // e.g.: '0 0 31 31'
+    const matchForViewboxValueStr = matchesForViewboxStr[1]                 // e.g.: '0 0 31 31'
     return inputSvg.replace(matchForViewboxValueStr, originalViewboxString)
 }

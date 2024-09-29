@@ -14,85 +14,27 @@ export
     }
 
 
-function decodeUrlParams(isDataManipulatorPage) {
-    // Get the url params from right source
-    const params = getUrlParams(isDataManipulatorPage)
+// Get the url params
 
-    if (params != null) {
-        return decodeAsThreeData(params)
+function decodeUrlParams() {
+
+    const urlParams = getUrlParams()
+    const urlParamsExists = urlParams.toString() !== ''
+
+    if (urlParamsExists) {
+        return decodeAsThreeData(urlParams)
     } else {
         console.log('There is NO url params to decode.')
     }
 }
 
-
-// Retrieve URL parameters or fallback to alternative source
-
-function getUrlParams(isDataManipulatorPage) {
-    // Check url params exists
-    const params = new URLSearchParams(window.location.search)
-    // toString() returns an empty string for no parameters, otherwise a truthy value.
-    const paramsExists = params.toString() !== ''
-
-    // index.html has url params               => decode it
-    // index.html has no url params            => decode the alternative text
-    // data-manipulator.html has url params    => decode it
-    // data-manipulator.html has no url params => do nothing
-    if (paramsExists === true) {
-        // At both index.html or data-manipulator.html
-        console.log(`There is a url params to decode.`)
-        return params
-
-    } else if (isDataManipulatorPage === false) {
-        console.log(`At index.html and there is no url params to decode, fetch the alternative text from the HTML element.`)
-        const sampleArtworkEncodedStr = document.getElementById("sample-artwork-encoded-string").textContent
-        return parseStrAsUrlParams(sampleArtworkEncodedStr)
-
-    } else {
-        console.log('At data-manipulator.html and there is no url params to decode, skipping processing.')
-        return null
-    }
+function getUrlParams() {
+    return new URLSearchParams(window.location.search)
 }
 
 
-
-// Parse the string of KV pairs array to url params structure
-
-function parseStrAsUrlParams(str) {
-    // Split as array
-    const deleteQuestion = tryDeleteQuestionAtStart(str.trim())
-    const splitByAmpersand = deleteQuestion.split('&')
-    const splitByEqual = splitByAmpersand.map(entry => entry.split('='))
-
-    // Set into Map object to keep order of elements
-    const map = new Map()
-    splitByEqual.forEach(([key, value]) => {
-        map.set(key, value)
-    })
-
-    return new URLSearchParams(map)
-}
-
-function tryDeleteQuestionAtStart(str) {
-    // 文字列の先頭が?ならば削除する
-    if (str.startsWith("?")) {
-        // 先頭の1文字を除いた文字列を取得する
-        return str.slice(1)
-    } else {
-        return str
-    }
-}
-
-// // test
-// const params_like_str = "?title=202401_001&desc=~2J6DBxK74JRDIQ5EfH43&A=013127b-NWrTPcKpRSjaX&0=0135n3ap2bI1fR"
-// console.log(parseStrAsUrlParams(params_like_str))
-// // URLSearchParams(4) { title → "202401_001", desc → "~2J6DBxK74JRDIQ5EfH43", A → "013127b-NWrTPcKpRSjaX", 0 → "0135n3ap2bI1fR" }
-// console.log(typeof(parseStrAsUrlParams(params_like_str)))
-// // object
-
-
-
-
+// Decode the url params as two Obj and one Map
+//   return { basicData: basicDataObj, linesData: linesDataMap, sizeData: sizeDataObj }
 
 function decodeAsThreeData(urlSearchParams) {
 

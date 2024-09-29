@@ -1,15 +1,11 @@
 import { getUrlParams }              from 'common-utils/read-url-params'
-import { isOnDataManipulatorPage }   from 'common-utils/select-output-textarea'
 import { getBasicDataFromUrlParams } from 'enc-and-dec/basic-data/basic-data-dec'
 
 // Get the N number of UIntNPortray for bruteforce53 and bigint64 decoding
 
 export function getUintNFromUrlParams() {
-  // Detect the url: 'index.html' or 'data-manipulator.html'
-  const isDataManipulatorPage = isOnDataManipulatorPage()
-
-  // Retrieve URL parameters or fallback to alternative source
-  const urlSearchParams = getUrlParams(isDataManipulatorPage)
+  // Retrieve URL parameters
+  const urlSearchParams = getUrlParams()
 
   // Get the basic data as Map
   const basicDataObj = getBasicDataFromUrlParams(urlSearchParams)

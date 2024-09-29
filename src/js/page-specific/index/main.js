@@ -46,6 +46,15 @@ import { replaceAtIndex }                from 'utils/replace-at-index'
 (async function () {
     // Initial decoding from url param to svg
     const isRelative = false   // Default value of path-mode is 'Absolute and separated'
+
+    // If there is no url params to decode at index.html, fetch the alternative text from the HTML element and insert it as sample url params.
+    if (!window.location.search) {
+        console.log("There is no url params, sample one will be inserted.")
+        const sampleUrlParamsStr = document.getElementById("sample-artwork-encoded-string").textContent
+        window.history.pushState({}, '', window.location.pathname + sampleUrlParamsStr)
+    }
+
+    // Decode
     const svgString = await decode(isRelative, isOnDataManipulatorPage())
 
     // Generate the HTML elements of group attrs color-pickers
