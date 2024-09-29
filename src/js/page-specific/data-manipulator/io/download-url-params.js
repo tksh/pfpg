@@ -2,6 +2,7 @@ import { outputToTextarea }        from 'common-utils/output-to-textarea'
 import { readTextarea }            from 'common-utils/read-textarea'
 import { isNonEmpty }              from 'common-utils/is-non-empty'
 import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
+import { tryDecompress }           from 'decode/try-decompress'
 
 export { mergeBasicDataAndLinesData }
 
@@ -120,7 +121,7 @@ function getTitle() {
     const rawJson = readTextarea('textarea-basic-data-uploaded')
 
     const basicDataObj = JSON.parse(rawJson)
-    return basicDataObj.title // e.g.: "202310_002"
+    return tryDecompress(basicDataObj.title) // e.g.: "202310_002"
 }
 
 
