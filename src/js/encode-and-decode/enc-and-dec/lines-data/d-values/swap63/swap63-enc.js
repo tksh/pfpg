@@ -11,7 +11,7 @@ import { tryCompress }                  from 'encode/try-compress'
 
 // Replace each number of relative d values (-31 to 31) with a character from the set [0-9, a-z, A-Z, _]
 
-export function swap63Enc() {
+export async function swap63Enc() {
     const startTime = performance.now()
 
     const encodingMethodName = 'swap63'
@@ -43,7 +43,7 @@ export function swap63Enc() {
     // Format: [group-colors]=[widths-and-counts]-[d-values]
 
     // Choose shorter one between URLComp applied or not, by each group
-    const { compressedByGroups, _ } = tryCompress(encodedDval, encodingMethodName, configValue)
+    const { compressedByGroups, _ } = await tryCompress(encodedDval, encodingMethodName, configValue)
     //console.log('compressedByGroups: ', compressedByGroups)
     // e.g.:
     //     Map { 000 → (2) […] }

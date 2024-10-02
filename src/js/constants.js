@@ -34,6 +34,7 @@ export const flagsMap = new Map([
     ['1st', new Map([
                 ['uncompressed',  '~'],
                 ['URLCompressor', '0'],
+                ['deflateRaw',    '1'],
             ])
     ],
     ['2nd', new Map([

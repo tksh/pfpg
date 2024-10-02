@@ -15,7 +15,7 @@ import { jsonToMapObj }          from 'encode/json-to-map-obj'
 import { showResult }            from 'encode/show-result'
 import { simplifyMap }           from 'encode/simplify-map'
 import { tryCompress }           from 'encode/try-compress'
-
+import { resultInfo } from 'constants'
 
 // Three layers iterations
 //   1. for-loop: Max codebook size from 0 to 52
@@ -29,7 +29,7 @@ const COORDINATES = ['x1', 'y1', 'x2', 'y2']
 
 
 // Main function
-export function bruteforce53Enc() {
+export async function bruteforce53Enc() {
     const startTime = performance.now()
     const encodingMethodName = 'bruteforce53'
     let currentShortestByGroups = new Map()
@@ -44,10 +44,19 @@ export function bruteforce53Enc() {
         console.log(`///////////////// maxCodebookSize: ${maxCodebookSize}, baseXNumber: ${baseXNumber} /////////////////`)
 
         const encodedDvals = processGroups(baseXNumber, diffValueRange)
-        const compressResult = compressAndStore(encodedDvals, encodingMethodName, baseXNumber)
+        const compressResult = await compressAndStore(encodedDvals, encodingMethodName, baseXNumber)
 
+        // currentShortestByGroups = updateShortestByGroups(currentShortestByGroups, compressResult, baseXNumber, maxCodebookSize)
         currentShortestByGroups = updateShortestByGroups(currentShortestByGroups, compressResult.compressedByGroups, baseXNumber, maxCodebookSize)
     }
+
+    // Aggregate and correct flags information for 'bruteforce53' method
+    // - At this point, the first flag (Compression method name) under 'bruteforce53 Flags' is incorrect
+    // - This is because tryCompress() in compressAndStore() is suitable for encoding methods other than 'bruteforce53'
+    // - We need to merge the correct flags arrays that are stored separately by group IDs
+    // - These arrays are stored under keys matching the pattern 'bruteforce53FlagsOfGroupId=[gId]'
+    // - After merging, we'll remove the individual flag entries to clean up the resultInfo map
+    mergeFlagsArr(resultInfo)
 
     return finalizeResults(currentShortestByGroups, encodingMethodName, startTime)
 }
@@ -114,12 +123,14 @@ function encodeGroupData(freqDiffAndDiffFourCoords, baseXNumber) {
 //   1. Prepend the [encoded stroke-width values and counts] to the beginning of [encoded d values].
 //   2. Compress the above combined string and choose the shorter one.
 //   3. Prepend the [encoded group-colors value] to the chosen string.
-function compressAndStore(encodedDvals, encodingMethodName, baseXNumber) {
-    const { compressedByGroups, compressingResultArr } = tryCompress(encodedDvals, encodingMethodName, baseXNumber)
+async function compressAndStore(encodedDvals, encodingMethodName, baseXNumber) {
+    const { compressedByGroups, compressingResultArr } = await tryCompress(encodedDvals, encodingMethodName, baseXNumber)
     return { compressedByGroups, compressingResultArr }
 }
 
+// function updateShortestByGroups(currentShortestByGroups, compressResult, baseXNumber, maxCodebookSize) {
 function updateShortestByGroups(currentShortestByGroups, compressedByGroups, baseXNumber, maxCodebookSize) {
+    // const transformedMap = transformMap(compressResult.compressedByGroups, baseXNumber)
     const transformedMap = transformMap(compressedByGroups, baseXNumber)
     return maxCodebookSize === MAX_CODEBOOK_SIZE_START
         ? transformedMap  // At first loop (maxCodebookSize: 0, baseXNumber: 52), init the Map with current value
@@ -148,4 +159,22 @@ function calculateDiffLimits(uintN) {
         min: 0 - (2 ** uintN - 1) * 4,
         max:     (2 ** uintN - 1) * 4
     }
+}
+
+// Merge correct separately flags into one, then remove originals
+function mergeFlagsArr(resultInfo) {
+    // Filter the resultInfo entries to include only those with keys starting with "bruteforce53FlagsOfGroupId"
+    const flagsByGroupsArr = Array.from(resultInfo.entries())
+        .filter(([key]) => key.startsWith('bruteforce53FlagsOfGroupId'))
+        .map(([, value]) => value);
+
+    // Set the "bruteforce53 Flags" key in resultInfo to the filtered array
+    resultInfo.set('bruteforce53 Flags', flagsByGroupsArr);
+
+    // Remove the original entries with keys starting with "bruteforce53FlagsOfGroupId"
+    resultInfo.forEach((_, key) => {
+        if (key.startsWith('bruteforce53FlagsOfGroupId')) {
+            resultInfo.delete(key);
+        }
+    });
 }

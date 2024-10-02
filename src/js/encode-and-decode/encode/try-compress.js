@@ -1,8 +1,9 @@
 import { flagsMap
        , resultInfo
-       , encodingMethodAndConfig }     from 'constants'
-import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
-import { URLCompressor }               from 'libs/url-comp-0-1-0/url-comp'
+       , encodingMethodAndConfig }        from 'constants'
+import { compressToEncodedURIComponent} from 'common-utils/compression-stream'
+import { getEncodedAttrsExceptsDvals }    from 'encode/get-attrs-excepts-dvals'
+import { URLCompressor }                  from 'libs/url-comp-0-1-0/url-comp'
 
 
 // Try compress, choose shorter, then add prefix to form:
@@ -13,7 +14,7 @@ import { URLCompressor }               from 'libs/url-comp-0-1-0/url-comp'
 //   2. Compress the above combined string and choose the shorter one.
 //   3. Prepend the [encoded group-colors value] to the chosen string.
 
-export function tryCompress(encodedDval, encodingMethodName, encodingConfigValue) {
+export async function tryCompress(encodedDval, encodingMethodName, encodingConfigValue) {
     const encodedWidthsAndCounts = getEncodedAttrsExceptsDvals().widthsAndCounts
     const encodedGroupColors     = getEncodedAttrsExceptsDvals().groupColors
 
@@ -36,12 +37,12 @@ export function tryCompress(encodedDval, encodingMethodName, encodingConfigValue
         const uncompressed = charOf2ndFlag + widthsAndCountsEncoded + '-' + dvalEncodedStr
 
         // Try compress with all compression methods,
-        const { bestCompressedData, bestMethodName } = compressAndSelectBest(uncompressed)
-        console.log(`In group ID ${gId}, best compression result made by: `, bestMethodName)
+        const { bestCompressedData, bestCompMethodName } = await compressAndSelectBest(uncompressed)
+        console.log(`group ID ${gId} (method: ${encodingMethodName}, config: ${encodingConfigValue}), best compression result ${bestCompressedData.length} made by: `, bestCompMethodName)
 
         // Prepend 1st flag to best result to form:
         //   [1st_flag_for_compression_method][2nd_flag_for_encoding_method][widths_and_counts]-[d_values]
-        const charOf1stFlag = flagsMap.get('1st').get(bestMethodName)
+        const charOf1stFlag = flagsMap.get('1st').get(bestCompMethodName)
         const encodedWidthAndDvalsAsValue   = charOf1stFlag + bestCompressedData
 
         // Prepend the color value as key to form: [key(group_colors)]=[value(width_and_dvals)]
@@ -57,12 +58,12 @@ export function tryCompress(encodedDval, encodingMethodName, encodingConfigValue
         lengthAfterComp.push(bestCompressedData.length + 1)
 
         // [group ID, length of uncompressed encoded lines data, length of best compression result of encoded lines data, name of best compression method]
-        compressingResultArr.push([gId, uncompressed.length + 1, bestCompressedData.length + 1, bestMethodName])
+        compressingResultArr.push([gId, uncompressed.length + 1, bestCompressedData.length + 1, bestCompMethodName])
 
         // Append the data to Map with group ID key like `bruteforce53_gId=0`
         const previousBaseXData = resultInfo.get(`${encodingMethodName} gId=${gId}`)
-            ?? [['gId', `${encodingMethodAndConfig.get(encodingMethodName)}`, 'uncompressed', 'bestCompressed', 'bestMethodName']]
-        const currentBaseXDataAdded = [...previousBaseXData, [gId, encodingConfigValue, uncompressed.length + 1, bestCompressedData.length + 1, bestMethodName]]
+            ?? [['gId', `${encodingMethodAndConfig.get(encodingMethodName)}`, 'uncompressed', 'bestCompressed', 'bestCompMethodName']]
+        const currentBaseXDataAdded = [...previousBaseXData, [gId, encodingConfigValue, uncompressed.length + 1, bestCompressedData.length + 1, bestCompMethodName]]
         resultInfo.set(`${encodingMethodName} gId=${gId}`, currentBaseXDataAdded)
     }
 
@@ -76,32 +77,35 @@ export function tryCompress(encodedDval, encodingMethodName, encodingConfigValue
 }
 
 
-function compressAndSelectBest(inputString) {
-    // Methods list
+async function compressAndSelectBest(inputString) {
+    // Methods list with async functions
     const compressionMethods = {
-         'uncompressed': inputString,
-        'URLCompressor': URLCompressor.compress(inputString)
-    }
+        'uncompressed' : async () => inputString,
+        'URLCompressor': async () => URLCompressor.compress(inputString),
+        'deflateRaw'   : async () => compressToEncodedURIComponent(inputString, 'deflate-raw')
+    };
 
-    // To store best method name and size
-    let bestMethodName = 'uncompressed'
-    let shortestSize = inputString.length
+    // Execute all compression methods concurrently
+    const results = await Promise.all(
+        Object.entries(compressionMethods).map(async ([method, compressFunc]) => {
+            const compressedData = await compressFunc();
+            return { method, compressedData, length: compressedData.length };
+        })
+    );
 
     // Find best result size and method name
-    for (const [method, compressedData] of Object.entries(compressionMethods)) {
-
-        console.log(`Method name: ${method} \t Result string length: ${compressedData.length}`)
-
-        if (compressedData.length < shortestSize) {
-            shortestSize = compressedData.length
-            bestMethodName = method
+    let bestResult = results[0]; // Start with the first result
+    for (const result of results) {
+        console.log(`Method name: ${result.method} \t Result string length: ${result.length}`);
+        if (result.length < bestResult.length) {
+            bestResult = result;
         }
     }
 
-    // Get best result string
-    const bestCompressedData = compressionMethods[bestMethodName]
-
-    return { bestCompressedData, bestMethodName }
+    return {
+        bestCompressedData: bestResult.compressedData,
+        bestCompMethodName: bestResult.method
+    };
 }
 
 

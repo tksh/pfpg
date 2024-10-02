@@ -9,7 +9,7 @@ import { convertResultsFromStrToArray } from 'encode/transform-encoded-result'
 import { tryCompress }                  from 'encode/try-compress'
 
 
-export function bigint64Enc() {
+export async function bigint64Enc() {
     const startTime = performance.now()
 
     const encodingMethodName = 'bigint64'
@@ -39,7 +39,7 @@ export function bigint64Enc() {
     // Format: [group-colors]=[widths-and-counts]-[d-values]
 
     // Choose shorter one between URLComp applied or not, by each group
-    const { compressedByGroups, _ } = tryCompress(encodedDvals, encodingMethodName, digitsPerChunk)
+    const { compressedByGroups, _ } = await tryCompress(encodedDvals, encodingMethodName, digitsPerChunk)
     //console.log('compressedByGroups: ', compressedByGroups)
 
     // Whole group strings joined with '&' (ampersand sign)

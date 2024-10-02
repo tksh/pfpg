@@ -9,7 +9,7 @@ import { convertResultsFromStrToArray } from 'encode/transform-encoded-result'
 import { tryCompress }                  from 'encode/try-compress'
 
 
-export function four16Enc() {
+export async function four16Enc() {
     const startTime = performance.now()
 
     const encodingMethodName = 'four16'
@@ -57,7 +57,7 @@ export function four16Enc() {
 
 
     // Choose shorter one between URLComp applied or not, by each group
-    const { compressedByGroups, _ } = tryCompress(encodedDvals,encodingMethodName, configValue)
+    const { compressedByGroups, _ } = await tryCompress(encodedDvals,encodingMethodName, configValue)
     console.log('compressedByGroups: ', compressedByGroups)
 
     // Whole group strings joined with '&' (ampersand sign)
