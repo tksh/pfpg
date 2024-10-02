@@ -1,4 +1,4 @@
-import { showProcessingTime }      from 'enc-and-dec/show-result'
+import { showProcessingTime }      from 'common-utils/show-processing-time'
 import { showStringSize }          from 'encode/show-result'
 import { readTextarea }            from 'common-utils/read-textarea'
 import { outputToTextarea }        from 'common-utils/output-to-textarea'
