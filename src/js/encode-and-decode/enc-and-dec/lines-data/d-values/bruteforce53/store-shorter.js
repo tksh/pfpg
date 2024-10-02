@@ -11,8 +11,8 @@ export function storeShorter(currentShortestByGroups, encodedStrByGroups, baseXN
 
             // これまでよりも 今回の方がサイズが 小さければ 値を更新する
             console.log(
-                `Updated: Current (baseXNumber=${pad(baseXNumber, 2)}, gId=${gId}) encoded string length ${pad(encodedStr[0].length, 2)}`
-                + ` is shorter than before (${pad(currentShortestByGroups.get(gId)[0].length, 3)}),`
+                `Updated: Current (baseXNumber=${pad(baseXNumber, 2)}, gId=${gId}) encoded string length ${pad(encodedStr[0].length, 4)}`
+                + ` is shorter than before (${pad(currentShortestByGroups.get(gId)[0].length, 4)}),`
                 + ` the value like "${encodedStr[0].slice(0, 10)} ... ${encodedStr[0].slice(-5)}"`
             )
             currentShortestByGroups.set(gId, [encodedStr[0], 'bruteforce53', { baseXNumber }])
