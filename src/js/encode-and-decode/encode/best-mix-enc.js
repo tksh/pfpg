@@ -37,19 +37,20 @@ const ENCODING_METHODS = {
 /**
  * Retrieves the names of encoding methods
  */
-function getCheckedEncodingMethodNames () {
+function getCheckedEncodingMethodNames() {
     return Object.keys(ENCODING_METHODS)
         .filter(id => document.getElementById(`apply-${id}`).checked)
         .map(id => id.replace('apply-', ''))
 }
 
 /**
- * Applies each encoding method to the data.
+ * Applies each encoding method to the data asynchronously.
  * @param   {Array<Function>} methods - An array of encoding method functions.
- * @returns {Array<Map>} An array of Maps containing the encoded data from each method.
+ * @returns {Promise<Array<Map>>} A promise that resolves to an array of Maps containing the encoded data from each method.
  */
-function encodeWithMethods (methods) {
-    return methods.map((method) => method())
+async function encodeWithSelectedMethods(methods) {
+    // Wait for all methods to complete and resolve their Promises
+    return await Promise.all(methods.map((method) => method()));
 }
 
 /**
@@ -58,7 +59,7 @@ function encodeWithMethods (methods) {
  * @param   {Array<string>} methodNames - An array of encoding method names.
  * @returns {Array} An array containing the shortest encoded data and its associated information.
  */
-function processEncodedData (encodedMaps, methodNames) {
+function processEncodedData(encodedMaps, methodNames) {
     const shortestArrByGroups = storeShortest(encodedMaps, methodNames)
     const shortestStrByGroups = simplifyMap(shortestArrByGroups)
     const shortestStrArr = [...shortestStrByGroups.values()]
@@ -71,7 +72,7 @@ function processEncodedData (encodedMaps, methodNames) {
  * @param {Map} shortestArrByGroups - A Map containing the shortest encodings by group.
  * @param {number} numberOfMethods - The number of encoding methods used.
  */
-function displayResults (shortestJoined, shortestArrByGroups, checkedMethodNames) {
+function displayResults(shortestJoined, shortestArrByGroups, checkedMethodNames) {
     outputToTextarea(shortestJoined, 'textarea-lines-data-encoded')
     const inputDataTitle = `Lines Data encoding via 'bestMixEnc()' includes ${checkedMethodNames.join(', ')}`
     showStringSize(inputDataTitle, shortestJoined, 'encoded-lines-data-size')
@@ -84,12 +85,12 @@ function displayResults (shortestJoined, shortestArrByGroups, checkedMethodNames
 /**
  * Performs the best mix encoding process using the specified methods.
  */
-function bestMixEnc() {
+async function bestMixEnc() {
     // Get the methods checked
     const checkedMethodNames = getCheckedEncodingMethodNames()  // e.g.: (3) ['bruteforce53', 'swap63', 'four16']
     const checkedMethodFunctions = checkedMethodNames.map((name) => ENCODING_METHODS[name])  // e.g.: (3) [ƒ, ƒ, ƒ]
     // Encode and choose the best result by groups
-    const encodedMaps = encodeWithMethods(checkedMethodFunctions)
+    const encodedMaps = await encodeWithSelectedMethods(checkedMethodFunctions)
     const [shortestArrByGroups, shortestStrArr] = processEncodedData(encodedMaps, checkedMethodNames)
     const shortestJoined = joinWithAmpersand(shortestStrArr)
     // Show the results
