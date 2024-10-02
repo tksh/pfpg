@@ -57,6 +57,7 @@ export async function bruteforce53Enc() {
     // - These arrays are stored under keys matching the pattern 'bruteforce53FlagsOfGroupId=[gId]'
     // - After merging, we'll remove the individual flag entries to clean up the resultInfo map
     mergeFlagsArr(resultInfo)
+    console.log("||||resultInfo:", resultInfo)
 
     return finalizeResults(currentShortestByGroups, encodingMethodName, startTime)
 }
