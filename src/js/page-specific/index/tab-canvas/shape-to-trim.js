@@ -3,7 +3,8 @@ import { svgWithNewShapeViewbox
        , extractViewboxValues
        }                      from 'tab-canvas/crop-side-margins'
 import { roundToTwoDecimals } from 'utils/number-rounding'
-import { getState }          from 'init/state'
+import { getState }          from 'state/state-as-map-obj'
+import { updateState } from 'state/state-as-map-obj'
 
 export
     { toggleDisplay
@@ -21,6 +22,7 @@ function toggleDisplay(elements, display) {
 
 // Update SVG with selected shape path
 function updateSvgWithSelectedShapePath(shape, inputSvg) {
+    updateState('shapeToTrim', shape)
 
     // Params for generating the 'Squircle' and 'Squircle, slimmed' shape path
     const gridSize = extractViewboxValues(inputSvg).get('h')
@@ -83,15 +85,19 @@ function getCenter(gridSize) {
 // Width narrowness
 function getWidthNarrowness() {
     const selectWidthNarrowness = document.getElementById('width-narrowness')
-    console.log('typeof(getWidthNarrowness): ', typeof (selectWidthNarrowness))
-    return selectWidthNarrowness.value
+    const value = selectWidthNarrowness.value
+    console.log('Value of widthNarrowness: ', value)
+    updateState('widthNarrowness', value)
+    return value
 }
 
 // Top-heavy ratio
 function getTopHeavyRatio() {
     const selectTopHeavyRatio = document.getElementById('top-heavy-ratio')
-    console.log('typeof(getTopHeavyRatio): ', typeof (selectTopHeavyRatio))
-    return selectTopHeavyRatio.value
+    const value = selectTopHeavyRatio.value
+    console.log('Value of topHeavyRatio: ', value)
+    updateState('topHeavyRatio', value)
+    return value
 }
 
 // 'Crop side margins' checked or not
@@ -101,9 +107,11 @@ function getBoolOfCropSideMargins() {
     // チェックボックスがチェックされているかどうかを確認
     if (cropCheckbox.checked) {
         console.log('"Crop side margins: " checkbox has checked')
+        updateState('cropSideMargins', true)
         return true
     } else {
         console.log('"Crop side margins: " checkbox has un-checked')
+        updateState('cropSideMargins', false)
         return false
     }
 }

@@ -1,3 +1,4 @@
+import { stateList }            from 'state/state-as-map-obj'
 import { getGroupColorsValues } from 'tab-lines/group-colors'
 
 // getInitialOpacitySteps() function used twice at main.js ...
@@ -13,7 +14,7 @@ import { getGroupColorsValues } from 'tab-lines/group-colors'
 // Get initial opacity steps detected from original decoded SVG
 export function getInitialOpacitySteps(svgString) {
 
-    // get whole group 'opacity' and 'stroke-opacity' values
+    // get whole group 'opacity(op)' and 'stroke-opacity(so)' values
     const groupColorsValues = getGroupColorsValues(svgString)
     const opNumArray = groupColorsValues.get('opacity_array').map(value => Number(value))
     const soNumArray = groupColorsValues.get('stroke_opacity_array').map(value => Number(value))
@@ -22,8 +23,13 @@ export function getInitialOpacitySteps(svgString) {
     const opLargestStep = findLargestStep(opNumArray)
     const soLargestStep = findLargestStep(soNumArray)
 
-    // Select smaller step value, it is 'opacity steps' for this artwork
-    return Math.min(opLargestStep, soLargestStep)
+    // Select smaller step value to get 'opacity steps' value for this artwork
+    const steps = Math.min(opLargestStep, soLargestStep)
+
+    // Set as default values map
+    stateList.set('opacitySteps', steps)
+
+    return steps
 }
 
 

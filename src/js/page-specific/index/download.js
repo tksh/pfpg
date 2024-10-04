@@ -1,12 +1,6 @@
-import { tryShortenAsHalf }     from "color-formatter/hex-shorten"
-import { normalizedToHex }      from "color-formatter/normalized-to-hex"
-import { tryDeleteFs }          from "color-formatter/try-delete-f"
 import { extractViewboxValues } from "tab-canvas/crop-side-margins"
-import {
-  convertColorFormatForArray,
-  getGroupColorsValues,
-}                               from "tab-lines/group-colors"
-import { roundToOneDecimal }    from "utils/number-rounding"
+import { getGroupColorsAsJoinedHex } from "tab-lines/colors-as-joined-hex"
+import { roundToOneDecimal } from "utils/number-rounding"
 
 export {
     countSvgSize,
@@ -59,36 +53,9 @@ function getPixelSizeWxH() {
 // Get the current preference status
 function getCurrentStatus() {
 
-    // Lines group attributes (stroke, opacity, stroke-opacity)
-    // `stroke` will always be converted to HEX format, even if RGB is selected
-    const groupColorsValues = getGroupColorsValues()
-    const stArray = convertColorFormatForArray(groupColorsValues.get('stroke_array'))
-    const opArray = groupColorsValues.get('opacity_array')
-    const soArray = groupColorsValues.get('stroke_opacity_array')
-    console.log(stArray) // Type: String | e.g.: Array(5) [ "#97FF6E", "#000000", "#8ACAFF", "#eeeeee", "#ffffff" ]
-    console.log(opArray) // Type: String | e.g.: Array(5) [ "0.5", "1", "1", "1", "1" ]
-    console.log(soArray) // Type: String | e.g.: Array(5) [ "1", "0.8", "1", "1", "1" ]
-
-    const stHexArray = stArray.map((colorValueStr) => colorValueStr.slice(1).toUpperCase()) // Delete '#'
-    const opHexArray = opArray.map((colorValueStr) => normalizedToHex(Number(colorValueStr)).toUpperCase())
-    const soHexArray = soArray.map((colorValueStr) => normalizedToHex(Number(colorValueStr)).toUpperCase())
-    console.log(stHexArray) // 6 chars hex | e.g.: Array(5) [ "97FF6E", "000000", "8ACAFF", "EEEEEE", "FFFFFF" ]
-    console.log(opHexArray) // 2 chars hex | e.g.: Array(5) [ "80", "FF", "FF", "FF", "FF" ]
-    console.log(soHexArray) // 2 chars hex | e.g.: Array(5) [ "FF", "CC", "FF", "FF", "FF" ]
-
-    // Format as 5(3+1+1) or 10(6+2+2) or 3(3+0+0) or 6(6+0+0) chars hex string
-    // 'stroke' (3|6) + 'opacity' (0|1|2) + 'stroke-opacity' (0|1|2)
-
-    // Merging the arrays (10(6+2+2) chars hex):
-    const mergedHexArray = stHexArray.map((item, index) => item + opHexArray[index] + soHexArray[index])
-
-    // Reducing into half length if all hex pairs are duplicated.                  10 => 5
-    // And deleting for "FF" (in 5 chars hex) or "FFFF" (in 10 chars hex) at last. 10 => 6, 5 => 3
-    const compressedHexArray = mergedHexArray.map(tenCharsHex => tryDeleteFs(tryShortenAsHalf(tenCharsHex)))
-
-    // Join the formatted hex with underscore '_'
-    const groupColorsHexString = compressedHexArray.join('_')
-    console.log('groupColorsHexString: ', groupColorsHexString) // e.g.: "FCFF4280FF_000FC_8F52FFFFFF_EEEFF_FFFFF"
+    // Group colors
+    const groupColorsHexString = getGroupColorsAsJoinedHex(getInputSvg())
+    console.log('groupColorsHexString: ', groupColorsHexString) // e.g.: "FCFF4280FF_000FC_8F52FF_EEE_FFF"
 
 
     // Path mode
@@ -119,7 +86,6 @@ function getCurrentStatus() {
         // Merge with two option values
         shapeToTrim = `squircleSlimmed_${widthNarrowness}_${topHeavyRatio}`
     }
-
 
     // Merge the all values of status
     return `g_${groupColorsHexString}-p_${pathMode}-t_${shapeToTrim}-r_${shapeRendering}`

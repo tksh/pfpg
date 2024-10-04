@@ -9,7 +9,7 @@ export
     }
 
 // 選択された path-mode で url params から デコードし直す
-async function decodeAsSelectedPathMode(pathMode) {
+function decodeAsSelectedPathMode(pathMode) {
     if (pathMode === 'relativeMerged') {
         console.log('Path mode: Relative and merged')
         const isRelative = true

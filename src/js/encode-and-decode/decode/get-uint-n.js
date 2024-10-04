@@ -1,11 +1,11 @@
-import { getUrlParams }              from 'common-utils/read-url-params'
+import { getUrlParamsExceptsStates }              from 'common-utils/read-url-params'
 import { getBasicDataFromUrlParams } from 'enc-and-dec/basic-data/basic-data-dec'
 
 // Get the N number of UIntNPortray for bruteforce53 and bigint64 decoding
 
 export function getUintNFromUrlParams() {
   // Retrieve URL parameters
-  const urlSearchParams = getUrlParams()
+  const urlSearchParams = getUrlParamsExceptsStates()
 
   // Get the basic data as Map
   const basicDataObj = getBasicDataFromUrlParams(urlSearchParams)

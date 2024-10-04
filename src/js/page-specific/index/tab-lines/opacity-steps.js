@@ -17,7 +17,7 @@ export
 
 // 'opacity' and 'stroke-opacity' values of entire groups will be changed as selected new steps.
 function changeOpacitySelectOptionsAsNewStep(opacitySteps) {
-    const groupColorsValues = getGroupColorsValues()
+    const groupColorsValues = getGroupColorsValues(getInputSvg())
     const numberOfGroups = groupColorsValues.get('number_of_groups')
     const opacity        = groupColorsValues.get('opacity_array')
     const strokeOpacity  = groupColorsValues.get('stroke_opacity_array')

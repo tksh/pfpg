@@ -1,3 +1,5 @@
+import { updateState} from 'state/state-as-map-obj'
+
 export
     { initThemeColorSelect
     , setSchemeAsDefaultTheme
@@ -6,40 +8,29 @@ export
 function initThemeColorSelect() {
 
     // セレクトメニューの要素を取得
-const colorThemeSelector = document.getElementById("theme-color")
-console.log('colorThemeSelector.length is ', colorThemeSelector.length) // 2
+    const colorThemeSelector = document.getElementById("theme-color")
+    console.log('colorThemeSelector.length is ', colorThemeSelector.length) // 2
 
-// changeイベントを設定
-colorThemeSelector.addEventListener("change", () => {
+    // changeイベントを設定
+    colorThemeSelector.addEventListener("change", () => {
 
-    // 選択されたセレクトメニューの値を取得
-    const selectedTheme = colorThemeSelector.value
-    console.log('colorThemeSelector.value is ', selectedTheme) // white, light, dark, black
+        // 選択されたセレクトメニューの値を取得
+        const selectedTheme = colorThemeSelector.value
+        console.log('colorThemeSelector.value is ', selectedTheme) // white, light, dark, black
 
-    // 選択されたテーマに基づいてdata-theme属性を設定
-    document.documentElement.setAttribute('data-theme', selectedTheme)
+        // 選択されたテーマに基づいてdata-theme属性を設定
+        document.documentElement.setAttribute('data-theme', selectedTheme)
 
-    //    // img要素を取得
-    //    const img = document.querySelector("img")
-    //
-    //    // Switch the class for img
-    //    if (value == "on") {
-    //        console.log('colorThemeSelector.value is ', colorThemeSelector.value)
-    //        img.classList.add("checker")
-    //    } else if (value == "off") {
-    //        console.log('colorThemeSelector.value is ', colorThemeSelector.value)
-    //        img.classList.remove("checker")
-    //    }
-})
+        // Update the state map and url params
+        updateState('themeColor', selectedTheme)
+        //updateStateUrl({ 'themeColor': selectedTheme })
+    })
 
 }
 
 function setSchemeAsDefaultTheme() {
     // セレクトメニューの要素を取得
     const colorThemeSelector = document.getElementById("theme-color")
-
-    // 選択されたセレクトメニューの値を取得
-//    const selectedTheme = colorThemeSelector.value
 
     // ブラウザの prefers-color-scheme の設定を取得する
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -53,4 +44,3 @@ function setSchemeAsDefaultTheme() {
         colorThemeSelector.value = 'light'
     }
 }
-//setSchemeAsDefaultTheme()

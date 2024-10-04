@@ -1,13 +1,14 @@
 import { getInputSvg
        , countSvgSize } from 'download'
 import { updateState
-       , getState }    from 'init/state'
+       , getState }     from 'state/state-as-map-obj'
 import { tabSpace }     from 'constants'
-
+import { decodeAsSelectedPathMode }      from 'tab-lines/path-mode'
 
 export
     { initSvgOptCheckbox
     , getSvgIndentation
+    , getCurrentPathModeIndentation
     , removeOpacity
     , removeNewlines
     , removeSpaces
@@ -38,7 +39,8 @@ function initSvgOptCheckbox() {
             svg = removeNewlines(svg)
             updateState('removeNewlines', true)
         } else {
-            svg = restoreNewlines(svg)
+            const pathMode = getState('pathMode')
+            svg = restoreNewlines(svg, pathMode)
             updateState('removeNewlines', false)
         }
 
@@ -83,8 +85,9 @@ function removeNewlines(svg) {
     return svg.replace(/>\s+</g, '><')
 }
 
-function restoreNewlines(svg) {
-    const indentCounts = getState('indentByRow')
+
+function restoreNewlines(svg, pathMode) {
+    const indentCounts = getCurrentPathModeIndentation(pathMode)
     let formattedSvg = svg.replace(/></g, '>\n<')
     const lines = formattedSvg.split('\n')
 
@@ -96,7 +99,7 @@ function restoreNewlines(svg) {
     return indentedLines.join('\n')
 }
 
-// Save the indentation as number in array
+// Get the indentation as numbers in array
 
 function getSvgIndentation(svg) {
     const lines = svg.split('\n')
@@ -104,6 +107,11 @@ function getSvgIndentation(svg) {
         const match = line.match(/^(\s*)/)
         return match ? Math.floor(match[1].length / 4) : 0
     })
+}
+
+function getCurrentPathModeIndentation(pathMode) {
+    const svgString = decodeAsSelectedPathMode(pathMode)
+    return getSvgIndentation(svgString)
 }
 
 

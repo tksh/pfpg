@@ -22,7 +22,7 @@ export
 
 // And also will be called from '/js/page-specific/index/tab-lines/path-mode.js' when 'path-mode' changed via option selector.
 
-async function decode(isRelative, isDataManipulatorPage) {
+function decode(isRelative, isDataManipulatorPage) {
     const startTime = performance.now()
     console.log('Start the decoding SVG ...')
 

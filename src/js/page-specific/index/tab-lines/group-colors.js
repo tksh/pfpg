@@ -42,7 +42,7 @@ function generateGroupColorsHtmlElements(colorFormat, opacitySteps) {
     // const colorFormat  = getState('colorFormat')
     console.log(`generateGroupColorsHtmlElements() now started. (Opacity step = ${opacitySteps})`)
 
-    const groupColorsValues = getGroupColorsValues()
+    const groupColorsValues = getGroupColorsValues(getInputSvg())
     const numberOfGroups = groupColorsValues.get('number_of_groups')
     const stroke         = convertColorFormatForArray(groupColorsValues.get('stroke_array'), colorFormat)
     const opacity        = groupColorsValues.get('opacity_array')
@@ -149,13 +149,14 @@ function generateOpacityElements(i, step, attrName, attrValue) {
 }
 
 
-function getGroupColorsValues(svgString = getInputSvg()) {
-    console.log(`getGroupColorsValues now started.`)
+function getGroupColorsValues(svgString) {
 
     // Find whole group colors elements
 
     // Get the matches for <g> from current SVG string in textarea
     const matches = regexMatchesOfGroupColors(svgString)
+    console.log(`||||matches Array: ${matches}`)
+    // e.g.: <g stroke="#AAAAAA" opacity="1.0" stroke-opacity="1.0">,<g stroke="#000000" opacity="1.0" stroke-opacity="1.0">,<g stroke="#FFFFFF" opacity="1.0" stroke-opacity="1.0">
     // e.g.: (5) ['<g stroke="rgb(0,0,0)" opacity="1.0" stroke-opacity="1.0">', ...]
 
     // マッチした部分の数を取得

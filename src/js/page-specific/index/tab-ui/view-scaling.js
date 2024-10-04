@@ -1,3 +1,5 @@
+import { updateState } from 'state/state-as-map-obj'
+
 export function initViewScalingSelect() {
 
     // セレクトメニューの要素を取得
@@ -10,6 +12,9 @@ export function initViewScalingSelect() {
         // チェックされたセレクトメニューの値を取得
         const value = selectOfViewScale.value
         //console.log('selectOfViewScale.value is ', value) // fit|actual
+
+        // Update the state
+        updateState('viewScaling', value)
 
         // img要素を取得
         const img = document.querySelector("img")

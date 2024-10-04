@@ -5,12 +5,13 @@ import { tryDecompress }             from 'decode/try-decompress'
 import { getBasicDataFromUrlParams } from 'enc-and-dec/basic-data/basic-data-dec'
 import { decodeGroupColors }         from 'enc-and-dec/lines-data/group-colors/group-colors-dec'
 import { decodeWidthsAndCounts }     from 'enc-and-dec/lines-data/widths-and-counts/widths-and-counts-dec'
+import { stateList }     from 'state/state-as-map-obj'
 
 import { BASIC_DATA_KEYS } from 'constants'
 
 export
     { decodeUrlParams
-    , getUrlParams
+    , getUrlParamsExceptsStates
     }
 
 
@@ -18,7 +19,7 @@ export
 
 function decodeUrlParams() {
 
-    const urlParams = getUrlParams()
+    const urlParams = getUrlParamsExceptsStates()
     const urlParamsExists = urlParams.toString() !== ''
 
     if (urlParamsExists) {
@@ -28,8 +29,18 @@ function decodeUrlParams() {
     }
 }
 
-function getUrlParams() {
-    return new URLSearchParams(window.location.search)
+// function getUrlParamsExceptsStates() {
+//     return new URLSearchParams(window.location.search)
+// }
+
+function getUrlParamsExceptsStates() {
+    const urlParams = new URLSearchParams(window.location.search)
+    const stateKeys = Array.from(stateList.keys())
+
+    // stateキーのリストを作成
+    const filteredParams = new Map([...urlParams.entries()].filter(([key]) => !stateKeys.includes(key)))
+
+    return filteredParams
 }
 
 

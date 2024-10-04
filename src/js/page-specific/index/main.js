@@ -7,11 +7,10 @@ import { adjustBox }                     from 'init/adjust-output-boxes-size'
 import { getInitialOpacitySteps }        from 'init/get-initial-opacity-steps'
 import { setDefaultValueOfOptions }      from 'init/set-defaults'
 import { getState
-       , updateState}                    from 'init/state'
+       , updateState}                    from 'state/state-as-map-obj'
 import { initTabs }                      from 'init/tab-setup'
 import { initSvgOptModal }               from 'svg-opt-modal/modal'
-import { getSvgIndentation
-       , initSvgOptCheckbox
+import { initSvgOptCheckbox
        , optimizeSvg}                    from 'svg-opt-modal/optimize-svg'
 import { measureSvg2pngTime
        , svg2png}                        from 'svg-to-png'
@@ -19,6 +18,7 @@ import { viewboxSlimmed
        , viewboxUnSlimmed}               from 'tab-canvas/crop-side-margins'
 import { toggleDisplay
        , updateSvgWithSelectedShapePath} from 'tab-canvas/shape-to-trim'
+import { getGroupColorsAsJoinedHex }     from "tab-lines/colors-as-joined-hex"
 import { updateSvgAsNewColorFormat }     from 'tab-lines/color-format'
 import { generateGroupColorsHtmlElements
        , generateGroupColorsSvgTags
@@ -55,7 +55,7 @@ import { replaceAtIndex }                from 'utils/replace-at-index'
     }
 
     // Decode
-    const svgString = await decode(isRelative, isOnDataManipulatorPage())
+    const svgString = decode(isRelative, isOnDataManipulatorPage())
 
     // Generate the HTML elements of group attrs color-pickers
     generateGroupColorsHtmlElements(getState('colorFormat'), getInitialOpacitySteps(svgString))
@@ -170,7 +170,7 @@ import { replaceAtIndex }                from 'utils/replace-at-index'
 
                 // Get three group colors value
                 const stroke = getStroke(matches[i])
-                const opacity = getOpacity(matches[i])             // [0-1] number
+                const opacity = getOpacity(matches[i])       // [0-1] number
                 const strokeOpacity = getStrokeOpacity(matches[i]) // [0-1] number
 
 
@@ -217,6 +217,10 @@ import { replaceAtIndex }                from 'utils/replace-at-index'
 
                 // Update the SVG string in <textarea>
                 svgInputElement.value = updatedSvg
+
+                // Update the states
+                const groupColorsHexString = getGroupColorsAsJoinedHex(updatedSvg)
+                updateState('groupColors', groupColorsHexString)
 
                 // Rendering the PNG image
                 executeSvg2png({ target: { value: updatedSvg } })
@@ -278,7 +282,7 @@ import { replaceAtIndex }                from 'utils/replace-at-index'
         console.log(`"${pathMode}" selected.`)
 
         // Re-decode as new 'Path mode' styled svg string from url params
-        const newPathModeSvg = await decodeAsSelectedPathMode(pathMode)
+        const newPathModeSvg = decodeAsSelectedPathMode(pathMode)
 
         // レンダリングし直す前に 保存しておいた 設定の値を 元に戻す
 
@@ -290,9 +294,6 @@ import { replaceAtIndex }                from 'utils/replace-at-index'
 
         // Update the state
         updateState('pathMode', pathMode)
-
-        // Count the number of indentations before removing them to preserve structural information.
-        updateState('indentByRow', getSvgIndentation(updatedSvg))
 
         // 保存しておいた設定の値を 全て元に戻した 新しいSVG文字列 を
         // SVG最適化モーダルウィンドウでの 3つのチェックボックスの状態に応じた形にしてから
@@ -463,6 +464,9 @@ import { replaceAtIndex }                from 'utils/replace-at-index'
     document.getElementById("shape-rendering").addEventListener("change", (event) => {
         // 選択された値を取得
         const value = event.target.value // 'geometricPrecision' | 'crispEdges'
+        console.log("Updated value of 'Anti-aliasing (shape-rendering)': ", value)
+        updateState('shapeRendering', value)
+
         // <textarea>のvalue属性を取得
         const svgString = svgInputElement.value
 
@@ -485,7 +489,7 @@ import { replaceAtIndex }                from 'utils/replace-at-index'
 
     // Function to update resvgOpts and convert SVG
     const updateAndConvert = (value) => {
-        console.log("New value of 'Width pixel size':", value)
+        console.log("Updated value of 'Width pixel size':", value)
         updateState('widthPixelSize', value)  // グローバルステート更新
 
         Object.assign(resvgOpts, {

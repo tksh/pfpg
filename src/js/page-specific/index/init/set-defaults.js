@@ -1,7 +1,6 @@
 import { getInitialOpacitySteps } from 'init/get-initial-opacity-steps'
-import { updateState }            from 'init/state'
+import { updateState }            from 'state/state-as-map-obj'
 import { getInputSvg }            from 'download'
-import { getSvgIndentation }      from 'svg-opt-modal/optimize-svg'
 
 
 export async function setDefaultValueOfOptions() {
@@ -11,10 +10,9 @@ export async function setDefaultValueOfOptions() {
     const inputSvg = getInputSvg()
 
     // Get each attrs values, then set it as default
-    setDefaultOfPathMode(inputSvg)                      // Path mode selector
-    setDefaultOfAntiAlias(inputSvg)                     // Anti-alias selector
-    setDefaultOfOpacitySteps(getInitialOpacitySteps())  // Opacity steps selector
-
+    setDefaultOfPathMode(inputSvg)                              // Path mode
+    setDefaultOfAntiAliasing(inputSvg)                          // Anti-aliasing (shape-rendering)
+    setDefaultOfOpacitySteps(getInitialOpacitySteps(inputSvg))  // Opacity steps
 }
 
 
@@ -35,45 +33,45 @@ function setDefaultOfPathMode(inputSvg) {
         console.log("Default 'Path mode' is 'Relative and merged'")
         updateState('pathMode', 'relativeMerged')
     }
-
-    // Save indentation
-    updateState('indentByRow', getSvgIndentation(inputSvg))
 }
 
 
 // Selector: Anti-aliasing (On (geometricPrecision) or Off (crispEdges))
-function setDefaultOfAntiAlias(inputSvg) {
+function setDefaultOfAntiAliasing(inputSvg) {
 
     // Get the 'shape-rendering' attr value
     const pattern = /shape-rendering="(.*)">/  // target: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" shape-rendering="geometricPrecision">
     const matches = pattern.exec(inputSvg)     // exec メソッドでマッチする部分を探す
-    console.log('matches(for shape-rendering): ', matches)
+    //console.log('matches(for shape-rendering): ', matches)
     // Array [ 'shape-rendering="geometricPrecision">', "geometricPrecision" ]
-    const defaultShapeRendering = matches[1]
+    const shapeRendering = matches[1]
 
     // <select> 要素を取得
     const selectElement = document.getElementById("shape-rendering")
 
     // <option> 要素の selected 属性を設定する
     for (let i = 0; i < selectElement.options.length; i++) { // <option> 要素をループ
-        if (selectElement.options[i].value === defaultShapeRendering) {
-            selectElement.options[i].selected = true  // value が 変更したい値 defaultShapeRendering と 同じならば selected を 付ける
+        if (selectElement.options[i].value === shapeRendering) {
+            selectElement.options[i].selected = true  // value が 変更したい値 shapeRendering と 同じならば selected を 付ける
         } else {
-            selectElement.options[i].selected = false // value が 変更したい値 defaultShapeRendering と 違うならば selected を 付けない
+            selectElement.options[i].selected = false // value が 変更したい値 shapeRendering と 違うならば selected を 付けない
         }
     }
 
-    console.log(`Default 'shape-rendering' value is "${defaultShapeRendering}"`)
+    // Update the state as url params
+    updateState('shapeRendering', shapeRendering)
+
+    console.log(`Default 'shape-rendering' value is "${shapeRendering}"`)
 }
 
 
 // Number and Range input: Width pixel size
 function setDefaultOfOpacitySteps(opacitySteps) {
 
-    // Set as default value
+    // Set the default value of html element
     document.getElementById("opacity-steps").value = opacitySteps
 
-    // Update the global state Map object
+    // Update the state as url params
     updateState('opacitySteps', opacitySteps)
 
     console.log(`Default 'Opacity steps' value is "${opacitySteps}"`)
