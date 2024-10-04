@@ -1,5 +1,6 @@
 import { roundToOneDecimal }    from 'utils/number-rounding'
 import { extractViewboxValues } from 'tab-canvas/crop-side-margins'
+import { getStateUrlsOfImageCustomization }       from 'state/state-as-url-params'
 
 export
     { measureSvg2pngTime
@@ -10,15 +11,22 @@ export
 // Rendering from SVG to PNG with options
 async function svg2png(svgString, opts, hasCrop) {
 
-    const svg = svgString ? svgString : svgInputElement.value.trim()
-    // svgString が真（例えば、文字列が空でない、nullでないなど）であれば、その値を svg 変数に代入します。
-    // svgString が偽（例えば、nullや空文字列）であれば、svgInputElement.value.trim() の結果を svg 変数に代入します。ここで、svgInputElement.value はおそらくHTML要素の値を取得し、trim() メソッドはその値の前後の空白を削除します。
-    // したがって、このコードは svgString が提供されている場合はそれを使用し、そうでない場合は svgInputElement から取得した値を使用して、その後空白を削除した状態を svg 変数に代入します。
+//    const svg = svgString ? svgString : svgInputElement.value.trim()
+//    // svgString が真（例えば、文字列が空でない、nullでないなど）であれば、その値を svg 変数に代入します。
+//    // svgString が偽（例えば、nullや空文字列）であれば、svgInputElement.value.trim() の結果を svg 変数に代入します。ここで、svgInputElement.value はおそらくHTML要素の値を取得し、trim() メソッドはその値の前後の空白を削除します。
+//    // したがって、このコードは svgString が提供されている場合はそれを使用し、そうでない場合は svgInputElement から取得した値を使用して、その後空白を削除した状態を svg 変数に代入します。
+//
+//    if (!svg) {
+//        alert('SVG is empty')
+//        return
+//    }
 
-    if (!svg) {
-        alert('SVG is empty')
-        return
-    }
+    // Get the customization states from url params
+    const paramsOfCustomization = getStateUrlsOfImageCustomization()
+    console.log('||||paramsOfCustomization: ', paramsOfCustomization)
+
+    // Rendering
+    const svg = svgString
     const resvgJS = new resvg.Resvg(svg, opts)
     console.log('resvgJS: ', resvgJS)
 
@@ -98,7 +106,6 @@ async function measureSvg2pngTime(svgString, opts, hasCrop, renderingStatusEleme
             const startTime = performance.now()
             console.log('svg2png startTime: ', startTime)
 
-
             try {
                 // svg2png関数を呼び出す
                 const result = await svg2png(svgString, opts, hasCrop)
@@ -106,7 +113,6 @@ async function measureSvg2pngTime(svgString, opts, hasCrop, renderingStatusEleme
                 // 終了時刻を記録
                 const endTime = performance.now()
                 console.log('svg2png endTime: ', endTime)
-
 
                 // 処理時間を計算
                 const elapsedTime = Math.floor(endTime - startTime)

@@ -1,24 +1,51 @@
 import { stateList } from 'state/state-as-map-obj'
 
 export
-    { getAllStateUrl
+    { getStateUrlsOfImageCustomization
+    , getStateUrlsOfSvgStrOptimization
+    , getStateUrlsOfUiConfiguration
     , getStateUrl
     , updateStateUrl
-    , resetAllStateUrl
+    , resetAllStateUrls
     }
 
 
 // URLから 全ての状態パラメータを取得する関数
-function getAllStateUrl() {
+function getAllStateUrls() {
     const params = new URLSearchParams(window.location.search);
     return Object.fromEntries(params);
 }
 
 // URLから 特定の状態パラメータを取得する関数
 function getStateUrl(key) {
-    const allParams = getAllStateUrl();
+    const allParams = getAllStateUrls();
     return allParams[key];
 }
+
+
+// URLから特定の範囲の状態パラメータを取得する汎用関数
+function getStateUrlsInRange(startIndex, endIndex) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const stateKeys = Array.from(stateList.keys()).slice(startIndex, endIndex);
+    return new Map([...urlParams.entries()].filter(([key]) => stateKeys.includes(key)));
+}
+
+// SVG optimization の状態パラメータを全て取得する関数
+function getStateUrlsOfSvgStrOptimization() {
+    return getStateUrlsInRange(0, 3);
+}
+
+// Image Customization の状態パラメータを全て取得する関数
+function getStateUrlsOfImageCustomization() {
+    return getStateUrlsInRange(3, 13);
+}
+
+// UI configuration の状態パラメータを全て取得する関数
+function getStateUrlsOfUiConfiguration() {
+    return getStateUrlsInRange(13, stateList.size);
+}
+
+
 
 // URL状態パラメータを設定する関数
 function setStateUrl(params) {
@@ -33,34 +60,25 @@ function setStateUrl(params) {
     window.history.replaceState({}, '', url);
 }
 
+// 状態パラメータを 追加 または 更新 する
+function updateStateUrl(params) {
+    const currentParams = getAllStateUrls();
+    const updatedParams = { ...currentParams, ...params };
+    setStateUrl(updatedParams);
+}
+
+
 // 特定の状態パラメータをリセット（削除）する関数
 function resetStateUrl(paramsToReset) {
-    const currentParams = getAllStateUrl();
+    const currentParams = getAllStateUrls();
     paramsToReset.forEach(param => {
         delete currentParams[param];
     });
     setStateUrl(currentParams);
 }
 
-// 状態パラメータを 追加 または 更新 する
-function updateStateUrl(params) {
-    const currentParams = getAllStateUrl();
-    const updatedParams = { ...currentParams, ...params };
-    setStateUrl(updatedParams);
-}
-
-
 // 全ての状態パラメータを リセット（削除）
-function resetAllStateUrl() {
+function resetAllStateUrls() {
     const allStateParams = [...stateList.keys()]
     resetStateUrl(allStateParams)
 }
-
-// 使用例
-
-// // 状態パラメータを追加または更新
-// updateStateUrl({
-//     removeOpacity: 'true',
-//     pathMode: 'relativeMerged',
-//     newParam: 'value'
-// });
