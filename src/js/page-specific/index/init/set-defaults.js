@@ -12,6 +12,7 @@ export async function setDefaultValueOfOptions() {
 
     // Get each attrs values, then set it as default
     setDefaultOfPathMode(inputSvg)                              // Path mode
+    setDefaultOfColorFormat()                              // Color format
     setDefaultOfAntiAliasing(inputSvg)                          // Anti-aliasing (shape-rendering)
     setDefaultOfOpacitySteps(getInitialOpacitySteps(inputSvg))  // Opacity steps
 }
@@ -43,6 +44,11 @@ function setDefaultOfPathMode(inputSvg) {
     }
 }
 
+// Selector: Color-format
+function setDefaultOfColorFormat() {
+    const colorFormat = getState('colorFormat') ? getState('colorFormat') : 'rgb'
+    document.getElementById("color-format").value = colorFormat
+}
 
 // Selector: Anti-aliasing (On (geometricPrecision) or Off (crispEdges))
 function setDefaultOfAntiAliasing(inputSvg) {

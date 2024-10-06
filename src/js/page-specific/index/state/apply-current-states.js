@@ -1,12 +1,10 @@
-import { getState } from 'state/state-as-map-obj'
-import { decodeGroupColors } from 'tab-lines/decode-colors-as-array'
-import {
-    generateGroupColorsHtmlElements,
-    generateGroupColorsSvgTags
-} from 'tab-lines/group-colors'
+import { getState }                             from 'state/state-as-map-obj'
+import { decodeGroupColors }                    from 'tab-lines/decode-colors-as-array'
+import { generateGroupColorsHtmlElements,
+    generateGroupColorsSvgTags }                from 'tab-lines/group-colors'
 import { addEventListenerForGroupColorsInputs } from 'tab-lines/group-colors-listener'
-import { getNumberOfGroups } from 'utils/get-number-of-groups'
-import { replaceAtIndex } from 'utils/replace-at-index'
+import { getNumberOfGroups }                    from 'utils/get-number-of-groups'
+import { replaceAtIndex }                       from 'utils/replace-at-index'
 
 
 export function applyCustomization(svgString, paramsOfImageCustomization) {
@@ -68,39 +66,3 @@ function applyGroupColors(svgString, value) {
 
     return updatedSvg
 }
-
-
-// function addEventListeners(numberOfGroups, svgString, attrName) {
-
-//     for (let i = 0; i < numberOfGroups; i++) {
-
-//         const elementId = `group-colors-${attrName}-${i}`
-
-//         const element = document.querySelector(`#${elementId}`)
-//         console.log('i, element: ', i, element) // 0 <input type=​"number" min=​"0" max=​"1" step=​"0.1" value=​"1" id=​"group-colors-${attrName}-0">​
-
-//         element.addEventListener('change', function (event) {
-
-//             const inputValue = event.target.value  // 'attrName' の input値を 取得
-//             console.log(`'${attrName}' changes to ${inputValue}`)
-
-//             // elementId最後の idの数値のみ を抽出して 変更されたグループの indexナンバー を特定
-//             const gId = elementId.replace(`group-colors-${attrName}-`, '')
-//             //console.log('gId: ', gId)                 // e.g: '0', '1', '2' ...
-//             //console.log('typeof(gId): ', typeof(gId)) // string
-
-//             // Get the matches
-//             const matches = regexMatchesOfGroupColors(svgString)
-//             console.log('matches: ', matches)
-//             // e.g: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
-
-//             // Get three group colors value
-//             const stroke = getStroke(matches[i])
-//             const opacity = getOpacity(matches[i])       // [0-1] number
-//             const strokeOpacity = getStrokeOpacity(matches[i]) // [0-1] number
-
-//             // Generate the array with input value, as same structured like regex '.match()' object
-//             let groupColorsArr = []
-//         }
-//     }
-// }

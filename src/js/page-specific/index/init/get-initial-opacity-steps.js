@@ -1,5 +1,5 @@
 import { getState
-       , stateList } from 'state/state-as-map-obj'
+       , stateList }            from 'state/state-as-map-obj'
 import { getGroupColorsValues } from 'tab-lines/group-colors'
 
 // getInitialOpacitySteps() function used twice at main.js ...

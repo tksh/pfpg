@@ -54,7 +54,9 @@ import { getNumberOfGroups }             from 'utils/get-number-of-groups'
     console.log('Initial decoded svgString: ', svgString)
 
     // Generate the HTML elements of group attrs color-pickers
-    generateGroupColorsHtmlElements(svgString, getState('colorFormat'), getInitialOpacitySteps(svgString))
+    // Default value of color-format is 'rgb'
+    const colorFormat = getState('colorFormat') ? getState('colorFormat') : 'rgb'
+    generateGroupColorsHtmlElements(svgString, colorFormat, getInitialOpacitySteps(svgString))
 
     await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm'))    // Path that relative from index.html
     const svgInputElement = document.querySelector('#input-svg') // <textarea id="input-svg" ... >

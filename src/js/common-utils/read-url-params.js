@@ -5,7 +5,7 @@ import { tryDecompress }             from 'decode/try-decompress'
 import { getBasicDataFromUrlParams } from 'enc-and-dec/basic-data/basic-data-dec'
 import { decodeGroupColors }         from 'enc-and-dec/lines-data/group-colors/group-colors-dec'
 import { decodeWidthsAndCounts }     from 'enc-and-dec/lines-data/widths-and-counts/widths-and-counts-dec'
-import { stateList }     from 'state/state-as-map-obj'
+import { stateList }                 from 'state/state-as-map-obj'
 
 import { BASIC_DATA_KEYS } from 'constants'
 
