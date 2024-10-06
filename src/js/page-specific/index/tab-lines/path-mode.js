@@ -1,6 +1,6 @@
 import { replaceAtIndex }          from 'utils/replace-at-index'
 import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
-import { decode }                  from 'decode/decode'
+import { decodeUrlToSvg }                  from 'decode/decode'
 
 export
     { decodeAsSelectedPathMode
@@ -13,11 +13,11 @@ function decodeAsSelectedPathMode(pathMode) {
     if (pathMode === 'relativeMerged') {
         console.log('Path mode: Relative and merged')
         const isRelative = true
-        return decode(isRelative, isOnDataManipulatorPage())
+        return decodeUrlToSvg(isRelative, isOnDataManipulatorPage())
     } else { // (pathMode === 'absoluteSeparated')
         console.log('Path mode: Absolute and separated')
         const isRelative = false
-        return decode(isRelative, isOnDataManipulatorPage())
+        return decodeUrlToSvg(isRelative, isOnDataManipulatorPage())
     }
 }
 

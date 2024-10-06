@@ -3,7 +3,7 @@ export
     , selectOutputTextareaId
     }
 
-// Get the SVG output textarea ID from URL for decode()
+// Get the SVG output textarea ID from URL for decodeUrlToSvg()
 // index           : 'input-svg'
 // data-manipulator: 'textarea-decoded-svg'
 

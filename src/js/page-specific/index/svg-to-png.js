@@ -58,14 +58,18 @@ async function executeSvg2png(event, resvgOpts) {
 // Rendering from SVG to PNG with options
 async function svg2png(svgString, resvgOpts, hasCrop) {
 
-    // Get the customization states from url params
-    const paramsOfImageCustomization = getStateUrlsOfImageCustomization()
-
-    // Apply the value of customization, if url param exists
-    const svgStringCustomizationApplied = applyCustomization(svgString, paramsOfImageCustomization)
+//    // Get the customization states from url params
+//    const paramsOfImageCustomization = getStateUrlsOfImageCustomization()
+//
+//    // Apply the value of customization, if url param exists
+//    const svgStringCustomizationApplied = applyCustomization(svgString, paramsOfImageCustomization)
+//
+//    // Update SVG textarea
+//    document.querySelector('#input-svg').value = svgStringCustomizationApplied
 
     // Rendering
-    const svg = svgStringCustomizationApplied ? svgStringCustomizationApplied : svgString
+    const svg = svgString
+    // const svg = svgStringCustomizationApplied ? svgStringCustomizationApplied : svgString
     const resvgJS = new resvg.Resvg(svg, resvgOpts)
     console.log('resvgJS: ', resvgJS)
 

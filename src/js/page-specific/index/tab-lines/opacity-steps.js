@@ -89,10 +89,10 @@ function numbersIncrementByStep(step) {
 
 // Update SVG
 
-function updateSvgForNewStep() {
+function updateSvgForNewStep(inputSvg) {
 
-    // Get the SVG string value
-    let inputSvg = getInputSvg()
+//    // Get the SVG string value
+//    let inputSvg = getInputSvg()
 
     // Get the number of groups
     const numberOfGroups = getNumberOfGroups(inputSvg)

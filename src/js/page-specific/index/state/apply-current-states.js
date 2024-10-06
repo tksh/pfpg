@@ -5,7 +5,7 @@ import { generateGroupColorsHtmlElements,
 import { addEventListenerForGroupColorsInputs } from 'tab-lines/group-colors-listener'
 import { getNumberOfGroups }                    from 'utils/get-number-of-groups'
 import { replaceAtIndex }                       from 'utils/replace-at-index'
-
+import { updateSvgForNewStep }            from 'tab-lines/opacity-steps'
 
 export function applyCustomization(svgString, paramsOfImageCustomization) {
     console.log("paramsOfImageCustomization: ", paramsOfImageCustomization)
@@ -27,6 +27,7 @@ export function applyCustomization(svgString, paramsOfImageCustomization) {
         updatedSvg = applyGroupColors(svgString, groupColorsValue)
     }
 
+    updatedSvg = updateSvgForNewStep(updatedSvg)
     return updatedSvg
 }
 

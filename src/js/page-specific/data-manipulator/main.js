@@ -1,5 +1,5 @@
 import { isOnDataManipulatorPage }             from 'common-utils/select-output-textarea'
-import { decode }                              from 'decode/decode'
+import { decodeUrlToSvg }                              from 'decode/decode'
 import { bestMixEnc }                          from 'encode/best-mix-enc'
 import { updateEncodingMethodsCheckboxStates } from 'encode/best-mix-enc'
 import { encodeBasicData
@@ -18,15 +18,15 @@ import { setupCopyButtons }                    from 'io/copy-textarea'
 const isDataManipulatorPage = isOnDataManipulatorPage()
 
 
-// decode() function will be executed twice at page loaded
+// decodeUrlToSvg() function will be executed twice at page loaded
 // 'isDataManipulatorPage = true' will export the generated relative and absolute style SVGs into each textarea.
 
 for (const boolean of [true, false]) {
     const isRelative = boolean
-    decode(isRelative,  isDataManipulatorPage)
+    decodeUrlToSvg(isRelative,  isDataManipulatorPage)
 }
-// decode(isRelative = true,  isDataManipulatorPage) => Relative and merged
-// decode(isRelative = false, isDataManipulatorPage) => Absolute and separated
+// decodeUrlToSvg(isRelative = true,  isDataManipulatorPage) => Relative and merged
+// decodeUrlToSvg(isRelative = false, isDataManipulatorPage) => Absolute and separated
 
 
 // Attach event listener

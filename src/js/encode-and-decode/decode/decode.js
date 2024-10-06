@@ -14,7 +14,7 @@ import { swap63Dec }              from 'enc-and-dec/lines-data/d-values/swap63/s
 
 
 export
-    { decode
+    { decodeUrlToSvg
     , decodeDvals
     }
 
@@ -22,9 +22,9 @@ export
 
 // And also will be called from '/js/page-specific/index/tab-lines/path-mode.js' when 'path-mode' changed via option selector.
 
-function decode(isRelative, isDataManipulatorPage) {
+function decodeUrlToSvg(isRelative, isDataManipulatorPage) {
     const startTime = performance.now()
-    console.log('Start the decoding SVG ...')
+    console.log('Start the decoding from URL params to SVG ...')
 
     const decodedParams = decodeUrlParams()
     // return { basicData: basicDataObj, linesData: linesDataMap, sizeData: sizeDataObj }
@@ -101,23 +101,14 @@ function decode(isRelative, isDataManipulatorPage) {
 
         return svgString
 
-    } else {
-        // Stop decoding when decodedParams = null
+    } else {  // (decodedParams = null)
+
+        // Stop decoding when there is no url params to decode.
+        // - This process possible to happen only at "data-manipulator.html",
+        // - because if there is  no url params at "index.html",
+        // - alternative text content like url params has read already.
         console.log('There is no url params to decode.')
 
-        if (isDataManipulatorPage === false) {
-            console.log('Read a SVG string from input-svg textarea.')
-            // <textarea>の要素を取得
-            const svgTextarea = document.querySelector('#input-svg') // Select <textarea id="input-svg" ...
-
-            // <textarea>のvalue属性を取得
-            const svgString = svgTextarea.value.trim() // '.trim()' = 文字列の両端の空白を削除
-
-            // Get textarea ID
-            const outputTextareaId = selectOutputTextareaId(isRelative, isDataManipulatorPage)
-
-            outputToTextarea(svgString, outputTextareaId)
-        }
     }
 }
 

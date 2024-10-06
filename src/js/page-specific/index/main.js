@@ -1,5 +1,5 @@
 import { isOnDataManipulatorPage }       from 'common-utils/select-output-textarea'
-import { decode }                        from 'decode/decode'
+import { decodeUrlToSvg }                        from 'decode/decode'
 import { getInputSvg
        , initDownloadButtons}            from 'download'
 import { adjustBox }                     from 'init/adjust-output-boxes-size'
@@ -34,6 +34,8 @@ import { initThemeColorSelect
        , setSchemeAsDefaultTheme}        from 'tab-ui/theme-color'
 import { initViewScalingSelect }         from 'tab-ui/view-scaling'
 import { getNumberOfGroups }             from 'utils/get-number-of-groups'
+import { applyCustomization } from 'state/apply-current-states'
+import { getStateUrlsOfImageCustomization } from 'state/state-as-url-params'
 
 
 (async function () {
@@ -50,17 +52,23 @@ import { getNumberOfGroups }             from 'utils/get-number-of-groups'
     }
 
     // Decode the SVG from url params
-    const svgString = decode(isRelative, isOnDataManipulatorPage())
-    console.log('Initial decoded svgString: ', svgString)
+    const initialDecodedSvgString = decodeUrlToSvg(isRelative, isOnDataManipulatorPage())
+    console.log('initialDecodedSvgString: ', initialDecodedSvgString)
+
+    // Get the customization states from url params, and apply them to initial decoded svg string
+    const paramsOfImageCustomization = getStateUrlsOfImageCustomization()
+    const svgString = applyCustomization(initialDecodedSvgString, paramsOfImageCustomization)
 
     // Generate the HTML elements of group attrs color-pickers
     // Default value of color-format is 'rgb'
     const colorFormat = getState('colorFormat') ? getState('colorFormat') : 'rgb'
     generateGroupColorsHtmlElements(svgString, colorFormat, getInitialOpacitySteps(svgString))
 
-    await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm'))    // Path that relative from index.html
     const svgInputElement = document.querySelector('#input-svg') // <textarea id="input-svg" ... >
     //console.log('svgInputElement.value.trim(): ', svgInputElement.value.trim()) // <svg xmlns="http://www.w3.org/2000/svg" ... </svg>
+    svgInputElement.value = svgString
+
+    await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm'))    // Path that relative from index.html
 
     let resvgOpts = {}
     // let resvgOpts = {
@@ -206,7 +214,7 @@ import { getNumberOfGroups }             from 'utils/get-number-of-groups'
 
         // 新しいセレクトメニューへの 更新で選ばれた その opacitySteps での 一番近い値の表示と 元々のSVGの色情報が ずれてしまうので
         // 新しいセレクトメニューでの 値 を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
-        const updatedSvg = updateSvgForNewStep()
+        const updatedSvg = updateSvgForNewStep(getInputSvg())
 
         svgInputElement.value = updatedSvg                 // Update textarea
         executeSvg2png({ target: { value: updatedSvg } })  // Rendering to PNG
@@ -229,7 +237,6 @@ import { getNumberOfGroups }             from 'utils/get-number-of-groups'
         updateState('colorFormat', colorFormat)
 
         // HTMLを 新しい表示フォーマットの js-color input に更新
-        // generateGroupColorsHtmlElements(colorFormat, getState('opacitySteps'))
         generateGroupColorsHtmlElements(getInputSvg(), colorFormat, getState('opacitySteps'))
 
         // Add event listener for new format js-color inputs and opacity selectors
