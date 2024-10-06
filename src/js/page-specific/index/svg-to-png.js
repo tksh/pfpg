@@ -1,15 +1,12 @@
-import { countSvgSize } from 'download'
-import { applyCustomization } from 'state/apply-current-states'
-import { getStateUrlsOfImageCustomization } from 'state/state-as-url-params'
+import { countSvgSize }         from 'download'
 import { extractViewboxValues } from 'tab-canvas/crop-side-margins'
-import { roundToOneDecimal } from 'utils/number-rounding'
+import { roundToOneDecimal }    from 'utils/number-rounding'
 
 export {
     executeSvg2png,
     measureSvg2pngTime,
     svg2png
 }
-
 
 
 // addMultipleEventListener(svgInputElement, ['change', 'keyup', 'paste'], function (event) {
@@ -58,27 +55,9 @@ async function executeSvg2png(event, resvgOpts) {
 // Rendering from SVG to PNG with options
 async function svg2png(svgString, resvgOpts, hasCrop) {
 
-//    // Get the customization states from url params
-//    const paramsOfImageCustomization = getStateUrlsOfImageCustomization()
-//
-//    // Apply the value of customization, if url param exists
-//    const svgStringCustomizationApplied = applyCustomization(svgString, paramsOfImageCustomization)
-//
-//    // Update SVG textarea
-//    document.querySelector('#input-svg').value = svgStringCustomizationApplied
-
-    // Rendering
-    const svg = svgString
-    // const svg = svgStringCustomizationApplied ? svgStringCustomizationApplied : svgString
-    const resvgJS = new resvg.Resvg(svg, resvgOpts)
+    // Create the Resvg object
+    const resvgJS = new resvg.Resvg(svgString, resvgOpts)
     console.log('resvgJS: ', resvgJS)
-
-    // resvg-js default outputs the w and h size as integer
-    // document.querySelector('#svg-info').textContent = 'Source SVG viewbox: ' + resvgJS.width + ' x ' + resvgJS.height
-
-    // Outputs the viewBox size as float to indicate at #svg-info <textarea>
-    const viewboxValues = extractViewboxValues(svgString) // e.g: Map(4) {'x' => 0, 'y' => 0, 'w' => 31, 'h' => 31}
-    document.querySelector('#svg-info').textContent = 'Source SVG viewBox size: ' + viewboxValues.get('w') + ' x ' + viewboxValues.get('h')
 
     // SVG内に含まれる外部リンクの画像を取得して解決する (Un-used)
     const resolved = await Promise.all(
@@ -111,10 +90,6 @@ async function svg2png(svgString, resvgOpts, hasCrop) {
     const pngData = resvgJS.render()
     const pngBuffer = pngData.asPng()
 
-    // PNGデータの長さ（バイト数）を取得
-    const pngSize = pngBuffer.length
-    const pngSizeAsKb = roundToOneDecimal(pngSize / 1024)
-
     // Create a blob and its url
     document.querySelector('#output img').src = URL.createObjectURL(
         new Blob([pngBuffer], { type: 'image/png' })
@@ -123,6 +98,13 @@ async function svg2png(svgString, resvgOpts, hasCrop) {
     // Outputs the Micro SVG (usvg) strings
     // console.log('Simplified svg string: \n', resvgJS.toString()) // <svg>...</svg>
 
+
+
+    // Get the PNG data size to indicate in html
+
+    // PNGデータの長さ（バイト数）を取得
+    const pngSize = pngBuffer.length
+    const pngSizeAsKb = roundToOneDecimal(pngSize / 1024)
 
     // PNGピクセルサイズを <div id="png-info">要素に 表示する
     document.querySelector('#png-info').textContent = `Rendered PNG pixel size: ${pngData.width} x ${pngData.height}`
@@ -134,6 +116,16 @@ async function svg2png(svgString, resvgOpts, hasCrop) {
 
     // button要素 を取得し innerHTML を変更する
     document.getElementById("png-download-button").innerHTML = pngDownloadSizeText
+
+
+    // SVG viewBox size to indicate in html
+
+    // resvg-js default outputs the w and h size as integer
+    // document.querySelector('#svg-info').textContent = 'Source SVG viewbox: ' + resvgJS.width + ' x ' + resvgJS.height
+
+    // Outputs the viewBox size as float to indicate at #svg-info <textarea>
+    const viewboxValues = extractViewboxValues(svgString) // e.g: Map(4) {'x' => 0, 'y' => 0, 'w' => 31, 'h' => 31}
+    document.querySelector('#svg-info').textContent = 'Source SVG viewBox size: ' + viewboxValues.get('w') + ' x ' + viewboxValues.get('h')
 }
 
 
