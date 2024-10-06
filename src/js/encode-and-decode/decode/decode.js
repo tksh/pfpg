@@ -72,7 +72,7 @@ function decodeUrlToSvg(isRelative, isDataManipulatorPage) {
         // Output to textarea
         const outputTextareaId = selectOutputTextareaId(isRelative, isDataManipulatorPage)
         // console.log("outputTextareaId: ", outputTextareaId)
-        // index.html: 'input-svg'
+        // index.html: 'svg-string'
         // data-manipulator.html: 'textarea-decoded-svg-as-rel' | 'textarea-decoded-svg-as-abs'
 
         outputToTextarea(svgString, outputTextareaId)

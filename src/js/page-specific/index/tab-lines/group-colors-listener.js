@@ -82,7 +82,7 @@ import { executeSvg2png } from 'svg-to-png'
             const updatedSvg = replaceAtIndex(inputSvg, pattern, changedGroupElem, gId)
 
             // Update the svg string in html
-            document.querySelector('#input-svg').value = updatedSvg
+            document.querySelector('#svg-string').value = updatedSvg
 
             // Update the states
             const groupColorsHexString = getGroupColorsAsJoinedHex(updatedSvg)

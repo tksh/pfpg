@@ -64,7 +64,7 @@ import { getStateUrlsOfImageCustomization } from 'state/state-as-url-params'
     const colorFormat = getState('colorFormat') ? getState('colorFormat') : 'rgb'
     generateGroupColorsHtmlElements(svgString, colorFormat, getInitialOpacitySteps(svgString))
 
-    const svgInputElement = document.querySelector('#input-svg') // <textarea id="input-svg" ... >
+    const svgInputElement = document.querySelector('#svg-string') // <textarea id="svg-string" ... >
     //console.log('svgInputElement.value.trim(): ', svgInputElement.value.trim()) // <svg xmlns="http://www.w3.org/2000/svg" ... </svg>
     svgInputElement.value = svgString
 

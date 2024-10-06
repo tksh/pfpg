@@ -17,7 +17,7 @@ export
 
 
 function initSvgOptCheckbox() {
-    const svgInputElement = document.querySelector('#input-svg')
+    const svgInputElement = document.querySelector('#svg-string')
     const checkboxes = document.querySelectorAll('#svg-opt-modal input[type="checkbox"]')
 
     checkboxes.forEach(checkbox => {

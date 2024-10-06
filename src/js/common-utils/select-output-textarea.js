@@ -4,7 +4,7 @@ export
     }
 
 // Get the SVG output textarea ID from URL for decodeUrlToSvg()
-// index           : 'input-svg'
+// index           : 'svg-string'
 // data-manipulator: 'textarea-decoded-svg'
 
 function isOnDataManipulatorPage() {
@@ -27,7 +27,7 @@ function selectOutputTextareaId(isRelative, isDataManipulatorPage) {
             return 'textarea-decoded-svg-as-abs'
         }
     } else if (isDataManipulatorPage === false) {  // on: index.html
-        return 'input-svg'
+        return 'svg-string'
     }
 
 }

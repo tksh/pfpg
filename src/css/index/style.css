@@ -149,7 +149,7 @@ div#img-box img {
 }
 
 /* SVG text area */
-#input-svg {
+#svg-string {
     width: 100%;
     aspect-ratio: 1/1;
     resize: none;
@@ -168,7 +168,7 @@ select {
     border: none;
 }
 
-textarea#input-svg.no-wrap {
+textarea#svg-string.no-wrap {
     white-space: pre;
     overflow-x: auto;
 }

@@ -1,5 +1,5 @@
 export function initSvgOptModal() {
-    const textarea = document.getElementById('input-svg')
+    const textarea = document.getElementById('svg-string')
     const modal    = document.getElementById('svg-opt-modal')
     const closeBtn = document.getElementById('close-svg-opt-modal')
 
