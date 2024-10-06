@@ -19,7 +19,6 @@ export function updateSvgAsNewColorFormat(colorFormat) {
     // Function to process each group
     const processGroup = (inputSvg, gId) => {
 
-        let newFormatStroke = ""
         // Get 'stroke' value
         const strokeElementId = `group-colors-stroke-${gId}`
         const stroke = convertColorFormat(getElementValueById(strokeElementId), colorFormat)
@@ -35,7 +34,7 @@ export function updateSvgAsNewColorFormat(colorFormat) {
         const strokeOpacity = getElementValueById(strokeOpacityElementId)
 
         // Generate the array like regex 'match' object with input value
-        const valueAsMatchesStructure = [
+        const groupColorsArr = [
             undefined,        // [0] = undefined
             stroke,           // [1] = value of stroke
             opacity,          // [2] = value of opacity
@@ -43,7 +42,7 @@ export function updateSvgAsNewColorFormat(colorFormat) {
         ]
 
         // Generate new group colors <g> element
-        const changedGroupElem = generateGroupColorsSvgTags(valueAsMatchesStructure)
+        const changedGroupElem = generateGroupColorsSvgTags(groupColorsArr)
 
         // Replace the <g> elements via group ID
         const pattern = /<g stroke=[^>]*>/g

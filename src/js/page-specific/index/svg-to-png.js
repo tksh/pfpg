@@ -1,33 +1,72 @@
-import { roundToOneDecimal }    from 'utils/number-rounding'
+import { countSvgSize } from 'download'
+import { applyCustomization } from 'state/apply-current-states'
+import { getStateUrlsOfImageCustomization } from 'state/state-as-url-params'
 import { extractViewboxValues } from 'tab-canvas/crop-side-margins'
-import { getStateUrlsOfImageCustomization }       from 'state/state-as-url-params'
+import { roundToOneDecimal } from 'utils/number-rounding'
 
-export
-    { measureSvg2pngTime
-    , svg2png
-    }
+export {
+    executeSvg2png,
+    measureSvg2pngTime,
+    svg2png
+}
 
+
+
+// addMultipleEventListener(svgInputElement, ['change', 'keyup', 'paste'], function (event) {
+//   const svgString = event.target.value.trim()
+//   const hasCrop = cropElement.checked
+//   if (!svgString) return
+//   svg2png(svgString, resvgOpts, hasCrop)
+// })
+
+// 上記の resvg-jsオリジナルの playground において SVGテキストエリアの編集イベントごとに PNGへの変換処理が呼び出される部分を
+// <input>や<select>などの 追加された選択要素からの更新でも それが呼び出されるように 下記の通りに変更した
+// - 'executeSvg2png' という関数を作り 選択要素から得られた値に従って SVGテキストエリアを更新し 直後に
+// - 'executeSvg2png({ target: { value: updatedSvg } })' として呼び出す
+// - 'svgInputElement' に対してSVG文字列を取得する際の 'event.target.value' と同じオブジェクト構造にする
+
+// svg2png() を呼び出し 処理時間を計測する measureSvg2pngTime() を実行し 処理時間結果を表示する
+async function executeSvg2png(event, resvgOpts) {
+
+    // 処理時間を表示する HTML要素を 取得
+    const renderingStatusElements = new Map([
+        ['pngDownloadButton', document.getElementById("png-download-button")], // <button> at below of output image
+        ['lastRenderingTimeP', document.getElementById("last-rendering-time")] // <p> at bottom of 'Render' tab
+    ])
+
+    // Arguments for rendering
+    const svgString = event.target.value.trim() // SVG文字列 / '.trim()' = 文字列の両端の空白を削除
+    const hasCrop = document.querySelector('#crop-by-bbox').checked // 'Crop by BBox' チェックボックスがチェックされている場合は true を チェックされていない場合は false を 返す
+
+    // Processing from SVG to PNG and measuring the time
+    measureSvg2pngTime(svgString, resvgOpts, hasCrop, renderingStatusElements)
+        .then((result) => {
+            console.log('result: ', result) // undefined
+
+            // 処理結果を利用する
+            console.log('svg2png processing has completed.')
+
+        })
+        .catch((error) => {
+            console.error('An error occurred during the processing of svg2png:', error)
+        })
+
+    // SVGファイルサイズを ダウンロードボタンに 表示する
+    countSvgSize(svgString)
+}
 
 // Rendering from SVG to PNG with options
-async function svg2png(svgString, opts, hasCrop) {
-
-//    const svg = svgString ? svgString : svgInputElement.value.trim()
-//    // svgString が真（例えば、文字列が空でない、nullでないなど）であれば、その値を svg 変数に代入します。
-//    // svgString が偽（例えば、nullや空文字列）であれば、svgInputElement.value.trim() の結果を svg 変数に代入します。ここで、svgInputElement.value はおそらくHTML要素の値を取得し、trim() メソッドはその値の前後の空白を削除します。
-//    // したがって、このコードは svgString が提供されている場合はそれを使用し、そうでない場合は svgInputElement から取得した値を使用して、その後空白を削除した状態を svg 変数に代入します。
-//
-//    if (!svg) {
-//        alert('SVG is empty')
-//        return
-//    }
+async function svg2png(svgString, resvgOpts, hasCrop) {
 
     // Get the customization states from url params
-    const paramsOfCustomization = getStateUrlsOfImageCustomization()
-    console.log('||||paramsOfCustomization: ', paramsOfCustomization)
+    const paramsOfImageCustomization = getStateUrlsOfImageCustomization()
+
+    // Apply the value of customization, if url param exists
+    const svgStringCustomizationApplied = applyCustomization(svgString, paramsOfImageCustomization)
 
     // Rendering
-    const svg = svgString
-    const resvgJS = new resvg.Resvg(svg, opts)
+    const svg = svgStringCustomizationApplied ? svgStringCustomizationApplied : svgString
+    const resvgJS = new resvg.Resvg(svg, resvgOpts)
     console.log('resvgJS: ', resvgJS)
 
     // resvg-js default outputs the w and h size as integer
@@ -95,7 +134,7 @@ async function svg2png(svgString, opts, hasCrop) {
 
 
 // Processing from SVG to PNG and measuring the time
-async function measureSvg2pngTime(svgString, opts, hasCrop, renderingStatusElements) {
+async function measureSvg2pngTime(svgString, resvgOpts, hasCrop, renderingStatusElements) {
     // 処理中メッセージを表示
     await updateRenderingStatus("Now rendering ...<br> Please wait a moment :)", renderingStatusElements.get('pngDownloadButton'))
 
@@ -108,7 +147,7 @@ async function measureSvg2pngTime(svgString, opts, hasCrop, renderingStatusEleme
 
             try {
                 // svg2png関数を呼び出す
-                const result = await svg2png(svgString, opts, hasCrop)
+                const result = await svg2png(svgString, resvgOpts, hasCrop)
 
                 // 終了時刻を記録
                 const endTime = performance.now()

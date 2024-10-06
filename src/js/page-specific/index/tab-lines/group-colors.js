@@ -1,6 +1,5 @@
 import { hexToRgb }               from "color-formatter/normalized-from-hex"
 import { rgbToHex }               from "color-formatter/normalized-to-hex"
-import { getInputSvg }            from "download"
 import { numbersIncrementByStep } from "tab-lines/opacity-steps"
 
 export {
@@ -21,14 +20,14 @@ export {
 
 // <g>タグを生成する
 function generateGroupColorsSvgTags(matches) {
-    console.log('matches: ', matches) // e.g.: (4) [undefined, '#4E8D09', '0.6', '1.0']
+    //console.log('matches: ', matches) // e.g.: (4) [undefined, '#4E8D09', '0.6', '1.0']
 
-    const stroke        = matches[1]                                      // e.g.: "rgb(0,0,0)" | "#FFF"
+    const stroke        = matches[1]                                     // e.g.: "rgb(0,0,0)" | "#FFF"
     const opacity       = matches[2] !== undefined ? matches[2] : "1.0"  // opacity が明示的に指定されていない場合は 1.0 とみなす
     const strokeOpacity = matches[3] !== undefined ? matches[3] : "1.0"  // strokeOpacity が明示的に指定されていない場合は 1.0 とみなす
     const groupElem = `<g stroke="${stroke}" opacity="${opacity}" stroke-opacity="${strokeOpacity}">`
 
-    console.log('groupElem: ', groupElem) // e.g.: <g stroke="#4E8D09" opacity="0.6" stroke-opacity="1.0">
+    //console.log('groupElem: ', groupElem) // e.g.: <g stroke="#4E8D09" opacity="0.6" stroke-opacity="1.0">
     return groupElem
 }
 
@@ -37,12 +36,10 @@ function generateGroupColorsSvgTags(matches) {
 
 // Generate the strokes group color input HTML elements
 
-function generateGroupColorsHtmlElements(colorFormat, opacitySteps) {
-    // const opacitySteps = getState('opacitySteps')
-    // const colorFormat  = getState('colorFormat')
+function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
     console.log(`generateGroupColorsHtmlElements() now started. (Opacity step = ${opacitySteps})`)
 
-    const groupColorsValues = getGroupColorsValues(getInputSvg())
+    const groupColorsValues = getGroupColorsValues(inputSvg)
     const numberOfGroups = groupColorsValues.get('number_of_groups')
     const stroke         = convertColorFormatForArray(groupColorsValues.get('stroke_array'), colorFormat)
     const opacity        = groupColorsValues.get('opacity_array')
@@ -155,7 +152,7 @@ function getGroupColorsValues(svgString) {
 
     // Get the matches for <g> from current SVG string in textarea
     const matches = regexMatchesOfGroupColors(svgString)
-    console.log(`||||matches Array: ${matches}`)
+    // console.log(`matches Array: ${matches}`)
     // e.g.: <g stroke="#AAAAAA" opacity="1.0" stroke-opacity="1.0">,<g stroke="#000000" opacity="1.0" stroke-opacity="1.0">,<g stroke="#FFFFFF" opacity="1.0" stroke-opacity="1.0">
     // e.g.: (5) ['<g stroke="rgb(0,0,0)" opacity="1.0" stroke-opacity="1.0">', ...]
 

@@ -9,7 +9,10 @@ export
 
 
 // State keys and default values
-//   - 'opacitySteps' value will be detected from initial decoded svg string when first page loaded.
+//   - These two attributes default value will be detected from initial decoded svg string when first page loaded.
+//     - 'groupColors'
+//     - 'opacitySteps'
+
 
 const stateList = new Map([                          // At: | Index | Possible values:
     ['removeOpacity',   false],   // SVG optimization modal |   0   | true, false

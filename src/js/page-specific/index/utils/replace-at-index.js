@@ -1,5 +1,6 @@
 export function replaceAtIndex(inputString, regexPattern, replacement, index) {
-    //console.log('replacement: ', replacement) // <g stroke="#00000088">
+    console.log('replacement: ', replacement) // <g stroke="#00000088">
+    console.log('index: ', index)
 
     // 正規表現でマッチした結果を配列として取得
     const matches = Array.from(inputString.matchAll(regexPattern))
@@ -39,7 +40,7 @@ export function replaceAtIndex(inputString, regexPattern, replacement, index) {
         // インデックスの後の部分 (マッチングした文字列の先頭 (20) + マッチ文字列 "apple" の長さ)
         // = 正規表現にマッチした文字列の末尾の位置を示す数値
         // `.slice()` メソッドを一つの引数だけで使用することで、指定した位置から文字列の最後までを取得
-
+    console.log('replacedString: ', replacedString)
     // 新しい文字列を返す
     return replacedString
 }

@@ -3,8 +3,8 @@ import { svgWithNewShapeViewbox
        , extractViewboxValues
        }                      from 'tab-canvas/crop-side-margins'
 import { roundToTwoDecimals } from 'utils/number-rounding'
-import { getState }          from 'state/state-as-map-obj'
-import { updateState } from 'state/state-as-map-obj'
+import { getState }           from 'state/state-as-map-obj'
+import { updateState }        from 'state/state-as-map-obj'
 
 export
     { toggleDisplay

@@ -115,7 +115,7 @@ function updateSvgForNewStep() {
         const strokeOpacity = getElementValueById(strokeOpacityElementId)
 
         // Generate the array like regex 'match' object with input value
-        const valueAsMatchesStructure = [
+        const groupColorsArr = [
             undefined,    // [0] = undefined
             stroke,       // [1] = value of stroke
             opacity,      // [2] = value of opacity
@@ -123,7 +123,7 @@ function updateSvgForNewStep() {
         ]
 
         // Generate new group colors <g> element
-        const changedGroupElem = generateGroupColorsSvgTags(valueAsMatchesStructure)
+        const changedGroupElem = generateGroupColorsSvgTags(groupColorsArr)
 
         // Replace the <g> elements via group ID
         const pattern = /<g stroke=[^>]*>/g

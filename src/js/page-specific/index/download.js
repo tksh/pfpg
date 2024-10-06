@@ -1,5 +1,5 @@
 import { extractViewboxValues } from "tab-canvas/crop-side-margins"
-import { getGroupColorsAsJoinedHex } from "tab-lines/colors-as-joined-hex"
+import { getGroupColorsAsJoinedHex } from "tab-lines/encode-colors-as-hex"
 import { roundToOneDecimal } from "utils/number-rounding"
 
 export {

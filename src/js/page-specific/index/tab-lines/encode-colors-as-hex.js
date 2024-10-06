@@ -1,8 +1,10 @@
-import { tryShortenAsHalf }     from "color-formatter/hex-shorten"
-import { normalizedToHex }      from "color-formatter/normalized-to-hex"
-import { tryDeleteFs }          from "color-formatter/try-delete-f"
-import { convertColorFormatForArray
-       , getGroupColorsValues } from "tab-lines/group-colors"
+import { hexShortenAsHalf } from "color-formatter/hex-shorten"
+import { normalizedToHex } from "color-formatter/normalized-to-hex"
+import { tryDeleteFs } from "color-formatter/try-delete-f"
+import {
+    convertColorFormatForArray,
+    getGroupColorsValues
+} from "tab-lines/group-colors"
 
 export function getGroupColorsAsJoinedHex(inputSvg) {
 
@@ -31,7 +33,7 @@ export function getGroupColorsAsJoinedHex(inputSvg) {
 
     // Reducing into half length if all hex pairs are duplicated.                  10 => 5
     // And deleting for "FF" (in 5 chars hex) or "FFFF" (in 10 chars hex) at last. 10 => 6, 5 => 3
-    const compressedHexArray = mergedHexArray.map(tenCharsHex => tryDeleteFs(tryShortenAsHalf(tenCharsHex)))
+    const compressedHexArray = mergedHexArray.map(tenCharsHex => tryDeleteFs(hexShortenAsHalf(tenCharsHex)))
 
     // Join the formatted each groups hex with underscore '_'
     return compressedHexArray.join('_')

@@ -1,4 +1,5 @@
-import { tryDeleteHash } from 'color-formatter/hex-shorten'
+import { tryDeleteHash }  from 'color-formatter/hex-shorten'
+import { hexExpandToSix } from 'color-formatter/hex-expand'
 
 export
     { normalizedFromHex
@@ -9,13 +10,13 @@ export
 
 
 // 2桁のHEX文字列を引数として受け取り
-// 0から1の範囲に正規化された数値として返す関数
+// 0から1の範囲に 正規化された数値として 返す関数
 function normalizedFromHex(hex) {
-    // 16進数を10進数に変換
+    // 16進数を 10進数に変換
     const decimalValue = parseInt(hex, 16)
-    // 0から255の範囲を0から1の範囲に正規化
+    // 0から255の範囲を 0から1の範囲 に 正規化
     const normalizedValue = decimalValue / 255
-    // 制度を小数点以下第2位までに調整
+    // 精度を 小数点以下第2位まで に 調整
     const normalizedValueFixed = Number(normalizedValue.toFixed(2))
     return normalizedValueFixed
 }
@@ -28,31 +29,32 @@ function normalizedFromHex(hex) {
 
 
 
-// 2桁のHEX文字列をuint8（0から255の範囲の整数）に変換する関数
+// 2桁のHEX文字列を uint8（0から255の範囲の整数）に 変換する関数
 function hexToUint8(twoDigitsHex) {
-    // 入力が2桁の16進数文字列であることを確認
+    // 入力が 2桁の16進数文字列 であることを確認
     if (!/^[0-9A-Fa-f]{2}$/.test(twoDigitsHex)) {
         return "Invalid hex string"
     }
-    // 16進数文字列を10進数の整数に変換
+    // 16進数文字列を 10進数の整数に変換
     const num = parseInt(twoDigitsHex, 16)
     return num
 }
 
-// 6桁のHEX文字列をRGBオブジェクトに変換する関数
-function hexToRgbMap(sixDigitsHex) {
-    const sixDigitsHexWithoutHash = tryDeleteHash(sixDigitsHex)
+// 3|6桁のHEX文字列を RGBオブジェクトに 変換する関数
+function hexToRgbMap(threeOrSixDigitsHex) {
+    const hexWithoutHash = tryDeleteHash(threeOrSixDigitsHex)
+    const sixDigitsHex = hexExpandToSix(hexWithoutHash)
 
-    // 入力が6桁の16進数文字列であることを確認
-    if (!/^[0-9A-Fa-f]{6}$/.test(sixDigitsHexWithoutHash)) {
+    // 入力が 6桁の16進数文字列 であることを確認
+    if (!/^[0-9A-Fa-f]{6}$/.test(sixDigitsHex)) {
         return "Invalid hex string"
     }
-    // 文字列を2桁ずつに分割
-    const r = sixDigitsHexWithoutHash.substring(0, 2)
-    const g = sixDigitsHexWithoutHash.substring(2, 4)
-    const b = sixDigitsHexWithoutHash.substring(4, 6)
+    // 文字列を 2桁ずつに分割
+    const r = sixDigitsHex.substring(0, 2)
+    const g = sixDigitsHex.substring(2, 4)
+    const b = sixDigitsHex.substring(4, 6)
 
-    // 各色をuint8に変換してオブジェクトを作成
+    // 各色をuint8に変換して オブジェクトを作成
     return new Map([
         ['r', hexToUint8(r)],
         ['g', hexToUint8(g)],

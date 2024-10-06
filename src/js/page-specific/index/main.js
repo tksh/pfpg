@@ -1,7 +1,6 @@
 import { isOnDataManipulatorPage }       from 'common-utils/select-output-textarea'
 import { decode }                        from 'decode/decode'
-import { countSvgSize
-       , getInputSvg
+import { getInputSvg
        , initDownloadButtons}            from 'download'
 import { adjustBox }                     from 'init/adjust-output-boxes-size'
 import { getInitialOpacitySteps }        from 'init/get-initial-opacity-steps'
@@ -12,20 +11,15 @@ import { initTabs }                      from 'init/tab-setup'
 import { initSvgOptModal }               from 'svg-opt-modal/modal'
 import { initSvgOptCheckbox
        , optimizeSvg}                    from 'svg-opt-modal/optimize-svg'
-import { measureSvg2pngTime
+import { executeSvg2png
        , svg2png}                        from 'svg-to-png'
 import { viewboxSlimmed
        , viewboxUnSlimmed}               from 'tab-canvas/crop-side-margins'
 import { toggleDisplay
        , updateSvgWithSelectedShapePath} from 'tab-canvas/shape-to-trim'
-import { getGroupColorsAsJoinedHex }     from "tab-lines/colors-as-joined-hex"
 import { updateSvgAsNewColorFormat }     from 'tab-lines/color-format'
-import { generateGroupColorsHtmlElements
-       , generateGroupColorsSvgTags
-       , getOpacity
-       , getStroke
-       , getStrokeOpacity
-       , regexMatchesOfGroupColors}      from 'tab-lines/group-colors'
+import { addEventListenerForGroupColorsInputs } from 'tab-lines/group-colors-listener'
+import { generateGroupColorsHtmlElements }      from 'tab-lines/group-colors'
 import { changeOpacitySelectOptionsAsNewStep
        , updateSvgForNewStep}            from 'tab-lines/opacity-steps'
 import { decodeAsSelectedPathMode
@@ -40,7 +34,6 @@ import { initThemeColorSelect
        , setSchemeAsDefaultTheme}        from 'tab-ui/theme-color'
 import { initViewScalingSelect }         from 'tab-ui/view-scaling'
 import { getNumberOfGroups }             from 'utils/get-number-of-groups'
-import { replaceAtIndex }                from 'utils/replace-at-index'
 
 
 (async function () {
@@ -54,62 +47,25 @@ import { replaceAtIndex }                from 'utils/replace-at-index'
         window.history.pushState({}, '', window.location.pathname + sampleUrlParamsStr)
     }
 
-    // Decode
+    // Decode the SVG from url params
     const svgString = decode(isRelative, isOnDataManipulatorPage())
+    console.log('Initial decoded svgString: ', svgString)
 
     // Generate the HTML elements of group attrs color-pickers
-    generateGroupColorsHtmlElements(getState('colorFormat'), getInitialOpacitySteps(svgString))
+    generateGroupColorsHtmlElements(svgString, getState('colorFormat'), getInitialOpacitySteps(svgString))
 
-    await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm')) // Path that relative from index.html
+    await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm'))    // Path that relative from index.html
     const svgInputElement = document.querySelector('#input-svg') // <textarea id="input-svg" ... >
     //console.log('svgInputElement.value.trim(): ', svgInputElement.value.trim()) // <svg xmlns="http://www.w3.org/2000/svg" ... </svg>
 
     let resvgOpts = {}
+    // let resvgOpts = {
+    //     fitTo: {
+    //         mode: 'height',
+    //         value: 256
+    //     }
+    // }
 
-    // addMultipleEventListener(svgInputElement, ['change', 'keyup', 'paste'], function (event) {
-    //   const svgString = event.target.value.trim()
-    //   const hasCrop = cropElement.checked
-    //   if (!svgString) return
-    //   svg2png(svgString, resvgOpts, hasCrop)
-    // })
-
-    // 上記のSVGテキストエリアの編集イベントごとに PNGへの変換処理が呼び出される部分を
-    // <input>や<select>などの 追加された選択要素からの更新でも それが呼び出されるように 下記の通りに変更した
-    // 'executeSvg2png' という関数を作り 選択要素からSVGテキストエリアを更新した直後に
-    // 'executeSvg2png({ target: { value: updatedSvg } })' として呼び出す
-    // 'svgInputElement' に対してSVG文字列を取得する際の 'event.target.value' と同じオブジェクト構造にする
-
-
-    // svg2png関数を呼び出し 処理時間を計測する 関数を定義
-    const executeSvg2png = async (event) => {
-
-        // 処理時間を表示する HTML要素を 取得
-        const renderingStatusElements = new Map([
-            ['pngDownloadButton', document.getElementById("png-download-button")], // <button> at below of output image
-            ['lastRenderingTimeP', document.getElementById("last-rendering-time")] // <p> at bottom of 'Render' tab
-        ])
-
-        // Arguments for rendering
-        const svgString = event.target.value.trim() // SVG文字列 / '.trim()' = 文字列の両端の空白を削除
-        const hasCrop = cropElement.checked         // 'Crop by BBox' チェックボックスがチェックされている場合は trueを チェックされていない場合は falseを 返す
-        if (!svgString) return
-
-        // Processing from SVG to PNG and measuring the time
-        measureSvg2pngTime(svgString, resvgOpts, hasCrop, renderingStatusElements)
-            .then((result) => {
-                console.log('result: ', result) // undefined
-
-                // 処理結果を利用する
-                console.log('svg2png processing has completed.')
-
-            })
-            .catch((error) => {
-                console.error('An error occurred during the processing of svg2png:', error)
-            })
-
-        // SVGファイルサイズを ダウンロードボタンに 表示する
-        countSvgSize(svgString)
-    }
 
 
     //////////////////////////////////////////////////////////////////////////
@@ -119,7 +75,7 @@ import { replaceAtIndex }                from 'utils/replace-at-index'
     function addMultipleEventListener(element, events, handler) {
         events.forEach(e => element.addEventListener(e, handler))
     }
-    addMultipleEventListener(svgInputElement, ['change', 'keyup', 'paste'], executeSvg2png)
+    addMultipleEventListener(svgInputElement, ['change', 'keyup', 'paste'], executeSvg2png(svgString, resvgOpts))
 
     //////////////////////////////// textarea ////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -135,98 +91,10 @@ import { replaceAtIndex }                from 'utils/replace-at-index'
 
     // Add multiple event listener for whole stroke colors
     const numberOfGroups = getNumberOfGroups(getInputSvg())
-    addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke')
-    addEventListenerForGroupColorsInputs(numberOfGroups, 'opacity')
-    addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke-opacity')
+    addEventListenerForGroupColorsInputs(numberOfGroups, svgString, 'stroke')
+    addEventListenerForGroupColorsInputs(numberOfGroups, svgString, 'opacity')
+    addEventListenerForGroupColorsInputs(numberOfGroups, svgString, 'stroke-opacity')
 
-    function addEventListenerForGroupColorsInputs(numberOfGroups, attrName) {
-
-        // id `group-colors-${attrName}-N` の要素の変更を監視
-        for (let i = 0; i < numberOfGroups; i++) {
-            const elementId = `group-colors-${attrName}-${i}`
-            console.log('elementId: ', elementId) // group-colors-${attrName}-0
-
-            const element = document.querySelector(`#${elementId}`)
-            console.log('i, element: ', i, element) // 0 <input type=​"number" min=​"0" max=​"1" step=​"0.1" value=​"1" id=​"group-colors-${attrName}-0">​
-
-            element.addEventListener('change', function (event) {
-
-                const inputValue = event.target.value  // 'attrName' の input値を 取得
-                console.log(`'${attrName}' changes to ${inputValue}`)
-
-                if (!inputValue) return
-
-                // elementId最後の idの数値のみ を抽出して 変更されたグループの indexナンバー を特定
-                const gId = elementId.replace(`group-colors-${attrName}-`, '')
-                //console.log('gId: ', gId)                 // e.g: '0', '1', '2' ...
-                //console.log('typeof(gId): ', typeof(gId)) // string
-
-                // Get the matches for <g> from current SVG string in textarea
-                const currentSvg = getInputSvg()
-                console.log('currentSvg: ', currentSvg)
-                const matches = regexMatchesOfGroupColors(currentSvg)
-                console.log('matches: ', matches)
-                // e.g: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
-
-                // Get three group colors value
-                const stroke = getStroke(matches[i])
-                const opacity = getOpacity(matches[i])       // [0-1] number
-                const strokeOpacity = getStrokeOpacity(matches[i]) // [0-1] number
-
-
-                // Generate the array with input value, as structure like regex 'match' object
-                let valueAsMatchesStructure = []
-
-                if (attrName === 'stroke') {
-
-                    valueAsMatchesStructure = [
-                        undefined,     // [0] = undefined
-                        inputValue,    // [1] = value of stroke
-                        opacity,       // [2] = value of opacity
-                        strokeOpacity  // [3] = value of stroke-opacity
-                    ]
-                } else if (attrName === 'opacity') {
-
-                    valueAsMatchesStructure = [
-                        undefined,     // [0] = undefined
-                        stroke,        // [1] = value of stroke
-                        inputValue,    // [2] = value of opacity
-                        strokeOpacity  // [3] = value of stroke-opacity
-                    ]
-                } else if (attrName === 'stroke-opacity') {
-
-                    valueAsMatchesStructure = [
-                        undefined,     // [0] = undefined
-                        stroke,        // [1] = value of stroke
-                        opacity,       // [2] = value of opacity
-                        inputValue     // [3] = value of stroke-opacity
-                    ]
-                }
-                console.log('valueAsMatchesStructure: ', valueAsMatchesStructure)
-                // e.g: (4) [undefined, '#FF0000', '0.8', '1']
-
-                // 更新された <g>タグを生成する
-                const changedGroupElem = generateGroupColorsSvgTags(valueAsMatchesStructure)
-                console.log('changedGroupElem: ', changedGroupElem)
-                // e.g: <g stroke="#FF7523" opacity="1" stroke-opacity="1">
-
-
-                // Replace the changed <g> elements via group ID
-                const pattern = /<g stroke=[^>]*>/g
-                const updatedSvg = replaceAtIndex(currentSvg, pattern, changedGroupElem, gId)
-
-                // Update the SVG string in <textarea>
-                svgInputElement.value = updatedSvg
-
-                // Update the states
-                const groupColorsHexString = getGroupColorsAsJoinedHex(updatedSvg)
-                updateState('groupColors', groupColorsHexString)
-
-                // Rendering the PNG image
-                executeSvg2png({ target: { value: updatedSvg } })
-            })
-        }
-    }
 
     ///////// Group colors: 'stroke', 'opacity' and 'stroke-opacity' /////////
     //////////////////////////////////////////////////////////////////////////
@@ -357,7 +225,8 @@ import { replaceAtIndex }                from 'utils/replace-at-index'
         updateState('colorFormat', colorFormat)
 
         // HTMLを 新しい表示フォーマットの js-color input に更新
-        generateGroupColorsHtmlElements(colorFormat, getState('opacitySteps'))
+        // generateGroupColorsHtmlElements(colorFormat, getState('opacitySteps'))
+        generateGroupColorsHtmlElements(getInputSvg(), colorFormat, getState('opacitySteps'))
 
         // Add event listener for new format js-color inputs and opacity selectors
         addEventListenerForGroupColorsInputs(numberOfGroups, 'stroke')
@@ -598,7 +467,7 @@ import { replaceAtIndex }                from 'utils/replace-at-index'
         await setPngSize(256)
 
         // Initial PNG rendering
-        await executeSvg2png({ target: { value: svgInputElement.value.trim() } })
+        await executeSvg2png({ target: { value: svgInputElement.value.trim() } }, resvgOpts)
 
         // To fit the contents (header + main) height as viewport height
         await adjustBox()

@@ -1,6 +1,6 @@
 export
     { hexShortenFromTen
-    , tryShortenAsHalf
+    , hexShortenAsHalf
     , tryDeleteHash
     }
 
@@ -96,7 +96,7 @@ function hexShortenFromTen(hex) {
 
 // hexコードを受け取り 半分のサイズの省略形に 変換する関数
 // 各2桁が同じであれば 1桁だけにする
-function tryShortenAsHalf(hex) {
+function hexShortenAsHalf(hex) {
     let result = ""
     for (let i = 0; i < hex.length - 1; i += 2) {
         if (hex[i] === hex[i + 1]) {
@@ -108,11 +108,11 @@ function tryShortenAsHalf(hex) {
     return result
 }
 // Test
-//console.log(tryShortenAsHalf("ffffff"))     // fff
-//console.log(tryShortenAsHalf("fffffe"))     // fffffe
-//console.log(tryShortenAsHalf("aabbccffff")) // abcff
-//console.log(tryShortenAsHalf("112233ee00")) // 123e0
-//console.log(tryShortenAsHalf("123456ffff")) // 123456ffff
+//console.log(hexShortenAsHalf("ffffff"))     // fff
+//console.log(hexShortenAsHalf("fffffe"))     // fffffe
+//console.log(hexShortenAsHalf("aabbccffff")) // abcff
+//console.log(hexShortenAsHalf("112233ee00")) // 123e0
+//console.log(hexShortenAsHalf("123456ffff")) // 123456ffff
 
 
 function tryDeleteHash(hexStr) {
