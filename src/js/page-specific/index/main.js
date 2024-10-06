@@ -71,11 +71,11 @@ import { getNumberOfGroups }             from 'utils/get-number-of-groups'
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////// textarea ////////////////////////////////
 
-    // <textarea>のSVGテキストを編集するたびに変換処理が呼び出される関数を設定
-    function addMultipleEventListener(element, events, handler) {
-        events.forEach(e => element.addEventListener(e, handler))
-    }
-    addMultipleEventListener(svgInputElement, ['change', 'keyup', 'paste'], executeSvg2png(svgString, resvgOpts))
+    // // <textarea>のSVGテキストを編集するたびに変換処理が呼び出される関数を設定
+    // function addMultipleEventListener(element, events, handler) {
+    //     events.forEach(e => element.addEventListener(e, handler))
+    // }
+    // addMultipleEventListener(svgInputElement, ['change', 'keyup', 'paste'], executeSvg2png(svgString, resvgOpts))
 
     //////////////////////////////// textarea ////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
