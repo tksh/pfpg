@@ -38,7 +38,9 @@ import { getNumberOfGroups }             from 'utils/get-number-of-groups'
 
 (async function () {
     // Initial decoding from url param to svg
-    const isRelative = false   // Default value of path-mode is 'Absolute and separated'
+
+    // Default value of path-mode is 'Absolute and separated'
+    const isRelative = getState('pathMode') === 'relativeMerged'
 
     // If there is no url params to decode at index.html, fetch the alternative text from the HTML element and insert it as sample url params.
     if (!window.location.search) {

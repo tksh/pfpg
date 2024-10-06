@@ -14,7 +14,7 @@ function decodeAsSelectedPathMode(pathMode) {
         console.log('Path mode: Relative and merged')
         const isRelative = true
         return decode(isRelative, isOnDataManipulatorPage())
-    } else { // (value === 'absoluteSeparated')
+    } else { // (pathMode === 'absoluteSeparated')
         console.log('Path mode: Absolute and separated')
         const isRelative = false
         return decode(isRelative, isOnDataManipulatorPage())

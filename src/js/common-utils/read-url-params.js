@@ -36,6 +36,7 @@ function decodeUrlParams() {
 function getUrlParamsExceptsStates() {
     const urlParams = new URLSearchParams(window.location.search)
     const stateKeys = Array.from(stateList.keys())
+    console.log('stateKeys to exclude: ', stateKeys)
 
     // stateキーのリストを作成
     const filteredParams = new Map([...urlParams.entries()].filter(([key]) => !stateKeys.includes(key)))
@@ -53,6 +54,8 @@ function decodeAsThreeData(urlSearchParams) {
     // e.g.: ?title=~202401_001&desc=001kObPFhaNkBHUZJE0kMCGBFCDo8j7lBr_44z9CIqW3Ba7eLr9kVIlASMdS4&metadata=01p0oU...
 
     const basicDataObj = getBasicDataFromUrlParams(urlSearchParams)
+    console.log('urlSearchParams: ', urlSearchParams)
+
     console.log('basicDataObj: ', basicDataObj)
     // e.g.:
     // {title: '202401_001',

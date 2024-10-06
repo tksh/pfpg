@@ -1,6 +1,7 @@
+import { getInputSvg } from 'download'
 import { getInitialOpacitySteps } from 'init/get-initial-opacity-steps'
-import { updateState }            from 'state/state-as-map-obj'
-import { getInputSvg }            from 'download'
+import { getState
+    , updateState } from 'state/state-as-map-obj'
 
 
 export async function setDefaultValueOfOptions() {
@@ -19,9 +20,16 @@ export async function setDefaultValueOfOptions() {
 // Selector: Path mode
 function setDefaultOfPathMode(inputSvg) {
 
-    // Find the '<path d= ... M ... L ... >' to detect as 'absolute'
-    const pattern = /<path[^>]*d="[^"]*M[^"]*L[^"]*"[^>]*>/g
-    const isAbsolute = pattern.test(inputSvg)
+    let isAbsolute
+
+    // Get the value via svg string, if url param not exists
+    if (!getState('pathMode')) {
+        // Find the '<path d= ... M ... L ... >' to detect as 'absolute'
+        const pattern = /<path[^>]*d="[^"]*M[^"]*L[^"]*"[^>]*>/g
+        isAbsolute = pattern.test(inputSvg)
+    } else {
+        isAbsolute = getState('pathMode') === 'absoluteSeparated'
+    }
 
     // Set the 'Path mode' input element value
     if (isAbsolute === true) {
