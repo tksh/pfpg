@@ -2,12 +2,11 @@ import { getGroupColorsValues }       from 'tab-lines/group-colors'
 import { generateGroupColorsSvgTags } from 'tab-lines/group-colors'
 import { getNumberOfGroups }          from 'utils/get-number-of-groups'
 import { replaceAtIndex }             from 'utils/replace-at-index'
-import { getInputSvg }                from 'download'
+import { getSvgString }                from 'download'
 import { formatAsFloatString }        from 'common-utils/format-as-float'
 
 export
     { changeOpacitySelectOptionsAsNewStep
-    , replaceToNewStepOptions
     , updateSvgForNewStep
     , getElementValueById
     , numbersIncrementByStep
@@ -16,8 +15,8 @@ export
 // For event listener of Opacity steps <select>
 
 // 'opacity' and 'stroke-opacity' values of entire groups will be changed as selected new steps.
-function changeOpacitySelectOptionsAsNewStep(opacitySteps) {
-    const groupColorsValues = getGroupColorsValues(getInputSvg())
+function changeOpacitySelectOptionsAsNewStep(svgString, opacitySteps) {
+    const groupColorsValues = getGroupColorsValues(svgString)
     const numberOfGroups = groupColorsValues.get('number_of_groups')
     const opacity        = groupColorsValues.get('opacity_array')
     const strokeOpacity  = groupColorsValues.get('stroke_opacity_array')
@@ -90,9 +89,6 @@ function numbersIncrementByStep(step) {
 // Update SVG
 
 function updateSvgForNewStep(inputSvg) {
-
-//    // Get the SVG string value
-//    let inputSvg = getInputSvg()
 
     // Get the number of groups
     const numberOfGroups = getNumberOfGroups(inputSvg)

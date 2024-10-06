@@ -1,18 +1,18 @@
-import { getInputSvg } from 'download'
+import { getSvgString }           from 'download'
 import { getInitialOpacitySteps } from 'init/get-initial-opacity-steps'
 import { getState
-    , updateState } from 'state/state-as-map-obj'
+       , updateState }            from 'state/state-as-map-obj'
 
 
 export async function setDefaultValueOfOptions() {
     console.log('setDefaultValueOfOptions(state) executed')
 
     // SVGのテキストを取得
-    const inputSvg = getInputSvg()
+    const inputSvg = getSvgString()
 
     // Get each attrs values, then set it as default
     setDefaultOfPathMode(inputSvg)                              // Path mode
-    setDefaultOfColorFormat()                              // Color format
+    setDefaultOfColorFormat()                                   // Color format
     setDefaultOfAntiAliasing(inputSvg)                          // Anti-aliasing (shape-rendering)
     setDefaultOfOpacitySteps(getInitialOpacitySteps(inputSvg))  // Opacity steps
 }

@@ -1,4 +1,4 @@
-import { getInputSvg
+import { getSvgString
        , countSvgSize } from 'download'
 import { updateState
        , getState }     from 'state/state-as-map-obj'
@@ -17,7 +17,7 @@ export
 
 
 function initSvgOptCheckbox() {
-    const svgInputElement = document.querySelector('#svg-string')
+    const svgStringElement = document.querySelector('#svg-string')
     const checkboxes = document.querySelectorAll('#svg-opt-modal input[type="checkbox"]')
 
     checkboxes.forEach(checkbox => {
@@ -25,7 +25,7 @@ function initSvgOptCheckbox() {
     })
 
     function updateSvg() {
-        let svg = getInputSvg()
+        let svg = getSvgString()
 
         if (document.getElementById('remove-opacity').checked) {
             svg = removeOpacity(svg)
@@ -53,7 +53,7 @@ function initSvgOptCheckbox() {
         }
 
         // Update the textarea
-        svgInputElement.value = svg
+        svgStringElement.value = svg
 
         // Count the size of new svg string siz and indicate it to download button
         countSvgSize(svg)

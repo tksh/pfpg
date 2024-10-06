@@ -1,3 +1,4 @@
+import { getSvgString }   from 'download'
 import { updateState } from 'state/state-as-map-obj'
 import { getGroupColorsAsJoinedHex } from "tab-lines/encode-colors-as-hex"
 import {
@@ -10,8 +11,7 @@ import {
 import { replaceAtIndex } from 'utils/replace-at-index'
 import { executeSvg2png } from 'svg-to-png'
 
-
-    export function addEventListenerForGroupColorsInputs(numberOfGroups, inputSvg, attrName) {
+export function addEventListenerForGroupColorsInputs(numberOfGroups, resvgOpts, attrName) {
 
     // id `group-colors-${attrName}-N` の要素の変更を監視
     for (let i = 0; i < numberOfGroups; i++) {
@@ -32,15 +32,14 @@ import { executeSvg2png } from 'svg-to-png'
             //console.log('typeof(gId): ', typeof(gId)) // string
 
             // Get the matches for <g> from current SVG string in textarea
-            const matches = regexMatchesOfGroupColors(inputSvg)
-            // const currentSvg = getInputSvg()
-            // const matches = regexMatchesOfGroupColors(currentSvg)
-            console.log('matches: ', matches)
-            // e.g: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
+            const svgString = getSvgString()
+            const matches = regexMatchesOfGroupColors(svgString)
+            //console.log('matches: ', matches)
+            // e.g: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', ... '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
 
             // Get three group colors value
             const stroke = getStroke(matches[i])
-            const opacity = getOpacity(matches[i])       // [0-1] number
+            const opacity = getOpacity(matches[i])             // [0-1] number
             const strokeOpacity = getStrokeOpacity(matches[i]) // [0-1] number
 
 
@@ -69,17 +68,17 @@ import { executeSvg2png } from 'svg-to-png'
                     inputValue     // [3] = value of stroke-opacity
                 ]
             }
-            console.log('groupColorsArr: ', groupColorsArr)
+            //console.log('groupColorsArr: ', groupColorsArr)
             // e.g: (4) [undefined, '#FF0000', '0.8', '1']
 
             // Generate the <g> element string
             const changedGroupElem = generateGroupColorsSvgTags(groupColorsArr)
-            console.log('changedGroupElem: ', changedGroupElem)
+            //console.log('changedGroupElem: ', changedGroupElem)
             // e.g: <g stroke="#FF7523" opacity="1" stroke-opacity="1">
 
             // Replace the changed <g> element via specific group ID
             const pattern = /<g stroke=[^>]*>/g
-            const updatedSvg = replaceAtIndex(inputSvg, pattern, changedGroupElem, gId)
+            const updatedSvg = replaceAtIndex(svgString, pattern, changedGroupElem, gId)
 
             // Update the svg string in html
             document.querySelector('#svg-string').value = updatedSvg
@@ -89,7 +88,7 @@ import { executeSvg2png } from 'svg-to-png'
             updateState('groupColors', groupColorsHexString)
 
             // Rendering the PNG image
-            executeSvg2png({ target: { value: updatedSvg } })
+            executeSvg2png({ target: { value: updatedSvg } }, resvgOpts)
         })
     }
 }

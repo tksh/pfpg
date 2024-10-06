@@ -2,15 +2,6 @@ import { getState
        , stateList }            from 'state/state-as-map-obj'
 import { getGroupColorsValues } from 'tab-lines/group-colors'
 
-// getInitialOpacitySteps() function used twice at main.js ...
-//
-//   1.
-//     For generating the group colors <select> html elements
-//       at main.js: async function () < generateGroupColorsHtmlElements(getInitialOpacitySteps())
-//
-//   2.
-//     For setting the default opacity steps
-//       at main.js: async function () < init() < setDefaultValueOfOptions() < setDefaultOfOpacitySteps() < getInitialOpacitySteps()
 
 // Get initial opacity steps detected from original decoded SVG
 export function getInitialOpacitySteps(svgString) {
@@ -94,4 +85,3 @@ function gcd(a, b) {
     // aが最大公約数となる
     return Math.abs(a)
 }
-

@@ -129,11 +129,6 @@ function getTitle() {
 // Merge the basic data and lines data as url params
 // And get the size of after Zstandard compression to indicate
 
-//// Only on data-manipulator.html
-//if (isOnDataManipulatorPage()) {
-//    document.getElementById('button-to-merge-as-url-params').addEventListener('click', mergeBasicDataAndLinesData)
-//}
-
 async function mergeBasicDataAndLinesData(){
     // Basic Data encoded string from textarea
     const basicDataStr = readTextarea(`textarea-basic-data-encoded`)

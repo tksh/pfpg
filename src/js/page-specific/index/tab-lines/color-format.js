@@ -1,4 +1,4 @@
-import { getInputSvg }                from 'download'
+import { getSvgString }                from 'download'
 import { getNumberOfGroups }          from 'utils/get-number-of-groups'
 import { generateGroupColorsSvgTags } from 'tab-lines/group-colors'
 import { replaceAtIndex }             from 'utils/replace-at-index'
@@ -9,7 +9,7 @@ import { getElementValueById }        from 'tab-lines/opacity-steps'
 export function updateSvgAsNewColorFormat(colorFormat) {
 
     // Get the SVG string value
-    let inputSvg = getInputSvg()
+    let inputSvg = getSvgString()
 
     // Get the number of groups
     const numberOfGroups = getNumberOfGroups(inputSvg)

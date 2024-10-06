@@ -29,10 +29,6 @@ function decodeUrlParams() {
     }
 }
 
-// function getUrlParamsExceptsStates() {
-//     return new URLSearchParams(window.location.search)
-// }
-
 function getUrlParamsExceptsStates() {
     const urlParams = new URLSearchParams(window.location.search)
     const stateKeys = Array.from(stateList.keys())

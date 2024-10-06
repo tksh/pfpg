@@ -4,18 +4,18 @@ import { roundToOneDecimal } from "utils/number-rounding"
 
 export {
     countSvgSize,
-    getInputSvg,
+    getSvgString,
     initDownloadButtons
 }
 
 // Get the svg string from <textarea> element
-function getInputSvg() {
+function getSvgString() {
     return document.querySelector('#svg-string').value.trim() // '.trim()' => 文字列の両端の空白を削除
 }
 
 // Get the artwork ID
 function getArtworkId() {
-    const inputSvg = getInputSvg()
+    const inputSvg = getSvgString()
     // Set the regex to match the title inside the <title> tag
     // `.` は任意の一文字にマッチし `*?` は直前の文字が 0回以上できるだけ少なく 繰り返される
     const patternForTitle = /<title>(.*?)<\/title>/g
@@ -54,7 +54,7 @@ function getPixelSizeWxH() {
 function getCurrentStatus() {
 
     // Group colors
-    const groupColorsHexString = getGroupColorsAsJoinedHex(getInputSvg())
+    const groupColorsHexString = getGroupColorsAsJoinedHex(getSvgString())
     console.log('groupColorsHexString: ', groupColorsHexString) // e.g.: "FCFF4280FF_000FC_8F52FF_EEE_FFF"
 
 
@@ -148,7 +148,7 @@ function downloadPng() {
 
 function downloadSvg() {
 
-    const inputSvg = getInputSvg()
+    const inputSvg = getSvgString()
     const blob = new Blob([inputSvg], { type: 'image/svg+xml' })
     const url  = URL.createObjectURL(blob)
     const link = document.createElement('a')

@@ -129,7 +129,6 @@ async function compressAndStore(encodedDvals, encodingMethodName, baseXNumber) {
     return { compressedByGroups, compressingResultArr }
 }
 
-// function updateShortestByGroups(currentShortestByGroups, compressResult, baseXNumber, maxCodebookSize) {
 function updateShortestByGroups(currentShortestByGroups, compressedByGroups, baseXNumber, maxCodebookSize) {
     // const transformedMap = transformMap(compressResult.compressedByGroups, baseXNumber)
     const transformedMap = transformMap(compressedByGroups, baseXNumber)

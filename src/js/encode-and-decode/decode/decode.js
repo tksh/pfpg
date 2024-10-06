@@ -24,7 +24,7 @@ export
 
 function decodeUrlToSvg(isRelative, isDataManipulatorPage) {
     const startTime = performance.now()
-    console.log('Start the decoding from URL params to SVG ...')
+    console.log(`Start the decoding from URL params to SVG (isRelative = ${isRelative}) ...`)
 
     const decodedParams = decodeUrlParams()
     // return { basicData: basicDataObj, linesData: linesDataMap, sizeData: sizeDataObj }
