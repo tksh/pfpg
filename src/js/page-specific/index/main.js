@@ -452,11 +452,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initDownloadButtons()
 
     // Tab - UI
-    applyUiConfiguration()
-//    initViewScalingSelect()
+    initViewScalingSelect()
     initCheckerboardBgCheckbox()
     initTextWrappingCheckbox()
     initThemeColorSelect()
+    applyUiConfiguration()
 
     // Tab - Render
     initWidthValidatorListener()

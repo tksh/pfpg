@@ -13,6 +13,7 @@ import { toggleDisplay
        , updateSvgWithSelectedShapePath}        from 'tab-canvas/shape-to-trim'
 import { replaceShapeRendering }                from 'tab-render/shape-rendering'
 import { switchViewScaling }                    from 'tab-ui/view-scaling'
+import { toggleCheckerboardBg }                 from 'tab-ui/checkerboard-bg'
 
 export
     { applyCustomization
@@ -89,9 +90,17 @@ function applyCustomization(svgString, resvgOption) {
 
 
 function applyUiConfiguration() {
-    const viewScaling = getState('viewScaling')
-    document.getElementById("view-scaling").value = viewScaling
+    ///////////////////////////// viewScaling /////////////////////////////
+    const viewScaling = getState('viewScaling')    // 'fit'|'actual'
+    document.getElementById('view-scaling').value = viewScaling
     switchViewScaling(viewScaling)
+
+    ///////////////////////////// checkerboard /////////////////////////////
+    const checkerboardBg = getState('checkerboardBg')  // bool
+    document.getElementById('checkerboard-bg').checked = checkerboardBg
+    toggleCheckerboardBg(checkerboardBg)
+
+
 }
 
 

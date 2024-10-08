@@ -10,7 +10,7 @@ export function initViewScalingSelect() {
 
         // チェックされたセレクトメニューの値を取得
         const viewScaling = selectOfViewScaling.value
-        //console.log('selectOfViewScaling.value is ', value) // fit|actual
+        console.log('selectOfViewScaling.value is ', value) // fit|actual
 
         // Update the state
         updateState('viewScaling', viewScaling)

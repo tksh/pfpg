@@ -43,7 +43,7 @@ const settingsDefaults = new Map([
     ['widthPixelSize',  256],                 // Render tab |  12   | number
 
     ['viewScaling',     'fit'],                   // UI tab |  13   | 'fit', 'actual'
-    ['checkerboard',    true],                    // UI tab |  14   | true, false
+    ['checkerboardBg',  true],                    // UI tab |  14   | true, false
     ['textWrapping',    true],                    // UI tab |  15   | true, false
     ['themeColor',      'dark'],                  // UI tab |  16   | 'white', 'light', 'dark', 'black'
 ])
