@@ -22,7 +22,8 @@ const resvgOption = {
 //     - 'opacitySteps'
 
 
-const stateList = new Map([                          // At: | Index | Possible values:
+const stateList = new Map([
+  //['Attribute name',  default value],     // Appeared at: | Index | Possible values:
     ['removeOpacity',   false],   // SVG optimization modal |   0   | true, false
     ['removeNewlines',  false],   // SVG optimization modal |   1   | true, false
     ['removeSpaces',    false],   // SVG optimization modal |   2   | true, false
@@ -36,7 +37,7 @@ const stateList = new Map([                          // At: | Index | Possible v
     ['topHeavyRatio',   1],                   // Canvas tab |   9   | 3, 2, 1, 0, -1, -2, -3
     ['cropSideMargins', false],               // Canvas tab |  10   | true, false
     ['shapeRendering',  'crispEdges'],        // Render tab |  11   | 'crispEdges', 'geometricPrecision'
-    ['widthPixelSize',  256],                 // Render tab |  12   | true, false
+    ['widthPixelSize',  256],                 // Render tab |  12   | number
 
     ['viewScaling',     'fit'],                   // UI tab |  13   | 'fit', 'actual'
     ['checkerboard',    true],                    // UI tab |  14   | true, false
@@ -54,11 +55,3 @@ function getState(key) {
 function updateState(key, value) {
     updateStateUrl({ [key]: value })
 }
-
-//function updateState(key, value) {
-//    // "true" か "false" の場合にのみブール値に変換
-//    const parsedValue = (value === "true") ? true : (value === "false") ? false : value;
-//
-//    // 状態をURLに更新する
-//    updateStateUrl({ [key]: parsedValue });
-//}

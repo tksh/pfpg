@@ -24,6 +24,7 @@ export {
 
 // svg2png() を呼び出し 処理時間を計測する measureSvg2pngTime() を実行し 処理時間結果を表示する
 async function executeSvg2png(event, resvgOpts) {
+    //console.dir(resvgOpts,  { depth: null })
 
     // 処理時間を表示する HTML要素を 取得
     const renderingStatusElements = new Map([

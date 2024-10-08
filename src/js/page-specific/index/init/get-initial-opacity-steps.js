@@ -1,34 +1,31 @@
-import { getState
-       , stateList }            from 'state/state-as-map-obj'
-import { getGroupColorsValues } from 'tab-lines/group-colors'
+import { decodeUrlParams } from 'common-utils/read-url-params'
+import { stateList }       from 'state/state-as-map-obj'
 
 
-// Get initial opacity steps detected from original decoded SVG
-export function getInitialOpacitySteps(svgString) {
+// Get initial opacity steps detected from original lines data
+export function getInitialOpacitySteps() {
 
-    let steps
+    // Get the whole lines data
+    const decodedLinesByGroups = decodeUrlParams().linesData
+    // e.g.: Map(3) {0 => {…}, 1 => {…}, 2 => {…}}
 
-    if (getState('opacitySteps')) {
-        // Get the value from url param
-        steps = getState('opacitySteps')
+    // Extract the values of opacities / e.g.: (3) ['1.0', '1.0', '1.0']
+    const opArr = [...decodedLinesByGroups.values()].map(eachGroupData => eachGroupData.groupColors.gOpacity)
+    const osArr = [...decodedLinesByGroups.values()].map(eachGroupData => eachGroupData.groupColors.gOpacityStroke)
 
-    } else {// If there is no 'opacitySteps' state in url param
+    // Convert the type to number / e.g.: (3) [1.0, 1.0, 1.0]
+    const opNumArray = opArr.map(value => Number(value))
+    const soNumArray = osArr.map(value => Number(value))
 
-        // get whole group 'opacity(op)' and 'stroke-opacity(so)' values
-        const groupColorsValues = getGroupColorsValues(svgString)
-        const opNumArray = groupColorsValues.get('opacity_array').map(value => Number(value))
-        const soNumArray = groupColorsValues.get('stroke_opacity_array').map(value => Number(value))
+    // Find largest step selected from [0.2, 0.1, 0.04] for each attr
+    const opLargestStep = findLargestStep(opNumArray)
+    const soLargestStep = findLargestStep(soNumArray)
 
-        // Find largest step selected from [0.2, 0.1, 0.04] for each attr
-        const opLargestStep = findLargestStep(opNumArray)
-        const soLargestStep = findLargestStep(soNumArray)
+    // Select smaller step value to get 'opacity steps' value for this artwork
+    const steps = Math.min(opLargestStep, soLargestStep)
 
-        // Select smaller step value to get 'opacity steps' value for this artwork
-        steps = Math.min(opLargestStep, soLargestStep)
-
-        // Set as default values map
-        stateList.set('opacitySteps', steps)
-    }
+    // Set as default values list map
+    stateList.set('opacitySteps', steps)
 
     return steps
 }

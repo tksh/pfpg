@@ -36,7 +36,6 @@ import { initThemeColorSelect
 import { initViewScalingSelect }                 from 'tab-ui/view-scaling'
 import { getNumberOfGroups }                     from 'utils/get-number-of-groups'
 import { applyCustomization }                    from 'state/apply-current-states'
-import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params'
 
 
 (async function () {
@@ -47,13 +46,6 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
         window.history.pushState({}, '', window.location.pathname + sampleUrlParamsStr)
     }
 
-    let resvgOpts = {}
-    // let resvgOpts = {
-    //     fitTo: {
-    //         mode: 'height',
-    //         value: 256
-    //     }
-    // }
 
     // Initial decoding from url param to svg
 
@@ -66,17 +58,16 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
     const initialDecodedSvgString = decodeUrlToSvg(isRelative, isOnDataManipulatorPage())
     console.log('initialDecodedSvgString: ', initialDecodedSvgString)
 
-    // Get the customization states from url params, and apply them to initial decoded svg string
-    const paramsOfImageCustomization = getStateUrlsOfImageCustomization()
-    const svgString = applyCustomization(initialDecodedSvgString, resvgOption, paramsOfImageCustomization)
-
+    // Apply the settings states from url param to initial decoded svg string
+    // - if there is no param in url, use default value retrieve from settingsDefaults map
+    const svgString = applyCustomization(initialDecodedSvgString, resvgOption)
 
     // Insert the decoded svg string to textarea
     const svgStringElement = document.querySelector('#svg-string') // <textarea id="svg-string" ... >
     //console.log('svgStringElement.value.trim(): ', svgStringElement.value.trim()) // <svg xmlns="http://www.w3.org/2000/svg" ... </svg>
     svgStringElement.value = svgString
 
-    await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm'))    // Path that relative from index.html
+    await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm'))  // Path that relative from index.html
 
     executeSvg2png({ target: { value: svgString } }, resvgOption)
 
@@ -236,6 +227,7 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
         // グローバルステートを 更新
         updateState('colorFormat', colorFormat)
 
+
         // HTMLを 新しい表示フォーマットの js-color input に更新
         generateGroupColorsHtmlElements(getSvgString(), colorFormat, getState('opacitySteps'))
 
@@ -244,6 +236,7 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
         addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'opacity')
         addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke-opacity')
 
+
         // 新しいセレクトメニューでの 値 を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
         const updatedSvg = updateSvgAsNewColorFormat(colorFormat)
         svgStringElement.value = updatedSvg
@@ -251,7 +244,6 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
         // Only update the SVG strings in the textarea.
         // No need to execute `executeSvg2png()`,
         // because the color-format does not affect the appearance of the artwork.
-        // But `executeSvg2png()` has executed in 'addEventListenerForGroupColorsInputs()'
     })
 
     /////////////////////////////// Color format ////////////////////////////////
@@ -344,10 +336,12 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
         // <textarea>のvalue属性を取得
         const svgString = svgStringElement.value
 
+        // 選択された値に SVG文字列を 置き換える
         const updatedSvg = replaceShapeRendering(svgString, shapeRendering)
 
         // <textarea>のvalue属性を更新する
         svgStringElement.value = updatedSvg
+
         // executeSvg2png関数を呼び出す
         executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
     })
@@ -359,18 +353,15 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////// Width pixel size ////////////////////////////
 
-    // Function to update resvgOpts and convert SVG
+    // Function to update resvgOption and convert SVG
     const updateAndConvert = (value) => {
         console.log("Updated value of 'Width pixel size':", value)
         updateState('widthPixelSize', value)  // グローバルステート更新
 
-        Object.assign(resvgOption, {
-            fitTo: {
-                mode: 'height',
-                value: parseInt(value, 10),
-            }
-        })
-        executeSvg2png({ target: { value: svgStringElement.value.trim() } })
+        // update the 'resvgOption'
+        resvgOption.fitTo.value = parseInt(value, 10)
+
+        executeSvg2png({ target: { value: getSvgString() } }, resvgOption)
     }
 
     // Event listener for both png-size-number and png-size-range
@@ -412,7 +403,7 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
     const cropElement = document.querySelector('#crop-by-bbox')
     cropElement.addEventListener('change', function (event) {
         const hasCrop = event.target.checked
-        svg2png(null, resvgOpts, hasCrop)
+        svg2png(null, resvgOption, hasCrop)
     })
 
     ////////////////////////////// Crop by BBox //////////////////////////////
@@ -439,24 +430,6 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
 
 
 
-    // Initialize the 'Width pixel size'
-    const setPngSize = async (value) => { // 直接数値を指定するため 上のサイズ変更用関数から 引数 を event から value に変更
-
-            // 引数(value)の値で svg2png() の第二引数となる resvgOpts オブジェクトを新しく更新する
-            Object.assign(resvgOption, {
-                fitTo: {
-                    mode: 'height',
-                    value: value
-                }
-            })
-
-            // Set the width number of input area with argument value
-            document.querySelector('#png-size-number').value = value
-            document.querySelector('#png-size-range').value = value
-            console.log(`Set 'Width pixel size' initial value as "${value}"`)
-    }
-
-
     // Startup initialize process
     const init = async () => {
 
@@ -464,13 +437,12 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
         // Read the values from original decoded SVG, then apply them as each option elements.
         await setDefaultValueOfOptions()
 
-        // Set default width size
-        // Force to apply '256' as PNG rendering size even if SVG has any grid size.
-        // '256' is the half of `<input type="range" max="512">`
-        await setPngSize(256)
-
         // Initial PNG rendering
-        await executeSvg2png({ target: { value: svgStringElement.value.trim() } }, resvgOption)
+        const svgForInitialRendering = svgStringElement.value.trim()
+        console.log("svgForInitialRendering: ", svgForInitialRendering)
+
+        await executeSvg2png({ target: { value: svgString } }, resvgOption)
+        // await executeSvg2png({ target: { value: svgStringElement.value.trim() } }, resvgOption)
 
         // To fit the contents (header + main) height as viewport height
         await adjustBox()

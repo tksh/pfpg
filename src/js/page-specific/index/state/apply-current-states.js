@@ -1,5 +1,7 @@
 import { getInitialOpacitySteps }               from 'init/get-initial-opacity-steps'
-import { getState }                             from 'state/state-as-map-obj'
+import { getState
+       , resvgOption }                          from 'state/state-as-map-obj'
+import { getStateUrl } from 'state/state-as-url-params'
 import { decodeGroupColors }                    from 'tab-lines/decode-colors-as-array'
 import { generateGroupColorsHtmlElements
        , generateGroupColorsSvgTags }           from 'tab-lines/group-colors'
@@ -12,26 +14,9 @@ import { toggleDisplay
        , updateSvgWithSelectedShapePath}        from 'tab-canvas/shape-to-trim'
 import { replaceShapeRendering }                from 'tab-render/shape-rendering'
 
-export function applyCustomization(svgString, resvgOpts, paramsOfImageCustomization) {
-    console.log("paramsOfImageCustomization: ", paramsOfImageCustomization)
-    // e.g:
-    // Map(3) {'pathMode' => 'absoluteSeparated', 'shapeRendering' => 'crispEdges', 'opacitySteps' => '0.2'}
-    // [[Entries]]
-    // 0: {"pathMode" => "absoluteSeparated"}
-    // 1: {"shapeRendering" => "crispEdges"}
-    // 2: {"opacitySteps" => "0.2"}
-    // 3: {"groupColors" => "44AA63CC66_000_FFF"}
-    // size: 3
-    // [[Prototype]]: Map
+export function applyCustomization(svgString, resvgOpts) {
 
     let updatedSvg = svgString
-
-    ////////////////////////////////////////////////// groupColors //////////////////////////////////////////////////
-    // Apply the image customization values via url params if exists
-    const groupColors = getState('groupColors')
-    if (groupColors) {
-        updatedSvg = applyGroupColors(svgString, resvgOpts, groupColors)
-    }
 
     ////////////////////////////////////////////////// colorFormat //////////////////////////////////////////////////
     // Generate the HTML elements of group attrs color-pickers
@@ -42,40 +27,57 @@ export function applyCustomization(svgString, resvgOpts, paramsOfImageCustomizat
     document.getElementById("color-format").value = colorFormat
 
     // Create the group colors input elements
-    generateGroupColorsHtmlElements(svgString, colorFormat, getInitialOpacitySteps(svgString))
+    generateGroupColorsHtmlElements(svgString, colorFormat, getInitialOpacitySteps())
 
     ////////////////////////////////////////////////// opacitySteps //////////////////////////////////////////////////
-    const opacitySteps = getState('opacitySteps')
+    // First, try to retrieve the value via url param with 'getStateUrl()' instead of 'getState()' like others
+    // 'opacitySteps' does not have default value before decoding in 'stateList'.
+    // The only way to get the default value of current artwork is calculate from original lines data.
+
+    let opacitySteps = getStateUrl('opacitySteps')
     if (opacitySteps) {
         document.getElementById("opacity-steps").value = opacitySteps
         changeOpacitySelectOptionsAsNewStep(updatedSvg, opacitySteps)  // Update the group colors input elements
         updatedSvg = updateSvgForNewStep(updatedSvg)                   // Extract the steps value from input elements selected
+    } else {
+        opacitySteps = getInitialOpacitySteps()
+    }
+
+    ////////////////////////////////////////////////// groupColors //////////////////////////////////////////////////
+    // Apply the image customization values via url params if exists
+    const groupColors = getState('groupColors')
+    if (groupColors) {
+        updatedSvg = applyGroupColors(svgString, resvgOpts, groupColors)
     }
 
     ////////////////////////////////////////////////// shapeToTrim //////////////////////////////////////////////////
     /////////////////////////// includes: widthNarrowness, topHeavyRatio, cropSideMargins ///////////////////////////
     const shapeToTrim = getState('shapeToTrim')
-    if (shapeToTrim) {
-        console.log("shapeToTrim from url param: ", shapeToTrim)
-        updatedSvg = updateSvgWithSelectedShapePath(shapeToTrim, updatedSvg)
+    console.log("shapeToTrim from url param: ", shapeToTrim)
+    updatedSvg = updateSvgWithSelectedShapePath(shapeToTrim, updatedSvg)
 
-        // 'squircleSlimmed'が 選ばれた時だけ表示される
-        // 2つのオプション選択用の<select>要素 と 横幅クロップ用の<label>&<input>要素 を取得し 表示または非表示にする
-        const elementsToToggle = ['width-narrowness-div', 'top-heavy-ratio-div', 'crop-side-margins-div']
+    // 'squircleSlimmed'が 選ばれた時だけ表示される
+    // 2つのオプション選択用の<select>要素 と 横幅クロップ用の<label>&<input>要素 を取得し 表示または非表示にする
+    const elementsToToggle = ['width-narrowness-div', 'top-heavy-ratio-div', 'crop-side-margins-div']
 
-        if (shapeToTrim === 'squircleSlimmed') {
-            toggleDisplay(elementsToToggle, 'inline')
-        } else {
-            toggleDisplay(elementsToToggle, 'none')
-        }
+    if (shapeToTrim === 'squircleSlimmed') {
+        toggleDisplay(elementsToToggle, 'inline')
+    } else {
+        toggleDisplay(elementsToToggle, 'none')
     }
 
     ////////////////////////////////////////////////// shapeRendering //////////////////////////////////////////////////
     const shapeRendering = getState('shapeRendering')
-    if (shapeRendering) {
-        document.getElementById("shape-rendering").value = shapeRendering
-        updatedSvg = replaceShapeRendering(updatedSvg, shapeRendering)
-    }
+    document.getElementById("shape-rendering").value = shapeRendering
+    updatedSvg = replaceShapeRendering(updatedSvg, shapeRendering)
+
+    ////////////////////////////////////////////////// widthPixelSize //////////////////////////////////////////////////
+    const widthPixelSize = parseInt(getState('widthPixelSize'), 10)
+    resvgOption.fitTo.value = widthPixelSize
+
+    document.querySelector('#png-size-number').value = widthPixelSize
+    document.querySelector('#png-size-range').value = widthPixelSize
+
     return updatedSvg
 }
 

@@ -11,7 +11,7 @@ import {
 import { replaceAtIndex } from 'utils/replace-at-index'
 import { executeSvg2png } from 'svg-to-png'
 
-export function addEventListenerForGroupColorsInputs(numberOfGroups, resvgOpts, attrName) {
+export function addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, attrName) {
 
     // id `group-colors-${attrName}-N` の要素の変更を監視
     for (let i = 0; i < numberOfGroups; i++) {
@@ -88,7 +88,7 @@ export function addEventListenerForGroupColorsInputs(numberOfGroups, resvgOpts, 
             updateState('groupColors', groupColorsHexString)
 
             // Rendering the PNG image
-            executeSvg2png({ target: { value: updatedSvg } }, resvgOpts)
+            executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
         })
     }
 }

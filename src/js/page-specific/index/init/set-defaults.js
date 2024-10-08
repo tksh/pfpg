@@ -12,7 +12,8 @@ export async function setDefaultValueOfOptions() {
 
     // Get each attrs values, then set it as default
     setDefaultOfPathMode(inputSvg)                              // Path mode
-    setDefaultOfOpacitySteps(getInitialOpacitySteps(inputSvg))  // Opacity steps
+    setDefaultOfOpacitySteps(getInitialOpacitySteps())  // Opacity steps
+    // setDefaultOfOpacitySteps(getInitialOpacitySteps(inputSvg))  // Opacity steps
 }
 
 

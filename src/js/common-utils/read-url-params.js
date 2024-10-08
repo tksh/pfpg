@@ -89,7 +89,6 @@ function decodeAsThreeData(urlSearchParams) {
         // Group-colors as Object
         const hex10Chars = hexExpandToTen(linesDataKvArray[i][0])    // e.g.: 000000ffff
         const decodedGroupColorsObj = decodeGroupColors(hex10Chars)  // Return as Object with three attrs
-        // groupColors: {g_stroke: '#ffffff', gOpacity: 1, gStrokeOpacity: 1}
 
         // Decode the Lines data string
         // Structure: [1st flag][2nd flag][width(stroke-width values and counts)]-[d values]
