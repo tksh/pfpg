@@ -1,5 +1,6 @@
-import { getSvgString }   from 'download'
-import { updateState } from 'state/state-as-map-obj'
+import { getSvgString } from 'download'
+import { updateState } from 'state/settings-defaults'
+import { executeSvg2png } from 'svg-to-png'
 import { getGroupColorsAsJoinedHex } from "tab-lines/encode-colors-as-hex"
 import {
     generateGroupColorsSvgTags,
@@ -9,7 +10,7 @@ import {
     regexMatchesOfGroupColors
 } from 'tab-lines/group-colors'
 import { replaceAtIndex } from 'utils/replace-at-index'
-import { executeSvg2png } from 'svg-to-png'
+
 
 export function addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, attrName) {
 

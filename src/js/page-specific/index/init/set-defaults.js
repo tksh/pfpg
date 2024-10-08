@@ -1,7 +1,7 @@
 import { getSvgString }           from 'download'
 import { getInitialOpacitySteps } from 'init/get-initial-opacity-steps'
 import { getState
-       , updateState }            from 'state/state-as-map-obj'
+       , updateState }            from 'state/settings-defaults'
 
 
 export async function setDefaultValueOfOptions() {
@@ -13,7 +13,6 @@ export async function setDefaultValueOfOptions() {
     // Get each attrs values, then set it as default
     setDefaultOfPathMode(inputSvg)                              // Path mode
     setDefaultOfOpacitySteps(getInitialOpacitySteps())  // Opacity steps
-    // setDefaultOfOpacitySteps(getInitialOpacitySteps(inputSvg))  // Opacity steps
 }
 
 

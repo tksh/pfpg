@@ -3,10 +3,11 @@ import { updateStateUrl
 
 export
     { resvgOption
-    , stateList
+    , settingsDefaults
     , updateState
     , getState
     }
+
 
 // Resvg Option: Argument for rendering
 const resvgOption = {
@@ -16,13 +17,15 @@ const resvgOption = {
     }
 }
 
-// State keys and default values
-//   - These two attributes default value will be detected from initial decoded svg string when first page loaded.
+
+
+// Settings name key and default value
+//   - These two attributes default value will be detected from initial decoded svg string when page loaded.
 //     - 'groupColors'
 //     - 'opacitySteps'
 
 
-const stateList = new Map([
+const settingsDefaults = new Map([
   //['Attribute name',  default value],     // Appeared at: | Index | Possible values:
     ['removeOpacity',   false],   // SVG optimization modal |   0   | true, false
     ['removeNewlines',  false],   // SVG optimization modal |   1   | true, false
@@ -48,8 +51,8 @@ const stateList = new Map([
 
 // URL状態パラメータから値を取得し、無ければデフォルト値を返す
 function getState(key) {
-    const urlValue = getStateUrl(key);
-    return urlValue !== undefined ? urlValue : stateList.get(key);
+    const stateValue = getStateUrl(key);
+    return stateValue !== undefined ? stateValue : settingsDefaults.get(key);
 }
 
 function updateState(key, value) {

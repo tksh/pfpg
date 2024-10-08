@@ -1,5 +1,5 @@
 import { decodeUrlParams } from 'common-utils/read-url-params'
-import { stateList }       from 'state/state-as-map-obj'
+import { settingsDefaults }       from 'state/settings-defaults'
 
 
 // Get initial opacity steps detected from original lines data
@@ -25,7 +25,7 @@ export function getInitialOpacitySteps() {
     const steps = Math.min(opLargestStep, soLargestStep)
 
     // Set as default values list map
-    stateList.set('opacitySteps', steps)
+    settingsDefaults.set('opacitySteps', steps)
 
     return steps
 }

@@ -1,6 +1,5 @@
 import { getInitialOpacitySteps }               from 'init/get-initial-opacity-steps'
-import { getState
-       , resvgOption }                          from 'state/state-as-map-obj'
+import { getState }                             from 'state/settings-defaults'
 import { getStateUrl } from 'state/state-as-url-params'
 import { decodeGroupColors }                    from 'tab-lines/decode-colors-as-array'
 import { generateGroupColorsHtmlElements
@@ -14,7 +13,7 @@ import { toggleDisplay
        , updateSvgWithSelectedShapePath}        from 'tab-canvas/shape-to-trim'
 import { replaceShapeRendering }                from 'tab-render/shape-rendering'
 
-export function applyCustomization(svgString, resvgOpts) {
+export function applyCustomization(svgString, resvgOption) {
 
     let updatedSvg = svgString
 
@@ -31,7 +30,7 @@ export function applyCustomization(svgString, resvgOpts) {
 
     ////////////////////////////////////////////////// opacitySteps //////////////////////////////////////////////////
     // First, try to retrieve the value via url param with 'getStateUrl()' instead of 'getState()' like others
-    // 'opacitySteps' does not have default value before decoding in 'stateList'.
+    // 'opacitySteps' does not have default value before decoding in 'settingsDefaults'.
     // The only way to get the default value of current artwork is calculate from original lines data.
 
     let opacitySteps = getStateUrl('opacitySteps')
@@ -47,7 +46,7 @@ export function applyCustomization(svgString, resvgOpts) {
     // Apply the image customization values via url params if exists
     const groupColors = getState('groupColors')
     if (groupColors) {
-        updatedSvg = applyGroupColors(svgString, resvgOpts, groupColors)
+        updatedSvg = applyGroupColors(svgString, resvgOption, groupColors)
     }
 
     ////////////////////////////////////////////////// shapeToTrim //////////////////////////////////////////////////
@@ -81,7 +80,7 @@ export function applyCustomization(svgString, resvgOpts) {
     return updatedSvg
 }
 
-function applyGroupColors(svgString, resvgOpts, value) {
+function applyGroupColors(svgString, resvgOption, value) {
 
     // Decode the group colors value
     // - from: Hex string that has joined whole groups with '_'
@@ -111,9 +110,9 @@ function applyGroupColors(svgString, resvgOpts, value) {
     generateGroupColorsHtmlElements(updatedSvg, colorFormat, getState('opacitySteps'))
     // Add event listener for new format js-color inputs and opacity selectors
     const numberOfGroups = getNumberOfGroups(svgString)
-    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOpts, 'stroke')
-    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOpts, 'opacity')
-    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOpts, 'stroke-opacity')
+    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke')
+    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'opacity')
+    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke-opacity')
 
     return updatedSvg
 }

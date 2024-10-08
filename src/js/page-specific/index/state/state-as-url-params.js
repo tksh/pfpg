@@ -1,4 +1,4 @@
-import { stateList } from 'state/state-as-map-obj'
+import { settingsDefaults } from 'state/settings-defaults'
 
 export
     { getStateUrlsOfImageCustomization
@@ -8,6 +8,7 @@ export
     , updateStateUrl
     , resetAllStateUrls
     }
+
 
 // Get
 
@@ -32,7 +33,7 @@ function getStateUrl(key) {
 // URLから特定の範囲の状態パラメータを取得する汎用関数（ブール値対応）
 function getStateUrlsInRange(startIndex, endIndex) {
     const allParams = getAllStateUrls();
-    const stateKeys = Array.from(stateList.keys()).slice(startIndex, endIndex);
+    const stateKeys = Array.from(settingsDefaults.keys()).slice(startIndex, endIndex);
     return new Map(
         Object.entries(allParams).filter(([key]) => stateKeys.includes(key))
     );
@@ -52,10 +53,19 @@ function getStateUrlsOfImageCustomization() {
 
 // UI configuration の状態パラメータを全て取得する関数
 function getStateUrlsOfUiConfiguration() {
-    return getStateUrlsInRange(13, stateList.size);
+    return getStateUrlsInRange(13, settingsDefaults.size);
 }
 
 
+
+// Update
+
+// 状態パラメータを 追加 または 更新 する
+function updateStateUrl(params) {
+    const currentParams = getAllStateUrls();
+    const updatedParams = { ...currentParams, ...params };
+    setStateUrl(updatedParams);
+}
 
 // URL状態パラメータを設定する関数
 function setStateUrl(params) {
@@ -70,13 +80,9 @@ function setStateUrl(params) {
     window.history.replaceState({}, '', url);
 }
 
-// 状態パラメータを 追加 または 更新 する
-function updateStateUrl(params) {
-    const currentParams = getAllStateUrls();
-    const updatedParams = { ...currentParams, ...params };
-    setStateUrl(updatedParams);
-}
 
+
+// Reset
 
 // 特定の状態パラメータをリセット（削除）する関数
 function resetStateUrl(paramsToReset) {
@@ -89,6 +95,6 @@ function resetStateUrl(paramsToReset) {
 
 // 全ての状態パラメータを リセット（削除）
 function resetAllStateUrls() {
-    const allStateParams = [...stateList.keys()]
+    const allStateParams = [...settingsDefaults.keys()]
     resetStateUrl(allStateParams)
 }

@@ -13,7 +13,7 @@ export {
 //   const svgString = event.target.value.trim()
 //   const hasCrop = cropElement.checked
 //   if (!svgString) return
-//   svg2png(svgString, resvgOpts, hasCrop)
+//   svg2png(svgString, resvgOption, hasCrop)
 // })
 
 // 上記の resvg-jsオリジナルの playground において SVGテキストエリアの編集イベントごとに PNGへの変換処理が呼び出される部分を
@@ -23,8 +23,8 @@ export {
 // - 'svgStringElement' に対してSVG文字列を取得する際の 'event.target.value' と同じオブジェクト構造にする
 
 // svg2png() を呼び出し 処理時間を計測する measureSvg2pngTime() を実行し 処理時間結果を表示する
-async function executeSvg2png(event, resvgOpts) {
-    //console.dir(resvgOpts,  { depth: null })
+async function executeSvg2png(event, resvgOption) {
+    //console.dir(resvgOption,  { depth: null })
 
     // 処理時間を表示する HTML要素を 取得
     const renderingStatusElements = new Map([
@@ -37,7 +37,7 @@ async function executeSvg2png(event, resvgOpts) {
     const hasCrop = document.querySelector('#crop-by-bbox').checked // 'Crop by BBox' チェックボックスがチェックされている場合は true を チェックされていない場合は false を 返す
 
     // Processing from SVG to PNG and measuring the time
-    measureSvg2pngTime(svgString, resvgOpts, hasCrop, renderingStatusElements)
+    measureSvg2pngTime(svgString, resvgOption, hasCrop, renderingStatusElements)
         .then((result) => {
             console.log('result: ', result) // undefined
 
@@ -54,10 +54,10 @@ async function executeSvg2png(event, resvgOpts) {
 }
 
 // Rendering from SVG to PNG with options
-async function svg2png(svgString, resvgOpts, hasCrop) {
+async function svg2png(svgString, resvgOption, hasCrop) {
 
     // Create the Resvg object
-    const resvgJS = new resvg.Resvg(svgString, resvgOpts)
+    const resvgJS = new resvg.Resvg(svgString, resvgOption)
     console.log('resvgJS: ', resvgJS)
 
     // SVG内に含まれる外部リンクの画像を取得して解決する (Un-used)
@@ -131,7 +131,7 @@ async function svg2png(svgString, resvgOpts, hasCrop) {
 
 
 // Processing from SVG to PNG and measuring the time
-async function measureSvg2pngTime(svgString, resvgOpts, hasCrop, renderingStatusElements) {
+async function measureSvg2pngTime(svgString, resvgOption, hasCrop, renderingStatusElements) {
     // 処理中メッセージを表示
     await updateRenderingStatus("Now rendering ...<br> Please wait a moment :)", renderingStatusElements.get('pngDownloadButton'))
 
@@ -144,7 +144,7 @@ async function measureSvg2pngTime(svgString, resvgOpts, hasCrop, renderingStatus
 
             try {
                 // svg2png関数を呼び出す
-                const result = await svg2png(svgString, resvgOpts, hasCrop)
+                const result = await svg2png(svgString, resvgOption, hasCrop)
 
                 // 終了時刻を記録
                 const endTime = performance.now()

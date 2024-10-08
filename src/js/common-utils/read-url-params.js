@@ -5,7 +5,7 @@ import { tryDecompress }             from 'decode/try-decompress'
 import { getBasicDataFromUrlParams } from 'enc-and-dec/basic-data/basic-data-dec'
 import { decodeGroupColors }         from 'enc-and-dec/lines-data/group-colors/group-colors-dec'
 import { decodeWidthsAndCounts }     from 'enc-and-dec/lines-data/widths-and-counts/widths-and-counts-dec'
-import { stateList }                 from 'state/state-as-map-obj'
+import { settingsDefaults }          from 'state/settings-defaults'
 
 import { BASIC_DATA_KEYS } from 'constants'
 
@@ -31,7 +31,7 @@ function decodeUrlParams() {
 
 function getUrlParamsExceptsStates() {
     const urlParams = new URLSearchParams(window.location.search)
-    const stateKeys = Array.from(stateList.keys())
+    const stateKeys = Array.from(settingsDefaults.keys())
     console.log('stateKeys to exclude: ', stateKeys)
 
     // stateキーのリストを作成

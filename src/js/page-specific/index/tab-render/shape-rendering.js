@@ -1,5 +1,4 @@
 export function replaceShapeRendering(svgString, shapeRendering) {
-    console.log("shapeRendering at replace func: ", shapeRendering)
     // 正規表現パターンを作成
     const patternForShapeRendering = /shape-rendering="[^"]*"/g
     // 正規表現でマッチした部分を書き換える

@@ -1,4 +1,4 @@
-import { updateState } from 'state/state-as-map-obj'
+import { updateState } from 'state/settings-defaults'
 
 export function initViewScalingSelect() {
 

@@ -1,6 +1,6 @@
 import { tabSpace }           from 'constants'
 import { getState
-       , updateState }        from 'state/state-as-map-obj'
+       , updateState }        from 'state/settings-defaults'
 import { viewboxSlimmed
        , viewboxUnSlimmed
        , extractViewboxValues

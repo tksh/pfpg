@@ -1,6 +1,6 @@
 import { decodeUrlParams } from 'common-utils/read-url-params'
 import { resvgOption
-       , updateState }     from 'state/state-as-map-obj'
+       , updateState }     from 'state/settings-defaults'
 import { toFixedTrimmed }  from 'utils/number-rounding'
 import { executeSvg2png }  from 'svg-to-png'
 
@@ -14,7 +14,6 @@ export
 
 
 // Change the viewBox size fit to Squircle, slimmed.
-// And textarea replaced as it.
 function viewboxSlimmed(inputSvg) {
     const slimmedXW = getSlimmedViewboxXW(inputSvg)
     //console.log('slimmedXW.get('x'): ', slimmedXW.get('x')) // e.g.: 1.55

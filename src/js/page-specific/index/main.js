@@ -6,7 +6,7 @@ import { adjustBox }                             from 'init/adjust-output-boxes-
 import { setDefaultValueOfOptions }              from 'init/set-defaults'
 import { getState
        , updateState
-       , resvgOption }                          from 'state/state-as-map-obj'
+       , resvgOption }                          from 'state/settings-defaults'
 import { initTabs }                              from 'init/tab-setup'
 import { initSvgOptModal }                       from 'svg-opt-modal/modal'
 import { initSvgOptCheckbox

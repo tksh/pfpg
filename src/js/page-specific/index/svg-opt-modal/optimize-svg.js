@@ -1,7 +1,7 @@
 import { getSvgString
        , countSvgSize } from 'download'
 import { updateState
-       , getState }     from 'state/state-as-map-obj'
+       , getState }     from 'state/settings-defaults'
 import { tabSpace }     from 'constants'
 import { decodeAsSelectedPathMode }      from 'tab-lines/path-mode'
 
