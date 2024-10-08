@@ -3,7 +3,6 @@ import { decodeUrlToSvg }                        from 'decode/decode'
 import { getSvgString
        , initDownloadButtons}                    from 'download'
 import { adjustBox }                             from 'init/adjust-output-boxes-size'
-import { setDefaultValueOfOptions }              from 'init/set-defaults'
 import { getState
        , updateState
        , resvgOption }                          from 'state/settings-defaults'
@@ -50,9 +49,10 @@ import { applyCustomization }                    from 'state/apply-current-state
     // Initial decoding from url param to svg
 
     // Get the path-mode value
-    // If there is no url param of 'pathMode', use default value of path-mode 'Absolute and separated'
+    // If there is no url param of 'pathMode', use 'absoluteSeparated' as default.
     const isRelative = getState('pathMode') === 'relativeMerged'
     console.log('isRelative: ', isRelative)
+    document.getElementById("path-mode").value = isRelative ? 'relativeMerged' : 'absoluteSeparated'
 
     // Decode the SVG from url params
     const initialDecodedSvgString = decodeUrlToSvg(isRelative, isOnDataManipulatorPage())
@@ -67,8 +67,8 @@ import { applyCustomization }                    from 'state/apply-current-state
     //console.log('svgStringElement.value.trim(): ', svgStringElement.value.trim()) // <svg xmlns="http://www.w3.org/2000/svg" ... </svg>
     svgStringElement.value = svgString
 
+    // Initial PNG rendering
     await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm'))  // Path that relative from index.html
-
     executeSvg2png({ target: { value: svgString } }, resvgOption)
 
     //////////////////////////////////////////////////////////////////////////
@@ -435,13 +435,10 @@ import { applyCustomization }                    from 'state/apply-current-state
 
         // Set default options values
         // Read the values from original decoded SVG, then apply them as each option elements.
-        await setDefaultValueOfOptions()
+//        await setDefaultValueOfOptions()
 
         // Initial PNG rendering
-        const svgForInitialRendering = svgStringElement.value.trim()
-        console.log("svgForInitialRendering: ", svgForInitialRendering)
-
-        await executeSvg2png({ target: { value: svgString } }, resvgOption)
+        //await executeSvg2png({ target: { value: svgString } }, resvgOption)
         // await executeSvg2png({ target: { value: svgStringElement.value.trim() } }, resvgOption)
 
         // To fit the contents (header + main) height as viewport height

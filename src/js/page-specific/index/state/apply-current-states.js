@@ -1,6 +1,6 @@
 import { getInitialOpacitySteps }               from 'init/get-initial-opacity-steps'
 import { getState }                             from 'state/settings-defaults'
-import { getStateUrl } from 'state/state-as-url-params'
+import { getStateUrl }                          from 'state/state-as-url-params'
 import { decodeGroupColors }                    from 'tab-lines/decode-colors-as-array'
 import { generateGroupColorsHtmlElements
        , generateGroupColorsSvgTags }           from 'tab-lines/group-colors'
