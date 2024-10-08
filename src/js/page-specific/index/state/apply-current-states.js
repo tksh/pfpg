@@ -12,8 +12,15 @@ import { replaceAtIndex }                       from 'utils/replace-at-index'
 import { toggleDisplay
        , updateSvgWithSelectedShapePath}        from 'tab-canvas/shape-to-trim'
 import { replaceShapeRendering }                from 'tab-render/shape-rendering'
+import { switchViewScaling }                    from 'tab-ui/view-scaling'
 
-export function applyCustomization(svgString, resvgOption) {
+export
+    { applyCustomization
+    , applyUiConfiguration
+    }
+
+
+function applyCustomization(svgString, resvgOption) {
 
     let updatedSvg = svgString
 
@@ -79,6 +86,14 @@ export function applyCustomization(svgString, resvgOption) {
 
     return updatedSvg
 }
+
+
+function applyUiConfiguration() {
+    const viewScaling = getState('viewScaling')
+    document.getElementById("view-scaling").value = viewScaling
+    switchViewScaling(viewScaling)
+}
+
 
 function applyGroupColors(svgString, resvgOption, value) {
 

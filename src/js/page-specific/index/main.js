@@ -3,9 +3,11 @@ import { decodeUrlToSvg }                        from 'decode/decode'
 import { getSvgString
        , initDownloadButtons}                    from 'download'
 import { adjustBox }                             from 'init/adjust-output-boxes-size'
+import { applyCustomization
+       , applyUiConfiguration }                  from 'state/apply-current-states'
 import { getState
        , updateState
-       , resvgOption }                          from 'state/settings-defaults'
+       , resvgOption }                           from 'state/settings-defaults'
 import { initTabs }                              from 'init/tab-setup'
 import { initSvgOptModal }                       from 'svg-opt-modal/modal'
 import { initSvgOptCheckbox
@@ -34,7 +36,6 @@ import { initThemeColorSelect
        , setSchemeAsDefaultTheme}                from 'tab-ui/theme-color'
 import { initViewScalingSelect }                 from 'tab-ui/view-scaling'
 import { getNumberOfGroups }                     from 'utils/get-number-of-groups'
-import { applyCustomization }                    from 'state/apply-current-states'
 
 
 (async function () {
@@ -433,14 +434,6 @@ import { applyCustomization }                    from 'state/apply-current-state
     // Startup initialize process
     const init = async () => {
 
-        // Set default options values
-        // Read the values from original decoded SVG, then apply them as each option elements.
-//        await setDefaultValueOfOptions()
-
-        // Initial PNG rendering
-        //await executeSvg2png({ target: { value: svgString } }, resvgOption)
-        // await executeSvg2png({ target: { value: svgStringElement.value.trim() } }, resvgOption)
-
         // To fit the contents (header + main) height as viewport height
         await adjustBox()
 
@@ -459,7 +452,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initDownloadButtons()
 
     // Tab - UI
-    initViewScalingSelect()
+    applyUiConfiguration()
+//    initViewScalingSelect()
     initCheckerboardBgCheckbox()
     initTextWrappingCheckbox()
     initThemeColorSelect()
