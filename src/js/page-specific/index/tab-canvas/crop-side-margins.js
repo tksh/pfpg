@@ -68,8 +68,9 @@ function extractViewboxValues(inputSvg) {
 // e.g.: 'viewBox="2.325 0 26.35 31"' => Object { x: 2.325, y: 0, w: 26.35, h: 31 }
 
 
-
-// When un-check the checkbox, Get back the viewBox as square
+// Get back the original viewBox size when:
+//   1. un-check the checkbox, or
+//   2. shapeToTrim changes to square|circle|squircle
 
 function viewboxUnSlimmed(inputSvg) {
     // Read original basic data from url params

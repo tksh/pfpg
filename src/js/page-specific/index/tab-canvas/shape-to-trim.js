@@ -46,12 +46,14 @@ function updateSvgWithSelectedShapePath(shape, inputSvg) {
         : inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">\n${tabSpace.repeat(3)}${shapePath}\n${tabSpace.repeat(2)}</clipPath>`)
 
 
-    // Update the viewBox with current 'cropSideMargin' bool, if 'squircleSlimmed' selected
+    // Update the viewBox string
+    // - If 'squircleSlimmed' selected, update the viewBox by current 'cropSideMargin' bool.
+    // - If 'square|circle|squircle' selected, always apply the viewboxUnSlimmed() to reset the viewBox to original grid dimension.
     const clippathAndViewboxUpdatedSvg = shape === 'squircleSlimmed'
         ? isCropSideMargins()
             ? viewboxSlimmed(newClippathSvg)
             : viewboxUnSlimmed(newClippathSvg)
-        : newClippathSvg
+        : viewboxUnSlimmed(newClippathSvg)
 
     return clippathAndViewboxUpdatedSvg
 }
