@@ -32,10 +32,10 @@ function openTab(evt, tabName) {
 function handleKeyPress(event) {
     const key = event.key.toLowerCase()
     const keyMap = {
-        'l': 'tab-1',
-        'c': 'tab-2',
-        'r': 'tab-3',
-        'u': 'tab-4'
+        '1': 'tab-1',
+        '2': 'tab-2',
+        '3': 'tab-3',
+        '4': 'tab-4'
     }
 
     if (key in keyMap) {
