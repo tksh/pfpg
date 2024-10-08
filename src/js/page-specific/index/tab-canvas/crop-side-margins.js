@@ -1,5 +1,5 @@
 import { decodeUrlParams } from 'common-utils/read-url-params'
-import { resvgOptions
+import { resvgOption
        , updateState }     from 'state/state-as-map-obj'
 import { toFixedTrimmed }  from 'utils/number-rounding'
 import { executeSvg2png }  from 'svg-to-png'
@@ -94,7 +94,7 @@ function viewboxUnSlimmed(inputSvg) {
 function updateSvg(inputSvg, isCropped) {
     const updatedSvg = isCropped ? viewboxSlimmed(inputSvg) : viewboxUnSlimmed(inputSvg)
     document.querySelector('#svg-string').value = updatedSvg
-    executeSvg2png({ target: { value: updatedSvg } }, resvgOptions)
+    executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
     return updatedSvg
 }
 

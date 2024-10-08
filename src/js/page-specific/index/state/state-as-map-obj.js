@@ -2,14 +2,14 @@ import { updateStateUrl
        , getStateUrl } from 'state/state-as-url-params'
 
 export
-    { resvgOptions
+    { resvgOption
     , stateList
     , updateState
     , getState
     }
 
 // Resvg Option: Argument for rendering
-const resvgOptions = {
+const resvgOption = {
     fitTo: {
         mode: 'height',
         value: 256
@@ -35,7 +35,7 @@ const stateList = new Map([                          // At: | Index | Possible v
     ['widthNarrowness', 10],                  // Canvas tab |   8   | 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30
     ['topHeavyRatio',   1],                   // Canvas tab |   9   | 3, 2, 1, 0, -1, -2, -3
     ['cropSideMargins', false],               // Canvas tab |  10   | true, false
-    ['shapeRendering',  'crispEdge'],         // Render tab |  11   | 'crispEdge', 'geometricPrecision'
+    ['shapeRendering',  'crispEdges'],        // Render tab |  11   | 'crispEdges', 'geometricPrecision'
     ['widthPixelSize',  256],                 // Render tab |  12   | true, false
 
     ['viewScaling',     'fit'],                   // UI tab |  13   | 'fit', 'actual'

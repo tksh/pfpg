@@ -10,7 +10,7 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
 import { replaceAtIndex }                       from 'utils/replace-at-index'
 import { toggleDisplay
        , updateSvgWithSelectedShapePath}        from 'tab-canvas/shape-to-trim'
-
+import { replaceShapeRendering }                from 'tab-render/shape-rendering'
 
 export function applyCustomization(svgString, resvgOpts, paramsOfImageCustomization) {
     console.log("paramsOfImageCustomization: ", paramsOfImageCustomization)
@@ -38,7 +38,8 @@ export function applyCustomization(svgString, resvgOpts, paramsOfImageCustomizat
     // Default value of color-format is 'rgb'
     // Require to generate the initial group colors input elements, even if there is no 'colorFormat' in url param,
     // Because below 'changeOpacitySelectOptionsAsNewStep()` needs pre-generated input elements.
-    const colorFormat = getState('colorFormat') ? getState('colorFormat') : 'rgb'
+    const colorFormat = getState('colorFormat')
+    document.getElementById("color-format").value = colorFormat
 
     // Create the group colors input elements
     generateGroupColorsHtmlElements(svgString, colorFormat, getInitialOpacitySteps(svgString))
@@ -46,6 +47,7 @@ export function applyCustomization(svgString, resvgOpts, paramsOfImageCustomizat
     ////////////////////////////////////////////////// opacitySteps //////////////////////////////////////////////////
     const opacitySteps = getState('opacitySteps')
     if (opacitySteps) {
+        document.getElementById("opacity-steps").value = opacitySteps
         changeOpacitySelectOptionsAsNewStep(updatedSvg, opacitySteps)  // Update the group colors input elements
         updatedSvg = updateSvgForNewStep(updatedSvg)                   // Extract the steps value from input elements selected
     }
@@ -68,8 +70,12 @@ export function applyCustomization(svgString, resvgOpts, paramsOfImageCustomizat
         }
     }
 
-
-
+    ////////////////////////////////////////////////// shapeRendering //////////////////////////////////////////////////
+    const shapeRendering = getState('shapeRendering')
+    if (shapeRendering) {
+        document.getElementById("shape-rendering").value = shapeRendering
+        updatedSvg = replaceShapeRendering(updatedSvg, shapeRendering)
+    }
     return updatedSvg
 }
 

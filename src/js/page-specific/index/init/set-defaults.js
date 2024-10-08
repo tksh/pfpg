@@ -12,8 +12,6 @@ export async function setDefaultValueOfOptions() {
 
     // Get each attrs values, then set it as default
     setDefaultOfPathMode(inputSvg)                              // Path mode
-    setDefaultOfColorFormat()                                   // Color format
-    setDefaultOfAntiAliasing(inputSvg)                          // Anti-aliasing (shape-rendering)
     setDefaultOfOpacitySteps(getInitialOpacitySteps(inputSvg))  // Opacity steps
 }
 
@@ -42,40 +40,6 @@ function setDefaultOfPathMode(inputSvg) {
         console.log("Default 'Path mode' is 'Relative and merged'")
         updateState('pathMode', 'relativeMerged')
     }
-}
-
-// Selector: Color-format
-function setDefaultOfColorFormat() {
-    const colorFormat = getState('colorFormat') ? getState('colorFormat') : 'rgb'
-    document.getElementById("color-format").value = colorFormat
-}
-
-// Selector: Anti-aliasing (On (geometricPrecision) or Off (crispEdges))
-function setDefaultOfAntiAliasing(inputSvg) {
-
-    // Get the 'shape-rendering' attr value
-    const pattern = /shape-rendering="(.*)">/  // target: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" shape-rendering="geometricPrecision">
-    const matches = pattern.exec(inputSvg)     // exec メソッドでマッチする部分を探す
-    //console.log('matches(for shape-rendering): ', matches)
-    // Array [ 'shape-rendering="geometricPrecision">', "geometricPrecision" ]
-    const shapeRendering = matches[1]
-
-    // <select> 要素を取得
-    const selectElement = document.getElementById("shape-rendering")
-
-    // <option> 要素の selected 属性を設定する
-    for (let i = 0; i < selectElement.options.length; i++) { // <option> 要素をループ
-        if (selectElement.options[i].value === shapeRendering) {
-            selectElement.options[i].selected = true  // value が 変更したい値 shapeRendering と 同じならば selected を 付ける
-        } else {
-            selectElement.options[i].selected = false // value が 変更したい値 shapeRendering と 違うならば selected を 付けない
-        }
-    }
-
-    // Update the state as url params
-    updateState('shapeRendering', shapeRendering)
-
-    console.log(`Default 'shape-rendering' value is "${shapeRendering}"`)
 }
 
 

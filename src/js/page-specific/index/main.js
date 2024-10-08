@@ -6,7 +6,7 @@ import { adjustBox }                             from 'init/adjust-output-boxes-
 import { setDefaultValueOfOptions }              from 'init/set-defaults'
 import { getState
        , updateState
-       , resvgOptions }                          from 'state/state-as-map-obj'
+       , resvgOption }                          from 'state/state-as-map-obj'
 import { initTabs }                              from 'init/tab-setup'
 import { initSvgOptModal }                       from 'svg-opt-modal/modal'
 import { initSvgOptCheckbox
@@ -27,6 +27,7 @@ import { decodeAsSelectedPathMode
        , recoverCurrentOptionValue}              from 'tab-lines/path-mode'
 import { adjustWidthNum
        , syncWidthNum}                           from 'tab-render/sync-number-and-range'
+import { replaceShapeRendering }                 from 'tab-render/shape-rendering'
 import { initWidthValidatorListener }            from 'tab-render/width-pixel-size'
 import { initCheckerboardBgCheckbox }            from 'tab-ui/checkerboard-bg'
 import { initTextWrappingCheckbox }              from 'tab-ui/text-wrapping'
@@ -67,7 +68,7 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
 
     // Get the customization states from url params, and apply them to initial decoded svg string
     const paramsOfImageCustomization = getStateUrlsOfImageCustomization()
-    const svgString = applyCustomization(initialDecodedSvgString, resvgOpts, paramsOfImageCustomization)
+    const svgString = applyCustomization(initialDecodedSvgString, resvgOption, paramsOfImageCustomization)
 
 
     // Insert the decoded svg string to textarea
@@ -77,7 +78,7 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
 
     await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm'))    // Path that relative from index.html
 
-
+    executeSvg2png({ target: { value: svgString } }, resvgOption)
 
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////// textarea ////////////////////////////////
@@ -102,9 +103,9 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
 
     // Add multiple event listener for whole stroke colors
     const numberOfGroups = getNumberOfGroups(getSvgString())
-    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOpts, 'stroke')
-    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOpts, 'opacity')
-    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOpts, 'stroke-opacity')
+    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke')
+    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'opacity')
+    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke-opacity')
 
 
     ///////// Group colors: 'stroke', 'opacity' and 'stroke-opacity' /////////
@@ -189,7 +190,7 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
         svgStringElement.value = optimizedSvg
 
         // executeSvg2png関数を呼び出す
-        executeSvg2png({ target: { value: updatedSvg } }, resvgOpts)
+        executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
     })
 
     /////////////////////////////// Path mode ////////////////////////////////
@@ -216,7 +217,7 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
         const updatedSvg = updateSvgForNewStep(getSvgString())
 
         svgStringElement.value = updatedSvg                 // Update textarea
-        executeSvg2png({ target: { value: updatedSvg } }, resvgOpts)  // Rendering to PNG
+        executeSvg2png({ target: { value: updatedSvg } }, resvgOption)  // Rendering to PNG
     })
 
     ////////////////////////////// Opacity steps /////////////////////////////
@@ -239,9 +240,9 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
         generateGroupColorsHtmlElements(getSvgString(), colorFormat, getState('opacitySteps'))
 
         // Add event listener for new format js-color inputs and opacity selectors
-        addEventListenerForGroupColorsInputs(numberOfGroups, resvgOpts, 'stroke')
-        addEventListenerForGroupColorsInputs(numberOfGroups, resvgOpts, 'opacity')
-        addEventListenerForGroupColorsInputs(numberOfGroups, resvgOpts, 'stroke-opacity')
+        addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke')
+        addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'opacity')
+        addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke-opacity')
 
         // 新しいセレクトメニューでの 値 を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
         const updatedSvg = updateSvgAsNewColorFormat(colorFormat)
@@ -270,7 +271,7 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
         updateState('widthNarrowness', widthNarrowness)
         const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvgString())
         svgStringElement.value = updatedSvg                              // Update textarea
-        executeSvg2png({ target: { value: updatedSvg } }, resvgOptions)  // Render to PNG
+        executeSvg2png({ target: { value: updatedSvg } }, resvgOption)  // Render to PNG
     })
 
     document.getElementById('top-heavy-ratio').addEventListener('change', (event) => {
@@ -279,7 +280,7 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
         updateState('topHeavyRatio', topHeavyRatio)
         const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvgString())
         svgStringElement.value = updatedSvg                              // Update textarea
-        executeSvg2png({ target: { value: updatedSvg } }, resvgOptions)  // Render to PNG
+        executeSvg2png({ target: { value: updatedSvg } }, resvgOption)  // Render to PNG
     })
 
 
@@ -306,7 +307,7 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
         const updatedSvg = updateSvgWithSelectedShapePath(shapeToTrim, inputSvg)
 
         svgStringElement.value = updatedSvg                              // Update textarea
-        executeSvg2png({ target: { value: updatedSvg } }, resvgOptions)  // Render to PNG
+        executeSvg2png({ target: { value: updatedSvg } }, resvgOption)  // Render to PNG
 
     })
 
@@ -336,21 +337,19 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
     // Event listeners for 'shape-rendering' type changes
     document.getElementById("shape-rendering").addEventListener("change", (event) => {
         // 選択された値を取得
-        const value = event.target.value // 'geometricPrecision' | 'crispEdges'
-        console.log("Updated value of 'Anti-aliasing (shape-rendering)': ", value)
-        updateState('shapeRendering', value)
+        const shapeRendering = event.target.value // 'geometricPrecision' | 'crispEdges'
+        console.log("Updated value of 'Anti-aliasing (shape-rendering)': ", shapeRendering)
+        updateState('shapeRendering', shapeRendering)
 
         // <textarea>のvalue属性を取得
         const svgString = svgStringElement.value
 
-        // 正規表現パターンを作成
-        const patternForShapeRendering = /shape-rendering="[^"]*"/g
-        // 正規表現でマッチした部分を書き換える
-        const updatedSvg = svgString.replace(patternForShapeRendering, `shape-rendering="${value}"`)
+        const updatedSvg = replaceShapeRendering(svgString, shapeRendering)
+
         // <textarea>のvalue属性を更新する
         svgStringElement.value = updatedSvg
         // executeSvg2png関数を呼び出す
-        executeSvg2png({ target: { value: updatedSvg } })
+        executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
     })
 
     ////////////////////////////// Anti-aliasing /////////////////////////////
@@ -365,7 +364,7 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
         console.log("Updated value of 'Width pixel size':", value)
         updateState('widthPixelSize', value)  // グローバルステート更新
 
-        Object.assign(resvgOpts, {
+        Object.assign(resvgOption, {
             fitTo: {
                 mode: 'height',
                 value: parseInt(value, 10),
@@ -444,7 +443,7 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
     const setPngSize = async (value) => { // 直接数値を指定するため 上のサイズ変更用関数から 引数 を event から value に変更
 
             // 引数(value)の値で svg2png() の第二引数となる resvgOpts オブジェクトを新しく更新する
-            Object.assign(resvgOpts, {
+            Object.assign(resvgOption, {
                 fitTo: {
                     mode: 'height',
                     value: value
@@ -471,7 +470,7 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
         await setPngSize(256)
 
         // Initial PNG rendering
-        await executeSvg2png({ target: { value: svgStringElement.value.trim() } }, resvgOpts)
+        await executeSvg2png({ target: { value: svgStringElement.value.trim() } }, resvgOption)
 
         // To fit the contents (header + main) height as viewport height
         await adjustBox()
