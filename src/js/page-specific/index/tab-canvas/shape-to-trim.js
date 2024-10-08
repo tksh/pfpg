@@ -1,10 +1,11 @@
 import { tabSpace }           from 'constants'
-import { svgWithNewShapeViewbox
+import { getState
+       , updateState }        from 'state/state-as-map-obj'
+import { viewboxSlimmed
+       , viewboxUnSlimmed
        , extractViewboxValues
        }                      from 'tab-canvas/crop-side-margins'
 import { roundToTwoDecimals } from 'utils/number-rounding'
-import { getState }           from 'state/state-as-map-obj'
-import { updateState }        from 'state/state-as-map-obj'
 
 export
     { toggleDisplay
@@ -22,7 +23,7 @@ function toggleDisplay(elements, display) {
 
 // Update SVG with selected shape path
 function updateSvgWithSelectedShapePath(shape, inputSvg) {
-    updateState('shapeToTrim', shape)
+    document.getElementById('shape-to-trim').value = shape
 
     // Params for generating the 'Squircle' and 'Squircle, slimmed' shape path
     const gridSize = extractViewboxValues(inputSvg).get('h')
@@ -37,7 +38,6 @@ function updateSvgWithSelectedShapePath(shape, inputSvg) {
                 ? `<circle cx="50%" cy="50%" r="50%" />`
                 : `<path d="M 0,${center}Q 0,0 ${center},0T ${gridSize},${center} ${center},${gridSize} 0,${center}" />` // shape === 'squircle'
 
-
     // Replace to new shape <clipPath>
     const patternForClippathShape = /<clipPath id="shape-to-trim">(\n?).*(\n?).*<\/clipPath>/g
     const removeNewlines = getState('removeNewlines')
@@ -45,9 +45,13 @@ function updateSvgWithSelectedShapePath(shape, inputSvg) {
         ? inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">${shapePath}</clipPath>`)
         : inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">\n${tabSpace.repeat(3)}${shapePath}\n${tabSpace.repeat(2)}</clipPath>`)
 
-    // Update the <textarea>
-    const hasCropSideMargins = getBoolOfCropSideMargins()
-    const clippathAndViewboxUpdatedSvg = svgWithNewShapeViewbox(shape, hasCropSideMargins, newClippathSvg)
+
+    // Update the viewBox with current 'cropSideMargin' bool, if 'squircleSlimmed' selected
+    const clippathAndViewboxUpdatedSvg = shape === 'squircleSlimmed'
+        ? isCropSideMargins()
+            ? viewboxSlimmed(newClippathSvg)
+            : viewboxUnSlimmed(newClippathSvg)
+        : newClippathSvg
 
     return clippathAndViewboxUpdatedSvg
 }
@@ -80,38 +84,59 @@ function getCenter(gridSize) {
     return center
 }
 
+
+
 // Three options for 'Squircle, slimmed'
 
-// Width narrowness
+// "Width narrowness" value: number
 function getWidthNarrowness() {
-    const selectWidthNarrowness = document.getElementById('width-narrowness')
-    const value = selectWidthNarrowness.value
-    console.log('Value of widthNarrowness: ', value)
-    updateState('widthNarrowness', value)
-    return value
-}
+    // Get the value from url param
+    const widthNarrowness = getState('widthNarrowness')
+    if (widthNarrowness) {
+        document.getElementById('width-narrowness').value = widthNarrowness
+        return widthNarrowness
 
-// Top-heavy ratio
-function getTopHeavyRatio() {
-    const selectTopHeavyRatio = document.getElementById('top-heavy-ratio')
-    const value = selectTopHeavyRatio.value
-    console.log('Value of topHeavyRatio: ', value)
-    updateState('topHeavyRatio', value)
-    return value
-}
-
-// 'Crop side margins' checked or not
-function getBoolOfCropSideMargins() {
-    const cropCheckbox = document.getElementById('crop-side-margins')
-
-    // チェックボックスがチェックされているかどうかを確認
-    if (cropCheckbox.checked) {
-        console.log('"Crop side margins: " checkbox has checked')
-        updateState('cropSideMargins', true)
-        return true
+    // Get the value from html elem
     } else {
-        console.log('"Crop side margins: " checkbox has un-checked')
-        updateState('cropSideMargins', false)
-        return false
+        const widthNarrowness = document.getElementById('width-narrowness').value
+        updateState('widthNarrowness', widthNarrowness)
+        return widthNarrowness
     }
+}
+
+// "Top-heavy ratio" value: number
+function getTopHeavyRatio() {
+    // Get the value from url param
+    const topHeavyRatio = getState('topHeavyRatio')
+    if (topHeavyRatio) {
+        document.getElementById('top-heavy-ratio').value = topHeavyRatio
+        return topHeavyRatio
+
+    // Get the value from html elem
+    } else {
+        const topHeavyRatio = document.getElementById('top-heavy-ratio').value
+        updateState('topHeavyRatio', topHeavyRatio)
+        return topHeavyRatio
+    }
+}
+
+
+
+// "Crop side margins" value: boolean
+function isCropSideMargins() {
+    const cropCheckbox = document.getElementById('crop-side-margins');
+
+    // Get the value from url param
+    const isCropped = getState('cropSideMargins');
+    if (isCropped !== undefined && isCropped !== null) {
+
+        // URLパラメータが true ならチェックが入り false ならチェックが外れる
+        cropCheckbox.checked = isCropped;
+
+    // If 'cropSideMargins' is not exists in url, use the value from html elem
+    } else {
+        updateState('cropSideMargins', cropCheckbox.checked);
+    }
+
+    return cropCheckbox.checked;
 }

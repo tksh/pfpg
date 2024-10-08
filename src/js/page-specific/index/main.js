@@ -5,15 +5,16 @@ import { getSvgString
 import { adjustBox }                             from 'init/adjust-output-boxes-size'
 import { setDefaultValueOfOptions }              from 'init/set-defaults'
 import { getState
-       , updateState}                            from 'state/state-as-map-obj'
+       , updateState
+       , resvgOptions }                          from 'state/state-as-map-obj'
 import { initTabs }                              from 'init/tab-setup'
 import { initSvgOptModal }                       from 'svg-opt-modal/modal'
 import { initSvgOptCheckbox
        , optimizeSvg}                            from 'svg-opt-modal/optimize-svg'
 import { executeSvg2png
        , svg2png}                                from 'svg-to-png'
-import { viewboxSlimmed
-       , viewboxUnSlimmed}                       from 'tab-canvas/crop-side-margins'
+import { cropSideMargins
+       , resetSideMargins}                       from 'tab-canvas/crop-side-margins'
 import { toggleDisplay
        , updateSvgWithSelectedShapePath}         from 'tab-canvas/shape-to-trim'
 import { updateSvgAsNewColorFormat }             from 'tab-lines/color-format'
@@ -261,44 +262,54 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
     //////////////////////////////////////////////////////////////////////////
     ///////////////////////////// Shapes to trim /////////////////////////////
 
-    document.getElementById('width-narrowness').addEventListener('change', () => {
+    // Event listeners for 'width narrowness' and 'Top-heavy ratio'
+
+    document.getElementById('width-narrowness').addEventListener('change', (event) => {
+        const widthNarrowness = event.target.value
+        console.log('widthNarrowness: ', widthNarrowness)
+        updateState('widthNarrowness', widthNarrowness)
         const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvgString())
-        svgStringElement.value = updatedSvg                 // Update textarea
-        executeSvg2png({ target: { value: updatedSvg } })  // Render to PNG
+        svgStringElement.value = updatedSvg                              // Update textarea
+        executeSvg2png({ target: { value: updatedSvg } }, resvgOptions)  // Render to PNG
     })
 
-    document.getElementById('top-heavy-ratio').addEventListener('change', () => {
+    document.getElementById('top-heavy-ratio').addEventListener('change', (event) => {
+        const topHeavyRatio = event.target.value
+        console.log('topHeavyRatio: ', topHeavyRatio)
+        updateState('topHeavyRatio', topHeavyRatio)
         const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvgString())
-        svgStringElement.value = updatedSvg                 // Update textarea
-        executeSvg2png({ target: { value: updatedSvg } })  // Render to PNG
+        svgStringElement.value = updatedSvg                              // Update textarea
+        executeSvg2png({ target: { value: updatedSvg } }, resvgOptions)  // Render to PNG
     })
 
 
-    // 'shape-to-trim' changeイベントリスナーを設定
+    // Event listeners for 'Shape to trim'
     document.getElementById('shape-to-trim').addEventListener("change", (event) => {
 
         // 選択された値を取得
-        const shape = event.target.value // square|circle|squircle|squircleSlimmed
+        const shapeToTrim = event.target.value // square|circle|squircle|squircleSlimmed
+        updateState('shapeToTrim', shapeToTrim)
 
         // 'squircleSlimmed'が 選ばれた時だけ表示される
         // 2つのオプション選択用の<select>要素 と 横幅クロップ用の<label>&<input>要素 を取得し 表示または非表示にする
         const elementsToToggle = ['width-narrowness-div', 'top-heavy-ratio-div', 'crop-side-margins-div']
 
-        if (shape === 'squircleSlimmed') {
+        if (shapeToTrim === 'squircleSlimmed') {
             toggleDisplay(elementsToToggle, 'inline')
         } else {
             toggleDisplay(elementsToToggle, 'none')
         }
 
+
+        // Update the SVG string with new clip shape path and viewBox
         const inputSvg = getSvgString()
+        const updatedSvg = updateSvgWithSelectedShapePath(shapeToTrim, inputSvg)
 
-        // Update thee SVG string with new clip shape path and viewBox
-        const updatedSvg = updateSvgWithSelectedShapePath(shape, inputSvg)
-
-        svgStringElement.value = updatedSvg                 // Update textarea
-        executeSvg2png({ target: { value: updatedSvg } })  // Render to PNG
+        svgStringElement.value = updatedSvg                              // Update textarea
+        executeSvg2png({ target: { value: updatedSvg } }, resvgOptions)  // Render to PNG
 
     })
+
     ///////////////////////////// Shapes to trim /////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
@@ -308,27 +319,10 @@ import { getStateUrlsOfImageCustomization }      from 'state/state-as-url-params
 
     // Event listener for 'Crop side margins' checkbox state changes
     document.getElementById('crop-side-margins').addEventListener('change', (event) => {
-        if (event.target.checked) {
-            // チェックボックスがチェックされた場合、クロップ処理を実行
-            console.log('Crop side margins: [x]')
-            updateState('cropSideMargins', true)  // グローバルステート更新
-
-            const inputSvg = getSvgString()
-            const updatedSvg = viewboxSlimmed(inputSvg)
-            svgStringElement.value = updatedSvg
-            executeSvg2png({ target: { value: updatedSvg } })
-
-        } else {
-            // チェックボックスが外れた場合、元のデータと同じ矩形のサイズに戻す
-            console.log('Crop side margins: [ ]')
-            updateState('cropSideMargins', false)  // グローバルステート更新
-
-            const inputSvg = getSvgString()
-            const updatedSvg = viewboxUnSlimmed(inputSvg)
-            svgStringElement.value = updatedSvg
-            executeSvg2png({ target: { value: updatedSvg } })
-        }
+        const svgString = getSvgString()
+        event.target.checked ? cropSideMargins(svgString) : resetSideMargins(svgString)
     })
+
     //////////////////////////// Crop side margins ///////////////////////////
     //////////////////////////////////////////////////////////////////////////
 

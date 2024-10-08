@@ -1,32 +1,17 @@
 import { decodeUrlParams } from 'common-utils/read-url-params'
+import { resvgOptions
+       , updateState }     from 'state/state-as-map-obj'
 import { toFixedTrimmed }  from 'utils/number-rounding'
+import { executeSvg2png }  from 'svg-to-png'
 
 export
-    { svgWithNewShapeViewbox
-    , viewboxSlimmed
-    , extractViewboxValues
+    { viewboxSlimmed
     , viewboxUnSlimmed
+    , extractViewboxValues
+    , cropSideMargins
+    , resetSideMargins
     }
 
-function svgWithNewShapeViewbox(shape, hasCropSideMargins, newClippathSvg) {
-
-    // Update 'viewBox'
-
-    // Get back original 'viewBox' value when
-    // 1. the shapes excepts 'squircleSlimmed' selected, or
-    // 2. 'squircleSlimmed' and not checked for 'Crop side margins' checkbox
-
-    console.log('hasCropSideMargins: ', hasCropSideMargins)         // boolean, true=cropped[checked], false=un-cropped[!checked]
-
-    if (shape == 'squircleSlimmed' && hasCropSideMargins == true) { // shape == 'squircleSlimmed'
-        return viewboxSlimmed(newClippathSvg)
-    } else {                                                        // shape == 'square | circle | squircle'
-        console.log(`"viewBox" value will be replaced to original size,
-                      because selected shape is ${shape}, and hasCropSideMargins is ${hasCropSideMargins}`)
-        return viewboxUnSlimmed(newClippathSvg)
-    }
-
-}
 
 // Change the viewBox size fit to Squircle, slimmed.
 // And textarea replaced as it.
@@ -51,9 +36,9 @@ function viewboxSlimmed(inputSvg) {
 function getSlimmedViewboxXW(inputSvg) {
     const patternToGetSquircleSlimmedPathStr = /<path d="M ([\d\.]+),.*Q.*T ([\d\.]+),/ // viewBox属性を抽出する正規表現
     const matches = patternToGetSquircleSlimmedPathStr.exec(inputSvg)
-    //console.log('matches: ', matches)       // e.g.: Array(3) [ '<path d="M 1.55,15.5Q 1.24,0 15.5,0T 29.45,', "1.55", "29.45" ]
-    //console.log('matches[1]: ', matches[1]) // e.g.: 1.55
-    //console.log('matches[2]: ', matches[2]) // e.g.: 29.45
+    console.log('matches: ', matches)       // e.g.: Array(3) [ '<path d="M 1.55,15.5Q 1.24,0 15.5,0T 29.45,', "1.55", "29.45" ]
+    console.log('matches[1]: ', matches[1]) // e.g.: 1.55
+    console.log('matches[2]: ', matches[2]) // e.g.: 29.45
 
     return new Map([
         ['x', toFixedTrimmed(parseFloat(matches[1]))             ], // viewBox start position | e.g.: 1.55
@@ -93,10 +78,34 @@ function viewboxUnSlimmed(inputSvg) {
 
     // Generate new string with original viewBox size
     const originalViewboxString = sizeDataObj.viewbox                       // e.g.: '0 0 31 31'
+    console.log("originalViewboxString: ", originalViewboxString)
 
     // Replace the viewBox string with new one
     const patternForViewboxStr = /viewBox="([^"]+)"/
     const matchesForViewboxStr = patternForViewboxStr.exec(inputSvg)        // e.g.: 'viewBox="0 0 31 31"'
+    console.log("matchesForViewboxStr: ", matchesForViewboxStr)
     const matchForViewboxValueStr = matchesForViewboxStr[1]                 // e.g.: '0 0 31 31'
     return inputSvg.replace(matchForViewboxValueStr, originalViewboxString)
+}
+
+
+// Functions for event listener
+
+function updateSvg(inputSvg, isCropped) {
+    const updatedSvg = isCropped ? viewboxSlimmed(inputSvg) : viewboxUnSlimmed(inputSvg)
+    document.querySelector('#svg-string').value = updatedSvg
+    executeSvg2png({ target: { value: updatedSvg } }, resvgOptions)
+    return updatedSvg
+}
+
+function cropSideMargins(inputSvg) {
+    console.log('Crop side margins: [x]')
+    updateState('cropSideMargins', true)
+    return updateSvg(inputSvg, true)
+}
+
+function resetSideMargins(inputSvg) {
+    console.log('Crop side margins: [ ]')
+    updateState('cropSideMargins', false)
+    return updateSvg(inputSvg, false)
 }

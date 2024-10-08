@@ -2,11 +2,19 @@ import { updateStateUrl
        , getStateUrl } from 'state/state-as-url-params'
 
 export
-    { stateList
+    { resvgOptions
+    , stateList
     , updateState
     , getState
     }
 
+// Resvg Option: Argument for rendering
+const resvgOptions = {
+    fitTo: {
+        mode: 'height',
+        value: 256
+    }
+}
 
 // State keys and default values
 //   - These two attributes default value will be detected from initial decoded svg string when first page loaded.
@@ -46,3 +54,11 @@ function getState(key) {
 function updateState(key, value) {
     updateStateUrl({ [key]: value })
 }
+
+//function updateState(key, value) {
+//    // "true" か "false" の場合にのみブール値に変換
+//    const parsedValue = (value === "true") ? true : (value === "false") ? false : value;
+//
+//    // 状態をURLに更新する
+//    updateStateUrl({ [key]: parsedValue });
+//}

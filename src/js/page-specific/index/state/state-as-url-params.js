@@ -9,26 +9,36 @@ export
     , resetAllStateUrls
     }
 
+// Get
 
-// URLから 全ての状態パラメータを取得する関数
+// URLから全ての状態パラメータを取得し、true/falseをブール値に変換する関数
 function getAllStateUrls() {
     const params = new URLSearchParams(window.location.search);
-    return Object.fromEntries(params);
+    return Object.fromEntries(
+        Array.from(params.entries()).map(([key, value]) => {
+            if (value.toLowerCase() === 'true') return [key, true];
+            if (value.toLowerCase() === 'false') return [key, false];
+            return [key, value];
+        })
+    );
 }
 
-// URLから 特定の状態パラメータを取得する関数
+// URLから特定の状態パラメータを取得する関数（ブール値対応）
 function getStateUrl(key) {
     const allParams = getAllStateUrls();
     return allParams[key];
 }
 
-
-// URLから特定の範囲の状態パラメータを取得する汎用関数
+// URLから特定の範囲の状態パラメータを取得する汎用関数（ブール値対応）
 function getStateUrlsInRange(startIndex, endIndex) {
-    const urlParams = new URLSearchParams(window.location.search);
+    const allParams = getAllStateUrls();
     const stateKeys = Array.from(stateList.keys()).slice(startIndex, endIndex);
-    return new Map([...urlParams.entries()].filter(([key]) => stateKeys.includes(key)));
+    return new Map(
+        Object.entries(allParams).filter(([key]) => stateKeys.includes(key))
+    );
 }
+
+
 
 // SVG optimization の状態パラメータを全て取得する関数
 function getStateUrlsOfSvgStrOptimization() {

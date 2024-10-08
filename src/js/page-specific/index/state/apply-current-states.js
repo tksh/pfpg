@@ -8,6 +8,8 @@ import { changeOpacitySelectOptionsAsNewStep
        , updateSvgForNewStep}                   from 'tab-lines/opacity-steps'
 import { getNumberOfGroups }                    from 'utils/get-number-of-groups'
 import { replaceAtIndex }                       from 'utils/replace-at-index'
+import { toggleDisplay
+       , updateSvgWithSelectedShapePath}        from 'tab-canvas/shape-to-trim'
 
 
 export function applyCustomization(svgString, resvgOpts, paramsOfImageCustomization) {
@@ -47,6 +49,26 @@ export function applyCustomization(svgString, resvgOpts, paramsOfImageCustomizat
         changeOpacitySelectOptionsAsNewStep(updatedSvg, opacitySteps)  // Update the group colors input elements
         updatedSvg = updateSvgForNewStep(updatedSvg)                   // Extract the steps value from input elements selected
     }
+
+    ////////////////////////////////////////////////// shapeToTrim //////////////////////////////////////////////////
+    /////////////////////////// includes: widthNarrowness, topHeavyRatio, cropSideMargins ///////////////////////////
+    const shapeToTrim = getState('shapeToTrim')
+    if (shapeToTrim) {
+        console.log("shapeToTrim from url param: ", shapeToTrim)
+        updatedSvg = updateSvgWithSelectedShapePath(shapeToTrim, updatedSvg)
+
+        // 'squircleSlimmed'が 選ばれた時だけ表示される
+        // 2つのオプション選択用の<select>要素 と 横幅クロップ用の<label>&<input>要素 を取得し 表示または非表示にする
+        const elementsToToggle = ['width-narrowness-div', 'top-heavy-ratio-div', 'crop-side-margins-div']
+
+        if (shapeToTrim === 'squircleSlimmed') {
+            toggleDisplay(elementsToToggle, 'inline')
+        } else {
+            toggleDisplay(elementsToToggle, 'none')
+        }
+    }
+
+
 
     return updatedSvg
 }
