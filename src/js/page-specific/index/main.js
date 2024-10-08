@@ -456,6 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initCheckerboardBgCheckbox()
     initTextWrappingCheckbox()
     initThemeColorSelect()
+
     applyUiConfiguration()
 
     // Tab - Render

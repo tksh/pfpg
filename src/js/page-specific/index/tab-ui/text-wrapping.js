@@ -1,14 +1,33 @@
 import { updateState } from 'state/settings-defaults'
 
-export function initTextWrappingCheckbox() {
-    const checkbox = document.querySelector('#text-wrapping')
-    const svgStringElement = document.querySelector('#svg-string')
+export
+    { initTextWrappingCheckbox
+    , toggleTextWrapping
+    }
 
-    //  checkbox.checked => remove 'no-wrap' class => set url param as 'textWrapping=true'
-    // !checkbox.checked =>    add 'no-wrap' class => set url param as 'textWrapping=false'
+function initTextWrappingCheckbox() {
+
+    const checkbox = document.getElementById('text-wrapping')
+
     checkbox.addEventListener('change', () => {
-        svgStringElement.classList.toggle('no-wrap', !checkbox.checked)
-        updateState('textWrapping', checkbox.checked)
+        const isTextWrapping = checkbox.checked
+        console.log("isTextWrapping: ", isTextWrapping)
+        updateState('textWrapping', isTextWrapping)
+        toggleTextWrapping(isTextWrapping)
     })
+
+}
+
+function toggleTextWrapping(isTextWrapping) {
+
+    //  checkbox.checked => remove 'no-wrap' class => set url param as 'textWrapping(isTextWrapping)=true'
+    // !checkbox.checked =>    add 'no-wrap' class => set url param as 'textWrapping(isTextWrapping)=false'
+    const svgTextarea = document.querySelector('#svg-string')
+
+    if (isTextWrapping === true) {
+        svgTextarea.classList.remove("no-wrap")
+    } else { // (isTextWrapping === false)
+        svgTextarea.classList.add("no-wrap")
+    }
 
 }
