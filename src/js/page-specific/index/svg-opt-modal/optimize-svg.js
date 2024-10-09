@@ -3,7 +3,7 @@ import { getSvgString
 import { updateState
        , getState }     from 'state/settings-defaults'
 import { tabSpace }     from 'constants'
-import { decodeAsSelectedPathMode }      from 'tab-lines/path-mode'
+import { decodeAsSelectedPathMode }  from 'tab-lines/path-mode'
 
 export
     { initSvgOptCheckbox
@@ -13,11 +13,43 @@ export
     , removeNewlines
     , removeSpaces
     , optimizeSvg
+    , tryRemoveOpacity
+    , tryRemoveNewlines
+    , tryRemoveSpaces
     }
 
 
+// For 'applySvgOptimization()' to init
+
+function tryRemoveOpacity(svgString, isOpacityRemoved) {
+    console.log('tryRemoveOpacity executed.')
+    if (isOpacityRemoved) {
+        return removeOpacity(svgString)
+    } else {
+        return svgString
+    }
+}
+function tryRemoveNewlines(svgString, isNewlinesRemoved) {
+    console.log('tryRemoveNewlines executed.')
+    if (isNewlinesRemoved) {
+        return removeNewlines(svgString)
+    } else {
+        return svgString
+    }
+}
+function tryRemoveSpaces(svgString, isSpacesRemoved) {
+    console.log('tryRemoveSpaces executed.')
+    if (isSpacesRemoved) {
+        return removeSpaces(svgString)
+    } else {
+        return svgString
+    }
+}
+
+
+// Add event listeners to checkboxes
+
 function initSvgOptCheckbox() {
-    const svgStringElement = document.querySelector('#svg-string')
     const checkboxes = document.querySelectorAll('#svg-opt-modal input[type="checkbox"]')
 
     checkboxes.forEach(checkbox => {
@@ -25,6 +57,7 @@ function initSvgOptCheckbox() {
     })
 
     function updateSvg() {
+        const svgStringElement = document.querySelector('#svg-string')
         let svg = getSvgString()
 
         if (document.getElementById('remove-opacity').checked) {
@@ -55,7 +88,7 @@ function initSvgOptCheckbox() {
         // Update the textarea
         svgStringElement.value = svg
 
-        // Count the size of new svg string siz and indicate it to download button
+        // Count the size of the updated SVG string and display it on the SVG download button
         countSvgSize(svg)
     }
 }
@@ -84,7 +117,6 @@ function restoreOpacity(svg) {
 function removeNewlines(svg) {
     return svg.replace(/>\s+</g, '><')
 }
-
 
 function restoreNewlines(svg, pathMode) {
     const indentCounts = getCurrentPathModeIndentation(pathMode)
@@ -133,7 +165,8 @@ function restoreSpaces(svg) {
 
 
 
-// Apply optimizations based on state
+// Bulk apply the optimizations based on current url params states, after 'pathMode' changes.
+// It will restore the string to how it looked before the changes.
 function optimizeSvg(svg, state) {
     let optimizedSvg = svg
     for (const [functionName, isEnabled] of state) {

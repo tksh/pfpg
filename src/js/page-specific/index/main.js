@@ -3,8 +3,9 @@ import { decodeUrlToSvg }                        from 'decode/decode'
 import { getSvgString
        , initDownloadButtons}                    from 'download'
 import { adjustBox }                             from 'init/adjust-output-boxes-size'
-import { applyCustomization
-       , applyUiConfiguration }                  from 'state/apply-current-states'
+import { applyImageCustomization
+       , applyUiConfiguration
+       , applySvgOptimization }                  from 'state/apply-current-states'
 import { getState
        , updateState
        , resvgOption }                           from 'state/settings-defaults'
@@ -60,7 +61,7 @@ import { getNumberOfGroups }                     from 'utils/get-number-of-group
 
     // Apply the settings states from url param to initial decoded svg string
     // - if there is no param in url, use default value retrieve from settingsDefaults map
-    const svgString = applyCustomization(initialDecodedSvgString, resvgOption)
+    const svgString = applyImageCustomization(initialDecodedSvgString, resvgOption)
 
     // Insert the decoded svg string to textarea
     const svgStringElement = document.querySelector('#svg-string') // <textarea id="svg-string" ... >
@@ -70,6 +71,14 @@ import { getNumberOfGroups }                     from 'utils/get-number-of-group
     // Initial PNG rendering
     await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm'))  // Path that relative from index.html
     executeSvg2png({ target: { value: svgString } }, resvgOption)
+
+    // Restore SVG string optimization
+    // This processes does not affect any changes for rendering result
+    // So just update the svg textarea value
+    const optimizedSvg = applySvgOptimization(svgString)
+    svgStringElement.value = optimizedSvg
+
+
 
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////// textarea ////////////////////////////////

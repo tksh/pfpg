@@ -2,7 +2,7 @@ import { settingsDefaults } from 'state/settings-defaults'
 
 export
     { getStateUrlsOfImageCustomization
-    , getStateUrlsOfSvgStrOptimization
+    , getStateUrlsOfSvgOptimization
     , getStateUrlsOfUiConfiguration
     , getStateUrl
     , updateStateUrl
@@ -42,11 +42,11 @@ function getStateUrlsInRange(startIndex, endIndex) {
 
 
 // SVG optimization の状態パラメータを全て取得する関数
-function getStateUrlsOfSvgStrOptimization() {
+function getStateUrlsOfSvgOptimization() {
     return getStateUrlsInRange(0, 3);
 }
 
-// Image Customization の状態パラメータを全て取得する関数
+// Image customization の状態パラメータを全て取得する関数
 function getStateUrlsOfImageCustomization() {
     return getStateUrlsInRange(3, 13);
 }

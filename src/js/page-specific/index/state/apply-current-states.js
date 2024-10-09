@@ -1,7 +1,11 @@
+import { countSvgSize }                         from 'download'
 import { getInitialOpacitySteps }               from 'init/get-initial-opacity-steps'
 import { getState
        , updateState }                          from 'state/settings-defaults'
 import { getStateUrl }                          from 'state/state-as-url-params'
+import { tryRemoveOpacity
+       , tryRemoveNewlines
+       , tryRemoveSpaces }                      from 'svg-opt-modal/optimize-svg'
 import { decodeGroupColors }                    from 'tab-lines/decode-colors-as-array'
 import { generateGroupColorsHtmlElements
        , generateGroupColorsSvgTags }           from 'tab-lines/group-colors'
@@ -20,12 +24,13 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
 import { replaceAtIndex }                       from 'utils/replace-at-index'
 
 export
-    { applyCustomization
+    { applyImageCustomization
     , applyUiConfiguration
+    , applySvgOptimization
     }
 
 
-function applyCustomization(svgString, resvgOption) {
+function applyImageCustomization(svgString, resvgOption) {
 
     let updatedSvg = svgString
 
@@ -115,6 +120,35 @@ function applyUiConfiguration() {
     document.getElementById('theme-color').value = themeColor
     changeThemeColor(themeColor)
 }
+
+
+function applySvgOptimization(svgString) {
+    ///////////////////////////// removeOpacity /////////////////////////////
+    const isOpacityRemoved = getState('removeOpacity')
+    updateState('removeOpacity', isOpacityRemoved)
+    document.getElementById('remove-opacity').checked = isOpacityRemoved
+    const removeOpacityApplied = tryRemoveOpacity(svgString, isOpacityRemoved)
+
+    //////////////////////////// removeNewlines ////////////////////////////
+    const isNewlinesRemoved = getState('removeNewlines')
+    updateState('removeNewlines', isNewlinesRemoved)
+    document.getElementById('remove-newlines').checked = isNewlinesRemoved
+    const removeNewlinesApplied = tryRemoveNewlines(removeOpacityApplied, isNewlinesRemoved)
+
+    ///////////////////////////// removeSpaces /////////////////////////////
+    const isSpacesRemoved = getState('removeSpaces')
+    updateState('removeSpaces', isSpacesRemoved)
+    document.getElementById('remove-spaces').checked = isSpacesRemoved
+    const removeSpacesApplied = tryRemoveSpaces(removeNewlinesApplied, isSpacesRemoved)
+
+    // Count the size of the updated SVG string and display it on the SVG download button
+    countSvgSize(removeSpacesApplied)
+
+    return removeSpacesApplied
+}
+
+
+
 
 
 function applyGroupColors(svgString, resvgOption, value) {
