@@ -32,8 +32,7 @@ import { replaceShapeRendering }                 from 'tab-render/shape-renderin
 import { initWidthValidatorListener }            from 'tab-render/width-pixel-size'
 import { initCheckerboardBgCheckbox }            from 'tab-ui/checkerboard-bg'
 import { initTextWrappingCheckbox }              from 'tab-ui/text-wrapping'
-import { initThemeColorSelect
-       , setSchemeAsDefaultTheme}                from 'tab-ui/theme-color'
+import { initThemeColorSelect }                  from 'tab-ui/theme-color'
 import { initViewScalingSelect }                 from 'tab-ui/view-scaling'
 import { getNumberOfGroups }                     from 'utils/get-number-of-groups'
 
@@ -430,16 +429,12 @@ import { getNumberOfGroups }                     from 'utils/get-number-of-group
     //////////////////////////////////////////////////////////////////////////
 
 
-
-    // Startup initialize process
-    const init = async () => {
-
+    // Startup layout initialize process
+    const initLayout = async () => {
         // To fit the contents (header + main) height as viewport height
         await adjustBox()
-
-        await setSchemeAsDefaultTheme()
     }
-    init()
+    initLayout()
 
 })() // `(async function () { ... })` 無名即時実行関数
 
@@ -457,12 +452,16 @@ document.addEventListener('DOMContentLoaded', () => {
     initTextWrappingCheckbox()
     initThemeColorSelect()
 
+    // Apply the UI configuration values retrieved from url params.
+    // if there is no url param for specific attr,
+    // get the default value from 'settingsDefaults'
+    // or detect the default value from data or environment.
     applyUiConfiguration()
 
     // Tab - Render
     initWidthValidatorListener()
 
-    // First tab ('Lines') activate
+    // Get first tab ('Lines') activated
     initTabs()
 
     // SVG optimization

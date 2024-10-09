@@ -11,7 +11,7 @@ function initCheckerboardBgCheckbox() {
 
     checkbox.addEventListener('change', () => {
         const isCheckerboardBg = checkbox.checked
-        console.log("isCheckerboardBg: ", isCheckerboardBg)
+        console.log('isCheckerboardBg: ', isCheckerboardBg)
         updateState('checkerboardBg', isCheckerboardBg)
         toggleCheckerboardBg(isCheckerboardBg)
     })
@@ -19,7 +19,7 @@ function initCheckerboardBgCheckbox() {
 
 function toggleCheckerboardBg(isCheckerboardBg) {
 
-    const img = document.querySelector("img")
-    img.classList.toggle("checker", isCheckerboardBg)
+    const img = document.querySelector('img')
+    img.classList.toggle('checker', isCheckerboardBg)
 
 }

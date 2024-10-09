@@ -1,5 +1,6 @@
 import { getInitialOpacitySteps }               from 'init/get-initial-opacity-steps'
-import { getState }                             from 'state/settings-defaults'
+import { getState
+       , updateState }                          from 'state/settings-defaults'
 import { getStateUrl }                          from 'state/state-as-url-params'
 import { decodeGroupColors }                    from 'tab-lines/decode-colors-as-array'
 import { generateGroupColorsHtmlElements
@@ -7,14 +8,16 @@ import { generateGroupColorsHtmlElements
 import { addEventListenerForGroupColorsInputs } from 'tab-lines/group-colors-listener'
 import { changeOpacitySelectOptionsAsNewStep
        , updateSvgForNewStep}                   from 'tab-lines/opacity-steps'
-import { getNumberOfGroups }                    from 'utils/get-number-of-groups'
-import { replaceAtIndex }                       from 'utils/replace-at-index'
 import { toggleDisplay
        , updateSvgWithSelectedShapePath}        from 'tab-canvas/shape-to-trim'
 import { replaceShapeRendering }                from 'tab-render/shape-rendering'
-import { switchViewScaling }                    from 'tab-ui/view-scaling'
 import { toggleCheckerboardBg }                 from 'tab-ui/checkerboard-bg'
 import { toggleTextWrapping }                   from 'tab-ui/text-wrapping'
+import { changeThemeColor
+       , getDefaultThemeViaPrefersColorScheme } from 'tab-ui/theme-color'
+import { switchViewScaling }                    from 'tab-ui/view-scaling'
+import { getNumberOfGroups }                    from 'utils/get-number-of-groups'
+import { replaceAtIndex }                       from 'utils/replace-at-index'
 
 export
     { applyCustomization
@@ -103,11 +106,14 @@ function applyUiConfiguration() {
 
     ///////////////////////////// textWrapping /////////////////////////////
     const isTextWrapping = getState('textWrapping')  // bool
-    console.log("||||isTextWrapping: ", isTextWrapping)
     document.getElementById('text-wrapping').checked = isTextWrapping
     toggleTextWrapping(isTextWrapping)
 
-
+    ///////////////////////////// themeColor /////////////////////////////
+    const themeColor = getStateUrl('themeColor') ? getStateUrl('themeColor') : getDefaultThemeViaPrefersColorScheme()
+    updateState('themeColor', themeColor)
+    document.getElementById('theme-color').value = themeColor
+    changeThemeColor(themeColor)
 }
 
 

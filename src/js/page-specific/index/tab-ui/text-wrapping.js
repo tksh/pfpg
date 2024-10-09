@@ -11,7 +11,7 @@ function initTextWrappingCheckbox() {
 
     checkbox.addEventListener('change', () => {
         const isTextWrapping = checkbox.checked
-        console.log("isTextWrapping: ", isTextWrapping)
+        console.log('isTextWrapping: ', isTextWrapping)
         updateState('textWrapping', isTextWrapping)
         toggleTextWrapping(isTextWrapping)
     })
@@ -25,9 +25,9 @@ function toggleTextWrapping(isTextWrapping) {
     const svgTextarea = document.querySelector('#svg-string')
 
     if (isTextWrapping === true) {
-        svgTextarea.classList.remove("no-wrap")
+        svgTextarea.classList.remove('no-wrap')
     } else { // (isTextWrapping === false)
-        svgTextarea.classList.add("no-wrap")
+        svgTextarea.classList.add('no-wrap')
     }
 
 }
