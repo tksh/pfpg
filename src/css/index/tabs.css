@@ -6,6 +6,36 @@
     width: 100%;
 }
 
+.icon-font {
+    vertical-align: -6px;
+}
+.icon-tab {
+    /* border-radius: 0.25rem 0.25rem 0rem 0rem; */
+    opacity: 0.7;
+    border: none;
+    outline: none;
+    font-size: 0.9rem;
+    flex: 0 1 auto;
+    /* This makes each tab size to its content */
+    width: auto;
+    /* Ensure width is auto */
+    min-width: 30px;
+    /* Set a minimum width */
+    max-width: 200px;
+    /* Set a maximum width */
+    flex-shrink: 0;
+    /* Prevent tabs from shrinking */
+    box-sizing: initial;
+    /* Ensure box model calculations are correct */
+    margin: 0;
+    /* padding: 0; */
+    padding: .25rem 0;
+    /* Adds some space between tabs */
+    /* background-color: var(--color-button-bg); */
+    background-color:  var(--color-bg);
+}
+
+
 .tab {
     border-radius: 0.25rem 0.25rem 0rem 0rem;
     opacity: 0.7;
@@ -59,8 +89,10 @@
     }
 
     .tab {
-        width: 23%;
+        width: 20%;
         min-width: 50px;
+        /* width: 23%;
+        min-width: 50px; */
         margin: 0;
     }
 

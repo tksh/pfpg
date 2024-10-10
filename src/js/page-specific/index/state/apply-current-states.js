@@ -123,23 +123,45 @@ function applyUiConfiguration() {
 
 
 function applySvgOptimization(svgString) {
-    ///////////////////////////// removeOpacity /////////////////////////////
+    /////////////////////////////////////// removeOpacity ///////////////////////////////////////
     const isOpacityRemoved = getState('removeOpacity')
     updateState('removeOpacity', isOpacityRemoved)
-    document.getElementById('remove-opacity').checked = isOpacityRemoved
+    // Optimize the svg text
     const removeOpacityApplied = tryRemoveOpacity(svgString, isOpacityRemoved)
 
-    //////////////////////////// removeNewlines ////////////////////////////
+    // Set the checkbox state
+    document.getElementById('remove-opacity').checked = isOpacityRemoved
+    // Toggle classes for the <code> content text
+    document.querySelector('#before-remove-opacity').classList.toggle('option-applied', !isOpacityRemoved)
+    document.querySelector('#after-remove-opacity').classList.toggle('option-applied', isOpacityRemoved)
+
+
+    ////////////////////////////////////// removeNewlines //////////////////////////////////////
     const isNewlinesRemoved = getState('removeNewlines')
     updateState('removeNewlines', isNewlinesRemoved)
-    document.getElementById('remove-newlines').checked = isNewlinesRemoved
+    // Optimize the svg text
     const removeNewlinesApplied = tryRemoveNewlines(removeOpacityApplied, isNewlinesRemoved)
 
-    ///////////////////////////// removeSpaces /////////////////////////////
+    // Set the checkbox state
+    document.getElementById('remove-newlines').checked = isNewlinesRemoved
+    // Toggle classes for the <code> content text
+    document.querySelector('#before-remove-newlines').classList.toggle('option-applied', !isNewlinesRemoved)
+    document.querySelector('#after-remove-newlines').classList.toggle('option-applied', isNewlinesRemoved)
+
+
+    /////////////////////////////////////// removeSpaces ///////////////////////////////////////
     const isSpacesRemoved = getState('removeSpaces')
     updateState('removeSpaces', isSpacesRemoved)
-    document.getElementById('remove-spaces').checked = isSpacesRemoved
+    // Optimize the svg text
     const removeSpacesApplied = tryRemoveSpaces(removeNewlinesApplied, isSpacesRemoved)
+
+    // Set the checkbox state
+    document.getElementById('remove-spaces').checked = isSpacesRemoved
+    // Toggle classes for the <code> content text
+    document.querySelector('#before-remove-spaces').classList.toggle('option-applied', !isSpacesRemoved)
+    document.querySelector('#after-remove-spaces').classList.toggle('option-applied', isSpacesRemoved)
+
+
 
     // Count the size of the updated SVG string and display it on the SVG download button
     countSvgSize(removeSpacesApplied)

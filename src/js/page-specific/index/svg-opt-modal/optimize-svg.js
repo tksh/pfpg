@@ -19,7 +19,8 @@ export
     }
 
 
-// For 'applySvgOptimization()' to init
+// Functions for 'applySvgOptimization()'
+// Restore the states of optimization via ulr params
 
 function tryRemoveOpacity(svgString, isOpacityRemoved) {
     console.log('tryRemoveOpacity executed.')
@@ -47,61 +48,74 @@ function tryRemoveSpaces(svgString, isSpacesRemoved) {
 }
 
 
-// Add event listeners to checkboxes
+
+// Add event listeners to three checkboxes in the modal
+
+const svgOptions = [
+    { id: 'remove-opacity',
+      stateKey: 'removeOpacity',
+      removeFunction: removeOpacity,
+      restoreFunction: restoreOpacity },
+    { id: 'remove-newlines',
+      stateKey: 'removeNewlines',
+      removeFunction: removeNewlines,
+      restoreFunction: restoreNewlines,
+      needsPathMode: true },
+    { id: 'remove-spaces',
+      stateKey: 'removeSpaces',
+      removeFunction: removeSpaces,
+      restoreFunction: restoreSpaces }
+  ];
 
 function initSvgOptCheckbox() {
-    const checkboxes = document.querySelectorAll('#svg-opt-modal input[type="checkbox"]')
-
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', updateSvg)
-    })
-
-    function updateSvg() {
-        const svgStringElement = document.querySelector('#svg-string')
-        let svg = getSvgString()
-
-        if (document.getElementById('remove-opacity').checked) {
-            svg = removeOpacity(svg)
-            updateState('removeOpacity', true)
-        } else {
-            svg = restoreOpacity(svg)
-            updateState('removeOpacity', false)
-        }
-
-        if (document.getElementById('remove-newlines').checked) {
-            svg = removeNewlines(svg)
-            updateState('removeNewlines', true)
-        } else {
-            const pathMode = getState('pathMode')
-            svg = restoreNewlines(svg, pathMode)
-            updateState('removeNewlines', false)
-        }
-
-        if (document.getElementById('remove-spaces').checked) {
-            svg = removeSpaces(svg)
-            updateState('removeSpaces', true)
-        } else {
-            svg = restoreSpaces(svg)
-            updateState('removeSpaces', false)
-        }
-
-        // Update the textarea
-        svgStringElement.value = svg
-
-        // Count the size of the updated SVG string and display it on the SVG download button
-        countSvgSize(svg)
-    }
+    const checkboxes = document.querySelectorAll('#svg-opt-modal input[type="checkbox"]');
+    checkboxes.forEach(checkbox => checkbox.addEventListener('change', updateSvg));
 }
+
+function updateSvg() {
+    let svgString = getSvgString();
+
+    svgOptions.forEach(option => {
+        const checkbox = document.getElementById(option.id);
+
+        // Update visual feedback in the modal
+        const beforeElement = document.querySelector(`#before-${option.id}`);
+        const afterElement = document.querySelector(`#after-${option.id}`);
+
+        beforeElement.classList.toggle('option-applied', !checkbox.checked);
+        afterElement.classList.toggle('option-applied', checkbox.checked);
+
+        // Optimize the SVG text and update the state
+        if (checkbox.checked) {
+            svgString = option.removeFunction(svgString);
+            updateState(option.stateKey, true);
+        } else {
+            if (option.needsPathMode) {
+                const pathMode = getState('pathMode');
+                svgString = option.restoreFunction(svgString, pathMode);
+            } else {
+                svgString = option.restoreFunction(svgString);
+            }
+            updateState(option.stateKey, false);
+        }
+
+        // Update the textarea with optimized text
+        document.querySelector('#svg-string').value = svgString
+        // Count the size of the updated SVG string and display it on the SVG download button
+        countSvgSize(svgString)
+    });
+}
+
 
 
 // Remove and restore functions
 
-function removeOpacity(svg) {
-    return svg.replace(/\s(opacity|stroke-opacity)="1(\.0)?"/g, '')
+function removeOpacity(svgString) {
+    return svgString.replace(/\s(opacity|stroke-opacity)="1(\.0)?"/g, '')
 }
 
-function restoreOpacity(svg) {
-    return svg.replace(/(<[^>]*\bstroke="[^"]*")([^>]*>)/g, function(match, p1, p2) {
+function restoreOpacity(svgString) {
+    return svgString.replace(/(<[^>]*\bstroke="[^"]*")([^>]*>)/g, function(match, p1, p2) {
         if (!/\bopacity=/.test(match) && !/\bstroke-opacity=/.test(match)) {
             return p1 + ' opacity="1.0" stroke-opacity="1.0"' + p2
         } else if (!/\bopacity=/.test(match)) {
@@ -114,13 +128,13 @@ function restoreOpacity(svg) {
 }
 
 
-function removeNewlines(svg) {
-    return svg.replace(/>\s+</g, '><')
+function removeNewlines(svgString) {
+    return svgString.replace(/>\s+</g, '><')
 }
 
-function restoreNewlines(svg, pathMode) {
+function restoreNewlines(svgString, pathMode) {
     const indentCounts = getCurrentPathModeIndentation(pathMode)
-    let formattedSvg = svg.replace(/></g, '>\n<')
+    let formattedSvg = svgString.replace(/></g, '>\n<')
     const lines = formattedSvg.split('\n')
 
     const indentedLines = lines.map((line, index) => {
@@ -133,8 +147,8 @@ function restoreNewlines(svg, pathMode) {
 
 // Get the indentation as numbers in array
 
-function getSvgIndentation(svg) {
-    const lines = svg.split('\n')
+function getSvgIndentation(svgString) {
+    const lines = svgString.split('\n')
     return lines.map(line => {
         const match = line.match(/^(\s*)/)
         return match ? Math.floor(match[1].length / 4) : 0
@@ -147,16 +161,16 @@ function getCurrentPathModeIndentation(pathMode) {
 }
 
 
-function removeSpaces(svg) {
-    return svg
+function removeSpaces(svgString) {
+    return svgString
         // 数値と大文字の M|L のあいだの スペースを削除
         .replace(/(\d)\s+([ML])/g, '$1$2')
         // ダブルクォートとスラッシュ のあいだの スペースを削除
         .replace(/"\s+(\/)/g, '"$1')
 }
 
-function restoreSpaces(svg) {
-    return svg
+function restoreSpaces(svgString) {
+    return svgString
         // 数値と大文字の M|L のあいだに スペースを挿入
         .replace(/(\d)([ML])/g, '$1 $2')
         // ダブルクォートとスラッシュ のあいだに スペースを挿入
@@ -167,8 +181,8 @@ function restoreSpaces(svg) {
 
 // Bulk apply the optimizations based on current url params states, after 'pathMode' changes.
 // It will restore the string to how it looked before the changes.
-function optimizeSvg(svg, state) {
-    let optimizedSvg = svg
+function optimizeSvg(svgString, state) {
+    let optimizedSvg = svgString
     for (const [functionName, isEnabled] of state) {
         if (isEnabled && typeof optimizeFunctions[functionName] === 'function') {
             optimizedSvg = optimizeFunctions[functionName](optimizedSvg)

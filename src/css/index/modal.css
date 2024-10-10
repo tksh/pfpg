@@ -11,10 +11,15 @@
 
 .modal-content {
     background-color: rgba(200, 200, 200, 1);
+    color: var(--color-text);
     margin: 10% auto;
     padding: 1rem;
     border: 2px solid rgba(200, 200, 200, 0.48);
     width: max-content;
+}
+
+.option-group {
+    padding-bottom: 3rem;
 }
 
 code {
@@ -23,19 +28,21 @@ code {
     /* font-family: Courier New, Courier, monospace; */
 }
 
-.arrow-color {
-    color: var(--color-text);
+.option-applied {
+    /* color: #000 */
+    /* color: var(--color-checker-trans); */
+    color: var(--color-text-input);
 }
 
 .arrow {
-    color: var(--color-text);
     display: block;
     padding-left: 1rem;
+    padding-top: .5rem;
 }
 
 .modal-content>h2 {
-    color: var(--color-text);
     font-size: 1rem;
+    padding-bottom: 2rem;
 }
 
 
@@ -58,5 +65,8 @@ button#close-svg-opt-modal {
     }
     .modal-content fieldset {
         margin: 0;
+    }
+    .option-group {
+        padding-bottom: 2rem;
     }
 }

@@ -170,6 +170,9 @@
     <!-- Main JS -->
     <script type="module" src="./js/page-specific/index/main.js"></script>
 
+    <!-- Material Design Icons via Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&icon_names=restart_alt,swap_vert" />
+
 </head>
 
 <body>
@@ -194,10 +197,12 @@
                     <button class="tab" data-tab="tab-2">Canvas</button>
                     <button class="tab" data-tab="tab-3">Render</button>
                     <button class="tab" data-tab="tab-4">UI</button>
+                    <!-- <button class="icon-tab" data-tab="tab-5"><span class="icon-font material-symbols-outlined">reset_settings</span></button> -->
+                    <button class="icon-tab" data-tab="tab-5"><span class="icon-font material-symbols-outlined">restart_alt</span></button>
                 </div>
 
 
-                <div id="tab-1" class="tab-content"> <!-- Lines-->
+                <div id="tab-1" class="tab-content"> <!-- Lines -->
 
                     <!-- Color-pickers for group colors (Generated dynamically) -->
                     <div id="multiple-stroke-color-desc" class="opts">
@@ -398,7 +403,11 @@
                         </div>
                     </div>
 
-                </div><!-- End of last tab contents -->
+                </div> <!-- End of UI tab -->
+
+                <div id="tab-5" class="tab-content"> <!-- Rest button -->
+
+                </div> <!-- End of last tab contents -->
             </fieldset>
         </div> <!-- end of <div id="customization" class="opts"> -->
 
@@ -459,44 +468,44 @@
         <!-- SVG optimization modal window content-->
         <div id="svg-opt-modal" class="modal">
             <div class="modal-content">
-                <h2 class="text-align-center">SVG strings optimization</h2>
+                <h2 class="text-align-center">SVG text optimization</h2>
                 <form>
                     <fieldset>
                         <legend class="display-none">Optimization options</legend>
 
-                        <div class="option-group padding-top">
+                        <div class="option-group">
                             <input type="checkbox" id="remove-opacity" name="remove-opacity" value="enabled">
                             <label for="remove-opacity">Remove default opacity attributes</label>
                             <div class="example padding-left-1">
-                                <code>&lt;g stroke=&quot;rgb(0,0,0)&quot; opacity=&quot;1.0&quot; stroke-opacity=&quot;1.0&quot;&gt;</code>
-                                <span class="arrow">⬇</span>
-                                <code>&lt;g stroke=&quot;rgb(0,0,0)&quot;&gt;</code>
+                                <code id="before-remove-opacity" class="option-applied">&lt;g stroke=&quot;rgb(0,0,0)&quot; opacity=&quot;1.0&quot; stroke-opacity=&quot;1.0&quot;&gt;</code>
+                                <span class="arrow"><span class="material-symbols-outlined">swap_vert</span></span>
+                                <code id="after-remove-opacity">&lt;g stroke=&quot;rgb(0,0,0)&quot;&gt;</code>
                             </div>
                         </div>
 
-                        <div class="option-group padding-top">
+                        <div class="option-group">
                             <input type="checkbox" id="remove-newlines" name="remove-newlines" value="enabled">
                             <label for="remove-newlines">Remove new-lines</label>
                             <div class="example padding-left-1">
-                                <code>
+                                <code id="before-remove-newlines" class="option-applied">
                                     &lt;tag&gt;<br>
                                     &emsp;&emsp;content-text<br>
                                     &lt;/tag&gt;
                                 </code>
-                                <span class="arrow">⬇</span>
-                                <code>
+                                <span class="arrow"><span class="material-symbols-outlined">swap_vert</span></span>
+                                <code id="after-remove-newlines">
                                     &lt;tag&gt;content-text&lt;/tag&gt;
                                 </code>
                             </div>
                         </div>
 
-                        <div class="option-group padding-top">
+                        <div class="option-group">
                             <input type="checkbox" id="remove-spaces" name="remove-spaces" value="enabled">
                             <label for="remove-spaces">Remove extra spaces</label>
                             <div class="example padding-left-1">
-                                <code>&lt;path d="M 36 61 L 33 68" /&gt;</code>
-                                <span class="arrow">⬇</span>
-                                <code>&lt;path d="M36 61L 33 68"/&gt;</code>
+                                <code id="before-remove-spaces" class="option-applied">&lt;path d="M 36 61 L 33 68" /&gt;</code>
+                                <span class="arrow"><span class="material-symbols-outlined">swap_vert</span></span>
+                                <code id="after-remove-spaces">&lt;path d="M36 61L 33 68"/&gt;</code>
                             </div>
                         </div>
                     </fieldset>
