@@ -11,11 +11,11 @@ export function getInitialOpacitySteps() {
 
     // Extract the values of opacities / e.g.: (3) ['1.0', '1.0', '1.0']
     const opArr = [...decodedLinesByGroups.values()].map(eachGroupData => eachGroupData.groupColors.gOpacity)
-    const osArr = [...decodedLinesByGroups.values()].map(eachGroupData => eachGroupData.groupColors.gOpacityStroke)
+    const soArr = [...decodedLinesByGroups.values()].map(eachGroupData => eachGroupData.groupColors.gStrokeOpacity)
 
     // Convert the type to number / e.g.: (3) [1.0, 1.0, 1.0]
     const opNumArray = opArr.map(value => Number(value))
-    const soNumArray = osArr.map(value => Number(value))
+    const soNumArray = soArr.map(value => Number(value))
 
     // Find largest step selected from [0.2, 0.1, 0.04] for each attr
     const opLargestStep = findLargestStep(opNumArray)

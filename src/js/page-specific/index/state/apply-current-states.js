@@ -44,6 +44,15 @@ function applyImageCustomization(svgString, resvgOption) {
 
     // Create the group colors input elements
     generateGroupColorsHtmlElements(svgString, colorFormat, getInitialOpacitySteps())
+    // Use temporary 'opacitySteps' value as argument in this timing.
+    // Calculate it from original lines data.
+
+    ////////////////////////////////////////////////// groupColors //////////////////////////////////////////////////
+    // Apply the image customization values via url params if exists
+    const groupColors = getState('groupColors')
+    if (groupColors) {
+        updatedSvg = applyGroupColors(svgString, resvgOption, groupColors)
+    }
 
     ////////////////////////////////////////////////// opacitySteps //////////////////////////////////////////////////
     // First, try to retrieve the value via url param with 'getStateUrl()' instead of 'getState()' like others
@@ -57,13 +66,6 @@ function applyImageCustomization(svgString, resvgOption) {
         updatedSvg = updateSvgForNewStep(updatedSvg)                   // Extract the steps value from input elements selected
     } else {
         opacitySteps = getInitialOpacitySteps()
-    }
-
-    ////////////////////////////////////////////////// groupColors //////////////////////////////////////////////////
-    // Apply the image customization values via url params if exists
-    const groupColors = getState('groupColors')
-    if (groupColors) {
-        updatedSvg = applyGroupColors(svgString, resvgOption, groupColors)
     }
 
     ////////////////////////////////////////////////// shapeToTrim //////////////////////////////////////////////////
