@@ -10,8 +10,9 @@ import { getState
        , updateState
        , resvgOption }                           from 'state/settings-defaults'
 import { initTabs }                              from 'init/tab-setup'
-import { initSvgOptModal }                       from 'svg-opt-modal/modal'
-import { initSvgOptCheckbox
+import { initSvgOptModal
+       , initSettingsResetModal }                from 'svg-opt-modal/modal'
+import { initSvgOptCheckboxes
        , optimizeSvg}                            from 'svg-opt-modal/optimize-svg'
 import { executeSvg2png
        , svg2png}                                from 'svg-to-png'
@@ -475,6 +476,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // SVG optimization
     initSvgOptModal()
-    initSvgOptCheckbox()
+    initSvgOptCheckboxes()
+
+    // Settings reset
+    initSettingsResetModal()
 
 })

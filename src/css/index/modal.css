@@ -18,7 +18,7 @@
     width: max-content;
 }
 
-.option-group {
+.input-group {
     padding-bottom: 3rem;
 }
 
@@ -51,7 +51,8 @@ code {
     padding-left: 1.5rem;
 }
 
-button#close-svg-opt-modal {
+/* button#close-svg-opt-modal { */
+.modal-content>button {
     margin-top: 1.5rem;
     padding: 0 1rem;
     min-width: 100%;
@@ -66,7 +67,7 @@ button#close-svg-opt-modal {
     .modal-content fieldset {
         margin: 0;
     }
-    .option-group {
+    .input-group {
         padding-bottom: 2rem;
     }
 }

@@ -308,6 +308,9 @@ footer {
 .text-align-center {
     text-align: center;
 }
+.align-items-center {
+    align-items: center;
+}
 
 a {
     color: var(--color-text);

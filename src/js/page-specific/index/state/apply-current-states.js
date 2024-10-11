@@ -1,5 +1,6 @@
 import { countSvgSize }                         from 'download'
-import { getInitialOpacitySteps }               from 'init/get-initial-opacity-steps'
+import { getInitialOpacitySteps
+       , calculateStepsFromTwoOpacities }       from 'init/get-initial-opacity-steps'
 import { getState
        , updateState }                          from 'state/settings-defaults'
 import { getStateUrl }                          from 'state/state-as-url-params'
@@ -63,7 +64,7 @@ function applyImageCustomization(svgString, resvgOption) {
 
     const groupColors = getState('groupColors')
     if (groupColors) {
-        const groupColorsByGroupsArr = decodeGroupColorsAsArray(urlParamValue, colorFormat)
+        const groupColorsByGroupsArr = decodeGroupColorsAsArray(groupColors, colorFormat)
         updatedSvg = applyGroupColors(svgString, resvgOption, groupColorsByGroupsArr, opacitySteps)
 
         // Get the opacitySteps from customized group colors

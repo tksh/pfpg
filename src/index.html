@@ -171,7 +171,7 @@
     <script type="module" src="./js/page-specific/index/main.js"></script>
 
     <!-- Material Design Icons via Google Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&icon_names=restart_alt,swap_vert" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&icon_names=close,restart_alt,swap_vert" />
 
 </head>
 
@@ -197,8 +197,7 @@
                     <button class="tab" data-tab="tab-2">Canvas</button>
                     <button class="tab" data-tab="tab-3">Render</button>
                     <button class="tab" data-tab="tab-4">UI</button>
-                    <!-- <button class="icon-tab" data-tab="tab-5"><span class="icon-font material-symbols-outlined">reset_settings</span></button> -->
-                    <button class="icon-tab" data-tab="tab-5"><span class="icon-font material-symbols-outlined">restart_alt</span></button>
+                    <button class="icon-tab" data-tab="tab-5" id="reset-icon"><span class="icon-font material-symbols-outlined">restart_alt</span></button>
                 </div>
 
 
@@ -405,9 +404,6 @@
 
                 </div> <!-- End of UI tab -->
 
-                <div id="tab-5" class="tab-content"> <!-- Rest button -->
-
-                </div> <!-- End of last tab contents -->
             </fieldset>
         </div> <!-- end of <div id="customization" class="opts"> -->
 
@@ -473,7 +469,7 @@
                     <fieldset>
                         <legend class="display-none">Optimization options</legend>
 
-                        <div class="option-group">
+                        <div class="input-group">
                             <input type="checkbox" id="remove-opacity" name="remove-opacity" value="enabled">
                             <label for="remove-opacity">Remove default opacity attributes</label>
                             <div class="example padding-left-1">
@@ -483,7 +479,7 @@
                             </div>
                         </div>
 
-                        <div class="option-group">
+                        <div class="input-group">
                             <input type="checkbox" id="remove-newlines" name="remove-newlines" value="enabled">
                             <label for="remove-newlines">Remove new-lines</label>
                             <div class="example padding-left-1">
@@ -499,7 +495,7 @@
                             </div>
                         </div>
 
-                        <div class="option-group">
+                        <div class="input-group">
                             <input type="checkbox" id="remove-spaces" name="remove-spaces" value="enabled">
                             <label for="remove-spaces">Remove extra spaces</label>
                             <div class="example padding-left-1">
@@ -508,9 +504,54 @@
                                 <code id="after-remove-spaces">&lt;path d="M36 61L 33 68"/&gt;</code>
                             </div>
                         </div>
+
                     </fieldset>
                 </form>
-                <button id="close-svg-opt-modal">Close</button>
+                <div class="align-items-center text-align-center padding-top-2">
+                    <span id="svg-opt-close-icon" class="material-symbols-outlined">close</span>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Settings reset modal window content-->
+        <div id="settings-reset-modal" class="modal">
+            <div class="modal-content">
+                <h2 class="text-align-center">Settings reset by categories</h2>
+                <form>
+                    <fieldset>
+                        <legend class="display-none">Settings categories</legend>
+
+                        <div class="input-group">
+                            <input type="checkbox" id="image-custom" name="image-custom" value="enabled" checked>
+                            <label for="image-custom">Image customization</label>
+                            <div class="example padding-left-1">
+                                <p>All settings at <i>Lines</i>, <i>Canvas</i> and <i>Render</i> tabs</code>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <input type="checkbox" id="ui-config" name="ui-config" value="enabled">
+                            <label for="ui-config">UI configuration</label>
+                            <div class="example padding-left-1">
+                                <p>All settings at <i>UI</i> tab</code>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <input type="checkbox" id="svg-optimize" name="svg-optimize" value="enabled">
+                            <label for="svg-optimize">SVG optimization</label>
+                            <div class="example padding-left-1">
+                                <p>All settings at modal window via svg textarea clicking</code>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </form>
+                <button id="settings-reset">Reset</button>
+                <div class="align-items-center text-align-center padding-top-2">
+                    <span id="settings-reset-close-icon" class="material-symbols-outlined">close</span>
+                </div>
             </div>
         </div>
 
