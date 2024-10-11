@@ -29,7 +29,7 @@ const resvgOption = {
 const settingsDefaults = new Map([
 //  ['Attribute name',  default value],     // Appeared at: | Index | Type   | Possible values:
     ['removeOpacity',   false],   // SVG optimization modal |   0   | Bool   | true, false
-    ['removeNewlines',  false],   // SVG optimization modal |   1   | Bool   | true, false
+    ['removeLineBreaks',  false], // SVG optimization modal |   1   | Bool   | true, false
     ['removeSpaces',    false],   // SVG optimization modal |   2   | Bool   | true, false
 
     ['groupColors',     undefined],            // Lines tab |   3   | String | 3|6|10 digits each group-colors hexes has joined with '_', e.g. 12345699FF_000123_FFF

@@ -10,11 +10,11 @@ export
     , getSvgIndentation
     , getCurrentPathModeIndentation
     , removeOpacity
-    , removeNewlines
+    , removeLineBreaks
     , removeSpaces
     , optimizeSvg
     , tryRemoveOpacity
-    , tryRemoveNewlines
+    , tryRemoveLineBreaks
     , tryRemoveSpaces
     }
 
@@ -30,10 +30,10 @@ function tryRemoveOpacity(svgString, isOpacityRemoved) {
         return svgString
     }
 }
-function tryRemoveNewlines(svgString, isNewlinesRemoved) {
-    console.log('tryRemoveNewlines executed.')
-    if (isNewlinesRemoved) {
-        return removeNewlines(svgString)
+function tryRemoveLineBreaks(svgString, isLineBreaksRemoved) {
+    console.log('tryRemoveLineBreaks executed.')
+    if (isLineBreaksRemoved) {
+        return removeLineBreaks(svgString)
     } else {
         return svgString
     }
@@ -56,10 +56,10 @@ const svgOptions = [
       stateKey: 'removeOpacity',
       removeFunction: removeOpacity,
       restoreFunction: restoreOpacity },
-    { id: 'remove-newlines',
-      stateKey: 'removeNewlines',
-      removeFunction: removeNewlines,
-      restoreFunction: restoreNewlines,
+    { id: 'remove-line-breaks',
+      stateKey: 'removeLineBreaks',
+      removeFunction: removeLineBreaks,
+      restoreFunction: restoreLineBreaks,
       needsPathMode: true },
     { id: 'remove-spaces',
       stateKey: 'removeSpaces',
@@ -128,11 +128,11 @@ function restoreOpacity(svgString) {
 }
 
 
-function removeNewlines(svgString) {
+function removeLineBreaks(svgString) {
     return svgString.replace(/>\s+</g, '><')
 }
 
-function restoreNewlines(svgString, pathMode) {
+function restoreLineBreaks(svgString, pathMode) {
     const indentCounts = getCurrentPathModeIndentation(pathMode)
     let formattedSvg = svgString.replace(/></g, '>\n<')
     const lines = formattedSvg.split('\n')
@@ -193,6 +193,6 @@ function optimizeSvg(svgString, state) {
 
 const optimizeFunctions = {
     removeOpacity,
-    removeNewlines,
+    removeLineBreaks,
     removeSpaces
 }

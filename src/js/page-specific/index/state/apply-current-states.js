@@ -5,7 +5,7 @@ import { getState
        , updateState }                          from 'state/settings-defaults'
 import { getStateUrl }                          from 'state/state-as-url-params'
 import { tryRemoveOpacity
-       , tryRemoveNewlines
+       , tryRemoveLineBreaks
        , tryRemoveSpaces }                      from 'svg-opt-modal/optimize-svg'
 import { decodeGroupColorsAsArray
        , getGroupOpacitiesAsMap }               from 'tab-lines/decode-colors-as-array'
@@ -154,24 +154,24 @@ function applySvgOptimization(svgString) {
     document.querySelector('#after-remove-opacity').classList.toggle('option-applied', isOpacityRemoved)
 
 
-    ////////////////////////////////////// removeNewlines //////////////////////////////////////
-    const isNewlinesRemoved = getState('removeNewlines')
-    updateState('removeNewlines', isNewlinesRemoved)
+    ////////////////////////////////////// removeLineBreaks //////////////////////////////////////
+    const isLineBreaksRemoved = getState('removeLineBreaks')
+    updateState('removeLineBreaks', isLineBreaksRemoved)
     // Optimize the svg text
-    const removeNewlinesApplied = tryRemoveNewlines(removeOpacityApplied, isNewlinesRemoved)
+    const removeLineBreaksApplied = tryRemoveLineBreaks(removeOpacityApplied, isLineBreaksRemoved)
 
     // Set the checkbox state
-    document.getElementById('remove-newlines').checked = isNewlinesRemoved
+    document.getElementById('remove-line-breaks').checked = isLineBreaksRemoved
     // Toggle classes for the <code> content text
-    document.querySelector('#before-remove-newlines').classList.toggle('option-applied', !isNewlinesRemoved)
-    document.querySelector('#after-remove-newlines').classList.toggle('option-applied', isNewlinesRemoved)
+    document.querySelector('#before-remove-line-breaks').classList.toggle('option-applied', !isLineBreaksRemoved)
+    document.querySelector('#after-remove-line-breaks').classList.toggle('option-applied', isLineBreaksRemoved)
 
 
     /////////////////////////////////////// removeSpaces ///////////////////////////////////////
     const isSpacesRemoved = getState('removeSpaces')
     updateState('removeSpaces', isSpacesRemoved)
     // Optimize the svg text
-    const removeSpacesApplied = tryRemoveSpaces(removeNewlinesApplied, isSpacesRemoved)
+    const removeSpacesApplied = tryRemoveSpaces(removeLineBreaksApplied, isSpacesRemoved)
 
     // Set the checkbox state
     document.getElementById('remove-spaces').checked = isSpacesRemoved

@@ -33,7 +33,7 @@ function getUrlParamsExceptsStates() {
     const urlParams = new URLSearchParams(window.location.search)
     const stateKeys = Array.from(settingsDefaults.keys())
     // console.log('stateKeys to exclude: ', stateKeys)
-    // (17) ['removeOpacity', 'removeNewlines', ... 'textWrapping', 'themeColor']
+    // (17) ['removeOpacity', 'removeLineBreaks', ... 'textWrapping', 'themeColor']
 
     // stateキーのリストを作成
     const filteredParams = new Map([...urlParams.entries()].filter(([key]) => !stateKeys.includes(key)))

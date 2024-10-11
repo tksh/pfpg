@@ -183,7 +183,7 @@ import { getNumberOfGroups }                     from 'utils/get-number-of-group
         // Optimize the SVG string using current three checkboxes status
         const svgOptState = new Map([
             ['removeOpacity',  getState('removeOpacity') ],  // SVG optimization modal
-            ['removeNewlines', getState('removeNewlines')],  // SVG optimization modal
+            ['removeLineBreaks', getState('removeLineBreaks')],  // SVG optimization modal
             ['removeSpaces',   getState('removeSpaces')  ],  // SVG optimization modal
         ])
         const optimizedSvg = optimizeSvg(updatedSvg, svgOptState)

@@ -40,8 +40,8 @@ function updateSvgWithSelectedShapePath(shape, inputSvg) {
 
     // Replace to new shape <clipPath>
     const patternForClippathShape = /<clipPath id="shape-to-trim">(\n?).*(\n?).*<\/clipPath>/g
-    const removeNewlines = getState('removeNewlines')
-    const newClippathSvg = removeNewlines
+    const removeLineBreaks = getState('removeLineBreaks')
+    const newClippathSvg = removeLineBreaks
         ? inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">${shapePath}</clipPath>`)
         : inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">\n${tabSpace.repeat(3)}${shapePath}\n${tabSpace.repeat(2)}</clipPath>`)
 
