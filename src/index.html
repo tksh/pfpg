@@ -464,14 +464,14 @@
         <!-- SVG optimization modal window content-->
         <div id="svg-opt-modal" class="modal">
             <div class="modal-content">
-                <h2 class="text-align-center">SVG text optimization</h2>
+                <h2 class="text-align-center">SVG Text Optimization</h2>
                 <form>
                     <fieldset>
-                        <legend class="display-none">Optimization options</legend>
+                        <legend class="display-none">Optimization Options</legend>
 
                         <div class="input-group">
                             <input type="checkbox" id="remove-opacity" name="remove-opacity" value="enabled">
-                            <label for="remove-opacity">Remove default opacity attributes</label>
+                            <label for="remove-opacity">Remove Default Opacity Attributes</label>
                             <div class="example padding-left-1">
                                 <code id="before-remove-opacity" class="option-applied">&lt;g stroke=&quot;rgb(0,0,0)&quot; opacity=&quot;1.0&quot; stroke-opacity=&quot;1.0&quot;&gt;</code>
                                 <span class="arrow"><span class="material-symbols-outlined">swap_vert</span></span>
@@ -481,7 +481,7 @@
 
                         <div class="input-group">
                             <input type="checkbox" id="remove-newlines" name="remove-newlines" value="enabled">
-                            <label for="remove-newlines">Remove new-lines</label>
+                            <label for="remove-newlines">Remove Newlines</label>
                             <div class="example padding-left-1">
                                 <code id="before-remove-newlines" class="option-applied">
                                     &lt;tag&gt;<br>
@@ -497,7 +497,7 @@
 
                         <div class="input-group">
                             <input type="checkbox" id="remove-spaces" name="remove-spaces" value="enabled">
-                            <label for="remove-spaces">Remove extra spaces</label>
+                            <label for="remove-spaces">Remove Extra Spaces</label>
                             <div class="example padding-left-1">
                                 <code id="before-remove-spaces" class="option-applied">&lt;path d="M 36 61 L 33 68" /&gt;</code>
                                 <span class="arrow"><span class="material-symbols-outlined">swap_vert</span></span>
@@ -515,42 +515,42 @@
 
 
         <!-- Settings reset modal window content-->
-        <div id="settings-reset-modal" class="modal">
+        <div id="reset-settings-modal" class="modal">
             <div class="modal-content">
-                <h2 class="text-align-center">Settings reset by categories</h2>
+                <h2 class="text-align-center">Reset Settings by Category</h2>
                 <form>
                     <fieldset>
-                        <legend class="display-none">Settings categories</legend>
+                        <legend class="display-none">Settings Categories</legend>
 
                         <div class="input-group">
                             <input type="checkbox" id="image-custom" name="image-custom" value="enabled" checked>
-                            <label for="image-custom">Image customization</label>
+                            <label for="image-custom">Image Customization</label>
                             <div class="example padding-left-1">
-                                <p>All settings at <i>Lines</i>, <i>Canvas</i> and <i>Render</i> tabs</code>
+                                <p>All settings in the <i>Lines</i>, <i>Canvas</i>, and <i>Render</i> tabs.</p>
                             </div>
                         </div>
 
                         <div class="input-group">
                             <input type="checkbox" id="ui-config" name="ui-config" value="enabled">
-                            <label for="ui-config">UI configuration</label>
+                            <label for="ui-config">UI Configuration</label>
                             <div class="example padding-left-1">
-                                <p>All settings at <i>UI</i> tab</code>
+                                <p>All settings in the <i>UI</i> tab.</p>
                             </div>
                         </div>
 
                         <div class="input-group">
                             <input type="checkbox" id="svg-optimize" name="svg-optimize" value="enabled">
-                            <label for="svg-optimize">SVG optimization</label>
+                            <label for="svg-optimize">SVG Optimization</label>
                             <div class="example padding-left-1">
-                                <p>All settings at modal window via svg textarea clicking</code>
+                                <p>All settings in the modal window accessed via the SVG textarea.</p>
                             </div>
                         </div>
 
                     </fieldset>
                 </form>
-                <button id="settings-reset">Reset</button>
+                <button id="reset-settings">Reset</button>
                 <div class="align-items-center text-align-center padding-top-2">
-                    <span id="settings-reset-close-icon" class="material-symbols-outlined">close</span>
+                    <span id="reset-settings-close-icon" class="material-symbols-outlined">close</span>
                 </div>
             </div>
         </div>

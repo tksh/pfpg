@@ -21,8 +21,8 @@ export function initSvgOptModal() {
 
 export function initSettingsResetModal() {
     const button = document.getElementById('reset-icon')
-    const modal    = document.getElementById('settings-reset-modal')
-    const closeIcon = document.getElementById('settings-reset-close-icon')
+    const modal    = document.getElementById('reset-settings-modal')
+    const closeIcon = document.getElementById('reset-settings-close-icon')
 
     button.addEventListener('click', function () {
         modal.style.display = "block"
