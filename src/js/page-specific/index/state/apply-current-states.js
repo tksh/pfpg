@@ -6,7 +6,8 @@ import { getStateUrl }                          from 'state/state-as-url-params'
 import { tryRemoveOpacity
        , tryRemoveNewlines
        , tryRemoveSpaces }                      from 'svg-opt-modal/optimize-svg'
-import { decodeGroupColors }                    from 'tab-lines/decode-colors-as-array'
+import { decodeGroupColorsAsArray
+       , getGroupOpacitiesAsMap }               from 'tab-lines/decode-colors-as-array'
 import { generateGroupColorsHtmlElements
        , generateGroupColorsSvgTags }           from 'tab-lines/group-colors'
 import { addEventListenerForGroupColorsInputs } from 'tab-lines/group-colors-listener'
@@ -22,6 +23,8 @@ import { changeThemeColor
 import { switchViewScaling }                    from 'tab-ui/view-scaling'
 import { getNumberOfGroups }                    from 'utils/get-number-of-groups'
 import { replaceAtIndex }                       from 'utils/replace-at-index'
+
+import { settingsDefaults }                     from 'state/settings-defaults'
 
 export
     { applyImageCustomization
@@ -42,30 +45,42 @@ function applyImageCustomization(svgString, resvgOption) {
     const colorFormat = getState('colorFormat')
     document.getElementById("color-format").value = colorFormat
 
-    // Create the group colors input elements
-    generateGroupColorsHtmlElements(svgString, colorFormat, getInitialOpacitySteps())
-    // Use temporary 'opacitySteps' value as argument in this timing.
+    // Use possibly temporary 'opacitySteps' value as argument in this timing.
     // Calculate it from original lines data.
+    let opacitySteps = getInitialOpacitySteps()                                        // Getting the steps - 1st of 3
+    console.log('Default opacitySteps calculated via original lines data: ', opacitySteps)                                                     // Stored as default
+    settingsDefaults.set('opacitySteps', opacitySteps)                                        // Set as default values
+
+    // Update the html elements
+    const opacityStepsSelector = document.getElementById("opacity-steps")
+    opacityStepsSelector.value = opacitySteps
+
+    // Create the group colors input elements
+    generateGroupColorsHtmlElements(svgString, colorFormat, opacitySteps)
 
     ////////////////////////////////////////////////// groupColors //////////////////////////////////////////////////
     // Apply the image customization values via url params if exists
+
     const groupColors = getState('groupColors')
     if (groupColors) {
-        updatedSvg = applyGroupColors(svgString, resvgOption, groupColors)
+        const groupColorsByGroupsArr = decodeGroupColorsAsArray(urlParamValue, colorFormat)
+        updatedSvg = applyGroupColors(svgString, resvgOption, groupColorsByGroupsArr, opacitySteps)
+
+        // Get the opacitySteps from customized group colors
+        const opacitiesByGroupMap = getGroupOpacitiesAsMap(groupColorsByGroupsArr)
+        opacitySteps = calculateStepsFromTwoOpacities(opacitiesByGroupMap)             // Getting the steps - 2nd of 3
     }
 
     ////////////////////////////////////////////////// opacitySteps //////////////////////////////////////////////////
-    // First, try to retrieve the value via url param with 'getStateUrl()' instead of 'getState()' like others
-    // 'opacitySteps' does not have default value before decoding in 'settingsDefaults'.
-    // The only way to get the default value of current artwork is calculate from original lines data.
-
-    let opacitySteps = getStateUrl('opacitySteps')
-    if (opacitySteps) {
-        document.getElementById("opacity-steps").value = opacitySteps
-        changeOpacitySelectOptionsAsNewStep(updatedSvg, opacitySteps)  // Update the group colors input elements
-        updatedSvg = updateSvgForNewStep(updatedSvg)                   // Extract the steps value from input elements selected
-    } else {
-        opacitySteps = getInitialOpacitySteps()
+    // Try to retrieve the value via url param with 'getStateUrl()' instead of 'getState()' like others
+    // 'opacitySteps' does not have default value in 'settingsDefaults' map object, before the decoding svg.
+    // The only way to get the default value is calculated from original lines data. (at above 'colorFormat' section)
+    const opacityStepsViaUrl = getStateUrl('opacitySteps')                             // Getting the steps - 3rd of 3
+    if (opacityStepsViaUrl) {
+        console.log("opacityStepsViaUrl: ", opacityStepsViaUrl)
+        opacityStepsSelector.value = opacityStepsViaUrl
+        changeOpacitySelectOptionsAsNewStep(updatedSvg, opacityStepsViaUrl)  // Update the group colors input elements
+        updatedSvg = updateSvgForNewStep(updatedSvg)           // Extract the steps value from input elements selected
     }
 
     ////////////////////////////////////////////////// shapeToTrim //////////////////////////////////////////////////
@@ -175,14 +190,10 @@ function applySvgOptimization(svgString) {
 
 
 
-function applyGroupColors(svgString, resvgOption, value) {
+// function applyGroupColors(svgString, resvgOption, urlParamValue) {
+function applyGroupColors(svgString, resvgOption, groupColorsByGroups, opacitySteps) {
 
-    // Decode the group colors value
-    // - from: Hex string that has joined whole groups with '_'
-    // -   to: Array structured same as regex '.match()' method returns.
-    // - Type: Array of arrays
     const colorFormat = getState('colorFormat')
-    const groupColorsByGroups = decodeGroupColors(value, colorFormat)
 
     // Generate the <g> element string
     // - Type: Array of strings
@@ -201,8 +212,8 @@ function applyGroupColors(svgString, resvgOption, value) {
     })
 
     // HTMLを 新しい表示フォーマットの js-color input に更新
-    // generateGroupColorsHtmlElements(colorFormat, getState('opacitySteps'))
-    generateGroupColorsHtmlElements(updatedSvg, colorFormat, getState('opacitySteps'))
+    generateGroupColorsHtmlElements(updatedSvg, colorFormat, opacitySteps)
+
     // Add event listener for new format js-color inputs and opacity selectors
     const numberOfGroups = getNumberOfGroups(svgString)
     addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke')

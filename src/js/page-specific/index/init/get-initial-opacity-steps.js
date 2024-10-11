@@ -1,35 +1,40 @@
 import { decodeUrlParams } from 'common-utils/read-url-params'
-import { settingsDefaults }       from 'state/settings-defaults'
+
+export
+    { getInitialOpacitySteps
+    , calculateStepsFromTwoOpacities
+    }
 
 
-// Get initial opacity steps detected from original lines data
-export function getInitialOpacitySteps() {
+// Get initial opacity steps from original lines data
+function getInitialOpacitySteps() {
 
     // Get the whole lines data
     const decodedLinesByGroups = decodeUrlParams().linesData
     // e.g.: Map(3) {0 => {…}, 1 => {…}, 2 => {…}}
 
-    // Extract the values of opacities / e.g.: (3) ['1.0', '1.0', '1.0']
-    const opArr = [...decodedLinesByGroups.values()].map(eachGroupData => eachGroupData.groupColors.gOpacity)
-    const soArr = [...decodedLinesByGroups.values()].map(eachGroupData => eachGroupData.groupColors.gStrokeOpacity)
-
-    // Convert the type to number / e.g.: (3) [1.0, 1.0, 1.0]
-    const opNumArray = opArr.map(value => Number(value))
-    const soNumArray = soArr.map(value => Number(value))
-
-    // Find largest step selected from [0.2, 0.1, 0.04] for each attr
-    const opLargestStep = findLargestStep(opNumArray)
-    const soLargestStep = findLargestStep(soNumArray)
-
-    // Select smaller step value to get 'opacity steps' value for this artwork
-    const steps = Math.min(opLargestStep, soLargestStep)
-
-    // Set as default values list map
-    settingsDefaults.set('opacitySteps', steps)
-
-    return steps
+    return calculateStepsFromTwoOpacities(decodedLinesByGroups)
 }
 
+// Get the opacity steps from url param value
+function calculateStepsFromTwoOpacities(dataByGroups) {
+   // Extract the values of opacities / e.g.: (3) ['1.0', '1.0', '1.0']
+   const opArr = [...dataByGroups.values()].map(data => data.groupColors.gOpacity)
+   const soArr = [...dataByGroups.values()].map(data => data.groupColors.gStrokeOpacity)
+
+   // Convert the type to number / e.g.: (3) [1.0, 1.0, 1.0]
+   const opNumArray = opArr.map(value => Number(value))
+   const soNumArray = soArr.map(value => Number(value))
+
+   // Find largest step selected from [0.2, 0.1, 0.04] for each attr
+   const opLargestStep = findLargestStep(opNumArray)
+   const soLargestStep = findLargestStep(soNumArray)
+
+   // Select smaller step value to get 'opacity steps' value for this artwork
+   const steps = Math.min(opLargestStep, soLargestStep)
+
+   return steps
+}
 
 // Find largest step from number array, selected from [0.2, 0.1, 0.04]
 function findLargestStep(numberArray) {
