@@ -1,6 +1,6 @@
-import { replaceAtIndex }          from 'utils/replace-at-index'
 import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
-import { decodeUrlToSvg }                  from 'decode/decode'
+import { decodeUrlToSvg }          from 'decode/decode'
+import { replaceAtIndex }          from 'utils/replace-at-index'
 
 export
     { decodeAsSelectedPathMode

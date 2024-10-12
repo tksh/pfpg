@@ -1,15 +1,13 @@
-import { getSvgString } from 'download'
-import { updateState } from 'state/settings-defaults'
-import { executeSvg2png } from 'svg-to-png'
-import { getGroupColorsAsJoinedHex } from "tab-lines/encode-colors-as-hex"
-import {
-    generateGroupColorsSvgTags,
-    getOpacity,
-    getStroke,
-    getStrokeOpacity,
-    regexMatchesOfGroupColors
-} from 'tab-lines/group-colors'
-import { replaceAtIndex } from 'utils/replace-at-index'
+import { getSvgString }               from 'download'
+import { updateState }                from 'state/settings-defaults'
+import { executeSvg2png }             from 'svg-to-png'
+import { getGroupColorsAsJoinedHex }  from "tab-lines/encode-colors-as-hex"
+import { generateGroupColorsSvgTags } from 'tab-lines/group-colors'
+import { getOpacity
+       , getStroke
+       , getStrokeOpacity
+       , regexMatchesOfGroupColors}   from 'tab-lines/get-colors-from-svg'
+import { replaceAtIndex }             from 'utils/replace-at-index'
 
 
 export function addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, attrName) {

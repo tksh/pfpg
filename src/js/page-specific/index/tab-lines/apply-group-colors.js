@@ -1,0 +1,39 @@
+import { getState }                             from 'state/settings-defaults'
+import { generateGroupColorsHtmlElements
+       , generateGroupColorsSvgTags}            from 'tab-lines/group-colors'
+import { addEventListenerForGroupColorsInputs } from 'tab-lines/group-colors-listener'
+import { getNumberOfGroups }                    from 'utils/get-number-of-groups'
+import { replaceAtIndex }                       from 'utils/replace-at-index'
+
+
+export function applyGroupColors(svgString, resvgOption, groupColorsByGroups, opacitySteps) {
+
+    const colorFormat = getState('colorFormat')
+
+    // Generate the <g> element string
+    // - Type: Array of strings
+    const gElemByGroups = groupColorsByGroups.map(groupColorsArr => generateGroupColorsSvgTags(groupColorsArr))
+    console.log('gElemByGroups: ', gElemByGroups)
+    // e.g.: (3) ['<g stroke="#38AA34" opacity="1" stroke-opacity="1">', '<g stroke="#000" opacity="1" stroke-opacity="1">', '<g stroke="#FFF" opacity="1" stroke-opacity="1">']
+
+    // Replace the whole groups <g> element, via group ID = index number of array
+    const pattern = /<g stroke=[^>]*>/g
+    let updatedSvg = svgString
+
+    // Replace each group element
+    gElemByGroups.forEach((gElem, gId) => {
+        // Here, assign the result of replaceAtIndex back to updatedSvg
+        updatedSvg = replaceAtIndex(updatedSvg, pattern, gElem, gId);
+    })
+
+    // HTMLを 新しい表示フォーマットの js-color input に更新
+    generateGroupColorsHtmlElements(updatedSvg, colorFormat, opacitySteps)
+
+    // Add event listener for new format js-color inputs and opacity selectors
+    const numberOfGroups = getNumberOfGroups(svgString)
+    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke')
+    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'opacity')
+    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke-opacity')
+
+    return updatedSvg
+}

@@ -1,16 +1,19 @@
-import { hexExpandToTen } from 'color-formatter/hex-expand'
-import { hexShortenAsHalf } from "color-formatter/hex-shorten"
-import { normalizedFromHex } from 'color-formatter/normalized-from-hex'
-import { convertColorFormat } from 'tab-lines/group-colors'
+import { hexExpandToTen }     from 'color-formatter/hex-expand'
+import { hexShortenAsHalf }   from "color-formatter/hex-shorten"
+import { normalizedFromHex }  from 'color-formatter/normalized-from-hex'
+import { convertColorFormat } from "tab-lines/color-format-converter"
+
+export
+    { decodeGroupColorsAsArray
+    , getGroupOpacitiesAsMap
+    }
 
 
-//    const groupColorsByGroups = decodeGroupColors(value)
 // Decode the group colors value
-// - from: Hex string that has joined whole groups with '_'
-// -   to: Array structured same as regex '.match()' method returns.
-// - Type: Array of arrays
+// -  input: Hex string that has joined whole groups with '_'
+// - output: Array contains each group arrays that structured same as regex '.match()' method returns.
 
-export function decodeGroupColorsAsArray(joinedHex, colorFormat) {
+function decodeGroupColorsAsArray(joinedHex, colorFormat) {
 
     const hexByGroups = joinedHex.split('_')
     return hexByGroups.map((hex) => {
@@ -26,21 +29,34 @@ export function decodeGroupColorsAsArray(joinedHex, colorFormat) {
     })
 }
 
-export function getGroupOpacitiesAsMap(groupColorsArray) {
+
+// Decode the group colors value
+// -  input: Array contains each group arrays that structured same as regex '.match()' method returns.
+// - output: Map that structured like as 'decodeAsThreeData(urlSearchParams)' function returns.
+//           Nested objects stored as value under the map object using group ID key
+
+function getGroupOpacitiesAsMap(groupColorsArray) {
+    // console.log("groupColorsArray: ", groupColorsArray)
+    // e.g.: (3) [Array(4), Array(4), Array(4)]
+    //         0: (4) [undefined, 'rgb(56,170,100)', 0.6, 0.4]
+    //         1: (4) [undefined, 'rgb(0,0,0)', 1, 1]
+    //         2: (4) [undefined, 'rgb(255,255,255)', 1, 1]
+
     const opacitiesArrays = groupColorsArray.map(arr => [arr[2], arr[3]])
     const opacitiesByGroupMap = new Map()
 
     for (const [index, opacities] of opacitiesArrays.entries()) {
         opacitiesByGroupMap.set(
-            `${index}`,                             // group ID: uint as string: '0', '1', ...
+            `${index}`,                           // group ID: uint as string: '0', '1', ...
             {
                 groupColors: {
-                    gOpacity: opacities[0],              //        opacity value: float[0.0-1.0] as string
-                    gStrokeOpacity: opacities[1]         // stroke-opacity value: float[0.0-1.0] as string
+                    gOpacity: opacities[0],       //        opacity value: float[0.0-1.0] as string
+                    gStrokeOpacity: opacities[1]  // stroke-opacity value: float[0.0-1.0] as string
                 }
             }
         )
     }
-    console.log("opacitiesByGroupMap: ", opacitiesByGroupMap)
+    // console.log("opacitiesByGroupMap: ", opacitiesByGroupMap)
+    // e.g.: Map(3) {'0' => {…}, '1' => {…}, '2' => {…}}
     return opacitiesByGroupMap
 }

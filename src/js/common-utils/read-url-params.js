@@ -7,7 +7,7 @@ import { decodeGroupColors }         from 'enc-and-dec/lines-data/group-colors/g
 import { decodeWidthsAndCounts }     from 'enc-and-dec/lines-data/widths-and-counts/widths-and-counts-dec'
 import { settingsDefaults }          from 'state/settings-defaults'
 
-import { BASIC_DATA_KEYS } from 'constants'
+import { BASIC_DATA_KEYS }           from 'constants'
 
 export
     { decodeUrlParams

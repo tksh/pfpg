@@ -1,5 +1,5 @@
 import { getStateUrl
-       , updateStateUrl } from 'state/state-as-url-params'
+       , updateStateUrl } from 'state/url-state-manager'
 
 export
     { resvgOption

@@ -1,7 +1,8 @@
-import { normalizedFromHex }      from 'color-formatter/normalized-from-hex'
-import { hexToRgbMap }            from 'color-formatter/normalized-from-hex'
-import { hexToUint8 }             from 'color-formatter/normalized-from-hex'
+import { normalizedFromHex
+       , hexToRgbMap
+       , hexToUint8 }             from 'color-formatter/normalized-from-hex'
 import { addDecimalToZeroAndOne } from 'common-utils/format-as-float'
+
 
 // Convert 10 digits hex to three group colors as Object
 

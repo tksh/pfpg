@@ -5,7 +5,7 @@ import { getSvgString
 import { adjustBox }                             from 'init/adjust-output-boxes-size'
 import { applyImageCustomization
        , applyUiConfiguration
-       , applySvgOptimization }                  from 'state/apply-current-states'
+       , applySvgOptimization }                  from 'state/apply-url-state'
 import { getState
        , updateState
        , resvgOption }                           from 'state/settings-defaults'
@@ -21,7 +21,7 @@ import { cropSideMargins
        , resetSideMargins}                       from 'tab-canvas/crop-side-margins'
 import { toggleDisplay
        , updateSvgWithSelectedShapePath}         from 'tab-canvas/shape-to-trim'
-import { updateSvgAsNewColorFormat }             from 'tab-lines/color-format'
+import { updateSvgAsNewColorFormat }             from 'tab-lines/update-svg-color-format'
 import { addEventListenerForGroupColorsInputs }  from 'tab-lines/group-colors-listener'
 import { generateGroupColorsHtmlElements }       from 'tab-lines/group-colors'
 import { changeOpacitySelectOptionsAsNewStep

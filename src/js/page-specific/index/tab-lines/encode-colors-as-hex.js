@@ -1,10 +1,8 @@
-import { hexShortenAsHalf } from "color-formatter/hex-shorten"
-import { normalizedToHex } from "color-formatter/normalized-to-hex"
-import { tryDeleteFs } from "color-formatter/try-delete-f"
-import {
-    convertColorFormatForArray,
-    getGroupColorsValues
-} from "tab-lines/group-colors"
+import { hexShortenAsHalf }           from "color-formatter/hex-shorten"
+import { normalizedToHex }            from "color-formatter/normalized-to-hex"
+import { tryDeleteFs }                from "color-formatter/try-delete-f"
+import { convertColorFormatForArray } from "tab-lines/color-format-converter"
+import { getGroupColorsValues }       from "tab-lines/get-colors-from-svg"
 
 export function getGroupColorsAsJoinedHex(inputSvg) {
 

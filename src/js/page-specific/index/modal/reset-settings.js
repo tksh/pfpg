@@ -1,7 +1,7 @@
 import { removeUrlParams
        , getStateUrlsOfImageCustomization
        , getStateUrlsOfSvgOptimization
-       , getStateUrlsOfUiConfiguration } from 'state/state-as-url-params'
+       , getStateUrlsOfUiConfiguration } from 'state/url-state-manager'
 
 export function initResetSettings() {
     const modal = document.getElementById('reset-settings-modal')
