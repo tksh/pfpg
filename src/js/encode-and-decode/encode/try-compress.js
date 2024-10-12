@@ -1,9 +1,9 @@
 import { flagsMap
        , resultInfo
-       , encodingMethodAndConfig }        from 'constants'
-import { compressToEncodedURIComponent} from 'common-utils/compression-stream'
-import { getEncodedAttrsExceptsDvals }    from 'encode/get-attrs-excepts-dvals'
-import { URLCompressor }                  from 'libs/url-comp-0-1-0/url-comp'
+       , encodingMethodAndConfig}        from 'constants'
+import { compressToEncodedURIComponent } from 'common-utils/compression-stream'
+import { getEncodedAttrsExceptsDvals }   from 'encode/get-attrs-excepts-dvals'
+import { URLCompressor }                 from 'libs/url-comp-0-1-0/url-comp'
 
 
 // Try compress, choose shorter, then add prefix to form:
@@ -83,29 +83,29 @@ async function compressAndSelectBest(inputString) {
         'uncompressed' : async () => inputString,
         'URLCompressor': async () => URLCompressor.compress(inputString),
         'deflateRaw'   : async () => compressToEncodedURIComponent(inputString, 'deflate-raw')
-    };
+    }
 
     // Execute all compression methods concurrently
     const results = await Promise.all(
         Object.entries(compressionMethods).map(async ([method, compressFunc]) => {
-            const compressedData = await compressFunc();
-            return { method, compressedData, length: compressedData.length };
+            const compressedData = await compressFunc()
+            return { method, compressedData, length: compressedData.length }
         })
-    );
+    )
 
     // Find best result size and method name
-    let bestResult = results[0]; // Start with the first result
+    let bestResult = results[0] // Start with the first result
     for (const result of results) {
-        console.log(`Method name: ${result.method} \t Result string length: ${result.length}`);
+        console.log(`Method name: ${result.method} \t Result string length: ${result.length}`)
         if (result.length < bestResult.length) {
-            bestResult = result;
+            bestResult = result
         }
     }
 
     return {
         bestCompressedData: bestResult.compressedData,
         bestCompMethodName: bestResult.method
-    };
+    }
 }
 
 

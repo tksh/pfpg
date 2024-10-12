@@ -1,5 +1,5 @@
 import { formatAsFloatString }        from 'common-utils/format-as-float'
-import { getGroupColorsValues }       from "tab-lines/get-colors-from-svg"
+import { getGroupColorsValues }       from 'tab-lines/get-colors-from-svg'
 import { generateGroupColorsSvgTags } from 'tab-lines/group-colors'
 import { getNumberOfGroups }          from 'utils/get-number-of-groups'
 import { replaceAtIndex }             from 'utils/replace-at-index'

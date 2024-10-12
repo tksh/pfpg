@@ -1,11 +1,11 @@
-import { convertColorFormatForArray } from "tab-lines/color-format-converter"
-import { getGroupColorsValues }       from "tab-lines/get-colors-from-svg"
-import { numbersIncrementByStep }     from "tab-lines/opacity-steps"
+import { convertColorFormatForArray } from 'tab-lines/color-format-converter'
+import { getGroupColorsValues }       from 'tab-lines/get-colors-from-svg'
+import { numbersIncrementByStep }     from 'tab-lines/opacity-steps'
 
 export
-  { generateGroupColorsHtmlElements
-  , generateGroupColorsSvgTags
-  }
+    { generateGroupColorsHtmlElements
+    , generateGroupColorsSvgTags
+    }
 
 
 // SVG

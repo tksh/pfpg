@@ -1,6 +1,6 @@
-import { flagsMap }                         from 'constants'
-import { decompressFromEncodedURIComponent} from 'common-utils/compression-stream'
-import { URLCompressor }                    from 'libs/url-comp-0-1-0/url-comp'
+import { flagsMap }                          from 'constants'
+import { decompressFromEncodedURIComponent } from 'common-utils/compression-stream'
+import { URLCompressor }                     from 'libs/url-comp-0-1-0/url-comp'
 
 export function tryDecompress(string) {
 

@@ -1,5 +1,5 @@
 import { getSvgString }               from 'download'
-import { convertColorFormat }         from "tab-lines/color-format-converter"
+import { convertColorFormat }         from 'tab-lines/color-format-converter'
 import { generateGroupColorsSvgTags } from 'tab-lines/group-colors'
 import { getElementValueById }        from 'tab-lines/opacity-steps'
 import { getNumberOfGroups }          from 'utils/get-number-of-groups'

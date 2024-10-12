@@ -32,7 +32,7 @@ function openTab(evt, tabName) {
 function handleKeyPress(event) {
 
     // Altキーが押されていない場合は、処理を行わない
-    if (!event.altKey) return;
+    if (!event.altKey) return
 
     const key = event.key.toLowerCase()
     const keyMap = {

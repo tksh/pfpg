@@ -23,7 +23,7 @@ export function applyGroupColors(svgString, resvgOption, groupColorsByGroups, op
     // Replace each group element
     gElemByGroups.forEach((gElem, gId) => {
         // Here, assign the result of replaceAtIndex back to updatedSvg
-        updatedSvg = replaceAtIndex(updatedSvg, pattern, gElem, gId);
+        updatedSvg = replaceAtIndex(updatedSvg, pattern, gElem, gId)
     })
 
     // HTMLを 新しい表示フォーマットの js-color input に更新

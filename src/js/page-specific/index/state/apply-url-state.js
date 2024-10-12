@@ -1,28 +1,28 @@
-import { countSvgSize }                         from 'download'
+import { countSvgSize }                        from 'download'
 import { getInitialOpacitySteps
-       , calculateStepsFromTwoOpacities }       from 'init/initial-opacity-steps'
+       , calculateStepsFromTwoOpacities}       from 'init/initial-opacity-steps'
 import { tryRemoveOpacity
        , tryRemoveLineBreaks
-       , tryRemoveSpaces }                      from 'modal/optimize-svg'
+       , tryRemoveSpaces}                      from 'modal/optimize-svg'
 import { getState
-       , updateState }                          from 'state/settings-defaults'
-import { getStateUrl }                          from 'state/url-state-manager'
-import { applyGroupColors }                     from 'tab-lines/apply-group-colors'
+       , updateState}                          from 'state/settings-defaults'
+import { getStateUrl }                         from 'state/url-state-manager'
+import { applyGroupColors }                    from 'tab-lines/apply-group-colors'
 import { decodeGroupColorsAsArray
-       , getGroupOpacitiesAsMap }               from 'tab-lines/decode-colors-as-array'
-import { generateGroupColorsHtmlElements }      from 'tab-lines/group-colors'
+       , getGroupOpacitiesAsMap}               from 'tab-lines/decode-colors-as-array'
+import { generateGroupColorsHtmlElements }     from 'tab-lines/group-colors'
 import { changeOpacitySelectOptionsAsNewStep
-       , updateSvgForNewStep}                   from 'tab-lines/opacity-steps'
+       , updateSvgForNewStep}                  from 'tab-lines/opacity-steps'
 import { toggleDisplay
-       , updateSvgWithSelectedShapePath}        from 'tab-canvas/shape-to-trim'
-import { replaceShapeRendering }                from 'tab-render/shape-rendering'
-import { toggleCheckerboardBg }                 from 'tab-ui/checkerboard-bg'
-import { toggleTextWrapping }                   from 'tab-ui/text-wrapping'
+       , updateSvgWithSelectedShapePath}       from 'tab-canvas/shape-to-trim'
+import { replaceShapeRendering }               from 'tab-render/shape-rendering'
+import { toggleCheckerboardBg }                from 'tab-ui/checkerboard-bg'
+import { toggleTextWrapping }                  from 'tab-ui/text-wrapping'
 import { changeThemeColor
-       , getDefaultThemeViaPrefersColorScheme } from 'tab-ui/theme-color'
-import { switchViewScaling }                    from 'tab-ui/view-scaling'
+       , getDefaultThemeViaPrefersColorScheme} from 'tab-ui/theme-color'
+import { switchViewScaling }                   from 'tab-ui/view-scaling'
 
-import { settingsDefaults }                     from 'state/settings-defaults'
+import { settingsDefaults }                    from 'state/settings-defaults'
 
 export
     { applyImageCustomization
@@ -84,7 +84,7 @@ function applyImageCustomization(svgString, resvgOption) {
     ////////////////////////////////////////////////// shapeToTrim //////////////////////////////////////////////////
     /////////////////////////// includes: widthNarrowness, topHeavyRatio, cropSideMargins ///////////////////////////
     const shapeToTrim = getState('shapeToTrim')
-    console.log("shapeToTrim from url param: ", shapeToTrim)
+    console.log("shapeToTrim                   from url param: ", shapeToTrim)
     updatedSvg = updateSvgWithSelectedShapePath(shapeToTrim, updatedSvg)
 
     // 'squircleSlimmed'が 選ばれた時だけ表示される

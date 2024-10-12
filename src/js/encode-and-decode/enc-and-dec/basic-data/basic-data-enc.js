@@ -6,7 +6,7 @@ import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
 import { isNonEmpty }              from 'common-utils/is-non-empty'
 import { URLCompressor }           from 'libs/url-comp-0-1-0/url-comp'
 
-import { BASIC_DATA_KEYS  } from 'constants'
+import { BASIC_DATA_KEYS }         from 'constants'
 
 export
     { encodeBasicData

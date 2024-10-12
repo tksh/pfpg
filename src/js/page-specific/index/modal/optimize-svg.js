@@ -1,9 +1,9 @@
 import { getSvgString
-       , countSvgSize } from 'download'
+       , countSvgSize}              from 'download'
 import { updateState
-       , getState }     from 'state/settings-defaults'
-import { tabSpace }     from 'constants'
-import { decodeAsSelectedPathMode }  from 'tab-lines/path-mode'
+       , getState}                  from 'state/settings-defaults'
+import { tabSpace }                 from 'constants'
+import { decodeAsSelectedPathMode } from 'tab-lines/path-mode'
 
 export
     { initSvgOptimization
@@ -65,45 +65,45 @@ const svgOptions = [
       stateKey: 'removeSpaces',
       removeFunction: removeSpaces,
       restoreFunction: restoreSpaces }
-  ];
+  ]
 
 function initSvgOptimization() {
-    const checkboxes = document.querySelectorAll('#svg-opt-modal input[type="checkbox"]');
-    checkboxes.forEach(checkbox => checkbox.addEventListener('change', updateSvg));
+    const checkboxes = document.querySelectorAll('#svg-opt-modal input[type="checkbox"]')
+    checkboxes.forEach(checkbox => checkbox.addEventListener('change', updateSvg))
 }
 
 function updateSvg() {
-    let svgString = getSvgString();
+    let svgString = getSvgString()
 
     svgOptions.forEach(option => {
-        const checkbox = document.getElementById(option.id);
+        const checkbox = document.getElementById(option.id)
 
         // Update visual feedback in the modal
-        const beforeElement = document.querySelector(`#before-${option.id}`);
-        const afterElement = document.querySelector(`#after-${option.id}`);
+        const beforeElement = document.querySelector(`#before-${option.id}`)
+        const afterElement = document.querySelector(`#after-${option.id}`)
 
-        beforeElement.classList.toggle('option-applied', !checkbox.checked);
-        afterElement.classList.toggle('option-applied', checkbox.checked);
+        beforeElement.classList.toggle('option-applied', !checkbox.checked)
+        afterElement.classList.toggle('option-applied', checkbox.checked)
 
         // Optimize the SVG text and update the state
         if (checkbox.checked) {
-            svgString = option.removeFunction(svgString);
-            updateState(option.stateKey, true);
+            svgString = option.removeFunction(svgString)
+            updateState(option.stateKey, true)
         } else {
             if (option.needsPathMode) {
-                const pathMode = getState('pathMode');
-                svgString = option.restoreFunction(svgString, pathMode);
+                const pathMode = getState('pathMode')
+                svgString = option.restoreFunction(svgString, pathMode)
             } else {
-                svgString = option.restoreFunction(svgString);
+                svgString = option.restoreFunction(svgString)
             }
-            updateState(option.stateKey, false);
+            updateState(option.stateKey, false)
         }
 
         // Update the textarea with optimized text
         document.querySelector('#svg-string').value = svgString
         // Count the size of the updated SVG string and display it on the SVG download button
         countSvgSize(svgString)
-    });
+    })
 }
 
 

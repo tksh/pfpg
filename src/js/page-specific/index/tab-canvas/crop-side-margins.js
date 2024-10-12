@@ -1,6 +1,6 @@
 import { decodeUrlParams } from 'common-utils/read-url-params'
 import { resvgOption
-       , updateState }     from 'state/settings-defaults'
+       , updateState}      from 'state/settings-defaults'
 import { toFixedTrimmed }  from 'utils/number-rounding'
 import { executeSvg2png }  from 'svg-to-png'
 

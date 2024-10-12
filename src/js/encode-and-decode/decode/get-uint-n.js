@@ -1,4 +1,4 @@
-import { getUrlParamsExceptsStates }              from 'common-utils/read-url-params'
+import { getUrlParamsExceptsStates } from 'common-utils/read-url-params'
 import { getBasicDataFromUrlParams } from 'enc-and-dec/basic-data/basic-data-dec'
 
 // Get the N number of UIntNPortray for bruteforce53 and bigint64 decoding

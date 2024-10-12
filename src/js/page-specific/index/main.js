@@ -1,43 +1,43 @@
-import { isOnDataManipulatorPage }               from 'common-utils/select-output-textarea'
-import { decodeUrlToSvg }                        from 'decode/decode'
+import { isOnDataManipulatorPage }              from 'common-utils/select-output-textarea'
+import { decodeUrlToSvg }                       from 'decode/decode'
 import { getSvgString
-       , initDownloadButtons}                    from 'download'
-import { adjustBox }                             from 'init/adjust-output-boxes-size'
+       , initDownloadButtons}                   from 'download'
+import { adjustBox }                            from 'init/adjust-output-boxes-size'
 import { applyImageCustomization
        , applyUiConfiguration
-       , applySvgOptimization }                  from 'state/apply-url-state'
+       , applySvgOptimization}                  from 'state/apply-url-state'
 import { getState
        , updateState
-       , resvgOption }                           from 'state/settings-defaults'
-import { initTabs }                              from 'init/tab-setup'
+       , resvgOption}                           from 'state/settings-defaults'
+import { initTabs }                             from 'init/tab-setup'
 import { initSvgOptimizationModalToggle
-       , initResetSettingsModalToggle }          from 'modal/modal-toggle'
+       , initResetSettingsModalToggle}          from 'modal/modal-toggle'
 import { initSvgOptimization
-       , optimizeSvg}                            from 'modal/optimize-svg'
-import { initResetSettings }                     from 'modal/reset-settings'
+       , optimizeSvg}                           from 'modal/optimize-svg'
+import { initResetSettings }                    from 'modal/reset-settings'
 import { executeSvg2png
-       , svg2png}                                from 'svg-to-png'
+       , svg2png}                               from 'svg-to-png'
 import { cropSideMargins
-       , resetSideMargins}                       from 'tab-canvas/crop-side-margins'
+       , resetSideMargins}                      from 'tab-canvas/crop-side-margins'
 import { toggleDisplay
-       , updateSvgWithSelectedShapePath}         from 'tab-canvas/shape-to-trim'
-import { updateSvgAsNewColorFormat }             from 'tab-lines/update-svg-color-format'
-import { addEventListenerForGroupColorsInputs }  from 'tab-lines/group-colors-listener'
-import { generateGroupColorsHtmlElements }       from 'tab-lines/group-colors'
+       , updateSvgWithSelectedShapePath}        from 'tab-canvas/shape-to-trim'
+import { updateSvgAsNewColorFormat }            from 'tab-lines/update-svg-color-format'
+import { addEventListenerForGroupColorsInputs } from 'tab-lines/group-colors-listener'
+import { generateGroupColorsHtmlElements }      from 'tab-lines/group-colors'
 import { changeOpacitySelectOptionsAsNewStep
-       , updateSvgForNewStep}                    from 'tab-lines/opacity-steps'
+       , updateSvgForNewStep}                   from 'tab-lines/opacity-steps'
 import { decodeAsSelectedPathMode
        , recoverCurrentGroupColorsValues
-       , recoverCurrentOptionValue}              from 'tab-lines/path-mode'
+       , recoverCurrentOptionValue}             from 'tab-lines/path-mode'
 import { adjustWidthNum
-       , syncWidthNum}                           from 'tab-render/sync-number-and-range'
-import { replaceShapeRendering }                 from 'tab-render/shape-rendering'
-import { initWidthValidatorListener }            from 'tab-render/width-pixel-size'
-import { initCheckerboardBgCheckbox }            from 'tab-ui/checkerboard-bg'
-import { initTextWrappingCheckbox }              from 'tab-ui/text-wrapping'
-import { initThemeColorSelect }                  from 'tab-ui/theme-color'
-import { initViewScalingSelect }                 from 'tab-ui/view-scaling'
-import { getNumberOfGroups }                     from 'utils/get-number-of-groups'
+       , syncWidthNum}                          from 'tab-render/sync-number-and-range'
+import { replaceShapeRendering }                from 'tab-render/shape-rendering'
+import { initWidthValidatorListener }           from 'tab-render/width-pixel-size'
+import { initCheckerboardBgCheckbox }           from 'tab-ui/checkerboard-bg'
+import { initTextWrappingCheckbox }             from 'tab-ui/text-wrapping'
+import { initThemeColorSelect }                 from 'tab-ui/theme-color'
+import { initViewScalingSelect }                from 'tab-ui/view-scaling'
+import { getNumberOfGroups }                    from 'utils/get-number-of-groups'
 
 
 (async function () {

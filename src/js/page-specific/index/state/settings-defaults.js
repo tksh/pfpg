@@ -1,5 +1,5 @@
 import { getStateUrl
-       , updateStateUrl } from 'state/url-state-manager'
+       , updateStateUrl} from 'state/url-state-manager'
 
 export
     { resvgOption
@@ -52,8 +52,8 @@ const settingsDefaults = new Map([
 
 // URL状態パラメータから値を取得し、無ければデフォルト値を返す
 function getState(key) {
-    const stateValue = getStateUrl(key);
-    return stateValue !== undefined ? stateValue : settingsDefaults.get(key);
+    const stateValue = getStateUrl(key)
+    return stateValue !== undefined ? stateValue : settingsDefaults.get(key)
 }
 
 function updateState(key, value) {

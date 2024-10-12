@@ -1,12 +1,12 @@
-import { extractViewboxValues } from "tab-canvas/crop-side-margins"
-import { getGroupColorsAsJoinedHex } from "tab-lines/encode-colors-as-hex"
-import { roundToOneDecimal } from "utils/number-rounding"
+import { extractViewboxValues }      from 'tab-canvas/crop-side-margins'
+import { getGroupColorsAsJoinedHex } from 'tab-lines/encode-colors-as-hex'
+import { roundToOneDecimal }         from 'utils/number-rounding'
 
-export {
-    countSvgSize,
-    getSvgString,
-    initDownloadButtons
-}
+export
+    { countSvgSize
+    , getSvgString
+    , initDownloadButtons
+    }
 
 // Get the svg string from <textarea> element
 function getSvgString() {

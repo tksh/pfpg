@@ -50,7 +50,7 @@ function getCheckedEncodingMethodNames() {
  */
 async function encodeWithSelectedMethods(methods) {
     // Wait for all methods to complete and resolve their Promises
-    return await Promise.all(methods.map((method) => method()));
+    return await Promise.all(methods.map((method) => method()))
 }
 
 /**

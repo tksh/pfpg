@@ -1,10 +1,10 @@
 import { isOnDataManipulatorPage }             from 'common-utils/select-output-textarea'
-import { decodeUrlToSvg }                              from 'decode/decode'
+import { decodeUrlToSvg }                      from 'decode/decode'
 import { bestMixEnc }                          from 'encode/best-mix-enc'
 import { updateEncodingMethodsCheckboxStates } from 'encode/best-mix-enc'
 import { encodeBasicData
        , parseBasicData
-       , updateBasicDataKeysCheckboxStates }   from 'enc-and-dec/basic-data/basic-data-enc'
+       , updateBasicDataKeysCheckboxStates}    from 'enc-and-dec/basic-data/basic-data-enc'
 import { bruteforce53Enc }                     from 'enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc'
 import { bigint64Enc }                         from 'enc-and-dec/lines-data/d-values/bigint64/bigint64-enc'
 import { swap63Enc }                           from 'enc-and-dec/lines-data/d-values/swap63/swap63-enc'

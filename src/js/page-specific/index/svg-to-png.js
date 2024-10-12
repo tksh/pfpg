@@ -2,11 +2,11 @@ import { countSvgSize }         from 'download'
 import { extractViewboxValues } from 'tab-canvas/crop-side-margins'
 import { roundToOneDecimal }    from 'utils/number-rounding'
 
-export {
-    executeSvg2png,
-    measureSvg2pngTime,
-    svg2png
-}
+export
+    { executeSvg2png
+    , measureSvg2pngTime
+    , svg2png
+    }
 
 
 // addMultipleEventListener(svgStringElement, ['change', 'keyup', 'paste'], function (event) {

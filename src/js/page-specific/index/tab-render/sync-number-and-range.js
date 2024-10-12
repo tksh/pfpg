@@ -1,7 +1,7 @@
 export
-  { syncWidthNum
-  , adjustWidthNum
-  }
+    { syncWidthNum
+    , adjustWidthNum
+    }
 
 // `Width pixel size:` value sync between `number` and `range`
 function syncWidthNum(element) {

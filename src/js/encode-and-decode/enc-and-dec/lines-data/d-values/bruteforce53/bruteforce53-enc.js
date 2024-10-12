@@ -7,7 +7,7 @@ import { calculateLimitsForBaseXSkipRange
        , handleBase52EncodingWithPrefix
        , handleBaseXEncoding
        , handleFrequencyDiff
-       , handleSingleDigit }     from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
+       , handleSingleDigit}      from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-diff'
 import { encodeFreqDiff }        from 'enc-and-dec/lines-data/d-values/bruteforce53/encode-freq-diff'
 import { storeShorter }          from 'enc-and-dec/lines-data/d-values/bruteforce53/store-shorter'
 import { joinWithAmpersand }     from 'encode/join-with-ampersand'
@@ -15,7 +15,7 @@ import { jsonToMapObj }          from 'encode/json-to-map-obj'
 import { showResult }            from 'encode/show-result'
 import { simplifyMap }           from 'encode/simplify-map'
 import { tryCompress }           from 'encode/try-compress'
-import { resultInfo } from 'constants'
+import { resultInfo }            from 'constants'
 
 // Three layers iterations
 //   1. for-loop: Max codebook size from 0 to 52
@@ -166,15 +166,15 @@ function mergeFlagsArr(resultInfo) {
     // Filter the resultInfo entries to include only those with keys starting with "bruteforce53FlagsOfGroupId"
     const flagsByGroupsArr = Array.from(resultInfo.entries())
         .filter(([key]) => key.startsWith('bruteforce53FlagsOfGroupId'))
-        .map(([, value]) => value);
+        .map(([, value]) => value)
 
     // Set the "bruteforce53 Flags" key in resultInfo to the filtered array
-    resultInfo.set('bruteforce53 Flags', flagsByGroupsArr);
+    resultInfo.set('bruteforce53 Flags', flagsByGroupsArr)
 
     // Remove the original entries with keys starting with "bruteforce53FlagsOfGroupId"
     resultInfo.forEach((_, key) => {
         if (key.startsWith('bruteforce53FlagsOfGroupId')) {
-            resultInfo.delete(key);
+            resultInfo.delete(key)
         }
-    });
+    })
 }

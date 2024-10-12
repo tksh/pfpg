@@ -1,11 +1,10 @@
-import { tabSpace }           from 'constants'
+import { tabSpace }            from 'constants'
 import { getState
-       , updateState }        from 'state/settings-defaults'
+       , updateState}          from 'state/settings-defaults'
 import { viewboxSlimmed
        , viewboxUnSlimmed
-       , extractViewboxValues
-       }                      from 'tab-canvas/crop-side-margins'
-import { roundToTwoDecimals } from 'utils/number-rounding'
+       , extractViewboxValues} from 'tab-canvas/crop-side-margins'
+import { roundToTwoDecimals }  from 'utils/number-rounding'
 
 export
     { toggleDisplay
@@ -126,19 +125,19 @@ function getTopHeavyRatio() {
 
 // "Crop side margins" value: boolean
 function isCropSideMargins() {
-    const cropCheckbox = document.getElementById('crop-side-margins');
+    const cropCheckbox = document.getElementById('crop-side-margins')
 
     // Get the value from url param
-    const isCropped = getState('cropSideMargins');
+    const isCropped = getState('cropSideMargins')
     if (isCropped !== undefined && isCropped !== null) {
 
         // URLパラメータが true ならチェックが入り false ならチェックが外れる
-        cropCheckbox.checked = isCropped;
+        cropCheckbox.checked = isCropped
 
     // If 'cropSideMargins' is not exists in url, use the value from html elem
     } else {
-        updateState('cropSideMargins', cropCheckbox.checked);
+        updateState('cropSideMargins', cropCheckbox.checked)
     }
 
-    return cropCheckbox.checked;
+    return cropCheckbox.checked
 }

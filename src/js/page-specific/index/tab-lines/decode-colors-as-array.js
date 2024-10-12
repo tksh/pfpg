@@ -1,7 +1,7 @@
 import { hexExpandToTen }     from 'color-formatter/hex-expand'
-import { hexShortenAsHalf }   from "color-formatter/hex-shorten"
+import { hexShortenAsHalf }   from 'color-formatter/hex-shorten'
 import { normalizedFromHex }  from 'color-formatter/normalized-from-hex'
-import { convertColorFormat } from "tab-lines/color-format-converter"
+import { convertColorFormat } from 'tab-lines/color-format-converter'
 
 export
     { decodeGroupColorsAsArray

@@ -1,5 +1,5 @@
-import { tryAddHash }    from "color-formatter/hex-expand"
-import { tryDeleteHash } from "color-formatter/hex-shorten"
+import { tryAddHash }    from 'color-formatter/hex-expand'
+import { tryDeleteHash } from 'color-formatter/hex-shorten'
 
 export
     { normalizedToHex

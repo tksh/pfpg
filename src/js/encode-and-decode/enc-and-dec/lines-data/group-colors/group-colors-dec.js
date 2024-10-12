@@ -1,6 +1,6 @@
 import { normalizedFromHex
        , hexToRgbMap
-       , hexToUint8 }             from 'color-formatter/normalized-from-hex'
+       , hexToUint8}              from 'color-formatter/normalized-from-hex'
 import { addDecimalToZeroAndOne } from 'common-utils/format-as-float'
 
 

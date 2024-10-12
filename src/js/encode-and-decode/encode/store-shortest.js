@@ -31,7 +31,7 @@ export function storeShortest(encodedArrByMethods, encodingMethodNamesArr) {
         //     Values: [encoded string, encoding-method name, configuration-value object]
         // e.g.:
         //   Executed with bestMixFrom2methods().
-        //     0 (bruteforce53): Array (3) 
+        //     0 (bruteforce53): Array (3)
         //         0: "F=08fOlodlaFekVCp-ARYvkXHvz8Poh25aTRmW8j4v5qf1vC0WgNdp-DzgDfJBgsiMsmTOlLs0YNpVslBnQadartJipZ5Mhi6HMRYbqTTAObPe0swdgXfDGdXUdpTApsIEDP"
         //         1: "bruteforce53"
         //         2: {baseXNumber: 51}

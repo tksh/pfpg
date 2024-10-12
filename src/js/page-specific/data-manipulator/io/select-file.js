@@ -1,5 +1,5 @@
 import { updateBasicDataKeysCheckboxStates
-       , parseBasicData }       from 'enc-and-dec/basic-data/basic-data-enc'
+       , parseBasicData} from 'enc-and-dec/basic-data/basic-data-enc'
 
 export function selectFileToInput(selectFileId, textAreaId){
     // FileListオブジェクト取得

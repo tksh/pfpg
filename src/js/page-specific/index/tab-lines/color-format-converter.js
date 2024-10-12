@@ -1,5 +1,5 @@
-import { hexToRgb } from "color-formatter/normalized-from-hex"
-import { rgbToHex } from "color-formatter/normalized-to-hex"
+import { hexToRgb } from 'color-formatter/normalized-from-hex'
+import { rgbToHex } from 'color-formatter/normalized-to-hex'
 
 export
     { convertColorFormat

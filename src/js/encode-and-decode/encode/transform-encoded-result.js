@@ -1,4 +1,4 @@
-import { encodingMethodAndConfig }  from 'constants'
+import { encodingMethodAndConfig } from 'constants'
 
 
 // For encoding methods except 'bruteforce53'
