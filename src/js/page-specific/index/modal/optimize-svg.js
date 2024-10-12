@@ -1,8 +1,8 @@
+import { tabSpace }                 from 'constants'
 import { getSvgString
        , countSvgSize}              from 'download'
 import { updateState
        , getState}                  from 'state/settings-defaults'
-import { tabSpace }                 from 'constants'
 import { decodeAsSelectedPathMode } from 'tab-lines/path-mode'
 
 export
@@ -122,35 +122,35 @@ function restoreOpacity(svgString) {
         }
 
         // 既存の属性を解析
-        let attrs = attributes.split(/\s+/).filter(attr => attr.trim() !== '');
-        let opacityValue = "1.0";
-        let strokeOpacityValue = "1.0";
-        let newAttrs = [];
+        let attrs = attributes.split(/\s+/).filter(attr => attr.trim() !== '')
+        let opacityValue = "1.0"
+        let strokeOpacityValue = "1.0"
+        let newAttrs = []
 
         // 既存の属性を処理し、opacity と stroke-opacity の値を取得
         for (let attr of attrs) {
             if (attr.startsWith('opacity="')) {
-                opacityValue = attr.split('"')[1];
+                opacityValue = attr.split('"')[1]
             } else if (attr.startsWith('stroke-opacity="')) {
-                strokeOpacityValue = attr.split('"')[1];
+                strokeOpacityValue = attr.split('"')[1]
             } else {
-                newAttrs.push(attr);
+                newAttrs.push(attr)
             }
         }
 
         // opacity と stroke-opacity を追加
-        newAttrs.push(`opacity="${opacityValue}"`);
-        newAttrs.push(`stroke-opacity="${strokeOpacityValue}"`);
+        newAttrs.push(`opacity="${opacityValue}"`)
+        newAttrs.push(`stroke-opacity="${strokeOpacityValue}"`)
 
-        return `<g ${newAttrs.join(' ')}>`;
-    });
+        return `<g ${newAttrs.join(' ')}>`
+    })
 }
 // // テスト
-// console.log(restoreOpacity('<g stroke="#FF7523">'));
-// console.log(restoreOpacity('<g stroke="#FF7523" opacity="1.0">'));
-// console.log(restoreOpacity('<g stroke="#FF7523" stroke-opacity="1.0">'));
-// console.log(restoreOpacity('<g stroke="#FF7523" opacity="0.5" stroke-opacity="0.8">'));
-// console.log(restoreOpacity('<g fill="#FF7523">'));  // stroke属性がない場合
+// console.log(restoreOpacity('<g stroke="#FF7523">'))
+// console.log(restoreOpacity('<g stroke="#FF7523" opacity="1.0">'))
+// console.log(restoreOpacity('<g stroke="#FF7523" stroke-opacity="1.0">'))
+// console.log(restoreOpacity('<g stroke="#FF7523" opacity="0.5" stroke-opacity="0.8">'))
+// console.log(restoreOpacity('<g fill="#FF7523">'))  // stroke属性がない場合
 //
 // <g stroke="#FF7523" opacity="1.0" stroke-opacity="1.0"> debugger eval code:34:9
 // <g stroke="#FF7523" opacity="1.0" stroke-opacity="1.0"> debugger eval code:35:9
