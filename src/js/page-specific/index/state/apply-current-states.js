@@ -6,7 +6,7 @@ import { getState
 import { getStateUrl }                          from 'state/state-as-url-params'
 import { tryRemoveOpacity
        , tryRemoveLineBreaks
-       , tryRemoveSpaces }                      from 'svg-opt-modal/optimize-svg'
+       , tryRemoveSpaces }                      from 'modal/optimize-svg'
 import { decodeGroupColorsAsArray
        , getGroupOpacitiesAsMap }               from 'tab-lines/decode-colors-as-array'
 import { generateGroupColorsHtmlElements

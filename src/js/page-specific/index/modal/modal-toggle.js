@@ -1,6 +1,11 @@
-export function initSvgOptModal() {
+export
+    { initSvgOptimizationModalToggle
+    , initResetSettingsModalToggle
+    }
+
+function initSvgOptimizationModalToggle() {
     const textarea = document.getElementById('svg-string')
-    const modal    = document.getElementById('svg-opt-modal')
+    const modal = document.getElementById('svg-opt-modal')
     const closeIcon = document.getElementById('svg-opt-close-icon')
 
     textarea.addEventListener('click', function () {
@@ -19,9 +24,9 @@ export function initSvgOptModal() {
 }
 
 
-export function initSettingsResetModal() {
+function initResetSettingsModalToggle() {
     const button = document.getElementById('reset-icon')
-    const modal    = document.getElementById('reset-settings-modal')
+    const modal = document.getElementById('reset-settings-modal')
     const closeIcon = document.getElementById('reset-settings-close-icon')
 
     button.addEventListener('click', function () {

@@ -6,7 +6,7 @@ import { tabSpace }     from 'constants'
 import { decodeAsSelectedPathMode }  from 'tab-lines/path-mode'
 
 export
-    { initSvgOptCheckboxes
+    { initSvgOptimization
     , getSvgIndentation
     , getCurrentPathModeIndentation
     , removeOpacity
@@ -67,7 +67,7 @@ const svgOptions = [
       restoreFunction: restoreSpaces }
   ];
 
-function initSvgOptCheckboxes() {
+function initSvgOptimization() {
     const checkboxes = document.querySelectorAll('#svg-opt-modal input[type="checkbox"]');
     checkboxes.forEach(checkbox => checkbox.addEventListener('change', updateSvg));
 }

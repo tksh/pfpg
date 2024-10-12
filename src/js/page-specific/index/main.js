@@ -10,10 +10,11 @@ import { getState
        , updateState
        , resvgOption }                           from 'state/settings-defaults'
 import { initTabs }                              from 'init/tab-setup'
-import { initSvgOptModal
-       , initSettingsResetModal }                from 'svg-opt-modal/modal'
-import { initSvgOptCheckboxes
-       , optimizeSvg}                            from 'svg-opt-modal/optimize-svg'
+import { initSvgOptimizationModalToggle
+       , initResetSettingsModalToggle }          from 'modal/modal-toggle'
+import { initSvgOptimization
+       , optimizeSvg}                            from 'modal/optimize-svg'
+import { initResetSettings }                     from 'modal/reset-settings'
 import { executeSvg2png
        , svg2png}                                from 'svg-to-png'
 import { cropSideMargins
@@ -475,10 +476,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initTabs()
 
     // SVG optimization
-    initSvgOptModal()
-    initSvgOptCheckboxes()
+    initSvgOptimizationModalToggle()
+    initSvgOptimization()
 
-    // Settings reset
-    initSettingsResetModal()
+    // Reset settings
+    initResetSettingsModalToggle()
+    initResetSettings()
 
 })
