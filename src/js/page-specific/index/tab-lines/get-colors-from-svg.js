@@ -81,10 +81,10 @@ function getStrokeRgb(inputStr) {
 function getOpacity(inputStr) {
     const pattern = /\sopacity="([^"]*)"/
     const matches = inputStr.match(pattern)
-    return matches?.[1]
+    return matches === null ? '1.0' : matches[1]  // 完全に不透明な値が 省略されていて matches が null の場合に '1.0' を返す
 }
 function getStrokeOpacity(inputStr) {
     const pattern = /stroke-opacity="([^"]*)"/
     const matches = inputStr.match(pattern)
-    return matches?.[1]
+    return matches === null ? '1.0' : matches[1]  // 完全に不透明な値が 省略されていて matches が null の場合に '1.0' を返す
 }

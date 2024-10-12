@@ -15,10 +15,10 @@ export function addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption
     // id `group-colors-${attrName}-N` の要素の変更を監視
     for (let i = 0; i < numberOfGroups; i++) {
         const elementId = `group-colors-${attrName}-${i}`
-        console.log('elementId: ', elementId) // group-colors-${attrName}-0
+        //console.log('elementId: ', elementId) // group-colors-${attrName}-0
 
         const element = document.querySelector(`#${elementId}`)
-        console.log('i, element: ', i, element) // 0 <input type=​"number" min=​"0" max=​"1" step=​"0.1" value=​"1" id=​"group-colors-${attrName}-0">​
+        //console.log('i, element: ', i, element) // 0 <input type=​"number" min=​"0" max=​"1" step=​"0.1" value=​"1" id=​"group-colors-${attrName}-0">​
 
         element.addEventListener('change', function (event) {
 

@@ -1,6 +1,8 @@
 import { convertColorFormatForArray } from 'tab-lines/color-format-converter'
 import { getGroupColorsValues }       from 'tab-lines/get-colors-from-svg'
 import { numbersIncrementByStep }     from 'tab-lines/opacity-steps'
+import { getState } from 'state/settings-defaults'
+import { removeOpacity } from 'modal/optimize-svg'
 
 export
     { generateGroupColorsHtmlElements
@@ -20,8 +22,13 @@ function generateGroupColorsSvgTags(matches) {
     const strokeOpacity = matches[3] !== undefined ? matches[3] : "1.0"  // strokeOpacity が明示的に指定されていない場合は 1.0 とみなす
     const groupElem = `<g stroke="${stroke}" opacity="${opacity}" stroke-opacity="${strokeOpacity}">`
 
-    //console.log('groupElem: ', groupElem) // e.g.: <g stroke="#4E8D09" opacity="0.6" stroke-opacity="1.0">
-    return groupElem
+    // Apply 'removeOpacity()' if 'removeOpacity=true'
+    const isOpacityRemoved = getState('removeOpacity')
+    if (isOpacityRemoved) {
+        return removeOpacity(groupElem)  // e.g.: <g stroke="#4E8D09">
+    } else {
+        return groupElem                 // e.g.: <g stroke="#4E8D09" opacity="0.6" stroke-opacity="1.0">
+    }
 }
 
 

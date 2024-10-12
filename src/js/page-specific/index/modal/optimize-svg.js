@@ -115,17 +115,49 @@ function removeOpacity(svgString) {
 }
 
 function restoreOpacity(svgString) {
-    return svgString.replace(/(<[^>]*\bstroke="[^"]*")([^>]*>)/g, function(match, p1, p2) {
-        if (!/\bopacity=/.test(match) && !/\bstroke-opacity=/.test(match)) {
-            return p1 + ' opacity="1.0" stroke-opacity="1.0"' + p2
-        } else if (!/\bopacity=/.test(match)) {
-            return p1 + ' opacity="1.0"' + p2
-        } else if (!/\bstroke-opacity=/.test(match)) {
-            return match.replace(/\bopacity="[^"]*"/, '$& stroke-opacity="1.0"')
+    return svgString.replace(/<g\b([^>]*)>/g, function(match, attributes) {
+        // stroke属性があるかチェック
+        if (!/\bstroke="[^"]*"/.test(attributes)) {
+            return match; // stroke属性がなければ変更しない
         }
-        return match
-    })
+
+        // 既存の属性を解析
+        let attrs = attributes.split(/\s+/).filter(attr => attr.trim() !== '');
+        let opacityValue = "1.0";
+        let strokeOpacityValue = "1.0";
+        let newAttrs = [];
+
+        // 既存の属性を処理し、opacity と stroke-opacity の値を取得
+        for (let attr of attrs) {
+            if (attr.startsWith('opacity="')) {
+                opacityValue = attr.split('"')[1];
+            } else if (attr.startsWith('stroke-opacity="')) {
+                strokeOpacityValue = attr.split('"')[1];
+            } else {
+                newAttrs.push(attr);
+            }
+        }
+
+        // opacity と stroke-opacity を追加
+        newAttrs.push(`opacity="${opacityValue}"`);
+        newAttrs.push(`stroke-opacity="${strokeOpacityValue}"`);
+
+        return `<g ${newAttrs.join(' ')}>`;
+    });
 }
+// // テスト
+// console.log(restoreOpacity('<g stroke="#FF7523">'));
+// console.log(restoreOpacity('<g stroke="#FF7523" opacity="1.0">'));
+// console.log(restoreOpacity('<g stroke="#FF7523" stroke-opacity="1.0">'));
+// console.log(restoreOpacity('<g stroke="#FF7523" opacity="0.5" stroke-opacity="0.8">'));
+// console.log(restoreOpacity('<g fill="#FF7523">'));  // stroke属性がない場合
+//
+// <g stroke="#FF7523" opacity="1.0" stroke-opacity="1.0"> debugger eval code:34:9
+// <g stroke="#FF7523" opacity="1.0" stroke-opacity="1.0"> debugger eval code:35:9
+// <g stroke="#FF7523" opacity="1.0" stroke-opacity="1.0"> debugger eval code:36:9
+// <g stroke="#FF7523" opacity="0.5" stroke-opacity="0.8"> debugger eval code:37:9
+// <g fill="#FF7523">
+
 
 
 function removeLineBreaks(svgString) {
