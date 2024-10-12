@@ -30,12 +30,16 @@ function openTab(evt, tabName) {
 }
 
 function handleKeyPress(event) {
+
+    // Altキーが押されていない場合は、処理を行わない
+    if (!event.altKey) return;
+
     const key = event.key.toLowerCase()
     const keyMap = {
-        '1': 'tab-1',
-        '2': 'tab-2',
-        '3': 'tab-3',
-        '4': 'tab-4'
+        'h': 'tab-1',  // Alt + h
+        'j': 'tab-2',  // Alt + j
+        'k': 'tab-3',  // Alt + k
+        'l': 'tab-4'   // Alt + l
     }
 
     if (key in keyMap) {
