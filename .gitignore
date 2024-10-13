@@ -1,6 +1,7 @@
 .vscode
 node-modules/
 
+dist/
 temp/
 
 
