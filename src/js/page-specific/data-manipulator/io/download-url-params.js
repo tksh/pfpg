@@ -1,6 +1,6 @@
+import { isNonEmpty }              from 'common-utils/is-non-empty'
 import { outputToTextarea }        from 'common-utils/output-to-textarea'
 import { readTextarea }            from 'common-utils/read-textarea'
-import { isNonEmpty }              from 'common-utils/is-non-empty'
 import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
 import { tryDecompress }           from 'decode/try-decompress'
 

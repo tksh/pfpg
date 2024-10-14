@@ -1,8 +1,8 @@
 import { removeOpacity }              from 'modal/optimize-svg'
+import { getState }                   from 'state/url-state-manager'
 import { convertColorFormatForArray } from 'tab-lines/color-format-converter'
 import { getGroupColorsValues }       from 'tab-lines/get-colors-from-svg'
 import { numbersIncrementByStep }     from 'tab-lines/opacity-steps'
-import { getState }                   from 'state/url-state-manager'
 
 export
     { generateGroupColorsHtmlElements

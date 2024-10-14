@@ -1,8 +1,8 @@
 import { outputToTextarea }        from 'common-utils/output-to-textarea'
 import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
+import { showProcessingTime }      from 'common-utils/show-processing-time'
 import { flagsMap
        , resultInfo}               from 'constants'
-import { showProcessingTime }      from 'common-utils/show-processing-time'
 import { zip }                     from 'libs/deno-std/zip'
 
 export

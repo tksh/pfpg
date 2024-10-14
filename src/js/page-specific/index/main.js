@@ -1,36 +1,36 @@
 import { isOnDataManipulatorPage }              from 'common-utils/select-output-textarea'
 import { decodeUrlToSvg }                       from 'decode/decode'
 import { getSvgString
-       , initDownloadButtons}                   from 'download'
+       , initDownloadButtons }                  from 'download'
 import { adjustBox }                            from 'init/adjust-output-boxes-size'
-import { applyImageCustomization
-       , applyUiConfiguration
-       , applySvgOptimization}                  from 'state/apply-url-state'
-import { resvgOption }                          from 'state/resvg-option'
-import { getState
-       , updateState }                          from 'state/url-state-manager'
 import { initTabs }                             from 'init/tab-setup'
 import { initSvgOptimizationModalToggle
-       , initResetSettingsModalToggle}          from 'modal/modal-toggle'
+       , initResetSettingsModalToggle }         from 'modal/modal-toggle'
 import { initSvgOptimization
        , optimizeSvg}                           from 'modal/optimize-svg'
 import { initResetSettings }                    from 'modal/reset-settings'
+import { applyImageCustomization
+       , applyUiConfiguration
+       , applySvgOptimization }                 from 'state/apply-url-state'
+import { resvgOption }                          from 'state/resvg-option'
+import { getState
+       , updateState }                          from 'state/url-state-manager'
 import { executeSvg2png
        , svg2png}                               from 'svg-to-png'
 import { cropSideMargins
-       , resetSideMargins}                      from 'tab-canvas/crop-side-margins'
+       , resetSideMargins }                     from 'tab-canvas/crop-side-margins'
 import { toggleDisplay
-       , updateSvgWithSelectedShapePath}        from 'tab-canvas/shape-to-trim'
+       , updateSvgWithSelectedShapePath }       from 'tab-canvas/shape-to-trim'
 import { updateSvgAsNewColorFormat }            from 'tab-lines/update-svg-color-format'
 import { addEventListenerForGroupColorsInputs } from 'tab-lines/group-colors-listener'
 import { generateGroupColorsHtmlElements }      from 'tab-lines/group-colors'
 import { changeOpacitySelectOptionsAsNewStep
-       , updateSvgForNewStep}                   from 'tab-lines/opacity-steps'
+       , updateSvgForNewStep }                  from 'tab-lines/opacity-steps'
 import { decodeAsSelectedPathMode
        , recoverCurrentGroupColorsValues
-       , recoverCurrentOptionValue}             from 'tab-lines/path-mode'
+       , recoverCurrentOptionValue }            from 'tab-lines/path-mode'
 import { adjustWidthNum
-       , syncWidthNum}                          from 'tab-render/sync-number-and-range'
+       , syncWidthNum }                         from 'tab-render/sync-number-and-range'
 import { replaceShapeRendering }                from 'tab-render/shape-rendering'
 import { initWidthValidatorListener }           from 'tab-render/width-pixel-size'
 import { initCheckerboardBgCheckbox }           from 'tab-ui/checkerboard-bg'

@@ -5,6 +5,7 @@
  */
 
 import { outputToTextarea }  from 'common-utils/output-to-textarea'
+import { tryDecompress }     from 'decode/try-decompress'
 import { showDetailsByGroups
        , showStringSize}     from 'encode/show-result'
 import { joinWithAmpersand } from 'encode/join-with-ampersand'
@@ -15,7 +16,6 @@ import { bigint64Enc }       from 'enc-and-dec/lines-data/d-values/bigint64/bigi
 import { bruteforce53Enc }   from 'enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc'
 import { swap63Enc }         from 'enc-and-dec/lines-data/d-values/swap63/swap63-enc'
 import { four16Enc }         from 'enc-and-dec/lines-data/d-values/four16/four16-enc'
-import { tryDecompress }     from 'decode/try-decompress'
 
 export
     { bestMixEnc

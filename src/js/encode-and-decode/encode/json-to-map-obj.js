@@ -1,6 +1,5 @@
 import { readTextarea } from 'common-utils/read-textarea'
 
-
 export function jsonToMapObj(textareaId) {
 
     const jsonString = readTextarea(`${textareaId}`)

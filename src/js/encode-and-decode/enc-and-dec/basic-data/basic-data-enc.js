@@ -1,12 +1,11 @@
 import { showProcessingTime }      from 'common-utils/show-processing-time'
-import { showStringSize }          from 'encode/show-result'
-import { readTextarea }            from 'common-utils/read-textarea'
-import { outputToTextarea }        from 'common-utils/output-to-textarea'
-import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
-import { isNonEmpty }              from 'common-utils/is-non-empty'
-import { URLCompressor }           from 'libs/url-comp-0-1-0/url-comp'
-
 import { BASIC_DATA_KEYS }         from 'constants'
+import { isNonEmpty }              from 'common-utils/is-non-empty'
+import { outputToTextarea }        from 'common-utils/output-to-textarea'
+import { readTextarea }            from 'common-utils/read-textarea'
+import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
+import { showStringSize }          from 'encode/show-result'
+import { URLCompressor }           from 'libs/url-comp-0-1-0/url-comp'
 
 export
     { encodeBasicData

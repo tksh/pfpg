@@ -1,7 +1,7 @@
+import { compressToEncodedURIComponent } from 'common-utils/compression-stream'
 import { flagsMap
        , resultInfo
        , encodingMethodAndConfig}        from 'constants'
-import { compressToEncodedURIComponent } from 'common-utils/compression-stream'
 import { getEncodedAttrsExceptsDvals }   from 'encode/get-attrs-excepts-dvals'
 import { URLCompressor }                 from 'libs/url-comp-0-1-0/url-comp'
 

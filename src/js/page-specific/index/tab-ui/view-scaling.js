@@ -1,6 +1,12 @@
 import { updateState } from 'state/url-state-manager'
 
-export function initViewScalingSelect() {
+export
+    { initViewScalingSelect
+    , switchViewScaling
+    }
+
+
+function initViewScalingSelect() {
 
     // セレクトメニューの要素を取得
     const selectOfViewScaling = document.getElementById('view-scaling')
@@ -20,7 +26,7 @@ export function initViewScalingSelect() {
     })
 }
 
-export function switchViewScaling(viewScaling) {
+function switchViewScaling(viewScaling) {
         // PNG img要素を 取得
         const img = document.querySelector('img')
 

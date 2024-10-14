@@ -1,12 +1,12 @@
 import { hexExpandToTen }            from 'color-formatter/hex-expand'
+import { BASIC_DATA_KEYS
+       , SETTINGS_DEFAULTS }         from 'constants'
 import { decodeDvals }               from 'decode/decode'
 import { sizeDataDec }               from 'decode/size-data-dec'
 import { tryDecompress }             from 'decode/try-decompress'
 import { getBasicDataFromUrlParams } from 'enc-and-dec/basic-data/basic-data-dec'
 import { decodeGroupColors }         from 'enc-and-dec/lines-data/group-colors/group-colors-dec'
 import { decodeWidthsAndCounts }     from 'enc-and-dec/lines-data/widths-and-counts/widths-and-counts-dec'
-import { BASIC_DATA_KEYS
-       , SETTINGS_DEFAULTS }         from 'constants'
 
 export
     { decodeUrlParams
