@@ -1,4 +1,4 @@
-import { settingsDefaults } from 'state/settings-defaults'
+import { SETTINGS_DEFAULTS } from 'constants'
 
 export
     { getStateUrlsOfImageCustomization
@@ -18,8 +18,8 @@ function getAllStateUrls() {
     return Object.fromEntries(
         Array.from(params.entries())
 
-            // settingsDefaults マップに存在するキーのみを抽出
-            .filter(([key]) => settingsDefaults.has(key))
+            // SETTINGS_DEFAULTS マップに存在するキーのみを抽出
+            .filter(([key]) => SETTINGS_DEFAULTS.has(key))
 
             .map(([key, value]) => {
 
@@ -74,7 +74,7 @@ function setStateUrl(params) {
 // URLから特定の範囲の状態パラメータを取得する汎用関数（ブール値対応）
 function getStateUrlsInRange(startIndex, endIndex) {
     const allParams = getAllStateUrls()
-    const stateKeys = Array.from(settingsDefaults.keys()).slice(startIndex, endIndex)
+    const stateKeys = Array.from(SETTINGS_DEFAULTS.keys()).slice(startIndex, endIndex)
     return new Map(
         Object.entries(allParams).filter(([key]) => stateKeys.includes(key))
     )
@@ -92,7 +92,7 @@ function getStateUrlsOfImageCustomization() {
 
 // UI configuration の状態パラメータを全て取得する関数
 function getStateUrlsOfUiConfiguration() {
-    return getStateUrlsInRange(13, settingsDefaults.size)
+    return getStateUrlsInRange(13, SETTINGS_DEFAULTS.size)
 }
 
 

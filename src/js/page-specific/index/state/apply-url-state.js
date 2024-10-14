@@ -1,3 +1,4 @@
+import { SETTINGS_DEFAULTS }                   from 'constants'
 import { countSvgSize }                        from 'download'
 import { getInitialOpacitySteps
        , calculateStepsFromTwoOpacities}       from 'init/initial-opacity-steps'
@@ -22,8 +23,6 @@ import { changeThemeColor
        , getDefaultThemeViaPrefersColorScheme} from 'tab-ui/theme-color'
 import { switchViewScaling }                   from 'tab-ui/view-scaling'
 
-import { settingsDefaults }                    from 'state/settings-defaults'
-
 export
     { applyImageCustomization
     , applyUiConfiguration
@@ -47,7 +46,7 @@ function applyImageCustomization(svgString, resvgOption) {
     // Calculate it from original lines data.
     let opacitySteps = getInitialOpacitySteps()                                        // Getting the steps - 1st of 3
     console.log('Default opacitySteps calculated via original lines data: ', opacitySteps)                                                     // Stored as default
-    settingsDefaults.set('opacitySteps', opacitySteps)                                        // Set as default values
+    SETTINGS_DEFAULTS.set('opacitySteps', opacitySteps)                                        // Set as default values
 
     // Update the html elements
     const opacityStepsSelector = document.getElementById("opacity-steps")
@@ -71,7 +70,7 @@ function applyImageCustomization(svgString, resvgOption) {
 
     ////////////////////////////////////////////////// opacitySteps //////////////////////////////////////////////////
     // Try to retrieve the value via url param with 'getStateUrl()' instead of 'getState()' like others
-    // 'opacitySteps' does not have default value in 'settingsDefaults' map object, before the decoding svg.
+    // 'opacitySteps' does not have default value in 'SETTINGS_DEFAULTS' map object, before the decoding svg.
     // The only way to get the default value is calculated from original lines data. (at above 'colorFormat' section)
     const opacityStepsViaUrl = getStateUrl('opacitySteps')                             // Getting the steps - 3rd of 3
     if (opacityStepsViaUrl) {

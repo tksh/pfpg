@@ -21,9 +21,11 @@ const isDataManipulatorPage = isOnDataManipulatorPage()
 // decodeUrlToSvg() function will be executed twice at page loaded
 // 'isDataManipulatorPage = true' will export the generated relative and absolute style SVGs into each textarea.
 
-for (const boolean of [true, false]) {
-    const isRelative = boolean
-    decodeUrlToSvg(isRelative,  isDataManipulatorPage)
+if (window.location.search) {
+    for (const boolean of [true, false]) {
+        const isRelative = boolean
+        decodeUrlToSvg(isRelative,  isDataManipulatorPage)
+    }
 }
 // decodeUrlToSvg(isRelative = true,  isDataManipulatorPage) => Relative and merged
 // decodeUrlToSvg(isRelative = false, isDataManipulatorPage) => Absolute and separated

@@ -62,7 +62,7 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
     console.log('initialDecodedSvgString: ', initialDecodedSvgString)
 
     // Apply the settings states from url param to initial decoded svg string
-    // - if there is no param in url, use default value retrieve from settingsDefaults map
+    // - if there is no param in url, use default value retrieve from SETTINGS_DEFAULTS map
     const svgString = applyImageCustomization(initialDecodedSvgString, resvgOption)
 
     // Insert the decoded svg string to textarea
@@ -465,7 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Apply the UI configuration values retrieved from url params.
     // if there is no url param for specific attr,
-    // get the default value from 'settingsDefaults'
+    // get the default value from 'SETTINGS_DEFAULTS'
     // or detect the default value from data or environment.
     applyUiConfiguration()
 
