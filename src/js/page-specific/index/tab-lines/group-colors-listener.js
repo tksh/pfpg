@@ -1,5 +1,5 @@
 import { getSvgString }               from 'download'
-import { updateState }                from 'state/settings-defaults'
+import { updateState }                from 'state/url-state-manager'
 import { executeSvg2png }             from 'svg-to-png'
 import { getGroupColorsAsJoinedHex }  from 'tab-lines/encode-colors-as-hex'
 import { generateGroupColorsSvgTags } from 'tab-lines/group-colors'

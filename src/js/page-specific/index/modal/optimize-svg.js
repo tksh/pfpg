@@ -2,7 +2,7 @@ import { tabSpace }                 from 'constants'
 import { getSvgString
        , countSvgSize}              from 'download'
 import { updateState
-       , getState}                  from 'state/settings-defaults'
+       , getState}                  from 'state/url-state-manager'
 import { decodeAsSelectedPathMode } from 'tab-lines/path-mode'
 
 export

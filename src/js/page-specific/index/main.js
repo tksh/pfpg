@@ -6,9 +6,9 @@ import { adjustBox }                            from 'init/adjust-output-boxes-s
 import { applyImageCustomization
        , applyUiConfiguration
        , applySvgOptimization}                  from 'state/apply-url-state'
+import { resvgOption }                          from 'state/resvg-option'
 import { getState
-       , updateState
-       , resvgOption}                           from 'state/settings-defaults'
+       , updateState }                          from 'state/url-state-manager'
 import { initTabs }                             from 'init/tab-setup'
 import { initSvgOptimizationModalToggle
        , initResetSettingsModalToggle}          from 'modal/modal-toggle'

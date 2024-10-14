@@ -4,13 +4,27 @@ export
     { getStateUrlsOfImageCustomization
     , getStateUrlsOfSvgOptimization
     , getStateUrlsOfUiConfiguration
+    , getState
     , getStateUrl
+    , updateState
     , updateStateUrl
     , removeUrlParams
     }
 
 
 // Get
+
+// URL状態パラメータから値を取得し、無ければデフォルト値を返す
+function getState(key) {
+    const stateValue = getStateUrl(key)
+    return stateValue !== undefined ? stateValue : SETTINGS_DEFAULTS.get(key)
+}
+
+// URLから特定の状態パラメータを取得する関数（ブール値対応）
+function getStateUrl(key) {
+    const allParams = getAllStateUrls()
+    return allParams[key]
+}
 
 // URLから全ての状態パラメータを取得し、true/falseをブール値に変換する関数
 function getAllStateUrls() {
@@ -32,17 +46,14 @@ function getAllStateUrls() {
     )
 }
 
-// URLから特定の状態パラメータを取得する関数（ブール値対応）
-function getStateUrl(key) {
-    const allParams = getAllStateUrls()
-    return allParams[key]
-}
-
-
 
 // Update
 
 // 状態パラメータを 追加 または 更新 する
+function updateState(key, value) {
+    updateStateUrl({ [key]: value })
+}
+
 function updateStateUrl(params) {
     const currentParams = getAllStateUrls()
     const updatedParams = { ...currentParams, ...params }

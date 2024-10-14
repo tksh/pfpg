@@ -6,8 +6,8 @@ import { tryRemoveOpacity
        , tryRemoveLineBreaks
        , tryRemoveSpaces}                      from 'modal/optimize-svg'
 import { getState
-       , updateState}                          from 'state/settings-defaults'
-import { getStateUrl }                         from 'state/url-state-manager'
+       , updateState
+       , getStateUrl }                         from 'state/url-state-manager'
 import { applyGroupColors }                    from 'tab-lines/apply-group-colors'
 import { decodeGroupColorsAsArray
        , getGroupOpacitiesAsMap}               from 'tab-lines/decode-colors-as-array'

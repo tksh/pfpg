@@ -1,6 +1,6 @@
 import { tabSpace }            from 'constants'
 import { getState
-       , updateState}          from 'state/settings-defaults'
+       , updateState}          from 'state/url-state-manager'
 import { viewboxSlimmed
        , viewboxUnSlimmed
        , extractViewboxValues} from 'tab-canvas/crop-side-margins'

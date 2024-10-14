@@ -1,4 +1,4 @@
-import { getState }                             from 'state/settings-defaults'
+import { getState }                             from 'state/url-state-manager'
 import { generateGroupColorsHtmlElements
        , generateGroupColorsSvgTags}            from 'tab-lines/group-colors'
 import { addEventListenerForGroupColorsInputs } from 'tab-lines/group-colors-listener'

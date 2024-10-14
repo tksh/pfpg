@@ -1,4 +1,4 @@
-import { updateState } from 'state/settings-defaults'
+import { updateState } from 'state/url-state-manager'
 
 export
     { initCheckerboardBgCheckbox
