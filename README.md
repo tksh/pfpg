@@ -4,6 +4,8 @@
 
 Profile picture generator
 
+https://pfpg.netlify.app
+
 ## Run with Deno std/http file server
 
 <https://docs.deno.com/runtime/tutorials/file_server>
