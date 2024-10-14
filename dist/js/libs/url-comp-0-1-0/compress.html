@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>ファイル圧縮</title>
+  <style>
+    .notice{
+      font-size:small;
+    }
+  </style>
+  <script src="url-comp.js" defer></script> <!-- data-compressor.js の読み込み -->
+</head>
+<body>
+  <h1 style="text-align:center">URLCompressorデモプログラム(ファイル圧縮)</h1>
+  <p>下のボタンをクリックして、ファイルを選んでください。ファイルを圧縮後、圧縮したファイルを<b>compressed.dat</b>というファイル名でダウンロードします。</p>
+  <p class="notice">注:ダウンロードといっても、圧縮したファイルがサーバーから送られてくるわけではありません。ローカルマシンで生成したファイルを保存するだけです。ファイルを保存する際に、ブラウザのダウンロード機能を使うので、ここではダウンロードと呼んでいます。</p>
+  <input type="file" id="input">
+
+  <script>
+    const reader=new FileReader();
+
+    // ファイルが読み終わった時に呼ばれる関数
+    reader.onload=function()
+    {
+      // ファイルが読めているかのチェック
+      if(reader.result===null) {
+        alert('ファイルが読めませんでした。');
+        return;
+      } // if
+
+      // ファイルの読み取り結果をバイナリ文字列に変換
+      const view=new Uint8Array(reader.result);
+      let strToCompress=''; // 圧縮したい文字列
+      for(let len=view.length,i=0; i<len; i++) {
+        strToCompress+=String.fromCharCode(view[i]);
+      } // for i
+
+      // 文字列をバイナリ形式で圧縮
+      const compressedStr=URLCompressor.compress(strToCompress,false); // 第2引数をfalseにするとバイナリ形式で圧縮
+
+      // 圧縮済みのバイナリ文字列をUint8Arrayに変換
+      const compressed=new Uint8Array(compressedStr.length);
+      for(let len=compressedStr.length,i=0; i<len; i++) {
+        compressed[i]=compressedStr.charCodeAt(i);
+      } // for i
+
+      // 圧縮済みのデータをファイルとしてダウンロード
+      const blob=new Blob([compressed],{type:'application/octet-stream'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      document.body.appendChild(a);
+      a.download = 'compressed.dat';
+      a.href = url;
+      a.click();
+      a.remove();
+     URL.revokeObjectURL(url);
+    } // reader.onload
+
+    window.onload=function()
+    {
+      const inputElement = document.getElementById("input");
+      inputElement.addEventListener("change",readFile);
+      inputElement.addEventListener("click",()=>{this.value="";}); // 同じファイルが連続して選ばれた時の対策
+    } // window.onload
+
+    function readFile(event)
+    {
+      let input=event.currentTarget;
+      if(input.files.length!==1) {
+        return;
+      } // if
+      const file = input.files[0];
+      reader.readAsArrayBuffer(file);
+    } // readFile
+  </script>
+</body>
+</html>

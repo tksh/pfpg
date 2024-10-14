@@ -1,0 +1,2 @@
+export function replaceShapeRendering(svgString, shapeRendering) {const patternForShapeRendering = /shape-rendering="[^"]*"/g
+return svgString.replace(patternForShapeRendering, `shape-rendering="${shapeRendering}"`)}

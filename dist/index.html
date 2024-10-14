@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pfpg</title>
+
+    <script type="importmap">
+        {
+            "imports": {
+
+                "libs/url-comp-0-1-0/url-comp": "./js/libs/url-comp-0-1-0/url-comp.js",
+                "libs/bech32-and-bech32m":      "./js/libs/bech32-and-bech32m.js",
+                "libs/deno-std/chunk":          "./js/libs/deno-std/chunk.js",
+                "libs/deno-std/zip":            "./js/libs/deno-std/zip.js",
+                "libs/deno-std/running-reduce": "./js/libs/deno-std/running-reduce.js",
+
+                "constants": "./js/constants.js",
+
+                "common-utils/compression-stream":     "./js/common-utils/compression-stream.js",
+                "common-utils/format-as-float":        "./js/common-utils/format-as-float.js",
+                "common-utils/get-uint-n":             "./js/common-utils/get-uint-n.js",
+                "common-utils/is-non-empty":           "./js/common-utils/is-non-empty.js",
+                "common-utils/output-to-textarea":     "./js/common-utils/output-to-textarea.js",
+                "common-utils/read-textarea":          "./js/common-utils/read-textarea.js",
+                "common-utils/read-url-params":        "./js/common-utils/read-url-params.js",
+                "common-utils/select-output-textarea": "./js/common-utils/select-output-textarea.js",
+                "common-utils/show-processing-time":   "./js/common-utils/show-processing-time.js",
+
+                "color-formatter/hex-expand":          "./js/color-formatter/hex-expand.js",
+                "color-formatter/hex-shorten":         "./js/color-formatter/hex-shorten.js",
+                "color-formatter/normalized-from-hex": "./js/color-formatter/normalized-from-hex.js",
+                "color-formatter/normalized-to-hex":   "./js/color-formatter/normalized-to-hex.js",
+                "color-formatter/try-delete-f":        "./js/color-formatter/try-delete-f.js",
+
+                "decode/calc-artwork-id": "./js/encode-and-decode/decode/calc-artwork-id.js",
+                "decode/decode":          "./js/encode-and-decode/decode/decode.js",
+                "decode/generate-svg":    "./js/encode-and-decode/decode/generate-svg.js",
+                "decode/get-uint-n":      "./js/encode-and-decode/decode/get-uint-n.js",
+                "decode/rel-to-abs":      "./js/encode-and-decode/decode/rel-to-abs.js",
+                "decode/size-data-dec":   "./js/encode-and-decode/decode/size-data-dec.js",
+                "decode/try-decompress":  "./js/encode-and-decode/decode/try-decompress.js",
+
+                "enc-and-dec/base-n/base-52-dec":    "./js/encode-and-decode/enc-and-dec/base-n/base-52-dec.js",
+                "enc-and-dec/base-n/base-52-enc":    "./js/encode-and-decode/enc-and-dec/base-n/base-52-enc.js",
+                "enc-and-dec/base-n/base-53-dec":    "./js/encode-and-decode/enc-and-dec/base-n/base-53-dec.js",
+                "enc-and-dec/base-n/base-53-enc":    "./js/encode-and-decode/enc-and-dec/base-n/base-53-enc.js",
+                "enc-and-dec/base-n/base-64url-dec": "./js/encode-and-decode/enc-and-dec/base-n/base-64url-dec.js",
+                "enc-and-dec/base-n/base-64url-enc": "./js/encode-and-decode/enc-and-dec/base-n/base-64url-enc.js",
+                "enc-and-dec/base-n/get-chars":      "./js/encode-and-decode/enc-and-dec/base-n/get-chars.js",
+
+                "enc-and-dec/basic-data/basic-data-dec": "./js/encode-and-decode/enc-and-dec/basic-data/basic-data-dec.js",
+                "enc-and-dec/basic-data/basic-data-enc": "./js/encode-and-decode/enc-and-dec/basic-data/basic-data-enc.js",
+
+                "enc-and-dec/lines-data/d-values/bigint64/abs-to-rel":           "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/abs-to-rel.js",
+                "enc-and-dec/lines-data/d-values/bigint64/bigint64-dec":         "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/bigint64-dec.js",
+                "enc-and-dec/lines-data/d-values/bigint64/bigint64-enc":         "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/bigint64-enc.js",
+                "enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk":     "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk.js",
+                "enc-and-dec/lines-data/d-values/bigint64/recover-zero-padding": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/recover-zero-padding.js",
+
+                "enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size":   "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/add-and-subtract":       "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/add-and-subtract.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/base-x-dec":             "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/base-x-dec.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/base-x-enc":             "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/base-x-enc.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-dec":       "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-dec.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc":       "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-dec": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-dec.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/decode-diff":            "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/decode-diff.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/decode-freq-diff":       "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/decode-freq-diff.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/diff-to-rel":            "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/diff-to-rel.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/encode-diff":            "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/encode-diff.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/encode-freq-diff":       "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/encode-freq-diff.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/specific-alphabets":     "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/specific-alphabets.js",
+                "enc-and-dec/lines-data/d-values/bruteforce53/store-shorter":          "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/store-shorter.js",
+
+                "enc-and-dec/lines-data/d-values/swap63/create-codebook":         "./js/encode-and-decode/enc-and-dec/lines-data/d-values/swap63/create-codebook.js",
+                "enc-and-dec/lines-data/d-values/swap63/swap63-dec":              "./js/encode-and-decode/enc-and-dec/lines-data/d-values/swap63/swap63-dec.js",
+                "enc-and-dec/lines-data/d-values/swap63/swap63-enc":              "./js/encode-and-decode/enc-and-dec/lines-data/d-values/swap63/swap63-enc.js",
+
+                "enc-and-dec/lines-data/d-values/four16/decode-with-four-base16": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/four16/decode-with-four-base16.js",
+                "enc-and-dec/lines-data/d-values/four16/encode-with-four-base16": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/four16/encode-with-four-base16.js",
+                "enc-and-dec/lines-data/d-values/four16/four16-dec":              "./js/encode-and-decode/enc-and-dec/lines-data/d-values/four16/four16-dec.js",
+                "enc-and-dec/lines-data/d-values/four16/four16-enc":              "./js/encode-and-decode/enc-and-dec/lines-data/d-values/four16/four16-enc.js",
+
+                "enc-and-dec/lines-data/group-colors/group-colors-dec":           "./js/encode-and-decode/enc-and-dec/lines-data/group-colors/group-colors-dec.js",
+                "enc-and-dec/lines-data/group-colors/group-colors-enc":           "./js/encode-and-decode/enc-and-dec/lines-data/group-colors/group-colors-enc.js",
+
+                "enc-and-dec/lines-data/widths-and-counts/widths-and-counts-dec": "./js/encode-and-decode/enc-and-dec/lines-data/widths-and-counts/widths-and-counts-dec.js",
+                "enc-and-dec/lines-data/widths-and-counts/widths-and-counts-enc": "./js/encode-and-decode/enc-and-dec/lines-data/widths-and-counts/widths-and-counts-enc.js",
+
+                "encode/best-mix-enc":             "./js/encode-and-decode/encode/best-mix-enc.js",
+                "encode/get-attrs-excepts-dvals":  "./js/encode-and-decode/encode/get-attrs-excepts-dvals.js",
+                "encode/join-with-ampersand":      "./js/encode-and-decode/encode/join-with-ampersand.js",
+                "encode/json-to-map-obj":          "./js/encode-and-decode/encode/json-to-map-obj.js",
+                "encode/show-best-mix-result":     "./js/encode-and-decode/encode/show-best-mix-result.js",
+                "encode/show-result":              "./js/encode-and-decode/encode/show-result.js",
+                "encode/simplify-map":             "./js/encode-and-decode/encode/simplify-map.js",
+                "encode/store-shortest":           "./js/encode-and-decode/encode/store-shortest.js",
+                "encode/transform-encoded-result": "./js/encode-and-decode/encode/transform-encoded-result.js",
+                "encode/try-compress":             "./js/encode-and-decode/encode/try-compress.js",
+
+
+                "init/adjust-output-boxes-size":    "./js/page-specific/index/init/adjust-output-boxes-size.js",
+                "init/initial-opacity-steps":       "./js/page-specific/index/init/initial-opacity-steps.js",
+                "init/set-defaults":                "./js/page-specific/index/init/set-defaults.js",
+                "init/tab-setup":                   "./js/page-specific/index/init/tab-setup.js",
+
+                "state/apply-url-state":            "./js/page-specific/index/state/apply-url-state.js",
+                "state/resvg-option":          "./js/page-specific/index/state/resvg-option.js",
+                "state/url-state-manager":          "./js/page-specific/index/state/url-state-manager.js",
+
+                "modal/modal-toggle":               "./js/page-specific/index/modal/modal-toggle.js",
+                "modal/optimize-svg":               "./js/page-specific/index/modal/optimize-svg.js",
+                "modal/reset-settings":             "./js/page-specific/index/modal/reset-settings.js",
+
+                "tab-canvas/crop-side-margins":     "./js/page-specific/index/tab-canvas/crop-side-margins.js",
+                "tab-canvas/shape-to-trim":         "./js/page-specific/index/tab-canvas/shape-to-trim.js",
+
+                "tab-lines/apply-group-colors":     "./js/page-specific/index/tab-lines/apply-group-colors.js",
+                "tab-lines/color-format-converter": "./js/page-specific/index/tab-lines/color-format-converter.js",
+                "tab-lines/decode-colors-as-array": "./js/page-specific/index/tab-lines/decode-colors-as-array.js",
+                "tab-lines/encode-colors-as-hex":   "./js/page-specific/index/tab-lines/encode-colors-as-hex.js",
+                "tab-lines/get-colors-from-svg":    "./js/page-specific/index/tab-lines/get-colors-from-svg.js",
+                "tab-lines/group-colors-listener":  "./js/page-specific/index/tab-lines/group-colors-listener.js",
+                "tab-lines/group-colors":           "./js/page-specific/index/tab-lines/group-colors.js",
+                "tab-lines/opacity-steps":          "./js/page-specific/index/tab-lines/opacity-steps.js",
+                "tab-lines/path-mode":              "./js/page-specific/index/tab-lines/path-mode.js",
+                "tab-lines/update-svg-color-format":"./js/page-specific/index/tab-lines/update-svg-color-format.js",
+
+                "tab-render/width-pixel-size":      "./js/page-specific/index/tab-render/width-pixel-size.js",
+                "tab-render/shape-rendering":       "./js/page-specific/index/tab-render/shape-rendering.js",
+                "tab-render/sync-number-and-range": "./js/page-specific/index/tab-render/sync-number-and-range.js",
+
+                "tab-ui/checkerboard-bg":           "./js/page-specific/index/tab-ui/checkerboard-bg.js",
+                "tab-ui/text-wrapping":             "./js/page-specific/index/tab-ui/text-wrapping.js",
+                "tab-ui/theme-color":               "./js/page-specific/index/tab-ui/theme-color.js",
+                "tab-ui/view-scaling":              "./js/page-specific/index/tab-ui/view-scaling.js",
+
+                "utils/get-number-of-groups":       "./js/page-specific/index/utils/get-number-of-groups.js",
+                "utils/number-rounding":            "./js/page-specific/index/utils/number-rounding.js",
+                "utils/replace-at-index":           "./js/page-specific/index/utils/replace-at-index.js",
+
+                "download":                         "./js/page-specific/index/download.js",
+                "svg-to-png":                       "./js/page-specific/index/svg-to-png.js"
+
+            }
+        }
+    </script>
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+    <link rel="manifest" href="./site.webmanifest">
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="./css/index/style.css">
+    <link rel="stylesheet" href="./css/index/color.css">
+    <link rel="stylesheet" href="./css/index/tabs.css">
+    <link rel="stylesheet" href="./css/index/modal.css">
+
+
+    <!-- JS -->
+
+    <!-- resvg-js -->
+    <link rel="preload" as="fetch" type="application/wasm" href="./wasm/index_bg.2.6.2.wasm" crossorigin>
+    <script defer src="./js/libs/resvgjs/index.2.6.2.min.js"></script>
+
+    <!-- JScolor -->
+    <script defer src="./js/libs/jscolor.2.5.2.min.js"></script>
+
+    <!-- Main JS -->
+    <script type="module" src="./js/page-specific/index/main.js"></script>
+
+
+    <!-- Icon -->
+
+    <!-- Material Design Icons via Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&icon_names=close,restart_alt,swap_vert" />
+
+</head>
+
+<body>
+    <!-- Sample artwork encoded string of 202401_001, bruteforce53 encoded -->
+    <script type="text/plain" id="sample-artwork-encoded-string">?n=~7&version=~0.9.0&title=~202401_001&desc=001kObPFhaNkBHUZJE0kMCGBFCDo8j7lBr_44z9CIqW3Ba7eLr9kVIlASMdS4&metadata=01p0oUdqIavqvtRKIHBt6NXiYteLcXbRKDSYZxUvq0iChyl3QzjiOqHuFNm7Yh7FxvfVouHuyHlFtlgVicDtP0QQvacAuauchBVBSAEBNwHFyYnHE4H4_PlL_NK6Khs9Y5ezyZTNRNQ_W_6WDhCCM6aK8hNaYsOpzGHbeaeG3F2JmojjAptx43DpLkdJW00oFQfE5INinLI4DdJoihJpCqJQMjzKPwm_9zYGyxrbwuMwbEgFjmpCRxQjSlTyWDFVcWNbBbjOAOLuOGemZD9rQ-sm0wbSw2B2KWXiU4Om8IjjtKSetOWV1FeJ_PQWCCIHLWIk94kVci0Mb0sjy6hLB8cJw7OrRNcR7ug6bE5XdEY2RLhp8sti1jb1IJvN_fBMxgTwMYKVvYpwUsYcxwXAHWBOiYqxDZAAwrMxHYfqCUFEesGViQgV0RPPz9hveyyHZVvuoxNTuCgynDTlOGlynRt6nKeyDKeysp7LKdAcAlsViO2qJ3xx4HJpMEvIUiMIMsbl4xusWw5NbhGNVSG3ZB2yLYfkOHrGgzR7PJFcRBwjSK3LAb6gwpA77CwjH6Mp&A=08fEKQ-VoisNalNhZy9GsmZzPU&0=08cJqY-3JMVTyH83QAsTiL3FDTnD61hpJcS8kPFWtVBM_n7KwZPoKrvVK5tIF1dLYIRCbKt0inU9MAPBVpcI2lR7kucA3g1jDC0fJqoQuXwQDLXBLjkpJqaHAXbZjjRASJWCJVUqZevC5ON3J2T_sf90WnyPRBQDmstuAHrgUnYdI3itH3EAVh00xHYH4zw32Cxh81iWNAtYm5ptyRqwSYSvYJHfzlBZ0B8dwwRZoDPgTHxh4nl98SJNLKhligDTkafBnhB81Lp0Xo24RLkTGOq0Ct3Y01CCYPVAkERzXy0xrCgg0Ni53d7xkiq3HEM6j3Ey24N7UWT8M4XA1J1BtLIlrE0UZeAC0bGCyZvPBbef3PgB7eZkXPxK8xS8zU67A_Lu-kYMRlbdazsbRfZRwea-60Dmrfr0wxG3KJz9ibAMrbYCV0dFkLDjnqEkFfeC_HmCC02PMHpcXTD22JXq2A3XbqAaxzaunU0tB286XDNUnO88VDKPw_rOBE2bYA7DsK29Ub1EXOdOTy_sySaHqznKGTSAoLLjNJuuzhAJdi_VdxrsPvsu1Hj1oy9suW7uMoIzgcUZ6J7WxQN9Ssa8tPlCNXwezDBT8S03XX8Y-1KcOxv4qqukX1oKDZXb0DYAdsuab7YZXEvxk3gXFVdJTiiYjF6qY9nZZsGzxlVZ1HKoPbNmeF3DxzoFIsIadDxfxDxWhcORr6qLEh5KloAW9hvZ7pwjKBcj9lOC-DBiki-FGQ-GF5T7z0ycZmvj5juCUnhCeF14ggQHGt_A7TLhsWhEtU-sowXAztUWOYMYCS16YamTYy_FjGgOW4dPSzm9hCguOX4MnHyNVAU21CP0Z8Zwf0Wk0mmUgFvCfcl2in5T2xZz_-QZLaVONBloSACBo2KWAtyl85UhY_scI9QQB6PKA0ERYYT3Tpx--rN546x463gQO2SWt6a-EKLAMJScEyuBOIHB-lfkrcuA_IgdJtvpCGVNtC4Luggd2iSqA3Y2SPNHSlLpbPHC6aiHDB3JO9tMHOqQrNMgCKpQ6YOCboxzSjnrHLXAYDXbm95DFvjw0pjiH4DRKSvJvFWo4ZkZCAQQflHz82tYUVa1SkkoPiPgIzRMM6yHDKU-90hlCH4lQO1YPWGgWTR8AYS1GKkDTmOGWwyVE_Or3bH-SjX0TjE7iyZM7c7txUHs-pXRO7mHb4G4OZ2muPsnneWxO6a0PAjhDTnRTld04gSgu4wAWUF3wjBJI5ZyaM9zOt7g72kuZS6T2CZaYbcRWdv3d5rfXZCFYEMUxCVwAXV0aS14V4PJppYpidA812f3aMfMLOzccbBLwnOYKGHxdffzWTcXU9kO3mhFbDXSCV5DQZg-3DspMILUMqEMtArnMp0hmNiZF2MycTQ-vh1wmPRecheKPGHkcjPNTHJMwEM3GvBNL-zWqGpkDlxWDx3bCmbBmbDkZUVGp3sQs2O9rRK0EhpV5cF9hMIEVFdK75SZXAK8ygAPUUS1rU3sZ7McE3n7dzqeAB9elsPGJEB5Mhb0YmYVJsJYLU7hwVI-4hBuWemayeSxS0OAW-hb3EYrCIMEDil4rzcsQyyKwWBo96430Yn5cFtd2lwWJFyy7_KXBtGbLtG49Y6k4ABFriR2mVohWEpa5ViZWub0tmmTowcR50N6kdXekxNaX15viSYMfOMUmEsmCEmLYnak4F3ViBkTgprlTi0ecQeUyPcpE4kTtJjRxPCY4zkp2lTUnjnduTN_lHnSdluxMWJ5eHC3AcNrzqcOKUY-8-WPOQ7YjkaJtPqjo8a70nh84WTibc1nMV32JlOO004jTmXY5MKJkRYcExwmHaYTYcTAGxQxM2BxkhyJqlhYw8izSGDJWO045cDGLNwwlySYoYBqXMLGlvOWMMODCsDLMMX7gMg7eGXkY3ugGPcwGJUcBbhxkZGLQZPlAyhlrD8dGQLIFpkF1tfDrTbGmKXeY5aqbIzJ0KUaaNXcgMFvhvTGOMH1UZuh5sGA9kaThpJGVPhhVZxJwWjKSMRrNqvjD2MMRfVsopGAka4hgDaOQSOvvl1ovFrDEo1SUjSCMD6lDnjikeBXxw0GZEDya5y9b5iXa6IKGUOBNmaz1hUft3zJ04t49xeYzfH6P4Iyu6xh846-gpzzLeenxe5pDz-uL0nbyX8hng1FT8hWZ7x_YeLMPoqfJBSKj8_XgU-OUaZ2FlShs2MuBPlp7MUGUZhl3Yp4SBvBdK6CfK36zEtIjfGuEX3P-UHMKk3OVfxNe0nwQ-yANnvVC-V5l_BDmsf8t-lXwoxGx2VZqsLJ83c38BZM2iDeijwFgwDmSmd3co_gCLgWtE94Kn-q_4P7gm3sDZhDvwuq-qzcKgjeyL2Z-CRh7w6InbHRGaexxWkPiyU3zS9IxsvuCVrDZ0BP6gajalZz7DRGoGwC2PCMAfI4mWA62mxm5fGpoe2MWDQtjA&F=08fOlodzcFekVL549cs3S7h45fSV4dswktZ2vY1MTNSLq-Bpt91wHlP8Bc8UGCi2WSP98Uuzhl2lWyUDdjTqXd64qWQkIYvJzEUG6k6wDW6V-leCsC74Y0DijpKYE_m9iQ</script>
+
+    <!-- Sample artwork encoded string of 202401_001, bigint64 encoded -->
+
+    <!-- Sample artwork encoded string of 202308_001, bigint64 encoded -->
+
+    <!-- Sample artwork encoded string of 202308_001, swap63 encoded -->
+
+
+    <header>
+
+        <div id="customization" class="opts">
+
+            <fieldset class="tabs-container opts">
+
+                <div class="tabs">
+                    <button class="tab" data-tab="tab-1">Lines</button>
+                    <button class="tab" data-tab="tab-2">Canvas</button>
+                    <button class="tab" data-tab="tab-3">Render</button>
+                    <button class="tab" data-tab="tab-4">UI</button>
+                    <button class="icon-tab" data-tab="tab-5" id="reset-icon"><span class="icon-font material-symbols-outlined">restart_alt</span></button>
+                </div>
+
+
+                <div id="tab-1" class="tab-content"> <!-- Lines -->
+
+                    <!-- Color-pickers for group colors (Generated dynamically) -->
+                    <div id="multiple-stroke-color-desc" class="opts">
+                        <div class="opts-cell">
+                            <p><i>stroke</i>, <i>opacity</i>, <i>stroke-opacity</i> for lines group:</p>
+                        </div>
+                    </div>
+                    <div id="group-colors-input-and-select" class="opts"></div>
+
+                    <details>
+                        <summary>more details</summary>
+
+                        <!-- Path mode -->
+                        <div class="opts">
+                            <div class="opts-cell">
+                                <label for="path-mode">Path mode: </label>
+                                <select name="path-mode" id="path-mode">
+                                    <option value="absoluteSeparated">Absolute and separated</option>
+                                    <option value="relativeMerged">Relative and merged</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Opacity steps -->
+                        <div class="opts">
+                            <div class="opts-cell">
+                                <label for="opacity-steps">Opacity steps: </label>
+                                <select name="opacity-steps" id="opacity-steps" autocomplete="off">
+                                    <option value="0.04">0.04</option>
+                                    <option value="0.1">0.1</option>
+                                    <option value="0.2">0.2</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Color format -->
+                        <div class="opts">
+                            <div class="opts-cell">
+                                <label for="color-format">Color format: </label>
+                                <select name="color-format" id="color-format">
+                                    <option value="rgb">RGB</option>
+                                    <option value="hex">Hex</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </details>
+                </div>
+
+
+                <div id="tab-2" class="tab-content"> <!-- Canvas -->
+
+                    <!-- Shape to trim -->
+                    <div class="opts">
+                        <div class="opts-cell">
+                            <label for="shape-to-trim">Shape to trim: </label>
+                            <select name="shape-to-trim" id="shape-to-trim" autocomplete="off">
+                                <option value="square" selected>Square</option>
+                                <option value="circle">Circle</option>
+                                <option value="squircle">Squircle</option>
+                                <option value="squircleSlimmed">Squircle, slimmed</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Three options for 'Squircle, slimmed' -->
+
+                    <!-- Width narrowness -->
+                    <div id="width-narrowness-div" class="display-none">
+                        <div class="opts-cell">
+                            <label for="width-narrowness">- Width narrowness: </label>
+                            <select name="width-narrowness" id="width-narrowness" autocomplete="off">
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10" selected>10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
+                                <option value="30">30</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Top-heavy ratio -->
+                    <div id="top-heavy-ratio-div" class="display-none">
+                        <div class="opts-cell">
+                            <label for="top-heavy-ratio">- Top-heavy ratio: </label>
+                            <select name="top-heavy-ratio" id="top-heavy-ratio" autocomplete="off">
+                                <option value="3">3</option>
+                                <option value="2">2</option>
+                                <option value="1" selected>1</option>
+                                <option value="0">0</option>
+                                <option value="-1">-1</option>
+                                <option value="-2">-2</option>
+                                <option value="-3">-3</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Crop side margins (Both applied to PNG and SVG) -->
+                    <div id="crop-side-margins-div" class="display-none">
+                        <div class="opts">
+                            <div class="opts-cell">
+                                <label for="crop-side-margins">- Crop side margins:</label>
+                                <input type="checkbox" name="crop-side-margins" id="crop-side-margins" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div id="tab-3" class="tab-content"> <!-- Render -->
+
+                    <!-- Anti-aliasing -->
+                    <div class="opts">
+                        <div class="opts-cell">
+                            <label for="shape-rendering">Anti-aliasing: </label>
+                            <select name="shape-rendering" id="shape-rendering" autocomplete="off">
+                                <option value="geometricPrecision">On (geometricPrecision)</option>
+                                <option value="crispEdges" selected>Off (crispEdges)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Width pixel size -->
+                    <div class="opts">
+                        <div class="opts-cell flex-direction-column">
+                            <div class="display-inline-block">
+                                <label for="png-size-number">Width pixel size:</label>
+                                <input type="number" id="png-size-number" name="png-size-number" class="width-size" min="1" value="256" autocomplete="off">
+                            </div>
+                            <div class="display-inline-block buttons-and-range">
+                                <button type="button" id="width-size-dec">-</button>
+                                <input type="range" id="png-size-range" name="png-size-range" min="2" max="512" step="2" autocomplete="off">
+                                <button type="button" id="width-size-inc">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Last rendering time -->
+                    <div class="opts">
+                        <div class="opts-cell">
+                            <p id="last-rendering-time" class="font-size-small"></p>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div id="tab-4" class="tab-content"> <!-- UI -->
+
+                    <!-- View scaling -->
+                    <div class="opts">
+                        <div class="opts-cell">
+                            <label for="view-scaling">View scaling: </label>
+                            <select name="view-scaling" id="view-scaling" autocomplete="off">
+                                <option value="fit" selected>Fit to display area</option>
+                                <option value="actual">Actual image size</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Checkerboard background -->
+                    <div class="opts">
+                        <div class="opts-cell">
+                            <label for="checkerboard-bg">Checkerboard background: </label>
+                            <input type="checkbox" id="checkerboard-bg" name="checkerboard-bg" value="enabled" checked>
+                        </div>
+                    </div>
+
+                    <!-- Text wrapping -->
+                    <div class="opts">
+                        <div class="opts-cell">
+                            <label for="text-wrapping">Text wrapping: </label>
+                            <input type="checkbox" id="text-wrapping" name="text-wrapping" value="enabled">
+                        </div>
+                    </div>
+
+                    <!-- Theme -->
+                    <div class="opts">
+                        <div class="opts-cell">
+                            <label for="theme-color">Theme color: </label>
+                            <select name="theme-color" id="theme-color" autocomplete="off">
+                                <option value="white">White</option>
+                                <option value="light">Light</option>
+                                <option value="dark">Dark</option>
+                                <option value="black" selected>Black</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div> <!-- End of UI tab -->
+
+            </fieldset>
+        </div> <!-- end of <div id="customization" class="opts"> -->
+
+
+        <!-- Crop by BBox | Disabled -->
+        <div class="display-none">
+            <div class="opts-cell">
+                <label for="crop-by-bbox">Crop by BBox:</label>
+                <input type="checkbox" name="crop-by-bbox" id="crop-by-bbox" autocomplete="off">
+            </div>
+        </div>
+
+
+    </header>
+
+
+    <main class="padding-bottom">
+        <div id="input-and-output">
+
+            <div id="output" class="cell"> <!-- Output PNG -->
+
+                <div class="header-info">
+                    <div id="png-info" class="info">png-info placeholder text</div>
+                </div>
+
+                <div id="img-box">
+                    <img id="img" class="checker fit-to-display-area" alt="Output PNG" />
+                </div> <!-- End of img-box -->
+                <div class="download-button">
+                    <button id="png-download-button">Download as PNG</button>
+                </div>
+
+            </div> <!-- End of Output PNG cell -->
+
+            <div id="input" class="cell"> <!-- Input SVG cell -->
+
+                <div class="header-info">
+                    <div id="svg-info" class="info">svg-info placeholder text</div>
+                </div>
+
+                <!-- svgTextarea -->
+                <div id="textarea-box">
+                    <textarea id="svg-string" name="svg-string" rows="7" placeholder="Enter the svg string" readonly >
+                    </textarea>
+                    <!-- End of svgTextarea -->
+
+                </div><!-- End of div textarea-box -->
+                <div class="download-button">
+                    <button id="svg-download-button">Download as SVG</button>
+                </div>
+
+            </div> <!-- End of Input SVG cell -->
+
+        </div> <!-- End of input-and-output box -->
+
+
+
+        <!-- SVG optimization modal window content-->
+        <div id="svg-opt-modal" class="modal">
+            <div class="modal-content">
+                <h2 class="text-align-center">SVG Text Optimization</h2>
+                <form>
+                    <fieldset>
+                        <legend class="display-none">Optimization Options</legend>
+
+                        <div class="input-group">
+                            <input type="checkbox" id="remove-opacity" name="remove-opacity" value="enabled">
+                            <label for="remove-opacity">Remove Default Opacity Attributes</label>
+                            <div class="example padding-left-1">
+                                <code id="before-remove-opacity" class="option-applied">&lt;g stroke=&quot;rgb(0,0,0)&quot; opacity=&quot;1.0&quot; stroke-opacity=&quot;1.0&quot;&gt;</code>
+                                <span class="arrow"><span class="material-symbols-outlined">swap_vert</span></span>
+                                <code id="after-remove-opacity">&lt;g stroke=&quot;rgb(0,0,0)&quot;&gt;</code>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <input type="checkbox" id="remove-line-breaks" name="remove-line-breaks" value="enabled">
+                            <label for="remove-line-breaks">Remove Line Breaks</label>
+                            <div class="example padding-left-1">
+                                <code id="before-remove-line-breaks" class="option-applied">
+                                    &lt;tag&gt;<br>
+                                    &emsp;&emsp;content-text<br>
+                                    &lt;/tag&gt;
+                                </code>
+                                <span class="arrow"><span class="material-symbols-outlined">swap_vert</span></span>
+                                <code id="after-remove-line-breaks">
+                                    &lt;tag&gt;content-text&lt;/tag&gt;
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <input type="checkbox" id="remove-spaces" name="remove-spaces" value="enabled">
+                            <label for="remove-spaces">Remove Extra Spaces</label>
+                            <div class="example padding-left-1">
+                                <code id="before-remove-spaces" class="option-applied">&lt;path d="M 36 61 L 33 68" /&gt;</code>
+                                <span class="arrow"><span class="material-symbols-outlined">swap_vert</span></span>
+                                <code id="after-remove-spaces">&lt;path d="M36 61L 33 68"/&gt;</code>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </form>
+                <div class="align-items-center text-align-center padding-top-2">
+                    <span id="svg-opt-close-icon" class="material-symbols-outlined">close</span>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Reset settings modal window content-->
+        <div id="reset-settings-modal" class="modal">
+            <div class="modal-content">
+                <h2 class="text-align-center">Reset Settings by Category</h2>
+                <form>
+                    <fieldset>
+                        <legend class="display-none">Settings Categories</legend>
+
+                        <div class="input-group">
+                            <input type="checkbox" id="image-custom" name="image-custom" value="enabled" checked>
+                            <label for="image-custom">Image Customization</label>
+                            <div class="example padding-left-1">
+                                <p>All settings in the <i>Lines</i>, <i>Canvas</i>, and <i>Render</i> tabs.</p>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <input type="checkbox" id="ui-config" name="ui-config" value="enabled">
+                            <label for="ui-config">UI Configuration</label>
+                            <div class="example padding-left-1">
+                                <p>All settings in the <i>UI</i> tab.</p>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <input type="checkbox" id="svg-optimize" name="svg-optimize" value="enabled">
+                            <label for="svg-optimize">SVG Optimization</label>
+                            <div class="example padding-left-1">
+                                <p>All settings in the modal window accessed via the SVG textarea.</p>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </form>
+                <button id="reset-settings">Clear and Reload</button>
+                <div class="align-items-center text-align-center padding-top-2">
+                    <span id="reset-settings-close-icon" class="material-symbols-outlined">close</span>
+                </div>
+            </div>
+        </div>
+
+
+
+    </main>
+
+    <hr>
+
+    <footer>
+
+        <div class="footer-info">
+
+            <details>
+                <summary>Usage</summary>
+                <dl>
+                    <dt>Workflow:</dt>
+                    <dd class="padding-top">
+                        <ol>
+                            <li><b>Import</b>: Start by importing the artwork data from a URL that includes a <a href="https://en.wikipedia.org/wiki/Query_string" title="Query string - Wikipedia">query string</a> encoding.</li>
+                            <li><b>Custom</b>: Modify your artwork freely using the options available under each category tab.</li>
+                            <li><b>Export</b>: Save your final artwork as either a <a href="https://en.wikipedia.org/wiki/PNG" title="PNG - Wikipedia">PNG</a> (raster) or <a href="https://en.wikipedia.org/wiki/SVG" title="SVG - Wikipedia">SVG</a> (vector) image format.</li>
+                        </ol>
+                    </dd>
+                </dl>
+                <dl class="padding-top-2">
+                    <dt>Tips:</dt>
+                    <dd class="padding-left-1">
+
+                        <dl>
+                            <dt>The difference made by <i>Path mode</i> option (in <i>Lines</i> tab)</dt>
+                            <dd>
+                                <ul>
+                                    <li><i>Relative and merged</i>: 'stroke-opacity' affects the whole lines group.</li>
+                                    <li><i>Absolute and separated</i>: 'stroke-opacity' affects the appearance of each line.</li>
+                                </ul>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>Maximum rendering size for <i>Width pixel size</i> option (in <i>Render</i> tab)</dt>
+                            <dd>The slider allows you to set the size up to 512 pixels, but you can type in a larger number manually into the box.</dd>
+                            <dd>(Note: Larger sizes will exponentially increase the rendering time)</dd>
+                        </dl>
+
+                    </dd>
+                </dl>
+            </details>
+
+            <details>
+                <summary>Showcase</summary>
+            </details>
+
+            <details>
+                <summary>About</summary>
+                <dl>
+                    <dt>Title:</dt>
+                    <dd>pfpg</dd>
+                    <dt>Overview:</dt>
+                    <dd>A custom <b>p</b>ro<b>f</b>ile <b>p</b>icture <b>g</b>enerator for a specific svg artwork that was made with the <a href="https://github.com/tksh/uint-n-portray" title="tksh/uint-n-portray: A subset of SVG for creating simple and efficient vector drawings">UIntNPortray</a> ruleset.</dd>
+                    <dt>Creator (both artwork and website):</dt>
+                    <!-- <dt>Creator of the website and artwork:</dt> -->
+                    <dd><a href="https://github.com/tksh" title="tksh on GitHub">SAITO Takashi (tksh)</a></dd>
+                    <dt>Source:</dt>
+                    <dd><a href="https://github.com/tksh/pfpg" title="tksh/pfpg: A custom profile picture generator for a specific svg artwork that was made with the UIntNPortray ruleset.">github.com/tksh/pfpg</a></dd>
+                    <dt>License:</dt>
+                    <dd><a href="https://www.mozilla.org/en-US/MPL/2.0/" title="Mozilla Public License, version 2.0">MPL 2.0 license</a></dd>
+                    <dt>Libraries:</dt>
+                    <dd><a href="https://github.com/yisibl/resvg-js" title="GitHub - yisibl/resvg-js: A high-performance SVG renderer and toolkit, powered by Rust based resvg and napi-rs.">resvg-js (MPL 2.0 license)</a></dd>
+                    <dd><a href="https://synapse.kyoto/lib/url-comp/page001.html" title="URLCompressorライブラリ(1) - しなぷすのハード製作記">URLCompressor (MIT license)</a></dd>
+                    <dd><a href="https://jscolor.com/" title="jscolor: JavaScript Color picker with Opacity (alpha channel)">jscolor (GNU GPL v3 license (for open source use))</a></dd>
+                    <dd><a href="https://github.com/denoland/deno_std/" title="Deno standard library (MIT license)">Deno standard library (MIT license)</a></dd>
+                    <dd><a href="https://github.com/manzt/numcodecs.js" title="numcodecs.js">numcodecs.js (MIT license)</a></dd>
+                </dl>
+            </details>
+
+            <p class="text-align-center padding-top-2">© 2023-present, SAITO Takashi (tksh)</p>
+        </div> <!-- End of <div class="footer-info"> -->
+
+    </footer>
+
+
+</body>

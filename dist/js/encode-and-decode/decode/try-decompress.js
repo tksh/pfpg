@@ -1,0 +1,4 @@
+import { decompressFromEncodedURIComponent } from 'common-utils/compression-stream'
+import { flagsMap } from 'constants'
+import { URLCompressor } from 'libs/url-comp-0-1-0/url-comp'
+export function tryDecompress(string) {if (string.startsWith(flagsMap.get('1st').get('uncompressed'))) {return string.slice(1)} else if (string.startsWith(flagsMap.get('1st').get('URLCompressor'))) {return URLCompressor.expand(string.slice(1))} else if (string.startsWith(flagsMap.get('1st').get('deflateRaw'))) {return decompressFromEncodedURIComponent(string.slice(1), 'deflate-raw')} else {console.error("Not valid string.")}}

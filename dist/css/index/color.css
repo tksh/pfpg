@@ -1,0 +1,98 @@
+/* Various color theme switching with custom property */
+/* Inspired: https://mxb.dev/ | https://mxb.dev/blog/color-theme-switcher/ */
+
+:root {
+    --color-bg: darkgray;
+    --color-fieldset-border: #ccc6;
+    --color-checker: #eeec;
+    --color-checker-trans: #fff0;
+    --color-text: #666;
+    --color-text-input: #666;
+    --color-info-bg-and-hr: #6669;
+    --color-info-text: darkgray;
+    --color-input-textarea-select: #eee6;
+    --color-button-bg: #eee3;
+    --color-button-border: #ccc9;
+    --color-picker-border: #ccc9;
+}
+
+/* Same color as above `:root` */
+[data-theme='light'] {
+    --color-bg: darkgray !important;
+    --color-fieldset-border: #ccc6 !important;
+    --color-checker: #eeec !important;
+    --color-checker-trans: #fff0 !important;
+    --color-text: #666 !important;
+    --color-text-input: #666 !important;
+    --color-info-bg-and-hr: #6669 !important;
+    --color-info-text: darkgray !important;
+    --color-input-textarea-select: #eee6 !important;
+    --color-button-bg: #eee3 !important;
+    --color-button-border: #ccc9 !important;
+    --color-picker-border: #ccc9 !important;
+}
+
+
+@media(prefers-color-scheme: dark) {
+    :root {
+        --color-bg: #222;
+        --color-fieldset-border: #ccc6;
+        --color-checker: #eee3;
+        --color-checker-trans: #fff0;
+        --color-text: #666;
+        --color-text-input: #333;
+        --color-info-bg-and-hr: #6669;
+        --color-info-text: #222;
+        --color-input-textarea-select: #eee6;
+        --color-button-bg: #6663;
+        --color-button-border: #ccc3;
+        --color-picker-border: #666
+    }
+}
+
+/* Same color as above `@media(prefers-color-scheme: dark)` */
+[data-theme='dark'] {
+    --color-bg: #222;
+    --color-fieldset-border: #ccc6;
+    --color-checker: #eee3;
+    --color-checker-trans: #fff0;
+    --color-text: #666;
+    --color-text-input: #333;
+    --color-info-bg-and-hr: #6669;
+    --color-info-text: #222;
+    --color-input-textarea-select: #eee6;
+    --color-button-bg: #6663;
+    --color-button-border: #ccc3;
+    --color-picker-border: #666;
+}
+
+
+[data-theme='black'] {
+    --color-bg: #000;
+    --color-fieldset-border: #ccc3;
+    --color-checker: #111;
+    --color-checker-trans: #000;
+    --color-text: #666c;
+    --color-text-input: #666;
+    --color-info-bg-and-hr: #6669;
+    --color-info-text: #000;
+    --color-input-textarea-select: #2226;
+    --color-button-bg: #6663;
+    --color-button-border: #ccc3;
+    --color-picker-border: #ccc3;
+}
+
+[data-theme='white'] {
+    --color-bg: white;
+    --color-fieldset-border: #ccc6;
+    --color-checker: #eeec;
+    --color-checker-trans: #fff0;
+    --color-text: #666;
+    --color-text-input: #666;
+    --color-info-bg-and-hr: #6669;
+    --color-info-text: white;
+    --color-input-textarea-select: #eee6;
+    --color-button-bg: #eee3;
+    --color-button-border: #ccc9;
+    --color-picker-border: #ccc9;
+}
