@@ -1,5 +1,5 @@
 export const BASIC_DATA_KEYS = ['n','version','title','desc','metadata','colors']
-export const tabSpace = ' '
+export const tabSpace = '\u0020\u0020\u0020\u0020'
 export const VIEWBOX_START_X = 0
 export const VIEWBOX_START_Y = 0
 export const flagsMap = new Map([['1st', new Map([['uncompressed', '~'],['URLCompressor', '0'],['deflateRaw', '1'],])],['2nd', new Map([['bruteforce53', '0'],['bigint64', '1'],['swap63', '2'],['four16', '3'],])]])

@@ -11,6 +11,7 @@ const strokeOpacity = matches[3] !== undefined ? matches[3] : "1.0"
 const groupElem = `<g stroke="${stroke}" opacity="${opacity}" stroke-opacity="${strokeOpacity}">`
 const isOpacityRemoved = getState('removeOpacity')
 if (isOpacityRemoved) {return removeOpacity(groupElem)} else {return groupElem}}
+jscolor.presets.default = {previewSize:20,borderRadius:0}
 function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {const groupColorsValues = getGroupColorsValues(inputSvg)
 const numberOfGroups = groupColorsValues.get('number_of_groups')
 const stroke = convertColorFormatForArray(groupColorsValues.get('stroke_array'), colorFormat)
