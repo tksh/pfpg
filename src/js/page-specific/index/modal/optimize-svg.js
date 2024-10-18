@@ -194,21 +194,50 @@ function getCurrentPathModeIndentation(pathMode) {
 
 
 function removeSpaces(svgString) {
-    return svgString
-        // 数値と大文字の M|L のあいだの スペースを削除
-        .replace(/(\d)\s+([ML])/g, '$1$2')
-        // ダブルクォートとスラッシュ のあいだの スペースを削除
-        .replace(/"\s+(\/)/g, '"$1')
+    return svgString.replace(/(\sd="[^>]+>)/g, (match, pathData) => {  // Use \sd= to skip id=
+
+        const optimizedPath = pathData
+
+            // コマンド後のスペースを削除
+            .replace(/([MLHVCSQTAZ])/gi, '$1')
+            // e.g.: <path d="M 36 61 L 33 68" /> => <path d="M36 61 L33 68" />
+
+            // 数字とコマンドの間のスペース削除
+            .replace(/\s*([MLHVCSQTAZ])\s*/gi, '$1')
+            // e.g.: <path d="M36 61 L33 68" /> => <path d="M36 61L33 68" />
+
+            // ダブルクォートとスラッシュ のあいだの スペースを削除
+            .replace(/"\s+(\/)/g, '"$1')
+            // e.g.: <path d="M36 61L33 68" /> => <path d="M36 61L33 68"/>
+
+        return optimizedPath
+    })
 }
+//console.log(removeSpaces('<path d="M 36 61 L 33 68" />'))  // => <path d="M36 61L33 68"/>
 
 function restoreSpaces(svgString) {
-    return svgString
-        // 数値と大文字の M|L のあいだに スペースを挿入
-        .replace(/(\d)([ML])/g, '$1 $2')
-        // ダブルクォートとスラッシュ のあいだに スペースを挿入
-        .replace(/"(\/)/g, '" $1')
-}
+    return svgString.replace(/(\sd="[^>]+>)/g, (match, pathData) => {  // Use \sd= to skip id=
 
+        const restoredPath = pathData
+
+            // コマンド後にスペースを挿入
+            .replace(/([MLHVCSQTAZ])/gi, '$1 ')
+
+            // 数字とコマンド間にスペース挿入
+            .replace(/(\d)([MLHVCSQTAZ])/gi, '$1 $2')
+
+            // ダブルクォートとスラッシュ のあいだに スペースを挿入
+            .replace(/"(\/)/g, '" $1')
+
+        return restoredPath
+    })
+}
+//console.log(restoreSpaces('<path d="M36 61L33 68"/>'))  // Line
+// <path d="M 36 61 L 33 68" />
+//console.log(restoreSpaces('<path d="M0,63.5Q0,0 63.5,0T127,63.5 63.5,127 0,63.5"/>'))  // Squircle
+// <path d="M 0,63.5 Q 0,0 63.5,0 T 127,63.5 63.5,127 0,63.5" />
+//console.log(restoreSpaces('<path d="M6.35,63.5Q5.08,0 63.5,0T120.65,63.5 63.5,127 6.35,63.5"/>'))  // Squircle, slimmed
+// <path d="M 6.35,63.5 Q 5.08,0 63.5,0 T 120.65,63.5 63.5,127 6.35,63.5" />
 
 
 // Bulk apply the optimizations based on current url params states, after 'pathMode' changes.

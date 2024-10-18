@@ -35,7 +35,7 @@ function updateSvgWithSelectedShapePath(shape, inputSvg) {
             ? `<rect width="100%" height="100%" />`
             : shape === 'circle'
                 ? `<circle cx="50%" cy="50%" r="50%" />`
-                : `<path d="M 0,${center}Q 0,0 ${center},0T ${gridSize},${center} ${center},${gridSize} 0,${center}" />` // shape === 'squircle'
+                : `<path d="M 0,${center} Q 0,0 ${center},0 T ${gridSize},${center} ${center},${gridSize} 0,${center}" />` // shape === 'squircle'
 
     // Replace to new shape <clipPath>
     const patternForClippathShape = /<clipPath id="shape-to-trim">(\n?).*(\n?).*<\/clipPath>/g
@@ -76,7 +76,7 @@ function generateClippathShapeOfSquircleSlimmed(inputSvg, widthNarrowness, topHe
     //console.log('right: ', right)
     const topInflationAmount = roundToTwoDecimals(left - ((gridSize / 100) * topHeavyRatio))
     //console.log('topInflationAmount: ', topInflationAmount)
-    return `<path d="M ${left},${center}Q ${topInflationAmount},0 ${center},0T ${right},${center} ${center},${gridSize} ${left},${center}" />`
+    return `<path d="M ${left},${center} Q ${topInflationAmount},0 ${center},0 T ${right},${center} ${center},${gridSize} ${left},${center}" />`
 }
 
 // Get center (the half of grid size)
