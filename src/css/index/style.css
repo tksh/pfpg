@@ -175,8 +175,9 @@ textarea#svg-string.no-wrap {
 
 /* 'opacity', 'stroke-opacity' */
 select.opacity {
-    margin-right: 2px;
-    width: 4rem;
+    margin-right: 4px;
+    width: 3.75rem;
+    height: 1.25rem;
 }
 
 input {
@@ -186,15 +187,15 @@ input {
 
 /* 'stroke' */
 input.stroke-rgb {
-    width: 10rem;
+    width: 9rem;
 }
 input.stroke-hex {
-    width: 7rem;
+    width: 6.5rem;
 }
 input.stroke {
     margin-top: 0.75rem;
-    height: 1.05rem;
-    margin-right: 2px;
+    height: 1.25rem;
+    margin-right: 4px;
 }
 
 label.stroke {

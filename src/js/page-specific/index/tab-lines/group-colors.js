@@ -41,7 +41,16 @@ function generateGroupColorsSvgTags(matches) {
 //  - <select> - opacity
 //  - <select> - stroke-opacity
 
-function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
+
+// These options apply to all color pickers on the page
+// - https://jscolor.com/docs/#api--opts--previewSize
+jscolor.presets.default = {
+    previewSize:20,  // Make preview size as 1:1 rect (default value is 32)
+    borderRadius:0   // Make solid corner shapes
+ }
+
+
+ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
     console.log(`generateGroupColorsHtmlElements() started. (Opacity step = ${opacitySteps})`)
 
     const groupColorsValues = getGroupColorsValues(inputSvg)
