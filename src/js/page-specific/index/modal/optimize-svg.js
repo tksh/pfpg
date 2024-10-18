@@ -199,11 +199,11 @@ function removeSpaces(svgString) {
         const optimizedPath = pathData
 
             // コマンド後のスペースを削除
-            .replace(/([MLHVCSQTAZ])/gi, '$1')
+            .replace(/([MLHVCSQTAZ])\s+/gi, '$1')
             // e.g.: <path d="M 36 61 L 33 68" /> => <path d="M36 61 L33 68" />
 
             // 数字とコマンドの間のスペース削除
-            .replace(/\s*([MLHVCSQTAZ])\s*/gi, '$1')
+            .replace(/(\d)\s+([MLHVCSQTAZ])/gi, '$1$2')
             // e.g.: <path d="M36 61 L33 68" /> => <path d="M36 61L33 68" />
 
             // ダブルクォートとスラッシュ のあいだの スペースを削除
@@ -213,7 +213,7 @@ function removeSpaces(svgString) {
         return optimizedPath
     })
 }
-//console.log(removeSpaces('<path d="M 36 61 L 33 68" />'))  // => <path d="M36 61L33 68"/>
+console.log(removeSpaces('<path d="M 36 61 L 33 68" />'))  // => <path d="M36 61L33 68"/>
 
 function restoreSpaces(svgString) {
     return svgString.replace(/(\sd="[^>]+>)/g, (match, pathData) => {  // Use \sd= to skip id=
