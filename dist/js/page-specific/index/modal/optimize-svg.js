@@ -45,8 +45,8 @@ return match ? Math.floor(match[1].length / 4) : 0})}
 function getCurrentPathModeIndentation(pathMode) {const svgString = decodeAsSelectedPathMode(pathMode)
 return getSvgIndentation(svgString)}
 function removeSpaces(svgString) {return svgString.replace(/(\sd="[^>]+>)/g, (match, pathData) => {const optimizedPath = pathData
-.replace(/([MLHVCSQTAZ])/gi, '$1')
-gi, '$1')
+.replace(/([MLHVCSQTAZ])\s+/gi, '$1')
+.replace(/(\d)\s+([MLHVCSQTAZ])/gi, '$1$2')
 .replace(/"\s+(\/)/g, '"$1')
 return optimizedPath})}
 function restoreSpaces(svgString) {return svgString.replace(/(\sd="[^>]+>)/g, (match, pathData) => {const restoredPath = pathData
