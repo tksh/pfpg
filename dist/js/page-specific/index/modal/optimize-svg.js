@@ -44,12 +44,16 @@ return lines.map(line => {const match = line.match(/^(\s*)/)
 return match ? Math.floor(match[1].length / 4) : 0})}
 function getCurrentPathModeIndentation(pathMode) {const svgString = decodeAsSelectedPathMode(pathMode)
 return getSvgIndentation(svgString)}
-function removeSpaces(svgString) {return svgString
-.replace(/(\d)\s+([ML])/g, '$1$2')
-.replace(/"\s+(\/)/g, '"$1')}
-function restoreSpaces(svgString) {return svgString
-.replace(/(\d)([ML])/g, '$1 $2')
-.replace(/"(\/)/g, '" $1')}
+function removeSpaces(svgString) {return svgString.replace(/(\sd="[^>]+>)/g, (match, pathData) => {const optimizedPath = pathData
+.replace(/([MLHVCSQTAZ])/gi, '$1')
+gi, '$1')
+.replace(/"\s+(\/)/g, '"$1')
+return optimizedPath})}
+function restoreSpaces(svgString) {return svgString.replace(/(\sd="[^>]+>)/g, (match, pathData) => {const restoredPath = pathData
+.replace(/([MLHVCSQTAZ])/gi, '$1 ')
+.replace(/(\d)([MLHVCSQTAZ])/gi, '$1 $2')
+.replace(/"(\/)/g, '" $1')
+return restoredPath})}
 function optimizeSvg(svgString, state) {let optimizedSvg = svgString
 for (const [functionName, isEnabled] of state) {if (isEnabled && typeof optimizeFunctions[functionName] === 'function') {optimizedSvg = optimizeFunctions[functionName](optimizedSvg)}}
 return optimizedSvg}

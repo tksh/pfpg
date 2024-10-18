@@ -14,7 +14,7 @@ const shapePath = shape === 'squircleSlimmed'
 ? `<rect width="100%" height="100%" />`
 : shape === 'circle'
 ? `<circle cx="50%" cy="50%" r="50%" />`
-: `<path d="M 0,${center}Q 0,0 ${center},0T ${gridSize},${center} ${center},${gridSize} 0,${center}" />`
+: `<path d="M 0,${center} Q 0,0 ${center},0 T ${gridSize},${center} ${center},${gridSize} 0,${center}" />`
 const patternForClippathShape = /<clipPath id="shape-to-trim">(\n?).*(\n?).*<\/clipPath>/g
 const removeLineBreaks = getState('removeLineBreaks')
 const newClippathSvg = removeLineBreaks
@@ -32,7 +32,7 @@ const eachSideWidthForNarrowing = ((gridSize / 100) * (widthNarrowness / 2))
 const left = roundToTwoDecimals(0 + eachSideWidthForNarrowing)
 const right = roundToTwoDecimals(gridSize - eachSideWidthForNarrowing)
 const topInflationAmount = roundToTwoDecimals(left - ((gridSize / 100) * topHeavyRatio))
-return `<path d="M ${left},${center}Q ${topInflationAmount},0 ${center},0T ${right},${center} ${center},${gridSize} ${left},${center}" />`}
+return `<path d="M ${left},${center} Q ${topInflationAmount},0 ${center},0 T ${right},${center} ${center},${gridSize} ${left},${center}" />`}
 function getCenter(gridSize) {const center = roundToTwoDecimals(gridSize / 2)
 return center}
 function getWidthNarrowness() {const widthNarrowness = getState('widthNarrowness')
