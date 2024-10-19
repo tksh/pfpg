@@ -213,7 +213,7 @@ function removeSpaces(svgString) {
         return optimizedPath
     })
 }
-console.log(removeSpaces('<path d="M 36 61 L 33 68" />'))  // => <path d="M36 61L33 68"/>
+//console.log(removeSpaces('<path d="M 36 61 L 33 68" />'))  // => <path d="M36 61L33 68"/>
 
 function restoreSpaces(svgString) {
     return svgString.replace(/(\sd="[^>]+>)/g, (match, pathData) => {  // Use \sd= to skip id=
