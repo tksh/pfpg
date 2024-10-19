@@ -183,9 +183,9 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
 
         // Optimize the SVG string using current three checkboxes status
         const svgOptState = new Map([
-            ['removeOpacity',  getState('removeOpacity') ],  // SVG optimization modal
+            ['removeOpacity',  getState('removeOpacity') ],      // SVG optimization modal
             ['removeLineBreaks', getState('removeLineBreaks')],  // SVG optimization modal
-            ['removeSpaces',   getState('removeSpaces')  ],  // SVG optimization modal
+            ['removeSpaces',   getState('removeSpaces')  ],      // SVG optimization modal
         ])
         const optimizedSvg = optimizeSvg(updatedSvg, svgOptState)
 
@@ -273,7 +273,7 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
         console.log('widthNarrowness: ', widthNarrowness)
         updateState('widthNarrowness', widthNarrowness)
         const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvgString())
-        svgStringElement.value = updatedSvg                              // Update textarea
+        svgStringElement.value = updatedSvg                             // Update textarea
         executeSvg2png({ target: { value: updatedSvg } }, resvgOption)  // Render to PNG
     })
 
@@ -282,7 +282,7 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
         console.log('topHeavyRatio: ', topHeavyRatio)
         updateState('topHeavyRatio', topHeavyRatio)
         const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvgString())
-        svgStringElement.value = updatedSvg                              // Update textarea
+        svgStringElement.value = updatedSvg                             // Update textarea
         executeSvg2png({ target: { value: updatedSvg } }, resvgOption)  // Render to PNG
     })
 
@@ -291,7 +291,7 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
     document.getElementById('shape-to-trim').addEventListener("change", (event) => {
 
         // 選択された値を取得
-        const shapeToTrim = event.target.value // square|circle|squircle|squircleSlimmed
+        const shapeToTrim = event.target.value  // square|circle|squircle|squircleSlimmed
         updateState('shapeToTrim', shapeToTrim)
 
         // 'squircleSlimmed'が 選ばれた時だけ表示される
@@ -309,7 +309,7 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
         const inputSvg = getSvgString()
         const updatedSvg = updateSvgWithSelectedShapePath(shapeToTrim, inputSvg)
 
-        svgStringElement.value = updatedSvg                              // Update textarea
+        svgStringElement.value = updatedSvg                             // Update textarea
         executeSvg2png({ target: { value: updatedSvg } }, resvgOption)  // Render to PNG
 
     })

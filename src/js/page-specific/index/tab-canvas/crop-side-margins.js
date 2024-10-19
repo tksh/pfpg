@@ -16,8 +16,8 @@ export
 // Change the viewBox size fit to Squircle, slimmed.
 function viewboxSlimmed(inputSvg) {
     const slimmedXW = getSlimmedViewboxXW(inputSvg)
-    //console.log('slimmedXW.get('x'): ', slimmedXW.get('x')) // e.g.: 1.55
-    //console.log('slimmedXW.get('w'): ', slimmedXW.get('w')) // e.g.: 27.9
+    console.log("slimmedXW.get('x'): ", slimmedXW.get('x')) // e.g.: 1.55
+    console.log("slimmedXW.get('w'): ", slimmedXW.get('w')) // e.g.: 27.9
 
     const viewboxValues = extractViewboxValues(inputSvg)
 
@@ -32,10 +32,15 @@ function viewboxSlimmed(inputSvg) {
 
 
 // Get the slimmed width size and 'x' position (= same number as how much reduced each sides)
+// - e.g.: Squircle / spaces un-removed       -> <path d="M 0 63.5 Q 0 0 63.5 0 T 127 63.5 63.5 127 0 63.5" />
+// - e.g.: Squircle, slimmed / spaces removed -> <path d="M6.35 63.5Q5.08 0 63.5 0T120.65 63.5 63.5 127 6.35 63.5"/>
 function getSlimmedViewboxXW(inputSvg) {
-    const patternToGetSquircleSlimmedPathStr = /<path d="M ([\d\.]+),.*Q.*T ([\d\.]+),/ // viewBox属性を抽出する正規表現
+
+    // 'M' と 'T' の直後の 1つの数値だけ を抽出する正規表現
+    // - (?:...) 非キャプチャグループ を使って 小数点以下の部分をキャプチャしない
+    const patternToGetSquircleSlimmedPathStr = /path d="M\s*(\d+(?:\.\d+)?)\s.*T\s*(\d+(?:\.\d+)?)/
     const matches = patternToGetSquircleSlimmedPathStr.exec(inputSvg)
-    console.log('matches: ', matches)       // e.g.: Array(3) [ '<path d="M 1.55,15.5Q 1.24,0 15.5,0T 29.45,', "1.55", "29.45" ]
+    console.log('matches: ', matches)       // e.g.: Array(3) [ '<path d="M 1.55 15.5Q 1.24 0 15.5 0T 29.45', "1.55", "29.45", ..]
     console.log('matches[1]: ', matches[1]) // e.g.: 1.55
     console.log('matches[2]: ', matches[2]) // e.g.: 29.45
 
@@ -49,6 +54,7 @@ function getSlimmedViewboxXW(inputSvg) {
 function extractViewboxValues(inputSvg) {
     // Use a regular expression to match the four number values in the viewBox string
     const match = inputSvg.match(/viewBox="([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)"/)
+    console.log('viewBox matches: ', match)
 
     // Check if the match was successful
     if (match && match.length === 5) {

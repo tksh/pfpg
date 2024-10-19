@@ -1,6 +1,7 @@
 import { tabSpace } from 'constants'
-import { getState, updateState} from 'state/url-state-manager'
-import { viewboxSlimmed, viewboxUnSlimmed, extractViewboxValues} from 'tab-canvas/crop-side-margins'
+import { tryRemoveSpaces } from 'modal/optimize-svg'
+import { getState, updateState } from 'state/url-state-manager'
+import { viewboxSlimmed, viewboxUnSlimmed, extractViewboxValues } from 'tab-canvas/crop-side-margins'
 import { roundToTwoDecimals } from 'utils/number-rounding'
 export
 { toggleDisplay, updateSvgWithSelectedShapePath}
@@ -15,11 +16,14 @@ const shapePath = shape === 'squircleSlimmed'
 : shape === 'circle'
 ? `<circle cx="50%" cy="50%" r="50%" />`
 : `<path d="M 0,${center} Q 0,0 ${center},0 T ${gridSize},${center} ${center},${gridSize} 0,${center}" />`
+const isSpacesRemoved = getState('removeSpaces')
+updateState('removeSpaces', isSpacesRemoved)
+const shapePathOptimized = tryRemoveSpaces(shapePath, isSpacesRemoved)
 const patternForClippathShape = /<clipPath id="shape-to-trim">(\n?).*(\n?).*<\/clipPath>/g
-const removeLineBreaks = getState('removeLineBreaks')
-const newClippathSvg = removeLineBreaks
-? inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">${shapePath}</clipPath>`)
-: inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">\n${tabSpace.repeat(3)}${shapePath}\n${tabSpace.repeat(2)}</clipPath>`)
+const isLineBreaksRemoved = getState('removeLineBreaks')
+const newClippathSvg = isLineBreaksRemoved
+? inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">${shapePathOptimized}</clipPath>`)
+: inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">\n${tabSpace.repeat(3)}${shapePathOptimized}\n${tabSpace.repeat(2)}</clipPath>`)
 const clippathAndViewboxUpdatedSvg = shape === 'squircleSlimmed'
 ? isCropSideMargins()
 ? viewboxSlimmed(newClippathSvg)
