@@ -10,7 +10,7 @@ const viewboxValues = extractViewboxValues(inputSvg)
 const newViewboxString = `viewBox="${slimmedXW.get('x')} ${viewboxValues.get('y')} ${slimmedXW.get('w')} ${viewboxValues.get('h')}"`
 const patternForViewboxStr = /viewBox="[^"]+"/
 return inputSvg.replace(patternForViewboxStr, newViewboxString)}
-function getSlimmedViewboxXW(inputSvg) {const patternToGetSquircleSlimmedPathStr = /<path d="M ([\d\.]+),.*Q.*T ([\d\.]+),/
+function getSlimmedViewboxXW(inputSvg) {const patternToGetSquircleSlimmedPathStr = /path d="M\s*(\d+(?:\.\d+)?)\s.*T\s*(\d+(?:\.\d+)?)/
 const matches = patternToGetSquircleSlimmedPathStr.exec(inputSvg)
 return new Map([['x', toFixedTrimmed(parseFloat(matches[1])) ],['w', toFixedTrimmed(parseFloat(matches[2] - matches[1]))]])}
 function extractViewboxValues(inputSvg) {const match = inputSvg.match(/viewBox="([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)"/)
