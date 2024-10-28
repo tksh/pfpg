@@ -6,6 +6,7 @@ export
     { countSvgSize
     , getSvgString
     , initDownloadButtons
+    , initButtonActionSelect
     }
 
 // Get the svg string from <textarea> element
@@ -101,9 +102,9 @@ function initDownloadButtons() {
         pngDownloadButton.addEventListener('click', downloadPng)
     }
 
-    const svgDownloadButton = document.getElementById('svg-download-button')
+    const svgDownloadButton = document.getElementById('svg-action-button')
     if (svgDownloadButton) {
-        svgDownloadButton.addEventListener('click', downloadSvg)
+        svgDownloadButton.addEventListener('click', executeActionForSvg)
     }
 }
 
@@ -182,17 +183,62 @@ function downloadSvg() {
 // SVGファイルサイズを ダウンロードボタンに 表示する関数
 function countSvgSize(svgString) {
     // バイトサイズを表示する button要素を取得
-    const svgDownloadButtonElement = document.getElementById("svg-download-button")
+    const svgDownloadButtonElement = document.getElementById("svg-action-button")
 
     // バイトサイズを計算して表示
     const svgSize = byteCount(svgString)
     const svgSizeAsKb = roundToOneDecimal(svgSize / 1024)
     console.log('SVG file size: ', svgSize)
-    svgDownloadButtonElement.innerHTML = `Download as SVG<br>(size: ${svgSizeAsKb} kb / ${svgSize} bytes)`
+
+    // Get current action type
+    const actionSelect = document.getElementById('action-select');
+    const selectedAction = actionSelect.value;
+
+    let actionText;
+    if (selectedAction === 'download') {
+        actionText = 'Download';
+    } else if (selectedAction === 'copy') {
+        actionText = 'Copy';
+    }
+
+    svgDownloadButtonElement.innerHTML = `${actionText} as SVG<br>(size: ${svgSizeAsKb} kb / ${svgSize} bytes)`;
 }
 
 // テキストのバイトサイズを計算する関数
 function byteCount(s) {
     // Blobオブジェクトを使ってUTF-8でのバイトサイズを取得
     return new Blob([s]).size
+}
+
+
+
+// クリップボードにテキストをコピーする関数
+async function copyToClipboard(text) {
+    try {
+        await navigator.clipboard.writeText(text);
+        console.log("SVG Text copied to clipboard");
+    } catch (error) {
+        console.error("Failed to copy SVG text: ", error);
+    }
+}
+
+// アクションを実行する関数
+function executeActionForSvg() {
+    const actionSelect = document.getElementById('action-select');
+    const selectedAction = actionSelect.value;
+
+    if (selectedAction === 'download') {
+        downloadSvg();
+    } else if (selectedAction === 'copy') {
+        const svgString = getSvgString();
+        copyToClipboard(svgString);
+    }
+}
+
+
+function initButtonActionSelect() {
+    // セレクトメニューの変更時にボタンのテキストを更新
+    document.getElementById('action-select').addEventListener('change', function () {
+        countSvgSize(getSvgString())
+    })
 }

@@ -281,7 +281,7 @@ button {
 }
 
 button#png-download-button,
-button#svg-download-button {
+button#svg-action-button {
     padding: 0 1rem;
     min-width: 70%;
 }

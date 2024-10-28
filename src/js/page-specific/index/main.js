@@ -37,6 +37,7 @@ import { initCheckerboardBgCheckbox }           from 'tab-ui/checkerboard-bg'
 import { initTextWrappingCheckbox }             from 'tab-ui/text-wrapping'
 import { initThemeColorSelect }                 from 'tab-ui/theme-color'
 import { initViewScalingSelect }                from 'tab-ui/view-scaling'
+import { initButtonActionSelect }               from 'download'
 import { getNumberOfGroups }                    from 'utils/get-number-of-groups'
 
 
@@ -461,6 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initViewScalingSelect()
     initCheckerboardBgCheckbox()
     initTextWrappingCheckbox()
+    initButtonActionSelect()
     initThemeColorSelect()
 
     // Apply the UI configuration values retrieved from url params.
