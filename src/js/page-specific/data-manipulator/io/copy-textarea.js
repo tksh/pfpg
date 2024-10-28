@@ -16,7 +16,7 @@ export function setupCopyButtons() {
             }, 3000)
           } else {
             console.log('Text copied to clipboard successfully.')
-            this.textContent = '✔️ Successfully copied !'
+            this.textContent = '✔️ Successfully copied!'
             setTimeout(() => {
               this.textContent = originalText
             }, 1500)

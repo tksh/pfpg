@@ -1,7 +1,8 @@
+import { getSvgString }                         from 'button/download-as-file'
+import { initDownloadButtons }                  from 'button/init-download-buttons'
+import { initButtonActionSelect }               from 'button/update-button-text'
 import { isOnDataManipulatorPage }              from 'common-utils/select-output-textarea'
 import { decodeUrlToSvg }                       from 'decode/decode'
-import { getSvgString
-       , initDownloadButtons }                  from 'download'
 import { adjustBox }                            from 'init/adjust-output-boxes-size'
 import { initTabs }                             from 'init/tab-setup'
 import { initSvgOptimizationModalToggle
@@ -37,7 +38,6 @@ import { initCheckerboardBgCheckbox }           from 'tab-ui/checkerboard-bg'
 import { initTextWrappingCheckbox }             from 'tab-ui/text-wrapping'
 import { initThemeColorSelect }                 from 'tab-ui/theme-color'
 import { initViewScalingSelect }                from 'tab-ui/view-scaling'
-import { initButtonActionSelect }               from 'download'
 import { getNumberOfGroups }                    from 'utils/get-number-of-groups'
 
 

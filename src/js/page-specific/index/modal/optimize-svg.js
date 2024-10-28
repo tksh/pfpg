@@ -1,6 +1,6 @@
 import { tabSpace }                 from 'constants'
-import { getSvgString
-       , updateButtonWithSvgSize}              from 'download'
+import { getSvgString }             from 'button/download-as-file'
+import { updateButtonWithSvgSize}   from 'button/update-button-text'
 import { updateState
        , getState}                  from 'state/url-state-manager'
 import { decodeAsSelectedPathMode } from 'tab-lines/path-mode'

@@ -1,5 +1,6 @@
-import { updateButtonWithSvgSize, updateButtonWithPngSize }         from 'download'
-import { extractViewboxValues } from 'tab-canvas/crop-side-margins'
+import { updateButtonWithSvgSize
+       , updateButtonWithPngSize } from 'button/update-button-text'
+import { extractViewboxValues }    from 'tab-canvas/crop-side-margins'
 // import { updateButtonWithPngSize }    from 'button/update-with-counted-size'
 
 export

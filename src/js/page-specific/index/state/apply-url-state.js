@@ -1,5 +1,5 @@
 import { SETTINGS_DEFAULTS }                    from 'constants'
-import { updateButtonWithSvgSize }                         from 'download'
+import { updateButtonWithSvgSize }              from 'button/update-button-text'
 import { getInitialOpacitySteps
        , calculateStepsFromTwoOpacities }       from 'init/initial-opacity-steps'
 import { tryRemoveOpacity
