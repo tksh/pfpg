@@ -1,5 +1,6 @@
 import { tabSpace } from 'constants'
-import { getSvgString, countSvgSize} from 'download'
+import { getSvgString } from 'button/download-as-file'
+import { updateButtonWithSvgSize} from 'button/update-button-text'
 import { updateState, getState} from 'state/url-state-manager'
 import { decodeAsSelectedPathMode } from 'tab-lines/path-mode'
 export
@@ -21,7 +22,7 @@ updateState(option.stateKey, true)} else {if (option.needsPathMode) {const pathM
 svgString = option.restoreFunction(svgString, pathMode)} else {svgString = option.restoreFunction(svgString)}
 updateState(option.stateKey, false)}
 document.querySelector('#svg-string').value = svgString
-countSvgSize(svgString)})}
+updateButtonWithSvgSize(svgString)})}
 function removeOpacity(svgString) {return svgString.replace(/\s(opacity|stroke-opacity)="1(\.0)?"/g, '')}
 function restoreOpacity(svgString) {return svgString.replace(/<g\b([^>]*)>/g, function(match, attributes) {if (!/\bstroke="[^"]*"/.test(attributes)) {return match;}
 let attrs = attributes.split(/\s+/).filter(attr => attr.trim() !== '')

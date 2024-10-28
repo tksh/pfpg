@@ -142,7 +142,11 @@
                 "utils/number-rounding":            "./js/page-specific/index/utils/number-rounding.js",
                 "utils/replace-at-index":           "./js/page-specific/index/utils/replace-at-index.js",
 
-                "download":                         "./js/page-specific/index/download.js",
+                "button/copy-to-clipboard": "./js/page-specific/index/button/copy-to-clipboard.js",
+                "button/download-as-file": "./js/page-specific/index/button/download-as-file.js",
+                "button/init-download-buttons": "./js/page-specific/index/button/init-download-buttons.js",
+                "button/update-button-text": "./js/page-specific/index/button/update-button-text.js",
+
                 "svg-to-png":                       "./js/page-specific/index/svg-to-png.js"
 
             }
@@ -395,6 +399,16 @@
                         </div>
                     </div>
 
+                    <!-- Button action -->
+                    <div class="opts">
+                        <div class="opts-cell">
+                            <label for="button-action">Button action: </label>
+                            <select id="button-action">
+                                <option value="download" selected>Download as file</option>
+                                <option value="copy">Copy to clipboard</option>
+                            </select>                        </div>
+                    </div>
+
                     <!-- Theme -->
                     <div class="opts">
                         <div class="opts-cell">
@@ -439,7 +453,7 @@
                     <img id="img" class="checker fit-to-display-area" alt="Output PNG" />
                 </div> <!-- End of img-box -->
                 <div class="download-button">
-                    <button id="png-download-button">Download as PNG</button>
+                    <button id="png-action-button">Download as PNG</button>
                 </div>
 
             </div> <!-- End of Output PNG cell -->
@@ -458,7 +472,7 @@
 
                 </div><!-- End of div textarea-box -->
                 <div class="download-button">
-                    <button id="svg-download-button">Download as SVG</button>
+                    <button id="svg-action-button">Download as SVG</button>
                 </div>
 
             </div> <!-- End of Input SVG cell -->

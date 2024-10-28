@@ -1,5 +1,5 @@
+import { updateButtonText, updateButtonWithSvgSize } from 'button/update-button-text'
 import { SETTINGS_DEFAULTS } from 'constants'
-import { countSvgSize } from 'download'
 import { getInitialOpacitySteps, calculateStepsFromTwoOpacities } from 'init/initial-opacity-steps'
 import { tryRemoveOpacity, tryRemoveLineBreaks, tryRemoveSpaces } from 'modal/optimize-svg'
 import { getState, updateState, getStateUrl } from 'state/url-state-manager'
@@ -53,6 +53,12 @@ toggleCheckerboardBg(isCheckerboardBg)
 const isTextWrapping = getState('textWrapping')
 document.getElementById('text-wrapping').checked = isTextWrapping
 toggleTextWrapping(isTextWrapping)
+const buttonAction = getState('buttonAction')
+document.getElementById('button-action').value = buttonAction
+const pngActionButton = document.getElementById('png-action-button');
+const svgActionButton = document.getElementById('svg-action-button');
+updateButtonText(buttonAction, pngActionButton)
+updateButtonText(buttonAction, svgActionButton)
 const themeColor = getStateUrl('themeColor') ? getStateUrl('themeColor') : getDefaultThemeViaPrefersColorScheme()
 updateState('themeColor', themeColor)
 document.getElementById('theme-color').value = themeColor
@@ -75,5 +81,5 @@ const removeSpacesApplied = tryRemoveSpaces(removeLineBreaksApplied, isSpacesRem
 document.getElementById('remove-spaces').checked = isSpacesRemoved
 document.querySelector('#before-remove-spaces').classList.toggle('option-applied', !isSpacesRemoved)
 document.querySelector('#after-remove-spaces').classList.toggle('option-applied', isSpacesRemoved)
-countSvgSize(removeSpacesApplied)
+updateButtonWithSvgSize(removeSpacesApplied)
 return removeSpacesApplied}

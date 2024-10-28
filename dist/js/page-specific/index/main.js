@@ -1,6 +1,8 @@
+import { getSvgString } from 'button/download-as-file'
+import { initDownloadButtons } from 'button/init-download-buttons'
+import { initButtonActionSelect } from 'button/update-button-text'
 import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
 import { decodeUrlToSvg } from 'decode/decode'
-import { getSvgString, initDownloadButtons } from 'download'
 import { adjustBox } from 'init/adjust-output-boxes-size'
 import { initTabs } from 'init/tab-setup'
 import { initSvgOptimizationModalToggle, initResetSettingsModalToggle } from 'modal/modal-toggle'
@@ -124,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {initDownloadButtons()
 initViewScalingSelect()
 initCheckerboardBgCheckbox()
 initTextWrappingCheckbox()
+initButtonActionSelect()
 initThemeColorSelect()
 applyUiConfiguration()
 initWidthValidatorListener()

@@ -1,4 +1,4 @@
-import { getSvgString } from 'download'
+import { getSvgString } from 'button/download-as-file'
 import { updateState } from 'state/url-state-manager'
 import { executeSvg2png } from 'svg-to-png'
 import { getGroupColorsAsJoinedHex } from 'tab-lines/encode-colors-as-hex'
