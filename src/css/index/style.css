@@ -281,7 +281,7 @@ button {
     font-size: .9rem;
 }
 
-button#png-download-button,
+button#png-action-button,
 button#svg-action-button {
     --button-height: 2.5rem; /* ボタン全体の高さ */
     height: var(--button-height);

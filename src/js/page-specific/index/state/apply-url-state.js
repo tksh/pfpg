@@ -1,5 +1,5 @@
 import { SETTINGS_DEFAULTS }                    from 'constants'
-import { countSvgSize }                         from 'download'
+import { updateButtonWithSvgSize }                         from 'download'
 import { getInitialOpacitySteps
        , calculateStepsFromTwoOpacities }       from 'init/initial-opacity-steps'
 import { tryRemoveOpacity
@@ -178,7 +178,7 @@ function applySvgOptimization(svgString) {
 
 
     // Count the size of the updated SVG string and display it on the SVG download button
-    countSvgSize(removeSpacesApplied)
+    updateButtonWithSvgSize(removeSpacesApplied)
 
     return removeSpacesApplied
 }

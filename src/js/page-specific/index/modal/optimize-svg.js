@@ -1,6 +1,6 @@
 import { tabSpace }                 from 'constants'
 import { getSvgString
-       , countSvgSize}              from 'download'
+       , updateButtonWithSvgSize}              from 'download'
 import { updateState
        , getState}                  from 'state/url-state-manager'
 import { decodeAsSelectedPathMode } from 'tab-lines/path-mode'
@@ -102,7 +102,7 @@ function updateSvg() {
         // Update the textarea with optimized text
         document.querySelector('#svg-string').value = svgString
         // Count the size of the updated SVG string and display it on the SVG download button
-        countSvgSize(svgString)
+        updateButtonWithSvgSize(svgString)
     })
 }
 

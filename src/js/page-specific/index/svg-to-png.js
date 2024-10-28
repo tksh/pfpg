@@ -1,6 +1,6 @@
-import { countSvgSize }         from 'download'
+import { updateButtonWithSvgSize, updateButtonWithPngSize }         from 'download'
 import { extractViewboxValues } from 'tab-canvas/crop-side-margins'
-import { roundToOneDecimal }    from 'utils/number-rounding'
+// import { updateButtonWithPngSize }    from 'button/update-with-counted-size'
 
 export
     { executeSvg2png
@@ -28,7 +28,7 @@ async function executeSvg2png(event, resvgOption) {
 
     // 処理時間を表示する HTML要素を 取得
     const renderingStatusElements = new Map([
-        ['pngDownloadButton', document.getElementById("png-download-button")], // <button> at below of output image
+        ['pngActionButton', document.getElementById("png-action-button")], // <button> at below of output image
         ['lastRenderingTimeP', document.getElementById("last-rendering-time")] // <p> at bottom of 'Render' tab
     ])
 
@@ -50,7 +50,7 @@ async function executeSvg2png(event, resvgOption) {
         })
 
     // SVGファイルサイズを ダウンロードボタンに 表示する
-    countSvgSize(svgString)
+    updateButtonWithSvgSize(svgString)
 }
 
 // Rendering from SVG to PNG with options
@@ -100,26 +100,16 @@ async function svg2png(svgString, resvgOption, hasCrop) {
     // console.log('Simplified svg string: \n', resvgJS.toString()) // <svg>...</svg>
 
 
+    // Indicate the PNG data size in html
 
-    // Get the PNG data size to indicate in html
-
-    // PNGデータの長さ（バイト数）を取得
-    const pngSize = pngBuffer.length
-    const pngSizeAsKb = roundToOneDecimal(pngSize / 1024)
+    // PNGファイルサイズを ダウンロードボタンに 表示する
+    updateButtonWithPngSize(pngBuffer)
 
     // PNGピクセルサイズを <div id="png-info">要素に 表示する
     document.querySelector('#png-info').textContent = `Rendered PNG pixel size: ${pngData.width} x ${pngData.height}`
 
-    // PNGファイルサイズを ダウンロードボタンに 表示する
 
-    // 挿入したいタグを含めたテキスト (改行を 'Download as PNG' の直後にする)
-    const pngDownloadSizeText = `Download as PNG<br>(size: ${pngSizeAsKb} kb / ${pngSize} bytes)`
-
-    // button要素 を取得し innerHTML を変更する
-    document.getElementById("png-download-button").innerHTML = pngDownloadSizeText
-
-
-    // SVG viewBox size to indicate in html
+    // Indicate the SVG viewBox size in html
 
     // resvg-js default outputs the w and h size as integer
     // document.querySelector('#svg-info').textContent = 'Source SVG viewbox: ' + resvgJS.width + ' x ' + resvgJS.height
@@ -133,7 +123,7 @@ async function svg2png(svgString, resvgOption, hasCrop) {
 // Processing from SVG to PNG and measuring the time
 async function measureSvg2pngTime(svgString, resvgOption, hasCrop, renderingStatusElements) {
     // 処理中メッセージを表示
-    await updateRenderingStatus("Now rendering ...<br> Please wait a moment :)", renderingStatusElements.get('pngDownloadButton'))
+    await updateRenderingStatus("Now rendering ...<br> Please wait a moment :)", renderingStatusElements.get('pngActionButton'))
 
     // setTimeoutを使用して 非同期処理を実行
     return new Promise((resolve, reject) => {
@@ -165,7 +155,7 @@ async function measureSvg2pngTime(svgString, resvgOption, hasCrop, renderingStat
             } catch (error) {
                 // エラー処理
                 console.error('An error occurred during the processing of svg2png:', error)
-                await updateRenderingStatus("An error occurred", pngDownloadButtonElement)
+                await updateRenderingStatus("An error occurred", pngActionButtonElement)
                 reject(error)
             }
         }, 0) // 0ミリ秒後に実行

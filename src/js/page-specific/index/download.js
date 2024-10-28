@@ -3,10 +3,12 @@ import { getGroupColorsAsJoinedHex } from 'tab-lines/encode-colors-as-hex'
 import { roundToOneDecimal }         from 'utils/number-rounding'
 
 export
-    { countSvgSize
+    { updateButtonWithSvgSize
+    , updateButtonWithPngSize
     , getSvgString
     , initDownloadButtons
     , initButtonActionSelect
+    , getActionText
     }
 
 // Get the svg string from <textarea> element
@@ -97,20 +99,20 @@ function getCurrentStatus() {
 // Initialize download button for SVG and PNG
 
 function initDownloadButtons() {
-    const pngDownloadButton = document.getElementById('png-download-button')
-    if (pngDownloadButton) {
-        pngDownloadButton.addEventListener('click', downloadPng)
+    const pngActionButton = document.getElementById('png-action-button')
+    if (pngActionButton) {
+        pngActionButton.addEventListener('click', executeActionForPng)
     }
 
-    const svgDownloadButton = document.getElementById('svg-action-button')
-    if (svgDownloadButton) {
-        svgDownloadButton.addEventListener('click', executeActionForSvg)
+    const svgActionButton = document.getElementById('svg-action-button')
+    if (svgActionButton) {
+        svgActionButton.addEventListener('click', executeActionForSvg)
     }
 }
 
 // Download as PNG
 
-function downloadPng() {
+function downloadPngAsFile() {
 
     // Get a Blob URL from rasterized img
     const imgElem = document.getElementById('img')
@@ -145,9 +147,42 @@ function downloadPng() {
 
 
 
+// クリップボードに PNG画像 をコピーする関数
+async function copyPngToClipboard() {
+    try {
+        const imgElem = document.getElementById('img');
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = imgElem.naturalWidth;
+        canvas.height = imgElem.naturalHeight;
+        ctx.drawImage(imgElem, 0, 0);
+
+        canvas.toBlob(async (blob) => {
+            await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+            console.log("PNG image copied to clipboard");
+
+            const pngActionButtonElement = document.getElementById("png-action-button");
+            const originalText = pngActionButtonElement.innerHTML;
+
+            pngActionButtonElement.textContent = '✔️ Successfully copied !';
+            pngActionButtonElement.classList.add('success-message');
+
+            setTimeout(() => {
+                pngActionButtonElement.innerHTML = originalText;
+                pngActionButtonElement.classList.remove('success-message');
+            }, 1500);
+        });
+
+    } catch (error) {
+        console.error("Failed to copy PNG image: ", error);
+    }
+}
+
+
 // Download as SVG
 
-function downloadSvg() {
+function downloadSvgAsFile() {
 
     const inputSvg = getSvgString()
     const blob = new Blob([inputSvg], { type: 'image/svg+xml' })
@@ -180,42 +215,63 @@ function downloadSvg() {
 // e.g.: 202404_001-v_0_0_31_31-g_000-p_absSep-b_FFF-t_square-r_crispEdges.svg
 
 
-// SVGファイルサイズを ダウンロードボタンに 表示する関数
-function countSvgSize(svgString) {
-    // バイトサイズを表示する button要素を取得
-    const svgDownloadButtonElement = document.getElementById("svg-action-button")
 
-    // バイトサイズを計算して表示
-    const svgSize = byteCount(svgString)
-    const svgSizeAsKb = roundToOneDecimal(svgSize / 1024)
-    console.log('SVG file size: ', svgSize)
+// PNG/SVG ファイルサイズを ダウンロードボタンに 表示する関数
 
-    // Get current action type
-    const actionSelect = document.getElementById('button-action');
-    const selectedAction = actionSelect.value;
-
-    let actionText;
-    if (selectedAction === 'download') {
-        actionText = 'Download';
-    } else if (selectedAction === 'copy') {
-        actionText = 'Copy';
-    }
-
-    svgDownloadButtonElement.innerHTML = `${actionText} as SVG<br>(size: ${svgSizeAsKb} kb / ${svgSize} bytes)`;
-}
-
-// テキストのバイトサイズを計算する関数
+// SVGテキストのバイトサイズを計算する関数
 function byteCount(s) {
     // Blobオブジェクトを使ってUTF-8でのバイトサイズを取得
     return new Blob([s]).size
 }
 
+function updateButtonWithSvgSize(svgString) {
+    // サイズを表示する button要素を取得
+    const svgActionButtonElement = document.getElementById("svg-action-button")
+
+    // サイズを計算して表示
+    const svgSize = byteCount(svgString)
+    const svgSizeAsKb = roundToOneDecimal(svgSize / 1024)
+    console.log('SVG file size: ', svgSize, svgSizeAsKb)
+
+    // Get current action type as string
+    const actionText = getActionText()
+
+    svgActionButtonElement.innerHTML = `${actionText} as SVG<br>(size: ${svgSizeAsKb} kb / ${svgSize} bytes)`;
+}
+
+function updateButtonWithPngSize(pngBuffer) {
+    // サイズを表示する button要素を取得
+    const pngActionButtonElement = document.getElementById("png-action-button")
+
+    // PNGデータの長さ（バイト数）を取得
+    const pngSize = pngBuffer.length
+    const pngSizeAsKb = roundToOneDecimal(pngSize / 1024)
+    console.log('PNG file size: ', pngSize, pngSizeAsKb)
+
+    // Get current action type as string
+    const actionText = getActionText()
+
+    pngActionButtonElement.innerHTML = `${actionText} as PNG<br>(size: ${pngSizeAsKb} kb / ${pngSize} bytes)`;
+}
+
+// Get current action type as string
+function getActionText() {
+    const actionSelect = document.getElementById('button-action');
+    const selectedAction = actionSelect.value;
+
+    if (selectedAction === 'download') {
+        return 'Download';
+    } else if (selectedAction === 'copy') {
+        return 'Copy';
+    }
+}
 
 
-// クリップボードにテキストをコピーする関数
-async function copyToClipboard(text) {
+
+// クリップボードに SVGテキスト をコピーする関数
+async function copySvgToClipboard() {
     try {
-        await navigator.clipboard.writeText(text);
+        await navigator.clipboard.writeText(getSvgString());
         console.log("SVG Text copied to clipboard");
 
         const svgActionButtonElement = document.getElementById("svg-action-button")
@@ -235,23 +291,58 @@ async function copyToClipboard(text) {
     }
 }
 
+
 // アクションを実行する関数
+
 function executeActionForSvg() {
     const actionSelect = document.getElementById('button-action');
     const selectedAction = actionSelect.value;
 
     if (selectedAction === 'download') {
-        downloadSvg();
+        downloadSvgAsFile();
     } else if (selectedAction === 'copy') {
-        const svgString = getSvgString();
-        copyToClipboard(svgString);
+        copySvgToClipboard();
+    }
+}
+
+function executeActionForPng() {
+    const actionSelect = document.getElementById('button-action');
+    const selectedAction = actionSelect.value;
+
+    if (selectedAction === 'download') {
+        downloadPngAsFile();
+    } else if (selectedAction === 'copy') {
+        copyPngToClipboard();
     }
 }
 
 
 function initButtonActionSelect() {
     // セレクトメニューの変更時にボタンのテキストを更新
-    document.getElementById('button-action').addEventListener('change', function () {
-        countSvgSize(getSvgString())
+    document.getElementById('button-action').addEventListener('change', (event) => {
+
+    // Selected action value: 'download' or 'copy'
+    const selectedAction = event.target.value
+
+    // ボタン要素を取得
+    const pngActionButton = document.getElementById('png-action-button');
+    const svgActionButton = document.getElementById('svg-action-button');
+
+    updateButtonText(selectedAction, pngActionButton)
+    updateButtonText(selectedAction, svgActionButton)
     })
+}
+
+function updateButtonText(selectedAction, button) {
+    const buttonText = button.innerHTML;
+
+    // "Download" または "Copy" を含む部分を探す
+    const regex = /(Download|Copy)/i;
+    const match = buttonText.match(regex);
+
+    if (match) {
+        // マッチした部分を置き換える
+        const replacement = selectedAction === 'download' ? 'Download' : 'Copy';
+        button.innerHTML = buttonText.replace(match[0], replacement);
+    }
 }
