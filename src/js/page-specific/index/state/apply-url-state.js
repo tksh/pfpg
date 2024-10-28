@@ -1,5 +1,6 @@
+import { updateButtonText
+       , updateButtonWithSvgSize }              from 'button/update-button-text'
 import { SETTINGS_DEFAULTS }                    from 'constants'
-import { updateButtonWithSvgSize }              from 'button/update-button-text'
 import { getInitialOpacitySteps
        , calculateStepsFromTwoOpacities }       from 'init/initial-opacity-steps'
 import { tryRemoveOpacity
@@ -127,6 +128,16 @@ function applyUiConfiguration() {
     const isTextWrapping = getState('textWrapping')  // bool
     document.getElementById('text-wrapping').checked = isTextWrapping
     toggleTextWrapping(isTextWrapping)
+
+    ///////////////////////////// buttonAction /////////////////////////////
+    const buttonAction = getState('buttonAction')  // 'download'|'copy'
+    document.getElementById('button-action').value = buttonAction
+    // Get the button elements, PNG and SVG
+    const pngActionButton = document.getElementById('png-action-button');
+    const svgActionButton = document.getElementById('svg-action-button');
+    // Update the button innerHtml as selected action
+    updateButtonText(buttonAction, pngActionButton)
+    updateButtonText(buttonAction, svgActionButton)
 
     ///////////////////////////// themeColor /////////////////////////////
     const themeColor = getStateUrl('themeColor') ? getStateUrl('themeColor') : getDefaultThemeViaPrefersColorScheme()

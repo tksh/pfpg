@@ -1,7 +1,9 @@
-import { roundToOneDecimal }         from 'utils/number-rounding'
+import { updateState }       from 'state/url-state-manager'
+import { roundToOneDecimal } from 'utils/number-rounding'
 
 export
     { initButtonActionSelect
+    , updateButtonText
     , updateButtonWithSvgSize
     , updateButtonWithPngSize
     }
@@ -12,18 +14,22 @@ function initButtonActionSelect() {
     document.getElementById('button-action').addEventListener('change', (event) => {
 
         // Selected action value: 'download' or 'copy'
-        const selectedAction = event.target.value
+        const buttonAction = event.target.value
 
-        // ボタン要素を取得
+        // Update the state
+        updateState('buttonAction', buttonAction)
+
+        // Get the button elements, PNG and SVG
         const pngActionButton = document.getElementById('png-action-button');
         const svgActionButton = document.getElementById('svg-action-button');
 
-        updateButtonText(selectedAction, pngActionButton)
-        updateButtonText(selectedAction, svgActionButton)
+        // Update the button innerHtml as selected action
+        updateButtonText(buttonAction, pngActionButton)
+        updateButtonText(buttonAction, svgActionButton)
     })
 }
 
-function updateButtonText(selectedAction, button) {
+function updateButtonText(buttonAction, button) {
     const buttonText = button.innerHTML;
 
     // "Download" または "Copy" を含む部分を探す
@@ -32,7 +38,7 @@ function updateButtonText(selectedAction, button) {
 
     if (match) {
         // マッチした部分を置き換える
-        const replacement = selectedAction === 'download' ? 'Download' : 'Copy';
+        const replacement = buttonAction === 'download' ? 'Download' : 'Copy';
         button.innerHTML = buttonText.replace(match[0], replacement);
     }
 }
@@ -45,11 +51,11 @@ function updateButtonText(selectedAction, button) {
 // Get current action type as string
 function getActionText() {
     const actionSelect = document.getElementById('button-action');
-    const selectedAction = actionSelect.value;
+    const buttonAction = actionSelect.value;
 
-    if (selectedAction === 'download') {
+    if (buttonAction === 'download') {
         return 'Download';
-    } else if (selectedAction === 'copy') {
+    } else if (buttonAction === 'copy') {
         return 'Copy';
     }
 }

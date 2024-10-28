@@ -118,5 +118,6 @@ export const SETTINGS_DEFAULTS = new Map([
     ['viewScaling',      'fit'],                   // UI tab |  13   | String | 'fit', 'actual'
     ['checkerboardBg',   true],                    // UI tab |  14   | Bool   | true, false
     ['textWrapping',     true],                    // UI tab |  15   | Bool   | true, false
-    ['themeColor',       undefined],               // UI tab |  16   | String | 'white', 'light', 'dark', 'black'
+    ['buttonAction',     'download'],              // UI tab |  16   | String | 'download', 'copy'
+    ['themeColor',       undefined],               // UI tab |  17   | String | 'white', 'light', 'dark', 'black'
 ])
