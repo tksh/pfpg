@@ -191,7 +191,7 @@ function countSvgSize(svgString) {
     console.log('SVG file size: ', svgSize)
 
     // Get current action type
-    const actionSelect = document.getElementById('action-select');
+    const actionSelect = document.getElementById('button-action');
     const selectedAction = actionSelect.value;
 
     let actionText;
@@ -217,14 +217,27 @@ async function copyToClipboard(text) {
     try {
         await navigator.clipboard.writeText(text);
         console.log("SVG Text copied to clipboard");
-    } catch (error) {
+
+        const svgActionButtonElement = document.getElementById("svg-action-button")
+        const originalHtml = svgActionButtonElement.innerHTML
+
+        // 成功メッセージを表示し、success-message クラスを追加
+        svgActionButtonElement.textContent = '✔️ Successfully copied !'
+        svgActionButtonElement.classList.add('success-message');
+
+        setTimeout(() => {
+                svgActionButtonElement.innerHTML = originalHtml
+                svgActionButtonElement.classList.remove('success-message')
+            }, 1500)
+
+        } catch (error) {
         console.error("Failed to copy SVG text: ", error);
     }
 }
 
 // アクションを実行する関数
 function executeActionForSvg() {
-    const actionSelect = document.getElementById('action-select');
+    const actionSelect = document.getElementById('button-action');
     const selectedAction = actionSelect.value;
 
     if (selectedAction === 'download') {
@@ -238,7 +251,7 @@ function executeActionForSvg() {
 
 function initButtonActionSelect() {
     // セレクトメニューの変更時にボタンのテキストを更新
-    document.getElementById('action-select').addEventListener('change', function () {
+    document.getElementById('button-action').addEventListener('change', function () {
         countSvgSize(getSvgString())
     })
 }

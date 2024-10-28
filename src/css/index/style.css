@@ -278,12 +278,19 @@ ul {
 button {
     background-color: var(--color-button-bg);
     border-color: var(--color-button-border);
+    font-size: .9rem;
 }
 
 button#png-download-button,
 button#svg-action-button {
-    padding: 0 1rem;
+    --button-height: 2.5rem; /* ボタン全体の高さ */
+    height: var(--button-height);
     min-width: 70%;
+}
+
+button#svg-action-button.success-message {
+    line-height: var(--button-height)
+    /* 改行のない文を縦にセンタリングするときは、line-heightを親要素のheightに合わせる */
 }
 
 .download-button {
