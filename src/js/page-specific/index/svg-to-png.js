@@ -1,7 +1,6 @@
 import { updateButtonWithSvgSize
        , updateButtonWithPngSize } from 'button/update-button-text'
 import { extractViewboxValues }    from 'tab-canvas/crop-side-margins'
-// import { updateButtonWithPngSize }    from 'button/update-with-counted-size'
 
 export
     { executeSvg2png
@@ -97,23 +96,34 @@ async function svg2png(svgString, resvgOption, hasCrop) {
         new Blob([pngBuffer], { type: 'image/png' })
     )
 
-    // Outputs the Micro SVG (usvg) strings
+
+    // Option: You can get the Micro SVG (usvg) strings like below
     // console.log('Simplified svg string: \n', resvgJS.toString()) // <svg>...</svg>
 
 
-    // Indicate the PNG data size in html
+    // Update the size info in HTML
 
-    // PNGファイルサイズを ダウンロードボタンに 表示する
+    // PNG file size on the download button
     updateButtonWithPngSize(pngBuffer)
 
+    // PNG pixel size and SVG viewBox size on the <div id="xxx-info"> elements
+    updatePngInfo(pngData)
+    updateSvgInfo(svgString)
+}
+
+function updatePngInfo(pngData) {
     // PNGピクセルサイズを <div id="png-info">要素に 表示する
     document.querySelector('#png-info').textContent = `Rendered PNG pixel size: ${pngData.width} x ${pngData.height}`
+}
 
+function updateSvgInfo(svgString) {
+    // Indicate the SVG viewBox size in HTML
 
-    // Indicate the SVG viewBox size in html
-
-    // resvg-js default outputs the w and h size as integer
+    // The resvg-js library outputs the width and height as integers by default, so the code below works fine:
     // document.querySelector('#svg-info').textContent = 'Source SVG viewbox: ' + resvgJS.width + ' x ' + resvgJS.height
+
+    // However, when 'Crop side margins:' is applied in the Canvas tab, the viewBox size values can be floats, not just integers.
+    // Therefore, we need to extract the size values from the SVG string using a regular expression, as shown below.
 
     // Outputs the viewBox size as float to indicate at #svg-info <textarea>
     const viewboxValues = extractViewboxValues(svgString) // e.g: Map(4) {'x' => 0, 'y' => 0, 'w' => 31, 'h' => 31}
