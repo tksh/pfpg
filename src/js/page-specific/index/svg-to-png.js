@@ -53,32 +53,13 @@ async function executeSvg2png(event, resvgOption) {
     updateButtonWithSvgSize(svgString)
 }
 
+
 // Rendering from SVG to PNG with options
 async function svg2png(svgString, resvgOption, hasCrop) {
 
     // Create the Resvg object
     const resvgJS = new resvg.Resvg(svgString, resvgOption)
     console.log('resvgJS: ', resvgJS)
-
-    // SVG内に含まれる外部リンクの画像を取得して解決する (Un-used)
-    const resolved = await Promise.all(
-        resvgJS.imagesToResolve().map(async (url) => {
-            console.log('image url', url)
-            const img = await fetch(url)
-            const buffer = await img.arrayBuffer()
-            // const MIME = img.headers.get('Content-Type')
-            return {
-                url,
-                buffer: new Uint8Array(buffer),
-            }
-        }),
-    )
-    if (resolved.length > 0) {
-        for (const result of resolved) {
-            const { url, buffer } = result
-            resvgJS.resolveImage(url, buffer)
-        }
-    }
 
     // Crop by BBox (Un-used)
     const innerBBox = resvgJS.innerBBox()
@@ -133,44 +114,39 @@ function updateSvgInfo(svgString) {
 
 // Processing from SVG to PNG and measuring the time
 async function measureSvg2pngTime(svgString, resvgOption, hasCrop, renderingStatusElements) {
-    // 処理中メッセージを表示
-    await updateRenderingStatus("Now rendering ...<br> Please wait a moment :)", renderingStatusElements.get('pngActionButton'))
+    try {
+        // 処理中メッセージを表示
+        await updateRenderingStatus("Now rendering ...<br> Please wait a moment :)", renderingStatusElements.get('pngActionButton'));
 
-    // setTimeoutを使用して 非同期処理を実行
-    return new Promise((resolve, reject) => {
-        setTimeout(async () => {
-            // 開始時刻を記録
-            const startTime = performance.now()
-            console.log('svg2png startTime: ', startTime)
+        // 開始時刻を記録
+        const startTime = performance.now();
+        console.log('svg2png startTime: ', startTime);
 
-            try {
-                // svg2png関数を呼び出す
-                const result = await svg2png(svgString, resvgOption, hasCrop)
+        // svg2png関数を呼び出す
+        const result = await svg2png(svgString, resvgOption, hasCrop);
 
-                // 終了時刻を記録
-                const endTime = performance.now()
-                console.log('svg2png endTime: ', endTime)
+        // 終了時刻を記録
+        const endTime = performance.now();
+        console.log('svg2png endTime: ', endTime);
 
-                // 処理時間を計算
-                const elapsedTime = Math.floor(endTime - startTime)
+        // 処理時間を計算
+        const elapsedTime = Math.floor(endTime - startTime);
 
-                // 処理時間をコンソールに出力
-                console.log(`svg2png rendering time: ${elapsedTime} ms`)
+        // 処理時間をコンソールに出力
+        console.log(`svg2png rendering time: ${elapsedTime} ms`);
 
-                // 処理完了メッセージを表示
-                await updateRenderingStatus(`Last rendering time: ${elapsedTime} milliseconds`, renderingStatusElements.get('lastRenderingTimeP'))
+        // 処理完了メッセージを表示
+        await updateRenderingStatus(`Last rendering time: ${elapsedTime} milliseconds`, renderingStatusElements.get('lastRenderingTimeP'));
 
-                // 処理結果を返す
-                resolve(result)
+        // 処理結果を返す
+        return result;
 
-            } catch (error) {
-                // エラー処理
-                console.error('An error occurred during the processing of svg2png:', error)
-                await updateRenderingStatus("An error occurred", pngActionButtonElement)
-                reject(error)
-            }
-        }, 0) // 0ミリ秒後に実行
-    })
+    } catch (error) {
+        // エラー処理
+        console.error('An error occurred during the processing of svg2png:', error);
+        await updateRenderingStatus("An error occurred", renderingStatusElements.get('pngActionButton'));
+        throw error;
+    }
 }
 
 // Update .innerHtml text
