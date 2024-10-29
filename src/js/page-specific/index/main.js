@@ -29,10 +29,9 @@ import { changeOpacitySelectOptionsAsNewStep
 import { decodeAsSelectedPathMode
        , recoverCurrentGroupColorsValues
        , recoverCurrentOptionValue }            from 'tab-lines/path-mode'
-import { adjustWidthNum
-       , syncWidthNum }                         from 'tab-render/sync-number-and-range'
 import { replaceShapeRendering }                from 'tab-render/shape-rendering'
-import { initWidthValidatorListener }           from 'tab-render/width-pixel-size'
+import { initWidthPixelSizeInputElements
+       , initWidthValidatorListener }           from 'tab-render/width-pixel-size'
 import { initCheckerboardBgCheckbox }           from 'tab-ui/checkerboard-bg'
 import { initTextWrappingCheckbox }             from 'tab-ui/text-wrapping'
 import { initThemeColorSelect }                 from 'tab-ui/theme-color'
@@ -82,6 +81,9 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
 
 
 
+    // Add event listeners
+
+
     // Options for 'Lines' tab /////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////
@@ -92,7 +94,6 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
     addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke')
     addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'opacity')
     addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke-opacity')
-
 
     ///////// Group colors: 'stroke', 'opacity' and 'stroke-opacity' /////////
     //////////////////////////////////////////////////////////////////////////
@@ -211,7 +212,7 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
 
 
     //////////////////////////////////////////////////////////////////////////
-    /////////////////////////////// Color format ////////////////////////////////
+    ///////////////////////////// Color format ///////////////////////////////
 
     //  Event listeners for 'Color format' selection changes
     document.getElementById("color-format").addEventListener("change", (event) => {
@@ -241,7 +242,7 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
         // because the color-format does not affect the appearance of the artwork.
     })
 
-    /////////////////////////////// Color format ////////////////////////////////
+    ///////////////////////////// Color format ///////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
 
@@ -345,47 +346,6 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
     //////////////////////////////////////////////////////////////////////////
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //////////////////////////// Width pixel size ////////////////////////////
-
-    // Function to update resvgOption and convert SVG
-    const updateAndConvert = (value) => {
-        console.log("Updated value of 'Width pixel size':", value)
-        updateState('widthPixelSize', value)  // グローバルステート更新
-
-        // update the 'resvgOption'
-        resvgOption.fitTo.value = parseInt(value, 10)
-
-        executeSvg2png({ target: { value: getSvgString() } }, resvgOption)
-    }
-
-    // Event listener for both png-size-number and png-size-range
-    const pngSizeElement = (event) => {
-        syncWidthNum(event.target)
-        updateAndConvert(event.target.value)
-    }
-
-    // Function to handle button clicks
-    const handleButtonClick = (step) => {
-        const value = adjustWidthNum(step)
-        if (value !== null) {
-            updateAndConvert(value)
-        }
-    }
-
-    // Attach event listeners
-
-    // input-box and slider
-    document.querySelector('#png-size-number').addEventListener('change', pngSizeElement)
-    document.querySelector('#png-size-range').addEventListener('change', pngSizeElement)
-    // Increment and decrement buttons
-    document.querySelector('#width-size-dec').addEventListener('click', () => handleButtonClick(-1))
-    document.querySelector('#width-size-inc').addEventListener('click', () => handleButtonClick(1))
-
-    //////////////////////////// Width pixel size ////////////////////////////
-    //////////////////////////////////////////////////////////////////////////
-
-
 
     // Layout /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -420,6 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
     applyUiConfiguration()
 
     // Tab - Render
+    initWidthPixelSizeInputElements()
     initWidthValidatorListener()
 
     // Get first tab ('Lines') activated
