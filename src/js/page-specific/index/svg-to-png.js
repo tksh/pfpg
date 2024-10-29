@@ -32,12 +32,12 @@ async function executeSvg2png(event, resvgOption) {
         ['lastRenderingTimeP', document.getElementById("last-rendering-time")] // <p> at bottom of 'Render' tab
     ])
 
-    // Arguments for rendering
+
+    // Input SVG string
     const svgString = event.target.value.trim() // SVG文字列 / '.trim()' = 文字列の両端の空白を削除
-    const hasCrop = document.querySelector('#crop-by-bbox').checked // 'Crop by BBox' チェックボックスがチェックされている場合は true を チェックされていない場合は false を 返す
 
     // Processing from SVG to PNG and measuring the time
-    measureSvg2pngTime(svgString, resvgOption, hasCrop, renderingStatusElements)
+    measureSvg2pngTime(svgString, resvgOption, renderingStatusElements)
         .then((result) => {
             console.log('result: ', result) // undefined
 
@@ -49,24 +49,18 @@ async function executeSvg2png(event, resvgOption) {
             console.error('An error occurred during the processing of svg2png:', error)
         })
 
+
     // SVGファイルサイズを ダウンロードボタンに 表示する
     updateButtonWithSvgSize(svgString)
 }
 
 
 // Rendering from SVG to PNG with options
-async function svg2png(svgString, resvgOption, hasCrop) {
+async function svg2png(svgString, resvgOption) {
 
     // Create the Resvg object
     const resvgJS = new resvg.Resvg(svgString, resvgOption)
     console.log('resvgJS: ', resvgJS)
-
-    // Crop by BBox (Un-used)
-    const innerBBox = resvgJS.innerBBox()
-    const bbox = resvgJS.getBBox()
-    console.log('SVG innerBBox: ', innerBBox)
-    console.log('SVG getBBox: ', bbox)
-    if (hasCrop && bbox) resvgJS.cropByBBox(bbox)
 
     // Render
     const pngData = resvgJS.render()
@@ -113,7 +107,7 @@ function updateSvgInfo(svgString) {
 
 
 // Processing from SVG to PNG and measuring the time
-async function measureSvg2pngTime(svgString, resvgOption, hasCrop, renderingStatusElements) {
+async function measureSvg2pngTime(svgString, resvgOption, renderingStatusElements) {
     try {
         // 処理中メッセージを表示
         await updateRenderingStatus("Now rendering ...<br> Please wait a moment :)", renderingStatusElements.get('pngActionButton'));
@@ -123,7 +117,7 @@ async function measureSvg2pngTime(svgString, resvgOption, hasCrop, renderingStat
         console.log('svg2png startTime: ', startTime);
 
         // svg2png関数を呼び出す
-        const result = await svg2png(svgString, resvgOption, hasCrop);
+        const result = await svg2png(svgString, resvgOption);
 
         // 終了時刻を記録
         const endTime = performance.now();
