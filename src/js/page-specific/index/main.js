@@ -16,8 +16,7 @@ import { applyImageCustomization
 import { resvgOption }                          from 'state/resvg-option'
 import { getState
        , updateState }                          from 'state/url-state-manager'
-import { executeSvg2png
-       , svg2png}                               from 'svg-to-png'
+import { executeSvg2png }                       from 'svg-to-png'
 import { cropSideMargins
        , resetSideMargins }                     from 'tab-canvas/crop-side-margins'
 import { toggleDisplay
@@ -404,27 +403,7 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
 
 
 
-
-    // Disabled options ///////////////////////////////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////////////////////////
-    //////////////////////////// Change background ///////////////////////////
-
-    // resvg-js playground original base color picker
-
-    // const backgroundColorPickerElement = document.querySelector('#background-color-picker')
-    // backgroundColorPickerElement.addEventListener('change', function (event) {
-    //   const value = event.target.value
-    //   const hasCrop = cropElement.checked
-    //   if (!value) return
-    //   resvgOpts.background = value
-    //   console.log('resvgOpts.background value is ' + resvgOpts.background) // e.g.: resvgOpts.background value is #87FF634C
-    //   svg2png(null, resvgOpts, hasCrop)
-    // })
-
-    //////////////////////////// Change background ///////////////////////////
-    //////////////////////////////////////////////////////////////////////////
-
+    // Layout /////////////////////////////////////////////////////////////////////////////////////////////
 
     // Startup layout initialize process
     const initLayout = async () => {
