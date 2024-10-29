@@ -1,4 +1,4 @@
-import { encodingMethodAndConfig } from 'constants'
+import { ENCODING_METHOD_AND_CONFIG_MAP } from 'constants'
 
 
 // For encoding methods except 'bruteforce53'
@@ -13,7 +13,7 @@ import { encodingMethodAndConfig } from 'constants'
 
 export function convertResultsFromStrToArray(encodedStrByGroups, encodingMethodName, encodingConfigValue) {
     // Get the configuration value name as key of object
-    const configKey = encodingMethodAndConfig.get(encodingMethodName)
+    const configKey = ENCODING_METHOD_AND_CONFIG_MAP.get(encodingMethodName)
 
     return new Map(
         Array.from(encodedStrByGroups, ([key, value]) => [

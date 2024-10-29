@@ -1,3 +1,8 @@
+////////////////////////////////////////////////////////////////////////////////
+// Used for both encoding and decoding
+////////////////////////////////////////////////////////////////////////////////
+
+
 // The keys in this array are optional. If a key does not exist, it will be ignored.
 export const BASIC_DATA_KEYS = [
     'n',         // required for bruteforce53|bigint64 decoding
@@ -9,14 +14,18 @@ export const BASIC_DATA_KEYS = [
 ]
 
 
+// SVG specs
+
 // Spaces in SVG string
-export const tabSpace = '\u0020\u0020\u0020\u0020' // Four spaces
+export const TAB_SPACE = '\u0020\u0020\u0020\u0020' // Four spaces
 
 // VIEWBOX_START_X and VIEWBOX_START_Y represent the starting position of the viewBox,
 // which is always at the origin (0,0).
 export const VIEWBOX_START_X = 0
 export const VIEWBOX_START_Y = 0
 
+
+// Flags
 
 // Map object to get 1st and 2nd flag char:
 //   key: String of method name
@@ -30,7 +39,7 @@ export const VIEWBOX_START_Y = 0
 //     [1] bigint64-enc
 //     [2] swap63-enc
 //     [3] four16-enc
-export const flagsMap = new Map([
+export const FLAGS_MAP = new Map([
     ['1st', new Map([
                 ['uncompressed',  '~'],
                 ['URLCompressor', '0'],
@@ -46,26 +55,26 @@ export const flagsMap = new Map([
     ]
 ])
 
-// Add KV reversed maps of 1st and 2nd into `flagsMap`,
+// Add KV reversed maps of 1st and 2nd into `FLAGS_MAP`,
 // to indicate the method names to console
 
 // 1st
 const reverse1st = new Map()
-flagsMap.get('1st').forEach((value, key) => {
+FLAGS_MAP.get('1st').forEach((value, key) => {
     reverse1st.set(value, key)
 })
-flagsMap.set('rev_1st', reverse1st)
+FLAGS_MAP.set('rev_1st', reverse1st)
 
 // 2nd
 const reverse2nd = new Map()
-flagsMap.get('2nd').forEach((value, key) => {
+FLAGS_MAP.get('2nd').forEach((value, key) => {
     reverse2nd.set(value, key)
 })
-flagsMap.set('rev_2nd', reverse2nd)
+FLAGS_MAP.set('rev_2nd', reverse2nd)
 
 // Result
-console.log("flagsMap: ", flagsMap)
-// flagsMap:
+console.log("FLAGS_MAP: ", FLAGS_MAP)
+// FLAGS_MAP:
 // Map(4) { 1st → Map(2), 2nd → Map(4), rev_1st → Map(2), rev_2nd → Map(4) }
 //   ​size: 4
 //   ​<entries>
@@ -75,8 +84,18 @@ console.log("flagsMap: ", flagsMap)
 //     ​​3: rev_2nd → Map(4) { 0 → "bruteforce53", 1 → "bigint64", 2 → "swap63", … }
 
 
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Used for encoding only
+////////////////////////////////////////////////////////////////////////////////
+
+
+// Encoding methods
+
 // The sets of encoding method name and its configuration value
-export const encodingMethodAndConfig = new Map([
+export const ENCODING_METHOD_AND_CONFIG_MAP = new Map([
     ['bruteforce53', 'baseXNumber'],
     ['bigint64',     'digitsPerChunk'],
     ['swap63',       'swap53HasNoConfigValue'],
@@ -89,6 +108,12 @@ export const resultInfo = new Map()
 
 
 
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Used for storing the states at index.html, mainly,
+// and also used for distilling the strokes data for decoding at both index.html and data-manipulator.html
+////////////////////////////////////////////////////////////////////////////////
 
 
 // Settings name keys and default values

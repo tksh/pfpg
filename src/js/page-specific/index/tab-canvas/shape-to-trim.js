@@ -1,4 +1,4 @@
-import { tabSpace }             from 'constants'
+import { TAB_SPACE }             from 'constants'
 import { tryRemoveSpaces }      from 'modal/optimize-svg'
 import { getState
        , updateState }          from 'state/url-state-manager'
@@ -48,7 +48,7 @@ function updateSvgWithSelectedShapePath(shape, inputSvg) {
     const isLineBreaksRemoved = getState('removeLineBreaks')
     const newClippathSvg = isLineBreaksRemoved
         ? inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">${shapePathOptimized}</clipPath>`)
-        : inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">\n${tabSpace.repeat(3)}${shapePathOptimized}\n${tabSpace.repeat(2)}</clipPath>`)
+        : inputSvg.replace(patternForClippathShape, `<clipPath id="shape-to-trim">\n${TAB_SPACE.repeat(3)}${shapePathOptimized}\n${TAB_SPACE.repeat(2)}</clipPath>`)
 
 
     // Update the viewBox string

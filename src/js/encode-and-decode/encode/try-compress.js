@@ -1,7 +1,7 @@
 import { compressToEncodedURIComponent } from 'common-utils/compression-stream'
-import { flagsMap
+import { FLAGS_MAP
        , resultInfo
-       , encodingMethodAndConfig}        from 'constants'
+       , ENCODING_METHOD_AND_CONFIG_MAP}        from 'constants'
 import { getEncodedAttrsExceptsDvals }   from 'encode/get-attrs-excepts-dvals'
 import { URLCompressor }                 from 'libs/url-comp-0-1-0/url-comp'
 
@@ -32,7 +32,7 @@ export async function tryCompress(encodedDval, encodingMethodName, encodingConfi
 
     for (const [gId, dvalEncodedStr] of encodedDval) {
         // Merge to form: [2nd_flag_for_encoding_method][widths_and_counts]-[d_values]
-        const charOf2ndFlag = flagsMap.get('2nd').get(encodingMethodName)
+        const charOf2ndFlag = FLAGS_MAP.get('2nd').get(encodingMethodName)
         const widthsAndCountsEncoded = encodedWidthsAndCounts.get(gId)
         const uncompressed = charOf2ndFlag + widthsAndCountsEncoded + '-' + dvalEncodedStr
 
@@ -42,7 +42,7 @@ export async function tryCompress(encodedDval, encodingMethodName, encodingConfi
 
         // Prepend 1st flag to best result to form:
         //   [1st_flag_for_compression_method][2nd_flag_for_encoding_method][widths_and_counts]-[d_values]
-        const charOf1stFlag = flagsMap.get('1st').get(bestCompMethodName)
+        const charOf1stFlag = FLAGS_MAP.get('1st').get(bestCompMethodName)
         const encodedWidthAndDvalsAsValue   = charOf1stFlag + bestCompressedData
 
         // Prepend the color value as key to form: [key(group_colors)]=[value(width_and_dvals)]
@@ -62,7 +62,7 @@ export async function tryCompress(encodedDval, encodingMethodName, encodingConfi
 
         // Append the data to Map with group ID key like `bruteforce53_gId=0`
         const previousBaseXData = resultInfo.get(`${encodingMethodName} gId=${gId}`)
-            ?? [['gId', `${encodingMethodAndConfig.get(encodingMethodName)}`, 'uncompressed', 'bestCompressed', 'bestCompMethodName']]
+            ?? [['gId', `${ENCODING_METHOD_AND_CONFIG_MAP.get(encodingMethodName)}`, 'uncompressed', 'bestCompressed', 'bestCompMethodName']]
         const currentBaseXDataAdded = [...previousBaseXData, [gId, encodingConfigValue, uncompressed.length + 1, bestCompressedData.length + 1, bestCompMethodName]]
         resultInfo.set(`${encodingMethodName} gId=${gId}`, currentBaseXDataAdded)
     }

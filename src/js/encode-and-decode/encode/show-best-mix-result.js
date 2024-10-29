@@ -1,4 +1,4 @@
-import { flagsMap } from 'constants'
+import { FLAGS_MAP } from 'constants'
 import { zip }      from 'libs/deno-std/zip'
 
 // For best mix [2|3] encoding by each group
@@ -19,8 +19,8 @@ export function showBestMixResult(dataToShow, textareaId) {
     transposed.map(v => {
         totalLength += v[2]
         // const lengthPadded = v[2].toString().padStart(6, ' ').replace(/ /g, '&nbsp')
-        const compressionMethodName = flagsMap.get('rev_1st').get(`${v[4]}`)  // flag => name
-        const encodingMethodName    = flagsMap.get('rev_2nd').get(`${v[5]}`)  // flag => name
+        const compressionMethodName = FLAGS_MAP.get('rev_1st').get(`${v[4]}`)  // flag => name
+        const encodingMethodName    = FLAGS_MAP.get('rev_2nd').get(`${v[5]}`)  // flag => name
         entireGroupInfo.push(`${v[0]}, ${v[2]}, ${compressionMethodName}, ${encodingMethodName} `)
     })
 

@@ -1,4 +1,4 @@
-import { flagsMap
+import { FLAGS_MAP
        , resultInfo} from 'constants'
 
 // Compare and store the shortest length string by each group
@@ -67,7 +67,7 @@ export function storeShortest(encodedArrByMethods, encodingMethodNamesArr) {
         // console.log(shortestArr[0].split('='))  // [0]: group colors , [1]: lines data except colors, e.g. (2) ['A', '08fEKQ-VoisNalNhZy9GsmZzPU']
         const charOf1stFlag = shortestArr[0].split('=')[1][0]          // the 1st char after '=' is compression method flag
         // e.g.: 0 (= URLCompressor applied)
-        const charOf2ndFlag = flagsMap.get('2nd').get(methodName)   // the 2nd char is encoding method flag that got from its name
+        const charOf2ndFlag = FLAGS_MAP.get('2nd').get(methodName)   // the 2nd char is encoding method flag that got from its name
         // e.g.: 0 (= bruteforce53 applied)
 
         flagsArr.push([charOf1stFlag, charOf2ndFlag])

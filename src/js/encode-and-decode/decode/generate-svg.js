@@ -1,5 +1,5 @@
 import { isNonEmpty } from 'common-utils/is-non-empty'
-import { tabSpace }   from 'constants'
+import { TAB_SPACE }   from 'constants'
 
 // Output SVG string like:
 
@@ -108,7 +108,7 @@ function generateRelPathTags(linesDataMap) {
 
 
             // Open and close <path> tag
-            const pathTagOpenWithWidth = tabSpace.repeat(3) + `<path stroke-width="${width}" d="`
+            const pathTagOpenWithWidth = TAB_SPACE.repeat(3) + `<path stroke-width="${width}" d="`
             // e.g. '            <path stroke-width="3" d="'
             const pathTagClose = '" />'
             // e.g. '" />'
@@ -160,9 +160,9 @@ function generateAbsPathTags(linesDataMap) {
             const lastlineIndex = lastlineIndices[i] - 1     // Subtract 1 to convert as index number
 
             // Generate open and close <g> tags
-            const widthGTagOpen = tabSpace.repeat(3) + `<g stroke-width="${width}">`
+            const widthGTagOpen = TAB_SPACE.repeat(3) + `<g stroke-width="${width}">`
             // e.g. '            <g stroke-width="3">'
-            const widthGTagClose = tabSpace.repeat(3) + '</g>'
+            const widthGTagClose = TAB_SPACE.repeat(3) + '</g>'
             // e.g. '            </g>'
 
             // Define the array with open <g> tag
@@ -172,7 +172,7 @@ function generateAbsPathTags(linesDataMap) {
             for (let i = firstlineIndex; i <= lastlineIndex; i++) {
                 let pathTag =
 
-                    tabSpace.repeat(4) +
+                    TAB_SPACE.repeat(4) +
                     `<path d="M ${dvalsObj.x1[i]} ${dvalsObj.y1[i]} L ${dvalsObj.x2[i]} ${dvalsObj.y2[i]}" />`
                     // e.g. <path d="M 1 0 L 1 26" />
 
@@ -206,19 +206,19 @@ function generateTagsBeforeStrokes(basicDataObj, sizeDataObj) {
         { tag: 'desc',     content: basicDataObj.desc },
         { tag: 'metadata', content: addNewlineAndIndentation(basicDataObj.metadata) },
     ].filter(({ content }) => isNonEmpty(content))
-        .map(({ tag, content }) => tabSpace.repeat(1) + `<${tag}>${content}</${tag}>`)
+        .map(({ tag, content }) => TAB_SPACE.repeat(1) + `<${tag}>${content}</${tag}>`)
 
 
     // Trimming shape <defs> tag (has no variables)
     const trimmingShapeDefs =
-        tabSpace.repeat(1) + '<defs>' + '\n' +
-        tabSpace.repeat(2) + '<clipPath id="shape-to-trim">' + '\n' +
-        tabSpace.repeat(3) + '<rect width="100%" height="100%" />' + '\n' +
-        tabSpace.repeat(2) + '</clipPath>' + '\n' +
-        tabSpace.repeat(1) + '</defs>'
+        TAB_SPACE.repeat(1) + '<defs>' + '\n' +
+        TAB_SPACE.repeat(2) + '<clipPath id="shape-to-trim">' + '\n' +
+        TAB_SPACE.repeat(3) + '<rect width="100%" height="100%" />' + '\n' +
+        TAB_SPACE.repeat(2) + '</clipPath>' + '\n' +
+        TAB_SPACE.repeat(1) + '</defs>'
 
     // clip-path: <rect> in <g>
-    const clipPathGroupOpen = tabSpace.repeat(1) + '<g clip-path="url(#shape-to-trim)">'
+    const clipPathGroupOpen = TAB_SPACE.repeat(1) + '<g clip-path="url(#shape-to-trim)">'
 
     return [svgOpen, ...optionalTags, trimmingShapeDefs, clipPathGroupOpen]
 }
@@ -234,18 +234,18 @@ function addNewlineAndIndentation(inputLines) {
     let lines = typeof inputLines === 'string' ? inputLines.split('\n') : inputLines
 
     // 各行の先頭に インデントを追加
-    const indentedLines = lines.map(line => `${tabSpace.repeat(2)}${line}`)
+    const indentedLines = lines.map(line => `${TAB_SPACE.repeat(2)}${line}`)
 
     // 先頭と最後に 改行を追加して 結合後
     // `</metadata>`を 一つ分下げる為のインデントを 最後の改行の後に 加える
-    const result = `\n${indentedLines.join('\n')}\n${tabSpace.repeat(1)}`
+    const result = `\n${indentedLines.join('\n')}\n${TAB_SPACE.repeat(1)}`
 
     return result
 }
 
 function generateTagsAfterStrokes() {
     // Close </g> tag for clip-path
-    const clipPathGroupClose = tabSpace.repeat(1) + '</g>'
+    const clipPathGroupClose = TAB_SPACE.repeat(1) + '</g>'
     const svgClose = '</svg>'
     return [clipPathGroupClose, svgClose]
 }
@@ -257,7 +257,7 @@ function generateGTagOpenByGroups(linesDataMap) {
         // Generate stroke color group
         const groupColors = v.groupColors
 
-        const colorGroupTagOpen = tabSpace.repeat(2)
+        const colorGroupTagOpen = TAB_SPACE.repeat(2)
             + `<g stroke="${groupColors.gStrokeRgbStr}" opacity="${groupColors.gOpacity}" stroke-opacity="${groupColors.gStrokeOpacity}">`
         //         <g stroke="#000000" opacity="1" stroke-opacity="1">
 
@@ -270,7 +270,7 @@ function generateGTagOpenByGroups(linesDataMap) {
 function generateGTagCloseByGroups(linesDataMap) {
     const gTagCloseByGroups = new Map()
     for (let [gId, v] of linesDataMap) {
-        const colorGroupTagClose = tabSpace.repeat(2) + '</g>'
+        const colorGroupTagClose = TAB_SPACE.repeat(2) + '</g>'
         //         </g>
         gTagCloseByGroups.set(gId, colorGroupTagClose)
     }
