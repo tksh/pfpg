@@ -2,7 +2,7 @@ import { initDownloadButtons }                  from 'button/init-download-butto
 import { initButtonActionSelect }               from 'button/update-button-text'
 import { isOnDataManipulatorPage }              from 'common-utils/select-output-textarea'
 import { decodeUrlToSvg }                       from 'decode/decode'
-import { adjustBox }                            from 'init/adjust-output-boxes-size'
+import { initLayout }                           from 'init/adjust-output-boxes-size'
 import { initTabs }                             from 'init/tab-setup'
 import { initSvgOptimizationModalToggle
        , initResetSettingsModalToggle }         from 'modal/modal-toggle'
@@ -33,7 +33,7 @@ import { initViewScalingSelect }                from 'tab-ui/view-scaling'
 
 (async function () {
 
-    // Get sample artwork
+    // Get sample artwork data
 
     // If there is no url params to decode at index.html, fetch the alternative text from the HTML element and insert it as sample url params.
     if (!window.location.search) {
@@ -75,18 +75,23 @@ import { initViewScalingSelect }                from 'tab-ui/view-scaling'
     svgTextarea.value = optimizedSvg
 
 
-    // Startup layout initialize process
-    const initLayout = async () => {
-        // To fit the contents (header + main) height as viewport height
-        await adjustBox()
-    }
+    // Startup layout initialization process must be executed before 'DOMContentLoaded'
     initLayout()
 
 })() // `(async function () { ... })` 無名即時実行関数
 
 
+
 // IIFEの外にDOMContentLoadedイベントリスナーを設定
-// 即時実行関数（IIFE: Immediately Invoked Function Expression）
+// - 即時実行関数（IIFE: Immediately Invoked Function Expression）
+
+// DOMContentLoadedイベント
+// - HTMLのパースが完了し DOMツリーが構築された時点で発火する
+
+// 'Group colors', 'Opacity steps' などのインプットHTMLタグ要素は
+// 最初の即実行関数内のSVGデコード時に URLパラメータのデータから 動的に生成されるので
+// それを待ってからイベントリスナーを設定する
+
 document.addEventListener('DOMContentLoaded', () => {
 
     // Get first tab ('Lines') activated

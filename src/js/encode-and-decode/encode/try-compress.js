@@ -1,9 +1,9 @@
 import { compressToEncodedURIComponent } from 'common-utils/compression-stream'
 import { FLAGS_MAP
-       , resultInfo
-       , ENCODING_METHOD_AND_CONFIG_MAP}        from 'constants'
+       , ENCODING_METHOD_AND_CONFIG_MAP} from 'constants'
 import { getEncodedAttrsExceptsDvals }   from 'encode/get-attrs-excepts-dvals'
 import { URLCompressor }                 from 'libs/url-comp-0-1-0/url-comp'
+import { resultInfo }                    from 'state/result-info'
 
 
 // Try compress, choose shorter, then add prefix to form:
@@ -20,14 +20,14 @@ export async function tryCompress(encodedDval, encodingMethodName, encodingConfi
 
     const compressedByGroups = new Map()
 
-    // For storing result info
+    // For storing results for logging
     let flagsArr = []
     let lengthBeforeComp = []
     let lengthAfterComp = []
     const groupCount = encodedDval.size
     const ampersandCount = groupCount - 1
 
-    // To store info
+    // For storing results for processing
     let compressingResultArr = []
 
     for (const [gId, dvalEncodedStr] of encodedDval) {
@@ -52,7 +52,8 @@ export async function tryCompress(encodedDval, encodingMethodName, encodingConfi
         compressedByGroups.set(gId, encodedAsKvPair)
 
 
-        // Info for console.log output
+        // Store results for logging
+
         flagsArr.push([charOf1stFlag, charOf2ndFlag])
         lengthBeforeComp.push(uncompressed.length + 1)
         lengthAfterComp.push(bestCompressedData.length + 1)
@@ -70,7 +71,7 @@ export async function tryCompress(encodedDval, encodingMethodName, encodingConfi
     // Calculate and compare the length of finished strings to output to console.
     calculateLengths(lengthBeforeComp, lengthAfterComp, ampersandCount)
 
-    // Store result info
+    // Store results for logging
     resultInfo.set(`${encodingMethodName} Flags`, flagsArr)
 
     return { compressedByGroups, compressingResultArr }
@@ -78,7 +79,8 @@ export async function tryCompress(encodedDval, encodingMethodName, encodingConfi
 
 
 async function compressAndSelectBest(inputString) {
-    // Methods list with async functions
+
+    // Methods names and functions list
     const compressionMethods = {
         'uncompressed' : async () => inputString,
         'URLCompressor': async () => URLCompressor.compress(inputString),

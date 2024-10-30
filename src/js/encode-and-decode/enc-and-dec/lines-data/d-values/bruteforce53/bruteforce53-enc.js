@@ -15,7 +15,7 @@ import { jsonToMapObj }          from 'encode/json-to-map-obj'
 import { showResult }            from 'encode/show-result'
 import { simplifyMap }           from 'encode/simplify-map'
 import { tryCompress }           from 'encode/try-compress'
-import { resultInfo }            from 'constants'
+import { resultInfo }            from 'state/result-info'
 
 // Three layers iterations
 //   1. for-loop: Max codebook size from 0 to 52
@@ -44,10 +44,10 @@ export async function bruteforce53Enc() {
         console.log(`///////////////// maxCodebookSize: ${maxCodebookSize}, baseXNumber: ${baseXNumber} /////////////////`)
 
         const encodedDvals = processGroups(baseXNumber, diffValueRange)
-        const compressResult = await compressAndStore(encodedDvals, encodingMethodName, baseXNumber)
+        const compressingResult = await compressAndStore(encodedDvals, encodingMethodName, baseXNumber)
 
-        // currentShortestByGroups = updateShortestByGroups(currentShortestByGroups, compressResult, baseXNumber, maxCodebookSize)
-        currentShortestByGroups = updateShortestByGroups(currentShortestByGroups, compressResult.compressedByGroups, baseXNumber, maxCodebookSize)
+        // currentShortestByGroups = updateShortestByGroups(currentShortestByGroups, compressingResult, baseXNumber, maxCodebookSize)
+        currentShortestByGroups = updateShortestByGroups(currentShortestByGroups, compressingResult.compressedByGroups, baseXNumber, maxCodebookSize)
     }
 
     // Aggregate and correct flags information for 'bruteforce53' method
@@ -130,7 +130,7 @@ async function compressAndStore(encodedDvals, encodingMethodName, baseXNumber) {
 }
 
 function updateShortestByGroups(currentShortestByGroups, compressedByGroups, baseXNumber, maxCodebookSize) {
-    // const transformedMap = transformMap(compressResult.compressedByGroups, baseXNumber)
+    // const transformedMap = transformMap(compressingResult.compressedByGroups, baseXNumber)
     const transformedMap = transformMap(compressedByGroups, baseXNumber)
     return maxCodebookSize === MAX_CODEBOOK_SIZE_START
         ? transformedMap  // At first loop (maxCodebookSize: 0, baseXNumber: 52), init the Map with current value

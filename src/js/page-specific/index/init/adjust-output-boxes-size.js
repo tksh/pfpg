@@ -1,4 +1,9 @@
-export async function adjustBox() {
+export async function initLayout() {
+    // To fit the contents (header + main) height as viewport height
+    await adjustOutputBoxSize()
+}
+
+async function adjustOutputBoxSize() {
 
     // Get the element rect sizes
 

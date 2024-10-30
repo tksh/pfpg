@@ -1,5 +1,5 @@
-import { FLAGS_MAP
-       , resultInfo} from 'constants'
+import { FLAGS_MAP } from 'constants'
+import { resultInfo} from 'state/result-info'
 
 // Compare and store the shortest length string by each group
 

@@ -1,4 +1,4 @@
-import { resultInfo } from 'constants'
+import { resultInfo } from 'state/result-info'
 
 export function storeShorter(currentShortestByGroups, encodedStrByGroups, baseXNumber) {
 

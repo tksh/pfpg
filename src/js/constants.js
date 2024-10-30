@@ -103,10 +103,6 @@ export const ENCODING_METHOD_AND_CONFIG_MAP = new Map([
 ])
 
 
-// To store the info for console output
-export const resultInfo = new Map()
-
-
 
 
 
