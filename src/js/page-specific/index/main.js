@@ -12,8 +12,7 @@ import { applyImageCustomization
        , applyUiConfiguration
        , applySvgOptimization }                 from 'state/apply-url-state'
 import { resvgOption }                          from 'state/resvg-option'
-import { getState
-       , updateState }                          from 'state/url-state-manager'
+import { getState }                             from 'state/url-state-manager'
 import { executeSvg2png }                       from 'svg-to-png'
 import { initShapeToTrimSelect
        , initWidthNarrownessSelect
@@ -23,9 +22,9 @@ import { initColorFormatSelect }                from 'tab-lines/color-format'
 import { initGroupColorsInputs }                from 'tab-lines/group-colors-listener'
 import { initOpacityStepsSelect }               from 'tab-lines/opacity-steps'
 import { initPathModeSelect }                   from 'tab-lines/path-mode'
-import { replaceShapeRendering }                from 'tab-render/shape-rendering'
 import { initWidthPixelSizeInputElements
        , initWidthValidatorListener }           from 'tab-render/width-pixel-size'
+import { initShapeRenderingSelect }             from 'tab-render/shape-rendering'
 import { initCheckerboardBgCheckbox }           from 'tab-ui/checkerboard-bg'
 import { initTextWrappingCheckbox }             from 'tab-ui/text-wrapping'
 import { initThemeColorSelect }                 from 'tab-ui/theme-color'
@@ -73,40 +72,7 @@ import { initViewScalingSelect }                from 'tab-ui/view-scaling'
     svgTextarea.value = optimizedSvg
 
 
-
-    // Add event listeners
-
-    // Options for 'Render' tab ///////////////////////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////////////////////////
-    ////////////////////////////// Anti-aliasing /////////////////////////////
-
-    // Event listeners for 'shape-rendering' type changes
-    document.getElementById("shape-rendering").addEventListener("change", (event) => {
-        // 選択された値を取得
-        const shapeRendering = event.target.value // 'geometricPrecision' | 'crispEdges'
-        console.log("Updated value of 'Anti-aliasing (shape-rendering)': ", shapeRendering)
-        updateState('shapeRendering', shapeRendering)
-
-        // <textarea>のvalue属性を取得
-        const svgString = svgTextarea.value
-
-        // 選択された値に SVG文字列を 置き換える
-        const updatedSvg = replaceShapeRendering(svgString, shapeRendering)
-
-        // <textarea>のvalue属性を更新する
-        svgTextarea.value = updatedSvg
-
-        // // Rendering the PNG with updated SVG
-        executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
-    })
-
-    ////////////////////////////// Anti-aliasing /////////////////////////////
-    //////////////////////////////////////////////////////////////////////////
-
-
-
-    // Layout /////////////////////////////////////////////////////////////////////////////////////////////
+    // Layout
 
     // Startup layout initialize process
     const initLayout = async () => {
@@ -122,8 +88,8 @@ import { initViewScalingSelect }                from 'tab-ui/view-scaling'
 // 即時実行関数（IIFE: Immediately Invoked Function Expression）
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Download buttons for SVG and PNG
-    initDownloadButtons()
+    // Get first tab ('Lines') activated
+    initTabs()
 
     // Tab - Lines
     initGroupColorsInputs()
@@ -136,6 +102,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initWidthNarrownessSelect()
     initTopHeavyRatioSelect()
     initCropSideMarginsCheckbox()
+
+    // Tab - Render
+    initShapeRenderingSelect()
+    initWidthPixelSizeInputElements()
+    initWidthValidatorListener()
 
     // Tab - UI
     initViewScalingSelect()
@@ -150,12 +121,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // or detect the default value from data or environment.
     applyUiConfiguration()
 
-    // Tab - Render
-    initWidthPixelSizeInputElements()
-    initWidthValidatorListener()
 
-    // Get first tab ('Lines') activated
-    initTabs()
+    // Buttons for SVG and PNG
+    initDownloadButtons()
+
 
     // Modal - SVG optimization
     initSvgOptimizationModalToggle()
