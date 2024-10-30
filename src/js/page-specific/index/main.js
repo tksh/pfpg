@@ -7,8 +7,7 @@ import { adjustBox }                            from 'init/adjust-output-boxes-s
 import { initTabs }                             from 'init/tab-setup'
 import { initSvgOptimizationModalToggle
        , initResetSettingsModalToggle }         from 'modal/modal-toggle'
-import { initSvgOptimization
-       , optimizeSvg}                           from 'modal/optimize-svg'
+import { initSvgOptimization }                  from 'modal/optimize-svg'
 import { initResetSettings }                    from 'modal/reset-settings'
 import { applyImageCustomization
        , applyUiConfiguration
@@ -24,8 +23,7 @@ import { toggleDisplay
 import { updateSvgAsNewColorFormat }            from 'tab-lines/update-svg-color-format'
 import { addEventListenerForGroupColorsInputs } from 'tab-lines/group-colors-listener'
 import { generateGroupColorsHtmlElements }      from 'tab-lines/group-colors'
-import { changeOpacitySelectOptionsAsNewStep
-       , updateSvgForNewStep }                  from 'tab-lines/opacity-steps'
+import { initOpacityStepsSelect }               from 'tab-lines/opacity-steps'
 import { initPathModeSelect }                   from 'tab-lines/path-mode'
 import { replaceShapeRendering }                from 'tab-render/shape-rendering'
 import { initWidthPixelSizeInputElements
@@ -98,33 +96,6 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
 
 
     //////////////////////////////////////////////////////////////////////////
-    ////////////////////////////// Opacity steps /////////////////////////////
-
-    // Event listeners for 'Opacity steps' value changes
-    document.getElementById("opacity-steps").addEventListener("change", (event) => {
-
-        // 選択されたセレクトメニューの値を取得
-        const opacitySteps = Number(event.target.value)  // 0.04 | 0.1 | 0.2
-
-        // グローバルステート更新
-        updateState('opacitySteps', opacitySteps)
-
-        // 新しいセレクトメニューに更新
-        changeOpacitySelectOptionsAsNewStep(getSvgString(), opacitySteps)
-
-        // 新しいセレクトメニューへの 更新で選ばれた その opacitySteps での 一番近い値の表示と 元々のSVGの色情報が ずれてしまうので
-        // 新しいセレクトメニューでの 値 を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
-        const updatedSvg = updateSvgForNewStep(getSvgString())
-
-        svgTextarea.value = updatedSvg                 // Update textarea
-        executeSvg2png({ target: { value: updatedSvg } }, resvgOption)  // Rendering to PNG
-    })
-
-    ////////////////////////////// Opacity steps /////////////////////////////
-    //////////////////////////////////////////////////////////////////////////
-
-
-    //////////////////////////////////////////////////////////////////////////
     ///////////////////////////// Color format ///////////////////////////////
 
     //  Event listeners for 'Color format' selection changes
@@ -171,7 +142,7 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
         console.log('widthNarrowness: ', widthNarrowness)
         updateState('widthNarrowness', widthNarrowness)
         const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvgString())
-        svgTextarea.value = updatedSvg                             // Update textarea
+        svgTextarea.value = updatedSvg                             // Update the textarea content
         executeSvg2png({ target: { value: updatedSvg } }, resvgOption)  // Render to PNG
     })
 
@@ -180,7 +151,7 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
         console.log('topHeavyRatio: ', topHeavyRatio)
         updateState('topHeavyRatio', topHeavyRatio)
         const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvgString())
-        svgTextarea.value = updatedSvg                             // Update textarea
+        svgTextarea.value = updatedSvg                             // Update the textarea content
         executeSvg2png({ target: { value: updatedSvg } }, resvgOption)  // Render to PNG
     })
 
@@ -207,7 +178,7 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
         const inputSvg = getSvgString()
         const updatedSvg = updateSvgWithSelectedShapePath(shapeToTrim, inputSvg)
 
-        svgTextarea.value = updatedSvg                             // Update textarea
+        svgTextarea.value = updatedSvg                             // Update the textarea content
         executeSvg2png({ target: { value: updatedSvg } }, resvgOption)  // Render to PNG
 
     })
@@ -251,7 +222,7 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
         // <textarea>のvalue属性を更新する
         svgTextarea.value = updatedSvg
 
-        // executeSvg2png関数を呼び出す
+        // // Rendering the PNG with updated SVG
         executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
     })
 
@@ -281,6 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Tab - Lines
     initPathModeSelect()
+    initOpacityStepsSelect()
 
     // Tab - UI
     initViewScalingSelect()

@@ -1,17 +1,46 @@
+import { getSvgString }               from 'button/download-as-file'
 import { formatAsFloatString }        from 'common-utils/format-as-float'
+import { updateState }                from 'state/url-state-manager'
+import { executeSvg2png }             from 'svg-to-png'
 import { getGroupColorsValues }       from 'tab-lines/get-colors-from-svg'
 import { generateGroupColorsSvgTags } from 'tab-lines/group-colors'
 import { getNumberOfGroups }          from 'utils/get-number-of-groups'
 import { replaceAtIndex }             from 'utils/replace-at-index'
 
 export
-    { changeOpacitySelectOptionsAsNewStep
+    { initOpacityStepsSelect
+    , changeOpacitySelectOptionsAsNewStep
     , updateSvgForNewStep
     , getElementValueById
     , numbersIncrementByStep
     }
 
-// For event listener of Opacity steps <select>
+
+// Event listeners for 'Opacity steps' value changes
+function initOpacityStepsSelect() {
+    document.getElementById("opacity-steps").addEventListener("change", (event) => {
+
+        // 選択されたセレクトメニューの値を取得
+        const opacitySteps = Number(event.target.value)  // 0.04 | 0.1 | 0.2
+
+        // グローバルステート更新
+        updateState('opacitySteps', opacitySteps)
+
+        // 新しいセレクトメニューに更新
+        changeOpacitySelectOptionsAsNewStep(getSvgString(), opacitySteps)
+
+        // 新しいセレクトメニューへの 更新で選ばれた その opacitySteps での 一番近い値の表示と 元々のSVGの色情報が ずれてしまうので
+        // 新しいセレクトメニューでの 値 を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
+        const updatedSvg = updateSvgForNewStep(getSvgString())
+
+        // Update the textarea content
+        document.querySelector('#svg-string').value = updatedSvg
+
+        // Rendering the PNG with updated SVG
+        executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
+    })
+}
+
 
 // 'opacity' and 'stroke-opacity' values of entire groups will be changed as selected new steps.
 function changeOpacitySelectOptionsAsNewStep(svgString, opacitySteps) {

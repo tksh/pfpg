@@ -89,10 +89,10 @@ function initPathModeSelect() {
         ])
         const optimizedSvg = optimizeSvg(updatedSvg, svgOptState)
 
-        const svgTextarea = document.querySelector('#svg-string')
-        svgTextarea.value = optimizedSvg
+        // Update the textarea content
+        document.querySelector('#svg-string').value = optimizedSvg
 
-        // executeSvg2png関数を呼び出す
+        // // Rendering the PNG with updated SVG
         executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
     })
 
