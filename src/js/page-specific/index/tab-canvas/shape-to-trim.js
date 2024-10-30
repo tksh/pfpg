@@ -7,22 +7,9 @@ import { viewboxSlimmed
        , extractViewboxValues } from 'tab-canvas/crop-side-margins'
 import { roundToTwoDecimals }   from 'utils/number-rounding'
 
-export
-    { toggleDisplay
-    , updateSvgWithSelectedShapePath
-    }
-
-
-// Function to toggle display of elements
-function toggleDisplay(elements, display) {
-    elements.forEach(element => {
-        document.getElementById(element).style.display = display
-    })
-}
-
 
 // Update SVG with selected shape path
-function updateSvgWithSelectedShapePath(shape, inputSvg) {
+export function updateSvgWithSelectedShapePath(shape, inputSvg) {
     document.getElementById('shape-to-trim').value = shape
 
     // Params for generating the 'Squircle' and 'Squircle, slimmed' shape path

@@ -15,8 +15,8 @@ import { decodeGroupColorsAsArray
 import { generateGroupColorsHtmlElements }      from 'tab-lines/group-colors-generator'
 import { changeOpacitySelectOptionsAsNewStep
        , updateSvgForNewStep }                  from 'tab-lines/opacity-steps'
-import { toggleDisplay
-       , updateSvgWithSelectedShapePath }       from 'tab-canvas/shape-to-trim'
+import { updateSvgWithSelectedShapePath }       from 'tab-canvas/shape-to-trim'
+import { toggleDisplay }                        from 'tab-canvas/shape-to-trim-listener'
 import { replaceShapeRendering }                from 'tab-render/shape-rendering'
 import { toggleCheckerboardBg }                 from 'tab-ui/checkerboard-bg'
 import { toggleTextWrapping }                   from 'tab-ui/text-wrapping'

@@ -1,4 +1,3 @@
-import { getSvgString }    from 'button/download-as-file'
 import { decodeUrlParams } from 'common-utils/read-url-params'
 import { resvgOption }     from 'state/resvg-option'
 import { updateState }     from 'state/url-state-manager'
@@ -6,21 +5,14 @@ import { executeSvg2png }  from 'svg-to-png'
 import { toFixedTrimmed }  from 'utils/number-rounding'
 
 export
-    { initCropSideMarginsCheckbox
-    , viewboxSlimmed
+    { viewboxSlimmed
     , viewboxUnSlimmed
     , extractViewboxValues
     , cropSideMargins
+    , resetSideMargins
     }
 
 
-// Event listener for 'Crop side margins' checkbox state changes
-function initCropSideMarginsCheckbox() {
-    document.getElementById('crop-side-margins').addEventListener('change', (event) => {
-        const svgString = getSvgString()
-        event.target.checked ? cropSideMargins(svgString) : resetSideMargins(svgString)
-    })
-}
 
 function cropSideMargins(inputSvg) {
     console.log('Crop side margins: [x]')
