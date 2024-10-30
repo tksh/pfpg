@@ -32,6 +32,9 @@ import { initViewScalingSelect }                from 'tab-ui/view-scaling'
 
 
 (async function () {
+
+    // Get sample artwork
+
     // If there is no url params to decode at index.html, fetch the alternative text from the HTML element and insert it as sample url params.
     if (!window.location.search) {
         console.log("There is no url params, sample one will be inserted.")
@@ -43,7 +46,7 @@ import { initViewScalingSelect }                from 'tab-ui/view-scaling'
     // Initial decoding from url param to svg
 
     // Get the path-mode value
-    // If there is no url param of 'pathMode', use 'absoluteSeparated' as default.
+    // - If there is no url param of 'pathMode', use 'absoluteSeparated' as default.
     const isRelative = getState('pathMode') === 'relativeMerged'
     console.log('isRelative: ', isRelative)
     document.getElementById("path-mode").value = isRelative ? 'relativeMerged' : 'absoluteSeparated'
@@ -53,26 +56,24 @@ import { initViewScalingSelect }                from 'tab-ui/view-scaling'
     console.log('initialDecodedSvgString: ', initialDecodedSvgString)
 
     // Apply the settings states from url param to initial decoded svg string
-    // - if there is no param in url, use default value retrieve from SETTINGS_DEFAULTS map
+    // - If there is no param in url, use default value retrieve from SETTINGS_DEFAULTS map
     const svgString = applyImageCustomization(initialDecodedSvgString, resvgOption)
 
-    // Insert the decoded svg string to textarea
-    const svgTextarea = document.querySelector('#svg-string') // <textarea id="svg-string" ... >
-    //console.log('svgTextarea.value.trim(): ', svgTextarea.value.trim()) // <svg xmlns="http://www.w3.org/2000/svg" ... </svg>
-    svgTextarea.value = svgString
 
     // Initial PNG rendering
     await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm'))  // Path that relative from index.html
     executeSvg2png({ target: { value: svgString } }, resvgOption)
 
+
     // Restore SVG string optimization
-    // This processes does not affect any changes for rendering result
-    // So just update the svg textarea value
+    // - This processes doesn't affect the rendering result
+    // - It only updates the SVG string
     const optimizedSvg = applySvgOptimization(svgString)
+
+    // Insert the SVG string to textarea
+    const svgTextarea = document.querySelector('#svg-string')
     svgTextarea.value = optimizedSvg
 
-
-    // Layout
 
     // Startup layout initialize process
     const initLayout = async () => {
