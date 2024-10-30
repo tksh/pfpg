@@ -1,3 +1,4 @@
+import { getSvgString }    from 'button/download-as-file'
 import { decodeUrlParams } from 'common-utils/read-url-params'
 import { resvgOption }     from 'state/resvg-option'
 import { updateState }     from 'state/url-state-manager'
@@ -5,12 +6,41 @@ import { executeSvg2png }  from 'svg-to-png'
 import { toFixedTrimmed }  from 'utils/number-rounding'
 
 export
-    { viewboxSlimmed
+    { initCropSideMarginsCheckbox
+    , viewboxSlimmed
     , viewboxUnSlimmed
     , extractViewboxValues
     , cropSideMargins
-    , resetSideMargins
     }
+
+
+// Event listener for 'Crop side margins' checkbox state changes
+function initCropSideMarginsCheckbox() {
+    document.getElementById('crop-side-margins').addEventListener('change', (event) => {
+        const svgString = getSvgString()
+        event.target.checked ? cropSideMargins(svgString) : resetSideMargins(svgString)
+    })
+}
+
+function cropSideMargins(inputSvg) {
+    console.log('Crop side margins: [x]')
+    updateState('cropSideMargins', true)
+    return updateSvg(inputSvg, true)
+}
+
+function resetSideMargins(inputSvg) {
+    console.log('Crop side margins: [ ]')
+    updateState('cropSideMargins', false)
+    return updateSvg(inputSvg, false)
+}
+
+function updateSvg(inputSvg, isCropped) {
+    const updatedSvg = isCropped ? viewboxSlimmed(inputSvg) : viewboxUnSlimmed(inputSvg)
+    document.querySelector('#svg-string').value = updatedSvg
+    executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
+    return updatedSvg
+}
+
 
 
 // Change the viewBox size fit to Squircle, slimmed.
@@ -73,6 +103,7 @@ function extractViewboxValues(inputSvg) {
 // e.g.: 'viewBox="2.325 0 26.35 31"' => Object { x: 2.325, y: 0, w: 26.35, h: 31 }
 
 
+
 // Get back the original viewBox size when:
 //   1. un-check the checkbox, or
 //   2. shapeToTrim changes to square|circle|squircle
@@ -92,26 +123,4 @@ function viewboxUnSlimmed(inputSvg) {
     console.log("matchesForViewboxStr: ", matchesForViewboxStr)
     const matchForViewboxValueStr = matchesForViewboxStr[1]                 // e.g.: '0 0 31 31'
     return inputSvg.replace(matchForViewboxValueStr, originalViewboxString)
-}
-
-
-// Functions for event listener
-
-function updateSvg(inputSvg, isCropped) {
-    const updatedSvg = isCropped ? viewboxSlimmed(inputSvg) : viewboxUnSlimmed(inputSvg)
-    document.querySelector('#svg-string').value = updatedSvg
-    executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
-    return updatedSvg
-}
-
-function cropSideMargins(inputSvg) {
-    console.log('Crop side margins: [x]')
-    updateState('cropSideMargins', true)
-    return updateSvg(inputSvg, true)
-}
-
-function resetSideMargins(inputSvg) {
-    console.log('Crop side margins: [ ]')
-    updateState('cropSideMargins', false)
-    return updateSvg(inputSvg, false)
 }

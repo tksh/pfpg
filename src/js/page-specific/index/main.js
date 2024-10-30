@@ -16,8 +16,7 @@ import { resvgOption }                          from 'state/resvg-option'
 import { getState
        , updateState }                          from 'state/url-state-manager'
 import { executeSvg2png }                       from 'svg-to-png'
-import { cropSideMargins
-       , resetSideMargins }                     from 'tab-canvas/crop-side-margins'
+import { initCropSideMarginsCheckbox }          from 'tab-canvas/crop-side-margins'
 import { toggleDisplay
        , updateSvgWithSelectedShapePath }       from 'tab-canvas/shape-to-trim'
 import { initColorFormatSelect }                from 'tab-lines/color-format'
@@ -134,19 +133,6 @@ import { initViewScalingSelect }                from 'tab-ui/view-scaling'
     //////////////////////////////////////////////////////////////////////////
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //////////////////////////// Crop side margins ///////////////////////////
-
-    // Event listener for 'Crop side margins' checkbox state changes
-    document.getElementById('crop-side-margins').addEventListener('change', (event) => {
-        const svgString = getSvgString()
-        event.target.checked ? cropSideMargins(svgString) : resetSideMargins(svgString)
-    })
-
-    //////////////////////////// Crop side margins ///////////////////////////
-    //////////////////////////////////////////////////////////////////////////
-
-
 
     // Options for 'Render' tab ///////////////////////////////////////////////////////////////////////////
 
@@ -202,6 +188,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initPathModeSelect()
     initOpacityStepsSelect()
     initColorFormatSelect()
+
+    // Tab - Canvas
+    initCropSideMarginsCheckbox()
 
     // Tab - UI
     initViewScalingSelect()
