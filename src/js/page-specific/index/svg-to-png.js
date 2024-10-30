@@ -9,7 +9,7 @@ export
     }
 
 
-// addMultipleEventListener(svgStringElement, ['change', 'keyup', 'paste'], function (event) {
+// addMultipleEventListener(svgTextarea, ['change', 'keyup', 'paste'], function (event) {
 //   const svgString = event.target.value.trim()
 //   const hasCrop = cropElement.checked
 //   if (!svgString) return
@@ -20,7 +20,7 @@ export
 // <input>や<select>などの 追加された選択要素からの更新でも それが呼び出されるように 下記の通りに変更した
 // - 'executeSvg2png' という関数を作り 選択要素から得られた値に従って SVGテキストエリアを更新し 直後に
 // - 'executeSvg2png({ target: { value: updatedSvg } })' として呼び出す
-// - 'svgStringElement' に対してSVG文字列を取得する際の 'event.target.value' と同じオブジェクト構造にする
+// - 'svgTextarea' に対してSVG文字列を取得する際の 'event.target.value' と同じオブジェクト構造にする
 
 // svg2png() を呼び出し 処理時間を計測する measureSvg2pngTime() を実行し 処理時間結果を表示する
 async function executeSvg2png(event, resvgOption) {

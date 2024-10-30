@@ -26,9 +26,7 @@ import { addEventListenerForGroupColorsInputs } from 'tab-lines/group-colors-lis
 import { generateGroupColorsHtmlElements }      from 'tab-lines/group-colors'
 import { changeOpacitySelectOptionsAsNewStep
        , updateSvgForNewStep }                  from 'tab-lines/opacity-steps'
-import { decodeAsSelectedPathMode
-       , recoverCurrentGroupColorsValues
-       , recoverCurrentOptionValue }            from 'tab-lines/path-mode'
+import { initPathModeSelect }                   from 'tab-lines/path-mode'
 import { replaceShapeRendering }                from 'tab-render/shape-rendering'
 import { initWidthPixelSizeInputElements
        , initWidthValidatorListener }           from 'tab-render/width-pixel-size'
@@ -65,9 +63,9 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
     const svgString = applyImageCustomization(initialDecodedSvgString, resvgOption)
 
     // Insert the decoded svg string to textarea
-    const svgStringElement = document.querySelector('#svg-string') // <textarea id="svg-string" ... >
-    //console.log('svgStringElement.value.trim(): ', svgStringElement.value.trim()) // <svg xmlns="http://www.w3.org/2000/svg" ... </svg>
-    svgStringElement.value = svgString
+    const svgTextarea = document.querySelector('#svg-string') // <textarea id="svg-string" ... >
+    //console.log('svgTextarea.value.trim(): ', svgTextarea.value.trim()) // <svg xmlns="http://www.w3.org/2000/svg" ... </svg>
+    svgTextarea.value = svgString
 
     // Initial PNG rendering
     await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm'))  // Path that relative from index.html
@@ -77,7 +75,7 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
     // This processes does not affect any changes for rendering result
     // So just update the svg textarea value
     const optimizedSvg = applySvgOptimization(svgString)
-    svgStringElement.value = optimizedSvg
+    svgTextarea.value = optimizedSvg
 
 
 
@@ -100,91 +98,6 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
 
 
     //////////////////////////////////////////////////////////////////////////
-    /////////////////////////////// Path mode ////////////////////////////////
-
-    //  Event listeners for 'Path mode' selection changes
-    document.getElementById("path-mode").addEventListener("change", async (event) => {
-
-        // 現在の設定の値を保存しておく
-
-        // Get the SVG string value
-        const currentPathModeSvg = getSvgString()
-
-
-        // Lines tab
-
-        // Group colors
-        const patternGroupColors = /<g stroke=[^>]*>/g
-        const matchOfGroupColors = currentPathModeSvg.match(patternGroupColors)
-        console.log('matchOfGroupColors: ', matchOfGroupColors)
-        // e.g.: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="# ...
-
-
-        // Opacity steps の選択肢の値は svgのコンテンツではなく UIのみに関わるので 保存しておいて元に戻す 必要はない
-
-
-        // Canvas tab
-
-        // Shape to trim
-        const patternShapeToTrim = /<clipPath id="shape-to-trim">[^>]*>/g
-        const matchOfShapeToTrim = currentPathModeSvg.match(patternShapeToTrim)
-        const valueOfShapeToTrim = matchOfShapeToTrim[0]   // 'square' | 'circle' | 'squircle' | 'squircle, slimmed'
-        // viewBox (for 'Crop side margins' checked.)
-        const patternViewbox = /viewBox="[^"]*"/
-        const matchOfViewbox = currentPathModeSvg.match(patternViewbox)
-        const valueOfViewbox = matchOfViewbox[0]           // e.g.: viewBox="1.55 0 27.9 31"
-
-
-        // Render tab
-
-        // Anti-aliasing (shape-rendering)
-        const patternShapeRendering = /shape-rendering="[^"]*"/g
-        const matchOfShapeRendering = currentPathModeSvg.match(patternShapeRendering)
-        const valueOfShapeRendering = matchOfShapeRendering[0]  // 'shape-rendering="geometricPrecision"' | 'shape-rendering="crispEdges"'
-
-
-
-        // 選択された 'Path mode'の値を 取得
-        const pathMode = event.target.value  // 'relativeMerged' | 'absoluteSeparated'
-        console.log(`"${pathMode}" selected.`)
-
-        // Re-decode as new 'Path mode' styled svg string from url params
-        const newPathModeSvg = decodeAsSelectedPathMode(pathMode)
-
-        // レンダリングし直す前に 保存しておいた 設定の値を 元に戻す
-
-        // Anti-alias, Base color, Shape to trim, viewBox
-        const recoverShapeRendering = recoverCurrentOptionValue(newPathModeSvg, patternShapeRendering, valueOfShapeRendering)
-        const recoverShapeToTrim    = recoverCurrentOptionValue(recoverShapeRendering, patternShapeToTrim, valueOfShapeToTrim)
-        const recoverViewbox        = recoverCurrentOptionValue(recoverShapeToTrim, patternViewbox, valueOfViewbox)
-        const updatedSvg            = recoverCurrentGroupColorsValues(recoverViewbox, patternGroupColors, matchOfGroupColors)
-
-        // Update the state
-        updateState('pathMode', pathMode)
-
-        // 保存しておいた設定の値を 全て元に戻した 新しいSVG文字列 を
-        // SVG最適化モーダルウィンドウでの 3つのチェックボックスの状態に応じた形にしてから
-        // <textarea>のvalue属性に 挿入する
-
-        // Optimize the SVG string using current three checkboxes status
-        const svgOptState = new Map([
-            ['removeOpacity',  getState('removeOpacity') ],      // SVG optimization modal
-            ['removeLineBreaks', getState('removeLineBreaks')],  // SVG optimization modal
-            ['removeSpaces',   getState('removeSpaces')  ],      // SVG optimization modal
-        ])
-        const optimizedSvg = optimizeSvg(updatedSvg, svgOptState)
-
-        svgStringElement.value = optimizedSvg
-
-        // executeSvg2png関数を呼び出す
-        executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
-    })
-
-    /////////////////////////////// Path mode ////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////
-
-
-    //////////////////////////////////////////////////////////////////////////
     ////////////////////////////// Opacity steps /////////////////////////////
 
     // Event listeners for 'Opacity steps' value changes
@@ -203,7 +116,7 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
         // 新しいセレクトメニューでの 値 を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
         const updatedSvg = updateSvgForNewStep(getSvgString())
 
-        svgStringElement.value = updatedSvg                 // Update textarea
+        svgTextarea.value = updatedSvg                 // Update textarea
         executeSvg2png({ target: { value: updatedSvg } }, resvgOption)  // Rendering to PNG
     })
 
@@ -235,7 +148,7 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
 
         // 新しいセレクトメニューでの 値 を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
         const updatedSvg = updateSvgAsNewColorFormat(colorFormat)
-        svgStringElement.value = updatedSvg
+        svgTextarea.value = updatedSvg
 
         // Only update the SVG strings in the textarea.
         // No need to execute `executeSvg2png()`,
@@ -258,7 +171,7 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
         console.log('widthNarrowness: ', widthNarrowness)
         updateState('widthNarrowness', widthNarrowness)
         const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvgString())
-        svgStringElement.value = updatedSvg                             // Update textarea
+        svgTextarea.value = updatedSvg                             // Update textarea
         executeSvg2png({ target: { value: updatedSvg } }, resvgOption)  // Render to PNG
     })
 
@@ -267,7 +180,7 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
         console.log('topHeavyRatio: ', topHeavyRatio)
         updateState('topHeavyRatio', topHeavyRatio)
         const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvgString())
-        svgStringElement.value = updatedSvg                             // Update textarea
+        svgTextarea.value = updatedSvg                             // Update textarea
         executeSvg2png({ target: { value: updatedSvg } }, resvgOption)  // Render to PNG
     })
 
@@ -294,7 +207,7 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
         const inputSvg = getSvgString()
         const updatedSvg = updateSvgWithSelectedShapePath(shapeToTrim, inputSvg)
 
-        svgStringElement.value = updatedSvg                             // Update textarea
+        svgTextarea.value = updatedSvg                             // Update textarea
         executeSvg2png({ target: { value: updatedSvg } }, resvgOption)  // Render to PNG
 
     })
@@ -330,13 +243,13 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
         updateState('shapeRendering', shapeRendering)
 
         // <textarea>のvalue属性を取得
-        const svgString = svgStringElement.value
+        const svgString = svgTextarea.value
 
         // 選択された値に SVG文字列を 置き換える
         const updatedSvg = replaceShapeRendering(svgString, shapeRendering)
 
         // <textarea>のvalue属性を更新する
-        svgStringElement.value = updatedSvg
+        svgTextarea.value = updatedSvg
 
         // executeSvg2png関数を呼び出す
         executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
@@ -366,6 +279,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Download buttons for SVG and PNG
     initDownloadButtons()
 
+    // Tab - Lines
+    initPathModeSelect()
+
     // Tab - UI
     initViewScalingSelect()
     initCheckerboardBgCheckbox()
@@ -386,11 +302,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Get first tab ('Lines') activated
     initTabs()
 
-    // SVG optimization
+    // Modal - SVG optimization
     initSvgOptimizationModalToggle()
     initSvgOptimization()
 
-    // Reset settings
+    // Modal - Reset settings
     initResetSettingsModalToggle()
     initResetSettings()
 
