@@ -20,9 +20,8 @@ import { cropSideMargins
        , resetSideMargins }                     from 'tab-canvas/crop-side-margins'
 import { toggleDisplay
        , updateSvgWithSelectedShapePath }       from 'tab-canvas/shape-to-trim'
-import { updateSvgAsNewColorFormat }            from 'tab-lines/update-svg-color-format'
-import { addEventListenerForGroupColorsInputs } from 'tab-lines/group-colors-listener'
-import { generateGroupColorsHtmlElements }      from 'tab-lines/group-colors'
+import { initColorFormatSelect }                from 'tab-lines/color-format'
+import { initGroupColorsInputs }                from 'tab-lines/group-colors-listener'
 import { initOpacityStepsSelect }               from 'tab-lines/opacity-steps'
 import { initPathModeSelect }                   from 'tab-lines/path-mode'
 import { replaceShapeRendering }                from 'tab-render/shape-rendering'
@@ -32,7 +31,6 @@ import { initCheckerboardBgCheckbox }           from 'tab-ui/checkerboard-bg'
 import { initTextWrappingCheckbox }             from 'tab-ui/text-wrapping'
 import { initThemeColorSelect }                 from 'tab-ui/theme-color'
 import { initViewScalingSelect }                from 'tab-ui/view-scaling'
-import { getNumberOfGroups }                    from 'utils/get-number-of-groups'
 
 
 (async function () {
@@ -78,57 +76,6 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
 
 
     // Add event listeners
-
-
-    // Options for 'Lines' tab /////////////////////////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////////////////////////
-    ///////// Group colors: 'stroke', 'opacity' and 'stroke-opacity' /////////
-
-    // Add multiple event listener for whole stroke colors
-    const numberOfGroups = getNumberOfGroups(getSvgString())
-    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke')
-    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'opacity')
-    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke-opacity')
-
-    ///////// Group colors: 'stroke', 'opacity' and 'stroke-opacity' /////////
-    //////////////////////////////////////////////////////////////////////////
-
-
-    //////////////////////////////////////////////////////////////////////////
-    ///////////////////////////// Color format ///////////////////////////////
-
-    //  Event listeners for 'Color format' selection changes
-    document.getElementById("color-format").addEventListener("change", (event) => {
-        // 選択されたセレクトメニューの値を 取得
-        const colorFormat = event.target.value  // rgb | hex
-        console.log('Color format: ', colorFormat)
-
-        // グローバルステートを 更新
-        updateState('colorFormat', colorFormat)
-
-
-        // HTMLを 新しい表示フォーマットの js-color input に更新
-        generateGroupColorsHtmlElements(getSvgString(), colorFormat, getState('opacitySteps'))
-
-        // Add event listener for new format js-color inputs and opacity selectors
-        addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke')
-        addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'opacity')
-        addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke-opacity')
-
-
-        // 新しいセレクトメニューでの 値 を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
-        const updatedSvg = updateSvgAsNewColorFormat(colorFormat)
-        svgTextarea.value = updatedSvg
-
-        // Only update the SVG strings in the textarea.
-        // No need to execute `executeSvg2png()`,
-        // because the color-format does not affect the appearance of the artwork.
-    })
-
-    ///////////////////////////// Color format ///////////////////////////////
-    //////////////////////////////////////////////////////////////////////////
-
 
     // Options for 'Canvas' tab ///////////////////////////////////////////////////////////////////////////
 
@@ -251,8 +198,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initDownloadButtons()
 
     // Tab - Lines
+    initGroupColorsInputs()
     initPathModeSelect()
     initOpacityStepsSelect()
+    initColorFormatSelect()
 
     // Tab - UI
     initViewScalingSelect()

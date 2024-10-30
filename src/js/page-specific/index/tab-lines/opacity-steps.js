@@ -1,9 +1,10 @@
 import { getSvgString }               from 'button/download-as-file'
 import { formatAsFloatString }        from 'common-utils/format-as-float'
+import { resvgOption }                from 'state/resvg-option'
 import { updateState }                from 'state/url-state-manager'
 import { executeSvg2png }             from 'svg-to-png'
 import { getGroupColorsValues }       from 'tab-lines/get-colors-from-svg'
-import { generateGroupColorsSvgTags } from 'tab-lines/group-colors'
+import { generateGroupColorsSvgTags } from 'tab-lines/group-colors-generator'
 import { getNumberOfGroups }          from 'utils/get-number-of-groups'
 import { replaceAtIndex }             from 'utils/replace-at-index'
 

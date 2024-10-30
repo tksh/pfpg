@@ -12,7 +12,7 @@ import { getState
 import { applyGroupColors }                     from 'tab-lines/apply-group-colors'
 import { decodeGroupColorsAsArray
        , getGroupOpacitiesAsMap }               from 'tab-lines/decode-colors-as-array'
-import { generateGroupColorsHtmlElements }      from 'tab-lines/group-colors'
+import { generateGroupColorsHtmlElements }      from 'tab-lines/group-colors-generator'
 import { changeOpacitySelectOptionsAsNewStep
        , updateSvgForNewStep }                  from 'tab-lines/opacity-steps'
 import { toggleDisplay
