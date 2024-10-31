@@ -1,10 +1,16 @@
 import { getSvgString } from 'button/download-as-file'
+import { resvgOption } from 'state/resvg-option'
 import { updateState } from 'state/url-state-manager'
 import { executeSvg2png } from 'svg-to-png'
 import { getGroupColorsAsJoinedHex } from 'tab-lines/encode-colors-as-hex'
-import { generateGroupColorsSvgTags } from 'tab-lines/group-colors'
+import { generateGroupColorsSvgTags } from 'tab-lines/group-colors-generator'
 import { getOpacity, getStroke, getStrokeOpacity, regexMatchesOfGroupColors} from 'tab-lines/get-colors-from-svg'
 import { replaceAtIndex } from 'utils/replace-at-index'
+import { getNumberOfGroups } from 'utils/get-number-of-groups'
+export function initGroupColorsInputs() {const numberOfGroups = getNumberOfGroups(getSvgString())
+addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke')
+addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'opacity')
+addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke-opacity')}
 export function addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, attrName) {for (let i = 0; i < numberOfGroups; i++) {const elementId = `group-colors-${attrName}-${i}`
 const element = document.querySelector(`#${elementId}`)
 element.addEventListener('change', function (event) {const inputValue = event.target.value

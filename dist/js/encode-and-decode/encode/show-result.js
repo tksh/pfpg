@@ -1,8 +1,9 @@
 import { outputToTextarea } from 'common-utils/output-to-textarea'
 import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
 import { showProcessingTime } from 'common-utils/show-processing-time'
-import { flagsMap, resultInfo} from 'constants'
+import { FLAGS_MAP } from 'constants'
 import { zip } from 'libs/deno-std/zip'
+import { resultInfo} from 'state/result-info'
 export
 { showResult, showStringSize, showDetailsByGroups}
 function showResult(encodingMethodName, startTime, encodedStrJoined, encodedArrByGroups) {const inputDataTitle = `Lines Data encoding via '${encodingMethodName}Enc()'`
@@ -23,6 +24,6 @@ const flagsByGroups = resultInfo.get(`${encodingMethodName} Flags`)
 const flagsByKinds = zip(...Array.from(flagsByGroups))
 const flag1 = flagsByKinds[0]
 const flag2 = flagsByKinds[1]
-const flag1Name = flag1.map(char => flagsMap.get('rev_1st').get(`${char}`))
-const flag2Name = flag2.map(char => flagsMap.get('rev_2nd').get(`${char}`))
+const flag1Name = flag1.map(char => FLAGS_MAP.get('rev_1st').get(`${char}`))
+const flag2Name = flag2.map(char => FLAGS_MAP.get('rev_2nd').get(`${char}`))
 return new Map([['gId', keys],['colors', groupColors],['length', lengthOfValues],['flags', flagsByGroups],['flag1', flag1],['flag2', flag2]])}

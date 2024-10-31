@@ -5,6 +5,14 @@ import { executeSvg2png } from 'svg-to-png'
 import { toFixedTrimmed } from 'utils/number-rounding'
 export
 { viewboxSlimmed, viewboxUnSlimmed, extractViewboxValues, cropSideMargins, resetSideMargins}
+function cropSideMargins(inputSvg) {updateState('cropSideMargins', true)
+return updateSvg(inputSvg, true)}
+function resetSideMargins(inputSvg) {updateState('cropSideMargins', false)
+return updateSvg(inputSvg, false)}
+function updateSvg(inputSvg, isCropped) {const updatedSvg = isCropped ? viewboxSlimmed(inputSvg) : viewboxUnSlimmed(inputSvg)
+document.querySelector('#svg-string').value = updatedSvg
+executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
+return updatedSvg}
 function viewboxSlimmed(inputSvg) {const slimmedXW = getSlimmedViewboxXW(inputSvg)
 const viewboxValues = extractViewboxValues(inputSvg)
 const newViewboxString = `viewBox="${slimmedXW.get('x')} ${viewboxValues.get('y')} ${slimmedXW.get('w')} ${viewboxValues.get('h')}"`
@@ -22,11 +30,3 @@ const patternForViewboxStr = /viewBox="([^"]+)"/
 const matchesForViewboxStr = patternForViewboxStr.exec(inputSvg)
 const matchForViewboxValueStr = matchesForViewboxStr[1]
 return inputSvg.replace(matchForViewboxValueStr, originalViewboxString)}
-function updateSvg(inputSvg, isCropped) {const updatedSvg = isCropped ? viewboxSlimmed(inputSvg) : viewboxUnSlimmed(inputSvg)
-document.querySelector('#svg-string').value = updatedSvg
-executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
-return updatedSvg}
-function cropSideMargins(inputSvg) {updateState('cropSideMargins', true)
-return updateSvg(inputSvg, true)}
-function resetSideMargins(inputSvg) {updateState('cropSideMargins', false)
-return updateSvg(inputSvg, false)}

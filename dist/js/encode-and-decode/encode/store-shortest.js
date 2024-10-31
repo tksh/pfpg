@@ -1,4 +1,5 @@
-import { flagsMap, resultInfo} from 'constants'
+import { FLAGS_MAP } from 'constants'
+import { resultInfo} from 'state/result-info'
 export function storeShortest(encodedArrByMethods, encodingMethodNamesArr) {const shortestArrByGroups = new Map()
 let flagsArr= []
 for (let i = 0; i < encodedArrByMethods[0].size; i++) {const encodedArrExtractWithGroupId = encodedArrByMethods.map(encodedArr => encodedArr.get(i))
@@ -9,7 +10,7 @@ const methodName = encodingMethodNamesArr[minIndex]
 const shortestArr = encodedArrExtractWithGroupId[minIndex]
 shortestArrByGroups.set(`${i}`, shortestArr)
 const charOf1stFlag = shortestArr[0].split('=')[1][0]
-const charOf2ndFlag = flagsMap.get('2nd').get(methodName)
+const charOf2ndFlag = FLAGS_MAP.get('2nd').get(methodName)
 flagsArr.push([charOf1stFlag, charOf2ndFlag])}
 const bestMixFlags = new Map([['flags', [...flagsArr]]])
 resultInfo.set('best-mix Flags', flagsArr)

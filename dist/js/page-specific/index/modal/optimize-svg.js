@@ -1,4 +1,4 @@
-import { tabSpace } from 'constants'
+import { TAB_SPACE } from 'constants'
 import { getSvgString } from 'button/download-as-file'
 import { updateButtonWithSvgSize} from 'button/update-button-text'
 import { updateState, getState} from 'state/url-state-manager'
@@ -38,7 +38,7 @@ function restoreLineBreaks(svgString, pathMode) {const indentCounts = getCurrent
 let formattedSvg = svgString.replace(/></g, '>\n<')
 const lines = formattedSvg.split('\n')
 const indentedLines = lines.map((line, index) => {const indentCount = indentCounts[index] || 0
-return tabSpace.repeat(indentCount) + line.trim()})
+return TAB_SPACE.repeat(indentCount) + line.trim()})
 return indentedLines.join('\n')}
 function getSvgIndentation(svgString) {const lines = svgString.split('\n')
 return lines.map(line => {const match = line.match(/^(\s*)/)

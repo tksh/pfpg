@@ -100,6 +100,7 @@
                 "encode/store-shortest":           "./js/encode-and-decode/encode/store-shortest.js",
                 "encode/transform-encoded-result": "./js/encode-and-decode/encode/transform-encoded-result.js",
                 "encode/try-compress":             "./js/encode-and-decode/encode/try-compress.js",
+                "state/result-info":        "./js/encode-and-decode/encode/state/result-info.js",
 
 
                 "init/adjust-output-boxes-size":    "./js/page-specific/index/init/adjust-output-boxes-size.js",
@@ -115,19 +116,21 @@
                 "modal/optimize-svg":               "./js/page-specific/index/modal/optimize-svg.js",
                 "modal/reset-settings":             "./js/page-specific/index/modal/reset-settings.js",
 
-                "tab-canvas/crop-side-margins":     "./js/page-specific/index/tab-canvas/crop-side-margins.js",
-                "tab-canvas/shape-to-trim":         "./js/page-specific/index/tab-canvas/shape-to-trim.js",
-
                 "tab-lines/apply-group-colors":     "./js/page-specific/index/tab-lines/apply-group-colors.js",
+                "tab-lines/color-format": "./js/page-specific/index/tab-lines/color-format.js",
                 "tab-lines/color-format-converter": "./js/page-specific/index/tab-lines/color-format-converter.js",
                 "tab-lines/decode-colors-as-array": "./js/page-specific/index/tab-lines/decode-colors-as-array.js",
                 "tab-lines/encode-colors-as-hex":   "./js/page-specific/index/tab-lines/encode-colors-as-hex.js",
                 "tab-lines/get-colors-from-svg":    "./js/page-specific/index/tab-lines/get-colors-from-svg.js",
                 "tab-lines/group-colors-listener":  "./js/page-specific/index/tab-lines/group-colors-listener.js",
-                "tab-lines/group-colors":           "./js/page-specific/index/tab-lines/group-colors.js",
+                "tab-lines/group-colors-generator":           "./js/page-specific/index/tab-lines/group-colors-generator.js",
                 "tab-lines/opacity-steps":          "./js/page-specific/index/tab-lines/opacity-steps.js",
                 "tab-lines/path-mode":              "./js/page-specific/index/tab-lines/path-mode.js",
                 "tab-lines/update-svg-color-format":"./js/page-specific/index/tab-lines/update-svg-color-format.js",
+
+                "tab-canvas/crop-side-margins":     "./js/page-specific/index/tab-canvas/crop-side-margins.js",
+                "tab-canvas/shape-to-trim":         "./js/page-specific/index/tab-canvas/shape-to-trim.js",
+                "tab-canvas/shape-to-trim-listener":         "./js/page-specific/index/tab-canvas/shape-to-trim-listener.js",
 
                 "tab-render/width-pixel-size":      "./js/page-specific/index/tab-render/width-pixel-size.js",
                 "tab-render/shape-rendering":       "./js/page-specific/index/tab-render/shape-rendering.js",
@@ -339,8 +342,8 @@
                         <div class="opts-cell">
                             <label for="shape-rendering">Anti-aliasing: </label>
                             <select name="shape-rendering" id="shape-rendering" autocomplete="off">
-                                <option value="geometricPrecision">On (geometricPrecision)</option>
                                 <option value="crispEdges" selected>Off (crispEdges)</option>
+                                <option value="geometricPrecision">On (geometricPrecision)</option>
                             </select>
                         </div>
                     </div>
@@ -426,16 +429,6 @@
 
             </fieldset>
         </div> <!-- end of <div id="customization" class="opts"> -->
-
-
-        <!-- Crop by BBox | Disabled -->
-        <div class="display-none">
-            <div class="opts-cell">
-                <label for="crop-by-bbox">Crop by BBox:</label>
-                <input type="checkbox" name="crop-by-bbox" id="crop-by-bbox" autocomplete="off">
-            </div>
-        </div>
-
 
     </header>
 
@@ -574,8 +567,6 @@
                 </div>
             </div>
         </div>
-
-
 
     </main>
 

@@ -1,5 +1,5 @@
 import { getState } from 'state/url-state-manager'
-import { generateGroupColorsHtmlElements, generateGroupColorsSvgTags} from 'tab-lines/group-colors'
+import { generateGroupColorsHtmlElements, generateGroupColorsSvgTags} from 'tab-lines/group-colors-generator'
 import { addEventListenerForGroupColorsInputs } from 'tab-lines/group-colors-listener'
 import { getNumberOfGroups } from 'utils/get-number-of-groups'
 import { replaceAtIndex } from 'utils/replace-at-index'

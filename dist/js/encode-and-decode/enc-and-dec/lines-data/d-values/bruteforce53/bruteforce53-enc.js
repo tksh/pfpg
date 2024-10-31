@@ -11,7 +11,7 @@ import { jsonToMapObj } from 'encode/json-to-map-obj'
 import { showResult } from 'encode/show-result'
 import { simplifyMap } from 'encode/simplify-map'
 import { tryCompress } from 'encode/try-compress'
-import { resultInfo } from 'constants'
+import { resultInfo } from 'state/result-info'
 const MAX_CODEBOOK_SIZE_START = 0
 const MAX_CODEBOOK_SIZE_END = 52
 const COORDINATES = ['x1', 'y1', 'x2', 'y2']
@@ -22,8 +22,8 @@ const uintN = tryDecompress(parseBasicData().n)
 const diffValueRange = calculateDiffLimits(uintN)
 for (let maxCodebookSize = MAX_CODEBOOK_SIZE_START; maxCodebookSize <= MAX_CODEBOOK_SIZE_END; maxCodebookSize++) {const baseXNumber = 52 - maxCodebookSize
 const encodedDvals = processGroups(baseXNumber, diffValueRange)
-const compressResult = await compressAndStore(encodedDvals, encodingMethodName, baseXNumber)
-currentShortestByGroups = updateShortestByGroups(currentShortestByGroups, compressResult.compressedByGroups, baseXNumber, maxCodebookSize)}
+const compressingResult = await compressAndStore(encodedDvals, encodingMethodName, baseXNumber)
+currentShortestByGroups = updateShortestByGroups(currentShortestByGroups, compressingResult.compressedByGroups, baseXNumber, maxCodebookSize)}
 mergeFlagsArr(resultInfo)
 return finalizeResults(currentShortestByGroups, encodingMethodName, startTime)}
 function processGroups(baseXNumber, diffValueRange) {const aggDataByGroups = jsonToMapObj(`textarea-agg-data-for-comp-uploaded`)

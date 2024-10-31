@@ -198,46 +198,60 @@ function removeSpaces(svgString) {
 
         const optimizedPath = pathData
 
-            // コマンド後のスペースを削除
+            // コマンド後のスペース削除
             .replace(/([MLHVCSQTAZ])\s+/gi, '$1')
-            // e.g.: <path d="M 36 61 L 33 68" /> => <path d="M36 61 L33 68" />
+            // e.g.: <path d="M 12 34 L 56 78" /> => <path d="M12 34 L56 78" />
 
-            // 数字とコマンドの間のスペース削除
-            .replace(/(\d)\s+([MLHVCSQTAZ])/gi, '$1$2')
-            // e.g.: <path d="M36 61 L33 68" /> => <path d="M36 61L33 68" />
+            // 数字 と コマンド のあいだのスペース削除
+            .replace(/(-?\d+(?:\.\d+)?)\s+([MLHVCSQTAZ])/gi, '$1$2')
+            // e.g.: <path d="M12 34 L56 78" /> => <path d="M12 34L56 78" />
 
-            // ダブルクォートとスラッシュ のあいだの スペースを削除
+            // 数字 と 負の値の数字 のあいだのスペース削除 (for relative coordinates values)
+            .replace(/(-?\d+(?:\.\d+)?)\s+(-\d+(?:\.\d+)?)/g, '$1$2')
+            // e.g.: <path d="d="m12 3 45 6m-7 89 -10 11"/> => <path d="d="m12 3 45 6m-7 89-10 11"/>
+
+            // ダブルクォート と スラッシュ のあいだのスペース削除
             .replace(/"\s+(\/)/g, '"$1')
-            // e.g.: <path d="M36 61L33 68" /> => <path d="M36 61L33 68"/>
+            // e.g.: <path d="M12 34L56 78" /> => <path d="M12 34L56 78"/>
 
         return optimizedPath
     })
 }
-//console.log(removeSpaces('<path d="M 36 61 L 33 68" />'))  // => <path d="M36 61L33 68"/>
+// Test
+// console.log(removeSpaces('<path d="M 12 34 L 56 78" />'))  // Absolute
+// // <path d="M36 61L33 68"/>
+// console.log(removeSpaces('<path d="d="m 12 3 45 6 m -7 89 -10 11" />'))  // Relative
+// // <path d="d="m12 3 45 6m-7 89-10 11"/>
+// console.log(removeSpaces('<path d="M 6.35 63.5 Q 5.08 0 63.5 0 T 120.65 63.5 63.5 127 6.35 63.5" />'))  // Squircle, slimmed
+// // <path d="M6.35 63.5Q5.08 0 63.5 0T120.65 63.5 63.5 127 6.35 63.5"/>
 
 function restoreSpaces(svgString) {
     return svgString.replace(/(\sd="[^>]+>)/g, (match, pathData) => {  // Use \sd= to skip id=
 
         const restoredPath = pathData
 
-            // コマンド後にスペースを挿入
+            // コマンド後にスペース挿入
             .replace(/([MLHVCSQTAZ])/gi, '$1 ')
 
-            // 数字とコマンド間にスペース挿入
+            // 数字 と コマンド のあいだにスペース挿入
             .replace(/(\d)([MLHVCSQTAZ])/gi, '$1 $2')
 
-            // ダブルクォートとスラッシュ のあいだに スペースを挿入
+            // 数字 と 負の値の数字 のあいだにスペース挿入 (for relative coordinates values)
+            .replace(/(\d)(-\d+(?:\.\d+)?)/gi, '$1 $2')
+
+            // ダブルクォート と スラッシュ のあいだにスペース挿入
             .replace(/"(\/)/g, '" $1')
 
         return restoredPath
     })
 }
-//console.log(restoreSpaces('<path d="M36 61L33 68"/>'))  // Line
-// <path d="M 36 61 L 33 68" />
-//console.log(restoreSpaces('<path d="M0,63.5Q0,0 63.5,0T127,63.5 63.5,127 0,63.5"/>'))  // Squircle
-// <path d="M 0,63.5 Q 0,0 63.5,0 T 127,63.5 63.5,127 0,63.5" />
-//console.log(restoreSpaces('<path d="M6.35,63.5Q5.08,0 63.5,0T120.65,63.5 63.5,127 6.35,63.5"/>'))  // Squircle, slimmed
-// <path d="M 6.35,63.5 Q 5.08,0 63.5,0 T 120.65,63.5 63.5,127 6.35,63.5" />
+// // Test
+// console.log(restoreSpaces('<path d="M36 61L33 68"/>'))  // Absolute
+// // <path d="M 36 61 L 33 68" />
+// console.log(restoreSpaces('<path d="d="m12 3 45 6m-7 89-10 11"/>'))  // Relative
+// // <path d="d="m 12 3 45 6 m -7 89 -10 11" />
+// console.log(restoreSpaces('<path d="M6.35 63.5Q5.08 0 63.5 0T120.65 63.5 63.5 127 6.35 63.5"/>'))  // Squircle, slimmed
+// // <path d="M 6.35 63.5 Q 5.08 0 63.5 0 T 120.65 63.5 63.5 127 6.35 63.5" />
 
 
 // Bulk apply the optimizations based on current url params states, after 'pathMode' changes.

@@ -1,7 +1,8 @@
 import { compressToEncodedURIComponent } from 'common-utils/compression-stream'
-import { flagsMap, resultInfo, encodingMethodAndConfig} from 'constants'
+import { FLAGS_MAP, ENCODING_METHOD_AND_CONFIG_MAP} from 'constants'
 import { getEncodedAttrsExceptsDvals } from 'encode/get-attrs-excepts-dvals'
 import { URLCompressor } from 'libs/url-comp-0-1-0/url-comp'
+import { resultInfo } from 'state/result-info'
 export async function tryCompress(encodedDval, encodingMethodName, encodingConfigValue) {const encodedWidthsAndCounts = getEncodedAttrsExceptsDvals().widthsAndCounts
 const encodedGroupColors = getEncodedAttrsExceptsDvals().groupColors
 const compressedByGroups = new Map()
@@ -11,11 +12,11 @@ let lengthAfterComp = []
 const groupCount = encodedDval.size
 const ampersandCount = groupCount - 1
 let compressingResultArr = []
-for (const [gId, dvalEncodedStr] of encodedDval) {const charOf2ndFlag = flagsMap.get('2nd').get(encodingMethodName)
+for (const [gId, dvalEncodedStr] of encodedDval) {const charOf2ndFlag = FLAGS_MAP.get('2nd').get(encodingMethodName)
 const widthsAndCountsEncoded = encodedWidthsAndCounts.get(gId)
 const uncompressed = charOf2ndFlag + widthsAndCountsEncoded + '-' + dvalEncodedStr
 const { bestCompressedData, bestCompMethodName } = await compressAndSelectBest(uncompressed)
-const charOf1stFlag = flagsMap.get('1st').get(bestCompMethodName)
+const charOf1stFlag = FLAGS_MAP.get('1st').get(bestCompMethodName)
 const encodedWidthAndDvalsAsValue = charOf1stFlag + bestCompressedData
 const encodedAsKvPair = addColorAsKey(encodedGroupColors, gId, encodedWidthAndDvalsAsValue)
 compressedByGroups.set(gId, encodedAsKvPair)
@@ -24,7 +25,7 @@ lengthBeforeComp.push(uncompressed.length + 1)
 lengthAfterComp.push(bestCompressedData.length + 1)
 compressingResultArr.push([gId, uncompressed.length + 1, bestCompressedData.length + 1, bestCompMethodName])
 const previousBaseXData = resultInfo.get(`${encodingMethodName} gId=${gId}`)
-?? [['gId', `${encodingMethodAndConfig.get(encodingMethodName)}`, 'uncompressed', 'bestCompressed', 'bestCompMethodName']]
+?? [['gId', `${ENCODING_METHOD_AND_CONFIG_MAP.get(encodingMethodName)}`, 'uncompressed', 'bestCompressed', 'bestCompMethodName']]
 const currentBaseXDataAdded = [...previousBaseXData, [gId, encodingConfigValue, uncompressed.length + 1, bestCompressedData.length + 1, bestCompMethodName]]
 resultInfo.set(`${encodingMethodName} gId=${gId}`, currentBaseXDataAdded)}
 calculateLengths(lengthBeforeComp, lengthAfterComp, ampersandCount)

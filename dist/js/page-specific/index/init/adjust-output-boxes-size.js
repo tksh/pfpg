@@ -1,4 +1,5 @@
-export async function adjustBox() {const windowInnerHeight = window.innerHeight
+export async function initLayout() {await adjustOutputBoxSize()}
+async function adjustOutputBoxSize() {const windowInnerHeight = window.innerHeight
 const bodyElem = document.querySelector('body')
 const bodyRect = bodyElem.getBoundingClientRect()
 const headerElem = document.querySelector('header')
