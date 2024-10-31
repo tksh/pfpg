@@ -203,11 +203,11 @@ function removeSpaces(svgString) {
             // e.g.: <path d="M 12 34 L 56 78" /> => <path d="M12 34 L56 78" />
 
             // 数字 と コマンド のあいだのスペース削除
-            .replace(/(-?\d+(?:\.\d+)?)\s+([MLHVCSQTAZ])/gi, '$1$2')
+            .replace(/(\d)\s+([MLHVCSQTAZ])/gi, '$1$2')
             // e.g.: <path d="M12 34 L56 78" /> => <path d="M12 34L56 78" />
 
             // 数字 と 負の値の数字 のあいだのスペース削除 (for relative coordinates values)
-            .replace(/(-?\d+(?:\.\d+)?)\s+(-\d+(?:\.\d+)?)/g, '$1$2')
+            .replace(/ -/g, '-')
             // e.g.: <path d="d="m12 3 45 6m-7 89 -10 11"/> => <path d="d="m12 3 45 6m-7 89-10 11"/>
 
             // ダブルクォート と スラッシュ のあいだのスペース削除
@@ -217,7 +217,7 @@ function removeSpaces(svgString) {
         return optimizedPath
     })
 }
-// Test
+// // Test
 // console.log(removeSpaces('<path d="M 12 34 L 56 78" />'))  // Absolute
 // // <path d="M36 61L33 68"/>
 // console.log(removeSpaces('<path d="d="m 12 3 45 6 m -7 89 -10 11" />'))  // Relative
@@ -237,7 +237,7 @@ function restoreSpaces(svgString) {
             .replace(/(\d)([MLHVCSQTAZ])/gi, '$1 $2')
 
             // 数字 と 負の値の数字 のあいだにスペース挿入 (for relative coordinates values)
-            .replace(/(\d)(-\d+(?:\.\d+)?)/gi, '$1 $2')
+            .replace(/(\d)-/g, '$1 -')
 
             // ダブルクォート と スラッシュ のあいだにスペース挿入
             .replace(/"(\/)/g, '" $1')
