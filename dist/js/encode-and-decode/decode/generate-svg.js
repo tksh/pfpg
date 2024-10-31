@@ -20,8 +20,7 @@ const lastlineIndex = lastlineIndices[i] - 1
 const pathTagOpenWithWidth = TAB_SPACE.repeat(3) + `<path stroke-width="${width}" d="`
 const pathTagClose = '" />'
 let pathTagDval = ""
-for (let i = firstlineIndex; i <= lastlineIndex; i++) {let eachDval = `m${dvalsObj.x1[i]} ${dvalsObj.y1[i]} ${dvalsObj.x2[i]} ${dvalsObj.y2[i]}`
-eachDval = eachDval.replace(/ -/g, '-')
+for (let i = firstlineIndex; i <= lastlineIndex; i++) {let eachDval = `m ${dvalsObj.x1[i]} ${dvalsObj.y1[i]} ${dvalsObj.x2[i]} ${dvalsObj.y2[i]}`
 pathTagDval += eachDval}
 const pathTag = pathTagOpenWithWidth + pathTagDval + pathTagClose
 pathTagUnderGroup.push(pathTag)}

@@ -48,11 +48,13 @@ return getSvgIndentation(svgString)}
 function removeSpaces(svgString) {return svgString.replace(/(\sd="[^>]+>)/g, (match, pathData) => {const optimizedPath = pathData
 .replace(/([MLHVCSQTAZ])\s+/gi, '$1')
 .replace(/(\d)\s+([MLHVCSQTAZ])/gi, '$1$2')
+.replace(/ -/g, '-')
 .replace(/"\s+(\/)/g, '"$1')
 return optimizedPath})}
 function restoreSpaces(svgString) {return svgString.replace(/(\sd="[^>]+>)/g, (match, pathData) => {const restoredPath = pathData
 .replace(/([MLHVCSQTAZ])/gi, '$1 ')
 .replace(/(\d)([MLHVCSQTAZ])/gi, '$1 $2')
+.replace(/(\d)-/g, '$1 -')
 .replace(/"(\/)/g, '" $1')
 return restoredPath})}
 function optimizeSvg(svgString, state) {let optimizedSvg = svgString
