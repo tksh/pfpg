@@ -15,13 +15,13 @@ import { TAB_SPACE }   from 'constants'
 //     <g clip-path="url(#shape-to-trim)">
 //         <g stroke="#000000" opacity="1" stroke-opacity="1">
 //             <g stroke-width="3">
-//                 <path d="m1 0 0 26m3-26 0 25m3-25-1 ... 8 5m-8-19 3 2" />
+//                 <path d="m 1 0 0 26 m 3 -26 0 25 m 3 -25 -1 ... 8 5 m-8 -19 3 2" />
 //             </g>
 //         </g>
-//         <g stroke="#000000" opacity="1" stroke-opacity="1">
+//         <g stroke="#000000" opacity="1" stroke -opacity="1">
 //             <g stroke-width="2">
 //             ...
-//                 <path d="m12 21 0 2m-1-19-2 3m2-1-1 2m1 3-2 3m2 1-1 1m2 5 2 1m-1 1 2 1" />
+//                 <path d="m 12 21 0 2 m  -1 -19 -2 3 m 2 -1 -1 2 m 1 3 -2 3 m 2 1 -1 1 m 2 5 2 1 m -1 1 2 1" />
 //             </g>
 //         </g>
 //     </g>
@@ -116,14 +116,12 @@ function generateRelPathTags(linesDataMap) {
             // d values for <path> tag
             let pathTagDval = ""
             for (let i = firstlineIndex; i <= lastlineIndex; i++) {
-                let eachDval = `m${dvalsObj.x1[i]} ${dvalsObj.y1[i]} ${dvalsObj.x2[i]} ${dvalsObj.y2[i]}`
-                eachDval = eachDval.replace(/ -/g, '-') // Delete unnecessary spaces before the minus mark '-'
+                let eachDval = `m ${dvalsObj.x1[i]} ${dvalsObj.y1[i]} ${dvalsObj.x2[i]} ${dvalsObj.y2[i]}`
                 pathTagDval += eachDval
             }
 
             // Join the whole <path> tag parts
             const pathTag = pathTagOpenWithWidth + pathTagDval + pathTagClose
-            // e.g. "                <path stroke-width="3" d=\"m1 0 0 26m3-26 0 25m ... m0-1 2 4m-1-1 8 5\" />"
 
             // Push the <path> tag string into same color group array
             pathTagUnderGroup.push(pathTag)
