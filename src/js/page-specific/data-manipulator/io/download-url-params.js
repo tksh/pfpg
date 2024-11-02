@@ -4,14 +4,17 @@ import { readTextarea }            from 'common-utils/read-textarea'
 import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
 import { tryDecompress }           from 'decode/try-decompress'
 
+// numcodecs/zstd
+// via CDN
+// import Zstd from 'https://cdn.skypack.dev/numcodecs/zstd?min'
+// via Local
+import Zstd from 'libs/numcodecs-v0.3.2/numcodecs/zstd'
+
 export { mergeBasicDataAndLinesData }
 
 
 // function to download encoded url params string
 // as `000_0000.txt` or `000_0000.txt.zst`
-
-import Zstd from 'https://cdn.skypack.dev/numcodecs/zstd?min'
-
 
 
 // Download as .txt.zst
