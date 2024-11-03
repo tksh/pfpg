@@ -127,6 +127,7 @@ main {
 
 /* PNG image */
 div#img-box img {
+    max-height: 100%;
     width: auto;
 }
 
