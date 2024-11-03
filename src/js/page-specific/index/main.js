@@ -19,6 +19,7 @@ import { initShapeToTrimSelect
        , initTopHeavyRatioSelect
        , initCropSideMarginsCheckbox }          from 'tab-canvas/shape-to-trim-listener'
 import { initColorFormatSelect }                from 'tab-lines/color-format'
+import { initOptionDetailsToggleListener }      from 'tab-lines/details-toggle-listener'
 import { initGroupColorsInputs }                from 'tab-lines/group-colors-listener'
 import { initOpacityStepsSelect }               from 'tab-lines/opacity-steps'
 import { initPathModeSelect }                   from 'tab-lines/path-mode'
@@ -105,6 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initPathModeSelect()
     initOpacityStepsSelect()
     initColorFormatSelect()
+    initOptionDetailsToggleListener()
 
     // Tab - Canvas
     initShapeToTrimSelect()
