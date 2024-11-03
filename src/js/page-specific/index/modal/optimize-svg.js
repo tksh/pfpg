@@ -1,9 +1,9 @@
 import { TAB_SPACE }                 from 'constants'
-import { getSvgString }             from 'button/download-as-file'
-import { updateButtonWithSvgSize}   from 'button/update-button-text'
+import { getSvgString }              from 'button/download-as-file'
+import { updateButtonWithSvgSize }   from 'button/update-button-text'
 import { updateState
-       , getState}                  from 'state/url-state-manager'
-import { decodeAsSelectedPathMode } from 'tab-lines/path-mode'
+       , getState }                  from 'state/url-state-manager'
+import { decodeAsSelectedPathMode }  from 'tab-lines/path-mode'
 
 export
     { initSvgOptimization
@@ -49,8 +49,9 @@ function tryRemoveSpaces(svgString, isSpacesRemoved) {
 
 
 
-// Add event listeners to three checkboxes in the modal
+// Add event listeners to the three checkboxes in the modal
 
+// Define an array of SVG optimization options
 const svgOptions = [
     { id: 'remove-opacity',
       stateKey: 'removeOpacity',
@@ -60,52 +61,50 @@ const svgOptions = [
       stateKey: 'removeLineBreaks',
       removeFunction: removeLineBreaks,
       restoreFunction: restoreLineBreaks,
-      needsPathMode: true },
+      needsPathMode: true },               // This boolean is required only for restoration.
     { id: 'remove-spaces',
       stateKey: 'removeSpaces',
       removeFunction: removeSpaces,
       restoreFunction: restoreSpaces }
   ]
 
+// Initialize event listeners for SVG optimization checkboxes
 function initSvgOptimization() {
     const checkboxes = document.querySelectorAll('#svg-opt-modal input[type="checkbox"]')
-    checkboxes.forEach(checkbox => checkbox.addEventListener('change', updateSvg))
+    checkboxes.forEach(checkbox => checkbox.addEventListener('change', (event) => updateSvg(event)))
 }
 
-function updateSvg() {
+// Apply SVG optimizations based on checked/un-checked options
+// Update the textarea content, URL parameters, and button text accordingly
+function updateSvg(event) {
     let svgString = getSvgString()
 
+    const isChecked = event.target.checked
+    const optionId = event.target.id        // e.g.: 'remove-opacity'
+
     svgOptions.forEach(option => {
-        const checkbox = document.getElementById(option.id)
 
-        // Update visual feedback in the modal
-        const beforeElement = document.querySelector(`#before-${option.id}`)
-        const afterElement = document.querySelector(`#after-${option.id}`)
-
-        beforeElement.classList.toggle('option-applied', !checkbox.checked)
-        afterElement.classList.toggle('option-applied', checkbox.checked)
-
-        // Optimize the SVG text and update the state
-        if (checkbox.checked) {
-            svgString = option.removeFunction(svgString)
-            updateState(option.stateKey, true)
-        } else {
-            if (option.needsPathMode) {
-                const pathMode = getState('pathMode')
-                svgString = option.restoreFunction(svgString, pathMode)
+        if (optionId === option.id) {  // Identify the currently selected option
+            if (isChecked) {
+                svgString = option.removeFunction(svgString)
+                updateState(option.stateKey, true)
             } else {
-                svgString = option.restoreFunction(svgString)
+                if (option.needsPathMode) {
+                    const pathMode = getState('pathMode')
+                    svgString = option.restoreFunction(svgString, pathMode)
+                } else {
+                    svgString = option.restoreFunction(svgString)
+                }
+                updateState(option.stateKey, false)
             }
-            updateState(option.stateKey, false)
         }
 
-        // Update the textarea with optimized text
+        // Update the textarea with optimized SVG
         document.querySelector('#svg-string').value = svgString
-        // Count the size of the updated SVG string and display it on the SVG download button
+        // Display the size of the updated SVG string on the action button
         updateButtonWithSvgSize(svgString)
     })
 }
-
 
 
 // Remove and restore functions
@@ -115,7 +114,10 @@ function removeOpacity(svgString) {
 }
 
 function restoreOpacity(svgString) {
-    return svgString.replace(/<g\b([^>]*)>/g, function(match, attributes) {
+        return svgString.replace(/<g\b([^>]*)>/g, function(match, attributes) {
+        console.log('match: ', match)            // e.g.:  <g stroke="rgb(255,255,255)" opacity="1.0" stroke-opacity="1.0">
+        console.log('attributes: ', attributes)  // e.g.:   stroke="rgb(255,255,255)" opacity="1.0" stroke-opacity="1.0"
+
         // stroke属性があるかチェック
         if (!/\bstroke="[^"]*"/.test(attributes)) {
             return match; // stroke属性がなければ変更しない
@@ -123,6 +125,8 @@ function restoreOpacity(svgString) {
 
         // 既存の属性を解析
         let attrs = attributes.split(/\s+/).filter(attr => attr.trim() !== '')
+        console.log('attrs: ', attrs)            // e.g.: (3) ['stroke="rgb(255,255,255)"', 'opacity="1.0"', 'stroke-opacity="1.0"']
+
         let opacityValue = "1.0"
         let strokeOpacityValue = "1.0"
         let newAttrs = []
@@ -142,20 +146,21 @@ function restoreOpacity(svgString) {
         newAttrs.push(`opacity="${opacityValue}"`)
         newAttrs.push(`stroke-opacity="${strokeOpacityValue}"`)
 
+        console.log('newAttrs: ', newAttrs)      // e.g.: (3) ['stroke="rgb(255,255,255)"', 'opacity="1.0"', 'stroke-opacity="1.0"']
         return `<g ${newAttrs.join(' ')}>`
     })
 }
-// // テスト
+// // Test
 // console.log(restoreOpacity('<g stroke="#FF7523">'))
 // console.log(restoreOpacity('<g stroke="#FF7523" opacity="1.0">'))
 // console.log(restoreOpacity('<g stroke="#FF7523" stroke-opacity="1.0">'))
 // console.log(restoreOpacity('<g stroke="#FF7523" opacity="0.5" stroke-opacity="0.8">'))
-// console.log(restoreOpacity('<g fill="#FF7523">'))  // stroke属性がない場合
+// console.log(restoreOpacity('<g fill="#FF7523">'))  // 'stroke'属性がない場合 変更しない
 //
-// <g stroke="#FF7523" opacity="1.0" stroke-opacity="1.0"> debugger eval code:34:9
-// <g stroke="#FF7523" opacity="1.0" stroke-opacity="1.0"> debugger eval code:35:9
-// <g stroke="#FF7523" opacity="1.0" stroke-opacity="1.0"> debugger eval code:36:9
-// <g stroke="#FF7523" opacity="0.5" stroke-opacity="0.8"> debugger eval code:37:9
+// <g stroke="#FF7523" opacity="1.0" stroke-opacity="1.0">
+// <g stroke="#FF7523" opacity="1.0" stroke-opacity="1.0">
+// <g stroke="#FF7523" opacity="1.0" stroke-opacity="1.0">
+// <g stroke="#FF7523" opacity="0.5" stroke-opacity="0.8">
 // <g fill="#FF7523">
 
 
@@ -178,7 +183,6 @@ function restoreLineBreaks(svgString, pathMode) {
 }
 
 // Get the indentation as numbers in array
-
 function getSvgIndentation(svgString) {
     const lines = svgString.split('\n')
     return lines.map(line => {
@@ -226,6 +230,7 @@ function removeSpaces(svgString) {
 // // <path d="M6.35 63.5Q5.08 0 63.5 0T120.65 63.5 63.5 127 6.35 63.5"/>
 
 function restoreSpaces(svgString) {
+    console.log('//// restorSpaces() executed.')
     return svgString.replace(/(\sd="[^>]+>)/g, (match, pathData) => {  // Use \sd= to skip id=
 
         const restoredPath = pathData
