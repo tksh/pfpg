@@ -1,3 +1,5 @@
+import { adjustOutputBoxSize } from 'init/adjust-output-boxes-size'
+
 export function initTabs() {
     const tabs = document.querySelectorAll('.tab')
     tabs.forEach(tab => {
@@ -27,6 +29,7 @@ function openTab(evt, tabName) {
         // If no event, then it's the initial load, so manually set the first tab link as active
         document.querySelector('.tab').classList.add('active')
     }
+    adjustOutputBoxSize('tabChanged')
 }
 
 function handleKeyPress(event) {

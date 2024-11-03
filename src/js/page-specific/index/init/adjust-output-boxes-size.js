@@ -1,9 +1,11 @@
-export async function initLayout() {
-    // To fit the contents (header + main) height as viewport height
-    await adjustOutputBoxSize()
-}
+//export async function initLayout(context) {
+//    // To fit the contents (header + main) height as viewport height
+//    await adjustOutputBoxSize(context)
+//}
 
-async function adjustOutputBoxSize() {
+export async function adjustOutputBoxSize(context) {
+// async function adjustOutputBoxSize(context) {
+// async function adjustOutputBoxSize() {
 
     // Get the element rect sizes
 
@@ -33,6 +35,7 @@ async function adjustOutputBoxSize() {
     const imgBoxRect = imgBoxElem.getBoundingClientRect()
     console.log('img-box: ', imgBoxRect.width, imgBoxRect.height)
 
+    // Result size will be same as above "img-box" rect
     // <div id="textarea-box">
     const textareaBoxElem = document.getElementById('textarea-box')
     const textareaBoxRect = textareaBoxElem.getBoundingClientRect()
@@ -69,18 +72,22 @@ async function adjustOutputBoxSize() {
 
         if (imgBoxHeightNew < imgBoxRect.width) { // 計算で導き出した output正方形divサイズの 横の幅が 元々の output正方形divサイズの幅 よりも 小さい場合
 
-            console.log(`Increase the height of img and textarea boxes: ${imgBoxRect.height} => ${imgBoxHeightNew}`)
+            console.log(`Decrease the height of img and textarea boxes: ${imgBoxRect.height} => ${imgBoxHeightNew}`)
+            resizeOutputRectBoxes(imgBoxElem, textareaBoxElem, imgBoxHeightNew)
 
-            // PNG画像と SVGテキストエリアの boxの それぞれ 縦と横のサイズを 全て同じ値に変更する => ２つの 同じサイズの 正方形div が 並ぶ
-            imgBoxElem.style.height      = imgBoxHeightNew + "px"
-            imgBoxElem.style.width       = imgBoxHeightNew + "px"
-            textareaBoxElem.style.height = imgBoxHeightNew + "px"
-            textareaBoxElem.style.width  = imgBoxHeightNew + "px"
+        } else {  // 計算で導き出した output正方形divサイズの 横の幅が 元々の output正方形divサイズの幅 よりも 大きい場合
+            if (context === 'tabChanged' || context === 'detailsOpened' || context === 'optionDisplayed') {
+
+                console.log(`Increase the height of img and textarea boxes: ${imgBoxRect.height} => ${imgBoxHeightNew}`)
+                resizeOutputRectBoxes(imgBoxElem, textareaBoxElem, imgBoxHeightNew)
+            }
+
+            // if (context === 'pageLoaded')
+            // 計算で導き出した output正方形divサイズの 横の幅が 元々の output正方形divサイズの幅 よりも 大きい場合
+            // すでに 横幅の50%を使っているので 大きく出来る余地がない
+            // => 何もしない (CSSだけで機能している)
         }
 
-        // 計算で導き出した output正方形divサイズの 横の幅が 元々の output正方形divサイズの幅 よりも 大きい場合
-        // すでに 横幅の50%を使っているので 大きく出来る余地がない
-        // => 何もしない (CSSだけで機能している)
 
     } else { // モバイル or 画面の縦の幅が 狭すぎる 場合
         console.log(`window.innerWidth < 512 => Mobile view mode, or window.innerHeight < 720 => The display height ${window.innerHeight} is too small to fit the output area.`)
@@ -88,4 +95,12 @@ async function adjustOutputBoxSize() {
         // 'window.innerHeight < 720' のような 縦の幅が狭すぎる画面のときは 無理にフィットさせると 画像表示エリアが 小さくなり過ぎるので そのまま横幅の50%の表示サイズから 変更せずに スクロールで見るようにする
     }
 
+}
+
+function resizeOutputRectBoxes(imgBoxElem, textareaBoxElem, newHeightSize) {
+            // PNG画像と SVGテキストエリアの boxの それぞれ 縦と横のサイズを 全て同じ値に変更する => ２つの 同じサイズの 正方形div が 並ぶ
+            imgBoxElem.style.height      = newHeightSize + "px"
+            imgBoxElem.style.width       = newHeightSize + "px"
+            textareaBoxElem.style.height = newHeightSize + "px"
+            textareaBoxElem.style.width  = newHeightSize + "px"
 }
