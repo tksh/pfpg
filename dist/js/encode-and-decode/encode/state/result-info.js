@@ -1,1 +1,0 @@
-export const resultInfo = new Map()

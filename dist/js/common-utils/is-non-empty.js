@@ -1,1 +1,0 @@
-export function isNonEmpty(value) {return value != null && value !== ''}

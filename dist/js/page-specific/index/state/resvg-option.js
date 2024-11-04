@@ -1,1 +1,0 @@
-export const resvgOption = {fitTo: {mode: 'height',value: 256}}

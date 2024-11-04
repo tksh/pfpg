@@ -1,2 +1,0 @@
-export function showProcessingTime(inputDataTitle, inputNum, outputElemId, isDataManipulatorPage) {if (isDataManipulatorPage) {const outputTextElem = document.getElementById(`${outputElemId}`)
-outputTextElem.textContent = `Processing time: ${inputNum} milliseconds`}}

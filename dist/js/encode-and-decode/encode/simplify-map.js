@@ -1,1 +1,0 @@
-export function simplifyMap(complexMap) {return new Map(Array.from(complexMap, ([key, [value]]) => [key, value]))}
