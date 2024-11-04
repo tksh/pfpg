@@ -1,17 +1,10 @@
-//export async function initLayout(context) {
-//    // To fit the contents (header + main) height as viewport height
-//    await adjustOutputBoxSize(context)
-//}
-
 export async function adjustOutputBoxSize(context) {
-// async function adjustOutputBoxSize(context) {
-// async function adjustOutputBoxSize() {
 
     // Get the element rect sizes
 
     // window.innerHeightを使用してビューポートの高さを取得
     const windowInnerHeight = window.innerHeight
-    console.log('windowInnerHeight: ', windowInnerHeight) // 1004
+    console.log('windowInnerHeight: ', windowInnerHeight)
 
     // <body>
     const bodyElem = document.querySelector('body')
@@ -28,8 +21,6 @@ export async function adjustOutputBoxSize(context) {
     const mainRect = mainElem.getBoundingClientRect()
     console.log('main: ', mainRect.width, mainRect.height)
 
-    // Get the output rect boxes to resize
-
     // <div id="img-box">
     const imgBoxElem = document.getElementById('img-box')
     const imgBoxRect = imgBoxElem.getBoundingClientRect()
@@ -44,6 +35,8 @@ export async function adjustOutputBoxSize(context) {
 
     // Calc
 
+    // About Height
+
     // header + main の height を算出
     const headerAndMainHeight = headerRect.height + mainRect.height
     console.log('headerAndMainHeight (header + main):', headerAndMainHeight)
@@ -52,44 +45,53 @@ export async function adjustOutputBoxSize(context) {
     // はみ出ていたら diffHeight の分だけ 正方形 (imgBoxElem, textareaBoxElem) の box を小さくする
     const diffHeight = Math.round(window.innerHeight - headerAndMainHeight)
     console.log(`diffHeight (window.innerHeight - headerAndMainHeight) = ${window.innerHeight} - ${headerAndMainHeight} = ${diffHeight}`)
-    // e.g.: 1004 - 1297 =  -293
 
     // 'img-box', 'textarea=box' に適用すべき imgBoxHeightNew を算出
     const imgBoxHeightNew = Math.round(imgBoxRect.height + diffHeight)
-    console.log('imgBoxRect.height => imgBoxHeightNew: ', imgBoxRect.height, imgBoxHeightNew) //  480 443
+    console.log('imgBoxRect.height => imgBoxHeightNew: ', imgBoxRect.height, imgBoxHeightNew)
+
+    // About Width
+
+    // Get the info header size to define the width limit
+
+    // <div id="png-info">
+    const pngInfoElem = document.getElementById('png-info')
+    const pngInfoRect = pngInfoElem.getBoundingClientRect()
+    console.log('pngInfo: ', pngInfoRect.width, pngInfoRect.height)
+
+    // Width limit
+    // Browser default root font size = 1 rem = 16px
+    // Each side has `1rem` spaces (in not mobile view, window.innerWidth > 512)
+    const imgWidthLimit = pngInfoRect.width - (16 * 2)
+
+    // imgWidthLimit と比較してどちらが 大きい数値か？ (画面から はみ出ているか？ そうではないか？)
+    // はみ出ていたら diffWidth の分だけ 正方形 (imgBoxElem, textareaBoxElem) の box を小さくする
+    const diffWidth = Math.round(imgWidthLimit - imgBoxHeightNew)
+    console.log(`diffWidth (imgWidthLimit - imgBoxHeightNew) = ${imgWidthLimit} - ${imgBoxHeightNew} = ${diffWidth}`)
+
+    // 'img-box', 'textarea=box' に適用すべき imgBoxWidthNew を算出
+    const imgBoxWidthNew = Math.round(imgBoxHeightNew + diffWidth)
+    console.log('imgBoxHeightNew, imgBoxWidthNew: ', imgBoxHeightNew, imgBoxWidthNew)
+
+    // Calculated size for adjusting boxes
+    // 2つの数値を比較し 小さい方を 新しい変数に代入
+    const imgBoxSizeNew = imgBoxHeightNew < imgBoxWidthNew ? imgBoxHeightNew : imgBoxWidthNew;
 
 
     // Adjust
 
     // ウィンドウサイズによって 適用するかどうかを判定する
-    if (window.innerWidth > 512         // モバイルではなく
-        && window.innerHeight >= 720) { // 縦の幅が狭くない (HDディスプレイ以上) 場合
+    if (
+        window.innerWidth > 512         // モバイルではなく
+        && window.innerHeight >= 720    // 縦の幅が狭くない (HDディスプレイ以上) 場合
+    ) {
 
         console.log('window.innerWidth and window.innerHeight (window.innerWidth > 512 && window.innerHeight >= 720): ', window.innerWidth, window.innerHeight)
-
-        // 計算で導き出した 縦の幅で ２つのoutput正方形divサイズを 大きく出来る 場合
-        // => id="img-box" と id="textarea-box" の output正方形divを 計算で導き出したサイズに 変更する
-
-        if (imgBoxHeightNew < imgBoxRect.width) { // 計算で導き出した output正方形divサイズの 横の幅が 元々の output正方形divサイズの幅 よりも 小さい場合
-
-            console.log(`Decrease the height of img and textarea boxes: ${imgBoxRect.height} => ${imgBoxHeightNew}`)
-            resizeOutputRectBoxes(imgBoxElem, textareaBoxElem, imgBoxHeightNew)
-
-        } else {  // 計算で導き出した output正方形divサイズの 横の幅が 元々の output正方形divサイズの幅 よりも 大きい場合
-            if (context === 'tabChanged' || context === 'detailsOpened' || context === 'optionDisplayed') {
-
-                console.log(`Increase the height of img and textarea boxes: ${imgBoxRect.height} => ${imgBoxHeightNew}`)
-                resizeOutputRectBoxes(imgBoxElem, textareaBoxElem, imgBoxHeightNew)
-            }
-
-            // if (context === 'pageLoaded')
-            // 計算で導き出した output正方形divサイズの 横の幅が 元々の output正方形divサイズの幅 よりも 大きい場合
-            // すでに 横幅の50%を使っているので 大きく出来る余地がない
-            // => 何もしない (CSSだけで機能している)
-        }
+        console.log(`Output boxes (${imgBoxRect.width} x ${imgBoxRect.height} px) resized to ${imgBoxSizeNew} x ${imgBoxSizeNew} px`)
+        resizeOutputRectBoxes(imgBoxElem, textareaBoxElem, imgBoxSizeNew)
 
 
-    } else { // モバイル or 画面の縦の幅が 狭すぎる 場合
+    } else { // モバイル or 画面の縦の幅が 狭すぎる (HDディスプレイ以下) 場合
         console.log(`window.innerWidth < 512 => Mobile view mode, or window.innerHeight < 720 => The display height ${window.innerHeight} is too small to fit the output area.`)
         // => 何もしない (CSSだけで機能している)
         // 'window.innerHeight < 720' のような 縦の幅が狭すぎる画面のときは 無理にフィットさせると 画像表示エリアが 小さくなり過ぎるので そのまま横幅の50%の表示サイズから 変更せずに スクロールで見るようにする

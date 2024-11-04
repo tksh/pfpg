@@ -117,12 +117,11 @@ main {
     max-width: 100%;
     aspect-ratio: 1/1;
     display: flex;
-    padding: 2rem;
+    padding: 0;
+    margin: 1.5rem auto;
     align-items: center;
     justify-content: center;
 
-    /* ブロックレベル要素を中央揃えにする */
-    margin: 0 auto;
 }
 
 /* PNG image */
@@ -136,22 +135,17 @@ div#img-box img {
     height: 100%;
 }
 
-/* .actual-image-size {
-    height: fit-content;
-    object-fit: none;
-} */
-
 /* actual-image-size クラスが付いている場合の設定 */
-#img-box img.actual-image-size { 
-    height: auto; /* fit-contentから変更 */
+#img-box img.actual-image-size {
+    height: auto;
     object-fit: none;
     max-height: none; /* max-heightの制限を解除 */
 }
 
-/* actual-image-size クラスが付いている場合のimg-boxの設定 */
+/* actual-image-size クラスが付いている場合の img-box の設定 */
 #img-box:has(img.actual-image-size) {
     overflow: auto; /* スクロールバーを追加 */
-    padding: 0; /* 画像を端まで表示するためにパディングを削除 */
+    padding: 0;    /* 画像を端まで表示するためにパディングを削除 */
 }
 
 
@@ -365,15 +359,13 @@ div#samples figure {
 
     #textarea-box,
     #img-box {
-        width: 100%;
         height: auto;
-        padding: 0;
-        margin: 1rem auto;
+        margin: 1rem auto;  /* Decrease the top and bottom spaces in mobile view */
+        /* default: 1.5rem; */
     }
 
     #input-and-output {
         flex-direction: column;
-        /* width: 100%; */
     }
 
     .opts {
