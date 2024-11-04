@@ -136,10 +136,24 @@ div#img-box img {
     height: 100%;
 }
 
-.actual-image-size {
+/* .actual-image-size {
     height: fit-content;
     object-fit: none;
+} */
+
+/* actual-image-size クラスが付いている場合の設定 */
+#img-box img.actual-image-size { 
+    height: auto; /* fit-contentから変更 */
+    object-fit: none;
+    max-height: none; /* max-heightの制限を解除 */
 }
+
+/* actual-image-size クラスが付いている場合のimg-boxの設定 */
+#img-box:has(img.actual-image-size) {
+    overflow: auto; /* スクロールバーを追加 */
+    padding: 0; /* 画像を端まで表示するためにパディングを削除 */
+}
+
 
 .checker {
     background-size: 1rem 1rem;
@@ -353,6 +367,8 @@ div#samples figure {
     #img-box {
         width: 100%;
         height: auto;
+        padding: 0;
+        margin: 1rem auto;
     }
 
     #input-and-output {
