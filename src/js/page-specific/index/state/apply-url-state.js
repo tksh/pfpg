@@ -18,6 +18,7 @@ import { changeOpacitySelectOptionsAsNewStep
 import { updateSvgWithSelectedShapePath }       from 'tab-canvas/shape-to-trim'
 import { toggleDisplay }                        from 'tab-canvas/shape-to-trim-listener'
 import { replaceShapeRendering }                from 'tab-render/shape-rendering'
+import { adjustImageDisplay }                   from 'tab-render/width-pixel-size'
 import { toggleCheckerboardBg }                 from 'tab-ui/checkerboard-bg'
 import { toggleTextWrapping }                   from 'tab-ui/text-wrapping'
 import { changeThemeColor
@@ -118,6 +119,7 @@ function applyUiConfiguration() {
     const viewScaling = getState('viewScaling')  // 'fit'|'actual'
     document.getElementById('view-scaling').value = viewScaling
     switchViewScaling(viewScaling)
+    adjustImageDisplay(parseInt(getState('widthPixelSize'), 10))  // It affects for 'actual'
 
     //////////////////////////// checkerboardBg ////////////////////////////
     const isCheckerboardBg = getState('checkerboardBg')  // bool

@@ -8,9 +8,15 @@ body {
     flex-direction: column;
 
     min-height: 100dvh;
+    /* min-height: calc(100dvh - 1rem); */
     /* ビューポートの高さいっぱいに拡張 */
 
     margin-top: .5rem;
+
+    padding: .5rem 2rem 0 1rem ;    /* 左に 1rem 右に 2rem のパディング */
+
+    scrollbar-gutter: both-edges
+    /* ボックスのインライン方向の先頭/末尾の端のどちらかにガターを表示した場合 反対側の端にもガターを表示 */
 }
 
 *,
@@ -110,17 +116,16 @@ main {
     align-items: center;
 }
 
+
 /* Boxes for png and svg */
-#img-box,
-#textarea-box {
+#textarea-box,
+#img-box {
     width: 100%;
     max-width: 100%;
     aspect-ratio: 1/1;
-    display: flex;
     padding: 0;
     margin: 1.5rem auto;
     align-items: center;
-    justify-content: center;
 
 }
 
@@ -135,6 +140,8 @@ div#img-box img {
     height: 100%;
 }
 
+/* .actual-image-size
+
 /* actual-image-size クラスが付いている場合の設定 */
 #img-box img.actual-image-size {
     height: auto;
@@ -145,7 +152,13 @@ div#img-box img {
 /* actual-image-size クラスが付いている場合の img-box の設定 */
 #img-box:has(img.actual-image-size) {
     overflow: auto; /* スクロールバーを追加 */
-    padding: 0;    /* 画像を端まで表示するためにパディングを削除 */
+}
+
+/* actual-image-size クラスが付いていて 'img-box' div要素より レンダリング画像が小さい場合は 表示位置を中央揃えにする */
+/* レンダリング画像が大きい場合にも 適用されたままだと スクロール範囲が不十分となってしまうので JSで動的に add/remove する*/
+#img-box.small-image {
+    display: flex;
+    justify-content: center;
 }
 
 
@@ -356,6 +369,15 @@ div#samples figure {
 
 
 @media screen and (max-width: 512px) {
+
+    body {
+        padding: 0;
+        margin-top: .25rem;
+
+    }
+    header {
+        padding-right: 1rem;
+    }
 
     #textarea-box,
     #img-box {

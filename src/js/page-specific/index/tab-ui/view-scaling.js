@@ -32,14 +32,25 @@ function switchViewScaling(viewScaling) {
 
         // Toggle the classes for img elem
         if (viewScaling == 'fit') {
-            //console.log('viewScaling value is ', viewScaling)
             img.classList.add('fit-to-display-area')
             img.classList.remove('actual-image-size')
         } else if (viewScaling == 'actual') {
-            //console.log('viewScaling value is ', viewScaling)
             img.classList.add('actual-image-size')
             img.classList.remove('fit-to-display-area')
         }
+
+
+        // レイアウトの再適用をトリガーする
+        // - クラスの切り替え後に #img-boxのstyle.displayを 一時的に"none"に設定し
+        //   offsetHeightの取得により強制的にレイアウトの再計算を行う
+        // - これにより、クラスの変更が 確実にレイアウトに反映される ようになる
+        // - style.display を空文字に戻すことで 再び要素が表示されるようになる
+        // この一連の操作によって クラスの切り替え時に スクロールバーの表示/非表示 が安定する
+
+        const imgBox = document.getElementById("img-box")
+        imgBox.style.display = "none";
+        void imgBox.offsetHeight; // レイアウト強制
+        imgBox.style.display = "";
 }
 
 

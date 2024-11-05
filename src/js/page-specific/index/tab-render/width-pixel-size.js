@@ -8,6 +8,7 @@ import { executeSvg2png } from 'svg-to-png'
 export
     { initWidthPixelSizeInputElements
     , initWidthValidatorListener
+    , adjustImageDisplay
     }
 
 
@@ -45,6 +46,8 @@ function updateAndConvert(value) {
     resvgOption.fitTo.value = parseInt(value, 10);
 
     executeSvg2png({ target: { value: getSvgString() } }, resvgOption);
+
+    adjustImageDisplay(value)
 }
 
 // Event listener for both png-size-number and png-size-range
@@ -59,4 +62,23 @@ function handleButtonClick(step) {
     if (value !== null) {
         updateAndConvert(value);
     }
+}
+
+
+// Additional class for .actual-image-size
+function adjustImageDisplay(value) {
+    const imgBox = document.getElementById("img-box");
+
+    // 画像サイズを取得
+    const boxWidth = imgBox.clientWidth;
+    console.log('value, boxWidth: ', value, boxWidth)
+
+    if (value <= boxWidth) {
+        // 小さい画像の場合は中央揃え
+        imgBox.classList.add('small-image');
+    } else {
+        // 大きい画像の場合はスクロール
+        imgBox.classList.remove('small-image');
+    }
+
 }

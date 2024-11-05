@@ -1,5 +1,7 @@
 .tabs-container {
-    width: auto;
+    /* width: auto; */
+    width: calc(100% - 1rem);
+    /* padding-right: 1rem; */
 }
 
 .tabs {
