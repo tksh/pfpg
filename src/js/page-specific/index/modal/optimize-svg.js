@@ -88,6 +88,11 @@ function updateSvg(event) {
             if (isChecked) {
                 svgString = option.removeFunction(svgString)
                 updateState(option.stateKey, true)
+
+                // Toggle classes for the <code> content text
+                document.querySelector(`#before-${optionId}`).classList.toggle('option-applied', !isChecked)
+                document.querySelector(`#after-${optionId}`).classList.toggle('option-applied', isChecked)
+
             } else {
                 if (option.needsPathMode) {
                     const pathMode = getState('pathMode')
@@ -96,6 +101,10 @@ function updateSvg(event) {
                     svgString = option.restoreFunction(svgString)
                 }
                 updateState(option.stateKey, false)
+
+                // Toggle classes for the <code> content text
+                document.querySelector(`#before-${optionId}`).classList.toggle('option-applied', !isChecked)
+                document.querySelector(`#after-${optionId}`).classList.toggle('option-applied', isChecked)
             }
         }
 
