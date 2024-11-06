@@ -39,27 +39,39 @@ body {
     flex-wrap: wrap;
 }
 
+.tabs {
+    padding-left: 2rem;
+}
+
+.tab-content {
+    padding-left: 2rem;
+}
+
+div#group-colors-input-and-select {
+    padding-left: 1rem;
+}
 .opts-cell-for-group-colors {
-    padding-left: 2.5rem;
-    min-width: 16rem;
+    padding-right: 1rem;
 }
 
 .opts-cell {
-    padding-left: 2rem;
     margin-top: 1rem;
     min-width: 16rem;
+
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
 }
 
-.opts-cell,
 legend {
     padding-right: 1rem;
+
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
 }
 
 fieldset {
     margin: 0 1rem;
-    /* border-color: var(--color-fieldset-border); */
+    border-color: var(--color-fieldset-border);
     border-style: none;
 }
 
@@ -261,11 +273,16 @@ p {
     color: var(--color-text);
 }
 
-details {
+details#lines-option-details {
     padding: 1rem 0;
 }
-div#customization details{
-    padding: 1.5rem 1rem 0.5rem 1.5rem;
+
+div#footer-info > details {
+    padding: 1.5rem 1rem 0.5rem 2rem;
+}
+
+dl.top-level {
+    padding-left: 3rem;
 }
 
 dd {
@@ -281,7 +298,7 @@ ul {
     padding-left: 1rem;
 }
 
-.padding-top {
+.padding-top-1 {
     padding-top: 1.5rem;
 }
 
@@ -289,8 +306,8 @@ ul {
     padding-top: 2rem;
 }
 
-.padding-left {
-    padding-left: 2px;
+.padding-bottom-1 {
+    padding-bottom: 2rem;
 }
 
 .padding-left-1 {
@@ -321,18 +338,14 @@ button#svg-action-button.success-message {
 }
 
 /* Footer */
-footer {
-    padding: 1rem;
+footer#footer-info {
+    font-size: 0.9rem;
+    padding: 2rem;
+    line-height: 1.6
 }
 
 .font-size-small {
     font-size: 0.8rem;
-}
-
-.footer-info {
-    font-size: 0.9rem;
-    padding: 1rem;
-    line-height: 1.6
 }
 
 .text-align-center {
@@ -378,6 +391,10 @@ div#samples figure {
     header {
         padding-right: 1rem;
     }
+    footer#footer-info {
+        padding: 1rem;
+        /* default: 2rem; */
+    }
 
     #textarea-box,
     #img-box {
@@ -394,6 +411,14 @@ div#samples figure {
         flex-direction: column;
     }
 
+    .tabs {
+        padding-left: 0;
+    }
+
+    .tab-content {
+        padding-left: 1rem;
+    }
+
     .cell {
         width: 100%;
     }
@@ -404,13 +429,12 @@ div#samples figure {
     }
 
     .opts-cell-for-group-colors {
-        padding-left: 1.5rem
-            /* default: 2.5rem; */
+        padding-left: 0
     }
 
     .opts-cell {
-        padding-left: 1rem;
-        /* default: 2rem; */
+        margin-top: 0.5rem;
+        padding-left: 0;
     }
 
 
@@ -447,5 +471,34 @@ div#samples figure {
 
     legend {
         padding-left: 0.5rem;
+    }
+    dl.top-level {
+        padding-left: 1.5rem;
+    }
+}
+
+
+/* For more narrow wide mobile phones, Slim the inputs to make these inline. */
+@media screen and (max-width: 375px) {
+
+    /* 'opacity', 'stroke-opacity' */
+    select.opacity {
+        margin-right: 2px;     /* default - 2px */
+        width: 3.25rem; /* default - 0.5rem */
+
+        padding-left: 0.25rem; /* default - 0.25rem */
+    }
+
+    /* 'stroke' */
+    input.stroke-rgb {
+        width: 8.75rem;        /* default - 0.25rem */
+    }
+
+    input.stroke-hex {
+        width: 6.25rem;        /* default - 0.25rem */
+    }
+
+    input.stroke {
+        margin-right: 2px;     /* default - 2px */
     }
 }

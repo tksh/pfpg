@@ -232,40 +232,43 @@
                     <details id="lines-option-details">
                         <summary>more details</summary>
 
-                        <!-- Path mode -->
-                        <div class="opts">
-                            <div class="opts-cell">
-                                <label for="path-mode">Path mode: </label>
-                                <select name="path-mode" id="path-mode">
-                                    <option value="absoluteSeparated">Absolute and separated</option>
-                                    <option value="relativeMerged">Relative and merged</option>
-                                </select>
-                            </div>
-                        </div>
+                        <div id="lines-options" class="padding-left-1">
 
-                        <!-- Opacity steps -->
-                        <div class="opts">
-                            <div class="opts-cell">
-                                <label for="opacity-steps">Opacity steps: </label>
-                                <select name="opacity-steps" id="opacity-steps" autocomplete="off">
-                                    <option value="0.04">0.04</option>
-                                    <option value="0.1">0.1</option>
-                                    <option value="0.2">0.2</option>
-                                </select>
+                            <!-- Path mode -->
+                            <div class="opts">
+                                <div class="opts-cell">
+                                    <label for="path-mode">Path mode: </label>
+                                    <select name="path-mode" id="path-mode">
+                                        <option value="absoluteSeparated">Absolute and separated</option>
+                                        <option value="relativeMerged">Relative and merged</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Color format -->
-                        <div class="opts">
-                            <div class="opts-cell">
-                                <label for="color-format">Color format: </label>
-                                <select name="color-format" id="color-format">
-                                    <option value="rgb">RGB</option>
-                                    <option value="hex">Hex</option>
-                                </select>
+                            <!-- Opacity steps -->
+                            <div class="opts">
+                                <div class="opts-cell">
+                                    <label for="opacity-steps">Opacity steps: </label>
+                                    <select name="opacity-steps" id="opacity-steps" autocomplete="off">
+                                        <option value="0.04">0.04</option>
+                                        <option value="0.1">0.1</option>
+                                        <option value="0.2">0.2</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
 
+                            <!-- Color format -->
+                            <div class="opts">
+                                <div class="opts-cell">
+                                    <label for="color-format">Color format: </label>
+                                    <select name="color-format" id="color-format">
+                                        <option value="rgb">RGB</option>
+                                        <option value="hex">Hex</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
                     </details>
                 </div>
 
@@ -286,58 +289,63 @@
                     </div>
 
                     <!-- Three options for 'Squircle, slimmed' -->
+                    <div id="squircle-slimmed-options" class="padding-left-1">
 
-                    <!-- Width narrowness -->
-                    <div id="width-narrowness-div" class="display-none">
-                        <div class="opts-cell">
-                            <label for="width-narrowness">- Width narrowness: </label>
-                            <select name="width-narrowness" id="width-narrowness" autocomplete="off">
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10" selected>10</option>
-                                <option value="15">15</option>
-                                <option value="20">20</option>
-                                <option value="25">25</option>
-                                <option value="30">30</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Top-heavy ratio -->
-                    <div id="top-heavy-ratio-div" class="display-none">
-                        <div class="opts-cell">
-                            <label for="top-heavy-ratio">- Top-heavy ratio: </label>
-                            <select name="top-heavy-ratio" id="top-heavy-ratio" autocomplete="off">
-                                <option value="3">3</option>
-                                <option value="2">2</option>
-                                <option value="1" selected>1</option>
-                                <option value="0">0</option>
-                                <option value="-1">-1</option>
-                                <option value="-2">-2</option>
-                                <option value="-3">-3</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Crop side margins (Both applied to PNG and SVG) -->
-                    <div id="crop-side-margins-div" class="display-none">
-                        <div class="opts">
+                        <!-- Width narrowness -->
+                        <div id="width-narrowness-div" class="display-none">
                             <div class="opts-cell">
-                                <label for="crop-side-margins">- Crop side margins:</label>
-                                <input type="checkbox" name="crop-side-margins" id="crop-side-margins" autocomplete="off">
+                                <label for="width-narrowness">Width narrowness: </label>
+                                <select name="width-narrowness" id="width-narrowness" autocomplete="off">
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10" selected>10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                    <option value="25">25</option>
+                                    <option value="30">30</option>
+                                </select>
                             </div>
                         </div>
+
+                        <!-- Top-heavy ratio -->
+                        <div id="top-heavy-ratio-div" class="display-none">
+                            <div class="opts-cell">
+                                <label for="top-heavy-ratio">Top-heavy ratio: </label>
+                                <select name="top-heavy-ratio" id="top-heavy-ratio" autocomplete="off">
+                                    <option value="3">3</option>
+                                    <option value="2">2</option>
+                                    <option value="1" selected>1</option>
+                                    <option value="0">0</option>
+                                    <option value="-1">-1</option>
+                                    <option value="-2">-2</option>
+                                    <option value="-3">-3</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Crop side margins (Both applied to PNG and SVG) -->
+                        <div id="crop-side-margins-div" class="display-none">
+                            <div class="opts">
+                                <div class="opts-cell">
+                                    <label for="crop-side-margins">Crop side margins:</label>
+                                    <input type="checkbox" name="crop-side-margins" id="crop-side-margins" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
+
+            
 
 
                 <div id="tab-3" class="tab-content"> <!-- Render -->
@@ -430,15 +438,15 @@
                         </div>
                     </div>
 
-                </div> <!-- End of UI tab -->
+                </div>  <!-- end of <div id="tab-4" class="tab-content"> -->
 
-            </fieldset>
-        </div> <!-- end of <div id="customization" class="opts"> -->
+            </fieldset> <!-- end of <fieldset class="tabs-container opts"> -->
+        </div>          <!-- end of <div id="customization" class="opts"> -->
 
     </header>
 
 
-    <main class="padding-bottom">
+    <main>
         <div id="input-and-output">
 
             <div id="output" class="cell"> <!-- Output PNG -->
@@ -525,7 +533,7 @@
 
                     </fieldset>
                 </form>
-                <div class="align-items-center text-align-center padding-top-2">
+                <div class="align-items-center text-align-center 1">
                     <span id="svg-opt-close-icon" class="material-symbols-outlined">close</span>
                 </div>
             </div>
@@ -567,7 +575,7 @@
                     </fieldset>
                 </form>
                 <button id="reset-settings">Clear and Reload</button>
-                <div class="align-items-center text-align-center padding-top-2">
+                <div class="align-items-center text-align-center 1">
                     <span id="reset-settings-close-icon" class="material-symbols-outlined">close</span>
                 </div>
             </div>
@@ -577,74 +585,69 @@
 
     <hr>
 
-    <footer>
+    <footer id="footer-info">
 
-        <div class="footer-info">
+        <details>
+            <summary>Usage</summary>
+            <dl class="top-level">
+                <dt>Workflow:</dt>
+                <dd class="padding-top-1">
+                    <ol>
+                        <li><b>Import</b>: Start by importing the artwork data from a URL that includes a <a href="https://en.wikipedia.org/wiki/Query_string" title="Query string - Wikipedia">query string</a> encoding.</li>
+                        <li><b>Custom</b>: Modify your artwork freely using the options available under each category tab.</li>
+                        <li><b>Export</b>: Save your final artwork as either a <a href="https://en.wikipedia.org/wiki/PNG" title="PNG - Wikipedia">PNG</a> (raster) or <a href="https://en.wikipedia.org/wiki/SVG" title="SVG - Wikipedia">SVG</a> (vector) image format.</li>
+                    </ol>
+                </dd>
+            </dl>
+            <dl class="top-level padding-top-1 padding-bottom-1">
+                <dt>Tips:</dt>
+                <dd class="padding-left-1">
+                    <dl>
+                        <dt>The difference made by <i>Path mode</i> option (in <i>Lines</i> tab)</dt>
+                        <dd>
+                            <ul>
+                                <li><i>Relative and merged</i>: 'stroke-opacity' affects the whole lines group.</li>
+                                <li><i>Absolute and separated</i>: 'stroke-opacity' affects the appearance of each line.</li>
+                            </ul>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Maximum rendering size for <i>Width pixel size</i> option (in <i>Render</i> tab)</dt>
+                        <dd>The slider allows you to set the size up to 512 pixels, but you can type in a larger number manually into the box.</dd>
+                        <dd>(Note: Larger sizes will exponentially increase the rendering time)</dd>
+                    </dl>
+                </dd>
+            </dl>
+        </details>
 
-            <details>
-                <summary>Usage</summary>
-                <dl>
-                    <dt>Workflow:</dt>
-                    <dd class="padding-top">
-                        <ol>
-                            <li><b>Import</b>: Start by importing the artwork data from a URL that includes a <a href="https://en.wikipedia.org/wiki/Query_string" title="Query string - Wikipedia">query string</a> encoding.</li>
-                            <li><b>Custom</b>: Modify your artwork freely using the options available under each category tab.</li>
-                            <li><b>Export</b>: Save your final artwork as either a <a href="https://en.wikipedia.org/wiki/PNG" title="PNG - Wikipedia">PNG</a> (raster) or <a href="https://en.wikipedia.org/wiki/SVG" title="SVG - Wikipedia">SVG</a> (vector) image format.</li>
-                        </ol>
-                    </dd>
-                </dl>
-                <dl class="padding-top-2">
-                    <dt>Tips:</dt>
-                    <dd class="padding-left-1">
+        <details>
+            <summary>Showcase</summary>
+        </details>
 
-                        <dl>
-                            <dt>The difference made by <i>Path mode</i> option (in <i>Lines</i> tab)</dt>
-                            <dd>
-                                <ul>
-                                    <li><i>Relative and merged</i>: 'stroke-opacity' affects the whole lines group.</li>
-                                    <li><i>Absolute and separated</i>: 'stroke-opacity' affects the appearance of each line.</li>
-                                </ul>
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>Maximum rendering size for <i>Width pixel size</i> option (in <i>Render</i> tab)</dt>
-                            <dd>The slider allows you to set the size up to 512 pixels, but you can type in a larger number manually into the box.</dd>
-                            <dd>(Note: Larger sizes will exponentially increase the rendering time)</dd>
-                        </dl>
+        <details>
+            <summary>About</summary>
+            <dl class="top-level">
+                <dt>Title:</dt>
+                <dd>pfpg</dd>
+                <dt>Overview:</dt>
+                <dd>A custom <b>p</b>ro<b>f</b>ile <b>p</b>icture <b>g</b>enerator for a specific svg artwork that was made with the <a href="https://github.com/tksh/uint-n-portray" title="tksh/uint-n-portray: A subset of SVG for creating simple and efficient vector drawings">UIntNPortray</a> ruleset.</dd>
+                <dt>Creator (both artwork and website):</dt>
+                <!-- <dt>Creator of the website and artwork:</dt> -->
+                <dd><a href="https://github.com/tksh" title="tksh on GitHub">SAITO Takashi (tksh)</a></dd>
+                <dt>Source:</dt>
+                <dd><a href="https://github.com/tksh/pfpg" title="tksh/pfpg: A custom profile picture generator for a specific svg artwork that was made with the UIntNPortray ruleset.">github.com/tksh/pfpg</a></dd>
+                <dt>License:</dt>
+                <dd><a href="https://www.mozilla.org/en-US/MPL/2.0/" title="Mozilla Public License, version 2.0">MPL 2.0 license</a></dd>
+                <dt>Libraries:</dt>
+                <dd><a href="https://github.com/yisibl/resvg-js" title="GitHub - yisibl/resvg-js: A high-performance SVG renderer and toolkit, powered by Rust based resvg and napi-rs.">resvg-js (MPL 2.0 license)</a></dd>
+                <dd><a href="https://synapse.kyoto/lib/url-comp/page001.html" title="URLCompressorライブラリ(1) - しなぷすのハード製作記">URLCompressor (MIT license)</a></dd>
+                <dd><a href="https://jscolor.com/" title="jscolor: JavaScript Color picker with Opacity (alpha channel)">jscolor (GNU GPL v3 license (for open source use))</a></dd>
+                <dd><a href="https://github.com/denoland/deno_std/" title="Deno standard library (MIT license)">Deno standard library (MIT license)</a></dd>
+                <dd><a href="https://github.com/manzt/numcodecs.js" title="numcodecs.js">numcodecs.js (MIT license)</a></dd>
+            </dl>
+        </details>
 
-                    </dd>
-                </dl>
-            </details>
-
-            <details>
-                <summary>Showcase</summary>
-            </details>
-
-            <details>
-                <summary>About</summary>
-                <dl>
-                    <dt>Title:</dt>
-                    <dd>pfpg</dd>
-                    <dt>Overview:</dt>
-                    <dd>A custom <b>p</b>ro<b>f</b>ile <b>p</b>icture <b>g</b>enerator for a specific svg artwork that was made with the <a href="https://github.com/tksh/uint-n-portray" title="tksh/uint-n-portray: A subset of SVG for creating simple and efficient vector drawings">UIntNPortray</a> ruleset.</dd>
-                    <dt>Creator (both artwork and website):</dt>
-                    <!-- <dt>Creator of the website and artwork:</dt> -->
-                    <dd><a href="https://github.com/tksh" title="tksh on GitHub">SAITO Takashi (tksh)</a></dd>
-                    <dt>Source:</dt>
-                    <dd><a href="https://github.com/tksh/pfpg" title="tksh/pfpg: A custom profile picture generator for a specific svg artwork that was made with the UIntNPortray ruleset.">github.com/tksh/pfpg</a></dd>
-                    <dt>License:</dt>
-                    <dd><a href="https://www.mozilla.org/en-US/MPL/2.0/" title="Mozilla Public License, version 2.0">MPL 2.0 license</a></dd>
-                    <dt>Libraries:</dt>
-                    <dd><a href="https://github.com/yisibl/resvg-js" title="GitHub - yisibl/resvg-js: A high-performance SVG renderer and toolkit, powered by Rust based resvg and napi-rs.">resvg-js (MPL 2.0 license)</a></dd>
-                    <dd><a href="https://synapse.kyoto/lib/url-comp/page001.html" title="URLCompressorライブラリ(1) - しなぷすのハード製作記">URLCompressor (MIT license)</a></dd>
-                    <dd><a href="https://jscolor.com/" title="jscolor: JavaScript Color picker with Opacity (alpha channel)">jscolor (GNU GPL v3 license (for open source use))</a></dd>
-                    <dd><a href="https://github.com/denoland/deno_std/" title="Deno standard library (MIT license)">Deno standard library (MIT license)</a></dd>
-                    <dd><a href="https://github.com/manzt/numcodecs.js" title="numcodecs.js">numcodecs.js (MIT license)</a></dd>
-                </dl>
-            </details>
-
-            <p class="text-align-center padding-top-2">© 2023-present, SAITO Takashi (tksh)</p>
-        </div> <!-- End of <div class="footer-info"> -->
+        <p class="text-align-center 1">© 2023-present, SAITO Takashi (tksh)</p>
 
     </footer>
 
