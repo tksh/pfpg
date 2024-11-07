@@ -25,11 +25,9 @@ async function copyPngToClipboard() {
             const originalText = pngActionButtonElement.innerHTML;
 
             pngActionButtonElement.textContent = '✔️ Successfully copied!';
-            pngActionButtonElement.classList.add('success-message');
 
             setTimeout(() => {
                 pngActionButtonElement.innerHTML = originalText;
-                pngActionButtonElement.classList.remove('success-message');
             }, 1500);
         });
 
@@ -51,14 +49,12 @@ async function copySvgToClipboard() {
 
         // 成功メッセージを表示し、success-message クラスを追加
         svgActionButtonElement.textContent = '✔️ Successfully copied!'
-        svgActionButtonElement.classList.add('success-message');
 
         setTimeout(() => {
-                svgActionButtonElement.innerHTML = originalHtml
-                svgActionButtonElement.classList.remove('success-message')
-            }, 1500)
+            svgActionButtonElement.innerHTML = originalHtml
+        }, 1500)
 
-        } catch (error) {
+    } catch (error) {
         console.error("Failed to copy SVG text: ", error);
     }
 }

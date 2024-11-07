@@ -273,6 +273,10 @@ p {
     color: var(--color-text);
 }
 
+footer > details {
+    padding: 1rem;
+}
+
 details#lines-option-details {
     padding: 1rem 0;
 }
@@ -303,7 +307,7 @@ ul {
 }
 
 .padding-top-2 {
-    padding-top: 2rem;
+    padding-top: 3rem;
 }
 
 .padding-bottom-1 {
@@ -322,19 +326,19 @@ button {
 
 button#png-action-button,
 button#svg-action-button {
-    --button-height: 2.5rem; /* ボタン全体の高さ */
+    --button-height: 3.5rem; /* ボタン全体の高さ */
     height: var(--button-height);
-    min-width: 70%;
-}
-
-button#svg-action-button.success-message {
-    line-height: var(--button-height)
-    /* 改行のない文を縦にセンタリングするときは、line-heightを親要素のheightに合わせる */
+    min-width: 16rem;
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .download-button {
-    text-align: center;
     width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 /* Footer */
@@ -391,9 +395,13 @@ div#samples figure {
     header {
         padding-right: 1rem;
     }
+
     footer#footer-info {
         padding: 1rem;
         /* default: 2rem; */
+    }
+    footer > details {
+        padding: 0.5rem;
     }
 
     #textarea-box,
