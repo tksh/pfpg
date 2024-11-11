@@ -45,13 +45,7 @@ export async function generateOgImage(pngData) {
         const dataUrl = canvas.toDataURL('image/png');
 
         // OGイメージを更新
-        let ogImageMeta = document.querySelector('meta[property="og:image"]');
-        if (!ogImageMeta) {
-            ogImageMeta = document.createElement('meta');
-            ogImageMeta.setAttribute('property', 'og:image');
-            document.head.appendChild(ogImageMeta);
-        }
-        ogImageMeta.content = dataUrl;
+        updateOgImage(dataUrl)
 
         console.log('OG image updated successfully');
         return dataUrl;
@@ -59,4 +53,15 @@ export async function generateOgImage(pngData) {
     } catch (error) {
         console.error('Error generating OG image:', error);
     }
+}
+
+// OGタグを更新する関数
+function updateOgImage(dataUrl) {
+    let ogImageMeta = document.querySelector('meta[property="og:image"]');
+    if (!ogImageMeta) {
+        ogImageMeta = document.createElement('meta');
+        ogImageMeta.setAttribute('property', 'og:image');
+        document.head.appendChild(ogImageMeta);
+    }
+    ogImageMeta.content = dataUrl;
 }

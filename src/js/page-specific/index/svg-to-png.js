@@ -1,12 +1,13 @@
 import { updateButtonWithSvgSize
        , updateButtonWithPngSize } from 'button/update-button-text'
 import { generateOgImage }         from 'dynamic-ogp/generate-og-image'
+import { updateMetadata }         from 'dynamic-ogp/update-metadata'
 import { extractViewboxValues }    from 'tab-canvas/crop-side-margins'
 
 export
     { executeSvg2png
     , measureSvg2pngTime
-    , svg2png
+    // , svg2png
     }
 
 
@@ -43,6 +44,13 @@ async function executeSvg2png(event, resvgOption) {
         // pngData から  OGイメージ を 生成, 更新
         const ogImageUrl = await generateOgImage(pngData);
         console.log('ogImageUrl: ', ogImageUrl);
+
+        // OGPメタタグを更新
+        updateMetadata(
+            "pfpg - Custom Profile Picture Generator",
+            "A custom profile picture generator for a specific svg artwork that was made with the UIntNPortray ruleset.",
+            window.location.href  // It includes URL params for artwork data and settings states
+        )
 
         // 処理結果を利用する
         console.log('svg2png processing has completed.');
@@ -89,7 +97,36 @@ async function svg2png(svgString, resvgOption) {
     return pngData
 }
 
-// Result of pngData
+// Result of resvgJS and pngData
+// - both have '.free()' for garbage correction
+
+// resvgJS:
+//    Q {__wbg_ptr: 1876528}
+//    __wbg_ptr: 1876528
+//    height: (...)
+//    width: (...)
+//    [[Prototype]]: A
+//      constructor: class extends
+//      height: (...)
+//      width: (...)
+//      [[Prototype]]: Object
+//        constructor: class
+//        cropByBBox: ƒ cropByBBox(t)
+//        free: ƒ free()
+//        getBBox: ƒ getBBox()
+//        height: (...)
+//        imagesToResolve: ƒ imagesToResolve()
+//        innerBBox: ƒ innerBBox()
+//        render: ƒ render()
+//        resolveImage: ƒ resolveImage(t,n)
+//        toString: ƒ toString()
+//        width: (...)
+//        __destroy_into_raw: ƒ __destroy_into_raw()
+//        get height: ƒ height()
+//        get width: ƒ width()
+//        [[Prototype]]: Object
+
+
 // pngData:
 //   e {__wbg_ptr: 1552808}
 //     __wbg_ptr: 1552808
