@@ -39,11 +39,8 @@ async function executeSvg2png(event, resvgOption) {
     // Processing from SVG to PNG and measuring the time
     measureSvg2pngTime(svgString, resvgOption, renderingStatusElements)
         .then((result) => {
-            console.log('result: ', result) // undefined
-
-            // 処理結果を利用する
+            console.log('svg2png result: ', result) // returned `pngData` from svg2png()
             console.log('svg2png processing has completed.')
-
         })
         .catch((error) => {
             console.error('An error occurred during the processing of svg2png:', error)
@@ -55,21 +52,72 @@ async function executeSvg2png(event, resvgOption) {
 }
 
 
+
+
+// 現在の リソースを追跡する グローバル変数
+const renderResources = {
+    currentBlobUrl: null,
+    pngData: null
+  };
+
+// 前回の renderResources をクリーンアップ
+function cleanupPreviousRender() {
+    // 前回の Blob URL をリボーク
+    if (renderResources.currentBlobUrl) {
+      URL.revokeObjectURL(renderResources.currentBlobUrl);
+      renderResources.currentBlobUrl = null
+    }
+
+    // 前回の pngData を解放
+    if (renderResources.pngData) {
+      renderResources.pngData.free()
+      renderResources.pngData = null
+    }
+
+    // 前回の resvgJSオブジェクト を解放
+    if (renderResources.resvgJS) {
+      renderResources.resvgJS.free()
+      renderResources.resvgJS = null
+    }
+
+    // Check the cleanup results
+    console.log('renderResources: ', renderResources)
+    // renderResources:
+    //     {currentBlobUrl: null, pngData: null, resvgJS: null}
+    //         currentBlobUrl: "blob:http://172.19.175.126:4507/e41fdaf1-3f87-4ae5-bd59-6ba05e6633f9"
+    //         pngData: e {__wbg_ptr: 2345856}
+    //         resvgJS: Q {__wbg_ptr: 1550136}
+    //         [[Prototype]]: Object
+
+    // このコンソール出力は、JavaScript のオブジェクト参照の特殊な動作を示しています。
+    // - console.log() は、オブジェクトの初期状態（null）を表示します。
+    // - コンソールを展開すると、実際のデータが表示されます。これは、ブラウザの開発者ツールがオブジェクトの最新の状態をリアルタイムで反映するためです。
+    // この動作は、開発者ツールと実際のメモリ管理の微妙な違いを示しています。null 代入は、明示的なクリーンアップの意図を示す重要な手法です。
+  }
+
 // Rendering from SVG to PNG with options
 async function svg2png(svgString, resvgOption) {
+    // 前回のリソースをクリーンアップ
+    cleanupPreviousRender()
 
     // Create the Resvg object
     const resvgJS = new resvg.Resvg(svgString, resvgOption)
+    renderResources.resvgJS = resvgJS                          // 追跡用に保存
     console.log('resvgJS: ', resvgJS)
 
     // Render
     const pngData = resvgJS.render()
+    renderResources.pngData = pngData                          // 追跡用に保存
+
     const pngBuffer = pngData.asPng()
 
     // Create a blob and its url
-    document.querySelector('#output img').src = URL.createObjectURL(
-        new Blob([pngBuffer], { type: 'image/png' })
-    )
+    const blob = new Blob([pngBuffer], { type: 'image/png' })
+    const blobUrl = URL.createObjectURL(blob)
+    renderResources.currentBlobUrl = blobUrl                   // 追跡用に保存
+
+    // Display the PNG img on output area
+    document.querySelector('#output img').src = blobUrl
 
 
     // Option: You can get the Micro SVG (usvg) strings like below
@@ -80,10 +128,11 @@ async function svg2png(svgString, resvgOption) {
 
     // PNG file size on the download button
     updateButtonWithPngSize(pngBuffer)
-
     // PNG pixel size and SVG viewBox size on the <div id="xxx-info"> elements
     updatePngInfo(pngData)
     updateSvgInfo(svgString)
+
+    return pngData;
 }
 
 function updatePngInfo(pngData) {
