@@ -53,7 +53,7 @@ cp -r ../src/ ./
 
 
 # Generate the custom 'farm/farm.config.ts' to over written
-bun ../script/generate_farm_config_ts.ts
+bun ../scripts/generate_farm_config_ts.ts
 
 
 
