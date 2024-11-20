@@ -18,12 +18,15 @@ fi
 rm -rf ./farm/
 
 # Setup
-bun create farm@latest farm --template Vanilla
+bun create farm@latest "farm" --template "vanilla"
 
 # bun create farm@latest
-# ✔ Project name · farm
+# ✔ Project name => "farm"
 # ✔ farm directory is not empty, do you want to overwrite? · yes
-# ✔ Select a framework: · Vanilla
+# - If already exists same name project directory, Farm will asked above question,
+# - So you should be remove ./farm/ dir before 'create farm' to skip the qustion.
+# ✔ Select a framework => "vanilla"
+# - Valid templates are [vanilla, react, vue3, vue2, lit, svelte, solid, preact, nestjs, tauri, electron]
 
 # Change directory
 cd farm
