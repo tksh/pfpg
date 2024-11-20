@@ -51,6 +51,10 @@ done
 # Copy the original 'src' directory to 'farm/src/'
 cp -r ../src/ ./
 
+# Check ./farm/src/
+echo "Check the files list in ./farm/src/ dir with 'ls -lh'"
+ls -lh
+
 
 # Generate the custom 'farm/farm.config.ts' to over written
 bun ../scripts/generate_farm_config_ts.ts
