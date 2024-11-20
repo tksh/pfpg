@@ -1,0 +1,63 @@
+#!/bin/bash
+set -e
+
+if command -v bun &> /dev/null  # Check the 'Bun' installed or not
+then
+    echo "Bun has already installed."
+else
+    echo "Bun is not installed. Starting installation..."
+    curl -fsSL https://bun.sh/install | bash
+    export BUN_INSTALL=\"$HOME/.bun\"
+    export PATH=\"$BUN_INSTALL/bin:$PATH\"
+fi
+
+
+# Farm
+
+# Setup
+bun create farm@latest
+
+# Install
+cd farm && bun install
+
+# Remove sample files in 'farm/public' directory
+rm -rf ./public/*
+
+# Copy the public files from 'src' directory
+for f in android-chrome-192x192.png \
+          android-chrome-512x512.png \
+          apple-touch-icon.png \
+          favicon.ico \
+          favicon.svg \
+          site.webmanifest; do
+    cp "../src/$f" "./public/$f" || exit 1
+done
+
+# Copy the original 'src' directory to 'farm/src/'
+cp -r ../src/ ./
+
+
+# Generate the custom 'farm/farm.config.ts' to over written
+bun ../script/generate_farm_config_ts.ts
+
+
+
+# Preprocess using TS scripts before Farm build
+
+# Remove 'console.log()' from JS or TS
+find ./src/js -type f \( -name "*.js" -o -name "*.ts" \) -print0 | while IFS= read -r -d '' file; do
+  bun ../scripts/remove_console_logs.ts --input="$file" --output="$file"
+done
+
+# Remove '<script type="importmap"></script>' from HTML
+find ./src/js -type f \( -name "*.html" \) -print0 | while IFS= read -r -d '' file; do
+  bun ../scripts/remove_importmap.ts --input="$file" --output="$file"
+done
+
+
+
+# Build with Farm into ./farm/build/
+bun run build  # = 'farm build'
+
+
+echo "Build complete."

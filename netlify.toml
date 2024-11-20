@@ -1,0 +1,7 @@
+[build]
+  command = "./scripts/build.sh"
+  publish = "./farm/build"
+
+[build.environment]
+  # NPMのインストールを無効化
+  NPM_FLAGS = "--version"
