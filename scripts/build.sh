@@ -38,22 +38,28 @@ bun install
 # Remove sample files in 'farm/public' directory
 rm -rf ./public/*
 
-# Copy the public files from 'src' directory
+# Copy the original 'src' directory to 'farm/src/'
+cp -r ../src/ ./
+
+
+# Move the public files from 'farm/src' to 'farm/public' directory
 for f in android-chrome-192x192.png \
           android-chrome-512x512.png \
           apple-touch-icon.png \
           favicon.ico \
           favicon.svg \
           site.webmanifest; do
-    cp "../src/$f" "./public/$f" || exit 1
+    mv "./src/$f" "./public/$f" || exit 1
 done
 
-# Copy the original 'src' directory to 'farm/src/'
-cp -r ../src/ ./
 
-# Check ./farm/src/
-echo "Check the list of files in ./farm/src/ dir with 'ls -lh'"
-ls -lh
+# Check the copied files
+echo "Check the list of files in ./farm/src/ directory."
+ls -lh ./src/
+
+echo "Check the list of files in ./farm/public/ directory."
+ls -lh ./public/
+
 
 
 # Generate the custom 'farm/farm.config.ts' to over written
