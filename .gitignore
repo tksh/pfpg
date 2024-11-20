@@ -1,19 +1,6 @@
 .vscode
-node-modules/
 
 # For build using www.farmfe.org
 farm/
 
-#dist/
 temp/
-
-
-# Yarn v4
-# Not using Zero-Installs
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions

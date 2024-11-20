@@ -4,7 +4,7 @@
 
 Profile picture generator
 
-https://pfpg.netlify.app
+<https://pfpg.netlify.app>
 
 ## Run with Deno std/http file server
 
@@ -16,6 +16,18 @@ deno install --allow-net --allow-read https://deno.land/std/http/file_server.ts
 # Run
 file_server .
 ```
+
+## Build to Netlify using Bun and Farm
+
+`git push` to published on [Netlify](https://www.netlify.com/) automatically.
+
+- Tools for build
+  - [Bun](https://bun.sh/)
+  - [Farm](https://www.farmfe.org/)
+
+- Files for build
+  - netlify.toml
+  - ./scripts/*
 
 ## Libraries
 

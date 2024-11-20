@@ -17,6 +17,7 @@ fi
 # Remove previous sources
 rm -rf ./farm/
 
+
 # Setup
 bun create farm@latest "farm" --template "vanilla"
 
@@ -27,6 +28,7 @@ bun create farm@latest "farm" --template "vanilla"
 # - So you should be remove ./farm/ dir before 'create farm' to skip the qustion.
 # ✔ Select a framework => "vanilla"
 # - Valid templates are [vanilla, react, vue3, vue2, lit, svelte, solid, preact, nestjs, tauri, electron]
+
 
 # Change directory
 cd farm
