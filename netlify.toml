@@ -1,5 +1,5 @@
 [build]
-  command = "./scripts/build.sh"
+  command = "chmod +x ./scripts/build.sh && ./scripts/build.sh"
   publish = "./farm/build"
 
 [build.environment]
