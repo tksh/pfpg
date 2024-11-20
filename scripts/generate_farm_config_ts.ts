@@ -5,6 +5,7 @@
 import fs from 'fs';
 
 console.log('process.cwd(): ', process.cwd())
+// process.cwd():  /opt/build/repo/farm
 
 
 // 上書き生成するファイルのパス
@@ -36,7 +37,7 @@ htmlFiles.forEach(file => {
   inputObject[file] = `../farm/src/${file}.html`;
 });
 
-// console.log('inputObject: ', inputObject)
+ console.log('inputObject: ', inputObject)
 //     inputObject:  {
 //         index: "./src/index.html",
 //         "data-manipulator": "./src/data-manipulator.html",
@@ -102,7 +103,7 @@ htmlFiles.forEach(file => {
         try {
             // 整形した文字列を JSON パースに渡す
             const sanitizedJsonString = sanitizeImportMapJson(importMapMatch[1]);
-            console.log('sanitizedJsonString: ', sanitizedJsonString)
+            //console.log('sanitizedJsonString: ', sanitizedJsonString)
             const importMap = JSON.parse(sanitizedJsonString);
 
             Object.entries(importMap.imports).forEach(([key, value]) => {
@@ -161,7 +162,7 @@ export default defineConfig({
 });
 `;
 
-// console.log('fileContent: ', fileContent)
+ console.log('fileContent: ', fileContent)
 //
 //     import { defineConfig } from '@farmfe/core';
 //     import { resolve } from 'path';
