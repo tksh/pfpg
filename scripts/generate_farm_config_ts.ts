@@ -1,11 +1,11 @@
 // Usage:
-//     > generate_farm_config_ts.ts
+//     > bun ../scripts/generate_farm_config_ts.ts
 
 
 import fs from 'fs';
 
 console.log('process.cwd(): ', process.cwd())
-// process.cwd():  /opt/build/repo/farm
+// process.cwd():  /opt/build/repo/farm (at Netlify deploy environment)
 
 
 // 上書き生成するファイルのパス
@@ -28,7 +28,7 @@ const htmlFiles = fs.readdirSync('../farm/src')
   .filter(file => file.endsWith('.html'))
   .map(file => file.replace('.html', ''));
 
-// console.log('htmlFiles: ', htmlFiles)
+//console.log('htmlFiles: ', htmlFiles)
 //     [ "index", "data-manipulator" ]
 
 
@@ -37,7 +37,7 @@ htmlFiles.forEach(file => {
   inputObject[file] = `../farm/src/${file}.html`;
 });
 
- console.log('inputObject: ', inputObject)
+//console.log('inputObject: ', inputObject)
 //     inputObject:  {
 //         index: "./src/index.html",
 //         "data-manipulator": "./src/data-manipulator.html",
@@ -111,6 +111,7 @@ htmlFiles.forEach(file => {
             });
         } catch (error) {
             console.warn(`Failed to parse import map in ${file}.html`);
+            process.exit(1);
         }
     }
 });
@@ -162,7 +163,7 @@ export default defineConfig({
 });
 `;
 
- console.log('fileContent: ', fileContent)
+// console.log('fileContent: ', fileContent)
 //
 //     import { defineConfig } from '@farmfe/core';
 //     import { resolve } from 'path';

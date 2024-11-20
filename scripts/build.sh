@@ -52,7 +52,7 @@ done
 cp -r ../src/ ./
 
 # Check ./farm/src/
-echo "Check the files list in ./farm/src/ dir with 'ls -lh'"
+echo "Check the list of files in ./farm/src/ dir with 'ls -lh'"
 ls -lh
 
 
