@@ -14,11 +14,23 @@ fi
 
 # Farm
 
+# Remove previous sources
+rm -rf ./farm/
+
 # Setup
-bun create farm@latest
+bun create farm@latest farm --template Vanilla
+
+# bun create farm@latest
+# ✔ Project name · farm
+# ✔ farm directory is not empty, do you want to overwrite? · yes
+# ✔ Select a framework: · Vanilla
+
+# Change directory
+cd farm
 
 # Install
-cd farm && bun install
+bun install
+
 
 # Remove sample files in 'farm/public' directory
 rm -rf ./public/*
