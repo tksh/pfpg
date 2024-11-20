@@ -4,8 +4,11 @@
 
 import fs from 'fs';
 
+console.log('process.cwd(): ', process.cwd())
+
+
 // 上書き生成するファイルのパス
-const filePath = './farm/farm.config.ts';
+const filePath = '../farm/farm.config.ts';
 
 // Tab space
 const TAB_SPACE = '\u0020\u0020' // Two spaces
@@ -20,7 +23,7 @@ const TAB_SPACE = '\u0020\u0020' // Two spaces
 //      'index': './src/index.html',
 //      'data-manipulator': './src/data-manipulator.html'
 
-const htmlFiles = fs.readdirSync('./farm/src')
+const htmlFiles = fs.readdirSync('../farm/src')
   .filter(file => file.endsWith('.html'))
   .map(file => file.replace('.html', ''));
 
@@ -30,7 +33,7 @@ const htmlFiles = fs.readdirSync('./farm/src')
 
 const inputObject = {};
 htmlFiles.forEach(file => {
-  inputObject[file] = `./src/${file}.html`;
+  inputObject[file] = `../farm/src/${file}.html`;
 });
 
 // console.log('inputObject: ', inputObject)
@@ -77,15 +80,15 @@ function sanitizeImportMapJson(jsonString: string): string {
     // 最後の項目の後にコンマがある場合、それを削除する (コンマがあっても インポートマップとしては 機能する)
     // 空白行やスペースも考慮する
     return jsonString
-      .trim() // 先頭末尾の空白を削除
-      .replace(/\s*,\s*\}/g, '}') // 最後のコンマと閉じ括弧の間の空白を削除
-      .replace(/\s*,\s*$/g, '') // 最後のコンマとその後の空白を削除
-      .replace(/^\s+|\s+$/gm, ''); // 各行の先頭末尾の空白を削除
+      .trim()                       // 先頭末尾の空白を削除
+      .replace(/\s*,\s*\}/g, '}')   // 最後のコンマと閉じ括弧の間の空白を削除
+      .replace(/\s*,\s*$/g, '')     // 最後のコンマとその後の空白を削除
+      .replace(/^\s+|\s+$/gm, '');  // 各行の先頭末尾の空白を削除
   }
 
 // Import Map の解析と alias の生成
 htmlFiles.forEach(file => {
-    const content = fs.readFileSync(`./farm/src/${file}.html`, 'utf8');
+    const content = fs.readFileSync(`../farm/src/${file}.html`, 'utf8');
     const importMapMatch = content.match(/<script type="importmap">([\s\S]*?)<\/script>/);
 
     //console.log(`importMapMatch in ${file}: `, importMapMatch)
@@ -134,13 +137,6 @@ const aliasEntries = Array.from(aliasMap.entries()).map(([key, value]) => {
 //         ... 18 more items
 //     ]
 
-const aliasString = `{${aliasEntries}}`;
-
-//console.log('aliasString: ', aliasString)
-//     aliasString:  {"libs/url-comp-0-1-0/url-comp": resolve('./src/js/libs/url-comp-0-1-0/url-comp.js'),"libs/bech32-and-bech32m": resolve('./src/js/libs/bech32-and-bech32m.js'), ...
-
-
-
 
 
 // Generate whole content of config file
@@ -166,6 +162,7 @@ export default defineConfig({
 `;
 
 // console.log('fileContent: ', fileContent)
+//
 //     import { defineConfig } from '@farmfe/core';
 //     import { resolve } from 'path';
 //
@@ -173,18 +170,18 @@ export default defineConfig({
 //       compilation: {
 //         input: {
 //           'index': './src/index.html',
-//     'data-manipulator': './src/data-manipulator.html'
+//           'data-manipulator': './src/data-manipulator.html'
 //         },
 //         output: {
-//           path: 'test'
+//           path: 'build'
 //         },
 //         resolve: {
 //           alias: {
 //             'libs/url-comp-0-1-0/url-comp': resolve('./src/js/libs/url-comp-0-1-0/url-comp.js'),
 //             'libs/bech32-and-bech32m': resolve('./src/js/libs/bech32-and-bech32m.js'),
 //             ...
-//             'button/update-button-text': resolve('./src/js/page-specific/index/button/update-button-text.js'),
-//             'svg-to-png': resolve('./src/js/page-specific/index/svg-to-png.js')
+//             'io/download-url-params': resolve('./src/js/page-specific/data-manipulator/io/download-url-params.js'),
+//             'io/select-file': resolve('./src/js/page-specific/data-manipulator/io/select-file.js')
 //           }
 //         }
 //       },
