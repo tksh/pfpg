@@ -42,13 +42,25 @@ export async function generateOgImage(pngData) {
         ctx.drawImage(img, x, y, originalWidth * scale, originalHeight * scale);
 
         // CanvasからデータURLを取得
-        const dataUrl = canvas.toDataURL('image/png');
+//        const dataUrl = canvas.toDataURL('image/png');
 
         // OGイメージを更新
-        updateOgImage(dataUrl)
+//        updateOgImage(dataUrl)
 
-        console.log('OG image updated successfully');
-        return dataUrl;
+        // キャンバスから新しい画像データを取得
+        const newImageData = canvas.toDataURL('image/png');
+
+        // 新しい画像データからBlobオブジェクトを作成
+        const newBlob = await fetch(newImageData).then(res => res.blob());
+
+        // 新しいBlob URLを作成
+        const newBlobUrl = URL.createObjectURL(newBlob);
+
+        // 新しいBlob URLを以降の処理で利用
+        console.log(newBlobUrl); // 例: ダウンロード、別のキャンバスへの描画など
+
+        console.log('OG image updated successfully, Blob URL/New is:', blobUrl, newBlobUrl);
+//        return dataUrl;
 
     } catch (error) {
         console.error('Error generating OG image:', error);
