@@ -1,11 +1,13 @@
 import { updateButtonWithSvgSize
        , updateButtonWithPngSize } from 'button/update-button-text'
+import { generateOgImage }         from 'dynamic-ogp/generate-og-image'
+import { updateMetadata }         from 'dynamic-ogp/update-metadata'
 import { extractViewboxValues }    from 'tab-canvas/crop-side-margins'
 
 export
     { executeSvg2png
     , measureSvg2pngTime
-    , svg2png
+    // , svg2png
     }
 
 
@@ -24,31 +26,42 @@ export
 
 // svg2png() を呼び出し 処理時間を計測する measureSvg2pngTime() を実行し 処理時間結果を表示する
 async function executeSvg2png(event, resvgOption) {
-    //console.dir(resvgOption,  { depth: null })
-
     // 処理時間を表示する HTML要素を 取得
     const renderingStatusElements = new Map([
-        ['pngActionButton', document.getElementById("png-action-button")], // <button> at below of output image
-        ['lastRenderingTimeP', document.getElementById("last-rendering-time")] // <p> at bottom of 'Render' tab
-    ])
-
+        ['pngActionButton', document.getElementById("png-action-button")],
+        ['lastRenderingTimeP', document.getElementById("last-rendering-time")]
+    ]);
 
     // Input SVG string
-    const svgString = event.target.value.trim() // SVG文字列 / '.trim()' = 文字列の両端の空白を削除
+    const svgString = event.target.value.trim();
 
-    // Processing from SVG to PNG and measuring the time
-    measureSvg2pngTime(svgString, resvgOption, renderingStatusElements)
-        .then((result) => {
-            console.log('svg2png result: ', result) // returned `pngData` from svg2png()
-            console.log('svg2png processing has completed.')
-        })
-        .catch((error) => {
-            console.error('An error occurred during the processing of svg2png:', error)
-        })
+    try {
+        // Processing from SVG to PNG and measuring the time
+        const pngData = await measureSvg2pngTime(svgString, resvgOption, renderingStatusElements);
 
+        console.log('pngData: ', pngData);
+
+        // pngData から  OGイメージ を 生成, Cloudinaryに アップロード
+        const ogImageUrl = await generateOgImage(pngData);
+        console.log('ogImageUrl: ', ogImageUrl);  // アップロードしたURL
+
+        // OGPメタタグを更新
+        // - Arguments: (title, description, url)
+        updateMetadata(
+            "pfpg - Custom Profile Picture Generator",
+            "A custom profile picture generator for a specific svg artwork that was made with the UIntNPortray ruleset.",
+            window.location.href  // It includes URL params for artwork data and settings states
+        )
+
+        // 処理結果を利用する
+        console.log('svg2png processing has completed.');
+
+    } catch (error) {
+        console.error('An error occurred during the processing of svg2png:', error);
+    }
 
     // SVGファイルサイズを ダウンロードボタンに 表示する
-    updateButtonWithSvgSize(svgString)
+    updateButtonWithSvgSize(svgString);
 }
 
 
@@ -132,8 +145,59 @@ async function svg2png(svgString, resvgOption) {
     updatePngInfo(pngData)
     updateSvgInfo(svgString)
 
-    return pngData;
+    return pngData
 }
+
+// Result of resvgJS and pngData
+// - both have '.free()' for garbage correction
+
+// resvgJS:
+//    Q {__wbg_ptr: 1876528}
+//    __wbg_ptr: 1876528
+//    height: (...)
+//    width: (...)
+//    [[Prototype]]: A
+//      constructor: class extends
+//      height: (...)
+//      width: (...)
+//      [[Prototype]]: Object
+//        constructor: class
+//        cropByBBox: ƒ cropByBBox(t)
+//        free: ƒ free()
+//        getBBox: ƒ getBBox()
+//        height: (...)
+//        imagesToResolve: ƒ imagesToResolve()
+//        innerBBox: ƒ innerBBox()
+//        render: ƒ render()
+//        resolveImage: ƒ resolveImage(t,n)
+//        toString: ƒ toString()
+//        width: (...)
+//        __destroy_into_raw: ƒ __destroy_into_raw()
+//        get height: ƒ height()
+//        get width: ƒ width()
+//        [[Prototype]]: Object
+
+
+// pngData:
+//   e {__wbg_ptr: 1552808}
+//     __wbg_ptr: 1552808
+//     height: (...)
+//     pixels: (...)
+//     width: (...)
+//     [[Prototype]]: Object
+//       asPng: ƒ asPng()
+//       constructor: class e
+//       free: ƒ free()
+//       height: (...)
+//       pixels: (...)
+//       width: (...)
+//       __destroy_into_raw: ƒ __destroy_into_raw()
+//       get height: ƒ height()
+//       get pixels: ƒ pixels()
+//       get width: ƒ width()
+//       [[Prototype]]: Object
+
+
 
 function updatePngInfo(pngData) {
     // PNGピクセルサイズを <div id="png-info">要素に 表示する
@@ -166,7 +230,7 @@ async function measureSvg2pngTime(svgString, resvgOption, renderingStatusElement
         console.log('svg2png startTime: ', startTime);
 
         // svg2png関数を呼び出す
-        const result = await svg2png(svgString, resvgOption);
+        const pngData = await svg2png(svgString, resvgOption);
 
         // 終了時刻を記録
         const endTime = performance.now();
@@ -182,7 +246,7 @@ async function measureSvg2pngTime(svgString, resvgOption, renderingStatusElement
         await updateRenderingStatus(`Last rendering time: ${elapsedTime} milliseconds`, renderingStatusElements.get('lastRenderingTimeP'));
 
         // 処理結果を返す
-        return result;
+        return pngData;
 
     } catch (error) {
         // エラー処理
