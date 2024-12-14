@@ -1,4 +1,8 @@
 export async function generateOgImage(pngData) {
+    // Cloudinaryの情報
+    const cloudName = 'ddoy3pmjg';
+    const uploadPreset = 'pfpg_ogp_preset';
+
     try {
         // PNGデータからBlob URLを作成
         const blobUrl = URL.createObjectURL(new Blob([pngData.asPng()], { type: 'image/png' }));
@@ -41,26 +45,46 @@ export async function generateOgImage(pngData) {
         // リサイズした画像を描画
         ctx.drawImage(img, x, y, originalWidth * scale, originalHeight * scale);
 
-        // CanvasからデータURLを取得
-//        const dataUrl = canvas.toDataURL('image/png');
-
-        // OGイメージを更新
-//        updateOgImage(dataUrl)
-
         // キャンバスから新しい画像データを取得
         const newImageData = canvas.toDataURL('image/png');
 
         // 新しい画像データからBlobオブジェクトを作成
         const newBlob = await fetch(newImageData).then(res => res.blob());
 
-        // 新しいBlob URLを作成
-        const newBlobUrl = URL.createObjectURL(newBlob);
+        // CloudinaryのアップロードURL
+        const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
 
-        // 新しいBlob URLを以降の処理で利用
-        console.log(newBlobUrl); // 例: ダウンロード、別のキャンバスへの描画など
+        // Define the public_id to form the result OGP image URL as deterministically
+        const publicId = "uinp1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs"
+        // result(data.secure_url) like: https://res.cloudinary.com/ddoy3pmjg/image/upload/v1734106822/uinp1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs.png
 
-        console.log('OG image updated successfully, Blob URL/New is:', blobUrl, newBlobUrl);
-//        return dataUrl;
+        // FormDataを構築
+        const formData = new FormData();
+        formData.append('file', newBlob);
+        formData.append('upload_preset', uploadPreset);
+        formData.append("public_id", publicId); // 任意の公開ID
+
+        // アップロードリクエスト
+        const response = await fetch(uploadUrl, {
+          method: 'POST',
+          body: formData,
+        });
+
+        // レスポンスを処理
+        const data = await response.json();
+        if (response.ok) {
+          console.log('Uploaded URL(data.secure_url) for <meta property="og:image" content"...">:', data.secure_url);
+          //alert(`Image uploaded successfully: ${data.secure_url}`);
+        } else {
+          throw new Error(data.error.message);
+        }
+
+        console.log('OG image updated successfully, Uploaded Url:', data.secure_url);
+
+        // OGイメージを更新
+        updateOgImage(data.secure_url)
+
+        return data.secure_url;
 
     } catch (error) {
         console.error('Error generating OG image:', error);
@@ -68,12 +92,12 @@ export async function generateOgImage(pngData) {
 }
 
 // OGタグを更新する関数
-function updateOgImage(dataUrl) {
+function updateOgImage(dataSecureUrl) {
     let ogImageMeta = document.querySelector('meta[property="og:image"]');
     if (!ogImageMeta) {
         ogImageMeta = document.createElement('meta');
         ogImageMeta.setAttribute('property', 'og:image');
         document.head.appendChild(ogImageMeta);
     }
-    ogImageMeta.content = dataUrl;
+    ogImageMeta.content = dataSecureUrl;
 }

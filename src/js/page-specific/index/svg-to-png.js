@@ -41,11 +41,12 @@ async function executeSvg2png(event, resvgOption) {
 
         console.log('pngData: ', pngData);
 
-        // pngData から  OGイメージ を 生成, 更新
+        // pngData から  OGイメージ を 生成, Cloudinaryに アップロード
         const ogImageUrl = await generateOgImage(pngData);
-        console.log('ogImageUrl: ', ogImageUrl);
+        console.log('ogImageUrl: ', ogImageUrl);  // アップロードしたURL
 
         // OGPメタタグを更新
+        // - Arguments: (title, description, url)
         updateMetadata(
             "pfpg - Custom Profile Picture Generator",
             "A custom profile picture generator for a specific svg artwork that was made with the UIntNPortray ruleset.",
