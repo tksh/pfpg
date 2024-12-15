@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>pfpg | data-manipulator</title>
 </head>
+<body>
 <script>
     
 // 動作確認用のデータ作成
@@ -30,6 +31,7 @@ async function sha256HashHexFromMap(map) {
         statesKvJoinedAsStr += `&${key}=${value}`;
     }
     console.log("statesKvJoinedAsStr:", statesKvJoinedAsStr)
+    alert(`statesKvJoinedAsStr: ${statesKvJoinedAsStr}`);
     // e.g: &groupColors=undefined&pathMode=absoluteSeparated& ... &themeColor=dark
 
     const encoder = new TextEncoder();
@@ -38,18 +40,22 @@ async function sha256HashHexFromMap(map) {
     // crypto オブジェクトの存在確認 (例)
     if (typeof crypto === 'undefined' || !crypto.subtle) {
         console.error('Web Crypto API is not supported in this environment.');
+        alert(`Web Crypto API is not supported in this environment.`);
         return;
       }
 
     const hashBuffer = await crypto.subtle.digest('SHA-256', encodedHash);  // TypeError: Cannot read properties of undefined (reading 'digest')
     const hashArray = Array.from(new Uint8Array(hashBuffer));
 
-    return uint8ArrayToHexString(hashArray);
+    const hexString =  uint8ArrayToHexString(hashArray);
+    alert(`hexString: ${hexString}`);
+
+    return hexString
 }
 
 console.log(sha256HashHexFromMap(map))
 </script>
 
-
+</body>
 
 </html>
