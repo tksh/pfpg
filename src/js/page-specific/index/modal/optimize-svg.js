@@ -71,12 +71,14 @@ const svgOptions = [
 // Initialize event listeners for SVG optimization checkboxes
 function initSvgOptimization() {
     const checkboxes = document.querySelectorAll('#svg-opt-modal input[type="checkbox"]')
-    checkboxes.forEach(checkbox => checkbox.addEventListener('change', (event) => updateSvg(event)))
+    checkboxes.forEach(checkbox => checkbox.addEventListener('change', async (event) => {
+        await updateSvg(event);
+    }))
 }
 
 // Apply SVG optimizations based on checked/un-checked options
 // Update the textarea content, URL parameters, and button text accordingly
-function updateSvg(event) {
+async function updateSvg(event) {
     let svgString = getSvgString()
 
     const isChecked = event.target.checked
@@ -96,7 +98,7 @@ function updateSvg(event) {
             } else {
                 if (option.needsPathMode) {
                     const pathMode = getState('pathMode')
-                    svgString = option.restoreFunction(svgString, pathMode)
+                    svgString = await restoreLineBreaks(svgString, pathMode)  // option.restoreFunction
                 } else {
                     svgString = option.restoreFunction(svgString)
                 }
