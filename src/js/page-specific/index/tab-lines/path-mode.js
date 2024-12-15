@@ -100,15 +100,15 @@ function initPathModeSelect() {
 
 
 // 選択された path-mode で url params から デコードし直す
-async function decodeAsSelectedPathMode(pathMode) {
+function decodeAsSelectedPathMode(pathMode) {
     if (pathMode === 'relativeMerged') {
         console.log('Path mode: Relative and merged')
         const isRelative = true
-        return await decodeUrlToSvg(isRelative, isOnDataManipulatorPage())
+        return decodeUrlToSvg(isRelative, isOnDataManipulatorPage())
     } else { // (pathMode === 'absoluteSeparated')
         console.log('Path mode: Absolute and separated')
         const isRelative = false
-        return await decodeUrlToSvg(isRelative, isOnDataManipulatorPage())
+        return decodeUrlToSvg(isRelative, isOnDataManipulatorPage())
     }
 }
 

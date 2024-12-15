@@ -71,14 +71,14 @@ const svgOptions = [
 // Initialize event listeners for SVG optimization checkboxes
 function initSvgOptimization() {
     const checkboxes = document.querySelectorAll('#svg-opt-modal input[type="checkbox"]')
-    checkboxes.forEach(checkbox => checkbox.addEventListener('change', async (event) => {
-        await updateSvg(event);
+    checkboxes.forEach(checkbox => checkbox.addEventListener('change', (event) => {
+        updateSvg(event);
     }))
 }
 
 // Apply SVG optimizations based on checked/un-checked options
 // Update the textarea content, URL parameters, and button text accordingly
-async function updateSvg(event) {
+function updateSvg(event) {
     let svgString = getSvgString()
 
     const isChecked = event.target.checked
@@ -98,7 +98,7 @@ async function updateSvg(event) {
             } else {
                 if (option.needsPathMode) {
                     const pathMode = getState('pathMode')
-                    svgString = await restoreLineBreaks(svgString, pathMode)  // option.restoreFunction
+                    svgString = option.restoreFunction(svgString, pathMode)  // option.restoreFunction
                 } else {
                     svgString = option.restoreFunction(svgString)
                 }
@@ -180,8 +180,8 @@ function removeLineBreaks(svgString) {
     return svgString.replace(/>\s+</g, '><')
 }
 
-async function restoreLineBreaks(svgString, pathMode) {
-    const indentCounts = await getCurrentPathModeIndentation(pathMode)
+function restoreLineBreaks(svgString, pathMode) {
+    const indentCounts = getCurrentPathModeIndentation(pathMode)
     let formattedSvg = svgString.replace(/></g, '>\n<')
     const lines = formattedSvg.split('\n')
 
@@ -202,8 +202,8 @@ function getSvgIndentation(svgString) {
     })
 }
 
-async function getCurrentPathModeIndentation(pathMode) {
-    const svgString = await decodeAsSelectedPathMode(pathMode)
+function getCurrentPathModeIndentation(pathMode) {
+    const svgString = decodeAsSelectedPathMode(pathMode)
     return getSvgIndentation(svgString)
 }
 
