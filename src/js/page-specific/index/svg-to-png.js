@@ -1,13 +1,12 @@
 import { updateButtonWithSvgSize
        , updateButtonWithPngSize } from 'button/update-button-text'
 import { generateOgImage }         from 'dynamic-ogp/generate-og-image'
-import { updateMetadata }         from 'dynamic-ogp/update-metadata'
+import { updateMetadata }          from 'dynamic-ogp/update-metadata'
 import { extractViewboxValues }    from 'tab-canvas/crop-side-margins'
 
 export
     { executeSvg2png
     , measureSvg2pngTime
-    // , svg2png
     }
 
 
@@ -71,7 +70,7 @@ async function executeSvg2png(event, resvgOption) {
 const renderResources = {
     currentBlobUrl: null,
     pngData: null
-  };
+};
 
 // 前回の renderResources をクリーンアップ
 function cleanupPreviousRender() {

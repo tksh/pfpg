@@ -1,4 +1,13 @@
+import { getStateUrlsAsMapExcludesSvgOptimization } from 'state/url-state-manager'
+import { sha256HashHexFromMap }       from 'decode/hashing'
+
 export async function generateOgImage(pngData) {
+
+  const statesAboutVisualEffects = getStateUrlsAsMapExcludesSvgOptimization()
+  console.log("statesAboutVisualEffects: ", statesAboutVisualEffects)
+//  const statesHash = await sha256HashHexFromMap(statesAboutVisualEffects)
+//  console.log("statesHash: ", statesHash)
+
     // Cloudinaryの情報
     const cloudName = 'ddoy3pmjg';
     const uploadPreset = 'pfpg_ogp_preset';
@@ -56,7 +65,7 @@ export async function generateOgImage(pngData) {
 
         // Define the public_id to form the result OGP image URL as deterministically
         const publicId = "pfpg1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs"
-        // result(data.secure_url) like: https://res.cloudinary.com/ddoy3pmjg/image/upload/v1734106822/uinp1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs.png
+        // result(data.secure_url) like: https://res.cloudinary.com/ddoy3pmjg/image/upload/v1734106822/glin1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs.png
 
         // FormDataを構築
         const formData = new FormData();

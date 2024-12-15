@@ -4,6 +4,7 @@ export
     { getStateUrlsOfImageCustomization
     , getStateUrlsOfSvgOptimization
     , getStateUrlsOfUiConfiguration
+    , getStateUrlsAsMapExcludesSvgOptimization
     , getState
     , getStateUrl
     , updateState
@@ -46,6 +47,36 @@ function getAllStateUrls() {
     )
 }
 
+// URLから全ての状態パラメータを取得する関数
+// - 存在しない場合は SETTINGS_DEFAULTS のデフォルト値を使用する
+// - ブーリアンへの型変換は行わなず 文字列のまま 取得する
+function getStateUrlsAsMapWithDefaultFill() {
+    const params = new URLSearchParams(window.location.search);
+    const result = new Map();
+
+    // SETTINGS_DEFAULTSの全ての項目をチェック
+    for (const [key, defaultValue] of SETTINGS_DEFAULTS) {
+        if (params.has(key)) {
+            // URLパラメータに存在する場合はその値を使用
+            result.set(key, params.get(key));
+        } else {
+            // URLパラメータに存在しない場合はデフォルト値を使用
+            result.set(key, defaultValue);
+        }
+    }
+
+    return result;
+}
+
+function getStateUrlsAsRawWithDefaultFill() {
+    const params = new URLSearchParams(window.location.search);
+    return Object.fromEntries(
+      Array.from(SETTINGS_DEFAULTS.keys()).map(key => {
+        const valueFromUrl = params.get(key);
+        return [key, valueFromUrl ?? SETTINGS_DEFAULTS.get(key)];  // valueFromUrl が undefined の場合、SETTINGS_DEFAULTS からデフォルト値を取得
+      })
+    );
+}
 
 // Update
 
@@ -84,12 +115,38 @@ function setStateUrl(params) {
 
 // URLから特定の範囲の状態パラメータを取得する汎用関数（ブール値対応）
 function getStateUrlsInRange(startIndex, endIndex) {
-    const allParams = getAllStateUrls()
+    const allParams = getAllStateUrls()  // return Object
     const stateKeys = Array.from(SETTINGS_DEFAULTS.keys()).slice(startIndex, endIndex)
     return new Map(
         Object.entries(allParams).filter(([key]) => stateKeys.includes(key))
     )
 }
+// URLから特定の範囲の状態パラメータを取得する汎用関数
+function getStateUrlsInRangeAsMapWithDefaultFill(startIndex, endIndex) {
+    const allParams = getStateUrlsAsMapWithDefaultFill()  // return Map
+    console.log("allParams: ", allParams)
+    const stateKeys = Array.from(SETTINGS_DEFAULTS.keys()).slice(startIndex, endIndex)
+    return new Map(
+        Object.entries(allParams).filter(([key]) => stateKeys.includes(key))
+    )
+}
+// マップオブジェクトを SETTINGS_DEFAULTS の開始インデックスと終了インデックスでフィルタリングする関数
+function filterStateByIndex(stateMap, startIndex, endIndex) {
+    const filteredMap = new Map();
+
+    // SETTINGS_DEFAULTS からキーを範囲で抽出
+    const keysInRange = Array.from(SETTINGS_DEFAULTS.keys()).slice(startIndex, endIndex + 1);
+
+    // stateMap の中で指定されたキーのみを保持
+    keysInRange.forEach((key) => {
+        if (stateMap.has(key)) {
+            filteredMap.set(key, stateMap.get(key));
+        }
+    });
+
+    return filteredMap;
+}
+
 
 // SVG optimization の状態パラメータを全て取得する関数
 function getStateUrlsOfSvgOptimization() {
@@ -104,6 +161,14 @@ function getStateUrlsOfImageCustomization() {
 // UI configuration の状態パラメータを全て取得する関数
 function getStateUrlsOfUiConfiguration() {
     return getStateUrlsInRange(13, SETTINGS_DEFAULTS.size)
+}
+
+// Image customization, UI configuration の状態パラメータを全て取得し 存在しない場合はデフォルト値で補完する関数
+// - ブーリアンへの型変換は行わなず 文字列のまま 取得する
+function getStateUrlsAsMapExcludesSvgOptimization() {
+    const statesExcludeArtworkData = getStateUrlsAsMapWithDefaultFill()
+    const statesExcludeSvgOptimization = filterStateByIndex(statesExcludeArtworkData, 3, SETTINGS_DEFAULTS.size)
+    return statesExcludeSvgOptimization
 }
 
 

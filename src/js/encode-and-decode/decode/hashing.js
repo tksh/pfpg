@@ -1,7 +1,12 @@
 import { bech32
-       , bech32m} from 'libs/bech32-and-bech32m'
+       , bech32m } from 'libs/bech32-and-bech32m'
 
-export async function calculateArtworkId(linesData) {
+export
+    { calculateArtworkId
+    , sha256HashHexFromMap
+    }
+
+async function calculateArtworkId(linesData) {
 
     // Start time
     const calcArtworkIdStartTime = performance.now()
@@ -11,14 +16,15 @@ export async function calculateArtworkId(linesData) {
     console.log("compositeSequence: ", compositeSequence)                // 01701701702552551272_6364 ...
     console.log("compositeSequence.length: ", compositeSequence.length)  // e.g.: 7578 (202404_001)
 
-    const { hexHash, bech32Hash, bech32mHash } = await sha256ThenBech32(compositeSequence)
+    const { hashArray, hashHex } = await strToSha256(compositeSequence)
+    const { bech32Hash, bech32mHash } = await hashArrayToBech32(hashArray)
 
     // End time
     const calcArtworkIdEndTime = performance.now()
     const elapsedTime = Math.floor(calcArtworkIdEndTime - calcArtworkIdStartTime)
     console.log('elapsedTime of calculating artwork ID: ', elapsedTime, ' ms')
 
-    return { hexHash, bech32Hash, bech32mHash }
+    return { bech32Hash, bech32mHash }
 }
 
 function generateCompositeSequence(linesData) {
@@ -118,8 +124,8 @@ async function sha256ThenBech32(inputStr, hrp = 'uinp') {
     const hashArray = Array.from(new Uint8Array(hashBuffer))
 
     // 16進数形式の文字列 を生成
-    const hexHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
-    //console.log("hexHash: ", hexHash)  // e.g.: 9f4c7b73e27ae5c198aec93a687d9d82d471d5ad34c5ce6a4f08f0e52d4ef755
+    const hashHex = uint8ArrayToHexString(hashArray)
+    //console.log("hashHex: ", hashHex)  // e.g.: 9f4c7b73e27ae5c198aec93a687d9d82d471d5ad34c5ce6a4f08f0e52d4ef755
 
     // Bech32用の words に変換
     const words = bech32.toWords(hashArray)
@@ -127,11 +133,89 @@ async function sha256ThenBech32(inputStr, hrp = 'uinp') {
 
     // Bech32エンコード
     const bech32Hash = bech32.encode(hrp, words)
-    //console.log("bech32Hash: ", bech32Hash)  // e.g.: uinp1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs
+    //console.log("bech32Hash: ", bech32Hash)  // e.g.: glin1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs
 
     // Bech32mエンコード
     const bech32mHash = bech32m.encode(hrp, words)
-    //console.log("bech32mHash: ", bech32mHash)  // e.g.: uinp1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs
+    //console.log("bech32mHash: ", bech32mHash)  // e.g.: glin1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs
 
-    return { hexHash, bech32Hash, bech32mHash }
+    return { hashHex, bech32Hash, bech32mHash }
+}
+
+// uint8Array => hex string (two digits padded)
+function uint8ArrayToHexString(uint8Array) {
+    return Array.from(uint8Array)
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+}
+
+async function strToSha256(inputStr) {
+
+    // 文字列を UTF-8エンコーディング された ArrayBuffer に変換
+    const encoder = new TextEncoder()
+    const utf8 = encoder.encode(inputStr)
+
+    // SHA-256ハッシュを 計算
+    const hashBuffer = await crypto.subtle.digest('SHA-256', utf8)
+
+    // 結果の ArrayBuffer を Uint8Array に変換
+    const hashArray = Array.from(new Uint8Array(hashBuffer))
+
+    // 16進数形式の文字列 を生成
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
+    //console.log("hashHex: ", hashHex)  // e.g.: 9f4c7b73e27ae5c198aec93a687d9d82d471d5ad34c5ce6a4f08f0e52d4ef755
+
+    return { hashArray, hashHex }
+}
+
+async function hashArrayToBech32(hashArray, hrp = 'glin') {  // 'glin' means the framework name 'gLines'
+
+    // Bech32用の words に変換
+    const words = bech32.toWords(hashArray)
+    //console.log("words: ", words)  // e.g.: (52) [19, 29, 6, 7, 22, 28, 31, ...
+
+    // Bech32エンコード
+    const bech32Hash = bech32.encode(hrp, words)
+    //console.log("bech32Hash: ", bech32Hash)  // e.g.: glin1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs
+
+    // Bech32mエンコード
+    const bech32mHash = bech32m.encode(hrp, words)
+    //console.log("bech32mHash: ", bech32mHash)  // e.g.: glin1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs
+
+    return { hashHex, bech32Hash, bech32mHash }
+}
+
+
+
+// function sha256HashHexFromMap(map) {
+//     let hash = '';
+//     for (const [key, value] of map) {
+//         hash += `&${key}=${value}`;
+//     }
+//     return crypto.subtle.digest('SHA-256', new TextEncoder().encode(hash)).then(hashBuffer => {
+//         const hashArray = Array.from(new Uint8Array(hashBuffer));
+//         return uint8ArrayToHexString(hashArray);
+//     });
+// }
+
+// Mapから SHA-256ハッシュを 生成する非同期関数
+async function sha256HashHexFromMap(map) {
+    console.log("map:", map)
+    // Map(15)
+    // 0: {"groupColors" => undefined} If there is no changes for group colors. But for hashing, it's OK.
+
+    let statesKvJoinedAsStr = '';
+    for (const [key, value] of map) {
+        statesKvJoinedAsStr += `&${key}=${value}`;
+    }
+    console.log("statesKvJoinedAsStr:", statesKvJoinedAsStr)
+    // e.g: &groupColors=undefined&pathMode=absoluteSeparated& ... &themeColor=dark
+
+    const encoder = new TextEncoder();
+    const encodedHash = encoder.encode(statesKvJoinedAsStr);
+
+    const hashBuffer = await crypto.subtle.digest('SHA-256', encodedHash);  // TypeError: Cannot read properties of undefined (reading 'digest')
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+
+    return uint8ArrayToHexString(hashArray);
 }

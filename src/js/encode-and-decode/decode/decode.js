@@ -1,7 +1,7 @@
 import { outputToTextarea }         from 'common-utils/output-to-textarea'
 import { decodeUrlParams }          from 'common-utils/read-url-params'
 import { selectOutputTextareaId }   from 'common-utils/select-output-textarea'
-import { calculateArtworkId }       from 'decode/calc-artwork-id'
+import { calculateArtworkId }       from 'decode/hashing'
 import { relToAbs }                 from 'decode/rel-to-abs'
 import { generateSvg }              from 'decode/generate-svg'
 import { showProcessingTime }       from 'common-utils/show-processing-time'
@@ -54,15 +54,13 @@ function decodeUrlToSvg(isRelative, isDataManipulatorPage) {
 
 
         // Uncomment to get the artwork ID
-        // // Calculate the artwork ID from absolute lines data
+        // Calculate the artwork ID from absolute lines data
         // const artworkId = await calculateArtworkId(decodedParams.linesData)
-        // console.log("artworkId.hexHash: ", artworkId.hexHash)
         // console.log("artworkId.bech32Hash: ", artworkId.bech32Hash)
         // console.log("artworkId.bech32mHash: ", artworkId.bech32mHash)
-        // // e.g.: (202401_001)
-        // // hexHash:     "9f4c7b73e27ae5c198aec93a687d9d82d471d5ad34c5ce6a4f08f0e52d4ef755" (64 chars)
-        // // bech32Hash:  "uinp1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs"  (63 chars)
-        // // bech32mHash: "uinp1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2sk8xjjj"  (63 chars)
+        // e.g.: (202401_001)
+        // bech32Hash:  "glin1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs"  (63 chars)
+        // bech32mHash: "glin1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2sk8xjjj"  (63 chars)
 
 
         // Generate SVG string
