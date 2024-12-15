@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pfpg | data-manipulator</title>
+</head>
+<script>
+    
+// 動作確認用のデータ作成
+const map = new Map();
+map.set(1, 100);
+map.set(2, 200);
+
+// uint8Array => hex string (two digits padded)
+function uint8ArrayToHexString(uint8Array) {
+    return Array.from(uint8Array)
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+}
+// Mapから SHA-256ハッシュを 生成する非同期関数
+async function sha256HashHexFromMap(map) {
+    console.log("map:", map)
+    // Map(15)
+    // 0: {"groupColors" => undefined} If there is no changes for group colors. But for hashing, it's OK.
+
+    let statesKvJoinedAsStr = '';
+    for (const [key, value] of map) {
+        statesKvJoinedAsStr += `&${key}=${value}`;
+    }
+    console.log("statesKvJoinedAsStr:", statesKvJoinedAsStr)
+    // e.g: &groupColors=undefined&pathMode=absoluteSeparated& ... &themeColor=dark
+
+    const encoder = new TextEncoder();
+    const encodedHash = encoder.encode(statesKvJoinedAsStr);
+
+    // crypto オブジェクトの存在確認 (例)
+    if (typeof crypto === 'undefined' || !crypto.subtle) {
+        console.error('Web Crypto API is not supported in this environment.');
+        return;
+      }
+
+    const hashBuffer = await crypto.subtle.digest('SHA-256', encodedHash);  // TypeError: Cannot read properties of undefined (reading 'digest')
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+
+    return uint8ArrayToHexString(hashArray);
+}
+
+console.log(sha256HashHexFromMap(map))
+</script>
+
+
+
+</html>
