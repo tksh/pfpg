@@ -22,7 +22,7 @@ export
 
 // And also will be called from '/js/page-specific/index/tab-lines/path-mode.js' when 'path-mode' changed via option selector.
 
-function decodeUrlToSvg(isRelative, isDataManipulatorPage) {
+async function decodeUrlToSvg(isRelative, isDataManipulatorPage) {
     const startTime = performance.now()
     console.log(`Start the decoding from URL params to SVG (isRelative = ${isRelative}) ...`)
 
@@ -55,13 +55,16 @@ function decodeUrlToSvg(isRelative, isDataManipulatorPage) {
 
         // Uncomment to get the artwork ID
         // Calculate the artwork ID from absolute lines data
-        // const artworkId = await calculateArtworkId(decodedParams.linesData)
-        // console.log("artworkId.bech32Hash: ", artworkId.bech32Hash)
-        // console.log("artworkId.bech32mHash: ", artworkId.bech32mHash)
+        const artworkId = await calculateArtworkId(decodedParams.linesData)
+        console.log("artworkId.bech32Hash: ", artworkId.bech32Hash)
+        console.log("artworkId.bech32mHash: ", artworkId.bech32mHash)
         // e.g.: (202401_001)
         // bech32Hash:  "glin1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs"  (63 chars)
         // bech32mHash: "glin1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2sk8xjjj"  (63 chars)
 
+//        calculateArtworkId(decodedParams.linesData, result => {
+//            console.log("result.bech32Hash, result.bech32mHash:)", result.bech32Hash, result.bech32mHash);
+//        });
 
         // Generate SVG string
 

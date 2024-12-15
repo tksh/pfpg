@@ -24,7 +24,7 @@ const isDataManipulatorPage = isOnDataManipulatorPage()
 if (window.location.search) {
     for (const boolean of [true, false]) {
         const isRelative = boolean
-        decodeUrlToSvg(isRelative,  isDataManipulatorPage)
+        await decodeUrlToSvg(isRelative,  isDataManipulatorPage)
     }
 }
 // decodeUrlToSvg(isRelative = true,  isDataManipulatorPage) => Relative and merged

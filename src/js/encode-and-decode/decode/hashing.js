@@ -16,7 +16,14 @@ async function calculateArtworkId(linesData) {
     console.log("compositeSequence: ", compositeSequence)                // 01701701702552551272_6364 ...
     console.log("compositeSequence.length: ", compositeSequence.length)  // e.g.: 7578 (202404_001)
 
+//    strToSha256(compositeSequence).then((digestBuffer) =>
+//        console.log("digestBuffer: ", digestBuffer)
+//    );
+
+    //const { hashArray, hashHex } = strToSha256(compositeSequence)
+    //const { bech32Hash, bech32mHash } = hashArrayToBech32(hashArray)
     const { hashArray, hashHex } = await strToSha256(compositeSequence)
+    alert(`Image uploaded successfully: ${hashHex}`);
     const { bech32Hash, bech32mHash } = await hashArrayToBech32(hashArray)
 
     // End time
@@ -24,6 +31,7 @@ async function calculateArtworkId(linesData) {
     const elapsedTime = Math.floor(calcArtworkIdEndTime - calcArtworkIdStartTime)
     console.log('elapsedTime of calculating artwork ID: ', elapsedTime, ' ms')
 
+    // callback( { bech32Hash, bech32mHash } )
     return { bech32Hash, bech32mHash }
 }
 
@@ -149,25 +157,31 @@ function uint8ArrayToHexString(uint8Array) {
         .join('');
 }
 
+// function strToSha256(inputStr) {
 async function strToSha256(inputStr) {
+
+    console.log("typeof(inputStr): ", typeof(inputStr))  // string
 
     // 文字列を UTF-8エンコーディング された ArrayBuffer に変換
     const encoder = new TextEncoder()
     const utf8 = encoder.encode(inputStr)
+    console.log("utf8: ", utf8)                  // Uint8Array [48, 49, 55, ...
 
     // SHA-256ハッシュを 計算
-    const hashBuffer = await crypto.subtle.digest('SHA-256', utf8)
+    const hashBuffer = await crypto.subtle.digest('SHA-256', utf8)  // Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'digest')
 
     // 結果の ArrayBuffer を Uint8Array に変換
     const hashArray = Array.from(new Uint8Array(hashBuffer))
 
     // 16進数形式の文字列 を生成
     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
-    //console.log("hashHex: ", hashHex)  // e.g.: 9f4c7b73e27ae5c198aec93a687d9d82d471d5ad34c5ce6a4f08f0e52d4ef755
+    console.log("hashHex: ", hashHex)  // e.g.: 9f4c7b73e27ae5c198aec93a687d9d82d471d5ad34c5ce6a4f08f0e52d4ef755
 
-    return { hashArray, hashHex }
+    return hashHex
+    // return { hashArray, hashHex }
 }
 
+// function hashArrayToBech32(hashArray, hrp = 'glin') {  // 'glin' means the framework name 'gLines'
 async function hashArrayToBech32(hashArray, hrp = 'glin') {  // 'glin' means the framework name 'gLines'
 
     // Bech32用の words に変換

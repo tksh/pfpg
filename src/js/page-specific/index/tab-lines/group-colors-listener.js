@@ -19,6 +19,7 @@ import { getNumberOfGroups }          from 'utils/get-number-of-groups'
 export function initGroupColorsInputs() {
 
     const numberOfGroups = getNumberOfGroups(getSvgString())
+    console.log('numberOfGroups: ', numberOfGroups)
     addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke')
     addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'opacity')
     addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke-opacity')

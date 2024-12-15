@@ -53,7 +53,7 @@ import { initViewScalingSelect }                from 'tab-ui/view-scaling'
     document.getElementById("path-mode").value = isRelative ? 'relativeMerged' : 'absoluteSeparated'
 
     // Decode the SVG from url params
-    const initialDecodedSvgString = decodeUrlToSvg(isRelative, isOnDataManipulatorPage())
+    const initialDecodedSvgString = await decodeUrlToSvg(isRelative, isOnDataManipulatorPage())
     console.log('initialDecodedSvgString: ', initialDecodedSvgString)
 
     // Apply the settings states from url param to initial decoded svg string
