@@ -178,8 +178,8 @@ function removeLineBreaks(svgString) {
     return svgString.replace(/>\s+</g, '><')
 }
 
-function restoreLineBreaks(svgString, pathMode) {
-    const indentCounts = getCurrentPathModeIndentation(pathMode)
+async function restoreLineBreaks(svgString, pathMode) {
+    const indentCounts = await getCurrentPathModeIndentation(pathMode)
     let formattedSvg = svgString.replace(/></g, '>\n<')
     const lines = formattedSvg.split('\n')
 
@@ -200,8 +200,8 @@ function getSvgIndentation(svgString) {
     })
 }
 
-function getCurrentPathModeIndentation(pathMode) {
-    const svgString = decodeAsSelectedPathMode(pathMode)
+async function getCurrentPathModeIndentation(pathMode) {
+    const svgString = await decodeAsSelectedPathMode(pathMode)
     return getSvgIndentation(svgString)
 }
 
