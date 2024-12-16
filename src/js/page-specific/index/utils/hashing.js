@@ -40,8 +40,7 @@ async function strToSha256(inputStr) {
     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
     console.log("hashHex: ", hashHex)  // e.g.: 9f4c7b73e27ae5c198aec93a687d9d82d471d5ad34c5ce6a4f08f0e52d4ef755
 
-    return hashHex
-    // return { hashArray, hashHex }
+    return { hashArray, hashHex }
 }
 
 function hashArrayToBech32(hashArray, hrp = 'glin') {  // 'glin' means the framework name 'gLines'
