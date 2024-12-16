@@ -10,7 +10,7 @@ export async function generateAndUploadOgImage(pngData) {
   // Cloudinaryの情報
   const cloudName = 'ddoy3pmjg';
   const uploadPreset = 'pfpg_ogp_preset';
-  console.log("urlWithoutVersionPath: ", urlWithoutVersionPath)
+  console.log("cloudName, uploadPreset: ", cloudName, uploadPreset)
 
   try {
     // PNGデータからBlob URLを作成
@@ -97,6 +97,7 @@ export async function generateAndUploadOgImage(pngData) {
     // To generate the final OGP image URL deterministically
 
     const urlOriginal = data.secure_url
+    console.log("urlOriginal: ", urlOriginal)
     const urlWithoutVersionPath = urlOriginal.replace(/\/v[0-9]+\//g, "/");  // .replace(/\/v\d+\//g, '/');
     console.log("urlWithoutVersionPath: ", urlWithoutVersionPath)
     // before: https://res.cloudinary.com/ddoy3pmjg/image/upload/v1734106822/pfpg1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs.png
