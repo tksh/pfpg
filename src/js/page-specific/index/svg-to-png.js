@@ -1,8 +1,8 @@
 import { updateButtonWithSvgSize
-       , updateButtonWithPngSize } from 'button/update-button-text'
-import { generateOgImage }         from 'dynamic-ogp/generate-og-image'
-import { updateMetadata }          from 'dynamic-ogp/update-metadata'
-import { extractViewboxValues }    from 'tab-canvas/crop-side-margins'
+       , updateButtonWithPngSize }  from 'button/update-button-text'
+import { generateAndUploadOgImage } from 'dynamic-ogp/generate-og-image'
+import { updateMetadata }           from 'dynamic-ogp/update-metadata'
+import { extractViewboxValues }     from 'tab-canvas/crop-side-margins'
 
 export
     { executeSvg2png
@@ -37,22 +37,20 @@ async function executeSvg2png(event, resvgOption) {
     try {
         // Processing from SVG to PNG and measuring the time
         const pngData = await measureSvg2pngTime(svgString, resvgOption, renderingStatusElements);
-
         console.log('pngData: ', pngData);
 
         // pngData から  OGイメージ を 生成, Cloudinaryに アップロード
-        const ogImageUrl = await generateOgImage(pngData);
-        console.log('ogImageUrl: ', ogImageUrl);  // アップロードしたURL
+        const ogImageUrl = await generateAndUploadOgImage(pngData);
+        console.log('ogImageUrl: ', ogImageUrl);  // Uploaded image URL, version path removed.
 
-        // OGPメタタグを更新
-        // - Arguments: (title, description, url)
+        // Update the OGP meta tag
         updateMetadata(
             "pfpg - Custom Profile Picture Generator",
             "A custom profile picture generator for a specific svg artwork that was made with the UIntNPortray ruleset.",
-            window.location.href  // It includes URL params for artwork data and settings states
+            window.location.href,  // It includes URL params for artwork data and current settings states
+            ogImageUrl
         )
 
-        // 処理結果を利用する
         console.log('svg2png processing has completed.');
 
     } catch (error) {

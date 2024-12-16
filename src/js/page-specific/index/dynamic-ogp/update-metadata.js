@@ -1,14 +1,16 @@
-export function updateMetadata(title, description, url) {
-    const metaTitle = document.querySelector('meta[property="og:title"]');
-    const metaType = document.querySelector('meta[property="og:type"]');
-    const metaDescription = document.querySelector('meta[property="og:description"]');
-    const metaUrl = document.querySelector('meta[property="og:url"]');
+export function updateMetadata(title, description, url, image) {
+    const metaOgTitle = document.querySelector('meta[property="og:title"]');
+    const metaOgType = document.querySelector('meta[property="og:type"]');
+    const metaOgDescription = document.querySelector('meta[property="og:description"]');
+    const metaOgUrl = document.querySelector('meta[property="og:url"]');
+    const metaOgImage = document.querySelector('meta[property="og:image"]');
 
-    if (title) metaTitle.content = title;
-    if (description) metaDescription.content = description;
-    if (url) metaUrl.content = url;
+    metaOgTitle.content = title;
+    metaOgDescription.content = description;
+    metaOgUrl.content = url;
+    metaOgImage.content = image;
 
-    // タイプは固定
-    metaType.content = "website";
+    // og:type is fixed value
+    metaOgType.content = "website";
 }
 

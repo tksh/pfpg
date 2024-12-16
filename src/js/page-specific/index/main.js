@@ -3,6 +3,7 @@ import { initButtonActionSelect }               from 'button/update-button-text'
 import { isOnDataManipulatorPage }              from 'common-utils/select-output-textarea'
 import { decodeUrlToSvg }                       from 'decode/decode'
 import { adjustOutputBoxSize }                  from 'init/adjust-output-boxes-size'
+import { storeArtworkId }                       from 'init/calc-artwork-id'
 import { initTabs }                             from 'init/tab-setup'
 import { initSvgOptimizationModalToggle
        , initResetSettingsModalToggle }         from 'modal/modal-toggle'
@@ -145,4 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initResetSettingsModalToggle()
     initResetSettings()
 
+    // Get the artwork ID for OG image generation
+    storeArtworkId()
 })

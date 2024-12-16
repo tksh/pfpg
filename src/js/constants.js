@@ -142,3 +142,13 @@ export const SETTINGS_DEFAULTS = new Map([
     ['buttonAction',     'download'],              // UI tab |  16   | String | 'download', 'copy'
     ['themeColor',       undefined],               // UI tab |  17   | String | 'white', 'light', 'dark', 'black'
 ])
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Used for decoding at index.html only
+////////////////////////////////////////////////////////////////////////////////
+
+export const ARTWORK_ID_AND_CONFIG_HASH_MAP = new Map([
+    ['artworkID', ''],
+    ['configHash',  ''],  // Except SVG optimization
+])
