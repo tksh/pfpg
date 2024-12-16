@@ -2,6 +2,8 @@ import { ARTWORK_ID_AND_CONFIG_HASH_MAP }           from 'constants'
 import { getStateUrlsAsMapExcludesSvgOptimization } from 'state/url-state-manager'
 import { sha256HashHexFromMap
        , strToSha256 }                              from 'utils/hashing'
+import { calculateArtworkId }                       from 'init/calc-artwork-id.js'
+import { getStateUrlsAsMapExcludesSvgOptimization } from 'state/url-state-manager'
 
 export async function generateAndUploadOgImage(pngData) {
 
@@ -81,18 +83,17 @@ export async function generateAndUploadOgImage(pngData) {
     // レスポンスを処理
     const data = await response.json();
     if (response.ok) {
-      console.log('Uploaded URL(data.secure_url) for <meta property="og:image" content"...">:', data.secure_url);
+      console.log('OG image updated successfully to Cloudinary, URL(data.secure_url):', data.secure_url);
       //alert(`Image uploaded successfully: ${data.secure_url}`);
     } else {
       throw new Error(data.error.message);
     }
 
-    console.log('OG image updated successfully, Uploaded Url:', data.secure_url);
-
     // Remove the path section of versioning '/vxxxxxxxx/'
     // To generate the final OGP image URL deterministically
 
-    const urlWithoutVersionPath = data.secure_url.replace(/\/v[0-9]+\//, "/");
+    const urlWithoutVersionPath = data.secure_url.replace(/\/v[0-9]+\//g, "/");  // .replace(/\/v\d+\//g, '/');
+    console.log("urlWithoutVersionPath: ", urlWithoutVersionPath)
     // before: https://res.cloudinary.com/ddoy3pmjg/image/upload/v1734106822/pfpg1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs.png
     // after: https://res.cloudinary.com/ddoy3pmjg/image/upload/pfpg1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs.png
 
