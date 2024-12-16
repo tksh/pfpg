@@ -10,10 +10,12 @@ export async function generateAndUploadOgImage(pngData) {
   // Cloudinaryの情報
   const cloudName = 'ddoy3pmjg';
   const uploadPreset = 'pfpg_ogp_preset';
+  console.log("urlWithoutVersionPath: ", urlWithoutVersionPath)
 
   try {
     // PNGデータからBlob URLを作成
     const blobUrl = URL.createObjectURL(new Blob([pngData.asPng()], { type: 'image/png' }));
+    console.log("blobUrl: ", blobUrl)
 
     // Imageオブジェクトを作成
     const img = new Image();
@@ -61,6 +63,8 @@ export async function generateAndUploadOgImage(pngData) {
 
     // CloudinaryのアップロードURL
     const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+    console.log("uploadUrl: ", uploadUrl)
+
 
     // Define the public_id
     // - It's hashed from the artwork ID and configuration states
@@ -92,7 +96,8 @@ export async function generateAndUploadOgImage(pngData) {
     // Remove the path section of versioning '/vxxxxxxxx/'
     // To generate the final OGP image URL deterministically
 
-    const urlWithoutVersionPath = data.secure_url.replace(/\/v[0-9]+\//g, "/");  // .replace(/\/v\d+\//g, '/');
+    const urlOriginal = data.secure_url
+    const urlWithoutVersionPath = urlOriginal.replace(/\/v[0-9]+\//g, "/");  // .replace(/\/v\d+\//g, '/');
     console.log("urlWithoutVersionPath: ", urlWithoutVersionPath)
     // before: https://res.cloudinary.com/ddoy3pmjg/image/upload/v1734106822/pfpg1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs.png
     // after: https://res.cloudinary.com/ddoy3pmjg/image/upload/pfpg1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs.png

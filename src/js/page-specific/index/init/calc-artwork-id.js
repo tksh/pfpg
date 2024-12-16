@@ -26,17 +26,10 @@ export async function calculateArtworkId() {
     console.log("compositeSequence: ", compositeSequence)                // 01701701702552551272_6364 ...
     console.log("compositeSequence.length: ", compositeSequence.length)  // e.g.: 7578 (202404_001)
 
-//    const { hashHex, bech32Hash, bech32mHash } = sha256ThenBech32(compositeSequence)
-
-//    strToSha256(compositeSequence).then((digestBuffer) =>
-//        console.log("digestBuffer: ", digestBuffer)
-//    );
-
-    //const { hashArray, hashHex } = strToSha256(compositeSequence)
-    //const { bech32Hash, bech32mHash } = hashArrayToBech32(hashArray)
     const { hashArray, hashHex } = await strToSha256(compositeSequence)
-    const { bech32Hash, bech32mHash } = await hashArrayToBech32(hashArray)
-    alert(`Hash generated successfully: ${hashHex}`);
+    console.log(" hashArray, hashHex: ",  hashArray, hashHex)
+    const { bech32Hash, bech32mHash } = hashArrayToBech32(hashArray)
+    console.log("bech32Hash, bech32mHash: ", bech32Hash, bech32mHash)
 
     // End time
     const calcArtworkIdEndTime = performance.now()

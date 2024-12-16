@@ -44,8 +44,8 @@ async function strToSha256(inputStr) {
     // return { hashArray, hashHex }
 }
 
-// function hashArrayToBech32(hashArray, hrp = 'glin') {  // 'glin' means the framework name 'gLines'
-async function hashArrayToBech32(hashArray, hrp = 'glin') {  // 'glin' means the framework name 'gLines'
+function hashArrayToBech32(hashArray, hrp = 'glin') {  // 'glin' means the framework name 'gLines'
+// async function hashArrayToBech32(hashArray, hrp = 'glin') {  // 'glin' means the framework name 'gLines'
 
     // Bech32用の words に変換
     const words = bech32.toWords(hashArray)
