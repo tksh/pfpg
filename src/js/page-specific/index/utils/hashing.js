@@ -35,6 +35,7 @@ async function strToSha256(inputStr) {
 
     // 結果の ArrayBuffer を Uint8Array に変換
     const hashArray = Array.from(new Uint8Array(hashBuffer))
+    console.log("hashArray: ", hashArray)
 
     // 16進数形式の文字列 を生成
     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')

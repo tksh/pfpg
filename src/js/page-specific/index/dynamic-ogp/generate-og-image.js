@@ -137,6 +137,6 @@ async function getHashForOgImageUrl() {
 
   // Merge 'Artwork ID' and 'Config Hash', then get its hash with 'pfpg1' prefix
   const merged = artworkId + configHash
-  const hashHex = await strToSha256(merged)
+  const { hashArray, hashHex } = await strToSha256(merged)
   return `pfpg1${hashHex}`
 }
