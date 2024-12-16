@@ -1,13 +1,17 @@
-import { ARTWORK_ID_AND_CONFIG_HASH_MAP } from 'constants'
+import { decodeUrlParams } from 'common-utils/read-url-params'
 import { strToSha256
        , hashArrayToBech32 }              from 'utils/hashing'
 
-export async function storeArtworkId() {
-    const calculatedIds = await calculateArtworkId()
-    ARTWORK_ID_AND_CONFIG_HASH_MAP.set('artworkID', calculatedIds.bech32mHash)
-}
+// export {
+//     , read-url-params.js
+// }
 
-async function calculateArtworkId() {
+//async function storeArtworkId() {
+//    const calculatedIds = await calculateArtworkId()
+//    ARTWORK_ID_AND_CONFIG_HASH_MAP.set('artworkID', calculatedIds.bech32mHash)
+//}
+
+export async function calculateArtworkId() {
 
     // Start time
     const calcArtworkIdStartTime = performance.now()

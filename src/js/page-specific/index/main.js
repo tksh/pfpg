@@ -147,5 +147,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initResetSettings()
 
     // Get the artwork ID for OG image generation
-    storeArtworkId()
+//     storeArtworkId()
 })
