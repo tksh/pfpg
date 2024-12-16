@@ -2,7 +2,7 @@ import { ARTWORK_ID_AND_CONFIG_HASH_MAP }           from 'constants'
 import { getStateUrlsAsMapExcludesSvgOptimization } from 'state/url-state-manager'
 import { sha256HashHexFromMap
        , strToSha256 }                              from 'utils/hashing'
-import { calculateArtworkId }                       from 'init/calc-artwork-id.js'
+import { calculateArtworkId }                       from 'init/calc-artwork-id'
 import { getStateUrlsAsMapExcludesSvgOptimization } from 'state/url-state-manager'
 
 export async function generateAndUploadOgImage(pngData) {
