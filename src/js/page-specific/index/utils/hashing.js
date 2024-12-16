@@ -58,7 +58,7 @@ function hashArrayToBech32(hashArray, hrp = 'glin') {  // 'glin' means the frame
     const bech32mHash = bech32m.encode(hrp, words)
     //console.log("bech32mHash: ", bech32mHash)  // e.g.: glin1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs
 
-    return { hashHex, bech32Hash, bech32mHash }
+    return { bech32Hash, bech32mHash }
 }
 
 
