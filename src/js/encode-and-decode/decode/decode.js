@@ -1,7 +1,6 @@
 import { outputToTextarea }         from 'common-utils/output-to-textarea'
 import { decodeUrlParams }          from 'common-utils/read-url-params'
 import { selectOutputTextareaId }   from 'common-utils/select-output-textarea'
-import { calculateArtworkId }       from 'decode/hashing'
 import { relToAbs }                 from 'decode/rel-to-abs'
 import { generateSvg }              from 'decode/generate-svg'
 import { showProcessingTime }       from 'common-utils/show-processing-time'
@@ -51,21 +50,6 @@ function decodeUrlToSvg(isRelative, isDataManipulatorPage) {
         console.log("decodedParams.sizeData: ", decodedParams.sizeData)
         // e.g.:
         // {viewbox: '0 0 127 127', uintN: 7, width: 127, height: 127}
-
-
-        // Uncomment to get the artwork ID
-        // Calculate the artwork ID from absolute lines data
-//        const artworkId = await calculateArtworkId(decodedParams.linesData)
-//        console.log("artworkId.hashHex: ", artworkId.hashHex)
-//        console.log("artworkId.bech32Hash: ", artworkId.bech32Hash)
-//        console.log("artworkId.bech32mHash: ", artworkId.bech32mHash)
-        // e.g.: (202401_001)
-        // bech32Hash:  "glin1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs"  (63 chars)
-        // bech32mHash: "glin1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2sk8xjjj"  (63 chars)
-
-//        calculateArtworkId(decodedParams.linesData, result => {
-//            console.log("result.bech32Hash, result.bech32mHash:)", result.bech32Hash, result.bech32mHash);
-//        });
 
         // Generate SVG string
 
