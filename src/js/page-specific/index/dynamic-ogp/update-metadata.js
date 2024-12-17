@@ -8,7 +8,7 @@ export function updateMetadata(title, description, url, image) {
     metaOgTitle.content = title;
     metaOgDescription.content = description;
     metaOgUrl.content = url;
-    metaOgImage.content = image;
+    // metaOgImage.content = image;
 
     // og:type is fixed value
     metaOgType.content = "website";
