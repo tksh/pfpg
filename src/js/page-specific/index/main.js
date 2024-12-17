@@ -98,6 +98,8 @@ import { initViewScalingSelect }                from 'tab-ui/view-scaling'
 // それを待ってからイベントリスナーを設定する
 
 document.addEventListener('DOMContentLoaded', () => {
+       const imageUrl = "https://res.cloudinary.com/ddoy3pmjg/image/upload/v1734026224/cld-sample-3.jpg"
+document.querySelector('meta[property="og:image"]').content = imageUrl;
 
     // Get first tab ('Lines') activated
     initTabs()
@@ -148,4 +150,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Get the artwork ID for OG image generation
 //     storeArtworkId()
+
 })
