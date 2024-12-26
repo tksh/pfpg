@@ -4,6 +4,7 @@ import { sha256HashHexFromMap
        , strToSha256 }                              from 'utils/hashing'
 import { calculateArtworkId }                       from 'init/calc-artwork-id'
 import { getStateUrlsAsMapExcludesSvgOptimization } from 'state/url-state-manager'
+import { getState }                                 from 'state/url-state-manager'
 
 export async function generateAndUploadOgImage(pngData) {
 
@@ -48,8 +49,15 @@ export async function generateAndUploadOgImage(pngData) {
     canvas.width = newWidth;
     canvas.height = newHeight;
 
-    // 背景を透明にする
-    ctx.fillStyle = 'rgba(255, 255, 255, 0)';
+    // 背景を 設定する
+
+    // // 背景を 透明にする
+    // ctx.fillStyle = 'rgba(255, 255, 255, 0)';
+
+    // テーマカラーに基づいて背景色のRGBA値を取得する
+    const bgColorViaThemeColor = getState('themeColor')
+    ctx.fillStyle = getBackgroundColorByTheme(bgColorViaThemeColor);
+
     ctx.fillRect(0, 0, newWidth, newHeight);
 
     // リサイズした画像を描画
@@ -125,18 +133,37 @@ function updateOgImage(dataSecureUrl) {
 */
 
 async function getHashForOgImageUrl() {
-  // Artwork ID
+  // Artwork ID ('glin1' + bech32m encoded string)
   const calculatedIds = await calculateArtworkId()
   const artworkId = calculatedIds.bech32mHash
 
-  // Config Hash
+  // Config Hash calculated from only the status related about visual effects.
   const configStatesAboutVisualEffects = getStateUrlsAsMapExcludesSvgOptimization()
   console.log("configStatesAboutVisualEffects: ", configStatesAboutVisualEffects)
   const configHash = await sha256HashHexFromMap(configStatesAboutVisualEffects)
   console.log("configHash: ", configHash)
 
-  // Merge 'Artwork ID' and 'Config Hash', then get its hash with 'pfpg1' prefix
+  // Merge 'Artwork ID' and 'Config Hash', then get its hash(sha256) with 'pfpg1' prefix
   const merged = artworkId + configHash
   const { hashArray, hashHex } = await strToSha256(merged)
   return `pfpg1${hashHex}`
+}
+
+
+// Get the bg fill color as themeColor's `--color-bg` via css/index/color.css
+// - white: white    = #ffffff = rgba(255, 255, 255, 1)
+// - light: darkgray = #a9a9a9 = rgba(169, 169, 169, 1)
+// - dark : #222     = #222222 = rgba( 34,  34,  34, 1)
+// - black: #000     = #000000 = rgba(  0,   0,   0, 1)
+
+// テーマカラーに基づいて背景色のRGBA値を取得する関数
+function getBackgroundColorByTheme(themeName) {
+  const themeColors = {
+      'white': 'rgba(255, 255, 255, 1)',
+      'light': 'rgba(169, 169, 169, 1)',
+      'dark': 'rgba(34, 34, 34, 1)',
+      'black': 'rgba(0, 0, 0, 1)'
+  };
+
+  return themeColors[themeName] || 'rgba(255, 255, 255, 0)'; // デフォルトは透明
 }
