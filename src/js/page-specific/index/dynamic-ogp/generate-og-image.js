@@ -30,6 +30,12 @@ export async function generateAndUploadOgImage(pngData) {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
+    // Set imageSmoothing type
+    // - crispEdges         => imageSmoothingEnabled: false
+    // - geometricPrecision => imageSmoothingEnabled: true
+    const imageSmoothingViaShapeRendering = getState('shapeRendering') !== 'crispEdges'
+    ctx.imageSmoothingEnabled = imageSmoothingViaShapeRendering;
+
     // 元の画像の幅と高さを取得
     const originalWidth = pngData.width;
     const originalHeight = pngData.height;
