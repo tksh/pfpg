@@ -35,7 +35,7 @@ export async function generateAndUploadOgImage(pngData) {
     });
 
     // [Test] PNGデータからCanvasに描画
-    const testCanvas = document.createElement('test-1');
+    const testCanvas = document.getElementById('test-1');
     const testCtx = testCanvas.getContext('2d');
 
     // PNGデータからCanvasに描画
