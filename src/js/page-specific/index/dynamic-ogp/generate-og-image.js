@@ -55,12 +55,26 @@ export async function generateAndUploadOgImage(pngData) {
     ctx.imageSmoothingEnabled = false;
     testCtx.imageSmoothingEnabled = false;
 
+
+    // 背景を 設定する
+
+    // // 背景を 透明にする
+    // ctx.fillStyle = 'rgba(255, 255, 255, 0)';
+
+    // テーマカラーに基づいて背景色のRGBA値を取得する
+    const bgColorViaThemeColor = getState('themeColor')
+    ctx.fillStyle = getBackgroundColorByTheme(bgColorViaThemeColor);
+
+    ctx.fillRect(0, 0, newWidth, newHeight);
+
+
     // 元の画像のサイズで一度描画
     ctx.drawImage(img, 0, 0);
 
-    testCtx.fillStyle = 'rgba(200, 0, 0, 1)';
+    // testCtx.fillStyle = 'rgba(200, 0, 0, 1)';
+    testCtx.fillStyle = getBackgroundColorByTheme(bgColorViaThemeColor);
     testCtx.fillRect(0, 0, 512, 512);
-    testCtx.drawImage(testImg, 0, 0);
+    //testCtx.drawImage(testImg, 0, 0);
 
     // 元の画像の幅と高さを取得
     const originalWidth = pngData.width;
@@ -88,18 +102,10 @@ export async function generateAndUploadOgImage(pngData) {
     console.log("testScaleInt: ", testScaleInt)
 
     // [test] リサイズした画像を描画
-    testCtx.drawImage(testImg, 0, 0, originalWidth * testScaleInt, originalHeight * testScaleInt);
+    testCtx.drawImage(testImg, 0, 0, originalWidth * testScale, originalHeight * testScale);
+    // testCtx.drawImage(testImg, 0, 0, originalWidth * testScaleInt, originalHeight * testScaleInt);
 
-    // 背景を 設定する
 
-    // // 背景を 透明にする
-    // ctx.fillStyle = 'rgba(255, 255, 255, 0)';
-
-    // テーマカラーに基づいて背景色のRGBA値を取得する
-    const bgColorViaThemeColor = getState('themeColor')
-    ctx.fillStyle = getBackgroundColorByTheme(bgColorViaThemeColor);
-
-    ctx.fillRect(0, 0, newWidth, newHeight);
 
     // リサイズした画像を描画
     ctx.drawImage(img, x, y, originalWidth * scale, originalHeight * scale);
