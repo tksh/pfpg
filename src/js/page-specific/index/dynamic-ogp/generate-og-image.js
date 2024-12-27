@@ -18,6 +18,9 @@ export async function generateAndUploadOgImage(pngData) {
     const blobUrl = URL.createObjectURL(new Blob([pngData.asPng()], { type: 'image/png' }));
     console.log("blobUrl: ", blobUrl)
 
+    const testBlobUrl = URL.createObjectURL(new Blob([pngData.asPng()], { type: 'image/png' }));
+    console.log("testBlobUrl: ", testBlobUrl)
+
     // Imageオブジェクトを作成
     const img = new Image();
     await new Promise((resolve, reject) => {
@@ -26,13 +29,13 @@ export async function generateAndUploadOgImage(pngData) {
       img.src = blobUrl;
     });
 
-//    // Imageオブジェクトを作成
-//    const testImg = new Image();
-//    await new Promise((resolve, reject) => {
-//      img.onload = resolve;
-//      img.onerror = reject;
-//      img.src = blobUrl;
-//    });
+    // Imageオブジェクトを作成
+    const testImg = new Image();
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
+      img.onerror = reject;
+      img.src = testBlobUrl;
+    });
 
     // [Test] PNGデータからCanvasに描画
     const testCanvas = document.getElementById('test-1');
@@ -56,7 +59,7 @@ export async function generateAndUploadOgImage(pngData) {
 
     testCtx.fillStyle = 'rgba(200, 0, 0, 1)';
     testCtx.fillRect(0, 0, 512, 512);
-    //testCtx.drawImage(testImg, 0, 0);
+    testCtx.drawImage(testImg, 0, 0);
 
     // 元の画像の幅と高さを取得
     const originalWidth = pngData.width;
@@ -76,6 +79,12 @@ export async function generateAndUploadOgImage(pngData) {
     // Canvasのサイズを設定
     canvas.width = newWidth;
     canvas.height = newHeight;
+
+    // [test] Scale to 512
+    const testScale = 512 / originalWidth
+    console.log("testScale: ", testScale)
+    const testScaleInt = Math.floor(testScale)
+    console.log("testScaleInt: ", testScaleInt)
 
     // 背景を 設定する
 
