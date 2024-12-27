@@ -88,7 +88,7 @@ export async function generateAndUploadOgImage(pngData) {
     console.log("testScaleInt: ", testScaleInt)
 
     // [test] リサイズした画像を描画
-    //testCtx.drawImage(img, 0, 0, originalWidth * testScaleInt, originalHeight * testScaleInt);
+    testCtx.drawImage(testImg, 0, 0, originalWidth * testScaleInt, originalHeight * testScaleInt);
 
     // 背景を 設定する
 
