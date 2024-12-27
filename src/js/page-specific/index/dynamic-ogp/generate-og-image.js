@@ -36,6 +36,9 @@ export async function generateAndUploadOgImage(pngData) {
     const imageSmoothingViaShapeRendering = getState('shapeRendering') !== 'crispEdges'
     ctx.imageSmoothingEnabled = imageSmoothingViaShapeRendering;
 
+    // 元の画像のサイズで一度描画
+    ctx.drawImage(img, 0, 0);
+
     // 元の画像の幅と高さを取得
     const originalWidth = pngData.width;
     const originalHeight = pngData.height;
