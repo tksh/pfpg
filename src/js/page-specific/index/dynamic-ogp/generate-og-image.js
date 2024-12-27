@@ -26,16 +26,17 @@ export async function generateAndUploadOgImage(pngData) {
       img.src = blobUrl;
     });
 
-    // Imageオブジェクトを作成
-    const testImg = new Image();
-    await new Promise((resolve, reject) => {
-      img.onload = resolve;
-      img.onerror = reject;
-      img.src = blobUrl;
-    });
+//    // Imageオブジェクトを作成
+//    const testImg = new Image();
+//    await new Promise((resolve, reject) => {
+//      img.onload = resolve;
+//      img.onerror = reject;
+//      img.src = blobUrl;
+//    });
 
     // [Test] PNGデータからCanvasに描画
     const testCanvas = document.getElementById('test-1');
+    console.log("testCanvas: ", testCanvas)
     const testCtx = testCanvas.getContext('2d');
 
     // PNGデータからCanvasに描画
@@ -52,7 +53,10 @@ export async function generateAndUploadOgImage(pngData) {
 
     // 元の画像のサイズで一度描画
     ctx.drawImage(img, 0, 0);
-    testCtx.drawImage(testImg, 0, 0);
+
+    testCtx.fillStyle = 'rgba(200, 0, 0, 1)';
+    testCtx.fillRect(0, 0, 512, 512);
+    //testCtx.drawImage(testImg, 0, 0);
 
     // 元の画像の幅と高さを取得
     const originalWidth = pngData.width;
