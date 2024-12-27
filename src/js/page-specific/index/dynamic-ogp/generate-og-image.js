@@ -26,6 +26,18 @@ export async function generateAndUploadOgImage(pngData) {
       img.src = blobUrl;
     });
 
+    // Imageオブジェクトを作成
+    const testImg = new Image();
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
+      img.onerror = reject;
+      img.src = blobUrl;
+    });
+
+    // [Test] PNGデータからCanvasに描画
+    const testCanvas = document.createElement('test-1');
+    const testCtx = testCanvas.getContext('2d');
+
     // PNGデータからCanvasに描画
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -33,11 +45,14 @@ export async function generateAndUploadOgImage(pngData) {
     // Set imageSmoothing type
     // - crispEdges         => imageSmoothingEnabled: false
     // - geometricPrecision => imageSmoothingEnabled: true
-    const imageSmoothingViaShapeRendering = getState('shapeRendering') !== 'crispEdges'
-    ctx.imageSmoothingEnabled = imageSmoothingViaShapeRendering;
+    //const imageSmoothingViaShapeRendering = getState('shapeRendering') !== 'crispEdges'
+    // ctx.imageSmoothingEnabled = imageSmoothingViaShapeRendering;
+    ctx.imageSmoothingEnabled = false;
+    testCtx.imageSmoothingEnabled = false;
 
     // 元の画像のサイズで一度描画
     ctx.drawImage(img, 0, 0);
+    testCtx.drawImage(testImg, 0, 0);
 
     // 元の画像の幅と高さを取得
     const originalWidth = pngData.width;
