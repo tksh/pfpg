@@ -73,7 +73,8 @@ export async function generateAndUploadOgImage(pngData) {
 
     // testCtx.fillStyle = 'rgba(200, 0, 0, 1)';
     testCtx.fillStyle = getBackgroundColorByTheme(bgColorViaThemeColor);
-    testCtx.fillRect(0, 0, 630, 630);
+    // testCtx.fillRect(0, 0, 630, 630);
+    testCtx.fillRect(0, 0, 1200, 840);
     //testCtx.drawImage(testImg, 0, 0);
 
     // 元の画像の幅と高さを取得
@@ -97,14 +98,17 @@ export async function generateAndUploadOgImage(pngData) {
 
     // [test] Scale to 630
     const testScale = 630 / originalWidth
-    console.log("testScale: ", testScale)
+    console.log("testScale: ", testScale,  `( 630 / ${originalWidth} )`)
     const testScaleInt = Math.floor(testScale)
     console.log("testScaleInt: ", testScaleInt)
 
     // [test] リサイズした画像を描画
-    testCtx.drawImage(testImg, 0, 0, originalWidth * testScale, originalHeight * testScale);
+    // testCtx.drawImage(testImg, 0, 0, originalWidth * testScale, originalHeight * testScale);
     // testCtx.drawImage(testImg, 0, 0, originalWidth * testScaleInt, originalHeight * testScaleInt);
 
+    // W: 1200 - 630 = 570,  X start position of 630x630 image is 570/2 = 285
+    // H:  840 - 630 = 210,  Y start position of 630x630 image is 210/2 = 105
+    testCtx.drawImage(testImg, 285, 105, originalWidth * testScale, originalHeight * testScale);
 
 
     // リサイズした画像を描画
