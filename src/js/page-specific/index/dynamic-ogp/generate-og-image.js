@@ -29,13 +29,14 @@ export async function generateAndUploadOgImage(pngData) {
       img.src = blobUrl;
     });
 
-    // Imageオブジェクトを作成
+    // [test] Imageオブジェクトを作成
     const testImg = new Image();
     await new Promise((resolve, reject) => {
-      img.onload = resolve;
-      img.onerror = reject;
-      img.src = testBlobUrl;
+      testImg.onload = resolve;
+      testImg.onerror = reject;
+      testImg.src = testBlobUrl;
     });
+    console.log("testImg: ", testImg)
 
     // [Test] PNGデータからCanvasに描画
     const testCanvas = document.getElementById('test-1');
@@ -85,6 +86,9 @@ export async function generateAndUploadOgImage(pngData) {
     console.log("testScale: ", testScale)
     const testScaleInt = Math.floor(testScale)
     console.log("testScaleInt: ", testScaleInt)
+
+    // [test] リサイズした画像を描画
+    //testCtx.drawImage(img, 0, 0, originalWidth * testScaleInt, originalHeight * testScaleInt);
 
     // 背景を 設定する
 
