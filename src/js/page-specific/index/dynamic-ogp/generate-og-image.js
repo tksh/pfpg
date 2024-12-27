@@ -73,7 +73,7 @@ export async function generateAndUploadOgImage(pngData) {
 
     // testCtx.fillStyle = 'rgba(200, 0, 0, 1)';
     testCtx.fillStyle = getBackgroundColorByTheme(bgColorViaThemeColor);
-    testCtx.fillRect(0, 0, 512, 512);
+    testCtx.fillRect(0, 0, 630, 630);
     //testCtx.drawImage(testImg, 0, 0);
 
     // 元の画像の幅と高さを取得
@@ -95,8 +95,8 @@ export async function generateAndUploadOgImage(pngData) {
     canvas.width = newWidth;
     canvas.height = newHeight;
 
-    // [test] Scale to 512
-    const testScale = 512 / originalWidth
+    // [test] Scale to 630
+    const testScale = 630 / originalWidth
     console.log("testScale: ", testScale)
     const testScaleInt = Math.floor(testScale)
     console.log("testScaleInt: ", testScaleInt)
