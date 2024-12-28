@@ -87,8 +87,8 @@ export async function generateAndUploadOgImage(pngData) {
 
     // Define the public_id
     // - It's hashed from the artwork ID and configuration states
-    const  { artworkId, configHash } = await getHashForOgImageUrl()  // 'pfpg1xxxxx ... xxxxx'
-    console.log("publicId: ", publicId)
+    const  { artworkId, configHash } = await getHashForOgImageUrl()
+    console.log("artworkId, configHash: ", artworkId, configHash)
     // result(data.secure_url) like: https://res.cloudinary.com/ddoy3pmjg/image/upload/v1734106822/glin1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs.png
 
     // Tags
@@ -99,8 +99,8 @@ export async function generateAndUploadOgImage(pngData) {
     const formData = new FormData();
     formData.append('file', newBlob);
     formData.append('upload_preset', uploadPreset);
-    formData.append("public_id", `pfpg1${configHash}`); // 任意の公開ID
-    formData.append("tags", tagsList); // 任意の公開ID
+    formData.append("public_id", `pfpg1${configHash}`); // String
+    formData.append("tags", tagsList);                  // Array of strings
 
     // アップロードリクエスト
     const response = await fetch(uploadUrl, {
