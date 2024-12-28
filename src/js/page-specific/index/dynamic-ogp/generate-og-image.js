@@ -89,10 +89,13 @@ export async function generateAndUploadOgImage(pngData) {
     // - It's hashed from the artwork ID and configuration states
     const  { artworkId, configHash } = await getHashForOgImageUrl()
     console.log("artworkId, configHash: ", artworkId, configHash)
-    // result(data.secure_url) like: https://res.cloudinary.com/ddoy3pmjg/image/upload/v1734106822/glin1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs.png
+    // e.g.:
+    // - artworkId : glin1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2sdufgkq
+    // - configHash: 800257fb1cee265b6e648903f635165ce594f56c9c3cb146f0dfcaacca5a3406
 
     // Tags
-    const tagsList = [artworkId, getDateAsYyyyMm()]
+    const { yyyy, yyyymm } = getYearAndMonth()
+    const tagsList = ['pfpg', artworkId, yyyy, yyyymm]
 
     // FormDataを構築
     // https://cloudinary.com/documentation/image_upload_api_reference
@@ -188,17 +191,17 @@ function getBackgroundColorByTheme(themeName) {
 }
 
 
-function getDateAsYyyyMm() {
+function getYearAndMonth() {
   const dt = new Date();
 
-  const y = dt.getFullYear();
-  console.log("y: ", y)  // e.g.: 2024
+  const yyyy = dt.getFullYear();
+  console.log("yyyy: ", yyyy)      // e.g.: 2024
 
-  const m = ("00" + (dt.getMonth() + 1)).slice(-2);  // getMonth() 関数は １月を 0 として返却するので １を加算
-  console.log("m: ", m)  // e.g.: 12
+  const mm = ("00" + (dt.getMonth() + 1)).slice(-2);  // getMonth() 関数は １月を 0 として返却するので １を加算
+  console.log("mm: ", mm)          // e.g.: 12
 
-  const yearAndMonth = `${y}${m}`
-  console.log("yearAndMonth: ", yearAndMonth)  // e.g.: 202412
+  const yyyymm = `${y}${m}`
+  console.log("yyyymm: ", yyyymm)  // e.g.: 202412
 
-  return yearAndMonth
+  return { yyyy, yyyymm }
 }
