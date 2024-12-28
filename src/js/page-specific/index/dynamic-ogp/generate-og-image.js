@@ -27,24 +27,21 @@ export async function generateAndUploadOgImage(pngData) {
     });
 
     // PNGデータからCanvasに描画
-    const canvas = document.getElementById('test-1');
+    const canvas = document.getElementById('ogp-image-generation');
     const ctx = canvas.getContext('2d');
 
-    // Set imageSmoothing type 'false' to avoid the unnecessary anti-alias process
+    // Set imageSmoothing value as 'false' to avoid the unnecessary anti-alias process
     ctx.imageSmoothingEnabled = false;
 
 
-    // 背景を 設定する
-
-    // // 背景を 透明にする
-    // ctx.fillStyle = 'rgba(255, 255, 255, 0)';
+    // Set the background color based on theme color
 
     // テーマカラーに基づいて背景色のRGBA値を取得する
     const bgColorViaThemeColor = getState('themeColor')
 
     ctx.fillStyle = getBackgroundColorByTheme(bgColorViaThemeColor);
 
-    // 新しいOGP画像の幅と高さ (1200x840)
+    // 新しいOGP画像の幅と高さ
     const ogpImageWidth = 1200;
     const ogpImageHeight = 840;
 
@@ -52,34 +49,33 @@ export async function generateAndUploadOgImage(pngData) {
     ctx.fillRect(0, 0, ogpImageWidth, ogpImageHeight);
 
 
-    // Scale the image rect
+    // Resize the image
+
+    const imageLongerSide = 630
 
     // 元の画像の幅と高さを取得
-    const originalWidth = pngData.width;
-    const originalHeight = pngData.height;
+    const originalWidth = pngData.width
+    const originalHeight = pngData.height
 
-//    // 縦方向に630pxになるように調整
-//    let scale = Math.min(630 / originalHeight, newWidth / originalWidth);
+    // 長辺が 630px になるように調整
+    const scale = Math.min(imageLongerSide / originalHeight, imageLongerSide / originalWidth);
+    console.log("scale: ", scale,  `Math.min( ${imageLongerSide} / ${originalWidth}, ${imageLongerSide} / ${originalHeight} )`)
 
-//    // リサイズ後の画像の位置を計算
-//    const x = (newWidth - originalWidth * scale) / 2;
-//    const y = (newHeight - originalHeight * scale) / 2;
+    // リサイズ後の 画像サイズ(W,H)を 計算
+    const newWidth  = originalWidth  * scale
+    const newHeight = originalHeight * scale
 
-//    // Canvasのサイズを設定
-//    canvas.width = newWidth;
-//    canvas.height = newHeight;
-
-    // Scale the image to 630x630
-    const imageRectTargetSize = 630
-    const scale = imageRectTargetSize / originalWidth
-    console.log("scale: ", scale,  `( 630 / ${originalWidth} )`)
-    const scaleInt = Math.floor(scale)
-    console.log("scaleInt: ", scaleInt)
+    // リサイズ後の 画像の 位置(X,Y)を 計算
+    const xPosition = ( ogpImageWidth  - newWidth ) / 2
+    const yPosition = ( ogpImageHeight - newHeight) / 2
+    console.log("xPosition, yPosition: ", xPosition, yPosition, )
 
     // リサイズした画像を描画
+    ctx.drawImage(img, xPosition, yPosition, newWidth, newHeight);
+
+    // リサイズ後の画像の位置を計算
     // W: 1200 - 630 = 570,  X start position of 630x630 image is 570/2 = 285
     // H:  840 - 630 = 210,  Y start position of 630x630 image is 210/2 = 105
-    ctx.drawImage(img, 285, 105, originalWidth * scale, originalHeight * scale);
 
 
 
