@@ -3,8 +3,8 @@ import { getStateUrlsAsMapExcludesSvgOptimization } from 'state/url-state-manage
 import { sha256HashHexFromMap
        , strToSha256 }                              from 'utils/hashing'
 import { calculateArtworkId }                       from 'init/calc-artwork-id'
-import { getStateUrlsAsMapExcludesSvgOptimization } from 'state/url-state-manager'
-import { getState }                                 from 'state/url-state-manager'
+import { getStateUrlsAsMapExcludesSvgOptimization
+       , getState }                                 from 'state/url-state-manager'
 
 export async function generateAndUploadOgImage(pngData) {
 
@@ -61,7 +61,7 @@ export async function generateAndUploadOgImage(pngData) {
     const scale = Math.min(imageLongerSide / originalHeight, imageLongerSide / originalWidth);
     console.log("scale: ", scale,  `Math.min( ${imageLongerSide} / ${originalWidth}, ${imageLongerSide} / ${originalHeight} )`)
 
-    // リサイズ後の 画像サイズ(W,H)を 計算
+    // リサイズ後の 画像の サイズ(W,H)を 計算
     const newWidth  = originalWidth  * scale
     const newHeight = originalHeight * scale
 
@@ -72,11 +72,6 @@ export async function generateAndUploadOgImage(pngData) {
 
     // リサイズした画像を描画
     ctx.drawImage(img, xPosition, yPosition, newWidth, newHeight);
-
-    // リサイズ後の画像の位置を計算
-    // W: 1200 - 630 = 570,  X start position of 630x630 image is 570/2 = 285
-    // H:  840 - 630 = 210,  Y start position of 630x630 image is 210/2 = 105
-
 
 
     // キャンバスから新しい画像データを取得
@@ -92,15 +87,20 @@ export async function generateAndUploadOgImage(pngData) {
 
     // Define the public_id
     // - It's hashed from the artwork ID and configuration states
-    const publicId = await getHashForOgImageUrl()  // 'pfpg1xxxxx ... xxxxx'
+    const  { artworkId, configHash } = await getHashForOgImageUrl()  // 'pfpg1xxxxx ... xxxxx'
     console.log("publicId: ", publicId)
     // result(data.secure_url) like: https://res.cloudinary.com/ddoy3pmjg/image/upload/v1734106822/glin1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs.png
 
+    // Tags
+    const tagsList = [artworkId, getDateAsYyyyMm()]
+
     // FormDataを構築
+    // https://cloudinary.com/documentation/image_upload_api_reference
     const formData = new FormData();
     formData.append('file', newBlob);
     formData.append('upload_preset', uploadPreset);
-    formData.append("public_id", publicId); // 任意の公開ID
+    formData.append("public_id", `pfpg1${configHash}`); // 任意の公開ID
+    formData.append("tags", tagsList); // 任意の公開ID
 
     // アップロードリクエスト
     const response = await fetch(uploadUrl, {
@@ -117,6 +117,7 @@ export async function generateAndUploadOgImage(pngData) {
       throw new Error(data.error.message);
     }
 
+
     // Remove the path section of versioning '/vxxxxxxxx/'
     // To generate the final OGP image URL deterministically
 
@@ -126,6 +127,7 @@ export async function generateAndUploadOgImage(pngData) {
     console.log("urlWithoutVersionPath: ", urlWithoutVersionPath)
     // before: https://res.cloudinary.com/ddoy3pmjg/image/upload/v1734106822/pfpg1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs.png
     // after: https://res.cloudinary.com/ddoy3pmjg/image/upload/pfpg1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs.png
+
 
     return urlWithoutVersionPath;
 
@@ -162,7 +164,8 @@ async function getHashForOgImageUrl() {
   // Merge 'Artwork ID' and 'Config Hash', then get its hash(sha256) with 'pfpg1' prefix
   const merged = artworkId + configHash
   const { hashArray, hashHex } = await strToSha256(merged)
-  return `pfpg1${hashHex}`
+
+  return { artworkId, configHash }
 }
 
 
@@ -182,4 +185,20 @@ function getBackgroundColorByTheme(themeName) {
   };
 
   return themeColors[themeName] || 'rgba(255, 255, 255, 0)'; // デフォルトは透明
+}
+
+
+function getDateAsYyyyMm() {
+  const dt = new Date();
+
+  const y = dt.getFullYear();
+  console.log("y: ", y)  // e.g.: 2024
+
+  const m = ("00" + (dt.getMonth() + 1)).slice(-2);  // getMonth() 関数は １月を 0 として返却するので １を加算
+  console.log("m: ", m)  // e.g.: 12
+
+  const yearAndMonth = `${y}${m}`
+  console.log("yearAndMonth: ", yearAndMonth)  // e.g.: 202412
+
+  return yearAndMonth
 }

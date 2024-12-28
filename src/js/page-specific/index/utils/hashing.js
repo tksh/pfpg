@@ -51,11 +51,11 @@ function hashArrayToBech32(hashArray, hrp = 'glin') {  // 'glin' means the frame
     const words = bech32.toWords(hashArray)
     //console.log("words: ", words)  // e.g.: (52) [19, 29, 6, 7, 22, 28, 31, ...
 
-    // Bech32エンコード
+    // Bech32 エンコード
     const bech32Hash = bech32.encode(hrp, words)
     //console.log("bech32Hash: ", bech32Hash)  // e.g.: glin1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs
 
-    // Bech32mエンコード
+    // Bech32m エンコード
     const bech32mHash = bech32m.encode(hrp, words)
     //console.log("bech32mHash: ", bech32mHash)  // e.g.: glin1nax8kulz0tjurx9weyaxslvast28r4ddxnzuu6j0prcw2t2w7a2srmk7hs
 
