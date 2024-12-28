@@ -18,9 +18,6 @@ export async function generateAndUploadOgImage(pngData) {
     const blobUrl = URL.createObjectURL(new Blob([pngData.asPng()], { type: 'image/png' }));
     console.log("blobUrl: ", blobUrl)
 
-    const testBlobUrl = URL.createObjectURL(new Blob([pngData.asPng()], { type: 'image/png' }));
-    console.log("testBlobUrl: ", testBlobUrl)
-
     // Imageオブジェクトを作成
     const img = new Image();
     await new Promise((resolve, reject) => {
@@ -29,22 +26,8 @@ export async function generateAndUploadOgImage(pngData) {
       img.src = blobUrl;
     });
 
-    // [test] Imageオブジェクトを作成
-    const testImg = new Image();
-    await new Promise((resolve, reject) => {
-      testImg.onload = resolve;
-      testImg.onerror = reject;
-      testImg.src = testBlobUrl;
-    });
-    console.log("testImg: ", testImg)
-
-    // [Test] PNGデータからCanvasに描画
-    const testCanvas = document.getElementById('test-1');
-    console.log("testCanvas: ", testCanvas)
-    const testCtx = testCanvas.getContext('2d');
-
     // PNGデータからCanvasに描画
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement('test-1');
     const ctx = canvas.getContext('2d');
 
     // Set imageSmoothing type
@@ -53,7 +36,6 @@ export async function generateAndUploadOgImage(pngData) {
     //const imageSmoothingViaShapeRendering = getState('shapeRendering') !== 'crispEdges'
     // ctx.imageSmoothingEnabled = imageSmoothingViaShapeRendering;
     ctx.imageSmoothingEnabled = false;
-    testCtx.imageSmoothingEnabled = false;
 
 
     // 背景を 設定する
@@ -63,60 +45,50 @@ export async function generateAndUploadOgImage(pngData) {
 
     // テーマカラーに基づいて背景色のRGBA値を取得する
     const bgColorViaThemeColor = getState('themeColor')
+
     ctx.fillStyle = getBackgroundColorByTheme(bgColorViaThemeColor);
 
-    ctx.fillRect(0, 0, newWidth, newHeight);
+    // 新しいOGP画像の幅と高さ (1200x840)
+    const ogpImageWidth = 1200;
+    const ogpImageHeight = 840;
+
+    // 背景色で塗りつぶす
+    ctx.fillRect(0, 0, ogpImageWidth, ogpImageHeight);
+
+//    // 元の画像の幅と高さを取得
+//    const originalWidth = pngData.width;
+//    const originalHeight = pngData.height;
 
 
-    // 元の画像のサイズで一度描画
-    ctx.drawImage(img, 0, 0);
 
-    // testCtx.fillStyle = 'rgba(200, 0, 0, 1)';
-    testCtx.fillStyle = getBackgroundColorByTheme(bgColorViaThemeColor);
-    // testCtx.fillRect(0, 0, 630, 630);
-    testCtx.fillRect(0, 0, 1200, 840);
-    //testCtx.drawImage(testImg, 0, 0);
+//    // 縦方向に630pxになるように調整
+//    let scale = Math.min(630 / originalHeight, newWidth / originalWidth);
 
-    // 元の画像の幅と高さを取得
-    const originalWidth = pngData.width;
-    const originalHeight = pngData.height;
+//    // リサイズ後の画像の位置を計算
+//    const x = (newWidth - originalWidth * scale) / 2;
+//    const y = (newHeight - originalHeight * scale) / 2;
 
-    // 新しい画像の幅と高さを計算 (1200x840)
-    const newWidth = 1200;
-    const newHeight = 840;
-
-    // 縦方向に630pxになるように調整
-    let scale = Math.min(630 / originalHeight, newWidth / originalWidth);
-
-    // リサイズ後の画像の位置を計算
-    const x = (newWidth - originalWidth * scale) / 2;
-    const y = (newHeight - originalHeight * scale) / 2;
-
-    // Canvasのサイズを設定
-    canvas.width = newWidth;
-    canvas.height = newHeight;
+//    // Canvasのサイズを設定
+//    canvas.width = newWidth;
+//    canvas.height = newHeight;
 
     // [test] Scale to 630
-    const testScale = 630 / originalWidth
-    console.log("testScale: ", testScale,  `( 630 / ${originalWidth} )`)
-    const testScaleInt = Math.floor(testScale)
-    console.log("testScaleInt: ", testScaleInt)
-
-    // [test] リサイズした画像を描画
-    // testCtx.drawImage(testImg, 0, 0, originalWidth * testScale, originalHeight * testScale);
-    // testCtx.drawImage(testImg, 0, 0, originalWidth * testScaleInt, originalHeight * testScaleInt);
-
-    // W: 1200 - 630 = 570,  X start position of 630x630 image is 570/2 = 285
-    // H:  840 - 630 = 210,  Y start position of 630x630 image is 210/2 = 105
-    testCtx.drawImage(testImg, 285, 105, originalWidth * testScale, originalHeight * testScale);
-
+    const scale = 630 / originalWidth
+    console.log("scale: ", scale,  `( 630 / ${originalWidth} )`)
+    const scaleInt = Math.floor(scale)
+    console.log("scaleInt: ", scaleInt)
 
     // リサイズした画像を描画
-    ctx.drawImage(img, x, y, originalWidth * scale, originalHeight * scale);
+    // W: 1200 - 630 = 570,  X start position of 630x630 image is 570/2 = 285
+    // H:  840 - 630 = 210,  Y start position of 630x630 image is 210/2 = 105
+    ctx.drawImage(testImg, 285, 105, originalWidth * scale, originalHeight * scale);
+
+
+//    // リサイズした画像を描画
+//    ctx.drawImage(img, x, y, originalWidth * scale, originalHeight * scale);
 
     // キャンバスから新しい画像データを取得
-    const newImageData = testCanvas.toDataURL('image/png');
-    // const newImageData = canvas.toDataURL('image/png');
+    const newImageData = canvas.toDataURL('image/png');
 
     // 新しい画像データからBlobオブジェクトを作成
     const newBlob = await fetch(newImageData).then(res => res.blob());
