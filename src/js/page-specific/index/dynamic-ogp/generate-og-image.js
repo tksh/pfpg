@@ -115,7 +115,8 @@ export async function generateAndUploadOgImage(pngData) {
     ctx.drawImage(img, x, y, originalWidth * scale, originalHeight * scale);
 
     // キャンバスから新しい画像データを取得
-    const newImageData = canvas.toDataURL('image/png');
+    const newImageData = testCanvas.toDataURL('image/png');
+    // const newImageData = canvas.toDataURL('image/png');
 
     // 新しい画像データからBlobオブジェクトを作成
     const newBlob = await fetch(newImageData).then(res => res.blob());
