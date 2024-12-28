@@ -27,14 +27,10 @@ export async function generateAndUploadOgImage(pngData) {
     });
 
     // PNGデータからCanvasに描画
-    const canvas = document.createElement('test-1');
+    const canvas = document.getElementById('test-1');
     const ctx = canvas.getContext('2d');
 
-    // Set imageSmoothing type
-    // - crispEdges         => imageSmoothingEnabled: false
-    // - geometricPrecision => imageSmoothingEnabled: true
-    //const imageSmoothingViaShapeRendering = getState('shapeRendering') !== 'crispEdges'
-    // ctx.imageSmoothingEnabled = imageSmoothingViaShapeRendering;
+    // Set imageSmoothing type 'false' to avoid the unnecessary anti-alias process
     ctx.imageSmoothingEnabled = false;
 
 
@@ -55,11 +51,12 @@ export async function generateAndUploadOgImage(pngData) {
     // 背景色で塗りつぶす
     ctx.fillRect(0, 0, ogpImageWidth, ogpImageHeight);
 
-//    // 元の画像の幅と高さを取得
-//    const originalWidth = pngData.width;
-//    const originalHeight = pngData.height;
 
+    // Scale the image rect
 
+    // 元の画像の幅と高さを取得
+    const originalWidth = pngData.width;
+    const originalHeight = pngData.height;
 
 //    // 縦方向に630pxになるように調整
 //    let scale = Math.min(630 / originalHeight, newWidth / originalWidth);
@@ -72,8 +69,9 @@ export async function generateAndUploadOgImage(pngData) {
 //    canvas.width = newWidth;
 //    canvas.height = newHeight;
 
-    // [test] Scale to 630
-    const scale = 630 / originalWidth
+    // Scale the image to 630x630
+    const imageRectTargetSize = 630
+    const scale = imageRectTargetSize / originalWidth
     console.log("scale: ", scale,  `( 630 / ${originalWidth} )`)
     const scaleInt = Math.floor(scale)
     console.log("scaleInt: ", scaleInt)
@@ -81,11 +79,9 @@ export async function generateAndUploadOgImage(pngData) {
     // リサイズした画像を描画
     // W: 1200 - 630 = 570,  X start position of 630x630 image is 570/2 = 285
     // H:  840 - 630 = 210,  Y start position of 630x630 image is 210/2 = 105
-    ctx.drawImage(testImg, 285, 105, originalWidth * scale, originalHeight * scale);
+    ctx.drawImage(img, 285, 105, originalWidth * scale, originalHeight * scale);
 
 
-//    // リサイズした画像を描画
-//    ctx.drawImage(img, x, y, originalWidth * scale, originalHeight * scale);
 
     // キャンバスから新しい画像データを取得
     const newImageData = canvas.toDataURL('image/png');
