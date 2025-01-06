@@ -385,6 +385,25 @@ div#samples figure {
 
 
 
+/* Showcase section */
+
+.image-gallery {
+    margin-bottom: 20px;  /* Space between galleries */
+}
+
+.artwork-container {
+    display: flex;
+    gap: 20px;  /* Space between horizontal images */
+    justify-content: flex-start;
+}
+
+.artwork-item {
+    flex: 0 1 auto;  /* Don't grow, can shrink, auto base size */
+}
+
+
+
+
 @media screen and (max-width: 512px) {
 
     body {
