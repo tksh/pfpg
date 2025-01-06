@@ -72,9 +72,9 @@ bun ../scripts/generate_farm_config_ts.ts
 # Preprocess using TS scripts before Farm build
 
 # # Remove 'console.log()' from JS or TS
-# find ./src/js -type f \( -name "*.js" -o -name "*.ts" \) -print0 | while IFS= read -r -d '' file; do
-#   bun ../scripts/remove_console_logs.ts --input="$file" --output="$file"
-# done
+find ./src/js -type f \( -name "*.js" -o -name "*.ts" \) -print0 | while IFS= read -r -d '' file; do
+  bun ../scripts/remove_console_logs.ts --input="$file" --output="$file"
+done
 
 # Remove '<script type="importmap"></script>' from HTML
 find ./src/js -type f \( -name "*.html" \) -print0 | while IFS= read -r -d '' file; do
