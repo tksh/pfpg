@@ -44,15 +44,18 @@ rm -rf ./public/*
 cp -r ../src/ ./
 
 
-# Move the public files from 'farm/src' to 'farm/public' directory
+# Move the static assetss from 'farm/src' to 'farm/public' directory
 for f in android-chrome-192x192.png \
-          android-chrome-512x512.png \
-          apple-touch-icon.png \
-          favicon.ico \
-          favicon.svg \
-          site.webmanifest; do
+         android-chrome-512x512.png \
+         apple-touch-icon.png \
+         favicon.ico \
+         favicon.svg \
+         site.webmanifest; do
     mv "./src/$f" "./public/$f" || exit 1
 done
+
+# Move the static assetss with .webp extension from 'farm/src/showcase_images' to 'farm/public' directory
+mv ./src/showcase_images/*.webp ./public/
 
 
 # Check the copied files
