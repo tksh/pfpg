@@ -105,7 +105,7 @@
 
                 "io/copy-textarea":       "./js/page-specific/data-manipulator/io/copy-textarea.js",
                 "io/download-url-params": "./js/page-specific/data-manipulator/io/download-url-params.js",
-                "io/select-file":         "./js/page-specific/data-manipulator/io/select-file.js",
+                "io/select-file":         "./js/page-specific/data-manipulator/io/select-file.js"
 
             }
         }
@@ -134,7 +134,7 @@
         <h4>1. ⬆ Basic Data:</h4>
         <label for="select-file-basic-data" class="custom-file-upload-button">Select the JSON file that contains n(required), version, title, desc, metadata, colors</label>
         <br />
-        <input type="file" id="select-file-basic-data" onchange="selectFileToInput('select-file-basic-data', 'textarea-basic-data-uploaded')" />
+        <input type="file" id="select-file-basic-data" />
         <br />
 
         <!-- Textarea to input the basic data json -->
@@ -176,7 +176,7 @@
         <h4>2.1 ⬆ Lines Data:</h4>
         <label for="select-file-lines-data">Select the JSON file that contains the grouped lines data extracted from SVG</label>
         <br />
-        <input type="file" id="select-file-lines-data" onchange="selectFileToInput('select-file-lines-data', 'textarea-lines-data-uploaded')" />
+        <input type="file" id="select-file-lines-data" />
         <br />
         <textarea id="textarea-lines-data-uploaded" class="height-1" placeholder="./json_extracted/%{ARTWORK_ID}_lines_data.json">[
             {

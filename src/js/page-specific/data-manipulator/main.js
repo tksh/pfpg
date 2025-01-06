@@ -11,6 +11,7 @@ import { swap63Enc }                           from 'enc-and-dec/lines-data/d-va
 import { four16Enc }                           from 'enc-and-dec/lines-data/d-values/four16/four16-enc'
 import { mergeBasicDataAndLinesData }          from 'io/download-url-params'
 import { setupCopyButtons }                    from 'io/copy-textarea'
+import { selectFileToInput }                   from 'io/select-file'
 
 // Decode from url params to SVG when page loaded.
 // If there is no url params at index.html, Decode from sample hidden text.
@@ -33,9 +34,16 @@ if (window.location.search) {
 
 // Attach event listener
 
-function initButtons(buttonId, functionName) {
+function initEncodeButtons(buttonId, functionName) {
     const buttonElem = document.getElementById(`${buttonId}`)
     buttonElem.addEventListener('click', functionName)
+}
+
+function initUploadButtons(inputId, textareaId) {
+    const fileInput = document.getElementById(inputId);
+    fileInput.addEventListener('change', function() {
+        selectFileToInput(inputId, textareaId);
+    });
 }
 
 function initBasicDataTextarea() {
@@ -48,23 +56,29 @@ function initBasicDataTextarea() {
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    // Buttons to upload
+    initUploadButtons('select-file-basic-data',        'textarea-basic-data-uploaded');
+    initUploadButtons('select-file-lines-data',        'textarea-lines-data-uploaded');
+    initUploadButtons('select-file-agg-data-for-comp', 'textarea-agg-data-for-comp-uploaded');
+
     // Buttons to encode
-    initButtons('encode-basic-data',                  encodeBasicData)
-    initButtons('encode-lines-data-via-bruteforce53', bruteforce53Enc)
-    initButtons('encode-lines-data-via-bigint64',     bigint64Enc)
-    initButtons('encode-lines-data-via-swap63',       swap63Enc)
-    initButtons('encode-lines-data-via-four16',       four16Enc)
-    initButtons('encode-lines-data-via-best-mix',     bestMixEnc)
+    initEncodeButtons('encode-basic-data',                  encodeBasicData)
+    initEncodeButtons('encode-lines-data-via-bruteforce53', bruteforce53Enc)
+    initEncodeButtons('encode-lines-data-via-bigint64',     bigint64Enc)
+    initEncodeButtons('encode-lines-data-via-swap63',       swap63Enc)
+    initEncodeButtons('encode-lines-data-via-four16',       four16Enc)
+    initEncodeButtons('encode-lines-data-via-best-mix',     bestMixEnc)
 
 
     // Buttons to merge
-    initButtons('button-to-merge-as-url-params',     mergeBasicDataAndLinesData)
+    initEncodeButtons('button-to-merge-as-url-params',     mergeBasicDataAndLinesData)
 
     // Buttons to copy the text value of textarea of
-    //   1. 'Encoded url params',
-    //   2. 'Decode SVG String (relative)' and
-    //   3. 'Decode SVG String (absolute)'
+    //   - 'Encoded url params',
+    //   - 'Decode SVG String (relative)' and
+    //   - 'Decode SVG String (absolute)'
     setupCopyButtons()
+
 
     // Initialize checkbox states based on pre-inputted sample Basic Data json
     const basicData = parseBasicData()

@@ -1,9 +1,9 @@
 import { updateBasicDataKeysCheckboxStates
        , parseBasicData} from 'enc-and-dec/basic-data/basic-data-enc'
 
-export function selectFileToInput(selectFileId, textAreaId){
+export function selectFileToInput(selectButtonId, textAreaId){
     // FileListオブジェクト取得
-    const selectFiles = document.querySelector(`#${selectFileId}`).files
+    const selectFiles = document.querySelector(`#${selectButtonId}`).files
 
     // Fileオブジェクト取得
     const file = selectFiles[0]
