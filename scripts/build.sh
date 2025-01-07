@@ -55,6 +55,7 @@ for f in android-chrome-192x192.png \
 done
 
 # Move the static assetss with .webp extension from 'farm/src/showcase_images' to 'farm/public' directory
+mkdir -p ./public/showcase_images/
 mv ./src/showcase_images/*.webp ./public/showcase_images/
 
 
