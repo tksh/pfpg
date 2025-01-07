@@ -397,7 +397,11 @@ details#showcase figure {
     padding-bottom: 3rem;
 }
 
-
+/* Image title caption */
+.bold-italic {
+    font-weight: bold;
+    font-style: italic;
+}
 
 @media screen and (max-width: 512px) {
 
