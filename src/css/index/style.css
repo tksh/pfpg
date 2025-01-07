@@ -285,7 +285,8 @@ div#footer-info > details {
     padding: 1.5rem 1rem 0.5rem 2rem;
 }
 
-dl.top-level {
+dl.top-level,
+section.showcase-container {
     padding-left: 3rem;
 }
 
@@ -296,10 +297,17 @@ dd {
 dt {
     padding: 1.5rem 0.5rem 0.25rem 0;
 }
+div.reference-item,
+div.artwork-item {
+    padding-left: 1rem;
+    padding-top: 1rem;
+}
 
 ol,
-ul {
-    padding-left: 1rem;
+ul,
+div.reference-container,
+div.artworks-container {
+    padding: 0 1rem;
 }
 
 .padding-top-1 {
@@ -364,19 +372,6 @@ a {
     text-decoration: underline;
 }
 
-/* Samples */
-div#samples img {
-    padding: 1rem;
-}
-
-div#samples .finished-and-reference {
-    display: flex;
-}
-
-div#samples figure {
-    display: inline;
-}
-
 
 .flex-direction-column {
     display: flex;
@@ -387,13 +382,9 @@ div#samples figure {
 
 /* Showcase section */
 
-.image-gallery {
-    margin-bottom: 20px;  /* Space between galleries */
-}
-
-.artwork-container {
+.artworks-container {
     display: flex;
-    gap: 20px;  /* Space between horizontal images */
+    gap: 1rem;  /* Space between horizontal images */
     justify-content: flex-start;
 }
 
@@ -401,6 +392,10 @@ div#samples figure {
     flex: 0 1 auto;  /* Don't grow, can shrink, auto base size */
 }
 
+details#showcase figure {
+    padding-left: 1rem;
+    padding-bottom: 3rem;
+}
 
 
 
@@ -499,8 +494,30 @@ div#samples figure {
     legend {
         padding-left: 0.5rem;
     }
-    dl.top-level {
+    dl.top-level,
+    section.showcase-container {
         padding-left: 1.5rem;
+    }
+
+    div.reference-container,
+    div.artworks-container {
+        padding: 0 0.5rem;
+    }
+
+    div.reference-item,
+    div.artwork-item {
+        padding-left: 0rem;
+        padding-top: 1rem;
+    }
+
+    .artworks-container {
+        flex-direction: column;  /* Stack vertically */
+        gap: 0;  /* Vertical space between stacked images are defined by 'padding' property */
+    }
+
+    details#showcase figure {
+        padding-left: 0.5rem;
+        padding-bottom: 1.5rem;
     }
 }
 
@@ -511,7 +528,7 @@ div#samples figure {
     /* 'opacity', 'stroke-opacity' */
     select.opacity {
         margin-right: 2px;     /* default - 2px */
-        width: 3.25rem; /* default - 0.5rem */
+        width: 3.25rem;        /* default - 0.5rem */
 
         padding-left: 0.25rem; /* default - 0.25rem */
     }
