@@ -9,16 +9,22 @@ export async function adjustOutputBoxSize(context) {
     // Dev only ///////////////////////////////////////////////////////////
 
     // JavaScriptを使用してCSSのDVH（デバイスビューポートハイト）で得られるビューポートの高さの数値を取得
-    const vv = window.visualViewport;
-    const height = vv.height;
-    console.log("///window.visualViewport height: ", height); // ビューポートの高さをピクセル単位で表示
+    const wvv = window.visualViewport;
+    const wvvh = wvv.height;
+    console.log("///window.visualViewport height: ", wvvh); // ビューポートの高さをピクセル単位で表示
 
     window.visualViewport.addEventListener('resize', () => {
         const wvvh = window.visualViewport.height;
         console.log('///New viewport height:', wvvh);
-        // ここで必要な処理を行う（例：CSS変数の更新）
         const wvvhValueBtn = document.getElementById('wvvh_value')
         wvvhValueBtn.textContent = `wvvh: ${wvvh}`
+    });
+
+    window.innerHeight.addEventListener('resize', () => {
+        const wih = window.innerHeight;
+        console.log('///New windowInnerHeight:', wih);
+        const wihValueBtn = document.getElementById('wih_value')
+        wihValueBtn.textContent = `wih: ${wih}`
     });
 
 
@@ -107,7 +113,7 @@ export async function adjustOutputBoxSize(context) {
     // ウィンドウサイズによって 適用するかどうかを判定する
     if (
         window.innerWidth > 512         // モバイルではなく
-        && window.innerHeight >= 720    // 縦の幅が狭くない (HDディスプレイ以上) 場合
+//        && window.innerHeight >= 720    // 縦の幅が狭くない (HDディスプレイ以上) 場合
     ) {
 
         console.log('window.innerWidth and window.innerHeight (window.innerWidth > 512 && window.innerHeight >= 720): ', window.innerWidth, window.innerHeight)
