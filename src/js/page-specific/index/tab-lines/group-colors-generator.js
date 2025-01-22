@@ -100,6 +100,7 @@ jscolor.presets.default = {
         inputElement.id = `group-colors-stroke-${i}`
         inputElement.setAttribute('value', `${stroke[i]}`)  // value format should be fit to current selected colorFormat
         inputElement.setAttribute("data-jscolor", `{format:'${colorFormat}'}`)  // format:'rgb' or format:'hex'
+        inputElement.setAttribute("inputmode", "none")  // inputmode="none": 仮想キーボードなし。 ページが独自のキーボード入力を実装している場合のためのもの
 
         // jscolor の初期化
         new jscolor(inputElement)
