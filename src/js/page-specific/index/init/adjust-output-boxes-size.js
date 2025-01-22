@@ -6,6 +6,30 @@ export async function adjustOutputBoxSize(context) {
     const windowInnerHeight = window.innerHeight
     console.log('windowInnerHeight: ', windowInnerHeight)
 
+    // Dev only ///////////////////////////////////////////////////////////
+
+    // JavaScriptを使用してCSSのDVH（デバイスビューポートハイト）で得られるビューポートの高さの数値を取得
+    const vv = window.visualViewport;
+    const height = vv.height;
+    console.log("///window.visualViewport height: ", height); // ビューポートの高さをピクセル単位で表示
+
+    window.visualViewport.addEventListener('resize', () => {
+        const wvvh = window.visualViewport.height;
+        console.log('///New viewport height:', wvvh);
+        // ここで必要な処理を行う（例：CSS変数の更新）
+        const wvvhValueBtn = document.getElementById('wvvh_value')
+        wvvhValueBtn.textContent = `wvvh: ${wvvh}`
+    });
+
+
+    const wvvhValueBtn = document.getElementById('wvvh_value')
+    wvvhValueBtn.textContent = `wvvh: ${windowInnerHeight}`
+
+    const wihValueBtn = document.getElementById('wih_value')
+    wihValueBtn.textContent = `wih: ${windowInnerHeight}`
+    // Dev only ///////////////////////////////////////////////////////////
+
+
     // <body>
     const bodyElem = document.querySelector('body')
     const bodyRect = bodyElem.getBoundingClientRect()
