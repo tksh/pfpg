@@ -335,9 +335,16 @@ button {
 button#png-action-button,
 button#svg-action-button {
     --button-height: 3.5rem; /* ボタン全体の高さ */
-    height: var(--button-height);
-    min-width: 16rem;
+    /* height: var(--button-height); */
+    /* min-width: 16rem; */
     line-height: 1.4;
+
+    padding: 0.5rem 1rem; /* 上下0.5rem、左右1remの余白 */
+
+    white-space: nowrap;
+    /* 基本的に改行しない */
+    /* 幅に余裕があれば1行で表示され、狭くなった場合にのみ <br>の位置で改行 */
+
     display: flex;
     align-items: center;
     justify-content: center;
