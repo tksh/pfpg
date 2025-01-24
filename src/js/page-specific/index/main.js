@@ -2,7 +2,8 @@ import { initDownloadButtons }                  from 'button/init-download-butto
 import { initButtonActionSelect }               from 'button/update-button-text'
 import { isOnDataManipulatorPage }              from 'common-utils/select-output-textarea'
 import { decodeUrlToSvg }                       from 'decode/decode'
-import { adjustOutputBoxSize }                  from 'init/adjust-output-boxes-size'
+import { adjustOutputBoxSize
+       , initViewportLister }                   from 'init/adjust-output-boxes-size'
 import { storeArtworkId }                       from 'init/calc-artwork-id'
 import { initTabs }                             from 'init/tab-setup'
 import { initSvgOptimizationModalToggle
@@ -148,7 +149,9 @@ document.querySelector('meta[property="og:image"]').content = imageUrl;
     initResetSettingsModalToggle()
     initResetSettings()
 
-    // Get the artwork ID for OG image generation
+//   // Get the artwork ID for OG image generation
 //     storeArtworkId()
 
+    // Add event lister to viewport for continuous resizing the output boxes (PNG and SVG)
+    initViewportLister()
 })

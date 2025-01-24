@@ -1,8 +1,15 @@
-window.visualViewport.addEventListener('resize', () => {
-    adjustOutputBoxSize('detailsOpened')
-});
+export {
+    initViewportLister,
+    adjustOutputBoxSize
+}
 
-export async function adjustOutputBoxSize(context) {
+function initViewportLister() {
+    window.visualViewport.addEventListener('resize', () => {
+        adjustOutputBoxSize('viewportResized')
+    });
+}
+
+async function adjustOutputBoxSize(context) {
 
     // Get the element rect sizes
 
@@ -10,34 +17,21 @@ export async function adjustOutputBoxSize(context) {
     const windowInnerHeight = window.innerHeight
     console.log('windowInnerHeight: ', windowInnerHeight)
 
-//    // Dev only //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//    // For debugging //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//    const wihValueBtn = document.getElementById('wih_value')
+//    wihValueBtn.textContent = `wih: ${windowInnerHeight}`
+//
 //
 //    // JavaScriptを使用してCSSのDVH（デバイスビューポートハイト）で得られるビューポートの高さの数値を取得
 //    const wvv = window.visualViewport;
 //    const wvvh = wvv.height;
 //    console.log("///window.visualViewport height: ", wvvh); // ビューポートの高さをピクセル単位で表示
 //
-//    window.visualViewport.addEventListener('resize', () => {
-//        const wvvh = window.visualViewport.height;
-//        console.log('///New viewport height:', wvvh);
-//        const wvvhValueBtn = document.getElementById('wvvh_value')
-//        wvvhValueBtn.textContent = `wvvh: ${wvvh}`
-//    });
-//
-//    window.visualViewport.addEventListener('resize', () => {
-//        const wih = window.innerHeight;
-//        console.log('///New windowInnerHeight:', wih);
-//        const wihValueBtn = document.getElementById('wih_value')
-//        wihValueBtn.textContent = `wih: ${wih}`
-//    });
-//
-//
 //    const wvvhValueBtn = document.getElementById('wvvh_value')
 //    wvvhValueBtn.textContent = `wvvh: ${wvvh}`
 //
-//    const wihValueBtn = document.getElementById('wih_value')
-//    wihValueBtn.textContent = `wih: ${windowInnerHeight}`
-//    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Dev only //
+//    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// For debugging //
 
 
     // <body>
@@ -45,15 +39,12 @@ export async function adjustOutputBoxSize(context) {
     const bodyRect = bodyElem.getBoundingClientRect()
     console.log('body: ', bodyRect.width, bodyRect.height)
 
-//    // Dev only //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    window.visualViewport.addEventListener('resize', () => {
-//        const bodyElem = document.querySelector('body')
-//        const bodyRect = bodyElem.getBoundingClientRect()
-//        console.log('body: ', bodyRect.width, bodyRect.height)
-//        const bwhValueBtn = document.getElementById('bwh_value')
-//        bwhValueBtn.textContent = `<body>: ${bodyRect.width} x ${bodyRect.height}`
-//    });
-//    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Dev only //
+//    // For debugging //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//    const bwhValueBtn = document.getElementById('bwh_value')
+//    bwhValueBtn.textContent = `<body>: ${bodyRect.width} x ${bodyRect.height}`
+//
+//    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// For debugging //
 
     // <header>
     const headerElem = document.querySelector('header')
