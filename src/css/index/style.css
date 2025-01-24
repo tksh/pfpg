@@ -109,6 +109,12 @@ main {
 
 #svg-info,
 #png-info {
+    white-space: nowrap;
+    /* 基本的に改行しない */
+    /* 幅に余裕があれば1行で表示され、狭くなった場合にのみ <wbr>の位置で改行 */
+
+    padding: 0.125rem 1rem; /* 上下0.125rem、左右1remの余白 */
+
     font-size: 1rem;
     text-align: center;
     color: var(--color-info-text);
@@ -343,7 +349,7 @@ button#svg-action-button {
 
     white-space: nowrap;
     /* 基本的に改行しない */
-    /* 幅に余裕があれば1行で表示され、狭くなった場合にのみ <br>の位置で改行 */
+    /* 幅に余裕があれば1行で表示され、狭くなった場合にのみ <wbr>の位置で改行 */
 
     display: flex;
     align-items: center;

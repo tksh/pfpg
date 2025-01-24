@@ -198,21 +198,21 @@ async function svg2png(svgString, resvgOption) {
 
 function updatePngInfo(pngData) {
     // PNGピクセルサイズを <div id="png-info">要素に 表示する
-    document.querySelector('#png-info').textContent = `Rendered PNG pixel size: ${pngData.width} x ${pngData.height}`
+    document.querySelector('#png-info').innerHTML = `Rendered PNG pixel size:&nbsp;<wbr>${pngData.width} x ${pngData.height}`
 }
 
 function updateSvgInfo(svgString) {
     // Indicate the SVG viewBox size in HTML
 
     // The resvg-js library outputs the width and height as integers by default, so the code below works fine:
-    // document.querySelector('#svg-info').textContent = 'Source SVG viewbox: ' + resvgJS.width + ' x ' + resvgJS.height
+    // document.querySelector('#svg-info').innerHTML = 'Source SVG viewbox: ' + resvgJS.width + ' x ' + resvgJS.height
 
     // However, when 'Crop side margins:' is applied in the Canvas tab, the viewBox size values can be floats, not just integers.
     // Therefore, we need to extract the size values from the SVG string using a regular expression, as shown below.
 
     // Outputs the viewBox size as float to indicate at #svg-info <textarea>
     const viewboxValues = extractViewboxValues(svgString) // e.g: Map(4) {'x' => 0, 'y' => 0, 'w' => 31, 'h' => 31}
-    document.querySelector('#svg-info').textContent = 'Source SVG viewBox size: ' + viewboxValues.get('w') + ' x ' + viewboxValues.get('h')
+    document.querySelector('#svg-info').innerHTML = `Source SVG viewBox size:&nbsp;<wbr>${viewboxValues.get('w')} x ${viewboxValues.get('h')}`
 }
 
 
