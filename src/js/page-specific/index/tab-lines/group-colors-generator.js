@@ -3,6 +3,13 @@ import { getState }                   from 'state/url-state-manager'
 import { convertColorFormatForArray } from 'tab-lines/color-format-converter'
 import { getGroupColorsValues }       from 'tab-lines/get-colors-from-svg'
 import { numbersIncrementByStep }     from 'tab-lines/opacity-steps'
+import { replaceAndRender }           from 'tab-lines/group-colors-listener'
+import { tryDeleteHash }  from 'color-formatter/hex-shorten'
+
+import { resvgOption } from 'state/resvg-option'
+
+//import Alwan from 'libs/alwan'; // Alwanをインポート
+
 
 export
     { generateGroupColorsHtmlElements
@@ -41,87 +48,78 @@ function generateGroupColorsSvgTags(matches) {
 //  - <select> - opacity
 //  - <select> - stroke-opacity
 
+function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
+    console.log(`generateGroupColorsHtmlElements() started. (Opacity step = ${opacitySteps})`);
 
-// These options apply to all color pickers on the page
-// - https://jscolor.com/docs/#api--opts--previewSize
-jscolor.presets.default = {
-    previewSize:20,  // Make preview size as 1:1 rect (default value is 32)
-    borderRadius:0   // Make solid corner shapes
- }
+    const groupColorsValues = getGroupColorsValues(inputSvg);
+    const numberOfGroups = groupColorsValues.get('number_of_groups');
+    const stroke = convertColorFormatForArray(groupColorsValues.get('stroke_array'), colorFormat);
+    const opacity = groupColorsValues.get('opacity_array');
+    const strokeOpacity = groupColorsValues.get('stroke_opacity_array');
 
-
- function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
-    console.log(`generateGroupColorsHtmlElements() started. (Opacity step = ${opacitySteps})`)
-
-    const groupColorsValues = getGroupColorsValues(inputSvg)
-    const numberOfGroups    = groupColorsValues.get('number_of_groups')
-    const stroke            = convertColorFormatForArray(groupColorsValues.get('stroke_array'), colorFormat)
-    const opacity           = groupColorsValues.get('opacity_array')
-    const strokeOpacity     = groupColorsValues.get('stroke_opacity_array')
-
-    // 挿入先のdiv要素を取得
-    const groupColorsDiv = document.getElementById("group-colors-input-and-select")
+    const groupColorsDiv = document.getElementById("group-colors-input-and-select");
 
     // Delete current whole child nodes
     while (groupColorsDiv.firstChild) {
-        groupColorsDiv.removeChild(groupColorsDiv.firstChild)
+        groupColorsDiv.removeChild(groupColorsDiv.firstChild);
     }
 
-    // マッチした部分の数だけ繰り返す
-    for (let i = 0; i < numberOfGroups; i++) {
+    for (let gId = 0; gId < numberOfGroups; gId++) {
+        const optsCellDiv = document.createElement('div');
+        optsCellDiv.classList.add('opts-cell-for-group-colors');
 
-        // <div>要素を作成
-        const optsCellDiv = document.createElement('div')
-        // クラスを追加
-        optsCellDiv.classList.add('opts-cell-for-group-colors')
+        const labelElement = document.createElement("label");
+        labelElement.setAttribute('for', `group-colors-stroke-${gId}`);
+        labelElement.textContent = `${gId}:`;
+        labelElement.classList.add('stroke');
+
+        // Alwan用のdivを作成。input要素は不要
+        const alwanContainer = document.createElement('div');
+        alwanContainer.id = `group-colors-stroke-${gId}`;
+        alwanContainer.classList.add('alwan-container'); // Alwan用のクラスを追加
+
+        // label, alwanContainer要素を div要素の子として追加
+        optsCellDiv.appendChild(labelElement);
+        optsCellDiv.appendChild(alwanContainer);
 
 
-        // <label>要素を作成
-        const labelElement = document.createElement("label")
-        labelElement.setAttribute('for', `group-colors-stroke-${i}`)
-        labelElement.textContent = `${i}:`
-        labelElement.classList.add('stroke')
+        // Alwanインスタンスを生成
+        const inputsOptionValue = colorFormat === 'rgb'
+            ? { hex: false, rgb: true, hsl: false }
+            : { hex: true, rgb: false, hsl: false }
 
+        const alwan = new Alwan(alwanContainer, {
+            format: colorFormat,       // format:'rgb' or format:'hex'
+            color: stroke[gId],       // Set the color value
+            inputs: inputsOptionValue,
+            opacity: false,             // Disable the alpha channel settings UI elements
+            theme: 'dark'
+        });
+        console.log('typeof(alwan): ', typeof(alwan))
+        console.log('alwan: ', alwan)
 
-        // jscolor カラーピッカー <input> を作成
+        // 色が変更された時のイベントリスナー
+        alwan.on('change', (color) => {
+            console.log(`Color changed for group ${gId}:`, color.rgb, color.hex)
+            //e.g: Color changed for group 0: rgb(0, 0, 0) #000000
 
-        // input要素を作成
-        const inputElement = document.createElement("input")
+            // Get color value as current selected color format (rgb or hex(without "#"))
+            const inputValue = colorFormat === 'rgb' ? color.rgb : tryDeleteHash(color.hex)
 
-        // Input box size defined by css class by color format, 'rgb' or 'hex'
-        if (colorFormat === "rgb") {
-            inputElement.classList.add('stroke-rgb')
-        } else {  // (colorFormat === "hex")
-            inputElement.classList.add('stroke-hex')
-        }
-
-        inputElement.classList.add('stroke')
-        inputElement.autocomplete = "off"
-        inputElement.id = `group-colors-stroke-${i}`
-        inputElement.setAttribute('value', `${stroke[i]}`)  // value format should be fit to current selected colorFormat
-        inputElement.setAttribute("data-jscolor", `{format:'${colorFormat}'}`)  // format:'rgb' or format:'hex'
-        inputElement.setAttribute("inputmode", "none")  // inputmode="none": 仮想キーボードなし。 ページが独自のキーボード入力を実装している場合のためのもの
-
-        // jscolor の初期化
-        new jscolor(inputElement)
-
-        // label, input要素を div要素の子として追加
-        optsCellDiv.appendChild(labelElement)
-        optsCellDiv.appendChild(inputElement)
-
+            // 色の変更を反映する処理
+            // @attrName = 'stroke'
+            replaceAndRender(inputValue, 'stroke', gId, resvgOption)
+        });
 
         // Generate <select> elements for opacity and stroke-opacity
+        const opacitySelectElem = generateOpacityElements(gId, opacitySteps, 'opacity', opacity[gId]);
+        const strokeOpacitySelectElem = generateOpacityElements(gId, opacitySteps, 'stroke-opacity', strokeOpacity[gId]);
 
-        const opacitySelectElem = generateOpacityElements(i, opacitySteps, 'opacity', opacity[i])
-        const strokeOpacitySelectElem = generateOpacityElements(i, opacitySteps, 'stroke-opacity', strokeOpacity[i])
-        console.log('opacitySelectElem: ', opacitySelectElem)
-        console.log('strokeOpacitySelectElem: ', strokeOpacitySelectElem)
-        optsCellDiv.appendChild(opacitySelectElem)
-        optsCellDiv.appendChild(strokeOpacitySelectElem)
+        optsCellDiv.appendChild(opacitySelectElem);
+        optsCellDiv.appendChild(strokeOpacitySelectElem);
 
-        groupColorsDiv.appendChild(optsCellDiv)
+        groupColorsDiv.appendChild(optsCellDiv);
     }
-
 }
 
 function generateOpacityElements(i, step, attrName, attrValue) {
