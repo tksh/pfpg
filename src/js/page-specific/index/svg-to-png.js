@@ -39,17 +39,17 @@ async function executeSvg2png(event, resvgOption) {
         const pngData = await measureSvg2pngTime(svgString, resvgOption, renderingStatusElements);
         console.log('pngData: ', pngData);
 
-        // pngData から  OGイメージ を 生成, Cloudinaryに アップロード
-        const ogImageUrl = await generateAndUploadOgImage(pngData);
-        console.log('ogImageUrl: ', ogImageUrl);  // Uploaded image URL, version path removed.
-
-        // Update the OGP meta tag
-        updateMetadata(
-            "pfpg - Custom Profile Picture Generator",
-            "A custom profile picture generator for a specific svg artwork that was made with the UIntNPortray ruleset.",
-            window.location.href,  // It includes URL params for artwork data and current settings states
-            ogImageUrl
-        )
+//        // pngData から  OGイメージ を 生成, Cloudinaryに アップロード
+//        const ogImageUrl = await generateAndUploadOgImage(pngData);
+//        console.log('ogImageUrl: ', ogImageUrl);  // Uploaded image URL, version path removed.
+//
+//        // Update the OGP meta tag
+//        updateMetadata(
+//            "pfpg - Custom Profile Picture Generator",
+//            "A custom profile picture generator for a specific svg artwork that was made with the UIntNPortray ruleset.",
+//            window.location.href,  // It includes URL params for artwork data and current settings states
+//            ogImageUrl
+//        )
 
         console.log('svg2png processing has completed.');
 

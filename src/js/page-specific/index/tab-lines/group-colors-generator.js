@@ -74,30 +74,51 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
         labelElement.classList.add('stroke');
 
         // Alwan用のdivを作成。input要素は不要
-        const alwanContainer = document.createElement('div');
-        alwanContainer.id = `group-colors-stroke-${gId}`;
-        alwanContainer.classList.add('alwan-container'); // Alwan用のクラスを追加
+        const alwanContainer = document.createElement('div');  // For hiding the alwan <button>
+        alwanContainer.id = `group-colors-stroke-container-${gId}`;
+        const alwanButton = document.createElement('div');
+        alwanButton.id = `group-colors-stroke-alwan-${gId}`;
+        //alwanButton.classList.add('alwan-container'); // Alwan用のクラスを追加
+        alwanContainer.appendChild(alwanButton);
+
+        // Alwan入力要素を非表示に
+        alwanContainer.style.display = 'none';
 
         // label, alwanContainer要素を div要素の子として追加
         optsCellDiv.appendChild(labelElement);
         optsCellDiv.appendChild(alwanContainer);
 
+        // Generate <div> element to indicate the color with text
+        const colorIndicateDiv = document.createElement('div')
+        colorIndicateDiv.id = `group-colors-stroke-indicator-${gId}`
+        colorIndicateDiv.classList.add('color-indicator')
+        colorIndicateDiv.innerHTML = `${stroke[gId]}`
+        colorIndicateDiv.style.backgroundColor = stroke[gId]
 
         // Alwanインスタンスを生成
         const inputsOptionValue = colorFormat === 'rgb'
             ? { hex: false, rgb: true, hsl: false }
             : { hex: true, rgb: false, hsl: false }
 
-        const alwan = new Alwan(alwanContainer, {
+        const alwan = new Alwan(alwanButton, {
             format: colorFormat,       // format:'rgb' or format:'hex'
             color: stroke[gId],       // Set the color value
             inputs: inputsOptionValue, // Show only the format selected currently
             opacity: false,             // Remove the alpha channel settings UI elements
             copy: false,             // Remove a copy button
             theme: 'dark',
+            target: colorIndicateDiv,
+            // target: `#group-colors-stroke-indicator-${gId}`,
+            //toggle: false, // デフォルトのトグルボタンを非表示に
+            popover: true
         });
         console.log('typeof(alwan): ', typeof(alwan))
         console.log('alwan: ', alwan)
+
+        // 生成したDiv要素にクリックイベントを追加
+        colorIndicateDiv.addEventListener('click', () => {
+            alwan.open();
+        });
 
         // 色が変更された時のイベントリスナー
         alwan.on('change', (color) => {
@@ -112,10 +133,12 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
             replaceAndRender(inputValue, 'stroke', gId, resvgOption)
         });
 
-        // Generate <select> elements for opacity and stroke-opacity
-        const opacitySelectElem = generateOpacityElements(gId, opacitySteps, 'opacity', opacity[gId]);
-        const strokeOpacitySelectElem = generateOpacityElements(gId, opacitySteps, 'stroke-opacity', strokeOpacity[gId]);
 
+        // Generate <select> elements for opacity and stroke-opacity
+        const opacitySelectElem = generateOpacityElements(gId, opacitySteps, 'opacity', opacity[gId])
+        const strokeOpacitySelectElem = generateOpacityElements(gId, opacitySteps, 'stroke-opacity', strokeOpacity[gId])
+
+        optsCellDiv.appendChild(colorIndicateDiv);
         optsCellDiv.appendChild(opacitySelectElem);
         optsCellDiv.appendChild(strokeOpacitySelectElem);
 
