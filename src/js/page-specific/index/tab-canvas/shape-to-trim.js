@@ -9,7 +9,7 @@ import { roundToTwoDecimals }   from 'utils/number-rounding'
 
 
 // Update SVG with selected shape path
-export function updateSvgWithSelectedShapePath(shape, inputSvg) {
+export function updateSvgWithNewShapePath(shape, inputSvg) {
     document.getElementById('shape-to-trim').value = shape
 
     // Params for generating the 'Squircle' and 'Squircle, slimmed' shape path

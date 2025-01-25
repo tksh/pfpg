@@ -3,7 +3,7 @@ import { adjustOutputBoxSize }                  from 'init/adjust-output-boxes-s
 import { resvgOption }                    from 'state/resvg-option'
 import { updateState }                    from 'state/url-state-manager'
 import { executeSvg2png }                 from 'svg-to-png'
-import { updateSvgWithSelectedShapePath } from 'tab-canvas/shape-to-trim'
+import { updateSvgWithNewShapePath } from 'tab-canvas/shape-to-trim'
 import { cropSideMargins
        , resetSideMargins }               from 'tab-canvas/crop-side-margins'
 
@@ -40,7 +40,7 @@ function initShapeToTrimSelect() {
 
         // Update the SVG string with new clip shape path and viewBox
         const inputSvg = getSvgString()
-        const updatedSvg = updateSvgWithSelectedShapePath(shapeToTrim, inputSvg)
+        const updatedSvg = updateSvgWithNewShapePath(shapeToTrim, inputSvg)
 
 
         document.querySelector('#svg-string').value = updatedSvg        // Update the textarea
@@ -67,7 +67,7 @@ function initWidthNarrownessSelect() {
         console.log('widthNarrowness: ', widthNarrowness)
         updateState('widthNarrowness', widthNarrowness)
 
-        const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvgString())
+        const updatedSvg = updateSvgWithNewShapePath('squircleSlimmed', getSvgString())
 
         document.querySelector('#svg-string').value = updatedSvg        // Update the textarea
         executeSvg2png({ target: { value: updatedSvg } }, resvgOption)  // Render to PNG
@@ -80,7 +80,7 @@ function initTopHeavyRatioSelect() {
         console.log('topHeavyRatio: ', topHeavyRatio)
         updateState('topHeavyRatio', topHeavyRatio)
 
-        const updatedSvg = updateSvgWithSelectedShapePath('squircleSlimmed', getSvgString())
+        const updatedSvg = updateSvgWithNewShapePath('squircleSlimmed', getSvgString())
 
         document.querySelector('#svg-string').value = updatedSvg        // Update the textarea
         executeSvg2png({ target: { value: updatedSvg } }, resvgOption)  // Render to PNG

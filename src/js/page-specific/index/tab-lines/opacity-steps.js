@@ -11,7 +11,7 @@ import { replaceAtIndex }             from 'utils/replace-at-index'
 export
     { initOpacityStepsSelect
     , changeOpacitySelectOptionsAsNewStep
-    , updateSvgForNewStep
+    , updateSvgWithNewSteps
     , getElementValueById
     , numbersIncrementByStep
     }
@@ -32,7 +32,7 @@ function initOpacityStepsSelect() {
 
         // 新しいセレクトメニューへの 更新で選ばれた その opacitySteps での 一番近い値の表示と 元々のSVGの色情報が ずれてしまうので
         // 新しいセレクトメニューでの 値 を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
-        const updatedSvg = updateSvgForNewStep(getSvgString())
+        const updatedSvg = updateSvgWithNewSteps(getSvgString())
 
         // Update the textarea content
         document.querySelector('#svg-string').value = updatedSvg
@@ -117,7 +117,7 @@ function numbersIncrementByStep(step) {
 
 // Update SVG
 
-function updateSvgForNewStep(inputSvg) {
+function updateSvgWithNewSteps(inputSvg) {
 
     // Get the number of groups
     const numberOfGroups = getNumberOfGroups(inputSvg)
@@ -162,7 +162,18 @@ function updateSvgForNewStep(inputSvg) {
     return updatedSvg
 }
 
-// Function to get element value by ID
+
+// Function to get the group colors value by ID
 function getElementValueById(id) {
-    return document.getElementById(id).value
+    const element = document.getElementById(id);
+
+    // Get 'opacity' or 'stroke-opacity' value from <select> element
+    // .value が存在する場合はそれを返す
+    if ('value' in element) {
+        return element.value;
+    }
+
+    // For 'stroke' value from <div> element
+    // .value が無ければ .textContent.trim() を返す
+    return element.textContent.trim();
 }

@@ -1,10 +1,11 @@
+import { tryDeleteHash }              from 'color-formatter/hex-shorten'
 import { removeOpacity }              from 'modal/optimize-svg'
 import { getState }                   from 'state/url-state-manager'
+import { executeSvg2png }             from 'svg-to-png'
 import { convertColorFormatForArray } from 'tab-lines/color-format-converter'
 import { getGroupColorsValues }       from 'tab-lines/get-colors-from-svg'
 import { numbersIncrementByStep }     from 'tab-lines/opacity-steps'
-import { replaceAndRender }           from 'tab-lines/group-colors-listener'
-import { tryDeleteHash }  from 'color-formatter/hex-shorten'
+import { updateSvgWithNewColorValue } from 'tab-lines/group-colors-listener'
 
 import { resvgOption } from 'state/resvg-option'
 
@@ -89,11 +90,18 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
         optsCellDiv.appendChild(alwanContainer);
 
         // Generate <div> element to indicate the color with text
-        const colorIndicateDiv = document.createElement('div')
-        colorIndicateDiv.id = `group-colors-stroke-indicator-${gId}`
-        colorIndicateDiv.classList.add('color-indicator')
-        colorIndicateDiv.innerHTML = `${stroke[gId]}`
-        colorIndicateDiv.style.backgroundColor = stroke[gId]
+        const colorIndicatorDiv = document.createElement('div')
+        colorIndicatorDiv.id = `group-colors-stroke-indicator-${gId}`
+        colorIndicatorDiv.classList.add('color-indicator')
+        colorIndicatorDiv.innerHTML = `${stroke[gId]}`
+        colorIndicatorDiv.style.backgroundColor = stroke[gId]
+
+        // Input box size defined by css class by color format, 'rgb' or 'hex'
+        if (colorFormat === "rgb") {
+            colorIndicatorDiv.classList.add('stroke-rgb')
+        } else {  // (colorFormat === "hex")
+            colorIndicatorDiv.classList.add('stroke-hex')
+        }
 
         // Alwanインスタンスを生成
         const inputsOptionValue = colorFormat === 'rgb'
@@ -107,7 +115,7 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
             opacity: false,             // Remove the alpha channel settings UI elements
             copy: false,             // Remove a copy button
             theme: 'dark',
-            target: colorIndicateDiv,
+            target: colorIndicatorDiv,
             // target: `#group-colors-stroke-indicator-${gId}`,
             //toggle: false, // デフォルトのトグルボタンを非表示に
             popover: true
@@ -116,7 +124,7 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
         console.log('alwan: ', alwan)
 
         // 生成したDiv要素にクリックイベントを追加
-        colorIndicateDiv.addEventListener('click', () => {
+        colorIndicatorDiv.addEventListener('click', () => {
             alwan.open();
         });
 
@@ -128,9 +136,17 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
             // Get color value as current selected color format (rgb or hex(without "#"))
             const inputValue = colorFormat === 'rgb' ? color.rgb : tryDeleteHash(color.hex)
 
-            // 色の変更を反映する処理
+            // Apply the value to HTML (color indicator element)
+            const colorIndicatorDiv = document.getElementById(`group-colors-stroke-indicator-${gId}`)
+            colorIndicatorDiv.innerHTML = inputValue
+            colorIndicatorDiv.style.backgroundColor = inputValue
+
+            // Apply the value to SVG string
             // @attrName = 'stroke'
-            replaceAndRender(inputValue, 'stroke', gId, resvgOption)
+            const updatedSvg = updateSvgWithNewColorValue(inputValue, 'stroke', gId)
+
+            // Render new PNG
+            executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
         });
 
 
@@ -138,7 +154,7 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
         const opacitySelectElem = generateOpacityElements(gId, opacitySteps, 'opacity', opacity[gId])
         const strokeOpacitySelectElem = generateOpacityElements(gId, opacitySteps, 'stroke-opacity', strokeOpacity[gId])
 
-        optsCellDiv.appendChild(colorIndicateDiv);
+        optsCellDiv.appendChild(colorIndicatorDiv);
         optsCellDiv.appendChild(opacitySelectElem);
         optsCellDiv.appendChild(strokeOpacitySelectElem);
 

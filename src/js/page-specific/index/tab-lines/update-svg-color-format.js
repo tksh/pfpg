@@ -19,7 +19,7 @@ export function updateSvgAsNewColorFormat(colorFormat) {
     const processGroup = (inputSvg, gId) => {
 
         // Get 'stroke' value
-        const strokeElementId = `group-colors-stroke-${gId}`
+        const strokeElementId = `group-colors-stroke-indicator-${gId}`
         const stroke = convertColorFormat(getElementValueById(strokeElementId), colorFormat)
         console.log('stroke: ', stroke)             // Current SVG string,  e.g.: "rgb(170,170,170)"
         console.log('colorFormat: ', colorFormat)   // New selected format, e.g.: "hex"

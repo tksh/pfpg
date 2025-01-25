@@ -14,8 +14,8 @@ import { decodeGroupColorsAsArray
        , getGroupOpacitiesAsMap }               from 'tab-lines/decode-colors-as-array'
 import { generateGroupColorsHtmlElements }      from 'tab-lines/group-colors-generator'
 import { changeOpacitySelectOptionsAsNewStep
-       , updateSvgForNewStep }                  from 'tab-lines/opacity-steps'
-import { updateSvgWithSelectedShapePath }       from 'tab-canvas/shape-to-trim'
+       , updateSvgWithNewSteps }                  from 'tab-lines/opacity-steps'
+import { updateSvgWithNewShapePath }       from 'tab-canvas/shape-to-trim'
 import { toggleDisplay }                        from 'tab-canvas/shape-to-trim-listener'
 import { replaceShapeRendering }                from 'tab-render/shape-rendering'
 import { adjustImageDisplay }                   from 'tab-render/width-pixel-size'
@@ -79,14 +79,14 @@ function applyImageCustomization(svgString, resvgOption) {
         console.log("opacityStepsViaUrl: ", opacityStepsViaUrl)
         opacityStepsSelector.value = opacityStepsViaUrl
         changeOpacitySelectOptionsAsNewStep(updatedSvg, opacityStepsViaUrl)  // Update the group colors input elements
-        updatedSvg = updateSvgForNewStep(updatedSvg)           // Extract the steps value from input elements selected
+        updatedSvg = updateSvgWithNewSteps(updatedSvg)           // Extract the steps value from input elements selected
     }
 
     ////////////////////////////////////////////////// shapeToTrim //////////////////////////////////////////////////
     /////////////////////////// includes: widthNarrowness, topHeavyRatio, cropSideMargins ///////////////////////////
     const shapeToTrim = getState('shapeToTrim')
     console.log("shapeToTrim                   from url param: ", shapeToTrim)
-    updatedSvg = updateSvgWithSelectedShapePath(shapeToTrim, updatedSvg)
+    updatedSvg = updateSvgWithNewShapePath(shapeToTrim, updatedSvg)
 
     // 'squircleSlimmed'が 選ばれた時だけ表示される
     // 2つのオプション選択用の<select>要素 と 横幅クロップ用の<label>&<input>要素 を取得し 表示または非表示にする

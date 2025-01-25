@@ -13,7 +13,7 @@ import { getNumberOfGroups }          from 'utils/get-number-of-groups'
 
 export {
 
-    replaceAndRender
+    updateSvgWithNewColorValue
 }
 
 // Add multiple event listener for whole stroke groups.
@@ -53,12 +53,16 @@ export function addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption
             //console.log('gId: ', gId)                 // e.g: 0, 1, 2 ...
             //console.log('typeof(gId): ', typeof(gId)) // number
 
-            replaceAndRender(inputValue, attrName, gId, resvgOption)
+            // Apply the value to SVG string
+            const updatedSvg = updateSvgWithNewColorValue(inputValue, attrName, gId)
+
+            // Render new PNG
+            executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
         })
     }
 }
 
-function replaceAndRender(inputValue, attrName, gId, resvgOption) {
+function updateSvgWithNewColorValue(inputValue, attrName, gId) {
 
     // Get the matches for <g> from current SVG string in textarea
     const svgString = getSvgString()
@@ -116,6 +120,5 @@ function replaceAndRender(inputValue, attrName, gId, resvgOption) {
     const groupColorsHexString = getGroupColorsAsJoinedHex(updatedSvg)
     updateState('groupColors', groupColorsHexString)
 
-    // Rendering the PNG image
-    executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
+    return updatedSvg
 }
