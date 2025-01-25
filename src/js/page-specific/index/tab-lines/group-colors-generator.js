@@ -58,7 +58,7 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
     const opacity = groupColorsValues.get('opacity_array');
     const strokeOpacity = groupColorsValues.get('stroke_opacity_array');
 
-    const groupColorsDiv = document.getElementById("group-colors-input-and-select");
+    const groupColorsDiv = document.getElementById("group-colors-container");
 
     // Delete current whole child nodes
     while (groupColorsDiv.firstChild) {
@@ -69,10 +69,10 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
         const optsCellDiv = document.createElement('div');
         optsCellDiv.classList.add('opts-cell-for-group-colors');
 
-        const labelElement = document.createElement("label");
-        labelElement.setAttribute('for', `group-colors-stroke-${gId}`);
+        const labelElement = document.createElement("span");
+        labelElement.id = `group-colors-id-${gId}`
         labelElement.textContent = `${gId}:`;
-        labelElement.classList.add('stroke');
+        labelElement.classList.add('group-id-text');
 
         // Alwan用のdivを作成。input要素は不要
         const alwanContainer = document.createElement('div');  // For hiding the alwan <button>
@@ -92,7 +92,7 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
         // Generate <div> element to indicate the color with text
         const colorIndicatorDiv = document.createElement('div')
         colorIndicatorDiv.id = `group-colors-stroke-indicator-${gId}`
-        colorIndicatorDiv.classList.add('color-indicator')
+        colorIndicatorDiv.classList.add('stroke-indicator')
         colorIndicatorDiv.innerHTML = `${stroke[gId]}`
         colorIndicatorDiv.style.backgroundColor = stroke[gId]
 
@@ -105,8 +105,8 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
 
         // Alwanインスタンスを生成
         const inputsOptionValue = colorFormat === 'rgb'
-            ? { hex: false, rgb: true, hsl: false }
-            : { hex: true, rgb: false, hsl: false }
+            ? { hex: false, rgb: true, hsl: false }  // RGB enabled
+            : { hex: true, rgb: false, hsl: false }  // HEX enabled
 
         const alwan = new Alwan(alwanButton, {
             format: colorFormat,       // format:'rgb' or format:'hex'
@@ -134,7 +134,8 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
             //e.g: Color changed for group 0: rgb(0, 0, 0) #000000
 
             // Get color value as current selected color format (rgb or hex(without "#"))
-            const inputValue = colorFormat === 'rgb' ? color.rgb : tryDeleteHash(color.hex)
+            const inputValue = colorFormat === 'rgb' ? color.rgb : color.hex
+            // const inputValue = colorFormat === 'rgb' ? color.rgb : tryDeleteHash(color.hex)
 
             // Apply the value to HTML (color indicator element)
             const colorIndicatorDiv = document.getElementById(`group-colors-stroke-indicator-${gId}`)
@@ -179,7 +180,7 @@ function generateOpacityElements(i, step, attrName, attrValue) {
     let selectElement = document.createElement("select")
     selectElement.name = `group-colors-${attrName}-${i}`
     selectElement.id   = `group-colors-${attrName}-${i}`
-    selectElement.classList.add('opacity')
+    selectElement.classList.add('opacities-selector')
 
     // 各選択肢を作成し、それぞれにvalue属性を設定
     values.forEach((value) => {

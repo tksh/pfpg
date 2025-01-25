@@ -209,12 +209,13 @@ textarea#svg-string.no-wrap {
 
 
 
-div#group-colors-input-and-select {
+div#group-colors-container {
     padding-left: 1rem;
 }
 .opts-cell-for-group-colors {
     margin-top: 0.25rem;
     padding-right: 1rem;
+    margin-top: 0.75rem;
 
     font-size: 0; /* 空白によるずれを防ぐ */
     line-height: 1.25rem; /* stroke <div>, opacities <select> の height と同じ値に設定 */
@@ -222,16 +223,17 @@ div#group-colors-input-and-select {
 }
 
 /* Font for 'gId' */
-label.stroke {
+span.group-id-text {
     font-size: 0.9rem;
     vertical-align: middle; /* 垂直方向の中央揃え */
     box-sizing: border-box;
     height: 1.25rem;
+    margin-right: 0.5rem
 }
 
 /* Font for 'stroke', 'opacity', 'stroke-opacity' selector */
-div.color-indicator,
-select.opacity {
+div.stroke-indicator,
+select.opacities-selector {
     font-family: sans-serif;
     font-size: 0.9rem;
     vertical-align: middle; /* 垂直方向の中央揃え */
@@ -239,7 +241,7 @@ select.opacity {
 }
 
 /* Selected 'stroke' color indicator */
-div.color-indicator {
+div.stroke-indicator {
     display: inline-block;
     height: 1.25rem;
     padding-left: 0.5rem;
@@ -247,7 +249,7 @@ div.color-indicator {
 }
 
 /* 'opacity', 'stroke-opacity' */
-select.opacity {
+select.opacities-selector {
     margin-right: 4px;
     width: 3.5rem;
     height: 1.25rem;
@@ -261,21 +263,13 @@ input {
 }
 
 /* 'stroke' */
-div.color-indicator.stroke-rgb {
+div.stroke-indicator.stroke-rgb {
     width: 8rem;
 }
-div.color-indicator.stroke-hex {
+div.stroke-indicator.stroke-hex {
     width: 5.5rem;
 }
-input.stroke {
-    margin-top: 0.75rem;
-    height: 1.25rem;
-    margin-right: 4px;
-}
 
-label.stroke {
-    margin-right: 0.5rem
-}
 
 /* Width pixel size */
 input#png-size-number {
@@ -301,7 +295,7 @@ button#width-size-inc {
 }
 
 
-
+span.group-id-text,
 #customization,
 figcaption,
 summary,
@@ -578,7 +572,7 @@ details#showcase figure {
 @media screen and (max-width: 375px) {
 
     /* 'opacity', 'stroke-opacity' */
-    select.opacity {
+    select.opacities-selector {
         margin-right: 2px;     /* default - 2px */
         width: 3.25rem;        /* default - 0.5rem */
 
@@ -586,15 +580,13 @@ details#showcase figure {
     }
 
     /* 'stroke' */
-    div.color-indicator.stroke-rgb {
+    div.stroke-indicator {
+        margin-right: 2px;     /* default - 2px */
+    }
+    div.stroke-indicator.stroke-rgb {
         width: 7.75rem;        /* default - 0.25rem */
     }
-
-    div.color-indicator.stroke-hex {
+    div.stroke-indicator.stroke-hex {
         width: 5.25rem;        /* default - 0.25rem */
-    }
-
-    input.stroke {
-        margin-right: 2px;     /* default - 2px */
     }
 }
