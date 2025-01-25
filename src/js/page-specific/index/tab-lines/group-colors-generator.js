@@ -91,9 +91,10 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
         const alwan = new Alwan(alwanContainer, {
             format: colorFormat,       // format:'rgb' or format:'hex'
             color: stroke[gId],       // Set the color value
-            inputs: inputsOptionValue,
-            opacity: false,             // Disable the alpha channel settings UI elements
-            theme: 'dark'
+            inputs: inputsOptionValue, // Show only the format selected currently
+            opacity: false,             // Remove the alpha channel settings UI elements
+            copy: false,             // Remove a copy button
+            theme: 'dark',
         });
         console.log('typeof(alwan): ', typeof(alwan))
         console.log('alwan: ', alwan)
