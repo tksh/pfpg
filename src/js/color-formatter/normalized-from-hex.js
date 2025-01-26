@@ -71,6 +71,6 @@ function hexToRgbMap(threeOrSixDigitsHex) {
 
 function hexToRgb(hexStr) {
     const rgbMap = hexToRgbMap(tryDeleteHash(hexStr))
-    return `rgb(${[...rgbMap.values()].join(',')})`
+    return `rgb(${[...rgbMap.values()].join(' ')})`
 }
 

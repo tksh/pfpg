@@ -12,14 +12,14 @@ import { addDecimalToZeroAndOne } from 'common-utils/format-as-float'
 // [8-9] gStrokeOpacity = [0-1] number
 
 // Input : "ffffffffff"
-// Output: groupColors: {g_strokeHex: '#ffffff', gStrokeRgbStr: rgb(255,255,255), gOpacity: 1, gStrokeOpacity: 1}
+// Output: groupColors: {g_strokeHex: '#ffffff', gStrokeRgbStr: rgb(255 255 255), gOpacity: 1, gStrokeOpacity: 1}
 
 export function decodeGroupColors(tenDigitsHex) {
 
     // Convert
     const gStrokeHex = '#' + tenDigitsHex.slice(0, 6)
     const gStrokeRgbMap = hexToRgbMap(gStrokeHex)
-    const gStrokeRgbStr = `rgb(${[...gStrokeRgbMap.values()].join(',')})`
+    const gStrokeRgbStr = `rgb(${[...gStrokeRgbMap.values()].join(' ')})`
 
     const gOpacityUint8 = hexToUint8(tenDigitsHex.slice(6, 8))
     const gOpacityFloat = normalizedFromHex(tenDigitsHex.slice(6, 8))

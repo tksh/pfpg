@@ -81,8 +81,8 @@ function rgbObjToHex(rgbDict) {
 
 
 function rgbStrToMap(rgbString) {
-    // 正規表現でRGB文字列の形式をチェック
-    const regex = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/
+    // 正規表現で、カンマまたはスペースで区切られたRGB文字列の形式をチェック
+    const regex = /^rgb\((\d+)[,\s]+(\d+)[,\s]+(\d+)\)$/
     const match = rgbString.match(regex)
 
     if (!match) {
@@ -102,10 +102,8 @@ function rgbStrToMap(rgbString) {
 // // テスト
 // console.log(rgbStrToMap("rgb(170,170,170)"))      // Map(3) {'r' => 170, 'g' => 170, 'b' => 170}
 // console.log(rgbStrToMap("rgb(255, 0, 0)"))        // Map(3) {'r' => 255, 'g' => 0, 'b' => 0}
-// console.log(rgbStrToMap("rgb(0,255,0)"))          // Map(3) {'r' => 0, 'g' => 255, 'b' => 0}
-// console.log(rgbStrToMap("rgb(0, 0, 255)"))        // Map(3) {'r' => 0, 'g' => 0, 'b' => 255}
-// console.log(rgbStrToMap("rgb(256,0,0)"))          // Map(3) {'r' => 256, 'g' => 0, 'b' => 0}  (Does NOT validate that the values are within the range of 0 to 255.)
-// console.log(rgbStrToMap("rgba(255,255,255,0.5)")) // "Invalid RGB string format"
+// console.log(rgbStrToMap("rgb(100 200 50)"))       // Map(3) {'r' => 100, 'g' => 200, 'b' => 50}
+// console.log(rgbStrToMap("rgb(100 200 50 0)"))     // Invalid RGB string format
 
 
 // Map object with uint8 rgb values convert to 6 digits hex string
@@ -114,14 +112,6 @@ function rgbMapToSixDigitsHex(rgbMap) {
     const rgbTwoDigitsHexArr = [...rgbMap.values()].map(value => uint8ToHex(value))
     return rgbTwoDigitsHexArr.join('')
 }
-
-// Test
-const rgbUint8Map = new Map([
-    ['r', 127],
-    ['g', 127],
-    ['b', 127]
-])
-console.log(rgbMapToSixDigitsHex(rgbUint8Map)) // '7F7F7F'
 
 
 function rgbToHex(rgbStr) {

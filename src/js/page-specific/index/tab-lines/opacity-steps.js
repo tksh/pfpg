@@ -128,7 +128,7 @@ function updateSvgWithNewSteps(inputSvg) {
     const processGroup = (inputSvg, gId) => {
 
         // Get 'stroke' value
-        const strokeElementId = `group-colors-stroke-${gId}`
+        const strokeElementId = `group-colors-stroke-indicator-${gId}`
         const stroke = getElementValueById(strokeElementId)
 
         // Get 'opacity' value

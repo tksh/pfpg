@@ -1,4 +1,3 @@
-import { tryDeleteHash }              from 'color-formatter/hex-shorten'
 import { removeOpacity }              from 'modal/optimize-svg'
 import { getState }                   from 'state/url-state-manager'
 import { executeSvg2png }             from 'svg-to-png'
@@ -6,6 +5,7 @@ import { convertColorFormatForArray } from 'tab-lines/color-format-converter'
 import { getGroupColorsValues }       from 'tab-lines/get-colors-from-svg'
 import { numbersIncrementByStep }     from 'tab-lines/opacity-steps'
 import { updateSvgWithNewColorValue } from 'tab-lines/group-colors-listener'
+import { convertRgbCommaToSpace }     from 'color-formatter/rgb-comma-to-space'
 
 import { resvgOption } from 'state/resvg-option'
 
@@ -131,11 +131,15 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
         // 色が変更された時のイベントリスナー
         alwan.on('change', (color) => {
             console.log(`Color changed for group ${gId}:`, color.rgb, color.hex)
-            //e.g: Color changed for group 0: rgb(0, 0, 0) #000000
+            // e.g: Color changed for group 0: rgb(255, 255, 255) #ffffff
 
-            // Get color value as current selected color format (rgb or hex(without "#"))
-            const inputValue = colorFormat === 'rgb' ? color.rgb : color.hex
-            // const inputValue = colorFormat === 'rgb' ? color.rgb : tryDeleteHash(color.hex)
+            // Refine the color format
+            const rgbAsSpaceDelimited = convertRgbCommaToSpace(color.rgb)  // e.g.: rgb(255, 255, 255) => rgb(255,255,255)
+            const hexInUpperCase = color.hex.toUpperCase();           // e.g.: #ffffff => #FFFFFF
+
+            // Get color value as current selected color format (RGB(without ",") or HEX)
+            const inputValue = colorFormat === 'rgb' ? rgbAsSpaceDelimited : hexInUpperCase
+
 
             // Apply the value to HTML (color indicator element)
             const colorIndicatorDiv = document.getElementById(`group-colors-stroke-indicator-${gId}`)
