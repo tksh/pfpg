@@ -1,9 +1,12 @@
-import { hexToRgb } from 'color-formatter/normalized-from-hex'
-import { rgbToHex } from 'color-formatter/normalized-to-hex'
+import { hexToRgbArr
+       , rgbStringify }    from 'color-formatter/normalized-from-hex'
+import { rgbToHex
+       , rgbStrToRgbArr  } from 'color-formatter/normalized-to-hex'
 
 export
     { convertColorFormat
     , convertColorFormatForArray
+    , convertToRgbArr
     }
 
 
@@ -16,7 +19,7 @@ function convertColorFormat(color, colorFormat) {
     } else {
         // 形式が一致していない場合は変換処理を行う
         if (colorFormat === 'rgb') {
-            return hexToRgb(color) // HEXからRGBへの変換関数を呼び出す
+            return rgbStringify(hexToRgbArr(color)) // HEXからRGBへの変換関数を呼び出す
         } else {
             return rgbToHex(color) // RGBからHEXへの変換関数を呼び出す
         }
@@ -31,4 +34,14 @@ function convertColorFormatForArray(strokeArr, colorFormat) {
 // RGB形式かHEX形式かを判定する関数
 function detectColorFormat(colorString) {
     return colorString.startsWith('rgb') ? 'rgb' : 'hex'
+}
+
+
+function convertToRgbArr(colorString) {
+    const currentFormat = detectColorFormat(colorString)
+    if (currentFormat === 'rgb') {
+        return rgbStrToRgbArr(colorString) // rgbStr => rgbArr
+    } else {
+        return hexToRgbArr(colorString)    // hex => rgbArr
+    }
 }

@@ -1,11 +1,13 @@
 import { removeOpacity }              from 'modal/optimize-svg'
 import { getState }                   from 'state/url-state-manager'
 import { executeSvg2png }             from 'svg-to-png'
-import { convertColorFormatForArray } from 'tab-lines/color-format-converter'
+import { convertColorFormatForArray
+       , convertToRgbArr }            from 'color-formatter/format-converter'
 import { getGroupColorsValues }       from 'tab-lines/get-colors-from-svg'
 import { numbersIncrementByStep }     from 'tab-lines/opacity-steps'
 import { updateSvgWithNewColorValue } from 'tab-lines/group-colors-listener'
 import { convertRgbCommaToSpace }     from 'color-formatter/rgb-comma-to-space'
+import { rgbToLch }     from 'color-formatter/rgb-to-lch'
 
 import { resvgOption } from 'state/resvg-option'
 
@@ -96,6 +98,11 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
         colorIndicatorDiv.innerHTML = `${stroke[gId]}`
         colorIndicatorDiv.style.backgroundColor = stroke[gId]
 
+        // Set text color with calculated lightness for optimal contrast
+        const textLightness = getTextLightness(stroke[gId])
+        colorIndicatorDiv.style.color = `lch(${textLightness} 0 0)`
+
+
         // Input box size defined by css class by color format, 'rgb' or 'hex'
         if (colorFormat === "rgb") {
             colorIndicatorDiv.classList.add('stroke-rgb')
@@ -137,14 +144,16 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
             const rgbAsSpaceDelimited = convertRgbCommaToSpace(color.rgb)  // e.g.: rgb(255, 255, 255) => rgb(255,255,255)
             const hexInUpperCase = color.hex.toUpperCase();           // e.g.: #ffffff => #FFFFFF
 
-            // Get color value as current selected color format (RGB(without ",") or HEX)
+            // Get color value as current selected color format (RGB(remove ",") or HEX)
             const inputValue = colorFormat === 'rgb' ? rgbAsSpaceDelimited : hexInUpperCase
 
 
             // Apply the value to HTML (color indicator element)
             const colorIndicatorDiv = document.getElementById(`group-colors-stroke-indicator-${gId}`)
-            colorIndicatorDiv.innerHTML = inputValue
-            colorIndicatorDiv.style.backgroundColor = inputValue
+            colorIndicatorDiv.style.backgroundColor = inputValue  // Fill with selected color
+            colorIndicatorDiv.innerHTML = inputValue  // Add text
+            const textLightness = getTextLightness(inputValue)  // Get text color
+            colorIndicatorDiv.style.color = `lch(${textLightness} 0 0)`   // Apply text color
 
             // Apply the value to SVG string
             // @attrName = 'stroke'
@@ -167,6 +176,28 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
     }
 }
 
+/**
+ * Get text color with calculated lightness for optimal contrast
+ * @param {string} colorString - RGB|HEX color value string, e.g.: "rgb(0 0 0)"|"#000000"
+ * @return {number} - Lightness value for LCH, [0-100]
+ */
+function getTextLightness(colorString) {
+    const rgbArr = convertToRgbArr(colorString)
+    const lch = rgbToLch(rgbArr[0], rgbArr[1], rgbArr[2])  // r, g, b UInt8 [0-255]
+    const fillLightness = Math.round(lch.lightness)  // Integer [0-100]
+    const textLightness = calculateContrast(fillLightness)
+    console.log('colorString, fillLightness, textLightness: ', colorString, fillLightness, textLightness)
+    return textLightness
+}
+
+function calculateContrast(fillLightness) {
+    const contrastDiff = 50
+    return fillLightness <= 50
+        ? fillLightness + contrastDiff
+        : fillLightness - contrastDiff
+}
+
+
 function generateOpacityElements(i, step, attrName, attrValue) {
 
     // 選択肢となる数値のリストを作成
@@ -183,7 +214,7 @@ function generateOpacityElements(i, step, attrName, attrValue) {
     // select要素を作成
     let selectElement = document.createElement("select")
     selectElement.name = `group-colors-${attrName}-${i}`
-    selectElement.id   = `group-colors-${attrName}-${i}`
+    selectElement.id = `group-colors-${attrName}-${i}`
     selectElement.classList.add('opacities-selector')
 
     // 各選択肢を作成し、それぞれにvalue属性を設定

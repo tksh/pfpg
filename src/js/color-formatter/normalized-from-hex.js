@@ -4,8 +4,8 @@ import { tryDeleteHash }  from 'color-formatter/hex-shorten'
 export
     { normalizedFromHex
     , hexToUint8
-    , hexToRgbMap
-    , hexToRgb
+    , hexToRgbArr
+    , rgbStringify
     }
 
 
@@ -40,8 +40,8 @@ function hexToUint8(twoDigitsHex) {
     return num
 }
 
-// 3|6桁のHEX文字列を RGBオブジェクトに 変換する関数
-function hexToRgbMap(threeOrSixDigitsHex) {
+// 3|6桁のHEX文字列を RGB array に 変換する関数
+function hexToRgbArr(threeOrSixDigitsHex) {
     const hexWithoutHash = tryDeleteHash(threeOrSixDigitsHex)
     const sixDigitsHex = hexExpandToSix(hexWithoutHash)
 
@@ -54,23 +54,26 @@ function hexToRgbMap(threeOrSixDigitsHex) {
     const g = sixDigitsHex.substring(2, 4)
     const b = sixDigitsHex.substring(4, 6)
 
-    // 各色をuint8に変換して オブジェクトを作成
-    return new Map([
-        ['r', hexToUint8(r)],
-        ['g', hexToUint8(g)],
-        ['b', hexToUint8(b)]
-    ])
+    // 各色をuint8に変換して Arrayを作成
+    return [ hexToUint8(r), hexToUint8(g), hexToUint8(b) ]
 }
 
-// // テスト
-// console.log(hexToUint8("00"))  // 0
-// console.log(hexToUint8("FF"))  // 255
-// console.log(hexToRgbMap("000000"))  // { r: 0, g: 0, b: 0 }
-// console.log(hexToRgbMap("FFFFFF"))  // { r: 255, g: 255, b: 255 }
-// console.log(hexToRgbMap("FF8000"))  // { r: 255, g: 128, b: 0 }
+// // Test
+// console.log(hexToUint8("00"))       // 0
+// console.log(hexToUint8("FF"))       // 255
+// console.log(hexToRgbArr("000000"))  // { r: 0, g: 0, b: 0 }
+// console.log(hexToRgbArr("FFFFFF"))  // { r: 255, g: 255, b: 255 }
+// console.log(hexToRgbArr("FF8000"))  // { r: 255, g: 128, b: 0 }
 
-function hexToRgb(hexStr) {
-    const rgbMap = hexToRgbMap(tryDeleteHash(hexStr))
-    return `rgb(${[...rgbMap.values()].join(' ')})`
+function hexToRgbStr(hexStr) {
+    const rgbArr = hexToRgbArr(tryDeleteHash(hexStr))
+    return `rgb(${[...rgbArr].join(' ')})`
 }
 
+function rgbStringify(rgbArr) {
+    return `rgb(${[...rgbArr].join(' ')})`
+}
+
+// // Test
+// console.log(rgbStringify([255, 255, 255]))  // "rgb(255 255 255)"
+// console.log(rgbStringify([0, 0, 0]))        // "rgb(0 0 0)"

@@ -82,13 +82,13 @@ function getSequenceOfGroupId(groupId) {
 function getSequenceOfColors(groupColors) {
 
     // values
-    const gStroke        = [...groupColors.gStrokeRgbMap.values()].join('')  // e.g. '170170170'
-    const gOpacity       = groupColors.gOpacityUint8.toString()              // e.g. '255'
-    const gStrokeOpacity = groupColors.gStrokeOpacityUint8.toString()        // e.g. '255'
-    const colorsVal = gStroke + gOpacity + gStrokeOpacity                    // 170170170255255
+    const gStroke        = [...groupColors.gStrokeRgbArr].join('')     // e.g. '170170170'
+    const gOpacity       = groupColors.gOpacityUint8.toString()        // e.g. '255'
+    const gStrokeOpacity = groupColors.gStrokeOpacityUint8.toString()  // e.g. '255'
+    const colorsVal = gStroke + gOpacity + gStrokeOpacity              // 170170170255255
 
     // digits
-    const gStrokeDig = [...groupColors.gStrokeRgbMap.values()].map(value => getDigits(value)).join('')  // e.g. '333'
+    const gStrokeDig = [...groupColors.gStrokeRgbArr].map(value => getDigits(value)).join('')  // e.g. '333'
     const gOpacityDig = getDigits(gOpacity)                                                             // e.g. '1'
     const gStrokeOpacityDig = getDigits(gStrokeOpacity)                                                 // e.g. '1'
     const colorsDig = gStrokeDig + gOpacityDig + gStrokeOpacityDig

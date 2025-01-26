@@ -27,7 +27,6 @@ export function initColorFormatSelect() {
         const numberOfGroups = getNumberOfGroups(svgString)
 
         // Add event listener for new format js-color inputs and opacity selectors
-//        addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke')
         addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'opacity')
         addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke-opacity')
 

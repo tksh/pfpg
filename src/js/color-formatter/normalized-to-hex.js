@@ -5,8 +5,7 @@ export
     { normalizedToHex
     , uint8ToHex
     , rgbObjToHex
-    , rgbStrToMap
-    , rgbMapToSixDigitsHex
+    , rgbStrToRgbArr
     , rgbToHex
     }
 
@@ -80,7 +79,7 @@ function rgbObjToHex(rgbDict) {
 //console.log(rgbObjToHex(uint8_rgb_obj_4)) // Invalid numberInvalid numberInvalid number
 
 
-function rgbStrToMap(rgbString) {
+function rgbStrToRgbArr(rgbString) {
     // 正規表現で、カンマまたはスペースで区切られたRGB文字列の形式をチェック
     const regex = /^rgb\((\d+)[,\s]+(\d+)[,\s]+(\d+)\)$/
     const match = rgbString.match(regex)
@@ -92,31 +91,26 @@ function rgbStrToMap(rgbString) {
     // 正規表現の結果からRGB値を抽出し、オブジェクトを作成
     const [, r, g, b] = match
 
-    return new Map([
-        ['r', parseInt(r)],
-        ['g', parseInt(g)],
-        ['b', parseInt(b)]
-    ])
+    return [ parseInt(r), parseInt(g), parseInt(b) ]
 }
 
 // // テスト
-// console.log(rgbStrToMap("rgb(170,170,170)"))      // Map(3) {'r' => 170, 'g' => 170, 'b' => 170}
-// console.log(rgbStrToMap("rgb(255, 0, 0)"))        // Map(3) {'r' => 255, 'g' => 0, 'b' => 0}
-// console.log(rgbStrToMap("rgb(100 200 50)"))       // Map(3) {'r' => 100, 'g' => 200, 'b' => 50}
-// console.log(rgbStrToMap("rgb(100 200 50 0)"))     // Invalid RGB string format
+// console.log(rgbStrToRgbArr("rgb(170,170,170)"))      // Array(3) {170, 170, 170}
+// console.log(rgbStrToRgbArr("rgb(255, 0, 0)"))        // Array(3) {255, 0, 0}
+// console.log(rgbStrToRgbArr("rgb(100 200 50)"))       // Array(3) {100, 200, 50}
+// console.log(rgbStrToRgbArr("rgb(100 200 50 0)"))     // Invalid RGB string format
 
 
-// Map object with uint8 rgb values convert to 6 digits hex string
-// e.g.: Map(3) {'r' => 170, 'g' => 170, 'b' => 170} => "AAAAAA"
-function rgbMapToSixDigitsHex(rgbMap) {
-    const rgbTwoDigitsHexArr = [...rgbMap.values()].map(value => uint8ToHex(value))
+// Array of uint8 rgb values convert to 6 digits hex string
+// e.g.: Array(3) {170, 170, 170} => "AAAAAA"
+function rgbArrToSixDigitsHex(rgbArr) {
+    const rgbTwoDigitsHexArr = [...rgbArr].map(value => uint8ToHex(value))
     return rgbTwoDigitsHexArr.join('')
 }
 
-
 function rgbToHex(rgbStr) {
-    const rgbMap = rgbStrToMap(tryDeleteHash(rgbStr))
-    const sixDigitsHex = rgbMapToSixDigitsHex(rgbMap)
+    const rgbArr = rgbStrToRgbArr(tryDeleteHash(rgbStr))
+    const sixDigitsHex = rgbArrToSixDigitsHex(rgbArr)
     return tryAddHash(sixDigitsHex)
 }
 

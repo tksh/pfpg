@@ -1,5 +1,6 @@
 import { normalizedFromHex
-       , hexToRgbMap
+       , hexToRgbArr
+       , rgbStringify
        , hexToUint8}              from 'color-formatter/normalized-from-hex'
 import { addDecimalToZeroAndOne } from 'common-utils/format-as-float'
 
@@ -18,8 +19,8 @@ export function decodeGroupColors(tenDigitsHex) {
 
     // Convert
     const gStrokeHex = '#' + tenDigitsHex.slice(0, 6)
-    const gStrokeRgbMap = hexToRgbMap(gStrokeHex)
-    const gStrokeRgbStr = `rgb(${[...gStrokeRgbMap.values()].join(' ')})`
+    const gStrokeRgbArr = hexToRgbArr(gStrokeHex)
+    const gStrokeRgbStr = rgbStringify(gStrokeRgbArr)
 
     const gOpacityUint8 = hexToUint8(tenDigitsHex.slice(6, 8))
     const gOpacityFloat = normalizedFromHex(tenDigitsHex.slice(6, 8))
@@ -31,7 +32,7 @@ export function decodeGroupColors(tenDigitsHex) {
 
     return {
         gStrokeHex,
-        gStrokeRgbMap,
+        gStrokeRgbArr,
         gStrokeRgbStr,
 
         gOpacityUint8,
