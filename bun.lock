@@ -1,0 +1,13 @@
+{
+  "lockfileVersion": 1,
+  "workspaces": {
+    "": {
+      "dependencies": {
+        "alwan": "^2.1.1",
+      },
+    },
+  },
+  "packages": {
+    "alwan": ["alwan@2.1.1", "", {}, "sha512-IxWc+wSY4rDdqmH+t5zBT88q5B+v3Zmw+dBhzG1lMVbJ3Jda65cPfWACvWrUjzeQyblsL406FymLqdVTYnyVzQ=="],
+  }
+}

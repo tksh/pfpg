@@ -1,18 +1,19 @@
+import { convertColorFormatForArray
+       , convertToRgbArr }            from 'color-formatter/format-converter'
+import { convertRgbCommaToSpace }     from 'color-formatter/rgb-comma-to-space'
+import { rgbToLch }                   from 'color-formatter/rgb-to-lch'
 import { removeOpacity }              from 'modal/optimize-svg'
 import { getState }                   from 'state/url-state-manager'
 import { executeSvg2png }             from 'svg-to-png'
-import { convertColorFormatForArray
-       , convertToRgbArr }            from 'color-formatter/format-converter'
 import { getGroupColorsValues }       from 'tab-lines/get-colors-from-svg'
 import { numbersIncrementByStep }     from 'tab-lines/opacity-steps'
 import { updateSvgWithNewColorValue } from 'tab-lines/group-colors-listener'
-import { convertRgbCommaToSpace }     from 'color-formatter/rgb-comma-to-space'
-import { rgbToLch }     from 'color-formatter/rgb-to-lch'
 
 import { resvgOption } from 'state/resvg-option'
 
-//import Alwan from 'libs/alwan'; // Alwanをインポート
-
+// Import Alwan JS and CSS from node_modules
+import Alwan from 'alwan';
+import 'alwan/dist/css/alwan.min.css';
 
 export
     { generateGroupColorsHtmlElements

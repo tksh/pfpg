@@ -65,10 +65,6 @@ function hexToRgbArr(threeOrSixDigitsHex) {
 // console.log(hexToRgbArr("FFFFFF"))  // { r: 255, g: 255, b: 255 }
 // console.log(hexToRgbArr("FF8000"))  // { r: 255, g: 128, b: 0 }
 
-function hexToRgbStr(hexStr) {
-    const rgbArr = hexToRgbArr(tryDeleteHash(hexStr))
-    return `rgb(${[...rgbArr].join(' ')})`
-}
 
 function rgbStringify(rgbArr) {
     return `rgb(${[...rgbArr].join(' ')})`

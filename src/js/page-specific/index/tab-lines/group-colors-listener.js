@@ -11,17 +11,18 @@ import { getOpacity
 import { replaceAtIndex }             from 'utils/replace-at-index'
 import { getNumberOfGroups }          from 'utils/get-number-of-groups'
 
-export {
-
-    updateSvgWithNewColorValue
-}
+export
+    { initGroupColorsInputs
+    , addEventListenerForGroupColorsInputs
+    , updateSvgWithNewColorValue
+    }
 
 
 // Add event listeners to group-colors elements.
 // - Applies to <select> elements for 'opacity' and 'stroke-opacity'.
 // - The 'stroke' color picker will have an event listener added when it is created.
 
-export function initGroupColorsInputs() {
+function initGroupColorsInputs() {
 
     const numberOfGroups = getNumberOfGroups(getSvgString())
     console.log('numberOfGroups: ', numberOfGroups)
@@ -33,7 +34,7 @@ export function initGroupColorsInputs() {
  /**
  / @attrName string - 'opacity' | 'stroke-opacity'
 */
-export function addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, attrName) {
+function addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, attrName) {
 
     // id `group-colors-${attrName}-N` の要素の変更を監視
     for (let i = 0; i < numberOfGroups; i++) {
