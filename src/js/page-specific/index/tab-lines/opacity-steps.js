@@ -62,11 +62,11 @@ function changeOpacitySelectOptionsAsNewStep(svgString, opacitySteps) {
 function replaceToNewStepOptions(i, opacitySteps, attrName, attrValueArray) {
 
     // Get the elem to append the new <option>
-    const selectElement = document.getElementById(`group-colors-${attrName}-${i}`)
+    const opacitiesSelect = document.getElementById(`group-colors-${attrName}-${i}`)
 
     // Delete current whole child <option> nodes
-    while (selectElement.firstChild) {
-        selectElement.removeChild(selectElement.firstChild)
+    while (opacitiesSelect.firstChild) {
+        opacitiesSelect.removeChild(opacitiesSelect.firstChild)
     }
 
 
@@ -83,16 +83,16 @@ function replaceToNewStepOptions(i, opacitySteps, attrName, attrValueArray) {
 
     // 各選択肢を作成し、それぞれにvalue属性を設定
     values.forEach((value) => {
-        let optionElement = document.createElement("option")
-        optionElement.value = value
-        optionElement.text = value
+        let valuesOption = document.createElement("option")
+        valuesOption.value = value
+        valuesOption.text = value
 
         // 現在の値に最も近い値に対応するオプションに 'selected' 属性を設定
         if (value === closestValue) {
-            optionElement.setAttribute('selected', 'selected')
+            valuesOption.setAttribute('selected', 'selected')
         }
 
-        selectElement.appendChild(optionElement)
+        opacitiesSelect.appendChild(valuesOption)
     })
 }
 
@@ -128,7 +128,7 @@ function updateSvgWithNewSteps(inputSvg) {
     const processGroup = (inputSvg, gId) => {
 
         // Get 'stroke' value
-        const strokeElementId = `group-colors-stroke-indicator-${gId}`
+        const strokeElementId = `group-colors-stroke-thumbnail-${gId}`
         const stroke = getElementValueById(strokeElementId)
 
         // Get 'opacity' value

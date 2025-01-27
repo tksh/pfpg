@@ -68,7 +68,7 @@ function processGroups(baseXNumber, diffValueRange) {
     // Get the lower and upper limits for baseX exclusion for handleBase52EncodingWithPrefix()
     const baseXRangeLimits = calculateLimitsForBaseXSkipRange(baseXNumber, diffValueRange)
 
-    // Process each lines group (g_id ranges from 0 to group size - 1)
+    // Process each line groups (g_id ranges from 0 to group size - 1)
     return new Map(
         Array.from(aggDataByGroups.values()).map(aggData => {
             const freqDiffAndDiffFourCoords = processCoordinates(aggData, baseXNumber, baseXRangeLimits)

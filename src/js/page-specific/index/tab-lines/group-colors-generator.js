@@ -45,136 +45,116 @@ function generateGroupColorsSvgTags(matches) {
 
 // HTML
 
-// Generate the strokes group colors customize HTML elements
-// Each lines group has a <div> that contains below four elements
-//  - <label>  - group ID
-//  - <input>  - stroke
-//  - <select> - opacity
-//  - <select> - stroke-opacity
+// Generate the strokes group colors customize HTML elements.
+// Each line groups has a <div> that contains below four elements.
+//  - <span>   - Group ID number text
+//  - <div>    - This is a custom color thumbnail (and color value text) element that to open Alwan color picker
+//  - <select> - opacity value selector
+//  - <select> - stroke-opacity value selector
 
 function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
     console.log(`generateGroupColorsHtmlElements() started. (Opacity step = ${opacitySteps})`);
 
+    // Get the group-colors values from SVG string in textarea
     const groupColorsValues = getGroupColorsValues(inputSvg);
     const numberOfGroups = groupColorsValues.get('number_of_groups');
-    const stroke = convertColorFormatForArray(groupColorsValues.get('stroke_array'), colorFormat);
-    const opacity = groupColorsValues.get('opacity_array');
-    const strokeOpacity = groupColorsValues.get('stroke_opacity_array');
+    const strokeArr = convertColorFormatForArray(groupColorsValues.get('stroke_array'), colorFormat);
+    const opacityArr = groupColorsValues.get('opacity_array');
+    const strokeOpacityArr = groupColorsValues.get('stroke_opacity_array');
 
+    // A parent <div> element to append whole line-groups
     const groupColorsDiv = document.getElementById("group-colors-container");
 
-    // Delete current whole child nodes
+    // Remove current whole child nodes
     while (groupColorsDiv.firstChild) {
         groupColorsDiv.removeChild(groupColorsDiv.firstChild);
     }
 
     for (let gId = 0; gId < numberOfGroups; gId++) {
+
+        // A parent <div> for group colors
         const optsCellDiv = document.createElement('div');
         optsCellDiv.classList.add('opts-cell-for-group-colors');
 
-        const labelElement = document.createElement("span");
-        labelElement.id = `group-colors-id-${gId}`
-        labelElement.textContent = `${gId}:`;
-        labelElement.classList.add('group-id-text');
+        // A <span> to display the group ID number
+        const gIdSpan = createGroupIdSpanElement(gId)
 
-        // Alwan用のdivを作成。input要素は不要
-        const alwanContainer = document.createElement('div');  // For hiding the alwan <button>
-        alwanContainer.id = `group-colors-stroke-container-${gId}`;
-        const alwanButton = document.createElement('div');
-        alwanButton.id = `group-colors-stroke-alwan-${gId}`;
-        //alwanButton.classList.add('alwan-container'); // Alwan用のクラスを追加
-        alwanContainer.appendChild(alwanButton);
-
-        // Alwan入力要素を非表示に
-        alwanContainer.style.display = 'none';
-
-        // label, alwanContainer要素を div要素の子として追加
-        optsCellDiv.appendChild(labelElement);
-        optsCellDiv.appendChild(alwanContainer);
-
-        // Generate <div> element to indicate the color with text
-        const colorIndicatorDiv = document.createElement('div')
-        colorIndicatorDiv.id = `group-colors-stroke-indicator-${gId}`
-        colorIndicatorDiv.classList.add('stroke-indicator')
-        colorIndicatorDiv.innerHTML = `${stroke[gId]}`
-        colorIndicatorDiv.style.backgroundColor = stroke[gId]
-
-        // Set text color with calculated lightness for optimal contrast
-        const textLightness = getTextLightness(stroke[gId])
-        colorIndicatorDiv.style.color = `lch(${textLightness} 0 0)`
-
-
-        // Input box size defined by css class by color format, 'rgb' or 'hex'
-        if (colorFormat === "rgb") {
-            colorIndicatorDiv.classList.add('stroke-rgb')
-        } else {  // (colorFormat === "hex")
-            colorIndicatorDiv.classList.add('stroke-hex')
-        }
+        // A <div> to indicate the color thumbnail with text
+        const strokeThumbDiv = createStrokeThumbnailDivElement(gId, strokeArr[gId], colorFormat)
 
         // Alwanインスタンスを生成
+
+        // Color format type of color picker will be set as current format
         const inputsOptionValue = colorFormat === 'rgb'
             ? { hex: false, rgb: true, hsl: false }  // RGB enabled
             : { hex: true, rgb: false, hsl: false }  // HEX enabled
 
-        const alwan = new Alwan(alwanButton, {
+        const alwan = new Alwan(`#group-colors-stroke-thumbnail-${gId}`, {
+            id: `alwan-picker-${gId}`,
+//            parent: `group-colors-stroke-thumbnail-${gId}`,
             format: colorFormat,       // format:'rgb' or format:'hex'
-            color: stroke[gId],       // Set the color value
+            color: strokeArr[gId],    // Set the color value
             inputs: inputsOptionValue, // Show only the format selected currently
             opacity: false,             // Remove the alpha channel settings UI elements
             copy: false,             // Remove a copy button
             theme: 'dark',
-            target: colorIndicatorDiv,
-            // target: `#group-colors-stroke-indicator-${gId}`,
-            //toggle: false, // デフォルトのトグルボタンを非表示に
-            popover: true
+            target: strokeThumbDiv,
         });
-        console.log('typeof(alwan): ', typeof(alwan))
-        console.log('alwan: ', alwan)
+
 
         // 生成したDiv要素にクリックイベントを追加
-        colorIndicatorDiv.addEventListener('click', () => {
-            alwan.open();
-        });
-
-        // 色が変更された時のイベントリスナー
-        alwan.on('change', (color) => {
-            console.log(`Color changed for group ${gId}:`, color.rgb, color.hex)
-            // e.g: Color changed for group 0: rgb(255, 255, 255) #ffffff
-
-            // Refine the color format
-            const rgbAsSpaceDelimited = convertRgbCommaToSpace(color.rgb)  // e.g.: rgb(255, 255, 255) => rgb(255,255,255)
-            const hexInUpperCase = color.hex.toUpperCase();           // e.g.: #ffffff => #FFFFFF
-
-            // Get color value as current selected color format (RGB(remove ",") or HEX)
-            const inputValue = colorFormat === 'rgb' ? rgbAsSpaceDelimited : hexInUpperCase
-
-
-            // Apply the value to HTML (color indicator element)
-            const colorIndicatorDiv = document.getElementById(`group-colors-stroke-indicator-${gId}`)
-            colorIndicatorDiv.style.backgroundColor = inputValue  // Fill with selected color
-            colorIndicatorDiv.innerHTML = inputValue  // Add text
-            const textLightness = getTextLightness(inputValue)  // Get text color
-            colorIndicatorDiv.style.color = `lch(${textLightness} 0 0)`   // Apply text color
-
-            // Apply the value to SVG string
-            // @attrName = 'stroke'
-            const updatedSvg = updateSvgWithNewColorValue(inputValue, 'stroke', gId)
-
-            // Render new PNG
-            executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
+        strokeThumbDiv.addEventListener('click', () => {
+            alwan.toggle();  // カラーピッカーが開いている状態で strokeThumbDiv をクリックしても もう一度開く処理が行われて 表示され続けてしまう
         });
 
 
-        // Generate <select> elements for opacity and stroke-opacity
-        const opacitySelectElem = generateOpacityElements(gId, opacitySteps, 'opacity', opacity[gId])
-        const strokeOpacitySelectElem = generateOpacityElements(gId, opacitySteps, 'stroke-opacity', strokeOpacity[gId])
+        // カラーピッカーで 色が変更された時の イベントリスナー
+        addEventListenerToAlwanOnChange(alwan, gId, colorFormat, resvgOption)
 
-        optsCellDiv.appendChild(colorIndicatorDiv);
-        optsCellDiv.appendChild(opacitySelectElem);
-        optsCellDiv.appendChild(strokeOpacitySelectElem);
 
+        // Two <select> elements for opacity and stroke-opacity
+        const opacitySelect = createOpacitiesSelectElement(gId, opacitySteps, 'opacity', opacityArr[gId])
+        const strokeOpacitySelect = createOpacitiesSelectElement(gId, opacitySteps, 'stroke-opacity', strokeOpacityArr[gId])
+
+        // Append into <div class="opts-cell-for-group-colors">
+        optsCellDiv.appendChild(gIdSpan);             // gId
+        optsCellDiv.appendChild(strokeThumbDiv);      // stroke
+        optsCellDiv.appendChild(opacitySelect);       // opacity
+        optsCellDiv.appendChild(strokeOpacitySelect); // stroke-opacity
+
+        // Append into <div id="group-colors-container">
         groupColorsDiv.appendChild(optsCellDiv);
     }
+}
+
+// Create <span> to display the group ID number
+function createGroupIdSpanElement(gId) {
+    const gIdSpan = document.createElement('span');
+    gIdSpan.id = `group-colors-id-${gId}`
+    gIdSpan.textContent = `${gId}:`;
+    gIdSpan.classList.add('group-id-text');
+    return gIdSpan
+}
+// Create <div> to indicate the color thumbnail with text
+function createStrokeThumbnailDivElement(gId, strokeColorStr, colorFormat) {
+    const strokeThumbDiv = document.createElement('div')
+    strokeThumbDiv.id = `group-colors-stroke-thumbnail-${gId}`
+    strokeThumbDiv.innerHTML = strokeColorStr
+    strokeThumbDiv.style.backgroundColor = strokeColorStr
+    strokeThumbDiv.classList.add('stroke-thumbnail')
+
+    // Set text color with calculated lightness for optimal contrast
+    const textLightness = getTextLightness(strokeColorStr)
+    strokeThumbDiv.style.color = `lch(${textLightness} 0 0)`
+
+    // Input box size defined by css class by color format: 'rgb' or 'hex'
+    if (colorFormat === "rgb") {
+        strokeThumbDiv.classList.add('stroke-rgb')
+    } else {  // (colorFormat === "hex")
+        strokeThumbDiv.classList.add('stroke-hex')
+    }
+
+    return strokeThumbDiv
 }
 
 /**
@@ -198,8 +178,8 @@ function calculateContrast(fillLightness) {
         : fillLightness - contrastDiff
 }
 
-
-function generateOpacityElements(i, step, attrName, attrValue) {
+// Create <select> elements for opacity and stroke-opacity
+function createOpacitiesSelectElement(i, step, attrName, attrValue) {
 
     // 選択肢となる数値のリストを作成
     const values = numbersIncrementByStep(step)
@@ -213,23 +193,55 @@ function generateOpacityElements(i, step, attrName, attrValue) {
     let closestValue = values.reduce((prev, curr) => Math.abs(curr - currentValue) < Math.abs(prev - currentValue) ? curr : prev)
 
     // select要素を作成
-    let selectElement = document.createElement("select")
-    selectElement.name = `group-colors-${attrName}-${i}`
-    selectElement.id = `group-colors-${attrName}-${i}`
-    selectElement.classList.add('opacities-selector')
+    let opacitiesSelect = document.createElement("select")
+    opacitiesSelect.name = `group-colors-${attrName}-${i}`
+    opacitiesSelect.id = `group-colors-${attrName}-${i}`
+    opacitiesSelect.classList.add('opacities-selector')
 
     // 各選択肢を作成し、それぞれにvalue属性を設定
     values.forEach((value) => {
-        let optionElement = document.createElement("option")
-        optionElement.value = value
-        optionElement.text = value
+        let valuesOption = document.createElement("option")
+        valuesOption.value = value
+        valuesOption.text = value
 
         // 現在の値に最も近い値に対応するオプションに 'selected' 属性を設定
         if (value === closestValue) {
-            optionElement.setAttribute('selected', 'selected')
+            valuesOption.setAttribute('selected', 'selected')
         }
 
-        selectElement.appendChild(optionElement)
+        opacitiesSelect.appendChild(valuesOption)
     })
-    return selectElement
+    return opacitiesSelect
+}
+
+
+function addEventListenerToAlwanOnChange(alwanInstance, gId, colorFormat, resvgOption) {
+
+    alwanInstance.on('change', (ev) => {
+        console.log('ev.source: ', ev.source)
+        console.log(`Color changed for group ${gId}:`, ev.rgb, ev.hex)
+        // e.g: Color changed for group 0: rgb(255, 255, 255) #ffffff
+
+        // Refine the color format
+        const rgbAsSpaceDelimited = convertRgbCommaToSpace(ev.rgb)  // e.g.: rgb(255, 255, 255) => rgb(255,255,255)
+        const hexInUpperCase = ev.hex.toUpperCase();           // e.g.: #ffffff => #FFFFFF
+
+        // Get color value as current selected color format (RGB(remove ",") or HEX)
+        const inputValue = colorFormat === 'rgb' ? rgbAsSpaceDelimited : hexInUpperCase
+
+        // Apply the value to HTML (color thumbnail element)
+        const strokeThumbDiv = document.getElementById(`group-colors-stroke-thumbnail-${gId}`)
+        strokeThumbDiv.style.backgroundColor = inputValue  // Fill with selected color
+        strokeThumbDiv.innerHTML = inputValue  // Add text
+        const textLightness = getTextLightness(inputValue)  // Get text color
+        strokeThumbDiv.style.color = `lch(${textLightness} 0 0)`   // Apply text color
+
+        // Apply the value to SVG string
+        // @attrName = 'stroke'
+        const updatedSvg = updateSvgWithNewColorValue(inputValue, 'stroke', gId)
+
+        // Render new PNG
+        executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
+    });
+
 }

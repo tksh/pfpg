@@ -147,7 +147,7 @@ function decodeAsThreeData(urlSearchParams) {
         )
 
     }
-    // Decode the data about canvas size from [0]-indexed (group ID = 0) lines group
+    // Decode the data about canvas size from [0]-indexed (group ID = 0) line groups
     const sizeDataObj = sizeDataDec(linesDataMap.get(0))
 
     return { basicData: basicDataObj, linesData: linesDataMap, sizeData: sizeDataObj }

@@ -232,7 +232,7 @@ span.group-id-text {
 }
 
 /* Font for 'stroke', 'opacity', 'stroke-opacity' selector */
-div.stroke-indicator,
+div.stroke-thumbnail,
 select.opacities-selector {
     font-family: sans-serif;
     font-size: 0.9rem;
@@ -241,7 +241,7 @@ select.opacities-selector {
 }
 
 /* Selected 'stroke' color indicator */
-div.stroke-indicator {
+div.stroke-thumbnail {
     display: inline-block;
     height: 1.25rem;
     padding-left: 0.5rem;
@@ -263,10 +263,10 @@ input {
 }
 
 /* 'stroke' */
-div.stroke-indicator.stroke-rgb {
+div.stroke-thumbnail.stroke-rgb {
     width: 8rem;
 }
-div.stroke-indicator.stroke-hex {
+div.stroke-thumbnail.stroke-hex {
     width: 5.5rem;
 }
 
@@ -580,13 +580,13 @@ details#showcase figure {
     }
 
     /* 'stroke' */
-    div.stroke-indicator {
+    div.stroke-thumbnail {
         margin-right: 2px;     /* default - 2px */
     }
-    div.stroke-indicator.stroke-rgb {
+    div.stroke-thumbnail.stroke-rgb {
         width: 7.75rem;        /* default - 0.25rem */
     }
-    div.stroke-indicator.stroke-hex {
+    div.stroke-thumbnail.stroke-hex {
         width: 5.25rem;        /* default - 0.25rem */
     }
 }
