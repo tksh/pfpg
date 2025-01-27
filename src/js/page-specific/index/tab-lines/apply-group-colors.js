@@ -26,12 +26,11 @@ export function applyGroupColors(svgString, resvgOption, groupColorsByGroups, op
         updatedSvg = replaceAtIndex(updatedSvg, pattern, gElem, gId)
     })
 
-    // HTMLを 新しい表示フォーマットの js-color input に更新
+    // HTMLを 新しい表示フォーマットに 更新
     generateGroupColorsHtmlElements(updatedSvg, colorFormat, opacitySteps)
 
-    // Add event listener for new format js-color inputs and opacity selectors
+    // Add event listener for new format opacity selectors
     const numberOfGroups = getNumberOfGroups(svgString)
-    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke')
     addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'opacity')
     addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke-opacity')
 

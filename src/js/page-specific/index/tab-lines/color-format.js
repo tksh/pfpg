@@ -9,7 +9,7 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
 
 
 export function initColorFormatSelect() {
-    //  Event listeners for 'Color format' selection changes
+    //  Event listeners for 'Color format' <select> changes
     document.getElementById("color-format").addEventListener("change", (event) => {
 
         // 選択されたセレクトメニューの値を 取得
@@ -19,17 +19,16 @@ export function initColorFormatSelect() {
         // グローバルステートを 更新
         updateState('colorFormat', colorFormat)
 
-        // HTMLを 新しい表示フォーマットの js-color input に更新
+        // HTMLを 新しい表示フォーマットに 更新
         const svgString = getSvgString()
         generateGroupColorsHtmlElements(svgString, colorFormat, getState('opacitySteps'))
 
         // Get the number of groups
         const numberOfGroups = getNumberOfGroups(svgString)
 
-        // Add event listener for new format js-color inputs and opacity selectors
+        // Add event listener for new format opacity selectors
         addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'opacity')
         addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke-opacity')
-
 
         // 新しいセレクトメニューでの 値 を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
         const updatedSvg = updateSvgAsNewColorFormat(colorFormat)

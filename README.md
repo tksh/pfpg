@@ -33,7 +33,7 @@ file_server .
 
 - [resvg-js](https://github.com/yisibl/resvg-js) (MPL 2.0 license)
 - [URLCompressor](https://synapse.kyoto/lib/url-comp/page001.html) (MIT license), convert to ESM
-- [jscolor](https://jscolor.com/) (GNU GPL v3 license ([for open source use](https://jscolor.com/download/#open-source-license)))
+- [Alwan](https://github.com/sefianecho/alwan) (MIT license)
 - [Deno standard library](https://github.com/denoland/deno_std) (MIT license), ported to JS
 - [numcodecs.js](https://github.com/manzt/numcodecs.js) (MIT license)
 - [bech32](https://github.com/bitcoinjs/bech32) (MIT license)

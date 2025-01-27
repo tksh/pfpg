@@ -37,11 +37,12 @@ function detectColorFormat(colorString) {
 }
 
 
+// Convert input to RGB array (handles both RGB and HEX formats)
 function convertToRgbArr(colorString) {
     const currentFormat = detectColorFormat(colorString)
     if (currentFormat === 'rgb') {
-        return rgbStrToRgbArr(colorString) // rgbStr => rgbArr
+        return rgbStrToRgbArr(colorString) // rgb string => rgb array
     } else {
-        return hexToRgbArr(colorString)    // hex => rgbArr
+        return hexToRgbArr(colorString)    // hex string => rgb array
     }
 }

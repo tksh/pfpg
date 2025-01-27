@@ -16,14 +16,15 @@ export {
     updateSvgWithNewColorValue
 }
 
-// Add multiple event listener for whole stroke groups.
-// Group colors attributes are 'stroke', 'opacity', and 'stroke-opacity'.
+
+// Add event listeners to group-colors elements.
+// - Applies to <select> elements for 'opacity' and 'stroke-opacity'.
+// - The 'stroke' color picker will have an event listener added when it is created.
 
 export function initGroupColorsInputs() {
 
     const numberOfGroups = getNumberOfGroups(getSvgString())
     console.log('numberOfGroups: ', numberOfGroups)
-    // addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke')
     addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'opacity')
     addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke-opacity')
 
