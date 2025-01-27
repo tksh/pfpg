@@ -23,7 +23,7 @@ export
 
 // SVG
 
-// Generate the strokes group colors SVG <g> tag strings
+// Generate the group-colors SVG <g> tag strings.
 
 function generateGroupColorsSvgTags(matches) {
     //console.log('matches: ', matches) // e.g.: (4) [undefined, '#4E8D09', '0.6', '1.0']
@@ -45,8 +45,8 @@ function generateGroupColorsSvgTags(matches) {
 
 // HTML
 
-// Generate the strokes group colors customize HTML elements.
-// Each line groups has a <div> that contains below four elements.
+// Generate the group-colors customize HTML elements.
+// Each line-groups has a <div> that contains below four elements.
 //  - <span>   - Group ID number text
 //  - <div>    - This is a custom color thumbnail (and color value text) element that to open Alwan color picker
 //  - <select> - opacity value selector
@@ -89,22 +89,15 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
             ? { hex: false, rgb: true, hsl: false }  // RGB enabled
             : { hex: true, rgb: false, hsl: false }  // HEX enabled
 
-        const alwan = new Alwan(`#group-colors-stroke-thumbnail-${gId}`, {
+        const alwan = new Alwan(strokeThumbDiv, {
             id: `alwan-picker-${gId}`,
-//            parent: `group-colors-stroke-thumbnail-${gId}`,
+            preset: false,             // Use custom thumbnail as a reference element instead of pre-styled button
             format: colorFormat,       // format:'rgb' or format:'hex'
-            color: strokeArr[gId],    // Set the color value
+            color: strokeArr[gId],    // Set the color value (rgb or hex)
             inputs: inputsOptionValue, // Show only the format selected currently
             opacity: false,             // Remove the alpha channel settings UI elements
             copy: false,             // Remove a copy button
             theme: 'dark',
-            target: strokeThumbDiv,
-        });
-
-
-        // 生成したDiv要素にクリックイベントを追加
-        strokeThumbDiv.addEventListener('click', () => {
-            alwan.toggle();  // カラーピッカーが開いている状態で strokeThumbDiv をクリックしても もう一度開く処理が行われて 表示され続けてしまう
         });
 
 
