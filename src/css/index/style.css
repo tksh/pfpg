@@ -264,7 +264,7 @@ div.opts-cell input {
 
 /* 'stroke' */
 div.stroke-thumbnail.stroke-rgb {
-    width: 8rem;
+    width: 8.25rem;
 }
 div.stroke-thumbnail.stroke-hex {
     width: 5.5rem;
@@ -295,17 +295,23 @@ button#width-size-inc {
 }
 
 
-span.group-id-text,
-#customization,
-figcaption,
-summary,
-legend,
-label,
-button,
-dt,
-dd,
-p {
-    color: var(--color-text);
+/* テキストカラー */
+/* <label> など Alwan が生成するカラーピッカー内の要素に影響を与えてないようにするため セクション を限定する */
+header,
+main,
+footer {
+    span.group-id-text,
+    #customization,
+    figcaption,
+    summary,
+    legend,
+    label,
+    button,
+    dt,
+    dd,
+    p {
+        color: var(--color-text);
+    }
 }
 
 footer > details {
@@ -361,7 +367,7 @@ div.artworks-container {
     padding-left: 1rem;
 }
 
-button {
+main button {
     background-color: var(--color-button-bg);
     border-color: var(--color-button-border);
     font-size: .9rem;
@@ -409,15 +415,15 @@ footer#footer-info {
     align-items: center;
 }
 
-a {
+footer a {
     color: var(--color-text);
     text-decoration: underline;
 }
 
-
+/* Display number and range inputs inline for the 'Width pixel size' setting in the 'Render' tab */
 .flex-direction-column {
     display: flex;
-    /* Flexboxを使用, 要素を横並びに配置*/
+    /* Use flexbox to align elements horizontally */
 }
 
 
@@ -506,6 +512,20 @@ details#showcase figure {
     }
 
 
+    /* >>> group-colors inputs */
+
+    /* 'opacity', 'stroke-opacity' */
+    select.opacities-selector {
+        margin-right: 8px;  /* default + 4px */
+    }
+    /* 'stroke' */
+    div.stroke-thumbnail {
+        margin-right: 8px;  /* default + 4px */
+    }
+
+    /* <<< group-colors inputs */
+
+
     /* >>> 'Width pixel size' - buttons and input[range] */
 
     .flex-direction-column {
@@ -535,6 +555,7 @@ details#showcase figure {
     }
 
     /* <<< 'Width pixel size' - buttons and input[range] */
+
 
 
     legend {
@@ -573,18 +594,12 @@ details#showcase figure {
 
     /* 'opacity', 'stroke-opacity' */
     select.opacities-selector {
-        margin-right: 8px;     /* default + 4px */
-        width: 3.25rem;        /* default - 0.5rem */
-
-        padding-left: 0.25rem; /* default - 0.25rem */
+        width: 3.25rem;        /* default - 0.25rem */
     }
 
     /* 'stroke' */
-    div.stroke-thumbnail {
-        margin-right: 8px;     /* default + 4px */
-    }
     div.stroke-thumbnail.stroke-rgb {
-        width: 7.75rem;        /* default - 0.25rem */
+        width: 8rem;           /* default - 0.25rem */
     }
     div.stroke-thumbnail.stroke-hex {
         width: 5.25rem;        /* default - 0.25rem */
