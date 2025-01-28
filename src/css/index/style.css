@@ -193,9 +193,9 @@ div#img-box img {
 }
 
 
-input,
-textarea,
-select {
+header input,
+header select,
+main textarea {
     color: var(--color-text-input);
     background-color: var(--color-input-textarea-select);
     padding-left: 0.5rem;
@@ -256,9 +256,9 @@ select.opacities-selector {
 }
 
 
-
-input {
-    /* margin-top: 1rem; */
+/* opts-cell クラスを持つ <div> 要素内にある <input> 要素のみに スタイルを適用 */
+/* グローバルに input に対して適用すると Alwanが生成するカラーピッカーに 影響を与えてしまう */
+div.opts-cell input {
     border: 1px solid var(--color-picker-border);
 }
 
@@ -272,11 +272,11 @@ div.stroke-thumbnail.stroke-hex {
 
 
 /* Width pixel size */
-input#png-size-number {
+div.opts-cell input#png-size-number {
     width: 4rem;
 }
 
-input[type="range"] {
+div.opts-cell input[type="range"] {
     /* スライダーを親要素のフォントサイズの0.3倍下にずらす */
     vertical-align: -0.3rem;
 }
