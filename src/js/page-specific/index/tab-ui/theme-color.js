@@ -1,4 +1,5 @@
-import { updateState } from 'state/url-state-manager'
+import { updateState }          from 'state/url-state-manager'
+import { determinePickerTheme } from 'tab-lines/group-colors-generator'
 
 export
     { changeThemeColor
@@ -12,15 +13,19 @@ function initThemeColorSelect() {
 
     // changeイベントを設定
     colorThemeSelector.addEventListener('change', () => {
+        // 選択されたテーマに基づいて サイトUIの data-theme属性を設定
         const themeColor = colorThemeSelector.value
         changeThemeColor(themeColor)
+
+        // 選択されたテーマに基づいて Alwanカラーピッカーの data-theme属性を設定
+        const lightOrDark = determinePickerTheme()
+        document.querySelectorAll('.alwan').forEach(picker => {
+            picker.dataset.theme = lightOrDark;
+        });
     })
 }
 
 function changeThemeColor(themeColor) {
-    // 選択されたテーマに基づいてdata-theme属性を設定
-    document.documentElement.setAttribute('data-theme', themeColor)
-
     // 選択されたテーマに基づいてdata-theme属性を設定
     document.documentElement.setAttribute('data-theme', themeColor)
 

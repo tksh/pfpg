@@ -26,7 +26,7 @@ async function adjustOutputBoxSize(context) {
 //    // JavaScriptを使用してCSSのDVH（デバイスビューポートハイト）で得られるビューポートの高さの数値を取得
 //    const wvv = window.visualViewport;
 //    const wvvh = wvv.height;
-//    console.log("///window.visualViewport height: ", wvvh); // ビューポートの高さをピクセル単位で表示
+//    console.log("window.visualViewport height: ", wvvh); // ビューポートの高さをピクセル単位で表示
 //
 //    const wvvhValueBtn = document.getElementById('wvvh_value')
 //    wvvhValueBtn.textContent = `wvvh: ${wvvh}`

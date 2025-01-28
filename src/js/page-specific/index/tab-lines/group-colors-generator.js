@@ -18,6 +18,7 @@ import 'alwan/dist/css/alwan.min.css';
 export
     { generateGroupColorsHtmlElements
     , generateGroupColorsSvgTags
+    , determinePickerTheme
     }
 
 
@@ -85,19 +86,22 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
         // Alwanインスタンスを生成
 
         // Color format type of color picker will be set as current format
-        const inputsOptionValue = colorFormat === 'rgb'
+        const rgbOrHex = colorFormat === 'rgb'
             ? { hex: false, rgb: true, hsl: false }  // RGB enabled
             : { hex: true, rgb: false, hsl: false }  // HEX enabled
+
+        // Determines color picker theme ('light'/'dark') based on active base UI theme
+        const lightOrDark = determinePickerTheme()
 
         const alwan = new Alwan(strokeThumbDiv, {
             id: `alwan-picker-${gId}`,
             preset: false,             // Use custom thumbnail as a reference element instead of pre-styled button
             format: colorFormat,       // format:'rgb' or format:'hex'
-            color: strokeArr[gId],    // Set the color value (rgb or hex)
-            inputs: inputsOptionValue, // Show only the format selected currently
-            opacity: false,             // Remove the alpha channel settings UI elements
-            copy: false,             // Remove a copy button
-            theme: 'dark',
+            color: strokeArr[gId],     // Set the color value (rgb or hex)
+            inputs: rgbOrHex,          // Show only the format selected currently
+            opacity: false,            // Remove the alpha channel settings UI elements
+            copy: false,               // Remove a copy button
+            theme: lightOrDark,        // 'light' or 'dark' based on UI theme color
         });
 
 
@@ -169,6 +173,16 @@ function calculateContrast(fillLightness) {
     return fillLightness <= 50
         ? fillLightness + contrastDiff
         : fillLightness - contrastDiff
+}
+
+// Determines color picker theme ('light'/'dark') based on active base UI theme
+// Mapping logic:
+// - Base UI themes ['white', 'light'] → 'light' picker theme
+// - Base UI themes ['dark', 'black'] → 'dark' picker theme
+function determinePickerTheme() {
+    const baseUiTheme = getState('themeColor')
+    const lightOrDark = ['white', 'light'].includes(baseUiTheme) ? 'light' : 'dark'
+    return lightOrDark
 }
 
 // Create <select> elements for opacity and stroke-opacity

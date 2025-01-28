@@ -142,7 +142,8 @@ function applyUiConfiguration() {
     updateButtonText(buttonAction, svgActionButton)
 
     ///////////////////////////// themeColor /////////////////////////////
-    const themeColor = getStateUrl('themeColor') ? getStateUrl('themeColor') : getDefaultThemeViaPrefersColorScheme()
+    const themeColor = getStateUrl('themeColor')
+    // const themeColor = getStateUrl('themeColor') ? getStateUrl('themeColor') : getDefaultThemeViaPrefersColorScheme()
     updateState('themeColor', themeColor)
     document.getElementById('theme-color').value = themeColor
     changeThemeColor(themeColor)

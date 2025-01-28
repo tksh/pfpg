@@ -241,7 +241,7 @@ function removeSpaces(svgString) {
 // // <path d="M6.35 63.5Q5.08 0 63.5 0T120.65 63.5 63.5 127 6.35 63.5"/>
 
 function restoreSpaces(svgString) {
-    console.log('//// restorSpaces() executed.')
+
     return svgString.replace(/(\sd="[^>]+>)/g, (match, pathData) => {  // Use \sd= to skip id=
 
         const restoredPath = pathData

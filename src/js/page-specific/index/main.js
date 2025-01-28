@@ -14,7 +14,8 @@ import { applyImageCustomization
        , applyUiConfiguration
        , applySvgOptimization }                 from 'state/apply-url-state'
 import { resvgOption }                          from 'state/resvg-option'
-import { getState }                             from 'state/url-state-manager'
+import { getState
+       , updateState }                          from 'state/url-state-manager'
 import { executeSvg2png }                       from 'svg-to-png'
 import { initShapeToTrimSelect
        , initWidthNarrownessSelect
@@ -30,9 +31,9 @@ import { initWidthPixelSizeInputElements
 import { initShapeRenderingSelect }             from 'tab-render/shape-rendering'
 import { initCheckerboardBgCheckbox }           from 'tab-ui/checkerboard-bg'
 import { initTextWrappingCheckbox }             from 'tab-ui/text-wrapping'
-import { initThemeColorSelect }                 from 'tab-ui/theme-color'
+import { getDefaultThemeViaPrefersColorScheme
+       , initThemeColorSelect }                 from 'tab-ui/theme-color'
 import { initViewScalingSelect }                from 'tab-ui/view-scaling'
-
 
 (async function () {
 
@@ -58,8 +59,12 @@ import { initViewScalingSelect }                from 'tab-ui/view-scaling'
     const initialDecodedSvgString = decodeUrlToSvg(isRelative, isOnDataManipulatorPage())
     console.log('initialDecodedSvgString: ', initialDecodedSvgString)
 
-    // Apply the settings states from url param to initial decoded svg string
-    // - If there is no param in url, use default value retrieve from SETTINGS_DEFAULTS map
+    // Initialize default UI theme from OS preference and cache in settings
+    // Must run before applyImageCustomization() to provide theme for color picker initialization
+    const themeColor = getDefaultThemeViaPrefersColorScheme()
+    updateState('themeColor', themeColor)
+
+    // Apply URL params to customize SVG, falling back to SETTINGS_DEFAULTS when empty
     const svgString = applyImageCustomization(initialDecodedSvgString, resvgOption)
 
 
@@ -100,7 +105,7 @@ import { initViewScalingSelect }                from 'tab-ui/view-scaling'
 
 document.addEventListener('DOMContentLoaded', () => {
        const imageUrl = "https://res.cloudinary.com/ddoy3pmjg/image/upload/v1734026224/cld-sample-3.jpg"
-document.querySelector('meta[property="og:image"]').content = imageUrl;
+       document.querySelector('meta[property="og:image"]').content = imageUrl;
 
     // Get first tab ('Lines') activated
     initTabs()
