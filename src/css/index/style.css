@@ -573,7 +573,7 @@ details#showcase figure {
 
     /* 'opacity', 'stroke-opacity' */
     select.opacities-selector {
-        margin-right: 2px;     /* default - 2px */
+        margin-right: 8px;     /* default + 4px */
         width: 3.25rem;        /* default - 0.5rem */
 
         padding-left: 0.25rem; /* default - 0.25rem */
