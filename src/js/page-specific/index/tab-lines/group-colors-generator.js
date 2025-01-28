@@ -63,13 +63,21 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
     const opacityArr = groupColorsValues.get('opacity_array');
     const strokeOpacityArr = groupColorsValues.get('stroke_opacity_array');
 
-    // A parent <div> element to append whole line-groups
+
+    // Parent <div> element to append all line-group setting elements
     const groupColorsDiv = document.getElementById("group-colors-container");
 
-    // Remove current whole child nodes
+
+    // Remove all current child nodes before generating new ones
     while (groupColorsDiv.firstChild) {
         groupColorsDiv.removeChild(groupColorsDiv.firstChild);
     }
+
+    // Clean up existing color pickers before creating new ones
+    // - Alwan color picker elements are not inside the above parent <div>, they are directly appended to the <body>
+    // - Alwan instances must be destroyed using the '.destroy()' before removal
+    cleanupExistingPickers();
+
 
     for (let gId = 0; gId < numberOfGroups; gId++) {
 
@@ -82,6 +90,7 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
 
         // A <div> to indicate the color thumbnail with text
         const strokeThumbDiv = createStrokeThumbnailDivElement(gId, strokeArr[gId], colorFormat)
+
 
         // Alwanインスタンスを生成
 
@@ -104,10 +113,8 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
             theme: lightOrDark,        // 'light' or 'dark' based on UI theme color
         });
 
-
         // カラーピッカーで 色が変更された時の イベントリスナー
         addEventListenerToAlwanOnChange(alwan, gId, colorFormat, resvgOption)
-
 
         // Two <select> elements for opacity and stroke-opacity
         const opacitySelect = createOpacitiesSelectElement(gId, opacitySteps, 'opacity', opacityArr[gId])
@@ -122,6 +129,25 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
         // Append into <div id="group-colors-container">
         groupColorsDiv.appendChild(optsCellDiv);
     }
+}
+
+// 既存のカラーピッカーをクリーンアップする関数
+function cleanupExistingPickers() {
+    // 既存のピッカー要素を取得
+    const existingPickers = document.querySelectorAll('.alwan');
+    console.log('existingPickers: ', existingPickers)
+    // e.g.: NodeList(3) [ div#alwan-picker-0.alwan, div#alwan-picker-1.alwan, div#alwan-picker-2.alwan ]
+
+    existingPickers.forEach(picker => {
+        // イベントハンドラ内で取得したインスタンスを使用してdestroy
+        picker.addEventListener('change', (ev) => {
+            const pickerInstance = ev.source;
+            pickerInstance.destroy();
+        });
+
+        // または直接DOM要素を削除（この場合はdestroyする前に必ずイベントを実行する必要があります）
+        picker.remove();
+    });
 }
 
 // Create <span> to display the group ID number
