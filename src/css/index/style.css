@@ -581,7 +581,7 @@ details#showcase figure {
 
     /* 'stroke' */
     div.stroke-thumbnail {
-        margin-right: 2px;     /* default - 2px */
+        margin-right: 8px;     /* default + 4px */
     }
     div.stroke-thumbnail.stroke-rgb {
         width: 7.75rem;        /* default - 0.25rem */
