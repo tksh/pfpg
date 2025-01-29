@@ -375,9 +375,9 @@ main button {
 
 button#png-action-button,
 button#svg-action-button {
+    max-width: 100%;
     --button-height: 3.5rem; /* ボタン全体の高さ */
     /* height: var(--button-height); */
-    /* min-width: 16rem; */
     line-height: 1.4;
 
     padding: 0.5rem 1rem; /* 上下0.5rem、左右1remの余白 */
@@ -387,6 +387,7 @@ button#svg-action-button {
     /* 幅に余裕があれば1行で表示され、狭くなった場合にのみ <wbr>の位置で改行 */
 
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
 }
@@ -434,6 +435,7 @@ footer a {
     display: flex;
     gap: 1rem;  /* Space between horizontal images */
     justify-content: flex-start;
+    flex-wrap: wrap;
 }
 
 .artwork-item {
