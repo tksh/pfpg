@@ -8,7 +8,6 @@ body {
     flex-direction: column;
 
     min-height: 100dvh;
-    /* min-height: calc(100dvh - 1rem); */
     /* ビューポートの高さいっぱいに拡張 */
 
     margin-top: .5rem;
@@ -47,13 +46,19 @@ body {
     padding-left: 2rem;
 }
 
-.opts-cell {
-    margin-top: 1rem;
-    min-width: 16rem;
 
+.opts-cell {
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
 }
+.opts > .opts-cell {
+    margin-top: 1rem;
+    min-width: 16rem;
+}
+fieldset > .opts-cell {       /* SVG/PNG setting in 'UI' tab */
+    margin-top: 0.5rem;
+}
+
 
 legend {
     padding-right: 1rem;
@@ -72,6 +77,19 @@ legend {
     font-size: 0.9rem;
     padding-left: 1rem;
 }
+
+/* On the "UI" tab, settings for the SVG and PNG output areas are categorized separately. */
+.tab-content fieldset {
+    margin: 1rem 0 0 ;   /* margin-top: 1rem; */
+    width: 80%;          /* adjust the length of border-top */
+
+    border-top: 1px solid var(--color-fieldset-border);
+}
+.tab-content legend {
+    padding-left: 0;
+    opacity: 80%;     /* Make font color of 'SVG'/'PNG' lighter */
+}
+
 
 
 /* 横幅いっぱいに広げてから 左右に 1rem 余白を取る */
@@ -102,8 +120,7 @@ main {
 
 #svg-info,
 #png-info {
-    white-space: nowrap;
-    /* 基本的に改行しない */
+    white-space: normal;
     /* 幅に余裕があれば1行で表示され、狭くなった場合にのみ <wbr>の位置で改行 */
 
     padding: 0.125rem 1rem; /* 上下0.125rem、左右1remの余白 */
@@ -115,6 +132,7 @@ main {
 
     border-radius: 0.25rem 0.25rem 0rem 0rem;
 }
+
 
 /* For #input and #output */
 .cell {
@@ -382,7 +400,7 @@ button#svg-action-button {
 
     padding: 0.5rem 1rem; /* 上下0.5rem、左右1remの余白 */
 
-    white-space: nowrap;
+    white-space: normal;
     /* 基本的に改行しない */
     /* 幅に余裕があれば1行で表示され、狭くなった場合にのみ <wbr>の位置で改行 */
 
@@ -406,7 +424,7 @@ footer#footer-info {
 }
 
 .font-size-small {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
 }
 
 .text-align-center {
@@ -508,7 +526,9 @@ details#showcase figure {
         padding-left: 0
     }
 
-    .opts-cell {
+    /* .opts 要素の直接の子要素で、かつ.opt-cell 要素に対してのみ適用 */
+    /* 'UI' tab内の <fieldset>子要素の .opt-cell は対象にならない */
+    .opts > .opts-cell {
         margin-top: 0.5rem;
         padding-left: 0;
     }

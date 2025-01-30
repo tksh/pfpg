@@ -45,7 +45,7 @@
     /* This makes each tab size to its content */
     width: auto;
     /* Ensure width is auto */
-    min-width: 100px;
+    min-width: 80px;
     /* Set a minimum width */
     max-width: 200px;
     /* Set a maximum width */
