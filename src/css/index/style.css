@@ -61,10 +61,7 @@ fieldset > .opts-cell {       /* SVG/PNG setting in 'UI' tab */
 
 
 legend {
-    padding-right: 1rem;
-
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
+    padding: 0.25rem 1rem;
 }
 
 fieldset {
@@ -73,21 +70,13 @@ fieldset {
     border-style: none;
 }
 
-legend {
-    font-size: 0.9rem;
-    padding-left: 1rem;
-}
 
 /* On the "UI" tab, settings for the SVG and PNG output areas are categorized separately. */
 .tab-content fieldset {
     margin: 1rem 0 0 ;   /* margin-top: 1rem; */
-    width: 80%;          /* adjust the length of border-top */
-
-    border-top: 1px solid var(--color-fieldset-border);
 }
 .tab-content legend {
     padding-left: 0;
-    opacity: 80%;     /* Make font color of 'SVG'/'PNG' lighter */
 }
 
 
@@ -425,6 +414,9 @@ footer#footer-info {
 
 .font-size-small {
     font-size: 0.85rem;
+}
+.font-color-lighter {
+    opacity: 80%;
 }
 
 .text-align-center {
