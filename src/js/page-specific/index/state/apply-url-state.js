@@ -1,4 +1,4 @@
-import { updateButtonText
+import { replaceButtonText
        , updateButtonWithSvgSize }              from 'button/update-button-text'
 import { SETTINGS_DEFAULTS }                    from 'constants'
 import { getInitialOpacitySteps
@@ -138,8 +138,8 @@ function applyUiConfiguration() {
     const pngActionButton = document.getElementById('png-action-button');
     const svgActionButton = document.getElementById('svg-action-button');
     // Update the button innerHtml as selected action
-    updateButtonText(buttonAction, pngActionButton)
-    updateButtonText(buttonAction, svgActionButton)
+    replaceButtonText(buttonAction, pngActionButton)
+    replaceButtonText(buttonAction, svgActionButton)
 
     ///////////////////////////// themeColor /////////////////////////////
     const themeColor = getStateUrl('themeColor')

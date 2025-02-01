@@ -125,7 +125,8 @@ main {
 
 /* 改行したくない範囲を <span>要素で囲み 改行位置を任意の箇所 (<span>要素の切れ目) で行うようにする */
 #png-info span,
-#svg-info span {
+#svg-info span,
+.artwork-item span {
     display: inline-block; /* span要素を横並びにする */
     /* margin-right: 5px; 要素間のスペース */
   }

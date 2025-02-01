@@ -3,7 +3,7 @@ import { roundToOneDecimal } from 'utils/number-rounding'
 
 export
     { initButtonActionSelect
-    , updateButtonText
+    , replaceButtonText
     , updateButtonWithSvgSize
     , updateButtonWithPngSize
     }
@@ -24,12 +24,12 @@ function initButtonActionSelect() {
         const svgActionButton = document.getElementById('svg-action-button');
 
         // Update the button innerHtml as selected action
-        updateButtonText(buttonAction, pngActionButton)
-        updateButtonText(buttonAction, svgActionButton)
+        replaceButtonText(buttonAction, pngActionButton)
+        replaceButtonText(buttonAction, svgActionButton)
     })
 }
 
-function updateButtonText(buttonAction, button) {
+function replaceButtonText(buttonAction, button) {
     const buttonText = button.innerHTML;
 
     // "Download" または "Copy" を含む部分を探す
@@ -93,18 +93,13 @@ function byteCount(s) {
 
 // SVG
 function updateButtonWithSvgSize(svgString) {
-    // サイズを表示する button要素を取得
-    const svgActionButtonElement = document.getElementById("svg-action-button")
-
-    // サイズを計算して表示
+    // SVGテキストの サイズ（バイト数）を計算して表示
     const svgByteSize = byteCount(svgString)
-
     updateButtonText('svg', svgByteSize)
 }
 // PNG
 function updateButtonWithPngSize(pngBuffer) {
-    // PNGデータの長さ（バイト数）を取得
+    // PNGデータの サイズ（バイト数）を取得して表示
     const pngByteSize = pngBuffer.length
-
     updateButtonText('png', pngByteSize)
 }
