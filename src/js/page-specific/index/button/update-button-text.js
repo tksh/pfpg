@@ -79,7 +79,7 @@ function updateButtonWithSvgSize(svgString) {
     // Get current action type as string
     const actionText = getActionText()
 
-    svgActionButtonElement.innerHTML = `${actionText} as SVG&nbsp;<wbr>(size: ${svgSizeAsKb} kb / ${svgSize} bytes)`;
+    svgActionButtonElement.innerHTML = `${actionText} as SVG&nbsp;<wbr>(${svgSizeAsKb} KB, ${svgSize.toLocaleString()} bytes)`;
 }
 
 function updateButtonWithPngSize(pngBuffer) {
@@ -94,5 +94,5 @@ function updateButtonWithPngSize(pngBuffer) {
     // Get current action type as string
     const actionText = getActionText()
 
-    pngActionButtonElement.innerHTML = `${actionText} as PNG&nbsp;<wbr>(size: ${pngSizeAsKb} kb / ${pngSize} bytes)`;
+    pngActionButtonElement.innerHTML = `${actionText} as PNG&nbsp;<wbr>(${pngSizeAsKb} KB, ${pngSize.toLocaleString()} bytes)`;
 }
