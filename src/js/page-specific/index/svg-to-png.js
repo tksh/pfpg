@@ -134,13 +134,18 @@ async function svg2png(svgString, resvgOption) {
     // console.log('Simplified svg string: \n', resvgJS.toString()) // <svg>...</svg>
 
 
-    // Update the size info in HTML
+    // Update the size and dimension info in HTML elements
 
-    // PNG file size on the download button
+    // PNG file size on the download/copy button
     updateButtonWithPngSize(pngBuffer)
-    // PNG pixel size and SVG viewBox size on the <div id="xxx-info"> elements
-    updatePngInfo(pngData)
-    updateSvgInfo(svgString)
+
+    // PNG pixel and SVG viewBox dimension on the <div id="[png|svg]-info">
+
+    // PNG
+    updateDimensionInfo('png', pngData.width, pngData.height)
+    // SVG
+    const viewboxValues = extractViewboxValues(svgString) // e.g: Map(4) {'x' => 0, 'y' => 0, 'w' => 31, 'h' => 31}
+    updateDimensionInfo('svg', viewboxValues.get('w'), viewboxValues.get('h'))
 
     return pngData
 }
@@ -195,26 +200,32 @@ async function svg2png(svgString, resvgOption) {
 //       [[Prototype]]: Object
 
 
+/**
+ * Updates the dimension information displayed for either a PNG or SVG image.
+ * @param {string} pngOrSvg    - 'png' or 'svg' to specify which element to update.
+ * @param {number} widthValue  - The width value to display.
+ * @param {number} heightValue - The height value to display.
+ */
+function updateDimensionInfo(pngOrSvg, widthValue, heightValue) {
+    const container = document.querySelector(`#${pngOrSvg}-info`)
 
-function updatePngInfo(pngData) {
-    // PNGピクセルサイズを <div id="png-info">要素に 表示する
-    document.querySelector('#png-info').innerHTML = `Rendered PNG pixel size:&nbsp;<wbr>${pngData.width} x ${pngData.height}`
+    // Create label element
+    const label = document.createElement('span')
+    label.textContent = pngOrSvg === 'png'
+        ? 'Rendered PNG pixel size:\u00A0'
+        : 'Source SVG viewBox size:\u00A0'
+
+    // Create value element
+    const value = document.createElement('span')
+    value.textContent = `${widthValue} x ${heightValue}`
+
+    // Clear existing content
+    container.innerHTML = ''
+
+    // Append new elements
+    container.appendChild(label)
+    container.appendChild(value)
 }
-
-function updateSvgInfo(svgString) {
-    // Indicate the SVG viewBox size in HTML
-
-    // The resvg-js library outputs the width and height as integers by default, so the code below works fine:
-    // document.querySelector('#svg-info').innerHTML = 'Source SVG viewbox: ' + resvgJS.width + ' x ' + resvgJS.height
-
-    // However, when 'Crop side margins:' is applied in the Canvas tab, the viewBox size values can be floats, not just integers.
-    // Therefore, we need to extract the size values from the SVG string using a regular expression, as shown below.
-
-    // Outputs the viewBox size as float to indicate at #svg-info <textarea>
-    const viewboxValues = extractViewboxValues(svgString) // e.g: Map(4) {'x' => 0, 'y' => 0, 'w' => 31, 'h' => 31}
-    document.querySelector('#svg-info').innerHTML = `Source SVG viewBox size:&nbsp;<wbr>${viewboxValues.get('w')} x ${viewboxValues.get('h')}`
-}
-
 
 // Processing from SVG to PNG and measuring the time
 async function measureSvg2pngTime(svgString, resvgOption, renderingStatusElements) {

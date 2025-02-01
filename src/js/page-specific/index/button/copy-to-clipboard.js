@@ -10,6 +10,9 @@ export
 async function copyPngToClipboard() {
     try {
         const imgElem = document.getElementById('img');
+        //console.log("imgElem:", imgElem)
+        // e.g.: <img id="img" class="checker fit-to-display-area" alt="Output PNG" src="blob:http://172.19.175.1…6-4350-9c80-553a0e4fceaf">
+
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
 

@@ -191,7 +191,7 @@ function applySvgOptimization(svgString) {
 
 
 
-    // Count the size of the updated SVG string and display it on the SVG download button
+    // Count the size of the updated SVG string and display it on the SVG download/copy button
     updateButtonWithSvgSize(removeSpacesApplied)
 
     return removeSpacesApplied

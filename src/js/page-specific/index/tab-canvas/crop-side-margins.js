@@ -72,7 +72,19 @@ function getSlimmedViewboxXW(inputSvg) {
     ])
 }
 
-// Get viewBox four number values as Map object
+/**
+ * Get viewBox four(x/y/w/h) number values as Map object
+ *
+ * The resvg-js library outputs the width and height as integers by default, so the code below works fine:
+ * > document.querySelector('#svg-info').innerHTML = 'Source SVG viewbox: ' + resvgJS.width + ' x ' + resvgJS.height
+ * However, when 'Crop side margins:' is applied in the Canvas tab, the viewBox size values can be floats, not just integers.
+ * Therefore, we need to extract the size values from the SVG string using a regular expression, as shown below.
+ *
+ * @param inputSvg string
+ * @returns Map object - Outputs the viewBox size as float to indicate at #svg-info <textarea>
+ *                       e.g: Map(4) {'x' => 0, 'y' => 0, 'w' => 31, 'h' => 31}   (Shape to trim: 'Square')
+ *                            Map(4) {'x' => 0, 'y' => 0, 'w' => 27.9, 'h' => 31} (Shape to trim: 'Squircle, slimmed' and Crop side margins: checked)
+ */
 function extractViewboxValues(inputSvg) {
     // Use a regular expression to match the four number values in the viewBox string
     const match = inputSvg.match(/viewBox="([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)"/)
@@ -92,8 +104,6 @@ function extractViewboxValues(inputSvg) {
         return null
     }
 }
-// e.g.: 'viewBox="2.325 0 26.35 31"' => Object { x: 2.325, y: 0, w: 26.35, h: 31 }
-
 
 
 // Get back the original viewBox size when:

@@ -47,9 +47,34 @@ function updateButtonText(buttonAction, button) {
 
 // PNG/SVG ファイルサイズを ダウンロードボタンに 表示する関数
 
+function updateButtonText(pngOrSvg, byteSize) {
+    // Get button element
+    const actionButtonElement = document.getElementById(`${pngOrSvg}-action-button`)
+
+    // Get current action type as string
+    const actionType = getActionType()
+
+    // Convert number value from 'byte' to 'KB'
+    const sizeAsKb = roundToOneDecimal(byteSize / 1024)
+
+    // Create action element
+    const action = document.createElement('span')
+    action.textContent = `${actionType} as ${pngOrSvg.toUpperCase()}:\u00A0`
+
+    // Create size element
+    const size = document.createElement('span')
+    size.textContent = `(${sizeAsKb} KB, ${byteSize.toLocaleString()} bytes)`
+
+    // Clear existing content
+    actionButtonElement.innerHTML = ''
+
+    // Append new elements
+    actionButtonElement.appendChild(action)
+    actionButtonElement.appendChild(size)
+}
 
 // Get current action type as string
-function getActionText() {
+function getActionType() {
     const actionSelect = document.getElementById('button-action');
     const buttonAction = actionSelect.value;
 
@@ -66,33 +91,20 @@ function byteCount(s) {
     return new Blob([s]).size
 }
 
-
+// SVG
 function updateButtonWithSvgSize(svgString) {
     // サイズを表示する button要素を取得
     const svgActionButtonElement = document.getElementById("svg-action-button")
 
     // サイズを計算して表示
-    const svgSize = byteCount(svgString)
-    const svgSizeAsKb = roundToOneDecimal(svgSize / 1024)
-    console.log('SVG file size: ', svgSize, svgSizeAsKb)
+    const svgByteSize = byteCount(svgString)
 
-    // Get current action type as string
-    const actionText = getActionText()
-
-    svgActionButtonElement.innerHTML = `${actionText} as SVG&nbsp;<wbr>(${svgSizeAsKb} KB, ${svgSize.toLocaleString()} bytes)`;
+    updateButtonText('svg', svgByteSize)
 }
-
+// PNG
 function updateButtonWithPngSize(pngBuffer) {
-    // サイズを表示する button要素を取得
-    const pngActionButtonElement = document.getElementById("png-action-button")
-
     // PNGデータの長さ（バイト数）を取得
-    const pngSize = pngBuffer.length
-    const pngSizeAsKb = roundToOneDecimal(pngSize / 1024)
-    console.log('PNG file size: ', pngSize, pngSizeAsKb)
+    const pngByteSize = pngBuffer.length
 
-    // Get current action type as string
-    const actionText = getActionText()
-
-    pngActionButtonElement.innerHTML = `${actionText} as PNG&nbsp;<wbr>(${pngSizeAsKb} KB, ${pngSize.toLocaleString()} bytes)`;
+    updateButtonText('png', pngByteSize)
 }

@@ -4,7 +4,7 @@ import { copySvgToClipboard
        , copyPngToClipboard } from 'button/copy-to-clipboard'
 
 
-// Initialize download button for SVG and PNG
+// Initialize download/copy button for SVG and PNG
 
 export function initDownloadButtons() {
     const pngActionButton = document.getElementById('png-action-button')
