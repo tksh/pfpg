@@ -424,48 +424,55 @@
                         </div>
                     </div>
 
-                    <!-- Button action -->
                     <div class="opts">
-                        <div class="opts-cell">
-                            <label for="button-action">Button action: </label>
-                            <select id="button-action">
-                                <option value="download" selected>Download as file</option>
-                                <option value="copy">Copy to clipboard</option>
-                            </select>
-                        </div>
+                        <fieldset>
+                            <legend class="font-size-small font-color-lighter">PNG/SVG</legend>
+
+                            <!-- Button action -->
+                            <div class="opts-cell padding-left-1">
+                                <label for="button-action">Button action: </label>
+                                <select id="button-action">
+                                    <option value="download" selected>Download as file</option>
+                                    <option value="copy">Copy to clipboard</option>
+                                </select>
+                            </div>
+
+                        </fieldset>
                     </div>
 
-                    <!-- View scaling -->
                     <div class="opts">
-                    <fieldset>
-                        <legend class="font-size-small font-color-lighter">PNG</legend>
-                    <div class="opts-cell padding-left-1">
-                        <label for="view-scaling">View scaling: </label>
-                        <select name="view-scaling" id="view-scaling" autocomplete="off">
-                            <option value="fit" selected>Fit to display area</option>
-                            <option value="actual">Actual image size</option>
-                        </select>
-                    </div>
-                <!-- </div> -->
+                        <fieldset>
+                            <legend class="font-size-small font-color-lighter">PNG</legend>
 
-                    <!-- Checkerboard background -->
-                    <!-- <div class="opts"> -->
-                        <div class="opts-cell padding-left-1">
-                            <label for="checkerboard-bg">Checkerboard background: </label>
-                            <input type="checkbox" id="checkerboard-bg" name="checkerboard-bg" value="enabled" checked>
-                        </div>
-                    </fieldset>
+                            <!-- View scaling -->
+                            <div class="opts-cell padding-left-1">
+                                <label for="view-scaling">View scaling: </label>
+                                <select name="view-scaling" id="view-scaling" autocomplete="off">
+                                    <option value="fit" selected>Fit to display area</option>
+                                    <option value="actual">Actual image size</option>
+                                </select>
+                            </div>
+
+                            <!-- Checkerboard background -->
+                            <div class="opts-cell padding-left-1">
+                                <label for="checkerboard-bg">Checkerboard background: </label>
+                                <input type="checkbox" id="checkerboard-bg" name="checkerboard-bg" value="enabled" checked>
+                            </div>
+
+                        </fieldset>
                     </div>
 
-                    <!-- Text wrapping -->
                     <div class="opts">
                         <fieldset>
                             <legend class="font-size-small font-color-lighter">SVG</legend>
-                        <div class="opts-cell padding-left-1">
-                            <label for="text-wrapping">Text wrapping: </label>
-                            <input type="checkbox" id="text-wrapping" name="text-wrapping" value="enabled">
-                        </div>
-                    </fieldset>
+
+                            <!-- Text wrapping -->
+                            <div class="opts-cell padding-left-1">
+                                <label for="text-wrapping">Text wrapping: </label>
+                                <input type="checkbox" id="text-wrapping" name="text-wrapping" value="enabled">
+                            </div>
+
+                        </fieldset>
                     </div>
 
             </div> <!-- end of <div id="tab-4" class="tab-content"> -->
