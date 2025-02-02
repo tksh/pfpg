@@ -69,10 +69,7 @@ import { initViewScalingSelect }                from 'tab-ui/view-scaling'
 
 
     // Initial PNG rendering
-
-    //await resvg.initWasm(fetch('./wasm/index_bg.2.6.2.wasm'))  // Path that relative from index.html
     await resvg.initWasm(fetch('https://unpkg.com/@resvg/resvg-wasm/index_bg.wasm'))  // From CDN
-
     executeSvg2png({ target: { value: svgString } }, resvgOption)
 
 

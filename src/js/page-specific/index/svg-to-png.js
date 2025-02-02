@@ -227,6 +227,7 @@ function updateDimensionInfo(pngOrSvg, widthValue, heightValue) {
     container.appendChild(value)
 }
 
+
 // Processing from SVG to PNG and measuring the time
 async function measureSvg2pngTime(svgString, resvgOption, renderingStatusElements) {
     try {
