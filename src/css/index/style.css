@@ -458,7 +458,7 @@ footer a {
 
 .artwork-item {
     flex: 0 1 auto;  /* Don't grow, can shrink, auto base size */
-    width: 100%;
+    width: fit-content;
 }
 
 details#showcase figure {
@@ -476,6 +476,7 @@ details#showcase figure {
 #showcase img {
     width: 100%;
     height: auto;
+    max-width: 256px;
 }
 
 
