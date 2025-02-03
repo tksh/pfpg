@@ -37,54 +37,67 @@ import { initViewScalingSelect }                from 'tab-ui/view-scaling'
 
 (async function () {
 
-    // Get sample artwork data
+       // Initialize sample artwork data.
 
-    // If there is no url params to decode at index.html, fetch the alternative text from the HTML element and insert it as sample url params.
-    if (!window.location.search) {
-        console.log("There is no url params, sample one will be inserted.")
-        const sampleUrlParamsStr = document.getElementById("sample-artwork-encoded-string").textContent
-        window.history.pushState({}, '', window.location.pathname + sampleUrlParamsStr)
-    }
+       // If no URL parameters are present (e.g., on initial page load),
+       // select a random artwork from the .artwork-item in 'Showcase' section and update the URL.
+       if (!window.location.search) {
+              console.log("No URL parameters found. Selecting a random sample artwork.");
 
+              // Retrieve query strings from showcase artwork links.
+              const hrefArray = Array.from(document.querySelectorAll('figure .artworks-container .artwork-item a'))
+                     .map(a => {
+                            const url = new URL(a.href);
+                            return url.search; // Extract the query string (including the '?').
+                     });
+              // e.g.: Array ["?n=~7&title=~202401_001&desc=001kObPF...jpKYE_m9iQ", ..., "?n=~5&title=~202412_001&B=~231b...6jCW"]
 
-    // Initial decoding from url param to svg
+              // Select a random query string.
+              const randomIndex = Math.floor(Math.random() * hrefArray.length);
+              const randomQueryString = hrefArray[randomIndex];
 
-    // Get the path-mode value
-    // - If there is no url param of 'pathMode', use 'absoluteSeparated' as default.
-    const isRelative = getState('pathMode') === 'relativeMerged'
-    console.log('isRelative: ', isRelative)
-    document.getElementById("path-mode").value = isRelative ? 'relativeMerged' : 'absoluteSeparated'
+              // Update the browser's history and URL with the selected query string.
+              window.history.pushState({}, '', window.location.pathname + randomQueryString);
+       }
 
-    // Decode the SVG from url params
-    const initialDecodedSvgString = decodeUrlToSvg(isRelative, isOnDataManipulatorPage())
-    console.log('initialDecodedSvgString: ', initialDecodedSvgString)
+       // Initial decoding from url param to svg
 
-    // Initialize default UI theme from OS preference and cache in settings
-    // Must run before applyImageCustomization() to provide theme for color picker initialization
-    const themeColor = getDefaultThemeViaPrefersColorScheme()
-    updateState('themeColor', themeColor)
+       // Get the path-mode value
+       // - If there is no url param of 'pathMode', use 'absoluteSeparated' as default.
+       const isRelative = getState('pathMode') === 'relativeMerged'
+       console.log('isRelative: ', isRelative)
+       document.getElementById("path-mode").value = isRelative ? 'relativeMerged' : 'absoluteSeparated'
 
-    // Apply URL params to customize SVG, falling back to SETTINGS_DEFAULTS when empty
-    const svgString = applyImageCustomization(initialDecodedSvgString, resvgOption)
+       // Decode the SVG from url params
+       const initialDecodedSvgString = decodeUrlToSvg(isRelative, isOnDataManipulatorPage())
+       console.log('initialDecodedSvgString: ', initialDecodedSvgString)
 
+       // Initialize default UI theme from OS preference and cache in settings
+       // Must run before applyImageCustomization() to provide theme for color picker initialization
+       const themeColor = getDefaultThemeViaPrefersColorScheme()
+       updateState('themeColor', themeColor)
 
-    // Initial PNG rendering
-    await resvg.initWasm(fetch('https://unpkg.com/@resvg/resvg-wasm/index_bg.wasm'))  // From CDN
-    executeSvg2png({ target: { value: svgString } }, resvgOption)
-
-
-    // Restore SVG string optimization
-    // - This processes doesn't affect the rendering result
-    // - It only updates the SVG string
-    const optimizedSvg = applySvgOptimization(svgString)
-
-    // Insert the SVG string to textarea
-    const svgTextarea = document.querySelector('#svg-string')
-    svgTextarea.value = optimizedSvg
+       // Apply URL params to customize SVG, falling back to SETTINGS_DEFAULTS when empty
+       const svgString = applyImageCustomization(initialDecodedSvgString, resvgOption)
 
 
-    // Startup layout initialization process must be executed before 'DOMContentLoaded'
-    adjustOutputBoxSize('pageLoaded')
+       // Initial PNG rendering
+       await resvg.initWasm(fetch('https://unpkg.com/@resvg/resvg-wasm/index_bg.wasm'))  // From CDN
+       executeSvg2png({ target: { value: svgString } }, resvgOption)
+
+
+       // Restore SVG string optimization
+       // - This processes doesn't affect the rendering result
+       // - It only updates the SVG string
+       const optimizedSvg = applySvgOptimization(svgString)
+
+       // Insert the SVG string to textarea
+       const svgTextarea = document.querySelector('#svg-string')
+       svgTextarea.value = optimizedSvg
+
+
+       // Startup layout initialization process must be executed before 'DOMContentLoaded'
+       adjustOutputBoxSize('pageLoaded')
 
 })() // `(async function () { ... })` 無名即時実行関数
 
@@ -104,56 +117,56 @@ document.addEventListener('DOMContentLoaded', () => {
        const imageUrl = "https://res.cloudinary.com/ddoy3pmjg/image/upload/v1734026224/cld-sample-3.jpg"
        document.querySelector('meta[property="og:image"]').content = imageUrl;
 
-    // Get first tab ('Lines') activated
-    initTabs()
+       // Get first tab ('Lines') activated
+       initTabs()
 
-    // Tab - Lines
-    initGroupColorsInputs()
-    initPathModeSelect()
-    initOpacityStepsSelect()
-    initColorFormatSelect()
-    initOptionDetailsToggleListener()
+       // Tab - Lines
+       initGroupColorsInputs()
+       initPathModeSelect()
+       initOpacityStepsSelect()
+       initColorFormatSelect()
+       initOptionDetailsToggleListener()
 
-    // Tab - Canvas
-    initShapeToTrimSelect()
-    initWidthNarrownessSelect()
-    initTopHeavyRatioSelect()
-    initCropSideMarginsCheckbox()
+       // Tab - Canvas
+       initShapeToTrimSelect()
+       initWidthNarrownessSelect()
+       initTopHeavyRatioSelect()
+       initCropSideMarginsCheckbox()
 
-    // Tab - Render
-    initShapeRenderingSelect()
-    initWidthPixelSizeInputElements()
-    initWidthValidatorListener()
+       // Tab - Render
+       initShapeRenderingSelect()
+       initWidthPixelSizeInputElements()
+       initWidthValidatorListener()
 
-    // Tab - UI
-    initViewScalingSelect()
-    initCheckerboardBgCheckbox()
-    initTextWrappingCheckbox()
-    initButtonActionSelect()
-    initThemeColorSelect()
+       // Tab - UI
+       initViewScalingSelect()
+       initCheckerboardBgCheckbox()
+       initTextWrappingCheckbox()
+       initButtonActionSelect()
+       initThemeColorSelect()
 
-    // Apply the UI configuration values retrieved from url params.
-    // if there is no url param for specific attr,
-    // get the default value from 'SETTINGS_DEFAULTS'
-    // or detect the default value from data or environment.
-    applyUiConfiguration()
-
-
-    // Buttons for SVG and PNG
-    initDownloadButtons()
+       // Apply the UI configuration values retrieved from url params.
+       // if there is no url param for specific attr,
+       // get the default value from 'SETTINGS_DEFAULTS'
+       // or detect the default value from data or environment.
+       applyUiConfiguration()
 
 
-    // Modal - SVG optimization
-    initSvgOptimizationModalToggle()
-    initSvgOptimization()
+       // Buttons for SVG and PNG
+       initDownloadButtons()
 
-    // Modal - Reset settings
-    initResetSettingsModalToggle()
-    initResetSettings()
 
-//   // Get the artwork ID for OG image generation
-//     storeArtworkId()
+       // Modal - SVG optimization
+       initSvgOptimizationModalToggle()
+       initSvgOptimization()
 
-    // Add event lister to viewport for continuous resizing the output boxes (PNG and SVG)
-    initViewportLister()
+       // Modal - Reset settings
+       initResetSettingsModalToggle()
+       initResetSettings()
+
+       //   // Get the artwork ID for OG image generation
+       //     storeArtworkId()
+
+       // Add event lister to viewport for continuous resizing the output boxes (PNG and SVG)
+       initViewportLister()
 })
