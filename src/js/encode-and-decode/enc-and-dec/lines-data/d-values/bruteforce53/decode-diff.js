@@ -9,13 +9,15 @@ export function decodeDiff(diffStr, codebook, baseX) {
 
         if (isInFreqDiff(diffStr[i], codebook)) {
             // Codebook に含まれるアルファベットならば 1文字ごとに diffStr[i]をキーにして 対応する数値を得て 配列に格納
-            console.log(`Decode diff: isInFreqDiff = true, ${diffStr[i]} => ${codebook.get(diffStr[i])}`)
+            // console.log(`Decode diff: isInFreqDiff = true, ${diffStr[i]} => ${codebook.get(diffStr[i])}`)
+            // e.g.: Decode diff: isInFreqDiff = true, P => -1
             decodedDiffArr.push(codebook.get(diffStr[i]))
             i++
 
         } else if (isNumber(diffStr[i])) {
             // 整数[0-9] ならば 1文字ごとに そのまま 配列に格納
-            console.log(`Decode diff: isNumber = true, ${diffStr[i]} => ${diffStr[i]}`)
+            // console.log(`Decode diff: isNumber = true, ${diffStr[i]} => ${diffStr[i]}`)
+            // e.g.: Decode diff: isNumber = true, 1 => 1
             decodedDiffArr.push(parseInt(diffStr[i], 10))
             i++
 
@@ -48,7 +50,8 @@ export function decodeDiff(diffStr, codebook, baseX) {
         } else {
             // 残りは BaseXでエンコードされた 2文字ずつ のみ なので それを baseXDec()して  配列に格納
             const toBaseXDecode = diffStr.slice(i, i + 2)
-            console.log(`Decode diff: toBaseXDecode: ${toBaseXDecode} => `, baseXDec(toBaseXDecode, baseX))
+            // console.log(`Decode diff: toBaseXDecode: ${toBaseXDecode} => `, baseXDec(toBaseXDecode, baseX))
+            // e.g.: Decode diff: toBaseXDecode: tG =>  -29
             decodedDiffArr.push(baseXDec(toBaseXDecode, baseX))
             i += 2
         }

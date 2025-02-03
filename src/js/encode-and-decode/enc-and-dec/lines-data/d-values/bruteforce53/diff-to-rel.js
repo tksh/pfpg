@@ -5,7 +5,8 @@ export function diffToRel(diffArray) {
 
     // Iterate over the diff array
     diffArray.forEach((diff, index) => {
-        console.log(`Row ${index}: ${diff} <${typeof(diff)}>`)  // Mixed <number> and <string> types
+        //console.log(`Row ${index}: ${diff} <${typeof(diff)}>`)  // Mixed <number> and <string> types
+        // e.g.: Row 281: -1 <number>
 
         // Process each element (diff)
         // If index is [0], perform Number() operation
