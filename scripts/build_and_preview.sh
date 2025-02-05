@@ -54,9 +54,15 @@ for f in android-chrome-192x192.png \
     mv "./src/$f" "./public/$f" || exit 1
 done
 
-# Move the static assetss with .webp extension from 'farm/src/showcase_images' to 'farm/public' directory
+# Move the static assets to public/
+
+# .webp files from 'farm/src/showcase_images' to 'farm/public/showcase_images'
 mkdir -p ./public/showcase_images/
 mv ./src/showcase_images/*.webp ./public/showcase_images/
+
+# .wasm file from 'farm/src/wasm' to 'farm/public/wasm'
+mkdir -p ./public/wasm/
+mv ./src/wasm/*.wasm ./public/wasm/
 
 
 # Check the copied files

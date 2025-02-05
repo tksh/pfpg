@@ -3,6 +3,7 @@ import { updateButtonWithSvgSize
 import { generateAndUploadOgImage } from 'dynamic-ogp/generate-og-image'
 import { updateMetadata }           from 'dynamic-ogp/update-metadata'
 import { extractViewboxValues }     from 'tab-canvas/crop-side-margins'
+// import { Resvg, initWasm } from 'libs/resvg-js/index.2.6.2.min'
 
 export
     { executeSvg2png
@@ -107,10 +108,12 @@ function cleanupPreviousRender() {
 
 // Rendering from SVG to PNG with options
 async function svg2png(svgString, resvgOption) {
+    // const resvgWasm = await resvg.initWasm(fetch('./wasm/index_bg.wasm'))
     // 前回のリソースをクリーンアップ
     cleanupPreviousRender()
 
     // Create the Resvg object
+    // const resvgJS = new Resvg(svgString, resvgOption)
     const resvgJS = new resvg.Resvg(svgString, resvgOption)
     renderResources.resvgJS = resvgJS                          // 追跡用に保存
     console.log('resvgJS: ', resvgJS)
