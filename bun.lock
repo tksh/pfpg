@@ -3,14 +3,11 @@
   "workspaces": {
     "": {
       "dependencies": {
-        "@resvg/resvg-wasm": "^2.6.2",
         "alwan": "^2.1.1",
       },
     },
   },
   "packages": {
-    "@resvg/resvg-wasm": ["@resvg/resvg-wasm@2.6.2", "", {}, "sha512-FqALmHI8D4o6lk/LRWDnhw95z5eO+eAa6ORjVg09YRR7BkcM6oPHU9uyC0gtQG5vpFLvgpeU4+zEAz2H8APHNw=="],
-
     "alwan": ["alwan@2.1.1", "", {}, "sha512-IxWc+wSY4rDdqmH+t5zBT88q5B+v3Zmw+dBhzG1lMVbJ3Jda65cPfWACvWrUjzeQyblsL406FymLqdVTYnyVzQ=="],
   }
 }

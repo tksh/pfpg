@@ -60,9 +60,9 @@ done
 mkdir -p ./public/showcase_images/
 mv ./src/showcase_images/*.webp ./public/showcase_images/
 
-# .wasm file from 'farm/src/wasm' to 'farm/public/wasm'
-mkdir -p ./public/wasm/
-mv ./src/wasm/*.wasm ./public/wasm/
+# .wasm file from 'farm/src/resvg-js-wasm' to 'farm/public/resvg-js-wasm'
+mkdir -p ./public/resvg-js-wasm/
+mv ./src/resvg-js-wasm/* ./public/resvg-js-wasm/
 
 
 # Check the copied files

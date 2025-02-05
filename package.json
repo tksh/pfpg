@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "@resvg/resvg-wasm": "^2.6.2",
     "alwan": "^2.1.1"
   }
 }
