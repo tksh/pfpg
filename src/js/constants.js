@@ -134,7 +134,7 @@ export const SETTINGS_DEFAULTS = new Map([
     ['topHeavyRatio',    1],                   // Canvas tab |   9   | Int    | 3, 2, 1, 0, -1, -2, -3
     ['cropSideMargins',  false],               // Canvas tab |  10   | Bool   | true, false
     ['shapeRendering',   'crispEdges'],        // Render tab |  11   | String | 'crispEdges', 'geometricPrecision'
-    ['widthPixelSize',   256],                 // Render tab |  12   | Uint   | 0 <
+    ['heightPixelSize',   256],                 // Render tab |  12   | Uint   | 0 <
 
     ['themeColor',       undefined],               // UI tab |  12   | String | 'white', 'light', 'dark', 'black'
     ['buttonAction',     'download'],              // UI tab |  13   | String | 'download', 'copy'

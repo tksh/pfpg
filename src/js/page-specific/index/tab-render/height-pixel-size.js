@@ -1,33 +1,33 @@
-import { getSvgString }   from 'button/download-as-file'
-import { resvgOption }    from 'state/resvg-option'
-import { adjustWidthNum
-       , syncWidthNum }   from 'tab-render/sync-number-and-range'
-import { updateState }    from 'state/url-state-manager'
-import { executeSvg2png } from 'svg-to-png'
+import { getSvgString }             from 'button/download-as-file'
+import { resvgOption }              from 'state/resvg-option'
+import { adjustInputValueViaButton
+       , syncInputNumberAndRange }  from 'tab-render/sync-number-and-range'
+import { updateState }              from 'state/url-state-manager'
+import { executeSvg2png }           from 'svg-to-png'
 
 export
-    { initWidthPixelSizeInputElements
-    , initWidthValidatorListener
+    { initHeightPixelSizeInputElements
+    , initNumberInputValidatorListener
     , adjustImageDisplay
     }
 
 
 // Attach the event listeners to number input, range slider, and inc/dec buttons
 
-function initWidthPixelSizeInputElements() {
+function initHeightPixelSizeInputElements() {
 
     // input-box and slider
     document.querySelector('#png-size-number').addEventListener('change', pngSizeElement)
     document.querySelector('#png-size-range').addEventListener('change', pngSizeElement)
     // Increment and decrement buttons
-    document.querySelector('#width-size-dec').addEventListener('click', () => handleButtonClick(-1))
-    document.querySelector('#width-size-inc').addEventListener('click', () => handleButtonClick(1))
+    document.querySelector('#png-size-dec').addEventListener('click', () => handleButtonClick(-1))
+    document.querySelector('#png-size-inc').addEventListener('click', () => handleButtonClick(1))
 
 }
 
 // Attach the event listener to number input
 
-function initWidthValidatorListener() {
+function initNumberInputValidatorListener() {
 
     // Constraint validation
     const numberInput = document.getElementById("png-size-number")
@@ -36,11 +36,11 @@ function initWidthValidatorListener() {
 }
 
 
-// Update resvgOption with new width size, and convert from SVG to PNG
+// Update resvgOption with new height size, and convert from SVG to PNG
 
 function updateAndConvert(value) {
-    console.log("Updated value of 'Width pixel size':", value);
-    updateState('widthPixelSize', value);
+    console.log("Updated value of 'Height pixel size':", value);
+    updateState('heightPixelSize', value);
 
     // update the 'resvgOption'
     resvgOption.fitTo.value = parseInt(value, 10);
@@ -52,13 +52,13 @@ function updateAndConvert(value) {
 
 // Event listener for both png-size-number and png-size-range
 function pngSizeElement(event) {
-    syncWidthNum(event.target);
+    syncInputNumberAndRange(event.target);
     updateAndConvert(event.target.value);
 }
 
 // Function to handle button clicks
 function handleButtonClick(step) {
-    const value = adjustWidthNum(step);
+    const value = adjustInputValueViaButton(step);
     if (value !== null) {
         updateAndConvert(value);
     }

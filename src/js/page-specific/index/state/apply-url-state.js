@@ -18,7 +18,7 @@ import { changeOpacitySelectOptionsAsNewStep
 import { updateSvgWithNewShapePath }       from 'tab-canvas/shape-to-trim'
 import { toggleDisplay }                        from 'tab-canvas/shape-to-trim-listener'
 import { replaceShapeRendering }                from 'tab-render/shape-rendering'
-import { adjustImageDisplay }                   from 'tab-render/width-pixel-size'
+import { adjustImageDisplay }                   from 'tab-render/height-pixel-size'
 import { toggleCheckerboardBg }                 from 'tab-ui/checkerboard-bg'
 import { toggleTextWrapping }                   from 'tab-ui/text-wrapping'
 import { changeThemeColor
@@ -103,12 +103,12 @@ function applyImageCustomization(svgString, resvgOption) {
     document.getElementById("shape-rendering").value = shapeRendering
     updatedSvg = replaceShapeRendering(updatedSvg, shapeRendering)
 
-    ////////////////////////////////////////////////// widthPixelSize //////////////////////////////////////////////////
-    const widthPixelSize = parseInt(getState('widthPixelSize'), 10)
-    resvgOption.fitTo.value = widthPixelSize
+    ////////////////////////////////////////////////// heightPixelSize //////////////////////////////////////////////////
+    const heightPixelSize = parseInt(getState('heightPixelSize'), 10)
+    resvgOption.fitTo.value = heightPixelSize
 
-    document.querySelector('#png-size-number').value = widthPixelSize
-    document.querySelector('#png-size-range').value = widthPixelSize
+    document.querySelector('#png-size-number').value = heightPixelSize
+    document.querySelector('#png-size-range').value = heightPixelSize
 
     return updatedSvg
 }
@@ -119,7 +119,7 @@ function applyUiConfiguration() {
     const viewScaling = getState('viewScaling')  // 'fit'|'actual'
     document.getElementById('view-scaling').value = viewScaling
     switchViewScaling(viewScaling)
-    adjustImageDisplay(parseInt(getState('widthPixelSize'), 10))  // It affects for 'actual'
+    adjustImageDisplay(parseInt(getState('heightPixelSize'), 10))  // It affects for 'actual'
 
     //////////////////////////// checkerboardBg ////////////////////////////
     const isCheckerboardBg = getState('checkerboardBg')  // bool

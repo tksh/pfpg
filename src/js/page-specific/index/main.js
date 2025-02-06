@@ -26,8 +26,8 @@ import { initOptionDetailsToggleListener }      from 'tab-lines/details-toggle-l
 import { initGroupColorsInputs }                from 'tab-lines/group-colors-listener'
 import { initOpacityStepsSelect }               from 'tab-lines/opacity-steps'
 import { initPathModeSelect }                   from 'tab-lines/path-mode'
-import { initWidthPixelSizeInputElements
-       , initWidthValidatorListener }           from 'tab-render/width-pixel-size'
+import { initHeightPixelSizeInputElements
+       , initNumberInputValidatorListener }     from 'tab-render/height-pixel-size'
 import { initShapeRenderingSelect }             from 'tab-render/shape-rendering'
 import { initCheckerboardBgCheckbox }           from 'tab-ui/checkerboard-bg'
 import { initTextWrappingCheckbox }             from 'tab-ui/text-wrapping'
@@ -137,8 +137,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
        // Tab - Render
        initShapeRenderingSelect()
-       initWidthPixelSizeInputElements()
-       initWidthValidatorListener()
+       initHeightPixelSizeInputElements()
+       initNumberInputValidatorListener()
 
        // Tab - UI
        initViewScalingSelect()

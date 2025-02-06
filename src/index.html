@@ -135,7 +135,7 @@
                 "tab-canvas/shape-to-trim": "./js/page-specific/index/tab-canvas/shape-to-trim.js",
                 "tab-canvas/shape-to-trim-listener": "./js/page-specific/index/tab-canvas/shape-to-trim-listener.js",
 
-                "tab-render/width-pixel-size": "./js/page-specific/index/tab-render/width-pixel-size.js",
+                "tab-render/height-pixel-size": "./js/page-specific/index/tab-render/height-pixel-size.js",
                 "tab-render/shape-rendering": "./js/page-specific/index/tab-render/shape-rendering.js",
                 "tab-render/sync-number-and-range": "./js/page-specific/index/tab-render/sync-number-and-range.js",
 
@@ -376,17 +376,17 @@
                         </div>
                     </div>
 
-                    <!-- Width pixel size -->
+                    <!-- Height pixel size -->
                     <div class="opts">
                         <div class="opts-cell flex-direction-column">
                             <div class="display-inline-block">
-                                <label for="png-size-number">Width pixel size:</label>
+                                <label for="png-size-number">Height pixel size:</label>
                                 <input type="number" id="png-size-number" name="png-size-number" class="width-size" min="1" value="256" autocomplete="off">
                             </div>
                             <div class="display-inline-block buttons-and-range">
-                                <button type="button" id="width-size-dec">-</button>
+                                <button type="button" id="png-size-dec">-</button>
                                 <input type="range" id="png-size-range" name="png-size-range" min="2" max="512" step="2" autocomplete="off">
-                                <button type="button" id="width-size-inc">+</button>
+                                <button type="button" id="png-size-inc">+</button>
                             </div>
                         </div>
                     </div>
@@ -653,7 +653,7 @@
                         </dd>
                     </dl>
                     <dl>
-                        <dt>Maximum rendering size for <i>Width pixel size</i> option (in <i>Render</i> tab)</dt>
+                        <dt>Maximum rendering size for <i>Height pixel size</i> option (in <i>Render</i> tab)</dt>
                         <dd>The slider allows you to set the size up to 512 pixels, but you can type in a larger number manually into the box.</dd>
                         <dd>(Note: Larger sizes will exponentially increase the rendering time)</dd>
                     </dl>

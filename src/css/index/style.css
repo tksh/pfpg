@@ -286,7 +286,7 @@ div.stroke-thumbnail.stroke-hex {
 }
 
 
-/* Width pixel size */
+/* Height pixel size */
 div.opts-cell input#png-size-number {
     width: 4rem;
 }
@@ -296,16 +296,16 @@ div.opts-cell input[type="range"] {
     vertical-align: -0.3rem;
 }
 
-button#width-size-dec,
-button#width-size-inc {
+button#png-size-dec,
+button#png-size-inc {
     width: 1.25rem
 }
 
-button#width-size-dec {
+button#png-size-dec {
     margin-left: 2rem;
     margin-right: .5rem; /* スライダーとボタンの間の余白 */
 }
-button#width-size-inc {
+button#png-size-inc {
     margin-left: .5rem;  /* スライダーとボタンの間の余白 */
 }
 
@@ -439,7 +439,7 @@ footer a {
     text-decoration: underline;
 }
 
-/* Display number and range inputs inline for the 'Width pixel size' setting in the 'Render' tab */
+/* Display number and range inputs inline for the 'Height pixel size' setting in the 'Render' tab */
 .flex-direction-column {
     display: flex;
     /* Use flexbox to align elements horizontally */
@@ -557,7 +557,7 @@ details#showcase figure {
     /* <<< group-colors inputs */
 
 
-    /* >>> 'Width pixel size' - buttons and input[range] */
+    /* >>> 'Height pixel size' - buttons and input[range] */
 
     .flex-direction-column {
         flex-direction: column; /* 子要素を縦に並べる */
@@ -573,19 +573,19 @@ details#showcase figure {
         display: inline-block;
     }
 
-    .flex-direction-column button#width-size-dec { /* 左側のボタン '-' */
+    .flex-direction-column button#png-size-dec { /* 左側のボタン '-' */
         margin-right: 1rem;
         /* 右側に余白を追加 - タッチ操作しやすいように モバイルの時に より大きく余白を作る*/
 
         margin-left: 1rem;
         /* モバイルでは改行がされ 隣に数値インプットボックスが無いので 余白をPCより狭くする */
     }
-    .flex-direction-column button#width-size-inc { /* 右側のボタン '+' */
+    .flex-direction-column button#png-size-inc { /* 右側のボタン '+' */
         margin-left: 1rem;
         /* 左側に余白を追加 - タッチ操作しやすいように モバイルの時に より大きく余白を作る*/
     }
 
-    /* <<< 'Width pixel size' - buttons and input[range] */
+    /* <<< 'Height pixel size' - buttons and input[range] */
 
 
 
