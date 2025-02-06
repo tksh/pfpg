@@ -136,11 +136,11 @@ export const SETTINGS_DEFAULTS = new Map([
     ['shapeRendering',   'crispEdges'],        // Render tab |  11   | String | 'crispEdges', 'geometricPrecision'
     ['widthPixelSize',   256],                 // Render tab |  12   | Uint   | 0 <
 
-    ['viewScaling',      'fit'],                   // UI tab |  13   | String | 'fit', 'actual'
-    ['checkerboardBg',   true],                    // UI tab |  14   | Bool   | true, false
-    ['textWrapping',     false],                   // UI tab |  15   | Bool   | true, false
-    ['buttonAction',     'download'],              // UI tab |  16   | String | 'download', 'copy'
-    ['themeColor',       undefined],               // UI tab |  17   | String | 'white', 'light', 'dark', 'black'
+    ['themeColor',       undefined],               // UI tab |  12   | String | 'white', 'light', 'dark', 'black'
+    ['buttonAction',     'download'],              // UI tab |  13   | String | 'download', 'copy'
+    ['viewScaling',      'fit'],                   // UI tab |  14   | String | 'fit', 'actual'
+    ['checkerboardBg',   true],                    // UI tab |  15   | Bool   | true, false
+    ['textWrapping',     false],                   // UI tab |  16   | Bool   | true, false
 ])
 
 
