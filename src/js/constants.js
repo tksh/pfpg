@@ -132,9 +132,9 @@ export const SETTINGS_DEFAULTS = new Map([
     ['shapeToTrim',      'square'],            // Canvas tab |   7   | String | 'square', 'circle', 'squircle', 'squircleSlimmed'
     ['widthNarrowness',  10],                  // Canvas tab |   8   | Uint   | 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30
     ['topHeavyRatio',    1],                   // Canvas tab |   9   | Int    | 3, 2, 1, 0, -1, -2, -3
-    ['cropSideMargins',  false],               // Canvas tab |  10   | Bool   | true, false
+    ['cropSideMargins',  true],                // Canvas tab |  10   | Bool   | true, false
     ['shapeRendering',   'crispEdges'],        // Render tab |  11   | String | 'crispEdges', 'geometricPrecision'
-    ['heightPixelSize',   256],                 // Render tab |  12   | Uint   | 0 <
+    ['heightPixelSize',   256],                // Render tab |  12   | Uint   | 0 <
 
     ['themeColor',       undefined],               // UI tab |  12   | String | 'white', 'light', 'dark', 'black'
     ['buttonAction',     'download'],              // UI tab |  13   | String | 'download', 'copy'
