@@ -252,12 +252,12 @@ function generateTagsAfterStrokes() {
 function generateGTagOpenByGroups(linesDataMap) {
     const gTagOpenByGroups = new Map()
     for (let [gId, v] of linesDataMap) {
-        // Generate stroke color group
+        // Get the values of group colors
         const groupColors = v.groupColors
 
         const colorGroupTagOpen = TAB_SPACE.repeat(2)
-            + `<g stroke="${groupColors.gStrokeRgbStr}" opacity="${groupColors.gOpacity}" stroke-opacity="${groupColors.gStrokeOpacity}">`
-        //         <g stroke="#000000" opacity="1" stroke-opacity="1">
+            + `<g id="${gId}" stroke="${groupColors.gStrokeRgbStr}" opacity="${groupColors.gOpacity}" stroke-opacity="${groupColors.gStrokeOpacity}">`
+        //         <g id="0" stroke="#000000" opacity="1" stroke-opacity="1">
 
         gTagOpenByGroups.set(gId, colorGroupTagOpen)
 

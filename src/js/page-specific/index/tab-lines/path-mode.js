@@ -28,7 +28,7 @@ function initPathModeSelect() {
         // Lines tab
 
         // Group colors
-        const patternGroupColors = /<g stroke=[^>]*>/g
+        const patternGroupColors = /<g[^>]*stroke=[^>]*>/g
         const matchOfGroupColors = currentPathModeSvg.match(patternGroupColors)
         console.log('matchOfGroupColors: ', matchOfGroupColors)
         // e.g.: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="# ...

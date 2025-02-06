@@ -148,10 +148,10 @@ function updateSvgWithNewSteps(inputSvg) {
         ]
 
         // Generate new group colors <g> element
-        const changedGroupElem = generateGroupColorsSvgTags(groupColorsArr)
+        const changedGroupElem = generateGroupColorsSvgTags(gId, groupColorsArr)
 
         // Replace the <g> elements via group ID
-        const pattern = /<g stroke=[^>]*>/g
+        const pattern = /<g[^>]*stroke=[^>]*>/g
         return replaceAtIndex(inputSvg, pattern, changedGroupElem, gId)
     }
 

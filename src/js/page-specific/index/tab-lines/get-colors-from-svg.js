@@ -14,7 +14,7 @@ function getGroupColorsValues(svgString) {
 
     // Get the matches for <g> from current SVG string in textarea
     const matches = regexMatchesOfGroupColors(svgString)
-    // console.log(`matches Array: ${matches}`)
+    // console.log(`matches Array:es}`)${matches}`)
     // e.g.: <g stroke="#AAAAAA" opacity="1.0" stroke-opacity="1.0">,<g stroke="#000000" opacity="1.0" stroke-opacity="1.0">,<g stroke="#FFFFFF" opacity="1.0" stroke-opacity="1.0">
     // e.g.: (5) ['<g stroke="rgb(0,0,0)" opacity="1.0" stroke-opacity="1.0">', ...]
 
@@ -54,7 +54,7 @@ function getGroupColorsValues(svgString) {
 
 // Get the values from group colors <g> element string
 function regexMatchesOfGroupColors(inputSvg) {
-    const pattern = /<g stroke=[^>]*>/g
+    const pattern = /<g[^>]*stroke=[^>]*>/g
     const matches = inputSvg.match(pattern) // matchメソッドで配列を返す
     // console.log('matches: ', matches)
     // e.g.: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']

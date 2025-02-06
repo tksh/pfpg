@@ -1,5 +1,5 @@
 export function replaceAtIndex(inputString, regexPattern, replacement, index) {
-    console.log('replacement: ', replacement) // <g stroke="#00000088">
+    console.log('replacement: ', replacement) // <g (id="0") stroke="#00000088" ... >
     console.log('index: ', index)  // Number
 
     // 正規表現でマッチした結果を配列として取得
