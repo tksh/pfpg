@@ -51,12 +51,15 @@ body {
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
 }
+
+/* .opts 要素の直接の子要素で、かつ.opt-cell 要素に対してのみ適用 */
+/* 'UI' tab内の <fieldset>子要素の .opt-cell は対象にならない */
 .opts > .opts-cell {
     margin-top: 1rem;
     min-width: 16rem;
 }
-fieldset > .opts-cell {       /* SVG/PNG setting in 'UI' tab */
-    margin-top: 0.5rem;
+fieldset > .opts-cell {       /* SVG/PNG|PNG|SVG settings in UI tab */
+    margin-top: 0.75rem;
 }
 
 
@@ -333,10 +336,6 @@ footer > details {
     padding: 1rem;
 }
 
-details#lines-option-details {
-    padding: 1rem 0;
-}
-
 div#footer-info > details {
     padding: 1.5rem 1rem 0.5rem 2rem;
 }
@@ -541,7 +540,12 @@ details#showcase figure {
         margin-top: 0.5rem;
         padding-left: 0;
     }
-
+    fieldset > .opts-cell {       /* SVG/PNG|PNG|SVG settings in UI tab */
+        margin-top: 0.25rem;
+    }
+    .tab-content fieldset {
+        margin: 0.75rem 0 0 ;   /* margin-top: 0.75rem; */
+    }
 
     /* >>> group-colors inputs */
 
@@ -564,7 +568,7 @@ details#showcase figure {
     }
     .buttons-and-range {
         width: 100%;
-        padding-top: .5rem;
+        padding-top: .75rem;
     }
     #png-size-range {
         min-width: calc(100% - 7rem);
