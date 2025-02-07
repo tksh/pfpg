@@ -1,7 +1,7 @@
 import { adjustOutputBoxSize } from 'init/adjust-output-boxes-size'
 
 export function initTabs() {
-    const tabs = document.querySelectorAll('.tab')
+    const tabs = document.querySelectorAll('.tab-link')
     tabs.forEach(tab => {
         tab.addEventListener('click', (event) => openTab(event, tab.dataset.tab))
     })
@@ -15,7 +15,7 @@ export function initTabs() {
 
 function openTab(evt, tabName) {
     const tabContent = document.getElementsByClassName("tab-content")
-    const tabLinks = document.getElementsByClassName("tab")
+    const tabLinks = document.getElementsByClassName("tab-link")
     for (let i = 0; i < tabContent.length; i++) {
         tabContent[i].style.display = "none"
     }
@@ -27,7 +27,7 @@ function openTab(evt, tabName) {
         evt.currentTarget.classList.add("active") // Add 'active' class to the clicked tab
     } else {
         // If no event, then it's the initial load, so manually set the first tab link as active
-        document.querySelector('.tab').classList.add('active')
+        document.querySelector('.tab-link').classList.add('active')
     }
     adjustOutputBoxSize('tabChanged')
 }

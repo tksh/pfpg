@@ -57,7 +57,7 @@ function regexMatchesOfGroupColors(inputSvg) {
     const pattern = /<g[^>]*stroke=[^>]*>/g
     const matches = inputSvg.match(pattern) // matchメソッドで配列を返す
     // console.log('matches: ', matches)
-    // e.g.: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
+    // e.g.: (5) ['<g (id="0") stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="#eeeeee" opacity="1" stroke-opacity="1">', '<g stroke="#ffffff" opacity="1" stroke-opacity="1">']
     return matches
 }
 

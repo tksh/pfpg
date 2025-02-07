@@ -109,7 +109,7 @@ function updateSvgWithNewColorValue(inputValue, attrName, gId) {
     // Generate the <g> element string
     const changedGroupElem = generateGroupColorsSvgTags(gId, groupColorsArr)
     //console.log('changedGroupElem: ', changedGroupElem)
-    // e.g: <g stroke="#FF7523" opacity="1" stroke-opacity="1">
+    // e.g: <g (id="0") stroke="#FF7523" opacity="1" stroke-opacity="1">
 
     // Replace the changed <g> element via specific group ID
     const pattern = /<g[^>]*stroke=[^>]*>/g

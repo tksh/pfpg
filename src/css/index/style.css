@@ -12,7 +12,10 @@ body {
 
     margin-top: .5rem;
 
-    padding: .5rem 2rem 0 1rem ;    /* 左に 1rem 右に 2rem のパディング */
+    padding: .5rem 1rem 0 1rem ;
+
+    /* padding: .5rem 2rem 0 1rem ; */
+    /* 左に 1rem 右に 2rem のパディング */
 
     scrollbar-gutter: both-edges
     /* ボックスのインライン方向の先頭/末尾の端のどちらかにガターを表示した場合 反対側の端にもガターを表示 */
@@ -33,7 +36,13 @@ body {
     display: none;
 }
 
-.opts {
+
+.display-flex-wrap {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.setting-container {
     display: flex;
     flex-wrap: wrap;
 }
@@ -47,18 +56,18 @@ body {
 }
 
 
-.opts-cell {
+.setting-item {
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
 }
 
-/* .opts 要素の直接の子要素で、かつ.opt-cell 要素に対してのみ適用 */
+/* .setting-container 要素の直接の子要素で、かつ.opt-cell 要素に対してのみ適用 */
 /* 'UI' tab内の <fieldset>子要素の .opt-cell は対象にならない */
-.opts > .opts-cell {
+.setting-container > .setting-item {
     margin-top: 1rem;
     min-width: 16rem;
 }
-fieldset > .opts-cell {       /* SVG/PNG|PNG|SVG settings in UI tab */
+fieldset > .setting-item {       /* SVG/PNG|PNG|SVG settings in UI tab */
     margin-top: 0.75rem;
 }
 
@@ -97,6 +106,12 @@ main {
     flex-grow: 1;
     padding-top: 1rem;
     padding-bottom: 2rem;
+}
+
+/* IDs */
+/* header */
+#customization {
+    width: calc(100% - 1rem);
 }
 
 #input-and-output {
@@ -230,7 +245,7 @@ textarea#svg-string.no-wrap {
 div#group-colors-container {
     padding-left: 1rem;
 }
-.opts-cell-for-group-colors {
+.setting-item-for-group-colors {
     margin-top: 0.25rem;
     padding-right: 1rem;
     margin-top: 0.75rem;
@@ -274,9 +289,9 @@ select.opacities-selector {
 }
 
 
-/* opts-cell クラスを持つ <div> 要素内にある <input> 要素のみに スタイルを適用 */
+/* setting-item クラスを持つ <div> 要素内にある <input> 要素のみに スタイルを適用 */
 /* グローバルに input に対して適用すると Alwanが生成するカラーピッカーに 影響を与えてしまう */
-div.opts-cell input {
+div.setting-item input {
     border: 1px solid var(--color-picker-border);
 }
 
@@ -290,11 +305,11 @@ div.stroke-thumbnail.stroke-hex {
 
 
 /* Height pixel size */
-div.opts-cell input#png-size-number {
+div.setting-item input#png-size-number {
     width: 4rem;
 }
 
-div.opts-cell input[type="range"] {
+div.setting-item input[type="range"] {
     /* スライダーを親要素のフォントサイズの0.3倍下にずらす */
     vertical-align: -0.3rem;
 }
@@ -479,20 +494,23 @@ details#showcase figure {
 }
 
 
+@media screen and (max-width: 1024px) {
+    footer#footer-info {
+        padding: 1rem;
+        /* default: 2rem; / max-width: 1024px => 1rem / max-width: 512px => 0.5rem */
+    }
+}
+
 @media screen and (max-width: 512px) {
 
     body {
         padding: 0;
-        margin-top: .25rem;
+        /* margin-top: .25rem; */
 
     }
-    header {
-        padding-right: 1rem;
-    }
-
     footer#footer-info {
-        padding: 1rem;
-        /* default: 2rem; */
+        padding: 0.5rem;
+        /* default: 2rem; / max-width: 512px => 1rem / max-width: 512px => 0.5rem */
     }
     footer > details {
         padding: 0.5rem;
@@ -509,7 +527,7 @@ details#showcase figure {
         flex-direction: column;
     }
 
-    .opts {
+    .setting-container {
         flex-direction: column;
     }
 
@@ -530,17 +548,17 @@ details#showcase figure {
         font-size: 0.9rem;
     }
 
-    .opts-cell-for-group-colors {
+    .setting-item-for-group-colors {
         padding-left: 0
     }
 
-    /* .opts 要素の直接の子要素で、かつ.opt-cell 要素に対してのみ適用 */
+    /* .setting-container 要素の直接の子要素で、かつ.opt-cell 要素に対してのみ適用 */
     /* 'UI' tab内の <fieldset>子要素の .opt-cell は対象にならない */
-    .opts > .opts-cell {
+    .setting-container > .setting-item {
         margin-top: 0.5rem;
         padding-left: 0;
     }
-    fieldset > .opts-cell {       /* SVG/PNG|PNG|SVG settings in UI tab */
+    fieldset > .setting-item {       /* SVG/PNG|PNG|SVG settings in UI tab */
         margin-top: 0.25rem;
     }
     .tab-content fieldset {

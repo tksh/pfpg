@@ -82,8 +82,8 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
     for (let gId = 0; gId < numberOfGroups; gId++) {
 
         // A parent <div> for group colors
-        const optsCellDiv = document.createElement('div');
-        optsCellDiv.classList.add('opts-cell-for-group-colors');
+        const settingItemDiv = document.createElement('div');
+        settingItemDiv.classList.add('setting-item-for-group-colors');
 
         // A <span> to display the group ID number
         const gIdSpan = createGroupIdSpanElement(gId)
@@ -120,14 +120,14 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
         const opacitySelect = createOpacitiesSelectElement(gId, opacitySteps, 'opacity', opacityArr[gId])
         const strokeOpacitySelect = createOpacitiesSelectElement(gId, opacitySteps, 'stroke-opacity', strokeOpacityArr[gId])
 
-        // Append into <div class="opts-cell-for-group-colors">
-        optsCellDiv.appendChild(gIdSpan);             // gId
-        optsCellDiv.appendChild(strokeThumbDiv);      // stroke
-        optsCellDiv.appendChild(opacitySelect);       // opacity
-        optsCellDiv.appendChild(strokeOpacitySelect); // stroke-opacity
+        // Append into <div class="setting-item-for-group-colors">
+        settingItemDiv.appendChild(gIdSpan);             // gId
+        settingItemDiv.appendChild(strokeThumbDiv);      // stroke
+        settingItemDiv.appendChild(opacitySelect);       // opacity
+        settingItemDiv.appendChild(strokeOpacitySelect); // stroke-opacity
 
         // Append into <div id="group-colors-container">
-        groupColorsDiv.appendChild(optsCellDiv);
+        groupColorsDiv.appendChild(settingItemDiv);
     }
 }
 
