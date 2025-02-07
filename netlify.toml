@@ -5,3 +5,7 @@
 [build.environment]
   # NPMのインストールを無効化
   NPM_FLAGS = "--version"
+
+[[edge_functions]]
+  function = "first-function"
+  path = "/ogp"
