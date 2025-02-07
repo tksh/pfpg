@@ -1,5 +1,5 @@
 import { bech32
-       , bech32m } from 'libs/bech32-and-bech32m'
+       , bech32m } from 'libs/bech32/bech32-and-bech32m'
 
 export
     { sha256HashHexFromMap
