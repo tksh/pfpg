@@ -111,6 +111,8 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
             opacity: false,            // Remove the alpha channel settings UI elements
             copy: false,               // Remove a copy button
             theme: lightOrDark,        // 'light' or 'dark' based on UI theme color
+            position: "top-start", // Keep below space free for virtual keyboard for mobile
+            preview: false, // Lesser height
         });
 
         // カラーピッカーで 色が変更された時の イベントリスナー
