@@ -171,19 +171,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
        // Add event lister to viewport for continuous resizing the output boxes (PNG and SVG)
        initViewportLister()
-
-
-       if ("virtualKeyboard" in navigator) {
-              // Prevent the browser from resizing the viewport
-              navigator.virtualKeyboard.overlaysContent = true;
-
-              // Listen for geometry changes
-              navigator.virtualKeyboard.addEventListener("geometrychange", (event) => {
-                     const { x, y, width, height } = event.target.boundingRect;
-                     // Adjust your layout based on the keyboard's position and size
-                     console.log(`Keyboard position: x=${x}, y=${y}, width=${width}, height=${height}`);
-                     // You can add logic here to reposition your color picker popup if needed
-              });
-       }
-
 })
