@@ -1,4 +1,4 @@
-import { adjustOutputBoxSize } from 'init/adjust-output-boxes-size'
+import { adjustLayoutIfNotMobile } from 'init/adjust-layout'
 
 export function initTabs() {
     const tabs = document.querySelectorAll('.tab-link')
@@ -29,7 +29,7 @@ function openTab(evt, tabName) {
         // If no event, then it's the initial load, so manually set the first tab link as active
         document.querySelector('.tab-link').classList.add('active')
     }
-    adjustOutputBoxSize('tabChanged')
+    adjustLayoutIfNotMobile('tabChanged')
 }
 
 function handleKeyPress(event) {

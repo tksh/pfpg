@@ -104,15 +104,15 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
 
         const alwan = new Alwan(strokeThumbDiv, {
             id: `alwan-picker-${gId}`,
-            preset: false,             // Use custom thumbnail as a reference element instead of pre-styled button
-            format: colorFormat,       // format:'rgb' or format:'hex'
-            color: strokeArr[gId],     // Set the color value (rgb or hex)
-            inputs: rgbOrHex,          // Show only the format selected currently
-            opacity: false,            // Remove the alpha channel settings UI elements
-            copy: false,               // Remove a copy button
-            theme: lightOrDark,        // 'light' or 'dark' based on UI theme color
-            position: "top-start", // Keep below space free for virtual keyboard for mobile
-            preview: false, // Lesser height
+            preset: false,          // Use custom thumbnail as a reference element instead of pre-styled button
+            format: colorFormat,    // format:'rgb' or format:'hex'
+            color: strokeArr[gId],  // Set the color value (rgb or hex)
+            inputs: rgbOrHex,       // Show only the format selected currently
+            opacity: false,         // Remove the alpha channel settings UI elements
+            copy: false,            // Remove a copy button
+            theme: lightOrDark,     // 'light' or 'dark' based on UI theme color
+            position: "top-start",  // Keep below space free for virtual keyboard for mobile
+            preview: false,         // Lesser height
         });
 
         // カラーピッカーで 色が変更された時の イベントリスナー

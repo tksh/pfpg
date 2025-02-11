@@ -2,8 +2,8 @@ import { initDownloadButtons }                  from 'button/init-download-butto
 import { initButtonActionSelect }               from 'button/update-button-text'
 import { isOnDataManipulatorPage }              from 'common-utils/select-output-textarea'
 import { decodeUrlToSvg }                       from 'decode/decode'
-import { adjustOutputBoxSize
-       , initViewportLister }                   from 'init/adjust-output-boxes-size'
+import { adjustLayoutIfNotMobile
+       , initViewportLister }                   from 'init/adjust-layout'
 import { storeArtworkId }                       from 'init/calc-artwork-id'
 import { initTabs }                             from 'init/tab-setup'
 import { initSvgOptimizationModalToggle
@@ -99,7 +99,7 @@ import { initViewScalingSelect }                from 'tab-ui/view-scaling'
 
 
        // Startup layout initialization process must be executed before 'DOMContentLoaded'
-       adjustOutputBoxSize('pageLoaded')
+       adjustLayoutIfNotMobile()
 
 })() // `(async function () { ... })` 無名即時実行関数
 

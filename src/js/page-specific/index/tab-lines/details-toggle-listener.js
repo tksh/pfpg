@@ -1,8 +1,8 @@
-import { adjustOutputBoxSize }                  from 'init/adjust-output-boxes-size'
+import { adjustLayoutIfNotMobile }                  from 'init/adjust-layout'
 
 export function initOptionDetailsToggleListener() {
     const details = document.getElementById('lines-option-details')
     details.addEventListener("toggle", () => {
-        adjustOutputBoxSize('detailsOpened')
+        adjustLayoutIfNotMobile('detailsOpened')
     })
 }

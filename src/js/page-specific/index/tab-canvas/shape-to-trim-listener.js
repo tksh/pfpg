@@ -1,5 +1,5 @@
 import { getSvgString }                   from 'button/download-as-file'
-import { adjustOutputBoxSize }                  from 'init/adjust-output-boxes-size'
+import { adjustLayoutIfNotMobile }                  from 'init/adjust-layout'
 import { resvgOption }                    from 'state/resvg-option'
 import { updateState }                    from 'state/url-state-manager'
 import { executeSvg2png }                 from 'svg-to-png'
@@ -31,10 +31,10 @@ function initShapeToTrimSelect() {
 
         if (shapeToTrim === 'squircleSlimmed') {
             toggleDisplay(elementsToToggle, 'inline')
-            adjustOutputBoxSize('optionDisplayed')
+            adjustLayoutIfNotMobile('optionDisplayed')
         } else {
             toggleDisplay(elementsToToggle, 'none')
-            adjustOutputBoxSize('optionDisplayed')
+            adjustLayoutIfNotMobile('optionDisplayed')
         }
 
 
