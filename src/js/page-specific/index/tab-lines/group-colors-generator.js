@@ -65,7 +65,7 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
 
 
     // Parent <div> element to append all line-group setting elements
-    const groupColorsDiv = document.getElementById("group-colors-container");
+    const groupColorsDiv = document.getElementById("group-colors-pickers");
 
 
     // Remove all current child nodes before generating new ones
@@ -128,7 +128,7 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
         settingItemDiv.appendChild(opacitySelect);       // opacity
         settingItemDiv.appendChild(strokeOpacitySelect); // stroke-opacity
 
-        // Append into <div id="group-colors-container">
+        // Append into <div id="group-colors-pickers">
         groupColorsDiv.appendChild(settingItemDiv);
     }
 }
