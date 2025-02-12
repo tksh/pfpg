@@ -248,7 +248,7 @@
                 <div id="group-colors-container" class="setting-container"></div>
 
                 <details id="lines-option-details" class="padding-top-1">
-                    <summary class="font-size-small font-color-lighter">More settings…</summary>
+                    <summary class="font-size-small font-color-lighter">More settings:</summary>
 
                     <div id="lines-options" class="padding-left-1">
 
@@ -418,7 +418,7 @@
 
                 <div class="setting-container">
                     <fieldset>
-                        <legend class="font-size-small font-color-lighter">PNG/SVG</legend>
+                        <legend class="font-size-small font-color-lighter">PNG/SVG:</legend>
 
                         <!-- Button action -->
                         <div class="setting-item padding-left-1">
@@ -434,7 +434,7 @@
 
                 <div class="setting-container">
                     <fieldset>
-                        <legend class="font-size-small font-color-lighter">PNG</legend>
+                        <legend class="font-size-small font-color-lighter">PNG:</legend>
 
                         <!-- View scaling -->
                         <div class="setting-item padding-left-1">
@@ -456,7 +456,7 @@
 
                 <div class="setting-container">
                     <fieldset>
-                        <legend class="font-size-small font-color-lighter">SVG</legend>
+                        <legend class="font-size-small font-color-lighter">SVG:</legend>
 
                         <!-- Text wrapping -->
                         <div class="setting-item padding-left-1">
@@ -630,31 +630,55 @@
         <details>
             <summary>Usage</summary>
             <dl class="top-level">
-                <dt>Workflow:</dt>
+                <dt>Basic flow:</dt>
                 <dd class="padding-top-1">
                     <ol>
-                        <li><b>Import</b>: Start by importing the artwork data from a URL that includes a <a href="https://en.wikipedia.org/wiki/Query_string" title="Query string - Wikipedia">query string</a> encoding.</li>
-                        <li><b>Custom</b>: Modify your artwork freely using the options available under each category tab.</li>
-                        <li><b>Export</b>: Save your final artwork as either a <a href="https://en.wikipedia.org/wiki/PNG" title="PNG - Wikipedia">PNG</a> (raster) or <a href="https://en.wikipedia.org/wiki/SVG" title="SVG - Wikipedia">SVG</a> (vector) image format.</li>
+                        <li>Import artwork data from a URL containing a <a href="https://en.wikipedia.org/wiki/Query_string" title="Query string - Wikipedia">query string</a>.</li>
+                        <li>Modify your artwork freely using the options in each category tab.</li>
+                        <li>Export your artwork as a <a href="https://en.wikipedia.org/wiki/PNG" title="PNG - Wikipedia">PNG</a> (raster) or <a href="https://en.wikipedia.org/wiki/SVG" title="SVG - Wikipedia">SVG</a> (vector) format via export buttons.</li>
                     </ol>
                 </dd>
             </dl>
             <dl class="top-level padding-top-1 padding-bottom-1">
-                <dt>Tips:</dt>
+                <dt>Configuration options:</dt>
                 <dd class="padding-left-1">
                     <dl>
-                        <dt>The difference made by <i>Path mode</i> option (in <i>Lines</i> tab)</dt>
+                        <dt>Tab Sections:</dt>
                         <dd>
                             <ul>
-                                <li><i>Relative and merged</i>: 'stroke-opacity' affects the whole line groups.</li>
-                                <li><i>Absolute and separated</i>: 'stroke-opacity' affects the appearance of each line.</li>
+                                <li>The <i>Lines</i>, <i>Canvas</i>, <i>Render</i> tabs offer settings to customize the artwork's appearance.</li>
+                                <li>The <i>UI</i> tab allows you to adjust the website's behavior.</li>
                             </ul>
                         </dd>
                     </dl>
                     <dl>
-                        <dt>Maximum rendering size for <i>Height pixel size</i> option (in <i>Render</i> tab)</dt>
-                        <dd>The slider allows you to set the size up to 512 pixels, but you can type in a larger number manually into the box.</dd>
-                        <dd>(Note: Larger sizes will exponentially increase the rendering time)</dd>
+                        <dt>Modal Dialogs:</dt>
+                        <dd>
+                            <ul>
+                                <li>Click/tap the reset icon (<span class="icon-font material-symbols-outlined">restart_alt</span>) to reset settings by category.</li>
+                                <li>Click/tap the rendered PNG image to access the sharing feature.</li>
+                                <li>Click/tap the source SVG input field to access optimization settings.</li>
+                            </ul>
+                        </dd>
+                    </dl>
+                </dd>
+            </dl>
+            <dl class="top-level padding-top-1 padding-bottom-1">
+                <dt>Additional Information:</dt>
+                <dd class="padding-left-1">
+                    <dl>
+                        <dt>Effect of the <i>Path mode</i> option (in <i>Lines</i> tab):</dt>
+                        <dd>
+                            <ul>
+                                <li><i>Relative and merged</i>: 'stroke-opacity' applies to entire line groups.</li>
+                                <li><i>Absolute and separated</i>: 'stroke-opacity' applies to individual lines</li>
+                            </ul>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Maximum rendering size for <i>Height pixel size</i> option (in <i>Render</i> tab):</dt>
+                        <dd>The slider supports sizes up to 512 pixels, but you can manually enter a larger value into the box.</dd>
+                        <dd>(Note: Larger sizes will exponentially increase rendering time)</dd>
                     </dl>
                 </dd>
             </dl>
