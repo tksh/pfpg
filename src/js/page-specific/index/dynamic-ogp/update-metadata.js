@@ -1,4 +1,5 @@
-export function updateMetadata(title, description, url, image) {
+// OGタグを更新する関数
+export function updateMetadata(title, description, url, imageUrl) {
     const metaOgTitle = document.querySelector('meta[property="og:title"]');
     const metaOgType = document.querySelector('meta[property="og:type"]');
     const metaOgDescription = document.querySelector('meta[property="og:description"]');
@@ -8,9 +9,8 @@ export function updateMetadata(title, description, url, image) {
     metaOgTitle.content = title;
     metaOgDescription.content = description;
     metaOgUrl.content = url;
-    // metaOgImage.content = image;
+    metaOgImage.content = imageUrl;
 
     // og:type is fixed value
     metaOgType.content = "website";
 }
-

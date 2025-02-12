@@ -4,7 +4,7 @@ import { isOnDataManipulatorPage }              from 'common-utils/select-output
 import { decodeUrlToSvg }                       from 'decode/decode'
 import { adjustLayoutIfNotMobile
        , initViewportLister }                   from 'init/adjust-layout'
-import { storeArtworkId }                       from 'init/calc-artwork-id'
+import { storeArtworkId }                       from 'dynamic-ogp/calc-artwork-hash'
 import { initTabs }                             from 'init/tab-setup'
 import { initSvgOptimizationModalToggle
        , initResetSettingsModalToggle }         from 'modal/modal-toggle'

@@ -20,7 +20,7 @@ export
 
 
 // Functions for 'applySvgOptimization()'
-// Restore the states of optimization via ulr params
+// Restore the status of optimization via ulr params
 
 function tryRemoveOpacity(svgString, isOpacityRemoved) {
     console.log('tryRemoveOpacity executed.')
@@ -270,7 +270,7 @@ function restoreSpaces(svgString) {
 // // <path d="M 6.35 63.5 Q 5.08 0 63.5 0 T 120.65 63.5 63.5 127 6.35 63.5" />
 
 
-// Bulk apply the optimizations based on current url params states, after 'pathMode' changes.
+// Bulk apply the optimizations based on current url params status, after 'pathMode' changes.
 // It will restore the string to how it looked before the changes.
 function optimizeSvg(svgString, state) {
     let optimizedSvg = svgString

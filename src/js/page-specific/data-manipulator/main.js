@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupCopyButtons()
 
 
-    // Initialize checkbox states based on pre-inputted sample Basic Data json
+    // Initialize checkbox status based on pre-inputted sample Basic Data json
     const basicData = parseBasicData()
     updateBasicDataKeysCheckboxStates(basicData)
     updateEncodingMethodsCheckboxStates(basicData)

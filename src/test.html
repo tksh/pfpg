@@ -27,16 +27,16 @@
             // Map(15)
             // 0: {"groupColors" => undefined} If there is no changes for group colors. But for hashing, it's OK.
 
-            let statesKvJoinedAsStr = '';
+            let stateKvJoinedAsStr = '';
             for (const [key, value] of map) {
-                statesKvJoinedAsStr += `&${key}=${value}`;
+                stateKvJoinedAsStr += `&${key}=${value}`;
             }
-            console.log("statesKvJoinedAsStr:", statesKvJoinedAsStr)
-            alert(`statesKvJoinedAsStr: ${statesKvJoinedAsStr}`);
+            console.log("stateKvJoinedAsStr:", stateKvJoinedAsStr)
+            alert(`stateKvJoinedAsStr: ${stateKvJoinedAsStr}`);
             // e.g: &groupColors=undefined&pathMode=absoluteSeparated& ... &themeColor=dark
 
             const encoder = new TextEncoder();
-            const encodedHash = encoder.encode(statesKvJoinedAsStr);
+            const encodedHash = encoder.encode(stateKvJoinedAsStr);
 
             // crypto オブジェクトの存在確認 (例)
             if (typeof crypto === 'undefined' || !crypto.subtle) {
@@ -61,16 +61,16 @@
             // Map(15)
             // 0: {"groupColors" => undefined} If there is no changes for group colors. But for hashing, it's OK.
 
-            let statesKvJoinedAsStr = '';
+            let stateKvJoinedAsStr = '';
             for (const [key, value] of map) {
-                statesKvJoinedAsStr += `&${key}=${value}`;
+                stateKvJoinedAsStr += `&${key}=${value}`;
             }
-            console.log("statesKvJoinedAsStr without async/await:", statesKvJoinedAsStr)
-            // alert(`statesKvJoinedAsStr: ${statesKvJoinedAsStr}`);
+            console.log("stateKvJoinedAsStr without async/await:", stateKvJoinedAsStr)
+            // alert(`stateKvJoinedAsStr: ${stateKvJoinedAsStr}`);
             // e.g: &groupColors=undefined&pathMode=absoluteSeparated& ... &themeColor=dark
 
             // const encoder = new TextEncoder();
-            // const encodedHash = encoder.encode(statesKvJoinedAsStr);
+            // const encodedHash = encoder.encode(stateKvJoinedAsStr);
 
             // crypto オブジェクトの存在確認 (例)
             if (typeof crypto === 'undefined' || !crypto.subtle) {
@@ -80,7 +80,7 @@
             }
 
             // Use '.then'
-            return crypto.subtle.digest('SHA-256', new TextEncoder().encode(statesKvJoinedAsStr)).then(hashBuffer => {
+            return crypto.subtle.digest('SHA-256', new TextEncoder().encode(stateKvJoinedAsStr)).then(hashBuffer => {
 
                 const hashArray = Array.from(new Uint8Array(hashBuffer));
                 const hexString = uint8ArrayToHexString(hashArray)

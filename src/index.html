@@ -44,6 +44,9 @@
                 "decode/size-data-dec": "./js/encode-and-decode/decode/size-data-dec.js",
                 "decode/try-decompress": "./js/encode-and-decode/decode/try-decompress.js",
 
+                "dynamic-ogp/calc-artwork-hash": "./js/page-specific/index/dynamic-ogp/calc-artwork-hash.js",
+                "dynamic-ogp/calc-config-hash": "./js/page-specific/index/dynamic-ogp/calc-config-hash.js",
+
                 "enc-and-dec/base-n/base-52-dec": "./js/encode-and-decode/enc-and-dec/base-n/base-52-dec.js",
                 "enc-and-dec/base-n/base-52-enc": "./js/encode-and-decode/enc-and-dec/base-n/base-52-enc.js",
                 "enc-and-dec/base-n/base-53-dec": "./js/encode-and-decode/enc-and-dec/base-n/base-53-dec.js",
@@ -106,7 +109,6 @@
 
 
                 "init/adjust-layout": "./js/page-specific/index/init/adjust-layout.js",
-                "init/calc-artwork-id": "./js/page-specific/index/init/calc-artwork-id.js",
                 "init/initial-opacity-steps": "./js/page-specific/index/init/initial-opacity-steps.js",
                 "init/set-defaults": "./js/page-specific/index/init/set-defaults.js",
                 "init/tab-setup": "./js/page-specific/index/init/tab-setup.js",
@@ -154,7 +156,9 @@
                 "button/init-download-buttons": "./js/page-specific/index/button/init-download-buttons.js",
                 "button/update-button-text": "./js/page-specific/index/button/update-button-text.js",
 
-                "dynamic-ogp/generate-og-image": "./js/page-specific/index/dynamic-ogp/generate-og-image.js",
+                "dynamic-ogp/constants": "./js/page-specific/index/dynamic-ogp/constants.js",
+                "dynamic-ogp/generate-and-upload": "./js/page-specific/index/dynamic-ogp/generate-and-upload.js",
+                "dynamic-ogp/params-for-uploading": "./js/page-specific/index/dynamic-ogp/params-for-uploading.js",
                 "dynamic-ogp/update-metadata": "./js/page-specific/index/dynamic-ogp/update-metadata.js",
 
                 "svg-to-png": "./js/page-specific/index/svg-to-png.js",
@@ -203,7 +207,7 @@
     <meta property="og:title" content="pfpg" />
     <meta property="og:url" content="https://pfpg.netlify.app/index.html" />
     <meta property="og:description" content="A custom profile picture generator for a specific svg artwork that was made with the UIntNPortray ruleset." />
-    <!-- <meta property="og:image" content="URL of Cloudinary, get deterministically from artwork data and current settings states" /> -->
+    <!-- <meta property="og:image" content="URL of Cloudinary, get deterministically from artwork data and current settings status" /> -->
     <!-- <meta property="og:image" content="https://res.cloudinary.com/ddoy3pmjg/image/upload/v1734026224/cld-sample-5.jpg" /> -->
     <!-- <meta property="og:image" content="https://res.cloudinary.com/ddoy3pmjg/image/upload/pfpg17d5e3dd8d561d00d7c48302402f47b9f024ae14d427c4526f7b1a5a2d1bdc9af.png" /> -->
     <meta property="og:image" content="" />

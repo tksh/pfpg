@@ -1,21 +1,11 @@
 import { decodeUrlParams } from 'common-utils/read-url-params'
-import { strToSha256
-       , hashArrayToBech32 }              from 'utils/hashing'
+import { strToSha256 }     from 'utils/hashing'
 
-// export {
-//     , read-url-params.js
-// }
-
-//async function storeArtworkId() {
-//    const calculatedIds = await calculateArtworkId()
-//    ARTWORK_ID_AND_CONFIG_HASH_MAP.set('artworkID', calculatedIds.bech32mHash)
-//}
-
-export async function calculateArtworkId() {
+export async function calculateArtworkHash() {
 
     // Start time
     const calcArtworkIdStartTime = performance.now()
-    console.log('Start the calculating artwork ID ...')
+    console.log('Start the calculating artwork hash ...')
 
     // Retrieve URL parameters and extract lines data
     const decodedParams = decodeUrlParams()
@@ -26,19 +16,16 @@ export async function calculateArtworkId() {
     console.log("compositeSequence: ", compositeSequence)                // 01701701702552551272_6364 ...
     console.log("compositeSequence.length: ", compositeSequence.length)  // e.g.: 7578 (202404_001)
 
+    // Get an artwork hash
     const { hashArray, hashHex } = await strToSha256(compositeSequence)
-    console.log(" hashArray, hashHex: ",  hashArray, hashHex)
-    const { bech32Hash, bech32mHash } = hashArrayToBech32(hashArray)
-    console.log("bech32Hash, bech32mHash: ", bech32Hash, bech32mHash)
+    console.log("hashArray, hashHex: ",  hashArray, hashHex)
 
     // End time
     const calcArtworkIdEndTime = performance.now()
     const elapsedTime = Math.floor(calcArtworkIdEndTime - calcArtworkIdStartTime)
-    console.log('elapsedTime of calculating artwork ID: ', elapsedTime, ' ms')
+    console.log('elapsedTime of calculating artwork hash: ', elapsedTime, ' ms')
 
-    // callback( { bech32Hash, bech32mHash } )
-    // return { bech32Hash, bech32mHash }
-    return { hashHex, bech32Hash, bech32mHash }
+    return hashHex
 }
 
 function generateCompositeSequence(linesData) {

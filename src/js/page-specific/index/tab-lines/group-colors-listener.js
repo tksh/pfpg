@@ -118,7 +118,7 @@ function updateSvgWithNewColorValue(inputValue, attrName, gId) {
     // Update the svg string in html
     document.querySelector('#svg-string').value = updatedSvg
 
-    // Update the states
+    // Update the status
     const groupColorsHexString = getGroupColorsAsJoinedHex(updatedSvg)
     updateState('groupColors', groupColorsHexString)
 

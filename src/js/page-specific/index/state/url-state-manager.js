@@ -166,9 +166,9 @@ function getStateUrlsOfUiConfiguration() {
 // Image customization, UI configuration の状態パラメータを全て取得し 存在しない場合はデフォルト値で補完する関数
 // - ブーリアンへの型変換は行わなず 文字列のまま 取得する
 function getStateUrlsAsMapExcludesSvgOptimization() {
-    const statesExcludeArtworkData = getStateUrlsAsMapWithDefaultFill()
-    const statesExcludeSvgOptimization = filterStateByIndex(statesExcludeArtworkData, 3, SETTINGS_DEFAULTS.size)
-    return statesExcludeSvgOptimization
+    const statusExcludeArtworkData = getStateUrlsAsMapWithDefaultFill()
+    const statusExcludeSvgOptimization = filterStateByIndex(statusExcludeArtworkData, 3, SETTINGS_DEFAULTS.size)
+    return statusExcludeSvgOptimization
 }
 
 

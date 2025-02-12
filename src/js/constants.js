@@ -107,7 +107,7 @@ export const ENCODING_METHOD_AND_CONFIG_MAP = new Map([
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// Used for storing the states at index.html, mainly,
+// Used for storing the status at index.html, mainly,
 // and also used for distilling the strokes data for decoding at both index.html and data-manipulator.html
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -136,19 +136,9 @@ export const SETTINGS_DEFAULTS = new Map([
     ['shapeRendering',   'crispEdges'],        // Render tab |  11   | String | 'crispEdges', 'geometricPrecision'
     ['heightPixelSize',   256],                // Render tab |  12   | Uint   | 0 <
 
-    ['themeColor',       undefined],               // UI tab |  12   | String | 'white', 'light', 'dark', 'black'
-    ['buttonAction',     'download'],              // UI tab |  13   | String | 'download', 'copy'
-    ['viewScaling',      'fit'],                   // UI tab |  14   | String | 'fit', 'actual'
-    ['checkerboardBg',   true],                    // UI tab |  15   | Bool   | true, false
-    ['textWrapping',     false],                   // UI tab |  16   | Bool   | true, false
-])
-
-
-////////////////////////////////////////////////////////////////////////////////
-// Used for decoding at index.html only
-////////////////////////////////////////////////////////////////////////////////
-
-export const ARTWORK_ID_AND_CONFIG_HASH_MAP = new Map([
-    ['artworkID', ''],
-    ['configHash',  ''],  // Except SVG optimization
+    ['themeColor',       undefined],               // UI tab |  13   | String | 'white', 'light', 'dark', 'black'
+    ['buttonAction',     'download'],              // UI tab |  14   | String | 'download', 'copy'
+    ['viewScaling',      'fit'],                   // UI tab |  15   | String | 'fit', 'actual'
+    ['checkerboardBg',   true],                    // UI tab |  16   | Bool   | true, false
+    ['textWrapping',     false],                   // UI tab |  17   | Bool   | true, false
 ])

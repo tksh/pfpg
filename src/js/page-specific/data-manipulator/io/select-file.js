@@ -18,7 +18,7 @@ export function selectFileToInput(selectButtonId, textAreaId){
 
         // Update checkboxes status for Basic Data decoding
         if (textAreaId === 'textarea-basic-data-uploaded') {
-            // Update checkbox states based on data
+            // Update checkbox status based on data
             const basicData = parseBasicData()
             updateBasicDataKeysCheckboxStates(basicData)
         }
