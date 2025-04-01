@@ -1,6 +1,5 @@
 export { rgbToLch }
 
-// RGBをXYZに変換
 function rgbToXyz(r, g, b) {
     r /= 255;
     g /= 255;
@@ -17,7 +16,6 @@ function rgbToXyz(r, g, b) {
     return [x, y, z];
 }
 
-// XYZをLabに変換
 function xyzToLab(x, y, z) {
     const ε = 216/24389;
     const κ = 24389/27;
@@ -33,7 +31,6 @@ function xyzToLab(x, y, z) {
     return [l, a, b];  // lightness, a and b axes
 }
 
-// LabをLCHに変換
 function labToLch(l, a, b) {
     const c = Math.sqrt(a * a + b * b);
     const hRadians = Math.atan2(b, a);
@@ -44,7 +41,6 @@ function labToLch(l, a, b) {
     return [l, c, hDegrees];
 }
 
-// RGB から LCH を取得する関数
 function rgbToLch(r, g, b) {
     const [x, y, z] = rgbToXyz(r, g, b);
     const [l, a, bLab] = xyzToLab(x/0.96422, y, z/0.82521); // D65のXYZ値で正規化
