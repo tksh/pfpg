@@ -41,7 +41,6 @@ bash scripts/build_and_preview.sh  # Execute Bun and Farm
 - [URLCompressor](https://synapse.kyoto/lib/url-comp/page001.html) (MIT license), convert to ESM
 - [Alwan](https://github.com/sefianecho/alwan) (MIT license)
 - [Deno standard library](https://github.com/denoland/deno_std) (MIT license), ported to JS
-- [numcodecs.js](https://github.com/manzt/numcodecs.js) (MIT license)
 - [bech32](https://github.com/bitcoinjs/bech32) (MIT license)
 
 ## License

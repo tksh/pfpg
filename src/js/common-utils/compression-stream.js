@@ -1,5 +1,6 @@
 export
-    { compressToEncodedURIComponent
+    { compressToBlob
+    , compressToEncodedURIComponent
     , decompressFromEncodedURIComponent
     }
 
@@ -41,26 +42,40 @@ function createUpstream(array) {
 
 
 /**
- * 文字列を圧縮してBase64エンコードする非同期関数
+ * 文字列を CompressionStream で圧縮し Blob を返す非同期関数
  *
  * @param {string} input - 圧縮する文字列
- * @param {string} method - 圧縮方式 ("gzip", "deflate", "deflate-raw")
- * @returns {Promise<string>} Base64エンコードされた圧縮データ
+ * @param {string} method - 圧縮方式 ("gzip", "deflate", "deflate-raw", "zstd")
+ * @param {string} [mimeType='application/octet-stream'] - Blob の MIME type
+ * @returns {Promise<Blob>} 圧縮されたデータ
  */
-async function compressToBase64(input, method) {
+async function compressToBlob(input, method, mimeType = 'application/octet-stream') {
     const textEncoder = getTextEncoder()
     const upstream = createUpstream(textEncoder.encode(input))
     const compression = new CompressionStream(method)
     const stream = upstream.pipeThrough(compression)
     const compressed = await new Response(stream).arrayBuffer()
-    return btoa(String.fromCharCode(...new Uint8Array(compressed)))
+    return new Blob([compressed], { type: mimeType })
+}
+
+/**
+ * 文字列を圧縮してBase64エンコードする非同期関数
+ *
+ * @param {string} input - 圧縮する文字列
+ * @param {string} method - 圧縮方式 ("gzip", "deflate", "deflate-raw", "zstd")
+ * @returns {Promise<string>} Base64エンコードされた圧縮データ
+ */
+async function compressToBase64(input, method) {
+    const blob = await compressToBlob(input, method)
+    const compressed = new Uint8Array(await blob.arrayBuffer())
+    return btoa(String.fromCharCode(...compressed))
 }
 
 /**
  * Base64エンコードされた圧縮データを解凍する非同期関数
  *
  * @param {string} input - Base64エンコードされた圧縮データ
- * @param {string} method - 圧縮方式 ("gzip", "deflate", "deflate-raw")
+ * @param {string} method - 圧縮方式 ("gzip", "deflate", "deflate-raw", "zstd")
  * @returns {Promise<string>} 解凍されたテキストデータ
  */
 async function decompressFromBase64(input, method) {
@@ -77,7 +92,7 @@ async function decompressFromBase64(input, method) {
  * 文字列を圧縮し、URIコンポーネントとして安全な形式にエンコードする非同期関数
  *
  * @param {string} input - 圧縮してエンコードする文字列
- * @param {string} method - 圧縮方式 ("gzip", "deflate", "deflate-raw")
+ * @param {string} method - 圧縮方式 ("gzip", "deflate", "deflate-raw", "zstd")
  * @returns {Promise<string>} 圧縮され、URIコンポーネントとして安全な形式にエンコードされた文字列
  */
 async function compressToEncodedURIComponent(input, method) {
@@ -92,7 +107,7 @@ async function compressToEncodedURIComponent(input, method) {
  * URIコンポーネントとして安全な形式でエンコードされた圧縮文字列を解凍する非同期関数
  *
  * @param {string} input - 解凍する圧縮されたURIコンポーネント文字列
- * @param {string} method - 圧縮方式 ("gzip", "deflate", "deflate-raw")
+ * @param {string} method - 圧縮方式 ("gzip", "deflate", "deflate-raw", "zstd")
  * @returns {Promise<string>} 解凍された元の文字列
  */
 async function decompressFromEncodedURIComponent(input, method) {

@@ -1,14 +1,9 @@
+import { compressToBlob }          from 'common-utils/compression-stream'
 import { isNonEmpty }              from 'common-utils/is-non-empty'
 import { outputToTextarea }        from 'common-utils/output-to-textarea'
 import { readTextarea }            from 'common-utils/read-textarea'
 import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
 import { tryDecompress }           from 'decode/try-decompress'
-
-// numcodecs/zstd
-// via CDN
-// import Zstd from 'https://cdn.skypack.dev/numcodecs/zstd?min'
-// via Local
-import Zstd from 'libs/numcodecs-v0.3.2/numcodecs/zstd'
 
 export { mergeBasicDataAndLinesData }
 
@@ -28,6 +23,13 @@ if (isOnDataManipulatorPage()) {
 }
 
 async function downloadUrlParamsAsTxtZstd(textareaId) {
+
+    if (!supportsZstdCompressionStream()) {
+        const message = 'Zstandard CompressionStream is not supported in this browser.'
+        console.error(message)
+        document.getElementById('encoded-url-params-size').innerHTML = message
+        return
+    }
 
     // Get the text content from textarea
     const textContent = document.getElementById(textareaId).value
@@ -57,21 +59,21 @@ async function downloadUrlParamsAsTxtZstd(textareaId) {
     URL.revokeObjectURL(url)
 }
 
-// Compressed using Zstandard before download
+// Compressed using browser CompressionStream("zstd") before download
+
+function supportsZstdCompressionStream() {
+    try {
+        new CompressionStream('zstd')
+        return true
+    } catch {
+        return false
+    }
+}
 
 async function compressStringToBlob(string) {
 
-    // Convert the input string to a Uint8Array
-    const inputArray = new TextEncoder().encode(string)
-    console.log('inputArray: ', inputArray)      // e.g.: Uint8Array(488) [ 63, 50, 48, 50, 51, 48, 56, 95, 48, 48, … ]
-
-    // Encode with Zstandard
-    const codec = new Zstd()
-    const encoded = await codec.encode(inputArray)
-    console.log('encoded: ', encoded)            // e.g.:Uint8Array(415) [ 40, 181, 47, 253, 96, 232, 0, 173, 12, 0, … ]
-
-    // Convert the Uint8Array to a Blob
-    const blob = new Blob([encoded], { type: 'application/zstd' })
+    // Convert and compress the input string via CompressionStream("zstd")
+    const blob = await compressToBlob(string, 'zstd', 'application/zstd')
     console.log('typeof(blob): ', typeof (blob)) // object
     console.log('blob: ', blob)                  // e.g.: Blob { size: 415, type: "application/zstd" }
     return blob
@@ -148,21 +150,28 @@ async function mergeBasicDataAndLinesData(){
         // Output to textarea
         outputToTextarea(urlParamsStr, 'textarea-encoded-url-params')
 
-    // Check the size after ZSTD compression
-    const blobSize = await getBlobSize(urlParamsStr)
-    console.log(`Blob size: ${blobSize} bytes`)
+        // Check the size after ZSTD compression (when browser supports it)
+        if (!supportsZstdCompressionStream()) {
+            document.getElementById(`encoded-url-params-size`).innerHTML =
+            `Size of original url params string: <b>${urlParamsStr.length}</b> characters(bytes) (.txt)<br>
+            Zstandard CompressionStream is not supported in this browser.`
+            return
+        }
+
+        const blobSize = await getBlobSize(urlParamsStr)
+        console.log(`Blob size: ${blobSize} bytes`)
 
 
-    // Show the result
+        // Show the result
 
-    // Get the ratio between original string and zstd blob
-    const compRatio = blobSize / urlParamsStr.length
+        // Get the ratio between original string and zstd blob
+        const compRatio = blobSize / urlParamsStr.length
 
-    // Show the size of result in html
-    document.getElementById(`encoded-url-params-size`).innerHTML =
-    `Size of original url params string: <b>${urlParamsStr.length}</b> characters(bytes) (.txt)<br>
-    Size of after Zstandard compression: <b>${blobSize}</b> bytes (.txt.zst)<br>
-    Ratio: ${blobSize} / ${urlParamsStr.length} = <b>${compRatio}</b>`
+        // Show the size of result in html
+        document.getElementById(`encoded-url-params-size`).innerHTML =
+        `Size of original url params string: <b>${urlParamsStr.length}</b> characters(bytes) (.txt)<br>
+        Size of after Zstandard compression: <b>${blobSize}</b> bytes (.txt.zst)<br>
+        Ratio: ${blobSize} / ${urlParamsStr.length} = <b>${compRatio}</b>`
 
     } else {
 
