@@ -6,15 +6,21 @@ Profile picture generator
 
 <https://pfpg.netlify.app>
 
-## Run with Deno std/http file server
-
-<https://docs.deno.com/runtime/tutorials/file_server>
+## Run
 
 ```sh
-# Install
-deno install --allow-net --allow-read https://deno.land/std/http/file_server.ts
-# Run
-file_server .
+# Clone
+git clone git@github.com:tksh/pfpg.git
+cd pfpg/
+
+# Install `Alwan` library
+bun install
+
+# For local dev
+bash scripts/build_and_preview.sh  # Execute Bun and Farm
+
+# For deploy (without preview)
+#   Execute `scripts/build.sh` via netlify.toml when `git push`
 ```
 
 ## Build to Netlify using Bun and Farm
