@@ -93,3 +93,8 @@ button,                         /* <button> */
 .pad {
     padding: 1rem;
 }
+
+#encoded-url-params-size {
+    white-space: pre;
+    font-family: monospace;
+}
