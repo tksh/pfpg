@@ -52,6 +52,13 @@ textarea {
     margin-bottom: 1rem;
     resize: vertical;
     word-break: break-all;
+    font-family: monospace, ui-monospace;
+}
+
+textarea,
+pre,
+[id^="encoded-"] {
+    font-family: monospace, ui-monospace;
 }
 
 /* For function button <button> and select file button <input type="file"> */
@@ -96,5 +103,4 @@ button,                         /* <button> */
 
 #encoded-url-params-size {
     white-space: pre;
-    font-family: monospace;
 }
