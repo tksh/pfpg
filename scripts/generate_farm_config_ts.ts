@@ -1,11 +1,9 @@
 // Usage:
-//     > bun ../scripts/generate_farm_config_ts.ts
+//     > deno run --allow-read --allow-write ../scripts/generate_farm_config_ts.ts
 
 
-import fs from 'fs';
-
-console.log('process.cwd(): ', process.cwd())
-// process.cwd():  /opt/build/repo/farm (at Netlify deploy environment)
+console.log('Deno.cwd(): ', Deno.cwd())
+// Deno.cwd():  /opt/build/repo/farm (at Netlify deploy environment)
 
 
 // 上書き生成するファイルのパス
@@ -24,15 +22,15 @@ const TAB_SPACE = '\u0020\u0020' // Two spaces
 //      'index': './src/index.html',
 //      'data-manipulator': './src/data-manipulator.html'
 
-const htmlFiles = fs.readdirSync('../farm/src')
-  .filter(file => file.endsWith('.html'))
-  .map(file => file.replace('.html', ''));
+const htmlFiles = Array.from(Deno.readDirSync('../farm/src'))
+  .filter(entry => entry.isFile && entry.name.endsWith('.html'))
+  .map(entry => entry.name.replace('.html', ''));
 
 //console.log('htmlFiles: ', htmlFiles)
 //     [ "index", "data-manipulator" ]
 
 
-const inputObject = {};
+const inputObject: Record<string, string> = {};
 htmlFiles.forEach(file => {
   inputObject[file] = `../farm/src/${file}.html`;
 });
@@ -89,7 +87,7 @@ function sanitizeImportMapJson(jsonString: string): string {
 
 // Import Map の解析と alias の生成
 htmlFiles.forEach(file => {
-    const content = fs.readFileSync(`../farm/src/${file}.html`, 'utf8');
+    const content = Deno.readTextFileSync(`../farm/src/${file}.html`);
     const importMapMatch = content.match(/<script type="importmap">([\s\S]*?)<\/script>/);
 
     //console.log(`importMapMatch in ${file}: `, importMapMatch)
@@ -107,11 +105,11 @@ htmlFiles.forEach(file => {
             const importMap = JSON.parse(sanitizedJsonString);
 
             Object.entries(importMap.imports).forEach(([key, value]) => {
-                aliasMap.set(key, value);
+                aliasMap.set(key, value as string);
             });
-        } catch (error) {
+        } catch (_error) {
             console.warn(`Failed to parse import map in ${file}.html`);
-            process.exit(1);
+            Deno.exit(1);
         }
     }
 });
@@ -192,6 +190,6 @@ export default defineConfig({
 
 
 // ファイルを上書き生成
-fs.writeFileSync(filePath, fileContent);
+Deno.writeTextFileSync(filePath, fileContent);
 
 console.log('File generated successfully.');

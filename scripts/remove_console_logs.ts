@@ -1,44 +1,28 @@
-import { readFile, writeFile } from "fs/promises";
-import { stdin, stdout, argv } from "process";
-import { parseArgs } from "util";
+import { parseArgs } from "jsr:@std/cli/parse-args";
 
-const flags = parseArgs({
-  args: argv.slice(2),      // 最初の2つの要素をスキップ, argvには 実行コマンド と スクリプト名 が含まれるため それらを除外
-  options: {
-    input: {
-      type: "string",
-      default: "stdin",     // デフォルト値
-    },
-    output: {
-      type: "string",
-      default: "stdout",    // デフォルト値
-    },
+const flags = parseArgs(Deno.args, {
+  string: ["input", "output"],
+  default: {
+    input: "stdin",     // デフォルト値
+    output: "stdout",    // デフォルト値
   },
-  strict: true,             // 未定義のオプションをエラーとする
-  allowPositionals: false,  // 位置引数を許可しない
 });
 
 //console.log('flags: ', flags)
 
 // Files:
-//     > bun run js/bun/remove_console_logs.ts --input=input.js --output=output.js
+//     > deno run --allow-read --allow-write scripts/remove_console_logs.ts --input=input.js --output=output.js
 //         flags:  {
-//             values: {
-//               input: "input.js",
-//               output: "output.js",
-//             },
-//             positionals: [],
-//           }
+//           input: "input.js",
+//           output: "output.js",
+//         }
 
 // Std IO:
-//     > cat input.js | bun run js/bun/remove_console_logs.ts --input=stdin --output=stdout
+//     > cat input.js | deno run --allow-read --allow-write scripts/remove_console_logs.ts --input=stdin --output=stdout
 //         flags:  {
-//             values: {
-//               input: "stdin",
-//               output: "stdout",
-//             },
-//             positionals: [],
-//           }
+//           input: "stdin",
+//           output: "stdout",
+//         }
 
 
 // 'console.log' を削除
@@ -87,41 +71,35 @@ function removeConsoleLogs(input: string): string {
 }
 
 async function readFromStdin(): Promise<string> {
-    const chunks: Buffer[] = [];
-    for await (const chunk of stdin) {
-        chunks.push(chunk as Buffer);
-    }
-    return Buffer.concat(chunks).toString("utf-8");
+    return await new Response(Deno.stdin.readable).text();
 }
 
 
 async function main() {
     let input: string;
 
-    if (flags.values.input === "stdin") {
+    if (flags.input === "stdin") {
         // 標準入力から読み込む場合
         input = await readFromStdin();
     } else {
         // ファイルから読み込む場合
-        input = await readFile(flags.values.input, "utf-8");
+        input = await Deno.readTextFile(flags.input);
     }
 
     // 全体の内容に対して removeConsoleLogs 関数を適用
     const formatted: string = removeConsoleLogs(input);
     // console.log('formatted: ', formatted)
 
-    if (flags.values.output === "stdout") {
+    if (flags.output === "stdout") {
         // 標準出力に書き込む場合
-        stdout.write(formatted);
+        await Deno.stdout.write(new TextEncoder().encode(formatted));
     } else {
         // ファイルに書き込む場合
-        await writeFile(flags.values.output, formatted, "utf-8");
+        await Deno.writeTextFile(flags.output, formatted);
     }
 }
 
 // メインスクリプトとして実行された場合にmain関数を呼び出す
-if (import.meta.main) {  // https://bun.sh/docs/api/import-meta
-                         // - `true` if this file is directly executed by `bun run`
-                         // - `false` otherwise
-    main()
+if (import.meta.main) {
+    main();
 }

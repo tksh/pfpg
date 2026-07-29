@@ -1,14 +1,14 @@
 #!/bin/bash
 set -e
 
-if command -v bun &> /dev/null  # Check the 'Bun' installed or not
+if command -v deno &> /dev/null  # Check the 'Deno' installed or not
 then
-    echo "Bun has already installed."
+    echo "Deno has already installed."
 else
-    echo "Bun is not installed. Starting installation..."
-    curl -fsSL https://bun.sh/install | bash
-    export BUN_INSTALL=\"$HOME/.bun\"
-    export PATH=\"$BUN_INSTALL/bin:$PATH\"
+    echo "Deno is not installed. Starting installation..."
+    curl -fsSL https://deno.land/install.sh | sh
+    export DENO_INSTALL="$HOME/.deno"
+    export PATH="$DENO_INSTALL/bin:$PATH"
 fi
 
 
@@ -19,9 +19,9 @@ rm -rf ./farm/
 
 
 # Setup
-bun create farm@latest "farm" --template "vanilla"
+npx -y create-farm@latest "farm" --template "vanilla"
 
-# bun create farm@latest
+# deno run -A npm:create-farm@latest
 # ✔ Project name => "farm"
 # ✔ farm directory is not empty, do you want to overwrite? · yes
 # - If already exists same name project directory, Farm will asked above question,
@@ -34,8 +34,8 @@ bun create farm@latest "farm" --template "vanilla"
 cd farm
 
 # Install
-bun add alwan
-bun install
+deno add npm:alwan npm:core-js
+deno install
 
 
 # Remove sample files in 'farm/public' directory
@@ -76,7 +76,7 @@ ls -lh ./public/
 
 
 # Generate the custom 'farm/farm.config.ts' to over written
-bun ../scripts/generate_farm_config_ts.ts
+deno run --allow-read --allow-write ../scripts/generate_farm_config_ts.ts
 
 
 
@@ -84,18 +84,18 @@ bun ../scripts/generate_farm_config_ts.ts
 
 # # Remove 'console.log()' from JS or TS
 find ./src/js -type f \( -name "*.js" -o -name "*.ts" \) -print0 | while IFS= read -r -d '' file; do
-  bun ../scripts/remove_console_logs.ts --input="$file" --output="$file"
+  deno run --allow-read --allow-write ../scripts/remove_console_logs.ts --input="$file" --output="$file"
 done
 
 # Remove '<script type="importmap"></script>' from HTML
 find ./src/js -type f \( -name "*.html" \) -print0 | while IFS= read -r -d '' file; do
-  bun ../scripts/remove_importmap.ts --input="$file" --output="$file"
+  deno run --allow-read --allow-write ../scripts/remove_importmap.ts --input="$file" --output="$file"
 done
 
 
 
 # Build with Farm into ./farm/build/
-bun run build  # = 'farm build'
+deno task build  # = 'farm build'
 
 
 echo "Build complete."
