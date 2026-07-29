@@ -34,6 +34,7 @@ bun create farm@latest "farm" --template "vanilla"
 cd farm
 
 # Install
+bun add alwan
 bun install
 
 
