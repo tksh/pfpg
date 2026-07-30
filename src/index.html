@@ -6,168 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>pfpg</title>
 
-    <script type="importmap">
-        {
-            "imports": {
 
-                "libs/url-comp-0-1-0/url-comp": "./js/libs/url-comp-0-1-0/url-comp.js",
-                "libs/bech32/bech32-and-bech32m": "./js/libs/bech32/bech32-and-bech32m.js",
-                "libs/deno-std/chunk": "./js/libs/deno-std/chunk.js",
-                "libs/deno-std/zip": "./js/libs/deno-std/zip.js",
-                "libs/deno-std/running-reduce": "./js/libs/deno-std/running-reduce.js",
-
-                "constants": "./js/constants.js",
-
-                "common-utils/compression-stream": "./js/common-utils/compression-stream.js",
-                "common-utils/format-as-float": "./js/common-utils/format-as-float.js",
-                "common-utils/get-uint-n": "./js/common-utils/get-uint-n.js",
-                "common-utils/is-non-empty": "./js/common-utils/is-non-empty.js",
-                "common-utils/output-to-textarea": "./js/common-utils/output-to-textarea.js",
-                "common-utils/read-textarea": "./js/common-utils/read-textarea.js",
-                "common-utils/read-url-params": "./js/common-utils/read-url-params.js",
-                "common-utils/select-output-textarea": "./js/common-utils/select-output-textarea.js",
-                "common-utils/show-processing-time": "./js/common-utils/show-processing-time.js",
-
-                "color-formatter/format-converter": "./js/color-formatter/format-converter.js",
-                "color-formatter/hex-expand": "./js/color-formatter/hex-expand.js",
-                "color-formatter/hex-shorten": "./js/color-formatter/hex-shorten.js",
-                "color-formatter/normalized-from-hex": "./js/color-formatter/normalized-from-hex.js",
-                "color-formatter/normalized-to-hex": "./js/color-formatter/normalized-to-hex.js",
-                "color-formatter/rgb-comma-to-space": "./js/color-formatter/rgb-comma-to-space.js",
-                "color-formatter/rgb-to-lch": "./js/color-formatter/rgb-to-lch.js",
-                "color-formatter/try-delete-f": "./js/color-formatter/try-delete-f.js",
-
-                "decode/decode": "./js/encode-and-decode/decode/decode.js",
-                "decode/generate-svg": "./js/encode-and-decode/decode/generate-svg.js",
-                "decode/get-uint-n": "./js/encode-and-decode/decode/get-uint-n.js",
-                "decode/rel-to-abs": "./js/encode-and-decode/decode/rel-to-abs.js",
-                "decode/size-data-dec": "./js/encode-and-decode/decode/size-data-dec.js",
-                "decode/try-decompress": "./js/encode-and-decode/decode/try-decompress.js",
-
-                "dynamic-ogp/calc-artwork-hash": "./js/page-specific/index/dynamic-ogp/calc-artwork-hash.js",
-                "dynamic-ogp/calc-config-hash": "./js/page-specific/index/dynamic-ogp/calc-config-hash.js",
-
-                "enc-and-dec/base-n/base-52-dec": "./js/encode-and-decode/enc-and-dec/base-n/base-52-dec.js",
-                "enc-and-dec/base-n/base-52-enc": "./js/encode-and-decode/enc-and-dec/base-n/base-52-enc.js",
-                "enc-and-dec/base-n/base-53-dec": "./js/encode-and-decode/enc-and-dec/base-n/base-53-dec.js",
-                "enc-and-dec/base-n/base-53-enc": "./js/encode-and-decode/enc-and-dec/base-n/base-53-enc.js",
-                "enc-and-dec/base-n/base-64url-dec": "./js/encode-and-decode/enc-and-dec/base-n/base-64url-dec.js",
-                "enc-and-dec/base-n/base-64url-enc": "./js/encode-and-decode/enc-and-dec/base-n/base-64url-enc.js",
-                "enc-and-dec/base-n/get-chars": "./js/encode-and-decode/enc-and-dec/base-n/get-chars.js",
-
-                "enc-and-dec/basic-data/basic-data-dec": "./js/encode-and-decode/enc-and-dec/basic-data/basic-data-dec.js",
-                "enc-and-dec/basic-data/basic-data-enc": "./js/encode-and-decode/enc-and-dec/basic-data/basic-data-enc.js",
-
-                "enc-and-dec/lines-data/d-values/bigint64/abs-to-rel": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/abs-to-rel.js",
-                "enc-and-dec/lines-data/d-values/bigint64/bigint64-dec": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/bigint64-dec.js",
-                "enc-and-dec/lines-data/d-values/bigint64/bigint64-enc": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/bigint64-enc.js",
-                "enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk.js",
-                "enc-and-dec/lines-data/d-values/bigint64/recover-zero-padding": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/recover-zero-padding.js",
-
-                "enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size.js",
-                "enc-and-dec/lines-data/d-values/bruteforce53/add-and-subtract": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/add-and-subtract.js",
-                "enc-and-dec/lines-data/d-values/bruteforce53/base-x-dec": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/base-x-dec.js",
-                "enc-and-dec/lines-data/d-values/bruteforce53/base-x-enc": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/base-x-enc.js",
-                "enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-dec": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-dec.js",
-                "enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc.js",
-                "enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-dec": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-dec.js",
-                "enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc.js",
-                "enc-and-dec/lines-data/d-values/bruteforce53/decode-diff": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/decode-diff.js",
-                "enc-and-dec/lines-data/d-values/bruteforce53/decode-freq-diff": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/decode-freq-diff.js",
-                "enc-and-dec/lines-data/d-values/bruteforce53/diff-to-rel": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/diff-to-rel.js",
-                "enc-and-dec/lines-data/d-values/bruteforce53/encode-diff": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/encode-diff.js",
-                "enc-and-dec/lines-data/d-values/bruteforce53/encode-freq-diff": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/encode-freq-diff.js",
-                "enc-and-dec/lines-data/d-values/bruteforce53/specific-alphabets": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/specific-alphabets.js",
-                "enc-and-dec/lines-data/d-values/bruteforce53/store-shorter": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/store-shorter.js",
-
-                "enc-and-dec/lines-data/d-values/swap63/create-codebook": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/swap63/create-codebook.js",
-                "enc-and-dec/lines-data/d-values/swap63/swap63-dec": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/swap63/swap63-dec.js",
-                "enc-and-dec/lines-data/d-values/swap63/swap63-enc": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/swap63/swap63-enc.js",
-
-                "enc-and-dec/lines-data/d-values/four16/decode-with-four-base16": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/four16/decode-with-four-base16.js",
-                "enc-and-dec/lines-data/d-values/four16/encode-with-four-base16": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/four16/encode-with-four-base16.js",
-                "enc-and-dec/lines-data/d-values/four16/four16-dec": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/four16/four16-dec.js",
-                "enc-and-dec/lines-data/d-values/four16/four16-enc": "./js/encode-and-decode/enc-and-dec/lines-data/d-values/four16/four16-enc.js",
-
-                "enc-and-dec/lines-data/group-colors/group-colors-dec": "./js/encode-and-decode/enc-and-dec/lines-data/group-colors/group-colors-dec.js",
-                "enc-and-dec/lines-data/group-colors/group-colors-enc": "./js/encode-and-decode/enc-and-dec/lines-data/group-colors/group-colors-enc.js",
-
-                "enc-and-dec/lines-data/widths-and-counts/widths-and-counts-dec": "./js/encode-and-decode/enc-and-dec/lines-data/widths-and-counts/widths-and-counts-dec.js",
-                "enc-and-dec/lines-data/widths-and-counts/widths-and-counts-enc": "./js/encode-and-decode/enc-and-dec/lines-data/widths-and-counts/widths-and-counts-enc.js",
-
-                "encode/best-mix-enc": "./js/encode-and-decode/encode/best-mix-enc.js",
-                "encode/get-attrs-excepts-dvals": "./js/encode-and-decode/encode/get-attrs-excepts-dvals.js",
-                "encode/join-with-ampersand": "./js/encode-and-decode/encode/join-with-ampersand.js",
-                "encode/json-to-map-obj": "./js/encode-and-decode/encode/json-to-map-obj.js",
-                "encode/show-best-mix-result": "./js/encode-and-decode/encode/show-best-mix-result.js",
-                "encode/show-result": "./js/encode-and-decode/encode/show-result.js",
-                "encode/simplify-map": "./js/encode-and-decode/encode/simplify-map.js",
-                "encode/store-shortest": "./js/encode-and-decode/encode/store-shortest.js",
-                "encode/transform-encoded-result": "./js/encode-and-decode/encode/transform-encoded-result.js",
-                "encode/try-compress": "./js/encode-and-decode/encode/try-compress.js",
-                "state/result-info": "./js/encode-and-decode/encode/state/result-info.js",
-
-
-                "init/adjust-layout": "./js/page-specific/index/init/adjust-layout.js",
-                "init/initial-opacity-steps": "./js/page-specific/index/init/initial-opacity-steps.js",
-                "init/set-defaults": "./js/page-specific/index/init/set-defaults.js",
-                "init/tab-setup": "./js/page-specific/index/init/tab-setup.js",
-
-                "state/apply-url-state": "./js/page-specific/index/state/apply-url-state.js",
-                "state/resvg-option": "./js/page-specific/index/state/resvg-option.js",
-                "state/url-state-manager": "./js/page-specific/index/state/url-state-manager.js",
-
-                "modal/modal-toggle": "./js/page-specific/index/modal/modal-toggle.js",
-                "modal/optimize-svg": "./js/page-specific/index/modal/optimize-svg.js",
-                "modal/reset-settings": "./js/page-specific/index/modal/reset-settings.js",
-
-                "tab-lines/apply-group-colors": "./js/page-specific/index/tab-lines/apply-group-colors.js",
-                "tab-lines/color-format": "./js/page-specific/index/tab-lines/color-format.js",
-                "tab-lines/details-toggle-listener": "./js/page-specific/index/tab-lines/details-toggle-listener.js",
-                "tab-lines/decode-colors-as-array": "./js/page-specific/index/tab-lines/decode-colors-as-array.js",
-                "tab-lines/encode-colors-as-hex": "./js/page-specific/index/tab-lines/encode-colors-as-hex.js",
-                "tab-lines/get-colors-from-svg": "./js/page-specific/index/tab-lines/get-colors-from-svg.js",
-                "tab-lines/group-colors-listener": "./js/page-specific/index/tab-lines/group-colors-listener.js",
-                "tab-lines/group-colors-generator": "./js/page-specific/index/tab-lines/group-colors-generator.js",
-                "tab-lines/opacity-steps": "./js/page-specific/index/tab-lines/opacity-steps.js",
-                "tab-lines/path-mode": "./js/page-specific/index/tab-lines/path-mode.js",
-                "tab-lines/update-svg-color-format":"./js/page-specific/index/tab-lines/update-svg-color-format.js",
-
-                "tab-canvas/crop-side-margins": "./js/page-specific/index/tab-canvas/crop-side-margins.js",
-                "tab-canvas/shape-to-trim": "./js/page-specific/index/tab-canvas/shape-to-trim.js",
-                "tab-canvas/shape-to-trim-listener": "./js/page-specific/index/tab-canvas/shape-to-trim-listener.js",
-
-                "tab-render/height-pixel-size": "./js/page-specific/index/tab-render/height-pixel-size.js",
-                "tab-render/shape-rendering": "./js/page-specific/index/tab-render/shape-rendering.js",
-                "tab-render/sync-number-and-range": "./js/page-specific/index/tab-render/sync-number-and-range.js",
-
-                "tab-ui/checkerboard-bg": "./js/page-specific/index/tab-ui/checkerboard-bg.js",
-                "tab-ui/text-wrapping": "./js/page-specific/index/tab-ui/text-wrapping.js",
-                "tab-ui/theme-color": "./js/page-specific/index/tab-ui/theme-color.js",
-                "tab-ui/view-scaling": "./js/page-specific/index/tab-ui/view-scaling.js",
-
-                "utils/hashing": "./js/page-specific/index/utils/hashing.js",
-                "utils/get-number-of-groups": "./js/page-specific/index/utils/get-number-of-groups.js",
-                "utils/number-rounding": "./js/page-specific/index/utils/number-rounding.js",
-                "utils/replace-at-index": "./js/page-specific/index/utils/replace-at-index.js",
-
-                "button/copy-to-clipboard": "./js/page-specific/index/button/copy-to-clipboard.js",
-                "button/download-as-file": "./js/page-specific/index/button/download-as-file.js",
-                "button/init-download-buttons": "./js/page-specific/index/button/init-download-buttons.js",
-                "button/update-button-text": "./js/page-specific/index/button/update-button-text.js",
-
-                "dynamic-ogp/constants": "./js/page-specific/index/dynamic-ogp/constants.js",
-                "dynamic-ogp/generate-and-upload": "./js/page-specific/index/dynamic-ogp/generate-and-upload.js",
-                "dynamic-ogp/params-for-uploading": "./js/page-specific/index/dynamic-ogp/params-for-uploading.js",
-                "dynamic-ogp/update-metadata": "./js/page-specific/index/dynamic-ogp/update-metadata.js",
-
-                "svg-to-png": "./js/page-specific/index/svg-to-png.js",
-
-                "serve-svg-image": "./js/page-specific/serve-svg-image/serve-svg-image.js"
-
-            }
-        }
-    </script>
 
     <!-- Favicon -->
     <link rel="apple-touch-icon" href="./apple-touch-icon.png">
@@ -183,14 +22,9 @@
 
     <!-- JS -->
 
-    <!-- resvg-js via local -->
-    <!-- <link rel="preload" as="fetch" type="application/wasm" href="/resvg-js-wasm/index_bg.wasm"> -->
-    <!-- <script rel="preload" src="/resvg-js-wasm/index.min.js"></script> -->
-    <script src="/resvg-js-wasm/index.min.js"></script>
 
-    <!-- resvg-js via CDN -->
-    <!-- <link rel="preload" as="fetch" type="application/wasm" href="https://unpkg.com/@resvg/resvg-wasm/index_bg.wasm" crossorigin> -->
-    <!-- <script src="https://unpkg.com/@resvg/resvg-wasm"></script> -->
+    <!-- resvg-js via local -->
+    <script src="./resvg-js-wasm/index.min.js"></script>
 
     <!-- Main JS -->
     <script type="module" src="./js/page-specific/index/main.js"></script>
@@ -703,7 +537,7 @@
                                 <span>By <a href="https://unsplash.com/@chrisjoelcampbell">Christopher Campbell</a></span><span>&nbsp;on&nbsp;<a href="https://unsplash.com/">Unsplash.com</a></span>
                             </figcaption>
                             <a href="https://unsplash.com/photos/shallow-focus-photography-of-woman-outdoor-during-day-rDEOVtE7vOs">
-                                <img class="reference-photo-at-showcase" src="/showcase_images/unsplash-chrisjoelcampbell-rDEOVtE7vOs-small.lossless.webp" alt="shallow focus photography of woman outdoor during day" height="171" width="256">
+                                <img class="reference-photo-at-showcase" src="./showcase_images/unsplash-chrisjoelcampbell-rDEOVtE7vOs-small.lossless.webp" alt="shallow focus photography of woman outdoor during day" height="171" width="256">
                                 <!-- Downloaded small size image from unsplash.com is 400 x 267, and resize to width 256 px (same as below artworks thumbnails): 256 x 171(170.88) -->
                             </a>
                         </div>
@@ -720,7 +554,7 @@
                                 <span class="bold-italic">202401_001</span>&nbsp;<span>(grid: 127x127, line groups: 3)</span>
                             </figcaption>
                             <a href="?n=~7&title=~202401_001&desc=001kObPFhaNkBHUZJE0kMCGBFCDo8j7lBr_44z9CIqW3Ba7eLr9kVIlASMdS4&metadata=01p0oUdqIavqvtRKIHBt6NXiYteLcXbRKDSYZxUvq0iChyl3QzjiOqHuFNm7Yh7FxvfVouHuyHlFtlgVicDtP0QQvacAuauchBVBSAEBNwHFyYnHE4H4_PlL_NK6Khs9Y5ezyZTNRNQ_W_6WDhCCM6aK8hNaYsOpzGHbeaeG3F2JmojjAptx43DpLkdJW00oFQfE5INinLI4DdJoihJpCqJQMjzKPwm_9zYGyxrbwuMwbEgFjmpCRxQjSlTyWDFVcWNbBbjOAOLuOGemZD9rQ-sm0wbSw2B2KWXiU4Om8IjjtKSetOWV1FeJ_PQWCCIHLWIk94kVci0Mb0sjy6hLB8cJw7OrRNcR7ug6bE5XdEY2RLhp8sti1jb1IJvN_fBMxgTwMYKVvYpwUsYcxwXAHWBOiYqxDZAAwrMxHYfqCUFEesGViQgV0RPPz9hveyyHZVvuoxNTuCgynDTlOGlynRt6nKeyDKeysp7LKdAcAlsViO2qJ3xx4HJpMEvIUiMIMsbl4xusWw5NbhGNVSG3ZB2yLYfkOHrGgzR7PJFcRBwjSK3LAb6gwpA77CwjH6Mp&A=08fEKQ-VoisNalNhZy9GsmZzPU&0=08cJqY-3JMVTyH83QAsTiL3FDTnD61hpJcS8kPFWtVBM_n7KwZPoKrvVK5tIF1dLYIRCbKt0inU9MAPBVpcI2lR7kucA3g1jDC0fJqoQuXwQDLXBLjkpJqaHAXbZjjRASJWCJVUqZevC5ON3J2T_sf90WnyPRBQDmstuAHrgUnYdI3itH3EAVh00xHYH4zw32Cxh81iWNAtYm5ptyRqwSYSvYJHfzlBZ0B8dwwRZoDPgTHxh4nl98SJNLKhligDTkafBnhB81Lp0Xo24RLkTGOq0Ct3Y01CCYPVAkERzXy0xrCgg0Ni53d7xkiq3HEM6j3Ey24N7UWT8M4XA1J1BtLIlrE0UZeAC0bGCyZvPBbef3PgB7eZkXPxK8xS8zU67A_Lu-kYMRlbdazsbRfZRwea-60Dmrfr0wxG3KJz9ibAMrbYCV0dFkLDjnqEkFfeC_HmCC02PMHpcXTD22JXq2A3XbqAaxzaunU0tB286XDNUnO88VDKPw_rOBE2bYA7DsK29Ub1EXOdOTy_sySaHqznKGTSAoLLjNJuuzhAJdi_VdxrsPvsu1Hj1oy9suW7uMoIzgcUZ6J7WxQN9Ssa8tPlCNXwezDBT8S03XX8Y-1KcOxv4qqukX1oKDZXb0DYAdsuab7YZXEvxk3gXFVdJTiiYjF6qY9nZZsGzxlVZ1HKoPbNmeF3DxzoFIsIadDxfxDxWhcORr6qLEh5KloAW9hvZ7pwjKBcj9lOC-DBiki-FGQ-GF5T7z0ycZmvj5juCUnhCeF14ggQHGt_A7TLhsWhEtU-sowXAztUWOYMYCS16YamTYy_FjGgOW4dPSzm9hCguOX4MnHyNVAU21CP0Z8Zwf0Wk0mmUgFvCfcl2in5T2xZz_-QZLaVONBloSACBo2KWAtyl85UhY_scI9QQB6PKA0ERYYT3Tpx--rN546x463gQO2SWt6a-EKLAMJScEyuBOIHB-lfkrcuA_IgdJtvpCGVNtC4Luggd2iSqA3Y2SPNHSlLpbPHC6aiHDB3JO9tMHOqQrNMgCKpQ6YOCboxzSjnrHLXAYDXbm95DFvjw0pjiH4DRKSvJvFWo4ZkZCAQQflHz82tYUVa1SkkoPiPgIzRMM6yHDKU-90hlCH4lQO1YPWGgWTR8AYS1GKkDTmOGWwyVE_Or3bH-SjX0TjE7iyZM7c7txUHs-pXRO7mHb4G4OZ2muPsnneWxO6a0PAjhDTnRTld04gSgu4wAWUF3wjBJI5ZyaM9zOt7g72kuZS6T2CZaYbcRWdv3d5rfXZCFYEMUxCVwAXV0aS14V4PJppYpidA812f3aMfMLOzccbBLwnOYKGHxdffzWTcXU9kO3mhFbDXSCV5DQZg-3DspMILUMqEMtArnMp0hmNiZF2MycTQ-vh1wmPRecheKPGHkcjPNTHJMwEM3GvBNL-zWqGpkDlxWDx3bCmbBmbDkZUVGp3sQs2O9rRK0EhpV5cF9hMIEVFdK75SZXAK8ygAPUUS1rU3sZ7McE3n7dzqeAB9elsPGJEB5Mhb0YmYVJsJYLU7hwVI-4hBuWemayeSxS0OAW-hb3EYrCIMEDil4rzcsQyyKwWBo96430Yn5cFtd2lwWJFyy7_KXBtGbLtG49Y6k4ABFriR2mVohWEpa5ViZWub0tmmTowcR50N6kdXekxNaX15viSYMfOMUmEsmCEmLYnak4F3ViBkTgprlTi0ecQeUyPcpE4kTtJjRxPCY4zkp2lTUnjnduTN_lHnSdluxMWJ5eHC3AcNrzqcOKUY-8-WPOQ7YjkaJtPqjo8a70nh84WTibc1nMV32JlOO004jTmXY5MKJkRYcExwmHaYTYcTAGxQxM2BxkhyJqlhYw8izSGDJWO045cDGLNwwlySYoYBqXMLGlvOWMMODCsDLMMX7gMg7eGXkY3ugGPcwGJUcBbhxkZGLQZPlAyhlrD8dGQLIFpkF1tfDrTbGmKXeY5aqbIzJ0KUaaNXcgMFvhvTGOMH1UZuh5sGA9kaThpJGVPhhVZxJwWjKSMRrNqvjD2MMRfVsopGAka4hgDaOQSOvvl1ovFrDEo1SUjSCMD6lDnjikeBXxw0GZEDya5y9b5iXa6IKGUOBNmaz1hUft3zJ04t49xeYzfH6P4Iyu6xh846-gpzzLeenxe5pDz-uL0nbyX8hng1FT8hWZ7x_YeLMPoqfJBSKj8_XgU-OUaZ2FlShs2MuBPlp7MUGUZhl3Yp4SBvBdK6CfK36zEtIjfGuEX3P-UHMKk3OVfxNe0nwQ-yANnvVC-V5l_BDmsf8t-lXwoxGx2VZqsLJ83c38BZM2iDeijwFgwDmSmd3co_gCLgWtE94Kn-q_4P7gm3sDZhDvwuq-qzcKgjeyL2Z-CRh7w6InbHRGaexxWkPiyU3zS9IxsvuCVrDZ0BP6gajalZz7DRGoGwC2PCMAfI4mWA62mxm5fGpoe2MWDQtjA&F=08fOlodzcFekVL549cs3S7h45fSV4dswktZ2vY1MTNSLq-Bpt91wHlP8Bc8UGCi2WSP98Uuzhl2lWyUDdjTqXd64qWQkIYvJzEUG6k6wDW6V-leCsC74Y0DijpKYE_m9iQ">
-                                <img class="reference-photo-at-showcase" src="/showcase_images/202401_001-256x256px-g_AAA_000_FFF-p_absoluteSeparated-t_square-r_crispEdges.lossless.webp" alt="Title: 202401_001">
+                                <img class="reference-photo-at-showcase" src="./showcase_images/202401_001-256x256px-g_AAA_000_FFF-p_absoluteSeparated-t_square-r_crispEdges.lossless.webp" alt="Title: 202401_001">
                             </a>
                         </div>
                         <!-- Second artwork -->
@@ -729,7 +563,7 @@
                                 <span class="bold-italic">202412_001</span>&nbsp;<span>(grid: 31x31, line groups: 6)</span>
                             </figcaption>
                             <a href="?n=~5&title=~202412_001&B=~231b-Kwv0vv__&999CF=098JSYvv2djHK9D5wP2bgcJqicJVDDi8uH65VZhKUkldzRzQMVOv8pk-AkTZ6cQxmf-GoKS1xBuAqG1UFpcRsODG_HW4kdbDtetXDCz7Wgtdl4o4K90Egb2uPQqAgjFRWFJPhQ4USyllHlUk3hRDvWXjhH9maBTYXNfiAXHp8TkBmfip6iwxPW&3=099yKYnqK1ZdV3dkGDgf5wBg8YVLaaOLLrq5VBvge1dNHxLhOJxtnFWLtUU2cKzbxeOmiUpcMvRNgIMBFAaljykZMZu9uXH7b2ZBuKDVshBICAJr2lyCipJ7BMsfvkUJo8U9pXuCh&DDDDD199FF=09_ZGCdWFpNgx-ug1nNdWywHE9Cw6BvgkVsRmPNPUroh9edMWvoeebLOAtfC7s2tdXeyd1_bFzBYMBgW_xiENuCPO_mWMalraeKO7PD24HU8&DDDDE966FF=09_Zq1iJek2Ya6uZRp_OAvSJE_fSoWY_deAHZbxJNG_XXy0xDXMLHFdDm&0=09_elogQ_NGU5ygFWdDaXCGHlF7Vg2MFl1AxypSIHTYREJTwxYm8b6DEa8sTSwkx_xJmY1oimHSeYwaFihIb-&66666C99FF=09_SEpdWf5jZ1K8AhNCWiLZTV6K_jJ1czHSU-rPVDycxrDoIkOhQAvAUNw1MDllCdt0_AzVl98_4VvYKEaAivwGy3NF4kq9DfEff3CgGVwoER2rgI0Ha9F6HHa3g3wCwC4AZMDIvzAEzCDzao2Rxw4-a_bcdNX7ZMGx4c87S-mHVzmGZPuDoqS9EejEejIxnrJ96jCW">
-                                <img class="reference-photo-at-showcase" src="/showcase_images/202412_001-256x256px-g_BBB_999CF_333_DDDDD199FF_DDDDE966FF_000_66666C99FF-p_absoluteSeparated-t_square-r_crispEdges.lossless.webp" alt="Title: 202412_001">
+                                <img class="reference-photo-at-showcase" src="./showcase_images/202412_001-256x256px-g_BBB_999CF_333_DDDDD199FF_DDDDE966FF_000_66666C99FF-p_absoluteSeparated-t_square-r_crispEdges.lossless.webp" alt="Title: 202412_001">
                             </a>
                         </div>
                     </div>

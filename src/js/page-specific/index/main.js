@@ -4,7 +4,6 @@ import { isOnDataManipulatorPage }              from 'common-utils/select-output
 import { decodeUrlToSvg }                       from 'decode/decode'
 import { adjustLayoutIfNotMobile
        , initViewportLister }                   from 'init/adjust-layout'
-import { storeArtworkId }                       from 'dynamic-ogp/calc-artwork-hash'
 import { initTabs }                             from 'init/tab-setup'
 import { initSvgOptimizationModalToggle
        , initResetSettingsModalToggle }         from 'modal/modal-toggle'
@@ -37,7 +36,7 @@ import { initViewScalingSelect }                from 'tab-ui/view-scaling'
 
 (async function () {
 
-       // Initialize sample artwork data.
+    // Initialize sample artwork data.
 
        // If no URL parameters are present (e.g., on initial page load),
        // select a random artwork from the .artwork-item in 'Showcase' section and update the URL.
@@ -165,9 +164,6 @@ document.addEventListener('DOMContentLoaded', () => {
        // Modal - Reset settings
        initResetSettingsModalToggle()
        initResetSettings()
-
-       //   // Get the artwork ID for OG image generation
-       //     storeArtworkId()
 
        // Add event lister to viewport for continuous resizing the output boxes (PNG and SVG)
        initViewportLister()

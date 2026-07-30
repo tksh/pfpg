@@ -1,5 +1,5 @@
-import { calculateArtworkHash } from 'dynamic-ogp/calc-artwork-hash.js'
-import { calculateConfigHash }  from 'dynamic-ogp/calc-config-hash.js'
+import { calculateArtworkHash } from 'dynamic-ogp/calc-artwork-hash'
+import { calculateConfigHash }  from 'dynamic-ogp/calc-config-hash'
 import { strToSha256 }          from 'utils/hashing'
 
 export

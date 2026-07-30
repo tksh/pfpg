@@ -13,7 +13,7 @@ import { resvgOption } from 'state/resvg-option'
 
 // Import Alwan JS and CSS from node_modules
 import Alwan from 'alwan';
-import 'alwan/dist/css/alwan.min.css';
+import 'alwan/css';
 
 export
     { generateGroupColorsHtmlElements

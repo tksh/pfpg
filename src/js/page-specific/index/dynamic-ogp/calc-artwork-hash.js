@@ -4,7 +4,7 @@ import { strToSha256 }     from 'utils/hashing'
 export async function calculateArtworkHash() {
 
     // Start time
-    const calcArtworkIdStartTime = performance.now()
+    const calcArtworkHashStartTime = performance.now()
     console.log('Start the calculating artwork hash ...')
 
     // Retrieve URL parameters and extract lines data
@@ -21,8 +21,8 @@ export async function calculateArtworkHash() {
     console.log("hashArray, hashHex: ",  hashArray, hashHex)
 
     // End time
-    const calcArtworkIdEndTime = performance.now()
-    const elapsedTime = Math.floor(calcArtworkIdEndTime - calcArtworkIdStartTime)
+    const calcArtworkHashEndTime = performance.now()
+    const elapsedTime = Math.floor(calcArtworkHashEndTime - calcArtworkHashStartTime)
     console.log('elapsedTime of calculating artwork hash: ', elapsedTime, ' ms')
 
     return hashHex

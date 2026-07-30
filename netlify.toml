@@ -1,6 +1,6 @@
 [build]
   command = "chmod +x ./scripts/build.sh && ./scripts/build.sh"
-  publish = "./farm/build"
+  publish = "./build"
 
 [build.environment]
   # NPMのインストールを無効化
