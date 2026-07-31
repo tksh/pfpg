@@ -1,15 +1,13 @@
 #!/bin/bash
 set -e
 
-if command -v deno &> /dev/null  # Check the 'Deno' installed or not
-then
-    echo "Deno has already installed."
-else
-    echo "Deno is not installed. Starting installation..."
-    curl -fsSL https://deno.land/install.sh | sh
-    export DENO_INSTALL="$HOME/.deno"
-    export PATH="$DENO_INSTALL/bin:$PATH"
-fi
+# NetlifyにプリインストールされているDenoを無視し、最新版をインストール
+curl -fsSL https://deno.land/install.sh | sh
+export DENO_INSTALL="$HOME/.deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
+
+# バージョン確認用ログ
+deno --version
 
 
 # Remove previous sources
@@ -18,7 +16,7 @@ rm -rf ./dist/
 # Install
 deno install
 
-# Build with `deno bundle` into ./build/
+# Build with `deno bundle` into ./dist/
 deno task build
 
 echo "Build complete."
