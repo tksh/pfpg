@@ -14,7 +14,7 @@ git clone git@github.com:tksh/pfpg.git
 cd pfpg/
 
 # Install dependencies
-Deno install
+deno install
 
 # Build with `deno bundle`
 deno task build  # Build index.html and data-manipulator.html

@@ -11,22 +11,38 @@
 //     s2.src = "./resvg-js-wasm/index.min.js";
 
 async function main() {
-    // Get index-********.js file name
-    //   Wrap readDirSync in Array.from() so we can use .find()
+    // Get the list of index-********.js file names
     const distDir = Array.from(Deno.readDirSync("./dist/"));
-    const indexJs = distDir.find(
-        (f) => f.name.startsWith("index") && f.name.endsWith(".js"),
-    );
 
-    if (!indexJs) {
-        throw new Error("Could not find index file in ./dist/");
+    // Get all .js files in the dist directory
+    const jsFiles = distDir.filter((f) => f.name.endsWith(".js"));
+
+    if (jsFiles.length === 0) {
+        console.error("No .js files found in ./dist/");
+        return;
     }
 
-    // Get a string
-    const content = await Deno.readTextFile(`dist/${indexJs.name}`);
+    // Filter the list to only the file that includs "../../../resvg-js-wasm/" in its content
+    const filteredJsFiles = [];
+    for (const jsFile of jsFiles) {
+        const content = await Deno.readTextFile(`dist/${jsFile.name}`);
+        if (content.includes("../../../resvg-js-wasm/")) {
+            filteredJsFiles.push(jsFile);
+        }
+    }
 
-    // Read and update content multiple times by chaining .replace()
-    const updatedContent = content
+    if (filteredJsFiles.length === 0) {
+        console.error("No .js files found in ./dist/ that include '../../../resvg-js-wasm/'");
+        return;
+    }
+
+    // Iterate over each .js file and update its content
+    for (const jsFile of filteredJsFiles) {
+        // Get a string
+        const content = await Deno.readTextFile(`dist/${jsFile.name}`);
+
+        // Read and update content multiple times by chaining .replace()
+        const updatedContent = content
         .replace(
             `fetch("../../../resvg-js-wasm/index_bg.wasm")`,
             `fetch("./resvg-js-wasm/index_bg.wasm")`,
@@ -36,10 +52,11 @@ async function main() {
             `s2.src = "./resvg-js-wasm/index.min.js";`,
         );
 
-    // Write the string back to the file
-    await Deno.writeTextFile(`dist/${indexJs.name}`, updatedContent);
+       // Write the string back to the file
+       await Deno.writeTextFile(`dist/${jsFile.name}`, updatedContent);
 
-    console.log(`Successfully updated ${indexJs.name}`);
+       console.log(`Successfully updated ${jsFile.name}`);
+    }
 }
 
 // メインスクリプトとして実行された場合にmain関数を呼び出す

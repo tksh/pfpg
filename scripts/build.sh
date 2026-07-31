@@ -9,14 +9,10 @@ export PATH="$DENO_INSTALL/bin:$PATH"
 # バージョン確認用ログ
 deno --version
 
-
-# Remove previous sources
-rm -rf ./dist/
-
 # Install
 deno install
 
-# Build with `deno bundle` into ./dist/
-deno task build
+# Build with `deno bundle` into ./dist/, and then remove console.log statements from the bundled files
+deno task build && deno task remove:console
 
 echo "Build complete."

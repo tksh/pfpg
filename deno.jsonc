@@ -1,19 +1,32 @@
  {
    "tasks": {
-      "serve": "deno run --allow-net --allow-read jsr:@std/http/file-server",
-      "dev": "deno bundle --watch src/index.html --platform=browser --code-splitting --outdir dist/",
-      "build": "deno task build:index && deno task build:data-manipulator",
-      "build:index": "deno bundle src/index.html --platform=browser --import-map src/importmap.index.json --outdir dist/ && deno task post-processes",
+      // "serve": "deno run --allow-net --allow-read jsr:@std/http/file-server",
+      "dev:build": "deno bundle --watch src/index.html --platform=browser --import-map src/importmap.index.json --outdir dist/ && deno task postprocessing",
+      "dev:serve": "deno run --allow-net --allow-read scripts/dev_server.ts",
+      "dev": "deno task dev:build & deno task dev:serve",
+
+      "build": "rm -rf dist/ && deno task build:index && deno task build:data-manipulator && deno task postprocessing",
+      "build:index": "deno bundle src/index.html --platform=browser --import-map src/importmap.index.json --outdir dist/",
       "build:data-manipulator": "deno bundle src/data-manipulator.html --platform=browser --import-map src/importmap.data-manipulator.json --outdir dist/",
 
-      "remove:console": "deno run --allow-read --allow-write scripts/remove_console_logs.ts --input=dist/index.html --output=dist/index.html",
+      // Copy the assets to the dist directory
       "copy:favicon": "deno run --allow-read --allow-write scripts/copy_favicon_images.ts",
       "copy:images": "cp -r src/showcase_images dist",
       "copy:css":    "cp -r src/css dist",
       "copy:resvg":  "cp -r src/resvg-js-wasm dist",
       "bulk-copy":   "deno task copy:favicon && deno task copy:images && deno task copy:css && deno task copy:resvg",
+
+      // Work around for resvg-js with `deno bundle` that the file path of resvg-js-wasm is incorrect in the bundled JS file 
       "fix-file-path": "deno run --allow-read --allow-write scripts/fix_resvg_wasm_file_path.ts",
       "get-back-resvg-js-to-html": "deno run --allow-read --allow-write scripts/get_back_resvg_js_to_html.ts",
-      "post-processes": "deno task remove:console && deno task bulk-copy && deno task fix-file-path && deno task get-back-resvg-js-to-html"
+
+      // Necessary post-processing tasks after building the project, both dev and production builds
+      "postprocessing": "deno task bulk-copy && deno task fix-file-path && deno task get-back-resvg-js-to-html",
+
+      // Production build tasks
+      "remove:console": "deno run --allow-read --allow-write scripts/remove_console_logs.ts"
+   },
+   "imports": {
+      "alwan": "npm:alwan@^2.1.1"
    }
  }

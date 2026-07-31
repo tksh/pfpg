@@ -70,10 +70,8 @@
     }
   },
   "workspace": {
-    "packageJson": {
-      "dependencies": [
-        "npm:alwan@^2.1.1"
-      ]
-    }
+    "dependencies": [
+      "npm:alwan@^2.1.1"
+    ]
   }
 }
