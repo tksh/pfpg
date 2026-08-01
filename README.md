@@ -24,13 +24,13 @@ deno task build  # Build index.html and data-manipulator.html
 
 `git push` to run `build.sh` on Netlify, which forces installation of the latest Deno.
 
-## Libraries
+## Dependencies
 
 - [resvg-js](https://github.com/yisibl/resvg-js) (MPL 2.0 license)
-- [URLCompressor](https://synapse.kyoto/lib/url-comp/page001.html) (MIT license), convert to ESM
 - [Alwan](https://github.com/sefianecho/alwan) (MIT license)
-- [Deno standard library](https://github.com/denoland/deno_std) (MIT license), ported to JS
-- [bech32](https://github.com/bitcoinjs/bech32) (MIT license)
+- [@tksh/url-compressor - JSR](https://jsr.io/@tksh/url-compressor) (MIT license)
+- [@std/collections - JSR](https://jsr.io/@std/collections) (MIT license)
+- [@scure/base - JSR](https://jsr.io/@scure/base) (MIT license)
 
 ## License
 

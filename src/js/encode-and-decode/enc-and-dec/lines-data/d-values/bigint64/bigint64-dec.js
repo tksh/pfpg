@@ -2,7 +2,7 @@ import { getUintNFromUrlParams }      from 'decode/get-uint-n'
 import { base64UrlDec }               from 'enc-and-dec/base-n/base-64url-dec'
 import { getDigitsPerChunk }          from 'enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk'
 import { recoverOriginalZeroPadding } from 'enc-and-dec/lines-data/d-values/bigint64/recover-zero-padding'
-import { chunk }                      from 'libs/deno-std/chunk'
+import { chunk }                      from '@std/collections/chunk'
 
 export
     { bigint64Dec
@@ -89,4 +89,3 @@ function splitStringIntoFour(str) {
 }
 // Test
 // console.log(splitStringIntoFour('abcdefgh')) // (4) ['ab', 'cd', 'ef', 'gh']
-

@@ -5,7 +5,7 @@ import { outputToTextarea }        from 'common-utils/output-to-textarea'
 import { readTextarea }            from 'common-utils/read-textarea'
 import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
 import { showStringSize }          from 'encode/show-result'
-import { URLCompressor }           from 'libs/url-comp-0-1-0/url-comp'
+import * as URLCompressor          from "@tksh/url-compressor";
 
 export
     { encodeBasicData
@@ -136,8 +136,6 @@ function processProperty(propertyName, value) {
         return `${propertyName}=${value}&`
     } else {
         console.log(`"${value}" is NOT valid, it needs to be encoded using URLCompressor.`)
-        return `${propertyName}=~${URLCompressor.compress(value)}&`
+        return `${propertyName}=~${URLCompressor.encode(value)}&`
     }
 }
-
-

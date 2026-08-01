@@ -1,5 +1,5 @@
 import { FLAGS_MAP } from 'constants'
-import { zip }      from 'libs/deno-std/zip'
+import { zip }      from '@std/collections/zip'
 
 // For best mix [2|3] encoding by each group
 export function showBestMixResult(dataToShow, textareaId) {

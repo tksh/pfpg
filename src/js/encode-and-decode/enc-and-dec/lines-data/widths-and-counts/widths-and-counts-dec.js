@@ -1,5 +1,5 @@
 import { base53Dec }     from 'enc-and-dec/base-n/base-53-dec'
-import { runningReduce } from 'libs/deno-std/running-reduce'
+import { runningReduce } from '@std/collections/running-reduce'
 
 
 // Decode the count and width, and generate the firstline and lastline

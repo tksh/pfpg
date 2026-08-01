@@ -4,6 +4,7 @@
     "jsr:@scure/base@2.2.0": "2.2.0",
     "jsr:@std/cli@*": "1.0.32",
     "jsr:@std/cli@^1.0.31": "1.0.32",
+    "jsr:@std/collections@^1.3.0": "1.3.0",
     "jsr:@std/encoding@^1.0.11": "1.0.11",
     "jsr:@std/fmt@^1.0.10": "1.0.10",
     "jsr:@std/fs@^1.0.24": "1.0.24",
@@ -14,6 +15,7 @@
     "jsr:@std/net@^1.0.6": "1.0.6",
     "jsr:@std/path@^1.1.6": "1.1.6",
     "jsr:@std/streams@^1.1.1": "1.1.1",
+    "jsr:@tksh/url-compressor@^1.1.1": "1.1.1",
     "npm:alwan@^2.1.1": "2.3.1"
   },
   "jsr": {
@@ -22,6 +24,9 @@
     },
     "@std/cli@1.0.32": {
       "integrity": "188b3a100d6202d64e3f5bd3d799c7fa4f6d77f92cc65eb7f641c1fa0aa92a66"
+    },
+    "@std/collections@1.3.0": {
+      "integrity": "eb36b43d784477ea0b476483ac034a14bdd182aff921c812ecf662a1fcef9498"
     },
     "@std/encoding@1.0.11": {
       "integrity": "e7cef2f0b3153bccc17431e7c864a1de03a4b6d9647389c43e08aaa775d37385"
@@ -66,6 +71,9 @@
     },
     "@std/streams@1.1.1": {
       "integrity": "92556d350e537e9dce527a6d08f6f15be3ff65e656079dea69d15252187c7613"
+    },
+    "@tksh/url-compressor@1.1.1": {
+      "integrity": "15370beca1ec44fcd2436bff759d177e97425a25f9b4bdad5dd2c1fad3a79e78"
     }
   },
   "npm": {
@@ -76,6 +84,8 @@
   "workspace": {
     "dependencies": [
       "jsr:@scure/base@2.2.0",
+      "jsr:@std/collections@^1.3.0",
+      "jsr:@tksh/url-compressor@^1.1.1",
       "npm:alwan@^2.1.1"
     ]
   }

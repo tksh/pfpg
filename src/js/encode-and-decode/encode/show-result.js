@@ -2,7 +2,7 @@ import { outputToTextarea }        from 'common-utils/output-to-textarea'
 import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
 import { showProcessingTime }      from 'common-utils/show-processing-time'
 import { FLAGS_MAP }               from 'constants'
-import { zip }                     from 'libs/deno-std/zip'
+import { zip }                     from '@std/collections/zip'
 import { resultInfo}               from 'state/result-info'
 
 export

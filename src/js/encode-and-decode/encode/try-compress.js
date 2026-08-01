@@ -2,7 +2,7 @@ import { compressToEncodedURIComponent } from 'common-utils/compression-stream'
 import { FLAGS_MAP
        , ENCODING_METHOD_AND_CONFIG_MAP} from 'constants'
 import { getEncodedAttrsExceptsDvals }   from 'encode/get-attrs-excepts-dvals'
-import { URLCompressor }                 from 'libs/url-comp-0-1-0/url-comp'
+import * as URLCompressor                from "@tksh/url-compressor";
 import { resultInfo }                    from 'state/result-info'
 
 
@@ -83,7 +83,7 @@ async function compressAndSelectBest(inputString) {
     // Methods names and functions list
     const compressionMethods = {
         'uncompressed' : async () => inputString,
-        'URLCompressor': async () => URLCompressor.compress(inputString),
+        'URLCompressor': async () => URLCompressor.encode(inputString),
         'deflateRaw'   : async () => compressToEncodedURIComponent(inputString, 'deflate-raw')
     }
 

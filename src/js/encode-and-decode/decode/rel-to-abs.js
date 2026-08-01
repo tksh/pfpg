@@ -1,4 +1,4 @@
-import { zip } from 'libs/deno-std/zip'
+import { zip } from '@std/collections/zip'
 
 export function relToAbs(relativeDvals, widthsAndCounts) {
 
@@ -42,4 +42,3 @@ export function relToAbs(relativeDvals, widthsAndCounts) {
 
     return absoluteDvals
 }
-
