@@ -6,15 +6,15 @@
       "dev": "deno task dev:build & deno task dev:serve",
 
       "build": "rm -rf dist/ && deno task build:index && deno task build:data-manipulator && deno task postprocessing",
-      "build:index": "deno bundle src/index.html --platform=browser --import-map src/importmap.index.json --outdir dist/",
-      "build:data-manipulator": "deno bundle src/data-manipulator.html --platform=browser --import-map src/importmap.data-manipulator.json --outdir dist/",
+      "build:index": "deno bundle src/index.html --platform=browser --outdir dist/",
+      "build:data-manipulator": "deno bundle src/data-manipulator.html --platform=browser --outdir dist/",
 
       // Copy the assets to the dist directory
       "copy:favicon": "deno run --allow-read --allow-write scripts/copy_favicon_images.ts",
       "copy:images": "cp -r src/showcase_images dist",
-      "copy:css":    "cp -r src/css dist",
-      "copy:resvg":  "cp -r src/resvg-js-wasm dist",
-      "bulk-copy":   "deno task copy:favicon && deno task copy:images && deno task copy:css && deno task copy:resvg",
+      "copy:css": "cp -r src/css dist",
+      "copy:resvg": "cp -r src/resvg-js-wasm dist",
+      "bulk-copy": "deno task copy:favicon && deno task copy:images && deno task copy:css && deno task copy:resvg",
 
       // Work around for resvg-js with `deno bundle` that the file path of resvg-js-wasm is incorrect in the bundled JS file 
       "fix-file-path": "deno run --allow-read --allow-write scripts/fix_resvg_wasm_file_path.ts",
@@ -27,6 +27,167 @@
       "remove:console": "deno run --allow-read --allow-write scripts/remove_console_logs.ts"
    },
    "imports": {
-      "alwan": "npm:alwan@^2.1.1"
+      // index.html specific imports
+      "alwan":                                                               "npm:alwan@^2.1.1",
+      "@scure/base":                                                         "jsr:@scure/base@2.2.0",
+
+      "init/adjust-layout":                                                  "./src/js/page-specific/index/init/adjust-layout.js",
+      "init/initial-opacity-steps":                                          "./src/js/page-specific/index/init/initial-opacity-steps.js",
+      "init/set-defaults":                                                   "./src/js/page-specific/index/init/set-defaults.js",
+      "init/tab-setup":                                                      "./src/js/page-specific/index/init/tab-setup.js",
+
+      "state/apply-url-state":                                               "./src/js/page-specific/index/state/apply-url-state.js",
+      "state/resvg-option":                                                  "./src/js/page-specific/index/state/resvg-option.js",
+      "state/url-state-manager":                                             "./src/js/page-specific/index/state/url-state-manager.js",
+
+      "modal/modal-toggle":                                                  "./src/js/page-specific/index/modal/modal-toggle.js",
+      "modal/optimize-svg":                                                  "./src/js/page-specific/index/modal/optimize-svg.js",
+      "modal/reset-settings":                                                "./src/js/page-specific/index/modal/reset-settings.js",
+
+      "tab-lines/apply-group-colors":                                        "./src/js/page-specific/index/tab-lines/apply-group-colors.js",
+      "tab-lines/color-format":                                              "./src/js/page-specific/index/tab-lines/color-format.js",
+      "tab-lines/details-toggle-listener":                                   "./src/js/page-specific/index/tab-lines/details-toggle-listener.js",
+      "tab-lines/decode-colors-as-array":                                    "./src/js/page-specific/index/tab-lines/decode-colors-as-array.js",
+      "tab-lines/encode-colors-as-hex":                                      "./src/js/page-specific/index/tab-lines/encode-colors-as-hex.js",
+      "tab-lines/get-colors-from-svg":                                       "./src/js/page-specific/index/tab-lines/get-colors-from-svg.js",
+      "tab-lines/group-colors-listener":                                     "./src/js/page-specific/index/tab-lines/group-colors-listener.js",
+      "tab-lines/group-colors-generator":                                    "./src/js/page-specific/index/tab-lines/group-colors-generator.js",
+      "tab-lines/opacity-steps":                                             "./src/js/page-specific/index/tab-lines/opacity-steps.js",
+      "tab-lines/path-mode":                                                 "./src/js/page-specific/index/tab-lines/path-mode.js",
+      "tab-lines/update-svg-color-format":                                   "./src/js/page-specific/index/tab-lines/update-svg-color-format.js",
+
+      "tab-canvas/crop-side-margins":                                        "./src/js/page-specific/index/tab-canvas/crop-side-margins.js",
+      "tab-canvas/shape-to-trim":                                            "./src/js/page-specific/index/tab-canvas/shape-to-trim.js",
+      "tab-canvas/shape-to-trim-listener":                                   "./src/js/page-specific/index/tab-canvas/shape-to-trim-listener.js",
+
+      "tab-render/height-pixel-size":                                        "./src/js/page-specific/index/tab-render/height-pixel-size.js",
+      "tab-render/shape-rendering":                                          "./src/js/page-specific/index/tab-render/shape-rendering.js",
+      "tab-render/sync-number-and-range":                                    "./src/js/page-specific/index/tab-render/sync-number-and-range.js",
+
+      "tab-ui/checkerboard-bg":                                              "./src/js/page-specific/index/tab-ui/checkerboard-bg.js",
+      "tab-ui/text-wrapping":                                                "./src/js/page-specific/index/tab-ui/text-wrapping.js",
+      "tab-ui/theme-color":                                                  "./src/js/page-specific/index/tab-ui/theme-color.js",
+      "tab-ui/view-scaling":                                                 "./src/js/page-specific/index/tab-ui/view-scaling.js",
+
+      "utils/hashing":                                                       "./src/js/page-specific/index/utils/hashing.js",
+      "utils/get-number-of-groups":                                          "./src/js/page-specific/index/utils/get-number-of-groups.js",
+      "utils/number-rounding":                                               "./src/js/page-specific/index/utils/number-rounding.js",
+      "utils/replace-at-index":                                              "./src/js/page-specific/index/utils/replace-at-index.js",
+
+      "button/copy-to-clipboard":                                            "./src/js/page-specific/index/button/copy-to-clipboard.js",
+      "button/download-as-file":                                             "./src/js/page-specific/index/button/download-as-file.js",
+      "button/init-download-buttons":                                        "./src/js/page-specific/index/button/init-download-buttons.js",
+      "button/update-button-text":                                           "./src/js/page-specific/index/button/update-button-text.js",
+
+      "dynamic-ogp/constants":                                               "./src/js/page-specific/index/dynamic-ogp/constants.js",
+      "dynamic-ogp/generate-and-upload":                                     "./src/js/page-specific/index/dynamic-ogp/generate-and-upload.js",
+      "dynamic-ogp/params-for-uploading":                                    "./src/js/page-specific/index/dynamic-ogp/params-for-uploading.js",
+      "dynamic-ogp/update-metadata":                                         "./src/js/page-specific/index/dynamic-ogp/update-metadata.js",
+
+      "svg-to-png":                                                          "./src/js/page-specific/index/svg-to-png.js",
+
+      "serve-svg-image":                                                     "./src/js/page-specific/serve-svg-image/serve-svg-image.js",
+
+      // data-manipulator.html specific imports
+      "encode/best-mix-enc":                                                 "./src/js/encode-and-decode/encode/best-mix-enc.js",
+      "encode/get-attrs-excepts-dvals":                                      "./src/js/encode-and-decode/encode/get-attrs-excepts-dvals.js",
+      "encode/join-with-ampersand":                                          "./src/js/encode-and-decode/encode/join-with-ampersand.js",
+      "encode/json-to-map-obj":                                              "./src/js/encode-and-decode/encode/json-to-map-obj.js",
+      "encode/show-best-mix-result":                                         "./src/js/encode-and-decode/encode/show-best-mix-result.js",
+      "encode/show-result":                                                  "./src/js/encode-and-decode/encode/show-result.js",
+      "encode/simplify-map":                                                 "./src/js/encode-and-decode/encode/simplify-map.js",
+      "encode/store-shortest":                                               "./src/js/encode-and-decode/encode/store-shortest.js",
+      "encode/transform-encoded-result":                                     "./src/js/encode-and-decode/encode/transform-encoded-result.js",
+      "encode/try-compress":                                                 "./src/js/encode-and-decode/encode/try-compress.js",
+      "state/result-info":                                                   "./src/js/encode-and-decode/encode/state/result-info.js",
+
+      "io/copy-textarea":                                                    "./src/js/page-specific/data-manipulator/io/copy-textarea.js",
+      "io/download-url-params":                                              "./src/js/page-specific/data-manipulator/io/download-url-params.js",
+      "io/select-file":                                                      "./src/js/page-specific/data-manipulator/io/select-file.js",
+
+      // Common imports for both index.html and data-manipulator.html
+      "constants":                                                           "./src/js/constants.js",
+
+      "libs/url-comp-0-1-0/url-comp":                                        "./src/js/libs/url-comp-0-1-0/url-comp.js",
+      "libs/deno-std/chunk":                                                 "./src/js/libs/deno-std/chunk.js",
+      "libs/deno-std/zip":                                                   "./src/js/libs/deno-std/zip.js",
+      "libs/deno-std/running-reduce":                                        "./src/js/libs/deno-std/running-reduce.js",
+
+      "common-utils/compression-stream":                                     "./src/js/common-utils/compression-stream.js",
+      "common-utils/format-as-float":                                        "./src/js/common-utils/format-as-float.js",
+      "common-utils/get-uint-n":                                             "./src/js/common-utils/get-uint-n.js",
+      "common-utils/is-non-empty":                                           "./src/js/common-utils/is-non-empty.js",
+      "common-utils/output-to-textarea":                                     "./src/js/common-utils/output-to-textarea.js",
+      "common-utils/read-textarea":                                          "./src/js/common-utils/read-textarea.js",
+      "common-utils/read-url-params":                                        "./src/js/common-utils/read-url-params.js",
+      "common-utils/select-output-textarea":                                 "./src/js/common-utils/select-output-textarea.js",
+      "common-utils/show-processing-time":                                   "./src/js/common-utils/show-processing-time.js",
+
+      "color-formatter/format-converter":                                    "./src/js/color-formatter/format-converter.js",
+      "color-formatter/hex-expand":                                          "./src/js/color-formatter/hex-expand.js",
+      "color-formatter/hex-shorten":                                         "./src/js/color-formatter/hex-shorten.js",
+      "color-formatter/normalized-from-hex":                                 "./src/js/color-formatter/normalized-from-hex.js",
+      "color-formatter/normalized-to-hex":                                   "./src/js/color-formatter/normalized-to-hex.js",
+      "color-formatter/rgb-comma-to-space":                                  "./src/js/color-formatter/rgb-comma-to-space.js",
+      "color-formatter/rgb-to-lch":                                          "./src/js/color-formatter/rgb-to-lch.js",
+      "color-formatter/try-delete-f":                                        "./src/js/color-formatter/try-delete-f.js",
+
+      "decode/decode":                                                       "./src/js/encode-and-decode/decode/decode.js",
+      "decode/generate-svg":                                                 "./src/js/encode-and-decode/decode/generate-svg.js",
+      "decode/get-uint-n":                                                   "./src/js/encode-and-decode/decode/get-uint-n.js",
+      "decode/rel-to-abs":                                                   "./src/js/encode-and-decode/decode/rel-to-abs.js",
+      "decode/size-data-dec":                                                "./src/js/encode-and-decode/decode/size-data-dec.js",
+      "decode/try-decompress":                                               "./src/js/encode-and-decode/decode/try-decompress.js",
+
+      "dynamic-ogp/calc-artwork-hash":                                       "./src/js/page-specific/index/dynamic-ogp/calc-artwork-hash.js",
+      "dynamic-ogp/calc-config-hash":                                        "./src/js/page-specific/index/dynamic-ogp/calc-config-hash.js",
+
+      "enc-and-dec/base-n/base-52-dec":                                      "./src/js/encode-and-decode/enc-and-dec/base-n/base-52-dec.js",
+      "enc-and-dec/base-n/base-52-enc":                                      "./src/js/encode-and-decode/enc-and-dec/base-n/base-52-enc.js",
+      "enc-and-dec/base-n/base-53-dec":                                      "./src/js/encode-and-decode/enc-and-dec/base-n/base-53-dec.js",
+      "enc-and-dec/base-n/base-53-enc":                                      "./src/js/encode-and-decode/enc-and-dec/base-n/base-53-enc.js",
+      "enc-and-dec/base-n/base-64url-dec":                                   "./src/js/encode-and-decode/enc-and-dec/base-n/base-64url-dec.js",
+      "enc-and-dec/base-n/base-64url-enc":                                   "./src/js/encode-and-decode/enc-and-dec/base-n/base-64url-enc.js",
+      "enc-and-dec/base-n/get-chars":                                        "./src/js/encode-and-decode/enc-and-dec/base-n/get-chars.js",
+
+      "enc-and-dec/basic-data/basic-data-dec":                               "./src/js/encode-and-decode/enc-and-dec/basic-data/basic-data-dec.js",
+      "enc-and-dec/basic-data/basic-data-enc":                               "./src/js/encode-and-decode/enc-and-dec/basic-data/basic-data-enc.js",
+
+      "enc-and-dec/lines-data/d-values/bigint64/abs-to-rel":                 "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/abs-to-rel.js",
+      "enc-and-dec/lines-data/d-values/bigint64/bigint64-dec":               "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/bigint64-dec.js",
+      "enc-and-dec/lines-data/d-values/bigint64/bigint64-enc":               "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/bigint64-enc.js",
+      "enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk":           "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk.js",
+      "enc-and-dec/lines-data/d-values/bigint64/recover-zero-padding":       "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/recover-zero-padding.js",
+
+      "enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size":   "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size.js",
+      "enc-and-dec/lines-data/d-values/bruteforce53/add-and-subtract":       "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/add-and-subtract.js",
+      "enc-and-dec/lines-data/d-values/bruteforce53/base-x-dec":             "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/base-x-dec.js",
+      "enc-and-dec/lines-data/d-values/bruteforce53/base-x-enc":             "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/base-x-enc.js",
+      "enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-dec":       "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-dec.js",
+      "enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc":       "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc.js",
+      "enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-dec": "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-dec.js",
+      "enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc": "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc.js",
+      "enc-and-dec/lines-data/d-values/bruteforce53/decode-diff":            "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/decode-diff.js",
+      "enc-and-dec/lines-data/d-values/bruteforce53/decode-freq-diff":       "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/decode-freq-diff.js",
+      "enc-and-dec/lines-data/d-values/bruteforce53/diff-to-rel":            "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/diff-to-rel.js",
+      "enc-and-dec/lines-data/d-values/bruteforce53/encode-diff":            "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/encode-diff.js",
+      "enc-and-dec/lines-data/d-values/bruteforce53/encode-freq-diff":       "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/encode-freq-diff.js",
+      "enc-and-dec/lines-data/d-values/bruteforce53/specific-alphabets":     "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/specific-alphabets.js",
+      "enc-and-dec/lines-data/d-values/bruteforce53/store-shorter":          "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/store-shorter.js",
+
+      "enc-and-dec/lines-data/d-values/swap63/create-codebook":              "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/swap63/create-codebook.js",
+      "enc-and-dec/lines-data/d-values/swap63/swap63-dec":                   "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/swap63/swap63-dec.js",
+      "enc-and-dec/lines-data/d-values/swap63/swap63-enc":                   "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/swap63/swap63-enc.js",
+
+      "enc-and-dec/lines-data/d-values/four16/decode-with-four-base16":      "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/four16/decode-with-four-base16.js",
+      "enc-and-dec/lines-data/d-values/four16/encode-with-four-base16":      "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/four16/encode-with-four-base16.js",
+      "enc-and-dec/lines-data/d-values/four16/four16-dec":                   "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/four16/four16-dec.js",
+      "enc-and-dec/lines-data/d-values/four16/four16-enc":                   "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/four16/four16-enc.js",
+
+      "enc-and-dec/lines-data/group-colors/group-colors-dec":                "./src/js/encode-and-decode/enc-and-dec/lines-data/group-colors/group-colors-dec.js",
+      "enc-and-dec/lines-data/group-colors/group-colors-enc":                "./src/js/encode-and-decode/enc-and-dec/lines-data/group-colors/group-colors-enc.js",
+
+      "enc-and-dec/lines-data/widths-and-counts/widths-and-counts-dec":      "./src/js/encode-and-decode/enc-and-dec/lines-data/widths-and-counts/widths-and-counts-dec.js",
+      "enc-and-dec/lines-data/widths-and-counts/widths-and-counts-enc":      "./src/js/encode-and-decode/enc-and-dec/lines-data/widths-and-counts/widths-and-counts-enc.js"
    }
- }
+}

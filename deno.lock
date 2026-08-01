@@ -1,6 +1,7 @@
 {
   "version": "5",
   "specifiers": {
+    "jsr:@scure/base@2.2.0": "2.2.0",
     "jsr:@std/cli@*": "1.0.32",
     "jsr:@std/cli@^1.0.31": "1.0.32",
     "jsr:@std/encoding@^1.0.11": "1.0.11",
@@ -16,6 +17,9 @@
     "npm:alwan@^2.1.1": "2.3.1"
   },
   "jsr": {
+    "@scure/base@2.2.0": {
+      "integrity": "389bb811208d4319337cf5c7e75b7e39c54c3230ecb90a59c39c7cb6251b972f"
+    },
     "@std/cli@1.0.32": {
       "integrity": "188b3a100d6202d64e3f5bd3d799c7fa4f6d77f92cc65eb7f641c1fa0aa92a66"
     },
@@ -71,6 +75,7 @@
   },
   "workspace": {
     "dependencies": [
+      "jsr:@scure/base@2.2.0",
       "npm:alwan@^2.1.1"
     ]
   }
