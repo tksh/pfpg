@@ -1,4 +1,4 @@
-import { svg2png as svg2pngWasm } from "npm:svg2png-wasm";
+import { svg2png as svg2pngWasm }  from "npm:svg2png-wasm";
 import { updateButtonWithSvgSize
        , updateButtonWithPngSize } from 'button/update-button-text'
 import { generateAndUploadImage }  from 'dynamic-ogp/generate-and-upload'

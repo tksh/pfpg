@@ -1,4 +1,4 @@
-import { TAB_SPACE }             from 'constants'
+import { TAB_SPACE }            from 'constants'
 import { tryRemoveSpaces }      from 'modal/optimize-svg'
 import { getState
        , updateState }          from 'state/url-state-manager'

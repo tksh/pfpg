@@ -1,6 +1,6 @@
 import { getSvgString }               from 'button/download-as-file'
 import { formatAsFloatString }        from 'common-utils/format-as-float'
-import { svg2pngOption }             from 'state/resvg-option'
+import { svg2pngOption }              from 'state/resvg-option'
 import { updateState }                from 'state/url-state-manager'
 import { executeSvg2png }             from 'svg-to-png'
 import { getGroupColorsValues }       from 'tab-lines/get-colors-from-svg'

@@ -1,29 +1,28 @@
 import { replaceButtonText
-       , updateButtonWithSvgSize }              from 'button/update-button-text'
-import { SETTINGS_DEFAULTS }                    from 'constants'
+       , updateButtonWithSvgSize }            from 'button/update-button-text'
+import { SETTINGS_DEFAULTS }                  from 'constants'
 import { getInitialOpacitySteps
-       , calculateStepsFromTwoOpacities }       from 'init/initial-opacity-steps'
+       , calculateStepsFromTwoOpacities }     from 'init/initial-opacity-steps'
 import { tryRemoveOpacity
        , tryRemoveLineBreaks
-       , tryRemoveSpaces }                      from 'modal/optimize-svg'
+       , tryRemoveSpaces }                    from 'modal/optimize-svg'
 import { getState
        , updateState
-       , getStateUrl }                          from 'state/url-state-manager'
-import { applyGroupColors }                     from 'tab-lines/apply-group-colors'
+       , getStateUrl }                        from 'state/url-state-manager'
+import { applyGroupColors }                   from 'tab-lines/apply-group-colors'
 import { decodeGroupColorsAsArray
-       , getGroupOpacitiesAsMap }               from 'tab-lines/decode-colors-as-array'
-import { generateGroupColorsHtmlElements }      from 'tab-lines/group-colors-generator'
+       , getGroupOpacitiesAsMap }             from 'tab-lines/decode-colors-as-array'
+import { generateGroupColorsHtmlElements }    from 'tab-lines/group-colors-generator'
 import { changeOpacitySelectOptionsAsNewStep
-       , updateSvgWithNewSteps }                  from 'tab-lines/opacity-steps'
-import { updateSvgWithNewShapePath }       from 'tab-canvas/shape-to-trim'
-import { toggleDisplay }                        from 'tab-canvas/shape-to-trim-listener'
-import { replaceShapeRendering }                from 'tab-render/shape-rendering'
-import { adjustImageDisplay }                   from 'tab-render/height-pixel-size'
-import { toggleCheckerboardBg }                 from 'tab-ui/checkerboard-bg'
-import { toggleTextWrapping }                   from 'tab-ui/text-wrapping'
-import { changeThemeColor
-       , getDefaultThemeViaPrefersColorScheme } from 'tab-ui/theme-color'
-import { switchViewScaling }                    from 'tab-ui/view-scaling'
+       , updateSvgWithNewSteps }              from 'tab-lines/opacity-steps'
+import { updateSvgWithNewShapePath }          from 'tab-canvas/shape-to-trim'
+import { toggleDisplay }                      from 'tab-canvas/shape-to-trim-listener'
+import { replaceShapeRendering }              from 'tab-render/shape-rendering'
+import { adjustImageDisplay }                 from 'tab-render/height-pixel-size'
+import { toggleCheckerboardBg }               from 'tab-ui/checkerboard-bg'
+import { toggleTextWrapping }                 from 'tab-ui/text-wrapping'
+import { changeThemeColor }                   from 'tab-ui/theme-color'
+import { switchViewScaling }                  from 'tab-ui/view-scaling'
 
 export
     { applyImageCustomization
@@ -143,7 +142,6 @@ function applyUiConfiguration() {
 
     ///////////////////////////// themeColor /////////////////////////////
     const themeColor = getStateUrl('themeColor')
-    // const themeColor = getStateUrl('themeColor') ? getStateUrl('themeColor') : getDefaultThemeViaPrefersColorScheme()
     updateState('themeColor', themeColor)
     document.getElementById('theme-color').value = themeColor
     changeThemeColor(themeColor)

@@ -1,11 +1,11 @@
-import { getSvgString }                   from 'button/download-as-file'
-import { adjustLayoutIfNotMobile }                  from 'init/adjust-layout'
-import { svg2pngOption }                  from 'state/resvg-option'
-import { updateState }                    from 'state/url-state-manager'
-import { executeSvg2png }                 from 'svg-to-png'
+import { getSvgString }              from 'button/download-as-file'
+import { adjustLayoutIfNotMobile }   from 'init/adjust-layout'
+import { svg2pngOption }             from 'state/resvg-option'
+import { updateState }               from 'state/url-state-manager'
+import { executeSvg2png }            from 'svg-to-png'
 import { updateSvgWithNewShapePath } from 'tab-canvas/shape-to-trim'
 import { cropSideMargins
-       , resetSideMargins }               from 'tab-canvas/crop-side-margins'
+       , resetSideMargins }          from 'tab-canvas/crop-side-margins'
 
 export
     { initShapeToTrimSelect

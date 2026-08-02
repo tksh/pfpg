@@ -7,7 +7,7 @@ export
 function syncInputNumberAndRange(element) {
   const id = element.id                             // 入力された要素のidを取得
   const value = element.value                       // 入力された要素の値を取得
-  const targetId = id === "png-size-number" ? "png-size-range" : "png-size-number"                            // idによって対応する要素を決める
+  const targetId = id === "png-size-number" ? "png-size-range" : "png-size-number"  // idによって対応する要素を決める
   const target = document.getElementById(targetId)  // 対応する要素を取得
   target.value = value                              // 対応する要素の値を入力された要素の値と同じにする
 }
@@ -21,7 +21,7 @@ function adjustInputValueViaButton(step) {
   if (newValue >= rangeInput.min && newValue <= rangeInput.max) {
       rangeInput.value = newValue
       numberInput.value = newValue
-      syncInputNumberAndRange(rangeInput)                     // 同期を強制的に行う
+      syncInputNumberAndRange(rangeInput)           // 同期を強制的に行う
       return newValue                               // 新しい値を返す
   }
   return null                                       // 範囲外の場合はnullを返す

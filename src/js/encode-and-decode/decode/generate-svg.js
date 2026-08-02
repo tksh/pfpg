@@ -1,5 +1,5 @@
 import { isNonEmpty } from 'common-utils/is-non-empty'
-import { TAB_SPACE }   from 'constants'
+import { TAB_SPACE }  from 'constants'
 
 // Output SVG string like:
 

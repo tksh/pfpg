@@ -1,9 +1,9 @@
-import { getSvgString }             from 'button/download-as-file'
-import { svg2pngOption }             from 'state/resvg-option'
+import { getSvgString }            from 'button/download-as-file'
+import { svg2pngOption }           from 'state/resvg-option'
 import { adjustInputValueViaButton
-       , syncInputNumberAndRange }  from 'tab-render/sync-number-and-range'
-import { updateState }              from 'state/url-state-manager'
-import { executeSvg2png }           from 'svg-to-png'
+       , syncInputNumberAndRange } from 'tab-render/sync-number-and-range'
+import { updateState }             from 'state/url-state-manager'
+import { executeSvg2png }          from 'svg-to-png'
 
 export
     { initHeightPixelSizeInputElements

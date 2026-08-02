@@ -2,7 +2,7 @@ import { getSvgString }            from 'button/download-as-file'
 import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
 import { decodeUrlToSvg }          from 'decode/decode'
 import { optimizeSvg}              from 'modal/optimize-svg'
-import { svg2pngOption }                 from 'state/resvg-option'
+import { svg2pngOption }           from 'state/resvg-option'
 import { getState
        , updateState }             from 'state/url-state-manager'
 import { executeSvg2png }          from 'svg-to-png'

@@ -4,11 +4,11 @@ import { removeUrlParams
        , getStateUrlsOfUiConfiguration} from 'state/url-state-manager'
 
 export function initResetSettings() {
-    const modal = document.getElementById('reset-settings-modal')
-    const resetButton = document.getElementById('reset-settings')
-    const imageCustomCheckbox = document.getElementById('image-custom')
-    const uiConfigCheckbox = document.getElementById('ui-config')
-    const svgOptimizeCheckbox = document.getElementById('svg-optimize')
+    const modal =               document.getElementById("reset-settings-modal");
+    const resetButton =         document.getElementById("reset-settings");
+    const imageCustomCheckbox = document.getElementById("image-custom");
+    const uiConfigCheckbox =    document.getElementById("ui-config");
+    const svgOptimizeCheckbox = document.getElementById("svg-optimize");
 
     // リセットボタンのイベントリスナー
     resetButton.addEventListener('click', function () {
