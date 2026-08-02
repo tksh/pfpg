@@ -1,10 +1,10 @@
-# pfpg
-
-![logo of pfpg](src/favicon.ico)
-
-Profile picture generator
-
-<https://pfpg.netlify.app>
+  # pfpg
+  
+  ![logo of pfpg](src/favicon.ico)
+  
+  Profile picture generator
+  
+  <https://pfpg.netlify.app>
 
 ## Development
 
@@ -26,11 +26,13 @@ deno task build  # Build index.html and data-manipulator.html
 
 ## Dependencies
 
-- [resvg-js](https://github.com/yisibl/resvg-js) (MPL 2.0 license)
-- [Alwan](https://github.com/sefianecho/alwan) (MIT license)
-- [@tksh/url-compressor - JSR](https://jsr.io/@tksh/url-compressor) (MIT license)
-- [@std/collections - JSR](https://jsr.io/@std/collections) (MIT license)
-- [@scure/base - JSR](https://jsr.io/@scure/base) (MIT license)
+| Library                                                     | License | Purpose                                      |
+| ----------------------------------------------------------- | ------- | -------------------------------------------- |
+| [svg2png-wasm](https://www.npmjs.com/package/svg2png-wasm)  | MIT     | Renders SVG into PNG images                  |
+| [Alwan](https://www.npmjs.com/package/alwan)                | MIT     | Color picker UI                              |
+| [@tksh/url-compressor](https://jsr.io/@tksh/url-compressor) | MIT     | URL-safe string compression                  |
+| [@std/collections](https://jsr.io/@std/collections)         | MIT     | Deno standard library array/object utilities |
+| [@scure/base](https://jsr.io/@scure/base)                   | MIT     | Bech32 and other binary-to-text encoding     |
 
 ## License
 
