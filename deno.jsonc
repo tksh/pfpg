@@ -15,7 +15,8 @@
       "copy:images": "cp -r src/showcase_images dist",
       "copy:css": "cp -r src/css dist",
       "copy:resvg": "cp -r src/resvg-js-wasm dist",
-      "bulk-copy": "deno task copy:favicon && deno task copy:images && deno task copy:css && deno task copy:resvg",
+      "copy:svg2png-wasm": "cp -r src/assets/svg2png-wasm dist",
+      "bulk-copy": "deno task copy:favicon && deno task copy:images && deno task copy:css && deno task copy:resvg && deno task copy:svg2png-wasm",
 
       // Work around for resvg-js with `deno bundle` that the file path of resvg-js-wasm is incorrect in the bundled JS file
       "fix-file-path": "deno run --allow-read --allow-write scripts/fix_resvg_wasm_file_path.ts",
@@ -44,6 +45,7 @@
       "modal/modal-toggle":                                                  "./src/js/page-specific/index/modal/modal-toggle.js",
       "modal/optimize-svg":                                                  "./src/js/page-specific/index/modal/optimize-svg.js",
       "modal/reset-settings":                                                "./src/js/page-specific/index/modal/reset-settings.js",
+      "svg2png-wasm": "npm:svg2png-wasm@^1.4.1",
 
       "tab-lines/apply-group-colors":                                        "./src/js/page-specific/index/tab-lines/apply-group-colors.js",
       "tab-lines/color-format":                                              "./src/js/page-specific/index/tab-lines/color-format.js",

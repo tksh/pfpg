@@ -18,7 +18,9 @@
     "jsr:@std/streams@*": "1.1.1",
     "jsr:@std/streams@^1.1.1": "1.1.1",
     "jsr:@tksh/url-compressor@^1.1.1": "1.1.1",
-    "npm:alwan@^2.1.1": "2.3.1"
+    "npm:alwan@^2.1.1": "2.3.1",
+    "npm:svg2png-wasm@*": "1.4.1",
+    "npm:svg2png-wasm@^1.4.1": "1.4.1"
   },
   "jsr": {
     "@scure/base@2.2.0": {
@@ -81,6 +83,10 @@
   "npm": {
     "alwan@2.3.1": {
       "integrity": "sha512-hyBrwuER87B/gBC6IvlR6IGpgpiet174dUXNN+016QanRO7VFPye/1e9ObUmoucZGgD3THVUIZT9IJO4Ot2Ltg=="
+    },
+    "svg2png-wasm@1.4.1": {
+      "integrity": "sha512-ZFy1NtwZVAsslaTQoI+/QqX2sg0vjmgJ/jGAuLZZvYcRlndI54hLPiwLC9JzXlFBerfxN5JiS7kpEUG0mrXS3Q==",
+      "deprecated": true
     }
   },
   "workspace": {
@@ -88,7 +94,8 @@
       "jsr:@scure/base@^2.2.0",
       "jsr:@std/collections@^1.3.0",
       "jsr:@tksh/url-compressor@^1.1.1",
-      "npm:alwan@^2.1.1"
+      "npm:alwan@^2.1.1",
+      "npm:svg2png-wasm@^1.4.1"
     ]
   }
 }
