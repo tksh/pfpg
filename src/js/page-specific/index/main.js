@@ -12,7 +12,7 @@ import { initResetSettings }                    from 'modal/reset-settings'
 import { applyImageCustomization
        , applyUiConfiguration
        , applySvgOptimization }                 from 'state/apply-url-state'
-import { resvgOption }                          from 'state/resvg-option'
+import { svg2pngOption }                        from 'state/resvg-option'
 import { getState
        , updateState }                          from 'state/url-state-manager'
 import { executeSvg2png }                       from 'svg-to-png'
@@ -33,6 +33,7 @@ import { initTextWrappingCheckbox }             from 'tab-ui/text-wrapping'
 import { getDefaultThemeViaPrefersColorScheme
        , initThemeColorSelect }                 from 'tab-ui/theme-color'
 import { initViewScalingSelect }                from 'tab-ui/view-scaling'
+import { initialize }                           from "npm:svg2png-wasm"
 
 (async function () {
 
@@ -77,14 +78,12 @@ import { initViewScalingSelect }                from 'tab-ui/view-scaling'
        updateState('themeColor', themeColor)
 
        // Apply URL params to customize SVG, falling back to SETTINGS_DEFAULTS when empty
-       const svgString = applyImageCustomization(initialDecodedSvgString, resvgOption)
+       const svgString = applyImageCustomization(initialDecodedSvgString, svg2pngOption)
 
 
-       // Initial PNG rendering
-       // await import('../../../resvg-js-wasm/index.min.js')
-       await resvg.initWasm(fetch('../../../resvg-js-wasm/index_bg.wasm'))                                    // From local
-       // await resvg.initWasm(fetch('https://unpkg.com/@resvg/resvg-wasm/index_bg.wasm'))    // From CDN
-       executeSvg2png({ target: { value: svgString } }, resvgOption)
+       // Initial PNG rendering - initialize svg2png-wasm
+       await initialize(await fetch("../../../assets/svg2png-wasm/svg2png_wasm_bg.wasm"))
+       executeSvg2png({ target: { value: svgString } }, svg2pngOption)
 
 
        // Restore SVG string optimization
