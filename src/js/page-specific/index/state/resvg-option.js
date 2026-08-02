@@ -1,7 +1,4 @@
-// Resvg Option: Argument for rendering
-export const resvgOption = {
-    fitTo: {
-        mode: 'height',
-        value: 256
-    }
+// svg2png-wasm Option: Argument for rendering
+export const svg2pngOption = {
+    height: 256
 }

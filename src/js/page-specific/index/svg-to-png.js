@@ -10,6 +10,13 @@ export
     }
 
 
+// IHDR helper to read PNG dimensions from the binary data
+function pngSize(buf) {
+    const dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
+    return { width: dv.getUint32(16), height: dv.getUint32(20) };
+}
+
+
 // addMultipleEventListener(svgTextarea, ['change', 'keyup', 'paste'], function (event) {
 //   const svgString = event.target.value.trim()
 //   const hasCrop = cropElement.checked
