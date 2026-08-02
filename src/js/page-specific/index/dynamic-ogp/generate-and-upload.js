@@ -5,10 +5,15 @@ import { getHashForOgImageUrl
        , getYearAndMonth }          from 'dynamic-ogp/params-for-uploading'
 import { getState }                 from 'state/url-state-manager'
 
+// IHDR helper to read PNG dimensions from the binary data
+function pngSize(buf) {
+    const dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
+    return { width: dv.getUint32(16), height: dv.getUint32(20) };
+}
 
 /**
  * Main function to generate and upload image
- * @param {Object} pngData - Raw PNG data to process
+ * @param {Uint8Array} pngData - Raw PNG data to process
  * @returns {Promise<string>} Final image URL
  */
 export async function generateAndUploadImage(pngData) {
@@ -34,12 +39,12 @@ export async function generateAndUploadImage(pngData) {
 
 /**
  * Creates a blob URL from PNG data
- * @param {Object} pngData - Raw PNG data
+ * @param {Uint8Array} pngData - Raw PNG data
  * @returns {string} Blob URL for the image
  */
 async function createBlobUrlFromPng(pngData) {
   return URL.createObjectURL(
-    new Blob([pngData.asPng()], { type: 'image/png' })
+    new Blob([pngData], { type: 'image/png' })
   );
 }
 
@@ -87,7 +92,7 @@ function calculateImageDimensions(originalWidth, originalHeight) {
  * Prepares the canvas with image and optional background
  * @param {HTMLCanvasElement} canvas - Canvas element
  * @param {HTMLImageElement} img - Image to draw
- * @param {Object} pngData - Original PNG data
+ * @param {Uint8Array} pngData - Original PNG data
  */
 function prepareCanvas(canvas, img, pngData) {
   // Set canvas size to target dimensions
@@ -104,8 +109,9 @@ function prepareCanvas(canvas, img, pngData) {
     ctx.fillRect(0, 0, ACTIVE_FORMAT.width, ACTIVE_FORMAT.height);
   }
 
-  // Calculate and draw the image
-  const dimensions = calculateImageDimensions(pngData.width, pngData.height);
+  // Calculate and draw the image using IHDR helper for dimensions
+  const { width, height } = pngSize(pngData);
+  const dimensions = calculateImageDimensions(width, height);
   ctx.drawImage(
     img,
     dimensions.xPosition,
