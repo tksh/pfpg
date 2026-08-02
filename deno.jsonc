@@ -17,8 +17,11 @@
       "copy:svg2png-wasm": "cp -r src/assets/svg2png-wasm dist",
       "bulk-copy": "deno task copy:favicon && deno task copy:images && deno task copy:css && deno task copy:svg2png-wasm",
 
+      // Work around for svg2png-wasm with `deno bundle` that the file path of svg2png-wasm is incorrect in the bundled JS file
+      "fix-svg2png-wasm-file-path": "deno run --allow-read --allow-write scripts/fix_svg2png_wasm_file_path.ts",
+
       // Necessary post-processing tasks after building the project, both dev and production builds
-      "postprocessing": "deno task bulk-copy",
+      "postprocessing": "deno task bulk-copy && deno task fix-svg2png-wasm-file-path",
 
       // Production build tasks, execute in scripts/build.sh only
       "remove:console": "deno run --allow-read --allow-write scripts/remove_console_logs.ts"
