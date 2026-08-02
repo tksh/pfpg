@@ -1,3 +1,4 @@
+import { svg2png } from "npm:svg2png-wasm";
 import { updateButtonWithSvgSize
        , updateButtonWithPngSize } from 'button/update-button-text'
 import { generateAndUploadImage }  from 'dynamic-ogp/generate-and-upload'
@@ -73,143 +74,33 @@ async function executeSvg2png(event, resvgOption) {
 
 
 
-// 現在の リソースを追跡する グローバル変数
-const renderResources = {
-    currentBlobUrl: null,
-    pngData: null
-};
-
-// 前回の renderResources をクリーンアップ
-function cleanupPreviousRender() {
-    // 前回の Blob URL をリボーク
-    if (renderResources.currentBlobUrl) {
-      URL.revokeObjectURL(renderResources.currentBlobUrl);
-      renderResources.currentBlobUrl = null
-    }
-
-    // 前回の pngData を解放
-    if (renderResources.pngData) {
-      renderResources.pngData.free()
-      renderResources.pngData = null
-    }
-
-    // 前回の resvgJSオブジェクト を解放
-    if (renderResources.resvgJS) {
-      renderResources.resvgJS.free()
-      renderResources.resvgJS = null
-    }
-
-    // Check the cleanup results
-    console.log('renderResources: ', renderResources)
-    // renderResources:
-    //     {currentBlobUrl: null, pngData: null, resvgJS: null}
-    //         currentBlobUrl: "blob:http://172.19.175.126:4507/e41fdaf1-3f87-4ae5-bd59-6ba05e6633f9"
-    //         pngData: e {__wbg_ptr: 2345856}
-    //         resvgJS: Q {__wbg_ptr: 1550136}
-    //         [[Prototype]]: Object
-
-    // このコンソール出力は、JavaScript のオブジェクト参照の特殊な動作を示しています。
-    // - console.log() は、オブジェクトの初期状態（null）を表示します。
-    // - コンソールを展開すると、実際のデータが表示されます。これは、ブラウザの開発者ツールがオブジェクトの最新の状態をリアルタイムで反映するためです。
-    // この動作は、開発者ツールと実際のメモリ管理の微妙な違いを示しています。null 代入は、明示的なクリーンアップの意図を示す重要な手法です。
-  }
-
 // Rendering from SVG to PNG with options
-async function svg2png(svgString, resvgOption) {
-    // const resvgWasm = await resvg.initWasm(fetch('./wasm/index_bg.wasm'))
-    // 前回のリソースをクリーンアップ
-    cleanupPreviousRender()
-
-    // Create the Resvg object
-    // const resvgJS = new Resvg(svgString, resvgOption)
-    const resvgJS = new resvg.Resvg(svgString, resvgOption)
-    renderResources.resvgJS = resvgJS                          // 追跡用に保存
-    console.log('resvgJS: ', resvgJS)
-
-    // Render
-    const pngData = resvgJS.render()
-    renderResources.pngData = pngData                          // 追跡用に保存
-
-    const pngBuffer = pngData.asPng()
+async function svg2png(svgString, svg2pngOption) {
+    // Render using svg2png-wasm
+    const pngUint8Array = await svg2png(svgString, svg2pngOption);
 
     // Create a blob and its url
-    const blob = new Blob([pngBuffer], { type: 'image/png' })
+    const blob = new Blob([pngUint8Array], { type: 'image/png' })
     const blobUrl = URL.createObjectURL(blob)
-    renderResources.currentBlobUrl = blobUrl                   // 追跡用に保存
 
     // Display the PNG img on output area
     document.querySelector('#output img').src = blobUrl
 
-
-    // Option: You can get the Micro SVG (usvg) strings like below
-    // console.log('Simplified svg string: \n', resvgJS.toString()) // <svg>...</svg>
-
-
     // Update the size and dimension info in HTML elements
 
     // PNG file size on the download/copy button
-    updateButtonWithPngSize(pngBuffer)
+    updateButtonWithPngSize(pngUint8Array)
 
-    // PNG pixel and SVG viewBox dimension on the <div id="[png|svg]-info">
+    // PNG pixel dimensions - use IHDR helper
+    const { width, height } = pngSize(pngUint8Array);
+    updateDimensionInfo('png', width, height)
 
-    // PNG
-    updateDimensionInfo('png', pngData.width, pngData.height)
-    // SVG
-    const viewboxValues = extractViewboxValues(svgString) // e.g: Map(4) {'x' => 0, 'y' => 0, 'w' => 31, 'h' => 31}
+    // SVG viewBox dimension
+    const viewboxValues = extractViewboxValues(svgString)
     updateDimensionInfo('svg', viewboxValues.get('w'), viewboxValues.get('h'))
 
-    return pngData
+    return pngUint8Array
 }
-
-// Result of resvgJS and pngData
-// - both have '.free()' for garbage correction
-
-// resvgJS:
-//    Q {__wbg_ptr: 1876528}
-//    __wbg_ptr: 1876528
-//    height: (...)
-//    width: (...)
-//    [[Prototype]]: A
-//      constructor: class extends
-//      height: (...)
-//      width: (...)
-//      [[Prototype]]: Object
-//        constructor: class
-//        cropByBBox: ƒ cropByBBox(t)
-//        free: ƒ free()
-//        getBBox: ƒ getBBox()
-//        height: (...)
-//        imagesToResolve: ƒ imagesToResolve()
-//        innerBBox: ƒ innerBBox()
-//        render: ƒ render()
-//        resolveImage: ƒ resolveImage(t,n)
-//        toString: ƒ toString()
-//        width: (...)
-//        __destroy_into_raw: ƒ __destroy_into_raw()
-//        get height: ƒ height()
-//        get width: ƒ width()
-//        [[Prototype]]: Object
-
-
-// pngData:
-//   e {__wbg_ptr: 1552808}
-//     __wbg_ptr: 1552808
-//     height: (...)
-//     pixels: (...)
-//     width: (...)
-//     [[Prototype]]: Object
-//       asPng: ƒ asPng()
-//       constructor: class e
-//       free: ƒ free()
-//       height: (...)
-//       pixels: (...)
-//       width: (...)
-//       __destroy_into_raw: ƒ __destroy_into_raw()
-//       get height: ƒ height()
-//       get pixels: ƒ pixels()
-//       get width: ƒ width()
-//       [[Prototype]]: Object
-
 
 /**
  * Updates the dimension information displayed for either a PNG or SVG image.
