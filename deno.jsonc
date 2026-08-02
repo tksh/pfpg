@@ -14,16 +14,11 @@
       "copy:favicon": "deno run --allow-read --allow-write scripts/copy_favicon_images.ts",
       "copy:images": "cp -r src/showcase_images dist",
       "copy:css": "cp -r src/css dist",
-      "copy:resvg": "cp -r src/resvg-js-wasm dist",
       "copy:svg2png-wasm": "cp -r src/assets/svg2png-wasm dist",
-      "bulk-copy": "deno task copy:favicon && deno task copy:images && deno task copy:css && deno task copy:resvg && deno task copy:svg2png-wasm",
-
-      // Work around for resvg-js with `deno bundle` that the file path of resvg-js-wasm is incorrect in the bundled JS file
-      "fix-file-path": "deno run --allow-read --allow-write scripts/fix_resvg_wasm_file_path.ts",
-      "get-back-resvg-js-to-html": "deno run --allow-read --allow-write scripts/get_back_resvg_js_to_html.ts",
+      "bulk-copy": "deno task copy:favicon && deno task copy:images && deno task copy:css && deno task copy:svg2png-wasm",
 
       // Necessary post-processing tasks after building the project, both dev and production builds
-      "postprocessing": "deno task bulk-copy && deno task fix-file-path && deno task get-back-resvg-js-to-html",
+      "postprocessing": "deno task bulk-copy",
 
       // Production build tasks, execute in scripts/build.sh only
       "remove:console": "deno run --allow-read --allow-write scripts/remove_console_logs.ts"
