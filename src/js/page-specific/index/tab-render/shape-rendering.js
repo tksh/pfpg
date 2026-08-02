@@ -1,5 +1,5 @@
 import { getSvgString }   from 'button/download-as-file'
-import { resvgOption }    from 'state/resvg-option'
+import { svg2pngOption }             from 'state/resvg-option'
 import { updateState }    from 'state/url-state-manager'
 import { executeSvg2png } from 'svg-to-png'
 
@@ -28,7 +28,7 @@ function initShapeRenderingSelect() {
         document.querySelector('#svg-string').value = updatedSvg
 
         // Rendering the PNG with updated SVG
-        executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
+        executeSvg2png({ target: { value: updatedSvg } }, svg2pngOption)
     })
 
 }

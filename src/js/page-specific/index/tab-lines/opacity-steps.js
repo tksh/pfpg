@@ -1,6 +1,6 @@
 import { getSvgString }               from 'button/download-as-file'
 import { formatAsFloatString }        from 'common-utils/format-as-float'
-import { resvgOption }                from 'state/resvg-option'
+import { svg2pngOption }             from 'state/resvg-option'
 import { updateState }                from 'state/url-state-manager'
 import { executeSvg2png }             from 'svg-to-png'
 import { getGroupColorsValues }       from 'tab-lines/get-colors-from-svg'
@@ -28,23 +28,23 @@ function initOpacityStepsSelect() {
         updateState('opacitySteps', opacitySteps)
 
         // 新しいセレクトメニューに更新
-        changeOpacitySelectOptionsAsNewStep(getSvgString(), opacitySteps)
+        changeOpacitySelectOptionsAsNewStep(getSvgString(), opacitySteps, svg2pngOption)
 
         // 新しいセレクトメニューへの 更新で選ばれた その opacitySteps での 一番近い値の表示と 元々のSVGの色情報が ずれてしまうので
         // 新しいセレクトメニューでの 値 を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
-        const updatedSvg = updateSvgWithNewSteps(getSvgString())
+        const updatedSvg = updateSvgWithNewSteps(getSvgString(), opacitySteps, svg2pngOption)
 
         // Update the textarea content
         document.querySelector('#svg-string').value = updatedSvg
 
         // Rendering the PNG with updated SVG
-        executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
+        executeSvg2png({ target: { value: updatedSvg } }, svg2pngOption)
     })
 }
 
 
 // 'opacity' and 'stroke-opacity' values of entire groups will be changed as selected new steps.
-function changeOpacitySelectOptionsAsNewStep(svgString, opacitySteps) {
+function changeOpacitySelectOptionsAsNewStep(svgString, opacitySteps, svg2pngOption) {
     const groupColorsValues = getGroupColorsValues(svgString)
     const numberOfGroups = groupColorsValues.get('number_of_groups')
     const opacity        = groupColorsValues.get('opacity_array')
@@ -54,12 +54,12 @@ function changeOpacitySelectOptionsAsNewStep(svgString, opacitySteps) {
     for (let i = 0; i < numberOfGroups; i++) {
         // 新しい opacitySteps の <option>に 置き換える
         // selected は 新しい<option>の中から 現在の値に一番近いものに 変更する
-        replaceToNewStepOptions(i, opacitySteps, 'opacity', opacity)
-        replaceToNewStepOptions(i, opacitySteps, 'stroke-opacity', strokeOpacity)
+        replaceToNewStepOptions(i, opacitySteps, 'opacity', opacity, svg2pngOption)
+        replaceToNewStepOptions(i, opacitySteps, 'stroke-opacity', strokeOpacity, svg2pngOption)
     }
 }
 
-function replaceToNewStepOptions(i, opacitySteps, attrName, attrValueArray) {
+function replaceToNewStepOptions(i, opacitySteps, attrName, attrValueArray, svg2pngOption) {
 
     // Get the elem to append the new <option>
     const opacitiesSelect = document.getElementById(`group-colors-${attrName}-${i}`)
@@ -117,7 +117,7 @@ function numbersIncrementByStep(step) {
 
 // Update SVG
 
-function updateSvgWithNewSteps(inputSvg) {
+function updateSvgWithNewSteps(inputSvg, opacitySteps, svg2pngOption) {
 
     // Get the number of groups
     const numberOfGroups = getNumberOfGroups(inputSvg)

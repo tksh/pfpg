@@ -1,5 +1,5 @@
 import { getSvgString }                         from 'button/download-as-file'
-import { resvgOption }                          from 'state/resvg-option'
+import { svg2pngOption }                        from 'state/resvg-option'
 import { getState
        , updateState }                          from 'state/url-state-manager'
 import { updateSvgAsNewColorFormat }            from 'tab-lines/update-svg-color-format'
@@ -27,8 +27,8 @@ export function initColorFormatSelect() {
         const numberOfGroups = getNumberOfGroups(svgString)
 
         // Add event listener for new format opacity selectors
-        addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'opacity')
-        addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke-opacity')
+        addEventListenerForGroupColorsInputs(numberOfGroups, svg2pngOption, 'opacity')
+        addEventListenerForGroupColorsInputs(numberOfGroups, svg2pngOption, 'stroke-opacity')
 
         // 新しいセレクトメニューでの 値 を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
         const updatedSvg = updateSvgAsNewColorFormat(colorFormat)

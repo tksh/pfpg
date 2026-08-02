@@ -1,5 +1,5 @@
 import { getSvgString }             from 'button/download-as-file'
-import { resvgOption }              from 'state/resvg-option'
+import { svg2pngOption }             from 'state/resvg-option'
 import { adjustInputValueViaButton
        , syncInputNumberAndRange }  from 'tab-render/sync-number-and-range'
 import { updateState }              from 'state/url-state-manager'
@@ -36,16 +36,16 @@ function initNumberInputValidatorListener() {
 }
 
 
-// Update resvgOption with new height size, and convert from SVG to PNG
+// Update svg2pngOption with new height size, and convert from SVG to PNG
 
 function updateAndConvert(value) {
     console.log("Updated value of 'Height pixel size':", value);
     updateState('heightPixelSize', value);
 
-    // update the 'resvgOption'
-    resvgOption.fitTo.value = parseInt(value, 10);
+    // update the 'svg2pngOption'
+    svg2pngOption.height = parseInt(value, 10);
 
-    executeSvg2png({ target: { value: getSvgString() } }, resvgOption);
+    executeSvg2png({ target: { value: getSvgString() } }, svg2pngOption);
 
     adjustImageDisplay(value)
 }

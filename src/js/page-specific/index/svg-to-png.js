@@ -1,4 +1,4 @@
-import { svg2png } from "npm:svg2png-wasm";
+import { svg2png as svg2pngWasm } from "npm:svg2png-wasm";
 import { updateButtonWithSvgSize
        , updateButtonWithPngSize } from 'button/update-button-text'
 import { generateAndUploadImage }  from 'dynamic-ogp/generate-and-upload'
@@ -32,7 +32,7 @@ function pngSize(buf) {
 // - 'svgTextarea' に対してSVG文字列を取得する際の 'event.target.value' と同じオブジェクト構造にする
 
 // svg2png() を呼び出し 処理時間を計測する measureSvg2pngTime() を実行し 処理時間結果を表示する
-async function executeSvg2png(event, resvgOption) {
+async function executeSvg2png(event, svg2pngOption) {
     // 処理時間を表示する HTML要素を 取得
     const renderingStatusElements = new Map([
         ['pngActionButton', document.getElementById("png-action-button")],
@@ -44,7 +44,7 @@ async function executeSvg2png(event, resvgOption) {
 
     try {
         // Processing from SVG to PNG and measuring the time
-        const pngData = await measureSvg2pngTime(svgString, resvgOption, renderingStatusElements);
+        const pngData = await measureSvg2pngTime(svgString, svg2pngOption, renderingStatusElements);
         console.log('pngData: ', pngData);
 
         //////////////// OGP ////////////////
@@ -77,7 +77,7 @@ async function executeSvg2png(event, resvgOption) {
 // Rendering from SVG to PNG with options
 async function svg2png(svgString, svg2pngOption) {
     // Render using svg2png-wasm
-    const pngUint8Array = await svg2png(svgString, svg2pngOption);
+    const pngUint8Array = await svg2pngWasm(svgString, svg2pngOption);
 
     // Create a blob and its url
     const blob = new Blob([pngUint8Array], { type: 'image/png' })
@@ -131,7 +131,7 @@ function updateDimensionInfo(pngOrSvg, widthValue, heightValue) {
 
 
 // Processing from SVG to PNG and measuring the time
-async function measureSvg2pngTime(svgString, resvgOption, renderingStatusElements) {
+async function measureSvg2pngTime(svgString, svg2pngOption, renderingStatusElements) {
     try {
         // 処理中メッセージを表示
         await updateRenderingStatus("Now rendering ...<br> Please wait a moment :)", renderingStatusElements.get('pngActionButton'));
@@ -141,7 +141,7 @@ async function measureSvg2pngTime(svgString, resvgOption, renderingStatusElement
         console.log('svg2png startTime: ', startTime);
 
         // svg2png関数を呼び出す
-        const pngData = await svg2png(svgString, resvgOption);
+        const pngData = await svg2png(svgString, svg2pngOption);
 
         // 終了時刻を記録
         const endTime = performance.now();

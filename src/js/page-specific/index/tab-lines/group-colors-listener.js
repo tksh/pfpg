@@ -1,5 +1,5 @@
 import { getSvgString }               from 'button/download-as-file'
-import { resvgOption }                from 'state/resvg-option'
+import { svg2pngOption }              from 'state/resvg-option'
 import { updateState }                from 'state/url-state-manager'
 import { executeSvg2png }             from 'svg-to-png'
 import { getGroupColorsAsJoinedHex }  from 'tab-lines/encode-colors-as-hex'
@@ -26,15 +26,15 @@ function initGroupColorsInputs() {
 
     const numberOfGroups = getNumberOfGroups(getSvgString())
     console.log('numberOfGroups: ', numberOfGroups)
-    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'opacity')
-    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke-opacity')
+    addEventListenerForGroupColorsInputs(numberOfGroups, svg2pngOption, 'opacity')
+    addEventListenerForGroupColorsInputs(numberOfGroups, svg2pngOption, 'stroke-opacity')
 
 }
 
  /**
  / @attrName string - 'opacity' | 'stroke-opacity'
 */
-function addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, attrName) {
+function addEventListenerForGroupColorsInputs(numberOfGroups, svg2pngOption, attrName) {
 
     // id `group-colors-${attrName}-N` の要素の変更を監視
     for (let i = 0; i < numberOfGroups; i++) {
@@ -59,7 +59,7 @@ function addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, attrN
             const updatedSvg = updateSvgWithNewColorValue(inputValue, attrName, gId)
 
             // Render new PNG
-            executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
+            executeSvg2png({ target: { value: updatedSvg } }, svg2pngOption)
         })
     }
 }

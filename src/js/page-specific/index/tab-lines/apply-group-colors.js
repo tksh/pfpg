@@ -6,7 +6,7 @@ import { getNumberOfGroups }                    from 'utils/get-number-of-groups
 import { replaceAtIndex }                       from 'utils/replace-at-index'
 
 
-export function applyGroupColors(svgString, resvgOption, groupColorsByGroups, opacitySteps) {
+export function applyGroupColors(svgString, svg2pngOption, groupColorsByGroups, opacitySteps) {
 
     const colorFormat = getState('colorFormat')
 
@@ -31,8 +31,8 @@ export function applyGroupColors(svgString, resvgOption, groupColorsByGroups, op
 
     // Add event listener for new format opacity selectors
     const numberOfGroups = getNumberOfGroups(svgString)
-    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'opacity')
-    addEventListenerForGroupColorsInputs(numberOfGroups, resvgOption, 'stroke-opacity')
+    addEventListenerForGroupColorsInputs(numberOfGroups, svg2pngOption, 'opacity')
+    addEventListenerForGroupColorsInputs(numberOfGroups, svg2pngOption, 'stroke-opacity')
 
     return updatedSvg
 }

@@ -32,7 +32,7 @@ export
     }
 
 
-function applyImageCustomization(svgString, resvgOption) {
+function applyImageCustomization(svgString, svg2pngOption) {
 
     let updatedSvg = svgString
 
@@ -105,7 +105,7 @@ function applyImageCustomization(svgString, resvgOption) {
 
     ////////////////////////////////////////////////// heightPixelSize //////////////////////////////////////////////////
     const heightPixelSize = parseInt(getState('heightPixelSize'), 10)
-    resvgOption.fitTo.value = heightPixelSize
+    svg2pngOption.height = heightPixelSize
 
     document.querySelector('#png-size-number').value = heightPixelSize
     document.querySelector('#png-size-range').value = heightPixelSize

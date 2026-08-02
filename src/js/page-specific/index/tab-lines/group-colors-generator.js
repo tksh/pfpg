@@ -9,7 +9,7 @@ import { getGroupColorsValues }       from 'tab-lines/get-colors-from-svg'
 import { numbersIncrementByStep }     from 'tab-lines/opacity-steps'
 import { updateSvgWithNewColorValue } from 'tab-lines/group-colors-listener'
 
-import { resvgOption } from 'state/resvg-option'
+import { svg2pngOption } from 'state/resvg-option'
 
 // Import Alwan JS and CSS from node_modules
 import Alwan from 'alwan';
@@ -116,7 +116,7 @@ function generateGroupColorsHtmlElements(inputSvg, colorFormat, opacitySteps) {
         });
 
         // カラーピッカーで 色が変更された時の イベントリスナー
-        addEventListenerToAlwanOnChange(alwan, gId, colorFormat, resvgOption)
+        addEventListenerToAlwanOnChange(alwan, gId, colorFormat, svg2pngOption)
 
         // Two <select> elements for opacity and stroke-opacity
         const opacitySelect = createOpacitiesSelectElement(gId, opacitySteps, 'opacity', opacityArr[gId])
@@ -250,7 +250,7 @@ function createOpacitiesSelectElement(i, step, attrName, attrValue) {
 }
 
 
-function addEventListenerToAlwanOnChange(alwanInstance, gId, colorFormat, resvgOption) {
+function addEventListenerToAlwanOnChange(alwanInstance, gId, colorFormat, svg2pngOption) {
 
     alwanInstance.on('change', (ev) => {
         console.log('ev.source: ', ev.source)
@@ -276,7 +276,7 @@ function addEventListenerToAlwanOnChange(alwanInstance, gId, colorFormat, resvgO
         const updatedSvg = updateSvgWithNewColorValue(inputValue, 'stroke', gId)
 
         // Render new PNG
-        executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
+        executeSvg2png({ target: { value: updatedSvg } }, svg2pngOption)
     });
 
 }

@@ -2,7 +2,7 @@ import { getSvgString }            from 'button/download-as-file'
 import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
 import { decodeUrlToSvg }          from 'decode/decode'
 import { optimizeSvg}              from 'modal/optimize-svg'
-import { resvgOption }             from 'state/resvg-option'
+import { svg2pngOption }                 from 'state/resvg-option'
 import { getState
        , updateState }             from 'state/url-state-manager'
 import { executeSvg2png }          from 'svg-to-png'
@@ -93,7 +93,7 @@ function initPathModeSelect() {
         document.querySelector('#svg-string').value = optimizedSvg
 
         // // Rendering the PNG with updated SVG
-        executeSvg2png({ target: { value: updatedSvg } }, resvgOption)
+        executeSvg2png({ target: { value: updatedSvg } }, svg2pngOption)
     })
 
 }

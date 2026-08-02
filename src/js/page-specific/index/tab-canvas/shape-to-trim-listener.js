@@ -1,6 +1,6 @@
 import { getSvgString }                   from 'button/download-as-file'
 import { adjustLayoutIfNotMobile }                  from 'init/adjust-layout'
-import { resvgOption }                    from 'state/resvg-option'
+import { svg2pngOption }                  from 'state/resvg-option'
 import { updateState }                    from 'state/url-state-manager'
 import { executeSvg2png }                 from 'svg-to-png'
 import { updateSvgWithNewShapePath } from 'tab-canvas/shape-to-trim'
@@ -44,7 +44,7 @@ function initShapeToTrimSelect() {
 
 
         document.querySelector('#svg-string').value = updatedSvg        // Update the textarea
-        executeSvg2png({ target: { value: updatedSvg } }, resvgOption)  // Render to PNG
+        executeSvg2png({ target: { value: updatedSvg } }, svg2pngOption)  // Render to PNG
 
     })
 }
@@ -70,7 +70,7 @@ function initWidthNarrownessSelect() {
         const updatedSvg = updateSvgWithNewShapePath('squircleSlimmed', getSvgString())
 
         document.querySelector('#svg-string').value = updatedSvg        // Update the textarea
-        executeSvg2png({ target: { value: updatedSvg } }, resvgOption)  // Render to PNG
+        executeSvg2png({ target: { value: updatedSvg } }, svg2pngOption)  // Render to PNG
     })
 }
 
@@ -83,7 +83,7 @@ function initTopHeavyRatioSelect() {
         const updatedSvg = updateSvgWithNewShapePath('squircleSlimmed', getSvgString())
 
         document.querySelector('#svg-string').value = updatedSvg        // Update the textarea
-        executeSvg2png({ target: { value: updatedSvg } }, resvgOption)  // Render to PNG
+        executeSvg2png({ target: { value: updatedSvg } }, svg2pngOption)  // Render to PNG
     })
 }
 
