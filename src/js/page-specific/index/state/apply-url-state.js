@@ -62,7 +62,7 @@ function applyImageCustomization(svgString, svg2pngOption) {
     const groupColors = getState('groupColors')
     if (groupColors) {
         const groupColorsByGroupsArr = decodeGroupColorsAsArray(groupColors, colorFormat)
-        updatedSvg = applyGroupColors(svgString, resvgOption, groupColorsByGroupsArr, opacitySteps)
+        updatedSvg = applyGroupColors(svgString, svg2pngOption, groupColorsByGroupsArr, opacitySteps)
 
         // Get the opacitySteps from customized group colors
         const opacitiesByGroupMap = getGroupOpacitiesAsMap(groupColorsByGroupsArr)
