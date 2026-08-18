@@ -2,7 +2,8 @@ import { calculateArtworkHash } from 'dynamic-ogp/calc-artwork-hash'
 import { calculateConfigHash }  from 'dynamic-ogp/calc-config-hash'
 import { strToSha256 }          from 'utils/hashing'
 import { SETTINGS_DEFAULTS,
-         VISUAL_CONFIG_DEFAULTS } from 'constants'
+         VISUAL_CONFIG_DEFAULTS,
+         BASIC_DATA_KEYS }      from 'constants'
 
 export
     { getOgImageData
@@ -48,7 +49,7 @@ async function getOgImageData() {
    const artwork = [];
 
    for (const [key, value] of params) {
-       if (!SETTINGS_DEFAULTS.has(key)) {
+       if (!SETTINGS_DEFAULTS.has(key) && !BASIC_DATA_KEYS.includes(key)) {  // Extract the lines data only
            artwork.push([key, value]);
        }
    }

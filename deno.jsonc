@@ -30,6 +30,7 @@
       // index.html specific imports
       "alwan":                                                               "npm:alwan@^2.3.1",
       "@scure/base":                                                         "jsr:@scure/base@^2.2.0",
+      "@timepp/murmurhash":                                                  "jsr:@timepp/murmurhash@^0.1.1",
 
       "init/adjust-layout":                                                  "./src/js/page-specific/index/init/adjust-layout.js",
       "init/initial-opacity-steps":                                          "./src/js/page-specific/index/init/initial-opacity-steps.js",
