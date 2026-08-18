@@ -157,10 +157,6 @@ export const SETTINGS_DEFAULTS = mergeMaps(
 );
 
 function mergeMaps(...maps) {
-  maps.forEach((m, i) => {
-      if (m == null) console.log(`mergeMaps arg #${i} is`, m);
-  });
-
   const out = new Map();
   for (const m of maps) {
     for (const [k, v] of m) out.set(k, v);
