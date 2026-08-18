@@ -67,11 +67,13 @@ const CONTENT_TYPES: Record<string, string> = {
   ".js": "application/javascript",
   ".css": "text/css",
   ".html": "text/html",
+  ".wasm": "application/wasm", // ← 追加
 };
 
 Deno.serve({ port: 8000 }, async (req) => {
   const url = new URL(req.url);
 
+  // --- SSE ライブリロード ---
   if (url.pathname === "/__livereload") {
     const stream = new ReadableStream({
       start(controller) {
@@ -88,19 +90,33 @@ Deno.serve({ port: 8000 }, async (req) => {
     });
   }
 
+  // --- 静的ファイル配信 ---
   const path = url.pathname === "/" ? "/index.html" : url.pathname;
   const fullPath = `${DIST}${path}`;
+
   try {
     const bytes = await Deno.readFile(fullPath);
     const ext = path.slice(path.lastIndexOf("."));
+
+    // HTML はライブリロードスクリプトを挿入
     if (ext === ".html") {
       const html = new TextDecoder().decode(bytes)
         .replace("</body>", `${LIVE_RELOAD_SCRIPT}</body>`);
       return new Response(html, { headers: { "content-type": "text/html" } });
     }
+
+    // WASM は必ず application/wasm を返す
+    if (ext === ".wasm") {
+      return new Response(bytes, {
+        headers: { "content-type": "application/wasm" },
+      });
+    }
+
+    // その他の静的ファイル
     return new Response(bytes, {
       headers: { "content-type": CONTENT_TYPES[ext] ?? "application/octet-stream" },
     });
+
   } catch {
     return new Response("Not found", { status: 404 });
   }
