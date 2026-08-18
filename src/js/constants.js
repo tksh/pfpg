@@ -9,8 +9,7 @@ export const BASIC_DATA_KEYS = [
     'version',
     'title',     // SVG tag content
     'desc',      // SVG tag content
-    'metadata',  // SVG tag content
-    'colors'
+    'metadata'   // SVG tag content
 ]
 
 
