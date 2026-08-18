@@ -111,34 +111,59 @@ export const ENCODING_METHOD_AND_CONFIG_MAP = new Map([
 // and also used for distilling the strokes data for decoding at both index.html and data-manipulator.html
 ////////////////////////////////////////////////////////////////////////////////
 
-
 // Settings name keys and default values
 //
 //   - The default values of below three attributes will be detected from artwork data or browser setting, when page loaded.
-//     - 'groupColors' : Extract from lines data
-//     - 'opacitySteps': Calculate from from lines data
-//     - 'themeColor'  : Define by user's scheme setting, (`prefers-color-scheme: dark` => 'dark', others => 'light')
+//     - VISUAL_CONFIG_DEFAULTS
+//       - 'groupColors' : Extract from lines data
+//       - 'opacitySteps': Calculate from from lines data
+//     - UI_CONFIG_DEFAULTS
+//       - 'themeColor'  : Define by user's scheme setting, (`prefers-color-scheme: dark` => 'dark', others => 'light')
 
-export const SETTINGS_DEFAULTS = new Map([
-//  ['Attribute name',   default value],     // Appeared at: | Index | Type   | Possible values:
-    ['removeOpacity',    false],   // SVG optimization modal |   0   | Bool   | true, false
-    ['removeLineBreaks', false],   // SVG optimization modal |   1   | Bool   | true, false
-    ['removeSpaces',     true],    // SVG optimization modal |   2   | Bool   | true, false
+export const SVG_OPTIMIZE_DEFAULTS = new Map([
+//  ['Attribute name',   default value],         // Appeared at:           | Type: | Possible values:
+    ['removeOpacity',    false],                 // SVG optimization modal | Bool  | true, false
+    ['removeLineBreaks', false],                 // SVG optimization modal | Bool  | true, false
+    ['removeSpaces',     true],                  // SVG optimization modal | Bool  | true, false
+]);
 
-    ['groupColors',      undefined],            // Lines tab |   3   | String | 3|6|10 digits each group-colors hexes has joined with '_', e.g. 12345699FF_000123_FFF
-    ['pathMode',         'absoluteSeparated'],  // Lines tab |   4   | String | 'absoluteSeparated', 'relativeMerged'
-    ['opacitySteps',     undefined],            // Lines tab |   5   | Float  | 0.2, 0.1, 0.04 (detected the nearest from initial decoded SVG)
-    ['colorFormat',      'rgb'],                // Lines tab |   6   | String | 'hex', 'rgb'
-    ['shapeToTrim',      'square'],            // Canvas tab |   7   | String | 'square', 'circle', 'squircle', 'squircleSlimmed'
-    ['widthNarrowness',  10],                  // Canvas tab |   8   | Uint   | 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30
-    ['topHeavyRatio',    1],                   // Canvas tab |   9   | Int    | 3, 2, 1, 0, -1, -2, -3
-    ['cropSideMargins',  true],                // Canvas tab |  10   | Bool   | true, false
-    ['shapeRendering',   'crispEdges'],        // Render tab |  11   | String | 'crispEdges', 'geometricPrecision'
-    ['heightPixelSize',   256],                // Render tab |  12   | Uint   | 0 <
+export const VISUAL_CONFIG_DEFAULTS = new Map([
+//  ['Attribute name',   default value],         // Appeared at: | Type:  | Possible values:
+    ['groupColors',      undefined],             //    Lines tab | String | 3|6|10 digits each group-colors hexes has joined with '_', e.g. 12345699FF_000123_FFF
+    ['pathMode',         'absoluteSeparated'],   //    Lines tab | String | 'absoluteSeparated', 'relativeMerged'
+    ['opacitySteps',     undefined],             //    Lines tab | Float  | 0.2, 0.1, 0.04 (detected the nearest from initial decoded SVG)
+    ['colorFormat',      'rgb'],                 //    Lines tab | String | 'hex', 'rgb'
+    ['shapeToTrim',      'square'],              //   Canvas tab | String | 'square', 'circle', 'squircle', 'squircleSlimmed'
+    ['widthNarrowness',  10],                    //   Canvas tab | Uint   | 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30
+    ['topHeavyRatio',    1],                     //   Canvas tab | Int    | 3, 2, 1, 0, -1, -2, -3
+    ['cropSideMargins',  true],                  //   Canvas tab | Bool   | true, false
+    ['shapeRendering',   'crispEdges'],          //   Render tab | String | 'crispEdges', 'geometricPrecision'
+    ['heightPixelSize',  256],                   //   Render tab | Uint   | 0 <
+]);
 
-    ['themeColor',       undefined],               // UI tab |  13   | String | 'white', 'light', 'dark', 'black'
-    ['buttonAction',     'download'],              // UI tab |  14   | String | 'download', 'copy'
-    ['viewScaling',      'fit'],                   // UI tab |  15   | String | 'fit', 'actual'
-    ['checkerboardBg',   true],                    // UI tab |  16   | Bool   | true, false
-    ['textWrapping',     false],                   // UI tab |  17   | Bool   | true, false
-])
+export const UI_CONFIG_DEFAULTS = new Map([
+//  ['Attribute name',   default value],         // Appeared at: | Type:  | Possible values:
+    ['themeColor',       undefined],             //       UI tab | String | 'white', 'light', 'dark', 'black'
+    ['buttonAction',     'download'],            //       UI tab | String | 'download', 'copy'
+    ['viewScaling',      'fit'],                 //       UI tab | String | 'fit', 'actual'
+    ['checkerboardBg',   true],                  //       UI tab | Bool   | true, false
+    ['textWrapping',     false],                 //       UI tab | Bool   | true, false
+]);
+
+export const SETTINGS_DEFAULTS = mergeMaps(
+  SVG_OPTIMIZE_DEFAULTS,
+  VISUAL_CONFIG_DEFAULTS,
+  UI_CONFIG_DEFAULTS
+);
+
+function mergeMaps(...maps) {
+  maps.forEach((m, i) => {
+      if (m == null) console.log(`mergeMaps arg #${i} is`, m);
+  });
+
+  const out = new Map();
+  for (const m of maps) {
+    for (const [k, v] of m) out.set(k, v);
+  }
+  return out;
+}
