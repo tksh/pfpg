@@ -127,6 +127,12 @@ export const SVG_OPTIMIZE_DEFAULTS = new Map([
     ['removeSpaces',     true],                  // SVG optimization modal | Bool  | true, false
 ]);
 
+/**
+ * Visual configuration schema.
+ *
+ * Entry order is the canonical serialization order.
+ * Do not reorder entries unless the canonical format is intentionally changed.
+ */
 export const VISUAL_CONFIG_DEFAULTS = new Map([
 //  ['Attribute name',   default value],         // Appeared at: | Type:  | Possible values:
     ['groupColors',      undefined],             //    Lines tab | String | 3|6|10 digits each group-colors hexes has joined with '_', e.g. 12345699FF_000123_FFF
