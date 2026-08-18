@@ -1,9 +1,12 @@
 import { calculateArtworkHash } from 'dynamic-ogp/calc-artwork-hash'
 import { calculateConfigHash }  from 'dynamic-ogp/calc-config-hash'
 import { strToSha256 }          from 'utils/hashing'
+import { SETTINGS_DEFAULTS,
+         VISUAL_CONFIG_DEFAULTS } from 'constants'
 
 export
-    { getHashForOgImageUrl
+    { getOgImageData
+    , getHashForOgImageUrl
     , getBackgroundColorByTheme
     , getYearAndMonth
     }
@@ -37,6 +40,32 @@ async function getHashForOgImageUrl() {
 
     return hashHex
 }
+
+async function getOgImageData() {
+    const params = new URLSearchParams(window.location.search);
+    console.log('params for OGP: ', params)
+
+   const artwork = [];
+
+   for (const [key, value] of params) {
+       if (!SETTINGS_DEFAULTS.has(key)) {
+           artwork.push([key, value]);
+       }
+   }
+
+   const config = [];
+   for (const [key, defaultValue] of VISUAL_CONFIG_DEFAULTS) {
+       config.push(params.has(key) ? params.get(key) : defaultValue);
+   }
+
+   return { artwork, config };
+}
+
+
+
+
+
+
 
 
 // Get the bg fill color as themeColor's `--color-bg` via css/index/color.css
