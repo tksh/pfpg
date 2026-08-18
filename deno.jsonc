@@ -1,8 +1,8 @@
  {
-   "tasks": {      
+   "tasks": {
       // Watch mode or HMR for development
       "dev": "deno run --allow-net --allow-read --allow-run scripts/dev.ts",
-      
+
       // Just build the project, no watch mode, for production build
       // - For development: using with `deno task serve`
       "build": "rm -rf dist/ && deno task build:index && deno task build:data-manipulator && deno task postprocessing",
@@ -28,7 +28,7 @@
    },
    "imports": {
       // index.html specific imports
-      "alwan":                                                               "npm:alwan@^2.1.1",
+      "alwan":                                                               "npm:alwan@^2.3.1",
       "@scure/base":                                                         "jsr:@scure/base@^2.2.0",
 
       "init/adjust-layout":                                                  "./src/js/page-specific/index/init/adjust-layout.js",
