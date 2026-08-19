@@ -50,7 +50,7 @@ import { initialize }                           from "npm:svg2png-wasm"
                             const url = new URL(a.href);
                             return url.search; // Extract the query string (including the '?').
                      });
-              // e.g.: Array ["?n=~7&title=~202401_001&desc=001kObPF...jpKYE_m9iQ", ..., "?n=~5&title=~202412_001&B=~231b...6jCW"]
+              // e.g.: Array ["?bits=~7&title=~202401_001&desc=001kObPF...jpKYE_m9iQ", ..., "?bits=~5&title=~202412_001&B=~231b...6jCW"]
 
               // Select a random query string.
               const randomIndex = Math.floor(Math.random() * hrefArray.length);
