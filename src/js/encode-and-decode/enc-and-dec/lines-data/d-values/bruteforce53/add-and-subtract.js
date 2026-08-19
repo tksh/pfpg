@@ -70,7 +70,7 @@ function calculateMinimumPossibleDiffValueFromUintN(uintN) {
 // For encoding
 function getMinimumPossibleDiffForEnc() {
     // `uintN` via textarea
-    const uintN = tryDecompress(parseBasicData().n)
+    const uintN = tryDecompress(parseBasicData().bits)
     return calculateMinimumPossibleDiffValueFromUintN(uintN)
 }
 // For decoding

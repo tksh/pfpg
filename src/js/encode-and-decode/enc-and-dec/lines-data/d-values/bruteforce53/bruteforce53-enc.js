@@ -35,7 +35,7 @@ export async function bruteforce53Enc() {
     let currentShortestByGroups = new Map()
 
     // Get the range of diff value to calculate the baseXRangeLimits value
-    const uintN = tryDecompress(parseBasicData().n)
+    const uintN = tryDecompress(parseBasicData().bits)
     const diffValueRange = calculateDiffLimits(uintN)
 
     // Bruteforce encoding for 53 patterns (Max codebook size: 0 -> 52, BaseX number: 52 -> 0)

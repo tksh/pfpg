@@ -102,7 +102,7 @@ async function bestMixEnc() {
 // Checkboxes to enable each encoding methods
 
 function updateEncodingMethodsCheckboxStates(basicData) {
-    const uintN = tryDecompress(basicData.n)
+    const uintN = tryDecompress(basicData.bits)
     const checkboxes = Object.keys(ENCODING_METHODS).reduce((acc, id) => {
         acc[id] = document.getElementById(`apply-${id}`)
         return acc

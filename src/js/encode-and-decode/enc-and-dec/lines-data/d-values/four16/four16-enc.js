@@ -15,7 +15,7 @@ export async function four16Enc() {
     const encodingMethodName = 'four16'
     const configValue = undefined
 
-    const uintN = tryDecompress(parseBasicData().n)  // e.g.: 5
+    const uintN = tryDecompress(parseBasicData().bits)  // e.g.: 5
     const charsSets = getFour16CharsSets()           // e.g.: abcdefghijklmnop
 
     const encodedDvals = new Map()

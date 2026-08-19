@@ -19,7 +19,7 @@ export
 
 /*
 {
-    "n": "~7",
+    "bits": "~7",
     "version": "~0.9.0",
     "title": "~202401_001",
     "desc": "001kObPFhaNkBHUZJE0kMCGBFCDo8j7lBr_44z9CIqW3Ba7eLr9kVIlASMdS4",
@@ -73,7 +73,7 @@ function encodeBasicData() {
 
 function updateBasicDataKeysCheckboxStates(basicData) {
     BASIC_DATA_KEYS.forEach(key => {
-        if (key !== 'n') {  // Skip 'n' as it's always required
+        if (key !== 'bits') {  // Skip 'bits' as it's always required
             const checkbox = document.getElementById(`include-${key}`)
             const label = checkbox.nextElementSibling
 

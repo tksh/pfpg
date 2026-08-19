@@ -23,7 +23,7 @@ export async function bigint64Enc() {
 
     // Bigint64 encoding apply to absolute d values
 
-    const digitsPerChunk = getDigitsPerChunk(Number(tryDecompress(parseBasicData().n)))
+    const digitsPerChunk = getDigitsPerChunk(Number(tryDecompress(parseBasicData().bits)))
     // console.log("digitsPerChunk: ", digitsPerChunk)
     const encodedDvals = base64UrlEncAfterJoinAsBigint(linesDataMap, digitsPerChunk)
     //console.log("encodedDvals: ", encodedDvals)
