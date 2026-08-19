@@ -2,7 +2,6 @@ import { svg2png as svg2pngWasm }  from "npm:svg2png-wasm";
 import { updateButtonWithSvgSize
        , updateButtonWithPngSize } from 'button/update-button-text'
 import { generateAndUploadImage }  from 'dynamic-ogp/generate-and-upload'
-import { updateMetadata }          from 'dynamic-ogp/update-metadata'
 import { extractViewboxValues }    from 'tab-canvas/crop-side-margins'
 
 export
@@ -17,19 +16,6 @@ function pngSize(buf) {
     return { width: dv.getUint32(16), height: dv.getUint32(20) };
 }
 
-
-// addMultipleEventListener(svgTextarea, ['change', 'keyup', 'paste'], function (event) {
-//   const svgString = event.target.value.trim()
-//   const hasCrop = cropElement.checked
-//   if (!svgString) return
-//   svg2png(svgString, resvgOption, hasCrop)
-// })
-
-// 上記の resvg-jsオリジナルの playground において SVGテキストエリアの編集イベントごとに PNGへの変換処理が呼び出される部分を
-// <input>や<select>などの 追加された選択要素からの更新でも それが呼び出されるように 下記の通りに変更した
-// - 'executeSvg2png' という関数を作り 選択要素から得られた値に従って SVGテキストエリアを更新し 直後に
-// - 'executeSvg2png({ target: { value: updatedSvg } })' として呼び出す
-// - 'svgTextarea' に対してSVG文字列を取得する際の 'event.target.value' と同じオブジェクト構造にする
 
 // svg2png() を呼び出し 処理時間を計測する measureSvg2pngTime() を実行し 処理時間結果を表示する
 async function executeSvg2png(event, svg2pngOption) {
@@ -48,17 +34,9 @@ async function executeSvg2png(event, svg2pngOption) {
         console.log('pngData: ', pngData);
 
         //////////////// OGP ////////////////
-        // pngDataから  OGイメージを生成 Cloudinaryにアップロード
+        // pngData から  OGイメージを生成 Cloudinary に アップロード
         const ogImageUrl = await generateAndUploadImage(pngData);
         console.log('ogImageUrl: ', ogImageUrl);  // Uploaded image URL, version path removed.
-
-//        // Update the OGP meta tag
-//        updateMetadata(
-//            "pfpg - Custom Profile Picture Generator",
-//            "A custom profile picture generator for a specific svg artwork that was made with the UIntNPortray ruleset.",
-//            window.location.href,  // It includes URL params for artwork data and current settings status
-//            ogImageUrl
-//        )
         //////////////// OGP ////////////////
 
         console.log('svg2png processing has completed.');

@@ -1,13 +1,10 @@
-import { calculateArtworkHash } from 'dynamic-ogp/calc-artwork-hash'
-import { calculateConfigHash }  from 'dynamic-ogp/calc-config-hash'
-import { strToSha256 }          from 'utils/hashing'
+import { murmurHash3_x64_128 }   from '@timepp/murmurhash';
 import { SETTINGS_DEFAULTS,
          VISUAL_CONFIG_DEFAULTS,
-         BASIC_DATA_KEYS }      from 'constants'
+         BASIC_DATA_KEYS }       from 'constants'
 
 export
-    { getOgImageData
-    , getHashForOgImageUrl
+    { getHashForOgImageUrl
     , getBackgroundColorByTheme
     , getYearAndMonth
     }
@@ -15,36 +12,34 @@ export
 
 /**
  * Generates a unique hash for an OG image URL by combining artwork and configuration hashes.
- * The function merges two SHA-256 hashes (artwork hash and config hash) and creates a new
- * SHA-256 hash from the combined string.
  *
  * @async
  * @function getHashForOgImageUrl
- * @returns {Promise<string>} A 64-character hexadecimal string representing the final hash
+ * @returns {Promise<string>} A 32-character hexadecimal string representing the final hash
  */
 async function getHashForOgImageUrl() {
     // Hash string of artwork data and its visual config settings
-    const artworkHash = await calculateArtworkHash()
-    const configHash = await calculateConfigHash()
-    console.log('artworkHash, configHash: ', artworkHash, configHash)
-    // e.g.:
-    //     artworkHash: string(64 char) 9f4c7b73e27ae5c198aec93a687d9d82d471d5ad34c5ce6a4f08f0e52d4ef755
-    //     configHash:  string(64 char) 955ba886ffccc1993d9bc57884eff136b8800a43befaa1b30da65192a94ba1d1
+    const { artwork, config } = await getOgImageData();
+    console.log('artwork, config: ', artwork, config)
 
-    // Merge 'Artwork hash' and 'Config hash' to get 'Configured artwork hash'
-    const twoHashMerged = artworkHash + configHash
-    console.log('twoHashMerged: ', twoHashMerged)
-    // e.g.: string(128 char) 9f4c7b73e27ae5c198aec93a687d9d82d471d5ad34c5ce6a4f08f0e52d4ef755955ba886ffccc1993d9bc57884eff136b8800a43befaa1b30da65192a94ba1d1
+    const hashInputStr = JSON.stringify([artwork, config]);
+    console.log('hashInputStr', hashInputStr)
+    // e.g.: [[["A","08fEKQ-VoisNalNhZy9GsmZzPU"],["0","08cJqY-3JMVTyH83QAsTiL3FDTn ... ,null,"rgb","square",10,1,true,"crispEdges",256]]
 
-    const { hashArray, hashHex } = await strToSha256(twoHashMerged)
-    console.log('hashArray, hashHex: ', hashArray, hashHex)
+    const hashBigInt = murmurHash3_x64_128(hashInputStr)
+    console.log('hashBigInt', hashBigInt)
+    // e.g.: 323066209079833201260614758727406931990n
 
-    return hashHex
+    const hashHexPadded = hashBigInt.toString(16).padStart(32, '0');
+    console.log('hashHexPadded', hashHexPadded)
+    // e.g.: 4327a70c6f036487c22f4075c965c9e3
+
+    return hashHexPadded
 }
 
 async function getOgImageData() {
-    const params = new URLSearchParams(window.location.search);
-    console.log('params for OGP: ', params)
+   const params = new URLSearchParams(window.location.search);
+   console.log('params for OGP: ', params)
 
    const artwork = [];
 
@@ -61,12 +56,6 @@ async function getOgImageData() {
 
    return { artwork, config };
 }
-
-
-
-
-
-
 
 
 // Get the bg fill color as themeColor's `--color-bg` via css/index/color.css

@@ -29,7 +29,6 @@
    "imports": {
       // index.html specific imports
       "alwan":                                                               "npm:alwan@^2.3.1",
-      "@scure/base":                                                         "jsr:@scure/base@^2.2.0",
       "@timepp/murmurhash":                                                  "jsr:@timepp/murmurhash@^0.1.1",
 
       "init/adjust-layout":                                                  "./src/js/page-specific/index/init/adjust-layout.js",
@@ -71,7 +70,6 @@
       "tab-ui/theme-color":                                                  "./src/js/page-specific/index/tab-ui/theme-color.js",
       "tab-ui/view-scaling":                                                 "./src/js/page-specific/index/tab-ui/view-scaling.js",
 
-      "utils/hashing":                                                       "./src/js/page-specific/index/utils/hashing.js",
       "utils/get-number-of-groups":                                          "./src/js/page-specific/index/utils/get-number-of-groups.js",
       "utils/number-rounding":                                               "./src/js/page-specific/index/utils/number-rounding.js",
       "utils/replace-at-index":                                              "./src/js/page-specific/index/utils/replace-at-index.js",
@@ -140,9 +138,6 @@
       "decode/rel-to-abs":                                                   "./src/js/encode-and-decode/decode/rel-to-abs.js",
       "decode/size-data-dec":                                                "./src/js/encode-and-decode/decode/size-data-dec.js",
       "decode/try-decompress":                                               "./src/js/encode-and-decode/decode/try-decompress.js",
-
-      "dynamic-ogp/calc-artwork-hash":                                       "./src/js/page-specific/index/dynamic-ogp/calc-artwork-hash.js",
-      "dynamic-ogp/calc-config-hash":                                        "./src/js/page-specific/index/dynamic-ogp/calc-config-hash.js",
 
       "enc-and-dec/base-n/base-52-dec":                                      "./src/js/encode-and-decode/enc-and-dec/base-n/base-52-dec.js",
       "enc-and-dec/base-n/base-52-enc":                                      "./src/js/encode-and-decode/enc-and-dec/base-n/base-52-enc.js",

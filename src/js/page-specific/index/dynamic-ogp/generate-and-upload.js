@@ -1,18 +1,10 @@
 import { CLOUDINARY_CONFIG
        , ACTIVE_FORMAT }            from 'dynamic-ogp/constants'
-import { getOgImageData
-       , getHashForOgImageUrl
+import { getHashForOgImageUrl
        , getBackgroundColorByTheme
        , getYearAndMonth }          from 'dynamic-ogp/params-for-uploading'
-import { getState } from 'state/url-state-manager'
-import { murmurHash3_x64_128 } from '@timepp/murmurhash';
+import { getState }                 from 'state/url-state-manager'
 
-
-// IHDR helper to read PNG dimensions from the binary data
-function pngSize(buf) {
-    const dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
-    return { width: dv.getUint32(16), height: dv.getUint32(20) };
-}
 
 /**
  * Main function to generate and upload image
@@ -21,7 +13,7 @@ function pngSize(buf) {
  */
 export async function generateAndUploadImage(pngData) {
   try {
-    const blobUrl = await createBlobUrlFromPng(pngData);
+    const blobUrl = createBlobUrlFromPng(pngData);
     const img = await loadImage(blobUrl);
 
     const canvas = document.getElementById('ogp-image-generation');
@@ -30,23 +22,10 @@ export async function generateAndUploadImage(pngData) {
     const newImageData = canvas.toDataURL('image/png');
     const newBlob = await fetch(newImageData).then(res => res.blob());
 
-    // WIP
-    const { artwork, config } = await getOgImageData();
-    console.log('artwork, config: ', artwork, config)
-    const hashInputStr = JSON.stringify([artwork, config]);
-      console.log('hashInputStr', hashInputStr)
-      // e.g.: [[["A","08fEKQ-VoisNalNhZy9GsmZzPU"],["0","08cJqY-3JMVTyH83QAsTiL3FDTn ... ,null,"rgb","square",10,1,true,"crispEdges",256]]
-      //
-      const hashBigInt = murmurHash3_x64_128(hashInputStr)
-      const hashHexPadded = hashBigInt.toString(16).padStart(32, '0');
-      console.log('hashHexPadded', hashHexPadded)
-      // e.g.: 4327a70c6f036487c22f4075c965c9e3
+    // Get 32 characters string hash from
+    const hashHexPadded = await getHashForOgImageUrl();
 
-      const configuredArtworkHashHex = await getHashForOgImageUrl();
-      console.log('configuredArtworkHashHex', configuredArtworkHashHex)
-      // e.g.: 4e4a0b3a2ba55c39cc97f70ad02f1999c6af7658b1a7c76db817030a151e4575
-
-      return await uploadToCloudinary(newBlob, configuredArtworkHashHex);
+    return await uploadToCloudinary(newBlob, hashHexPadded);
 
   } catch (error) {
     console.error('Error generating image:', error);
@@ -60,7 +39,7 @@ export async function generateAndUploadImage(pngData) {
  * @param {Uint8Array} pngData - Raw PNG data
  * @returns {string} Blob URL for the image
  */
-async function createBlobUrlFromPng(pngData) {
+function createBlobUrlFromPng(pngData) {
   return URL.createObjectURL(
     new Blob([pngData], { type: 'image/png' })
   );
@@ -138,6 +117,13 @@ function prepareCanvas(canvas, img, pngData) {
     dimensions.newHeight
   );
 }
+
+// IHDR helper to read PNG dimensions from the binary data
+function pngSize(buf) {
+    const dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
+    return { width: dv.getUint32(16), height: dv.getUint32(20) };
+}
+
 
 /**
  * Uploads an image to Cloudinary

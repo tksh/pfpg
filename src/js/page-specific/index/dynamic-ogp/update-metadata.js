@@ -1,5 +1,5 @@
 // OGタグを更新する関数
-export function updateMetadata(title, description, url, imageUrl) {
+export function updateMetadataForOGP(title, description, url, imageUrl) {
     const metaOgTitle       = document.querySelector('meta[property="og:title"]');
     const metaOgType        = document.querySelector('meta[property="og:type"]');
     const metaOgDescription = document.querySelector('meta[property="og:description"]');

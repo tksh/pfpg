@@ -32,7 +32,7 @@ deno task build  # Build index.html and data-manipulator.html
 | [Alwan](https://www.npmjs.com/package/alwan)                | MIT     | Color picker UI                              |
 | [@tksh/url-compressor](https://jsr.io/@tksh/url-compressor) | MIT     | URL-safe string compression                  |
 | [@std/collections](https://jsr.io/@std/collections)         | MIT     | Deno standard library array/object utilities |
-| [@scure/base](https://jsr.io/@scure/base)                   | MIT     | Bech32 and other binary-to-text encoding     |
+| [murmurhash](https://jsr.io/@timepp/murmurhash)             | MIT     | MurmurHash3 typescript implementation        |
 
 ## License
 
