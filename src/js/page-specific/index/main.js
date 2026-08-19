@@ -72,10 +72,12 @@ import { initialize }                           from "npm:svg2png-wasm"
        const initialDecodedSvgString = decodeUrlToSvg(isRelative, isOnDataManipulatorPage())
        console.log('initialDecodedSvgString: ', initialDecodedSvgString)
 
-       // Initialize default UI theme from OS preference and cache in settings
-       // Must run before applyImageCustomization() to provide theme for color picker initialization
-       const themeColor = getDefaultThemeViaPrefersColorScheme()
-       updateState('themeColor', themeColor)
+       // URLに themeColor が既にある場合はそれを尊重し、ブラウザ設定による検知・上書きは行わない
+       const existingThemeColor = getState('themeColor')
+       const themeColor = existingThemeColor ?? getDefaultThemeViaPrefersColorScheme()
+       if (!existingThemeColor) {
+         updateState('themeColor', themeColor)
+       }
 
        // Apply URL params to customize SVG, falling back to SETTINGS_DEFAULTS when empty
        const svgString = applyImageCustomization(initialDecodedSvgString, svg2pngOption)

@@ -15,6 +15,7 @@ function initThemeColorSelect() {
     colorThemeSelector.addEventListener('change', () => {
         // 選択されたテーマに基づいて サイトUIの data-theme属性を設定
         const themeColor = colorThemeSelector.value
+        console.log('The value of theme color from selector:', themeColor)
         changeThemeColor(themeColor)
 
         // 選択されたテーマに基づいて Alwanカラーピッカーの data-theme属性を設定
@@ -29,6 +30,8 @@ function changeThemeColor(themeColor) {
     // 選択されたテーマに基づいてdata-theme属性を設定
     document.documentElement.setAttribute('data-theme', themeColor)
 
+    console.log('Set new theme color:', themeColor)
+
     // Update the state with url params
     updateState('themeColor', themeColor)
 }
@@ -41,12 +44,12 @@ function getDefaultThemeViaPrefersColorScheme() {
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
 
         // ダークテーマが設定されている場合の処理
-        console.log('Dark mode is enables.')
+        console.log('Detect default theme color via browser preference: Dark mode')
         return 'dark'
 
     } else {
         // ライトテーマが設定されている場合の処理
-        console.log('Light mode is enables.')
+        console.log('Detect default theme color via browser preference: Light mode')
         return 'light'
     }
 }

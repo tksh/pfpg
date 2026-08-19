@@ -1,7 +1,7 @@
 import { removeUrlParams
        , getStateUrlsOfImageCustomization
        , getStateUrlsOfSvgOptimization
-       , getStateUrlsOfUiConfiguration} from 'state/url-state-manager'
+       , getStateUrlsOfUiConfiguration } from 'state/url-state-manager'
 
 export function initResetSettings() {
     const modal =               document.getElementById("reset-settings-modal");
@@ -32,7 +32,7 @@ export function initResetSettings() {
         // モーダルを閉じる
         modal.style.display = "none"
 
-        // ページをリロード（オプション）
+        // ページをリロード
         window.location.reload()
     })
 }
