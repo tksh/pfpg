@@ -1,9 +1,2 @@
-name = "your-project-name"
+name = "pfpg"
 pages_build_output_dir = "./dist"
-
-[build]
-command = "chmod +x ./scripts/build.sh && ./scripts/build.sh"
-
-[build.environment]
-SKIP_DEPENDENCY_INSTALL = "1"
-# Deno を使用しており npm は使わないため、Pages に `npm install` を自動実行させないように
