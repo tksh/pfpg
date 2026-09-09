@@ -1,4 +1,4 @@
-import { decodeUrlParams } from 'common-utils/read-url-params'
+import { getDecodedSizeData } from 'state/url-decode'
 import { svg2pngOption }   from 'state/resvg-option'
 import { updateState }     from 'state/url-state-manager'
 import { executeSvg2png }  from 'svg-to-png'
@@ -14,20 +14,20 @@ export
 
 
 
-function cropSideMargins(inputSvg) {
+async function cropSideMargins(inputSvg) {
     console.log('Crop side margins: [x]')
     updateState('cropSideMargins', true)
-    return updateSvg(inputSvg, true)
+    return await updateSvg(inputSvg, true)
 }
 
-function resetSideMargins(inputSvg) {
+async function resetSideMargins(inputSvg) {
     console.log('Crop side margins: [ ]')
     updateState('cropSideMargins', false)
-    return updateSvg(inputSvg, false)
+    return await updateSvg(inputSvg, false)
 }
 
-function updateSvg(inputSvg, isCropped) {
-    const updatedSvg = isCropped ? viewboxSlimmed(inputSvg) : viewboxUnSlimmed(inputSvg)
+async function updateSvg(inputSvg, isCropped) {
+    const updatedSvg = isCropped ? viewboxSlimmed(inputSvg) : await viewboxUnSlimmed(inputSvg)
     document.querySelector('#svg-string').value = updatedSvg
     executeSvg2png({ target: { value: updatedSvg } }, svg2pngOption)
     return updatedSvg
@@ -110,10 +110,9 @@ function extractViewboxValues(inputSvg) {
 //   1. un-check the checkbox, or
 //   2. shapeToTrim changes to square|circle|squircle
 
-function viewboxUnSlimmed(inputSvg) {
+async function viewboxUnSlimmed(inputSvg) {
     // Read original basic data from url params
-    const decodedParams = decodeUrlParams()
-    const sizeDataObj = decodedParams.sizeData
+    const sizeDataObj = await getDecodedSizeData()
 
     // Generate new string with original viewBox size
     const originalViewboxString = sizeDataObj.viewbox                       // e.g.: '0 0 31 31'

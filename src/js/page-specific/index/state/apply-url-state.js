@@ -31,7 +31,7 @@ export
     }
 
 
-function applyImageCustomization(svgString, svg2pngOption) {
+async function applyImageCustomization(svgString, svg2pngOption) {
 
     let updatedSvg = svgString
 
@@ -45,7 +45,7 @@ function applyImageCustomization(svgString, svg2pngOption) {
 
     // Use possibly temporary 'opacitySteps' value as argument in this timing.
     // Calculate it from original lines data.
-    let opacitySteps = getInitialOpacitySteps()                                        // Getting the steps - 1st of 3
+    let opacitySteps = await getInitialOpacitySteps()                                  // Getting the steps - 1st of 3
     console.log('Default opacitySteps calculated via original lines data: ', opacitySteps)                                                     // Stored as default
     SETTINGS_DEFAULTS.set('opacitySteps', opacitySteps)                                        // Set as default values
 
@@ -85,7 +85,7 @@ function applyImageCustomization(svgString, svg2pngOption) {
     /////////////////////////// includes: widthNarrowness, topHeavyRatio, cropSideMargins ///////////////////////////
     const shapeToTrim = getState('shapeToTrim')
     console.log("shapeToTrim                   from url param: ", shapeToTrim)
-    updatedSvg = updateSvgWithNewShapePath(shapeToTrim, updatedSvg)
+    updatedSvg = await updateSvgWithNewShapePath(shapeToTrim, updatedSvg)
 
     // 'squircleSlimmed'が 選ばれた時だけ表示される
     // 2つのオプション選択用の<select>要素 と 横幅クロップ用の<label>&<input>要素 を取得し 表示または非表示にする

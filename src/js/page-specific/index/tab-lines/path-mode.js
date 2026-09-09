@@ -1,6 +1,5 @@
 import { getSvgString }            from 'button/download-as-file'
-import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
-import { decodeUrlToSvg }          from 'decode/decode'
+import { decodeUrlToSvgForPage }    from 'state/url-decode'
 import { optimizeSvg}              from 'modal/optimize-svg'
 import { svg2pngOption }           from 'state/resvg-option'
 import { getState
@@ -63,7 +62,7 @@ function initPathModeSelect() {
         console.log(`"${pathMode}" selected.`)
 
         // Re-decode as new 'Path mode' styled svg string from url params
-        const newPathModeSvg = decodeAsSelectedPathMode(pathMode)
+        const newPathModeSvg = await decodeAsSelectedPathMode(pathMode)
 
         // レンダリングし直す前に 保存しておいた 設定の値を 元に戻す
 
@@ -100,15 +99,13 @@ function initPathModeSelect() {
 
 
 // 選択された path-mode で url params から デコードし直す
-function decodeAsSelectedPathMode(pathMode) {
+async function decodeAsSelectedPathMode(pathMode) {
     if (pathMode === 'relativeMerged') {
         console.log('Path mode: Relative and merged')
-        const isRelative = true
-        return decodeUrlToSvg(isRelative, isOnDataManipulatorPage())
+        return await decodeUrlToSvgForPage(true)
     } else { // (pathMode === 'absoluteSeparated')
         console.log('Path mode: Absolute and separated')
-        const isRelative = false
-        return decodeUrlToSvg(isRelative, isOnDataManipulatorPage())
+        return await decodeUrlToSvgForPage(false)
     }
 }
 

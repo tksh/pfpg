@@ -9,7 +9,7 @@ import { roundToTwoDecimals }   from 'utils/number-rounding'
 
 
 // Update SVG with selected shape path
-export function updateSvgWithNewShapePath(shape, inputSvg) {
+export async function updateSvgWithNewShapePath(shape, inputSvg) {
     document.getElementById('shape-to-trim').value = shape
 
     // Params for generating the 'Squircle' and 'Squircle, slimmed' shape path
@@ -44,8 +44,8 @@ export function updateSvgWithNewShapePath(shape, inputSvg) {
     const clippathAndViewboxUpdatedSvg = shape === 'squircleSlimmed'
         ? isCropSideMargins()
             ? viewboxSlimmed(newClippathSvg)
-            : viewboxUnSlimmed(newClippathSvg)
-        : viewboxUnSlimmed(newClippathSvg)
+            : await viewboxUnSlimmed(newClippathSvg)
+        : await viewboxUnSlimmed(newClippathSvg)
 
     return clippathAndViewboxUpdatedSvg
 }

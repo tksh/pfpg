@@ -1,5 +1,5 @@
-import { parseBasicData,
-         updateBasicDataKeysCheckboxStates } from 'enc-and-dec/basic-data/basic-data-enc'
+import { parseBasicDataFromTextarea as parseBasicData
+       , updateBasicDataKeysCheckboxStates } from 'data-manipulator/encode-adapters'
 
 export function selectFileToInput(selectButtonId, textAreaId){
     // FileListオブジェクト取得

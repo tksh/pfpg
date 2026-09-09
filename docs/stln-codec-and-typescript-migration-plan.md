@@ -215,23 +215,23 @@ escalate to the human as design decisions.
 
 ## 6. Phased execution plan
 
-- [ ] **Phase 0 — Baseline + fixtures (pfpg only).** Add `deno.jsonc` tasks
+- [x] **Phase 0 — Baseline + fixtures (pfpg only).** Add `deno.jsonc` tasks
       (`test`, `check`, `lint`, `fmt`); capture golden inputs/outputs (basic
       JSON, lines JSON, aggregated JSON, finished query strings, decoded rel/abs
       SVGs for `bits ~5` and `~7` samples). Human approves fixture set.
-- [ ] **Phase 1 — Library scaffold (`stln-codec` repo).** `deno.json`, license
+- [x] **Phase 1 — Library scaffold (`stln-codec` repo).** `deno.json`, license
       **MPL-2.0 (DECIDED 2026-09-09)**, `src/mod.ts` re-exports, `src/types.ts`,
       strict config, CI (`deno test`, `deno lint`, `deno fmt --check`,
       `deno check`, `deno publish
   --dry-run`).
-- [ ] **Phase 2 — Port pure codec (bottom-up).** `base-n` → `group-colors` +
+- [x] **Phase 2 — Port pure codec (bottom-up).** `base-n` → `group-colors` +
       `widths-and-counts` → `d-values/*` → `basic-data` →
       `size-data`/`rel-to-abs` → `generate-svg` → `try-compress`/`best-mix` →
       `decodeUrlParams` facade. Each with unit tests; decode tests cover all
       1st-flag branches (`~`/`0`/`1`) incl. the newly-async `deflate-raw` path.
-- [ ] **Phase 3 — Conformance.** Library round-trip tests reproduce Phase 0
+- [x] **Phase 3 — Conformance.** Library round-trip tests reproduce Phase 0
       goldens byte-for-byte (modulo intended async fix). Human reviews any diff.
-- [ ] **Phase 4 — pfpg adapters (TS).** Thin wrappers per page
+- [x] **Phase 4 — pfpg adapters (TS).** Thin wrappers per page
       (`parseBasicDataFromTextarea`, `getCheckedMethods`, `mergeAndDisplay`,
       `filteredSearchParams`); `deno.jsonc` gains `@tksh/stln-codec`, drops
       codec entries as files are deleted.

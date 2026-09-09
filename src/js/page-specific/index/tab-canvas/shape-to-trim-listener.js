@@ -19,7 +19,7 @@ export
 // Event listener for 'Shape to trim'
 function initShapeToTrimSelect() {
 
-    document.getElementById('shape-to-trim').addEventListener("change", (event) => {
+    document.getElementById('shape-to-trim').addEventListener("change", async (event) => {
 
         // 選択された値を取得
         const shapeToTrim = event.target.value  // square|circle|squircle|squircleSlimmed
@@ -40,7 +40,7 @@ function initShapeToTrimSelect() {
 
         // Update the SVG string with new clip shape path and viewBox
         const inputSvg = getSvgString()
-        const updatedSvg = updateSvgWithNewShapePath(shapeToTrim, inputSvg)
+        const updatedSvg = await updateSvgWithNewShapePath(shapeToTrim, inputSvg)
 
 
         document.querySelector('#svg-string').value = updatedSvg        // Update the textarea
@@ -62,12 +62,12 @@ function toggleDisplay(elements, display) {
 // - 'Top-heavy ratio'
 
 function initWidthNarrownessSelect() {
-    document.getElementById('width-narrowness').addEventListener('change', (event) => {
+    document.getElementById('width-narrowness').addEventListener('change', async (event) => {
         const widthNarrowness = event.target.value
         console.log('widthNarrowness: ', widthNarrowness)
         updateState('widthNarrowness', widthNarrowness)
 
-        const updatedSvg = updateSvgWithNewShapePath('squircleSlimmed', getSvgString())
+        const updatedSvg = await updateSvgWithNewShapePath('squircleSlimmed', getSvgString())
 
         document.querySelector('#svg-string').value = updatedSvg        // Update the textarea
         executeSvg2png({ target: { value: updatedSvg } }, svg2pngOption)  // Render to PNG
@@ -75,12 +75,12 @@ function initWidthNarrownessSelect() {
 }
 
 function initTopHeavyRatioSelect() {
-    document.getElementById('top-heavy-ratio').addEventListener('change', (event) => {
+    document.getElementById('top-heavy-ratio').addEventListener('change', async (event) => {
         const topHeavyRatio = event.target.value
         console.log('topHeavyRatio: ', topHeavyRatio)
         updateState('topHeavyRatio', topHeavyRatio)
 
-        const updatedSvg = updateSvgWithNewShapePath('squircleSlimmed', getSvgString())
+        const updatedSvg = await updateSvgWithNewShapePath('squircleSlimmed', getSvgString())
 
         document.querySelector('#svg-string').value = updatedSvg        // Update the textarea
         executeSvg2png({ target: { value: updatedSvg } }, svg2pngOption)  // Render to PNG
@@ -91,8 +91,8 @@ function initTopHeavyRatioSelect() {
 // Event listener for 'Crop side margins'
 
 function initCropSideMarginsCheckbox() {
-    document.getElementById('crop-side-margins').addEventListener('change', (event) => {
+    document.getElementById('crop-side-margins').addEventListener('change', async (event) => {
         const svgString = getSvgString()
-        event.target.checked ? cropSideMargins(svgString) : resetSideMargins(svgString)
+        event.target.checked ? await cropSideMargins(svgString) : await resetSideMargins(svgString)
     })
 }

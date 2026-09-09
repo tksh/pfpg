@@ -1,4 +1,4 @@
-import { decodeUrlParams } from 'common-utils/read-url-params'
+import { getDecodedLinesData } from 'state/url-decode'
 
 export
     { getInitialOpacitySteps
@@ -7,10 +7,10 @@ export
 
 
 // Get initial opacity steps from original lines data
-function getInitialOpacitySteps() {
+async function getInitialOpacitySteps() {
 
     // Get the whole lines data
-    const decodedLinesByGroups = decodeUrlParams().linesData
+    const decodedLinesByGroups = await getDecodedLinesData()
     // e.g.: Map(3) {0 => {…}, 1 => {…}, 2 => {…}}
 
     return calculateStepsFromTwoOpacities(decodedLinesByGroups)

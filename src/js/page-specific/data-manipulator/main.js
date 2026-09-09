@@ -1,35 +1,52 @@
-import { isOnDataManipulatorPage }             from 'common-utils/select-output-textarea'
-import { decodeUrlToSvg }                      from 'decode/decode'
-import { bestMixEnc }                          from 'encode/best-mix-enc'
-import { updateEncodingMethodsCheckboxStates } from 'encode/best-mix-enc'
-import { encodeBasicData
-       , parseBasicData
-       , updateBasicDataKeysCheckboxStates}    from 'enc-and-dec/basic-data/basic-data-enc'
-import { bruteforce53Enc }                     from 'enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc'
-import { bigint64Enc }                         from 'enc-and-dec/lines-data/d-values/bigint64/bigint64-enc'
-import { swap63Enc }                           from 'enc-and-dec/lines-data/d-values/swap63/swap63-enc'
-import { four16Enc }                           from 'enc-and-dec/lines-data/d-values/four16/four16-enc'
-import { mergeBasicDataAndLinesData }          from 'io/download-url-params'
-import { setupCopyButtons }                    from 'io/copy-textarea'
-import { selectFileToInput }                   from 'io/select-file'
+import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
+import { showProcessingTime } from 'common-utils/show-processing-time'
+import { outputToTextarea } from 'common-utils/output-to-textarea'
+import { decodeUrlToSvg } from '@tksh/stln-codec'
+import { getUrlParamsExceptsStates } from 'common-utils/read-url-params'
+import { encodeBasicDataHandler
+       , encodeBruteforce53Handler
+       , encodeBigint64Handler
+       , encodeSwap63Handler
+       , encodeFour16Handler
+       , encodeBestMixHandler
+       , parseBasicDataFromTextarea
+       , updateBasicDataKeysCheckboxStates
+       , updateEncodingMethodsCheckboxStates } from 'data-manipulator/encode-adapters'
+import { mergeBasicDataAndLinesData } from 'io/download-url-params'
+import { setupCopyButtons } from 'io/copy-textarea'
+import { selectFileToInput } from 'io/select-file'
 
 // Decode from url params to SVG when page loaded.
 // If there is no url params at index.html, Decode from sample hidden text.
 
 const isDataManipulatorPage = isOnDataManipulatorPage()
 
-
-// decodeUrlToSvg() function will be executed twice at page loaded
-// 'isDataManipulatorPage = true' will export the generated relative and absolute style SVGs into each textarea.
-
+// Decode via stln-codec, preserving the verification display:
+// relative- and absolute-style SVGs into each textarea with size ratios.
 if (window.location.search) {
-    for (const boolean of [true, false]) {
-        const isRelative = boolean
-        decodeUrlToSvg(isRelative,  isDataManipulatorPage)
+    for (const isRelative of [true, false]) {
+        const pathMode = isRelative ? 'relativeMerged' : 'absoluteSeparated'
+        const startTime = performance.now()
+        const { svg: svgString } = await decodeUrlToSvg(getUrlParamsExceptsStates(), { pathMode })
+
+        const postfix = isRelative ? 'rel' : 'abs'
+        const outputTextareaId = isRelative ? 'textarea-decoded-svg-as-rel' : 'textarea-decoded-svg-as-abs'
+        outputToTextarea(svgString, outputTextareaId)
+
+        // Compare the data size of url params and generated SVG
+        const queryString = window.location.search
+        const compRatio = queryString.length / svgString.length
+        const resultTextElem = document.getElementById(`encoded-size-compare-for-${postfix}`)
+        const text = `Size of url params: <b>${queryString.length}</b> characters (bytes)<br>
+        Size of SVG string: <b>${svgString.length}</b> characters (bytes)<br>
+        Ratio: ${queryString.length} / ${svgString.length} = <b>${compRatio}</b>`
+        resultTextElem.innerHTML = text
+
+        const endTime = performance.now()
+        const elapsedTime = Math.floor(endTime - startTime)
+        showProcessingTime('SVG decoding', elapsedTime, `encoded-lines-data-time-for-${postfix}`, isDataManipulatorPage)
     }
 }
-// decodeUrlToSvg(isRelative = true,  isDataManipulatorPage) => Relative and merged
-// decodeUrlToSvg(isRelative = false, isDataManipulatorPage) => Absolute and separated
 
 
 // Attach event listener
@@ -47,14 +64,14 @@ function initUploadButtons(inputId, textareaId) {
 }
 
 function initBasicDataTextarea() {
-    document.getElementById('textarea-basic-data-uploaded').addEventListener('input', () => {
-        const basicData = parseBasicData()
+    document.getElementById('textarea-basic-data-uploaded').addEventListener('input', async () => {
+        const basicData = parseBasicDataFromTextarea()
         updateBasicDataKeysCheckboxStates(basicData)
-        updateEncodingMethodsCheckboxStates(basicData)
+        await updateEncodingMethodsCheckboxStates(basicData)
     })
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
 
     // Buttons to upload
     initUploadButtons('select-file-basic-data',        'textarea-basic-data-uploaded');
@@ -62,12 +79,12 @@ document.addEventListener('DOMContentLoaded', () => {
     initUploadButtons('select-file-agg-data-for-comp', 'textarea-agg-data-for-comp-uploaded');
 
     // Buttons to encode
-    initEncodeButtons('encode-basic-data',                  encodeBasicData)
-    initEncodeButtons('encode-lines-data-via-bruteforce53', bruteforce53Enc)
-    initEncodeButtons('encode-lines-data-via-bigint64',     bigint64Enc)
-    initEncodeButtons('encode-lines-data-via-swap63',       swap63Enc)
-    initEncodeButtons('encode-lines-data-via-four16',       four16Enc)
-    initEncodeButtons('encode-lines-data-via-best-mix',     bestMixEnc)
+    initEncodeButtons('encode-basic-data',                  encodeBasicDataHandler)
+    initEncodeButtons('encode-lines-data-via-bruteforce53', encodeBruteforce53Handler)
+    initEncodeButtons('encode-lines-data-via-bigint64',     encodeBigint64Handler)
+    initEncodeButtons('encode-lines-data-via-swap63',       encodeSwap63Handler)
+    initEncodeButtons('encode-lines-data-via-four16',       encodeFour16Handler)
+    initEncodeButtons('encode-lines-data-via-best-mix',     encodeBestMixHandler)
 
 
     // Buttons to merge
@@ -81,9 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Initialize checkbox status based on pre-inputted sample Basic Data json
-    const basicData = parseBasicData()
+    const basicData = parseBasicDataFromTextarea()
     updateBasicDataKeysCheckboxStates(basicData)
-    updateEncodingMethodsCheckboxStates(basicData)
+    await updateEncodingMethodsCheckboxStates(basicData)
 
     // textarea of Basic Data
     initBasicDataTextarea()

@@ -1,7 +1,6 @@
 import { initDownloadButtons }                  from 'button/init-download-buttons'
 import { initButtonActionSelect }               from 'button/update-button-text'
-import { isOnDataManipulatorPage }              from 'common-utils/select-output-textarea'
-import { decodeUrlToSvg }                       from 'decode/decode'
+import { decodeUrlToSvgForPage as decodeUrlToSvg } from 'state/url-decode'
 import { adjustLayoutIfNotMobile
        , initViewportLister }                   from 'init/adjust-layout'
 import { initTabs }                             from 'init/tab-setup'
@@ -68,8 +67,8 @@ import { initialize }                           from "npm:svg2png-wasm"
        console.log('isRelative: ', isRelative)
        document.getElementById("path-mode").value = isRelative ? 'relativeMerged' : 'absoluteSeparated'
 
-       // Decode the SVG from url params
-       const initialDecodedSvgString = decodeUrlToSvg(isRelative, isOnDataManipulatorPage())
+        // Decode the SVG from url params
+        const initialDecodedSvgString = await decodeUrlToSvg(isRelative)
        console.log('initialDecodedSvgString: ', initialDecodedSvgString)
 
        // URLに themeColor が既にある場合はそれを尊重し、ブラウザ設定による検知・上書きは行わない
@@ -79,8 +78,8 @@ import { initialize }                           from "npm:svg2png-wasm"
          updateState('themeColor', themeColor)
        }
 
-       // Apply URL params to customize SVG, falling back to SETTINGS_DEFAULTS when empty
-       const svgString = applyImageCustomization(initialDecodedSvgString, svg2pngOption)
+        // Apply URL params to customize SVG, falling back to SETTINGS_DEFAULTS when empty
+        const svgString = await applyImageCustomization(initialDecodedSvgString, svg2pngOption)
 
 
        // Initial PNG rendering - initialize svg2png-wasm

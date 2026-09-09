@@ -3,7 +3,8 @@ import { isNonEmpty }              from 'common-utils/is-non-empty'
 import { outputToTextarea }        from 'common-utils/output-to-textarea'
 import { readTextarea }            from 'common-utils/read-textarea'
 import { isOnDataManipulatorPage } from 'common-utils/select-output-textarea'
-import { tryDecompress }           from 'decode/try-decompress'
+import { mergeUrlParams
+       , tryDecompress }           from '@tksh/stln-codec'
 
 export { mergeBasicDataAndLinesData }
 
@@ -11,12 +12,12 @@ export { mergeBasicDataAndLinesData }
 // Download as .txt
 
 if (isOnDataManipulatorPage()) {
-    document.getElementById('button-to-download-url-params-as-txt').onclick = function () {
+    document.getElementById('button-to-download-url-params-as-txt').onclick = async function () {
         downloadUrlParamsAsTxt('textarea-encoded-url-params')
     }
 }
 
-function downloadUrlParamsAsTxt(textareaId) {
+async function downloadUrlParamsAsTxt(textareaId) {
 
     // Get text content from textarea
     const textContent = document.getElementById(textareaId).value
@@ -26,7 +27,7 @@ function downloadUrlParamsAsTxt(textareaId) {
     link.href = url
 
     // Generate the filename
-    const idAndSizeStr = getTitle()
+    const idAndSizeStr = await getTitle()
     link.download = `${idAndSizeStr}.txt`
 
     // Download
@@ -40,13 +41,13 @@ function downloadUrlParamsAsTxt(textareaId) {
 // Get the artwork title and grid size string
 // Extract via basic data .json strings in textarea
 
-function getTitle() {
+async function getTitle() {
 
     // Read from textarea
     const rawJson = readTextarea('textarea-basic-data-uploaded')
 
     const basicDataObj = JSON.parse(rawJson)
-    return tryDecompress(basicDataObj.title)
+    return await tryDecompress(basicDataObj.title)
 }
 
 
@@ -89,7 +90,7 @@ async function mergeBasicDataAndLinesData() {
     if (isNonEmpty(basicDataStr) && isNonEmpty(linesDataStr)) {
 
         // Merge as a string
-        const urlParamsStr = basicDataStr + linesDataStr
+        const urlParamsStr = mergeUrlParams(basicDataStr, linesDataStr)
 
         // Output to textarea
         outputToTextarea(urlParamsStr, 'textarea-encoded-url-params')

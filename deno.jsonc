@@ -46,6 +46,10 @@
       // Test-only imports (plan §5 Phase 0; bare specifiers per repo lint rules)
       "@std/assert":                                                         "jsr:@std/assert@^1.0.1",
 
+      // Straightlines codec (plan Phase 4). DEV PIN: local checkout until
+      // stln-codec 0.1.0 is published (Phase 6 switches to jsr:@tksh/stln-codec).
+      "@tksh/stln-codec":                                                    "../../stln-codec/src/mod.ts",
+
       // index.html specific imports
       "alwan":                                                               "npm:alwan@^2.3.1",
       "@timepp/murmurhash":                                                  "jsr:@timepp/murmurhash@^0.1.1",
@@ -57,6 +61,7 @@
 
       "state/apply-url-state":                                               "./src/js/page-specific/index/state/apply-url-state.js",
       "state/resvg-option":                                                  "./src/js/page-specific/index/state/resvg-option.js",
+      "state/url-decode":                                                    "./src/js/page-specific/index/state/url-decode.js",
       "state/url-state-manager":                                             "./src/js/page-specific/index/state/url-state-manager.js",
 
       "modal/modal-toggle":                                                  "./src/js/page-specific/index/modal/modal-toggle.js",
@@ -108,27 +113,17 @@
       "serve-svg-image":                                                     "./src/js/page-specific/serve-svg-image/serve-svg-image.js",
 
       // data-manipulator.html specific imports
-      "encode/best-mix-enc":                                                 "./src/js/encode-and-decode/encode/best-mix-enc.js",
-      "encode/get-attrs-excepts-dvals":                                      "./src/js/encode-and-decode/encode/get-attrs-excepts-dvals.js",
-      "encode/join-with-ampersand":                                          "./src/js/encode-and-decode/encode/join-with-ampersand.js",
-      "encode/json-to-map-obj":                                              "./src/js/encode-and-decode/encode/json-to-map-obj.js",
+      // (display helpers for the stln-codec-based encode adapters)
       "encode/show-best-mix-result":                                         "./src/js/encode-and-decode/encode/show-best-mix-result.js",
       "encode/show-result":                                                  "./src/js/encode-and-decode/encode/show-result.js",
-      "encode/simplify-map":                                                 "./src/js/encode-and-decode/encode/simplify-map.js",
-      "encode/store-shortest":                                               "./src/js/encode-and-decode/encode/store-shortest.js",
-      "encode/transform-encoded-result":                                     "./src/js/encode-and-decode/encode/transform-encoded-result.js",
-      "encode/try-compress":                                                 "./src/js/encode-and-decode/encode/try-compress.js",
-      "state/result-info":                                                   "./src/js/encode-and-decode/encode/state/result-info.js",
 
       "io/copy-textarea":                                                    "./src/js/page-specific/data-manipulator/io/copy-textarea.js",
       "io/download-url-params":                                              "./src/js/page-specific/data-manipulator/io/download-url-params.js",
       "io/select-file":                                                      "./src/js/page-specific/data-manipulator/io/select-file.js",
+      "data-manipulator/encode-adapters":                                    "./src/js/page-specific/data-manipulator/encode-adapters.js",
 
       // Common imports for both index.html and data-manipulator.html
-      "@tksh/url-compressor":	                                               "jsr:@tksh/url-compressor@^1.1.1",
-      "@std/collections/chunk":                                              "jsr:@std/collections@^1.3.0/chunk",
       "@std/collections/zip":                                                "jsr:@std/collections@^1.3.0/zip",
-      "@std/collections/running-reduce":                                     "jsr:@std/collections@^1.3.0/running-reduce",
 
       "constants":                                                           "./src/js/constants.js",
 
@@ -149,61 +144,6 @@
       "color-formatter/normalized-to-hex":                                   "./src/js/color-formatter/normalized-to-hex.js",
       "color-formatter/rgb-comma-to-space":                                  "./src/js/color-formatter/rgb-comma-to-space.js",
       "color-formatter/rgb-to-lch":                                          "./src/js/color-formatter/rgb-to-lch.js",
-      "color-formatter/try-delete-f":                                        "./src/js/color-formatter/try-delete-f.js",
-
-      "decode/decode":                                                       "./src/js/encode-and-decode/decode/decode.js",
-      "decode/generate-svg":                                                 "./src/js/encode-and-decode/decode/generate-svg.js",
-      "decode/get-uint-n":                                                   "./src/js/encode-and-decode/decode/get-uint-n.js",
-      "decode/rel-to-abs":                                                   "./src/js/encode-and-decode/decode/rel-to-abs.js",
-      "decode/size-data-dec":                                                "./src/js/encode-and-decode/decode/size-data-dec.js",
-      "decode/try-decompress":                                               "./src/js/encode-and-decode/decode/try-decompress.js",
-
-      "enc-and-dec/base-n/base-52-dec":                                      "./src/js/encode-and-decode/enc-and-dec/base-n/base-52-dec.js",
-      "enc-and-dec/base-n/base-52-enc":                                      "./src/js/encode-and-decode/enc-and-dec/base-n/base-52-enc.js",
-      "enc-and-dec/base-n/base-53-dec":                                      "./src/js/encode-and-decode/enc-and-dec/base-n/base-53-dec.js",
-      "enc-and-dec/base-n/base-53-enc":                                      "./src/js/encode-and-decode/enc-and-dec/base-n/base-53-enc.js",
-      "enc-and-dec/base-n/base-64url-dec":                                   "./src/js/encode-and-decode/enc-and-dec/base-n/base-64url-dec.js",
-      "enc-and-dec/base-n/base-64url-enc":                                   "./src/js/encode-and-decode/enc-and-dec/base-n/base-64url-enc.js",
-      "enc-and-dec/base-n/get-chars":                                        "./src/js/encode-and-decode/enc-and-dec/base-n/get-chars.js",
-
-      "enc-and-dec/basic-data/basic-data-dec":                               "./src/js/encode-and-decode/enc-and-dec/basic-data/basic-data-dec.js",
-      "enc-and-dec/basic-data/basic-data-enc":                               "./src/js/encode-and-decode/enc-and-dec/basic-data/basic-data-enc.js",
-
-      "enc-and-dec/lines-data/d-values/bigint64/abs-to-rel":                 "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/abs-to-rel.js",
-      "enc-and-dec/lines-data/d-values/bigint64/bigint64-dec":               "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/bigint64-dec.js",
-      "enc-and-dec/lines-data/d-values/bigint64/bigint64-enc":               "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/bigint64-enc.js",
-      "enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk":           "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/digits-per-chunk.js",
-      "enc-and-dec/lines-data/d-values/bigint64/recover-zero-padding":       "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bigint64/recover-zero-padding.js",
-
-      "enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size":   "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/actual-codebook-size.js",
-      "enc-and-dec/lines-data/d-values/bruteforce53/add-and-subtract":       "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/add-and-subtract.js",
-      "enc-and-dec/lines-data/d-values/bruteforce53/base-x-dec":             "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/base-x-dec.js",
-      "enc-and-dec/lines-data/d-values/bruteforce53/base-x-enc":             "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/base-x-enc.js",
-      "enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-dec":       "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-dec.js",
-      "enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc":       "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/bruteforce53-enc.js",
-      "enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-dec": "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-dec.js",
-      "enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc": "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/create-codebook-to-enc.js",
-      "enc-and-dec/lines-data/d-values/bruteforce53/decode-diff":            "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/decode-diff.js",
-      "enc-and-dec/lines-data/d-values/bruteforce53/decode-freq-diff":       "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/decode-freq-diff.js",
-      "enc-and-dec/lines-data/d-values/bruteforce53/diff-to-rel":            "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/diff-to-rel.js",
-      "enc-and-dec/lines-data/d-values/bruteforce53/encode-diff":            "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/encode-diff.js",
-      "enc-and-dec/lines-data/d-values/bruteforce53/encode-freq-diff":       "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/encode-freq-diff.js",
-      "enc-and-dec/lines-data/d-values/bruteforce53/specific-alphabets":     "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/specific-alphabets.js",
-      "enc-and-dec/lines-data/d-values/bruteforce53/store-shorter":          "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/bruteforce53/store-shorter.js",
-
-      "enc-and-dec/lines-data/d-values/swap63/create-codebook":              "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/swap63/create-codebook.js",
-      "enc-and-dec/lines-data/d-values/swap63/swap63-dec":                   "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/swap63/swap63-dec.js",
-      "enc-and-dec/lines-data/d-values/swap63/swap63-enc":                   "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/swap63/swap63-enc.js",
-
-      "enc-and-dec/lines-data/d-values/four16/decode-with-four-base16":      "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/four16/decode-with-four-base16.js",
-      "enc-and-dec/lines-data/d-values/four16/encode-with-four-base16":      "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/four16/encode-with-four-base16.js",
-      "enc-and-dec/lines-data/d-values/four16/four16-dec":                   "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/four16/four16-dec.js",
-      "enc-and-dec/lines-data/d-values/four16/four16-enc":                   "./src/js/encode-and-decode/enc-and-dec/lines-data/d-values/four16/four16-enc.js",
-
-      "enc-and-dec/lines-data/group-colors/group-colors-dec":                "./src/js/encode-and-decode/enc-and-dec/lines-data/group-colors/group-colors-dec.js",
-      "enc-and-dec/lines-data/group-colors/group-colors-enc":                "./src/js/encode-and-decode/enc-and-dec/lines-data/group-colors/group-colors-enc.js",
-
-      "enc-and-dec/lines-data/widths-and-counts/widths-and-counts-dec":      "./src/js/encode-and-decode/enc-and-dec/lines-data/widths-and-counts/widths-and-counts-dec.js",
-      "enc-and-dec/lines-data/widths-and-counts/widths-and-counts-enc":      "./src/js/encode-and-decode/enc-and-dec/lines-data/widths-and-counts/widths-and-counts-enc.js"
+      "color-formatter/try-delete-f":                                        "./src/js/color-formatter/try-delete-f.js"
    }
 }
