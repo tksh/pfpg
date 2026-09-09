@@ -7,7 +7,9 @@ const clients = new Set<ReadableStreamDefaultController>();
 function broadcastReload() {
   const msg = new TextEncoder().encode(`data: reload\n\n`);
   for (const c of clients) {
-    try { c.enqueue(msg); } catch { /* 切断済み */ }
+    try {
+      c.enqueue(msg);
+    } catch { /* 切断済み */ }
   }
 }
 
@@ -28,18 +30,22 @@ async function runPostprocessing() {
 }
 
 // --- deno bundle --watch を子プロセスとして起動し、出力を監視する ---
-async function startBundleWatch() {
+// 全ページを監視する (以前は index.html のみだったため、
+// data-manipulator.html の dist/ が古いまま残り、検証を誤らせることがあった)
+const PAGES = ["src/index.html", "src/data-manipulator.html", "src/404.html"];
+
+async function startBundleWatch(entry: string) {
   const cmd = new Deno.Command("deno", {
     args: [
       "bundle",
       "--watch",
-      "src/index.html",
+      entry,
       "--platform=browser",
       "--outdir",
       "dist/",
     ],
     stdout: "inherit", // 使わないのでそのまま表示だけしておく
-    stderr: "piped",   // ← ここを監視する
+    stderr: "piped", // ← ここを監視する
   });
   const child = cmd.spawn();
 
@@ -50,12 +56,14 @@ async function startBundleWatch() {
   for await (const line of lines) {
     console.log("[bundle]", line); // デバッグ用: 生のログを必ず表示
     if (line.includes("Bundled") && line.includes("modules")) {
-  await runPostprocessing();
-}
+      await runPostprocessing();
+    }
   }
 }
 
-startBundleWatch();
+for (const page of PAGES) {
+  void startBundleWatch(page);
+}
 
 // --- 静的ファイル配信 + SSEでのライブリロード ---
 const LIVE_RELOAD_SCRIPT = `
@@ -114,9 +122,10 @@ Deno.serve({ port: 8000 }, async (req) => {
 
     // その他の静的ファイル
     return new Response(bytes, {
-      headers: { "content-type": CONTENT_TYPES[ext] ?? "application/octet-stream" },
+      headers: {
+        "content-type": CONTENT_TYPES[ext] ?? "application/octet-stream",
+      },
     });
-
   } catch {
     return new Response("Not found", { status: 404 });
   }
