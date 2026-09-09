@@ -1,7 +1,10 @@
 {
   "version": "5",
   "specifiers": {
+    "jsr:@std/assert@*": "1.0.19",
+    "jsr:@std/assert@^1.0.1": "1.0.19",
     "jsr:@std/collections@^1.3.0": "1.3.0",
+    "jsr:@std/internal@^1.0.12": "1.0.14",
     "jsr:@std/streams@*": "1.1.2",
     "jsr:@timepp/murmurhash@~0.1.1": "0.1.1",
     "jsr:@tksh/url-compressor@^1.1.1": "1.1.1",
@@ -10,8 +13,17 @@
     "npm:svg2png-wasm@^1.4.1": "1.4.1"
   },
   "jsr": {
+    "@std/assert@1.0.19": {
+      "integrity": "eaada96ee120cb980bc47e040f82814d786fe8162ecc53c91d8df60b8755991e",
+      "dependencies": [
+        "jsr:@std/internal"
+      ]
+    },
     "@std/collections@1.3.0": {
       "integrity": "eb36b43d784477ea0b476483ac034a14bdd182aff921c812ecf662a1fcef9498"
+    },
+    "@std/internal@1.0.14": {
+      "integrity": "291516b3d4c35024d6ffbc0a9df5bf4c64116e05b50012cf846710152d2ffdf7"
     },
     "@std/streams@1.1.2": {
       "integrity": "0249bf9b78a999f57032ca4d8e7ccaa57579090242640b35ddc948fbb745d3af"
@@ -34,6 +46,7 @@
   },
   "workspace": {
     "dependencies": [
+      "jsr:@std/assert@^1.0.1",
       "jsr:@std/collections@^1.3.0",
       "jsr:@timepp/murmurhash@~0.1.1",
       "jsr:@tksh/url-compressor@^1.1.1",
