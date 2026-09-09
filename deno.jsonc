@@ -47,9 +47,8 @@
       // Test-only imports (plan §5 Phase 0; bare specifiers per repo lint rules)
       "@std/assert":                                                         "jsr:@std/assert@^1.0.1",
 
-      // Straightlines codec (plan Phase 4). DEV PIN: local checkout until
-      // stln-codec 0.1.0 is published (Phase 6 switches to jsr:@tksh/stln-codec).
-      "@tksh/stln-codec":                                                    "../../stln-codec/src/mod.ts",
+      // Straightlines codec (plan Phase 6): published package.
+      "@tksh/stln-codec":                                                    "jsr:@tksh/stln-codec@^0.1.0",
 
       // index.html specific imports
       "alwan":                                                               "npm:alwan@^2.3.1",
