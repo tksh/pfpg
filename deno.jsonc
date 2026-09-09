@@ -40,7 +40,8 @@
    },
    "compilerOptions": {
       "strict": true,
-      "noUncheckedIndexedAccess": true
+      "noUncheckedIndexedAccess": true,
+      "lib": ["dom", "dom.iterable", "dom.asynciterable", "deno.ns"]
    },
    "imports": {
       // Test-only imports (plan §5 Phase 0; bare specifiers per repo lint rules)
@@ -94,9 +95,9 @@
       "tab-ui/theme-color":                                                  "./src/js/page-specific/index/tab-ui/theme-color.js",
       "tab-ui/view-scaling":                                                 "./src/js/page-specific/index/tab-ui/view-scaling.js",
 
-      "utils/get-number-of-groups":                                          "./src/js/page-specific/index/utils/get-number-of-groups.js",
-      "utils/number-rounding":                                               "./src/js/page-specific/index/utils/number-rounding.js",
-      "utils/replace-at-index":                                              "./src/js/page-specific/index/utils/replace-at-index.js",
+      "utils/get-number-of-groups":                                          "./src/js/page-specific/index/utils/get-number-of-groups.ts",
+      "utils/number-rounding":                                               "./src/js/page-specific/index/utils/number-rounding.ts",
+      "utils/replace-at-index":                                              "./src/js/page-specific/index/utils/replace-at-index.ts",
 
       "button/copy-to-clipboard":                                            "./src/js/page-specific/index/button/copy-to-clipboard.js",
       "button/download-as-file":                                             "./src/js/page-specific/index/button/download-as-file.js",
@@ -125,17 +126,17 @@
       // Common imports for both index.html and data-manipulator.html
       "@std/collections/zip":                                                "jsr:@std/collections@^1.3.0/zip",
 
-      "constants":                                                           "./src/js/constants.js",
+      "constants":                                                           "./src/js/constants.ts",
 
-      "common-utils/compression-stream":                                     "./src/js/common-utils/compression-stream.js",
-      "common-utils/format-as-float":                                        "./src/js/common-utils/format-as-float.js",
+      "common-utils/compression-stream":                                     "./src/js/common-utils/compression-stream.ts",
+      "common-utils/format-as-float":                                        "./src/js/common-utils/format-as-float.ts",
       "common-utils/get-uint-n":                                             "./src/js/common-utils/get-uint-n.js",
-      "common-utils/is-non-empty":                                           "./src/js/common-utils/is-non-empty.js",
-      "common-utils/output-to-textarea":                                     "./src/js/common-utils/output-to-textarea.js",
-      "common-utils/read-textarea":                                          "./src/js/common-utils/read-textarea.js",
-      "common-utils/read-url-params":                                        "./src/js/common-utils/read-url-params.js",
-      "common-utils/select-output-textarea":                                 "./src/js/common-utils/select-output-textarea.js",
-      "common-utils/show-processing-time":                                   "./src/js/common-utils/show-processing-time.js",
+      "common-utils/is-non-empty":                                           "./src/js/common-utils/is-non-empty.ts",
+      "common-utils/output-to-textarea":                                     "./src/js/common-utils/output-to-textarea.ts",
+      "common-utils/read-textarea":                                          "./src/js/common-utils/read-textarea.ts",
+      "common-utils/read-url-params":                                        "./src/js/common-utils/read-url-params.ts",
+      "common-utils/select-output-textarea":                                 "./src/js/common-utils/select-output-textarea.ts",
+      "common-utils/show-processing-time":                                   "./src/js/common-utils/show-processing-time.ts",
 
       "color-formatter/format-converter":                                    "./src/js/color-formatter/format-converter.js",
       "color-formatter/hex-expand":                                          "./src/js/color-formatter/hex-expand.js",

@@ -1,4 +1,4 @@
-export function replaceAtIndex(inputString, regexPattern, replacement, index) {
+export function replaceAtIndex(inputString: string, regexPattern: RegExp, replacement: string, index: number): string {
     console.log('replacement: ', replacement) // <g (id="0") stroke="#00000088" ... >
     console.log('index: ', index)  // Number
 
@@ -23,6 +23,9 @@ export function replaceAtIndex(inputString, regexPattern, replacement, index) {
     //   文字列としては 同じ 'apple' でも 'index'はそれぞれの情報を持っている
     //   'index'は マッチングした文字列の先頭が 元の文字列内でどの位置にあるか を示す数値
     const matchToReplace = matches[index]
+    if (matchToReplace === undefined || matchToReplace.index === undefined) {
+        throw new Error(`replaceAtIndex: no match at index ${index}`)
+    }
     console.log('matchToReplace: ', matchToReplace)
     // Array [ "apple" ]
     //   0: "apple"
@@ -33,10 +36,14 @@ export function replaceAtIndex(inputString, regexPattern, replacement, index) {
 
     // 元の文字列を指定されたインデックスの要素で分割し、
     // replacement を挿入して新しい文字列を生成
+    const firstMatch = matchToReplace[0]
+    if (firstMatch === undefined) {
+        throw new Error(`replaceAtIndex: empty match at index ${index}`)
+    }
     const replacedString =
         inputString.slice(0, matchToReplace.index) + // インデックスの前の部分 0から19までが抽出される (0, マッチングした文字列の先頭 (20))
         replacement + // 置き換える文字列
-        inputString.slice(matchToReplace.index + matchToReplace[0].length)
+        inputString.slice(matchToReplace.index + firstMatch.length)
         // インデックスの後の部分 (マッチングした文字列の先頭 (20) + マッチ文字列 "apple" の長さ)
         // = 正規表現にマッチした文字列の末尾の位置を示す数値
         // `.slice()` メソッドを一つの引数だけで使用することで、指定した位置から文字列の最後までを取得

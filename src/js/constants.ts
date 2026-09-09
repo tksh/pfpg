@@ -10,7 +10,7 @@ export const BASIC_DATA_KEYS = [
     'title',     // SVG tag content
     'desc',      // SVG tag content
     'metadata'   // SVG tag content
-]
+] as const
 
 
 // SVG specs
@@ -38,7 +38,7 @@ export const VIEWBOX_START_Y = 0
 //     [1] bigint64-enc
 //     [2] swap63-enc
 //     [3] four16-enc
-export const FLAGS_MAP = new Map([
+export const FLAGS_MAP: Map<string, Map<string, string>> = new Map([
     ['1st', new Map([
                 ['uncompressed',  '~'],
                 ['URLCompressor', '0'],
@@ -58,15 +58,15 @@ export const FLAGS_MAP = new Map([
 // to indicate the method names to console
 
 // 1st
-const reverse1st = new Map()
-FLAGS_MAP.get('1st').forEach((value, key) => {
+const reverse1st = new Map<string, string>()
+FLAGS_MAP.get('1st')?.forEach((value, key) => {
     reverse1st.set(value, key)
 })
 FLAGS_MAP.set('rev_1st', reverse1st)
 
 // 2nd
-const reverse2nd = new Map()
-FLAGS_MAP.get('2nd').forEach((value, key) => {
+const reverse2nd = new Map<string, string>()
+FLAGS_MAP.get('2nd')?.forEach((value, key) => {
     reverse2nd.set(value, key)
 })
 FLAGS_MAP.set('rev_2nd', reverse2nd)
@@ -94,7 +94,7 @@ console.log("FLAGS_MAP: ", FLAGS_MAP)
 // Encoding methods
 
 // The sets of encoding method name and its configuration value
-export const ENCODING_METHOD_AND_CONFIG_MAP = new Map([
+export const ENCODING_METHOD_AND_CONFIG_MAP: Map<string, string> = new Map([
     ['bruteforce53', 'baseXNumber'],
     ['bigint64',     'digitsPerChunk'],
     ['swap63',       'swap53HasNoConfigValue'],
@@ -119,7 +119,9 @@ export const ENCODING_METHOD_AND_CONFIG_MAP = new Map([
 //     - UI_CONFIG_DEFAULTS
 //       - 'themeColor'  : Define by user's scheme setting, (`prefers-color-scheme: dark` => 'dark', others => 'light')
 
-export const SVG_OPTIMIZE_DEFAULTS = new Map([
+export type SettingValue = string | number | boolean | undefined
+
+export const SVG_OPTIMIZE_DEFAULTS = new Map<string, SettingValue>([
 //  ['Attribute name',   default value],         // Appeared at:           | Type: | Possible values:
     ['removeOpacity',    false],                 // SVG optimization modal | Bool  | true, false
     ['removeLineBreaks', false],                 // SVG optimization modal | Bool  | true, false
@@ -132,7 +134,7 @@ export const SVG_OPTIMIZE_DEFAULTS = new Map([
  * Entry order is the canonical serialization order.
  * Do not reorder entries unless the canonical format is intentionally changed.
  */
-export const VISUAL_CONFIG_DEFAULTS = new Map([
+export const VISUAL_CONFIG_DEFAULTS = new Map<string, SettingValue>([
 //  ['Attribute name',   default value],         // Appeared at: | Type:  | Possible values:
     ['groupColors',      undefined],             //    Lines tab | String | 3|6|10 digits each group-colors hexes has joined with '_', e.g. 12345699FF_000123_FFF
     ['pathMode',         'absoluteSeparated'],   //    Lines tab | String | 'absoluteSeparated', 'relativeMerged'
@@ -146,7 +148,7 @@ export const VISUAL_CONFIG_DEFAULTS = new Map([
     ['heightPixelSize',  256],                   //   Render tab | Uint   | 0 <
 ]);
 
-export const UI_CONFIG_DEFAULTS = new Map([
+export const UI_CONFIG_DEFAULTS = new Map<string, SettingValue>([
 //  ['Attribute name',   default value],         // Appeared at: | Type:  | Possible values:
     ['themeColor',       undefined],             //       UI tab | String | 'white', 'light', 'dark', 'black'
     ['buttonAction',     'download'],            //       UI tab | String | 'download', 'copy'
@@ -155,14 +157,14 @@ export const UI_CONFIG_DEFAULTS = new Map([
     ['textWrapping',     false],                 //       UI tab | Bool   | true, false
 ]);
 
-export const SETTINGS_DEFAULTS = mergeMaps(
+export const SETTINGS_DEFAULTS: Map<string, SettingValue> = mergeMaps(
   SVG_OPTIMIZE_DEFAULTS,
   VISUAL_CONFIG_DEFAULTS,
   UI_CONFIG_DEFAULTS
 );
 
-function mergeMaps(...maps) {
-  const out = new Map();
+function mergeMaps(...maps: Array<Map<string, SettingValue>>): Map<string, SettingValue> {
+  const out = new Map<string, SettingValue>();
   for (const m of maps) {
     for (const [k, v] of m) out.set(k, v);
   }

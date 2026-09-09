@@ -7,7 +7,7 @@ export
 // index           : 'svg-string'
 // data-manipulator: 'textarea-decoded-svg'
 
-function isOnDataManipulatorPage() {
+function isOnDataManipulatorPage(): boolean {
     // 現在のURLを取得する
     const url = window.location.href // url: 検索対象の文字列
 
@@ -18,7 +18,7 @@ function isOnDataManipulatorPage() {
 
 // Select the ID text via two booleans
 
-function selectOutputTextareaId(isRelative, isDataManipulatorPage) {
+function selectOutputTextareaId(isRelative: boolean, isDataManipulatorPage: boolean): string | undefined {
 
     if (isDataManipulatorPage === true) {          // on: data-manipulator.html
         if (isRelative === true) {                 //      path style: relative-and-merged

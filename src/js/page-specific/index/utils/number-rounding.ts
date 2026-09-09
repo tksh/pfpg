@@ -11,11 +11,11 @@ export
 
 // これで、JavaScriptで小数点第二位までを表現することができます。
 
-function roundToTwoDecimals(num) {
+function roundToTwoDecimals(num: number): number {
     return Math.round(num * 100) / 100
 }
 
-function roundToOneDecimal(num) {
+function roundToOneDecimal(num: number): number {
     return Math.round(num * 10) / 10
 }
 
@@ -25,7 +25,7 @@ function roundToOneDecimal(num) {
 // For simplify the viewBox value like the case of 'Squircle, slimmed' and 'Width narrowness: 0'
 //   - Before: viewBox="0.00 0 31.00 31"
 //   - After : viewBox="0 0 31 31"
-function toFixedTrimmed(num) {
+function toFixedTrimmed(num: number): number {
     return Number.parseFloat(num.toFixed(2))
     // return num.toFixed(2).replace(/\.00$/, '')
 }

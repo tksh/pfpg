@@ -7,7 +7,7 @@ export
 // Artwork URL params with UI state keys filtered out, for stln-codec.
 // (Decoding itself moved to stln-codec; see 'state/url-decode'.)
 
-function getUrlParamsExceptsStates() {
+function getUrlParamsExceptsStates(): URLSearchParams {
     const urlParams = new URLSearchParams(window.location.search)
     const stateKeys = Array.from(SETTINGS_DEFAULTS.keys())
     // console.log('stateKeys to exclude: ', stateKeys)
