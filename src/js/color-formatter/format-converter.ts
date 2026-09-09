@@ -11,7 +11,7 @@ export
 
 
 // 単一の色情報の文字列を指定の形式に変換する
-function convertColorFormat(color, colorFormat) {
+function convertColorFormat(color: string, colorFormat: string): string {
     const currentFormat = detectColorFormat(color)
     if (currentFormat === colorFormat) {
         // 形式が一致している場合は何もせずに元の値を返す
@@ -27,18 +27,18 @@ function convertColorFormat(color, colorFormat) {
 }
 
 // 色情報の文字列の配列を指定の形式に変換する
-function convertColorFormatForArray(strokeArr, colorFormat) {
+function convertColorFormatForArray(strokeArr: string[], colorFormat: string): string[] {
     return strokeArr.map(color => convertColorFormat(color, colorFormat))
 }
 
 // RGB形式かHEX形式かを判定する関数
-function detectColorFormat(colorString) {
+function detectColorFormat(colorString: string): string {
     return colorString.startsWith('rgb') ? 'rgb' : 'hex'
 }
 
 
 // Convert input to RGB array (handles both RGB and HEX formats)
-function convertToRgbArr(colorString) {
+function convertToRgbArr(colorString: string): Array<number | string> | string {
     const currentFormat = detectColorFormat(colorString)
     if (currentFormat === 'rgb') {
         return rgbStrToRgbArr(colorString) // rgb string => rgb array

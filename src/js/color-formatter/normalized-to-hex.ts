@@ -11,7 +11,7 @@ export
 
 // 0から1の範囲に正規化された数値を引数として受け取り
 // 2桁のHEX文字列として返す関数
-function normalizedToHex(num) {
+function normalizedToHex(num: number): string {
     // 数値が0から1の範囲にあるかチェックする
     if (num < 0 || num > 1) {
         // 範囲外であればエラーを返す
@@ -35,7 +35,7 @@ function normalizedToHex(num) {
 
 // uint8（0から255の範囲の整数）を
 // 2桁のHEX文字列に変換する関数
-function uint8ToHex(num) {
+function uint8ToHex(num: number): string {
     // 数値がuint8の範囲（0から255）にあるかチェックする
     if (num < 0 || num > 255 || !Number.isInteger(num)) {
         // 範囲外または整数でない場合はエラーを返す
@@ -61,7 +61,7 @@ function uint8ToHex(num) {
 
 
 
-function rgbObjToHex(rgbDict) {
+function rgbObjToHex(rgbDict: { r: number; g: number; b: number }): string {
     const r = uint8ToHex(rgbDict.r)
     const g = uint8ToHex(rgbDict.g)
     const b = uint8ToHex(rgbDict.b)
@@ -79,7 +79,7 @@ function rgbObjToHex(rgbDict) {
 //console.log(rgbObjToHex(uint8_rgb_obj_4)) // Invalid numberInvalid numberInvalid number
 
 
-function rgbStrToRgbArr(rgbString) {
+function rgbStrToRgbArr(rgbString: string): Array<number> | string {
     // 正規表現で、カンマまたはスペースで区切られたRGB文字列の形式をチェック
     const regex = /^rgb\((\d+)[,\s]+(\d+)[,\s]+(\d+)\)$/
     const match = rgbString.match(regex)
@@ -91,7 +91,7 @@ function rgbStrToRgbArr(rgbString) {
     // 正規表現の結果からRGB値を抽出し、オブジェクトを作成
     const [, r, g, b] = match
 
-    return [ parseInt(r), parseInt(g), parseInt(b) ]
+    return [ parseInt(r ?? '', 10), parseInt(g ?? '', 10), parseInt(b ?? '', 10) ]
 }
 
 // // テスト
@@ -103,12 +103,12 @@ function rgbStrToRgbArr(rgbString) {
 
 // Array of uint8 rgb values convert to 6 digits hex string
 // e.g.: Array(3) {170, 170, 170} => "AAAAAA"
-function rgbArrToSixDigitsHex(rgbArr) {
-    const rgbTwoDigitsHexArr = [...rgbArr].map(value => uint8ToHex(value))
+function rgbArrToSixDigitsHex(rgbArr: Array<number | string> | string): string {
+    const rgbTwoDigitsHexArr = [...rgbArr].map(value => uint8ToHex(Number(value)))
     return rgbTwoDigitsHexArr.join('')
 }
 
-function rgbToHex(rgbStr) {
+function rgbToHex(rgbStr: string): string {
     const rgbArr = rgbStrToRgbArr(tryDeleteHash(rgbStr))
     const sixDigitsHex = rgbArrToSixDigitsHex(rgbArr)
     return tryAddHash(sixDigitsHex)

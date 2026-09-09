@@ -1,6 +1,6 @@
 export { rgbToLch }
 
-function rgbToXyz(r, g, b) {
+function rgbToXyz(r: number, g: number, b: number): [number, number, number] {
     r /= 255;
     g /= 255;
     b /= 255;
@@ -16,7 +16,7 @@ function rgbToXyz(r, g, b) {
     return [x, y, z];
 }
 
-function xyzToLab(x, y, z) {
+function xyzToLab(x: number, y: number, z: number): [number, number, number] {
     const ε = 216/24389;
     const κ = 24389/27;
 
@@ -31,7 +31,7 @@ function xyzToLab(x, y, z) {
     return [l, a, b];  // lightness, a and b axes
 }
 
-function labToLch(l, a, b) {
+function labToLch(l: number, a: number, b: number): [number, number, number] {
     const c = Math.sqrt(a * a + b * b);
     const hRadians = Math.atan2(b, a);
     let hDegrees = hRadians * 360 / (2 * Math.PI);
@@ -41,7 +41,7 @@ function labToLch(l, a, b) {
     return [l, c, hDegrees];
 }
 
-function rgbToLch(r, g, b) {
+function rgbToLch(r: number, g: number, b: number): { lightness: number; chroma: number; hue: number } {
     const [x, y, z] = rgbToXyz(r, g, b);
     const [l, a, bLab] = xyzToLab(x/0.96422, y, z/0.82521); // D65のXYZ値で正規化
     const [lightness, chroma, hue] = labToLch(l, a, bLab);

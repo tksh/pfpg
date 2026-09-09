@@ -11,7 +11,7 @@ export
 
 // 2桁のHEX文字列を引数として受け取り
 // 0から1の範囲に 正規化された数値として 返す関数
-function normalizedFromHex(hex) {
+function normalizedFromHex(hex: string): number {
     // 16進数を 10進数に変換
     const decimalValue = parseInt(hex, 16)
     // 0から255の範囲を 0から1の範囲 に 正規化
@@ -30,7 +30,7 @@ function normalizedFromHex(hex) {
 
 
 // 2桁のHEX文字列を uint8（0から255の範囲の整数）に 変換する関数
-function hexToUint8(twoDigitsHex) {
+function hexToUint8(twoDigitsHex: string): number | string {
     // 入力が 2桁の16進数文字列 であることを確認
     if (!/^[0-9A-Fa-f]{2}$/.test(twoDigitsHex)) {
         return "Invalid hex string"
@@ -41,12 +41,12 @@ function hexToUint8(twoDigitsHex) {
 }
 
 // 3|6桁のHEX文字列を RGB array に 変換する関数
-function hexToRgbArr(threeOrSixDigitsHex) {
+function hexToRgbArr(threeOrSixDigitsHex: string): Array<number | string> | string {
     const hexWithoutHash = tryDeleteHash(threeOrSixDigitsHex)
     const sixDigitsHex = hexExpandToSix(hexWithoutHash)
 
     // 入力が 6桁の16進数文字列 であることを確認
-    if (!/^[0-9A-Fa-f]{6}$/.test(sixDigitsHex)) {
+    if (typeof sixDigitsHex !== 'string' || !/^[0-9A-Fa-f]{6}$/.test(sixDigitsHex)) {
         return "Invalid hex string"
     }
     // 文字列を 2桁ずつに分割
@@ -66,7 +66,7 @@ function hexToRgbArr(threeOrSixDigitsHex) {
 // console.log(hexToRgbArr("FF8000"))  // { r: 255, g: 128, b: 0 }
 
 
-function rgbStringify(rgbArr) {
+function rgbStringify(rgbArr: Array<number | string> | string): string {
     return `rgb(${[...rgbArr].join(' ')})`
 }
 

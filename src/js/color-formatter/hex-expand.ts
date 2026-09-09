@@ -9,7 +9,7 @@ export
 
 // 6|5|3|1桁 に変換された hex を 10桁に戻す関数
 
-function hexExpandToTen(hex) {
+function hexExpandToTen(hex: string): string | Error {
     // 文字列の長さが 10 ならば そのまま 返す
     if (hex.length === 10) {
         return hex
@@ -67,11 +67,12 @@ function hexExpandToTen(hex) {
 // Extend to 8 digits hex if in short style or no hex-code (value = 1)
 // Add opacity value '1' as 'FF' (7th and 8th chars)
 // Input with "#" but and output without "#"
-function hexExpandToEight(hexWithHash, opacity) {
+function hexExpandToEight(hexWithHash: string, opacity: number): string {
 
-    let hex = hexWithHash.slice(1)                              // `#`記号 を除く文字列を取得
+    const expanded = hexExpandToSix(hexWithHash.slice(1))                       // `#`記号 を除く文字列を取得
     //console.log('hex.length: ', hex.length)                        // 3 | 4 | 6 | 8
-    hex = hexExpandToSix(hex)                      // 6 digits
+    // Preserve the legacy coercion for invalid input (undefined/Error + string).
+    const hex = typeof expanded === 'string' ? expanded : String(expanded)
     const opacityAsHex = normalizedToHex(opacity)  // 2 digits
 
     return hex + opacityAsHex
@@ -95,7 +96,7 @@ function hexExpandToEight(hexWithHash, opacity) {
 
 
 
-function hexExpandToSix(hex) {
+function hexExpandToSix(hex: string): string | undefined | Error {
     if (!hex) {
         return undefined
 }
@@ -118,7 +119,7 @@ function hexExpandToSix(hex) {
 }
 
 
-function tryAddHash(hexString) {
+function tryAddHash(hexString: string): string {
     if (!hexString.startsWith('#')) {
         return '#' + hexString
     }

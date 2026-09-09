@@ -115,8 +115,8 @@
 
       // data-manipulator.html specific imports
       // (display helpers for the stln-codec-based encode adapters)
-      "encode/show-best-mix-result":                                         "./src/js/encode-and-decode/encode/show-best-mix-result.js",
-      "encode/show-result":                                                  "./src/js/encode-and-decode/encode/show-result.js",
+      "encode/show-best-mix-result":                                         "./src/js/encode-and-decode/encode/show-best-mix-result.ts",
+      "encode/show-result":                                                  "./src/js/encode-and-decode/encode/show-result.ts",
 
       "io/copy-textarea":                                                    "./src/js/page-specific/data-manipulator/io/copy-textarea.js",
       "io/download-url-params":                                              "./src/js/page-specific/data-manipulator/io/download-url-params.js",
@@ -138,13 +138,13 @@
       "common-utils/select-output-textarea":                                 "./src/js/common-utils/select-output-textarea.ts",
       "common-utils/show-processing-time":                                   "./src/js/common-utils/show-processing-time.ts",
 
-      "color-formatter/format-converter":                                    "./src/js/color-formatter/format-converter.js",
-      "color-formatter/hex-expand":                                          "./src/js/color-formatter/hex-expand.js",
-      "color-formatter/hex-shorten":                                         "./src/js/color-formatter/hex-shorten.js",
-      "color-formatter/normalized-from-hex":                                 "./src/js/color-formatter/normalized-from-hex.js",
-      "color-formatter/normalized-to-hex":                                   "./src/js/color-formatter/normalized-to-hex.js",
-      "color-formatter/rgb-comma-to-space":                                  "./src/js/color-formatter/rgb-comma-to-space.js",
-      "color-formatter/rgb-to-lch":                                          "./src/js/color-formatter/rgb-to-lch.js",
-      "color-formatter/try-delete-f":                                        "./src/js/color-formatter/try-delete-f.js"
+      "color-formatter/format-converter":                                    "./src/js/color-formatter/format-converter.ts",
+      "color-formatter/hex-expand":                                          "./src/js/color-formatter/hex-expand.ts",
+      "color-formatter/hex-shorten":                                         "./src/js/color-formatter/hex-shorten.ts",
+      "color-formatter/normalized-from-hex":                                 "./src/js/color-formatter/normalized-from-hex.ts",
+      "color-formatter/normalized-to-hex":                                   "./src/js/color-formatter/normalized-to-hex.ts",
+      "color-formatter/rgb-comma-to-space":                                  "./src/js/color-formatter/rgb-comma-to-space.ts",
+      "color-formatter/rgb-to-lch":                                          "./src/js/color-formatter/rgb-to-lch.ts",
+      "color-formatter/try-delete-f":                                        "./src/js/color-formatter/try-delete-f.ts"
    }
 }

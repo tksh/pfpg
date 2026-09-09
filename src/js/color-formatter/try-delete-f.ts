@@ -3,7 +3,7 @@
 //   Remove 'FFFF' or 'FF' if at end
 //   10 => 6 or 5 => 3
 
-export function tryDeleteFs(hex) {
+export function tryDeleteFs(hex: string): string | undefined {
 
     hex = hex.toUpperCase()
 
