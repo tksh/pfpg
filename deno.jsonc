@@ -5,9 +5,10 @@
 
       // Just build the project, no watch mode, for production build
       // - For development: using with `deno task serve`
-      "build": "rm -rf dist/ && deno task build:index && deno task build:data-manipulator && deno task postprocessing",
+      "build": "rm -rf dist/ && deno task build:index && deno task build:data-manipulator && deno task build:404 && deno task postprocessing",
       "build:index": "deno bundle src/index.html --platform=browser --outdir dist/",
       "build:data-manipulator": "deno bundle src/data-manipulator.html --platform=browser --outdir dist/",
+      "build:404": "deno bundle src/404.html --platform=browser --outdir dist/",
       "serve": "deno run --allow-net --allow-read jsr:@std/http/file-server",
 
       // Copy the assets to the dist directory
