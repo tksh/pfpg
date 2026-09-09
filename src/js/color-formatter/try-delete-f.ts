@@ -4,23 +4,19 @@
 //   10 => 6 or 5 => 3
 
 export function tryDeleteFs(hex: string): string | undefined {
+  hex = hex.toUpperCase();
 
-    hex = hex.toUpperCase()
-
-    if (hex.length !== 10 && hex.length !== 5) {
-        console.error('Invalid length hex for "Group colors":', hex)
-    }
-    // 10 => 6
-    else if (hex.length === 10 && hex.slice(-4) === "FFFF") {
-        return hex.slice(0, 6)
-    }
-    // 5 => 3
-    else if (hex.length === 5 && hex.slice(-2) === "FF") {
-        return hex.slice(0, 3)
-    }
-    else {
-        return hex
-    }
+  if (hex.length !== 10 && hex.length !== 5) {
+    console.error('Invalid length hex for "Group colors":', hex);
+  } // 10 => 6
+  else if (hex.length === 10 && hex.slice(-4) === "FFFF") {
+    return hex.slice(0, 6);
+  } // 5 => 3
+  else if (hex.length === 5 && hex.slice(-2) === "FF") {
+    return hex.slice(0, 3);
+  } else {
+    return hex;
+  }
 }
 
 // Test

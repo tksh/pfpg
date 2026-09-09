@@ -1,3 +1,3 @@
 export function convertRgbCommaToSpace(rgbString: string): string {
-    return rgbString.replace(/,\s*/g, ' ');
-  }
+  return rgbString.replace(/,\s*/g, " ");
+}

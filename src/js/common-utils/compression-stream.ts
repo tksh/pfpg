@@ -1,39 +1,39 @@
-export
-    { compressToBlob
-    , compressToEncodedURIComponent
-    , decompressFromEncodedURIComponent
-    }
+export {
+  compressToBlob,
+  compressToEncodedURIComponent,
+  decompressFromEncodedURIComponent,
+};
 
 // TextEncoderとTextDecoderを遅延初期化する
 
-let textEncoder: TextEncoder | undefined
-let textDecoder: TextDecoder | undefined
+let textEncoder: TextEncoder | undefined;
+let textDecoder: TextDecoder | undefined;
 
 function getTextEncoder(): TextEncoder {
-    if (!textEncoder) {
-        textEncoder = new TextEncoder()
-    }
-    return textEncoder
+  if (!textEncoder) {
+    textEncoder = new TextEncoder();
+  }
+  return textEncoder;
 }
 
 function getTextDecoder(): TextDecoder {
-    if (!textDecoder) {
-        textDecoder = new TextDecoder()
-    }
-    return textDecoder
+  if (!textDecoder) {
+    textDecoder = new TextDecoder();
+  }
+  return textDecoder;
 }
 
 // Start pulling before writing: the transform applies backpressure, so
 // awaiting the write with an idle read side deadlocks.
 async function runThrough(
-    data: Uint8Array<ArrayBuffer>,
-    transform: CompressionStream | DecompressionStream,
+  data: Uint8Array<ArrayBuffer>,
+  transform: CompressionStream | DecompressionStream,
 ): Promise<ArrayBuffer> {
-    const result = new Response(transform.readable).arrayBuffer()
-    const writer = transform.writable.getWriter()
-    await writer.write(data)
-    await writer.close()
-    return await result
+  const result = new Response(transform.readable).arrayBuffer();
+  const writer = transform.writable.getWriter();
+  await writer.write(data);
+  await writer.close();
+  return await result;
 }
 
 /**
@@ -45,16 +45,16 @@ async function runThrough(
  * @returns 圧縮されたデータ
  */
 async function compressToBlob(
-    input: string,
-    method: string,
-    mimeType = 'application/octet-stream',
+  input: string,
+  method: string,
+  mimeType = "application/octet-stream",
 ): Promise<Blob> {
-    const textEncoder = getTextEncoder()
-    const buffer = await runThrough(
-        textEncoder.encode(input),
-        new CompressionStream(method as CompressionFormat),
-    )
-    return new Blob([buffer], { type: mimeType })
+  const textEncoder = getTextEncoder();
+  const buffer = await runThrough(
+    textEncoder.encode(input),
+    new CompressionStream(method as CompressionFormat),
+  );
+  return new Blob([buffer], { type: mimeType });
 }
 
 /**
@@ -64,13 +64,16 @@ async function compressToBlob(
  * @param method - 圧縮方式 ("gzip", "deflate", "deflate-raw", "brotli")
  * @returns Base64エンコードされた圧縮データ
  */
-async function compressToBase64(input: string, method: string): Promise<string> {
-    const buffer = await runThrough(
-        getTextEncoder().encode(input),
-        new CompressionStream(method as CompressionFormat),
-    )
-    const compressed = new Uint8Array(buffer)
-    return btoa(String.fromCharCode(...compressed))
+async function compressToBase64(
+  input: string,
+  method: string,
+): Promise<string> {
+  const buffer = await runThrough(
+    getTextEncoder().encode(input),
+    new CompressionStream(method as CompressionFormat),
+  );
+  const compressed = new Uint8Array(buffer);
+  return btoa(String.fromCharCode(...compressed));
 }
 
 /**
@@ -80,14 +83,17 @@ async function compressToBase64(input: string, method: string): Promise<string> 
  * @param method - 圧縮方式 ("gzip", "deflate", "deflate-raw", "brotli")
  * @returns 解凍されたテキストデータ
  */
-async function decompressFromBase64(input: string, method: string): Promise<string> {
-    const textDecoder = getTextDecoder()
-    const compressedBytes = Uint8Array.from(atob(input), (c) => c.charCodeAt(0))
-    const buffer = await runThrough(
-        compressedBytes,
-        new DecompressionStream(method as CompressionFormat),
-    )
-    return textDecoder.decode(buffer)
+async function decompressFromBase64(
+  input: string,
+  method: string,
+): Promise<string> {
+  const textDecoder = getTextDecoder();
+  const compressedBytes = Uint8Array.from(atob(input), (c) => c.charCodeAt(0));
+  const buffer = await runThrough(
+    compressedBytes,
+    new DecompressionStream(method as CompressionFormat),
+  );
+  return textDecoder.decode(buffer);
 }
 
 /**
@@ -97,12 +103,15 @@ async function decompressFromBase64(input: string, method: string): Promise<stri
  * @param method - 圧縮方式 ("gzip", "deflate", "deflate-raw", "brotli")
  * @returns 圧縮され、URIコンポーネントとして安全な形式にエンコードされた文字列
  */
-async function compressToEncodedURIComponent(input: string, method: string): Promise<string> {
-    const withBase64 = await compressToBase64(input, method)
-    return withBase64
-        .replace(/\+/g, "-")
-        .replace(/\//g, "_")
-        .replace(/=+$/, "")
+async function compressToEncodedURIComponent(
+  input: string,
+  method: string,
+): Promise<string> {
+  const withBase64 = await compressToBase64(input, method);
+  return withBase64
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
 }
 
 /**
@@ -112,18 +121,18 @@ async function compressToEncodedURIComponent(input: string, method: string): Pro
  * @param method - 圧縮方式 ("gzip", "deflate", "deflate-raw", "brotli")
  * @returns 解凍された元の文字列
  */
-async function decompressFromEncodedURIComponent(input: string, method: string): Promise<string> {
-    let base64 = input
-        .replace(/-/g, "+")
-        .replace(/_/g, "/")
-    while (base64.length % 4) {
-        base64 += "="
-    }
-    return decompressFromBase64(base64, method)
+async function decompressFromEncodedURIComponent(
+  input: string,
+  method: string,
+): Promise<string> {
+  let base64 = input
+    .replace(/-/g, "+")
+    .replace(/_/g, "/");
+  while (base64.length % 4) {
+    base64 += "=";
+  }
+  return await decompressFromBase64(base64, method);
 }
-
-
-
 
 /*
 

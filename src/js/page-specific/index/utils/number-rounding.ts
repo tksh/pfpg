@@ -1,8 +1,4 @@
-export
-    { roundToTwoDecimals
-    , roundToOneDecimal
-    , toFixedTrimmed
-    }
+export { roundToOneDecimal, roundToTwoDecimals, toFixedTrimmed };
 
 // **Math.round()**メソッドだけでは、小数点第二位までを丸めることができません。そこで、数値に100をかけてから丸めて、100で割るという工夫をします。例えば、以下のように書くことができます。
 
@@ -12,13 +8,12 @@ export
 // これで、JavaScriptで小数点第二位までを表現することができます。
 
 function roundToTwoDecimals(num: number): number {
-    return Math.round(num * 100) / 100
+  return Math.round(num * 100) / 100;
 }
 
 function roundToOneDecimal(num: number): number {
-    return Math.round(num * 10) / 10
+  return Math.round(num * 10) / 10;
 }
-
 
 // Round to two decimal places via '.toFixed(2)'
 // Delete '.00' if could via Number.parseFloat()
@@ -26,8 +21,6 @@ function roundToOneDecimal(num: number): number {
 //   - Before: viewBox="0.00 0 31.00 31"
 //   - After : viewBox="0 0 31 31"
 function toFixedTrimmed(num: number): number {
-    return Number.parseFloat(num.toFixed(2))
-    // return num.toFixed(2).replace(/\.00$/, '')
+  return Number.parseFloat(num.toFixed(2));
+  // return num.toFixed(2).replace(/\.00$/, '')
 }
-
-

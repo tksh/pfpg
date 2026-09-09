@@ -1,28 +1,22 @@
-import { tryAddHash }    from 'color-formatter/hex-expand'
-import { tryDeleteHash } from 'color-formatter/hex-shorten'
+import { tryAddHash } from "color-formatter/hex-expand";
+import { tryDeleteHash } from "color-formatter/hex-shorten";
 
-export
-    { normalizedToHex
-    , uint8ToHex
-    , rgbObjToHex
-    , rgbStrToRgbArr
-    , rgbToHex
-    }
+export { normalizedToHex, rgbObjToHex, rgbStrToRgbArr, rgbToHex, uint8ToHex };
 
 // 0から1の範囲に正規化された数値を引数として受け取り
 // 2桁のHEX文字列として返す関数
 function normalizedToHex(num: number): string {
-    // 数値が0から1の範囲にあるかチェックする
-    if (num < 0 || num > 1) {
-        // 範囲外であればエラーを返す
-        return "Invalid number"
-    }
-    // 数値を255倍して整数にし、16進数に変換、
-    // 2桁になるよう0埋めし、大文字に変換する
-    return Math.round(num * 255)
-        .toString(16)
-        .padStart(2, '0')
-        .toUpperCase()
+  // 数値が0から1の範囲にあるかチェックする
+  if (num < 0 || num > 1) {
+    // 範囲外であればエラーを返す
+    return "Invalid number";
+  }
+  // 数値を255倍して整数にし、16進数に変換、
+  // 2桁になるよう0埋めし、大文字に変換する
+  return Math.round(num * 255)
+    .toString(16)
+    .padStart(2, "0")
+    .toUpperCase();
 }
 
 // Test
@@ -31,21 +25,19 @@ function normalizedToHex(num: number): string {
 // console.log(normalizedToHex(0.01)) // 03
 // console.log(normalizedToHex(0))    // 00
 
-
-
 // uint8（0から255の範囲の整数）を
 // 2桁のHEX文字列に変換する関数
 function uint8ToHex(num: number): string {
-    // 数値がuint8の範囲（0から255）にあるかチェックする
-    if (num < 0 || num > 255 || !Number.isInteger(num)) {
-        // 範囲外または整数でない場合はエラーを返す
-        return "Invalid number"
-    }
-    // 整数を16進数に変換し、2桁になるよう0埋めし、大文字に変換する
-    return num
-        .toString(16)
-        .padStart(2, '0')
-        .toUpperCase()
+  // 数値がuint8の範囲（0から255）にあるかチェックする
+  if (num < 0 || num > 255 || !Number.isInteger(num)) {
+    // 範囲外または整数でない場合はエラーを返す
+    return "Invalid number";
+  }
+  // 整数を16進数に変換し、2桁になるよう0埋めし、大文字に変換する
+  return num
+    .toString(16)
+    .padStart(2, "0")
+    .toUpperCase();
 }
 
 // // Test
@@ -59,13 +51,11 @@ function uint8ToHex(num: number): string {
 // // JavaScriptでは、小数点以下が存在しない場合（たとえば 1.0 や 2.0 など）
 // // その数値は整数と見なされ Number.isInteger(1.0) の結果が true になる
 
-
-
 function rgbObjToHex(rgbDict: { r: number; g: number; b: number }): string {
-    const r = uint8ToHex(rgbDict.r)
-    const g = uint8ToHex(rgbDict.g)
-    const b = uint8ToHex(rgbDict.b)
-    return r + g + b
+  const r = uint8ToHex(rgbDict.r);
+  const g = uint8ToHex(rgbDict.g);
+  const b = uint8ToHex(rgbDict.b);
+  return r + g + b;
 }
 
 //// Test
@@ -78,20 +68,19 @@ function rgbObjToHex(rgbDict: { r: number; g: number; b: number }): string {
 //console.log(rgbObjToHex(uint8_rgb_obj_3)) // FFFFFF
 //console.log(rgbObjToHex(uint8_rgb_obj_4)) // Invalid numberInvalid numberInvalid number
 
-
 function rgbStrToRgbArr(rgbString: string): Array<number> | string {
-    // 正規表現で、カンマまたはスペースで区切られたRGB文字列の形式をチェック
-    const regex = /^rgb\((\d+)[,\s]+(\d+)[,\s]+(\d+)\)$/
-    const match = rgbString.match(regex)
+  // 正規表現で、カンマまたはスペースで区切られたRGB文字列の形式をチェック
+  const regex = /^rgb\((\d+)[,\s]+(\d+)[,\s]+(\d+)\)$/;
+  const match = rgbString.match(regex);
 
-    if (!match) {
-        return "Invalid RGB string format"
-    }
+  if (!match) {
+    return "Invalid RGB string format";
+  }
 
-    // 正規表現の結果からRGB値を抽出し、オブジェクトを作成
-    const [, r, g, b] = match
+  // 正規表現の結果からRGB値を抽出し、オブジェクトを作成
+  const [, r, g, b] = match;
 
-    return [ parseInt(r ?? '', 10), parseInt(g ?? '', 10), parseInt(b ?? '', 10) ]
+  return [parseInt(r ?? "", 10), parseInt(g ?? "", 10), parseInt(b ?? "", 10)];
 }
 
 // // テスト
@@ -100,18 +89,19 @@ function rgbStrToRgbArr(rgbString: string): Array<number> | string {
 // console.log(rgbStrToRgbArr("rgb(100 200 50)"))       // Array(3) {100, 200, 50}
 // console.log(rgbStrToRgbArr("rgb(100 200 50 0)"))     // Invalid RGB string format
 
-
 // Array of uint8 rgb values convert to 6 digits hex string
 // e.g.: Array(3) {170, 170, 170} => "AAAAAA"
 function rgbArrToSixDigitsHex(rgbArr: Array<number | string> | string): string {
-    const rgbTwoDigitsHexArr = [...rgbArr].map(value => uint8ToHex(Number(value)))
-    return rgbTwoDigitsHexArr.join('')
+  const rgbTwoDigitsHexArr = [...rgbArr].map((value) =>
+    uint8ToHex(Number(value))
+  );
+  return rgbTwoDigitsHexArr.join("");
 }
 
 function rgbToHex(rgbStr: string): string {
-    const rgbArr = rgbStrToRgbArr(tryDeleteHash(rgbStr))
-    const sixDigitsHex = rgbArrToSixDigitsHex(rgbArr)
-    return tryAddHash(sixDigitsHex)
+  const rgbArr = rgbStrToRgbArr(tryDeleteHash(rgbStr));
+  const sixDigitsHex = rgbArrToSixDigitsHex(rgbArr);
+  return tryAddHash(sixDigitsHex);
 }
 
 // test

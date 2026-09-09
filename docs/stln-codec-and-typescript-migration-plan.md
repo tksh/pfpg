@@ -235,7 +235,7 @@ escalate to the human as design decisions.
       (`parseBasicDataFromTextarea`, `getCheckedMethods`, `mergeAndDisplay`,
       `filteredSearchParams`); `deno.jsonc` gains `@tksh/stln-codec`, drops
       codec entries as files are deleted.
-- [ ] **Phase 5 — pfpg UI to TS.** Remaining `page-specific/*` and
+- [x] **Phase 5 — pfpg UI to TS.** Remaining `page-specific/*` and
       `common-utils/*` to `.ts`; `deno task build` + smoke both pages.
 - [ ] **Phase 6 — Publish + pin.** Publish `stln-codec` 0.1.0 (JSR; npm if
       needed), pin in `pfpg` (`deno.lock` update), update README dependency
