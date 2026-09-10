@@ -1,148 +1,150 @@
-  {
-   "tasks": {
-      // Watch mode or HMR for development
-      "dev": "deno run --allow-net --allow-read --allow-run scripts/dev.ts",
+{
+  "tasks": {
+    // Watch mode or HMR for development
+    "dev": "deno run --allow-net --allow-read --allow-run scripts/dev.ts",
 
-      // Just build the project, no watch mode, for production build
-      // - For development: using with `deno task serve`
-      "build": "rm -rf dist/ && deno task build:index && deno task build:data-manipulator && deno task build:404 && deno task postprocessing",
-      "build:index": "deno bundle src/index.html --platform=browser --outdir dist/",
-      "build:data-manipulator": "deno bundle src/data-manipulator.html --platform=browser --outdir dist/",
-      "build:404": "deno bundle src/404.html --platform=browser --outdir dist/",
-      "serve": "deno run --allow-net --allow-read jsr:@std/http/file-server",
+    // Just build the project, no watch mode, for production build
+    // - For development: using with `deno task serve`
+    "build": "rm -rf dist/ && deno task build:index && deno task build:data-manipulator && deno task build:404 && deno task postprocessing",
+    "build:index": "deno bundle src/index.html --platform=browser --outdir dist/",
+    "build:data-manipulator": "deno bundle src/data-manipulator.html --platform=browser --outdir dist/",
+    "build:404": "deno bundle src/404.html --platform=browser --outdir dist/",
+    "serve": "deno run --allow-net --allow-read jsr:@std/http/file-server",
 
-      // Copy the assets to the dist directory
-      "copy:favicon": "deno run --allow-read --allow-write scripts/copy_favicon_images.ts",
-      "copy:images": "cp -r src/showcase_images dist",
-      "copy:css": "cp -r src/css dist",
-      "copy:svg2png-wasm": "cp -r src/assets/svg2png-wasm dist",
-      "bulk-copy": "deno task copy:favicon && deno task copy:images && deno task copy:css && deno task copy:svg2png-wasm",
+    // Copy the assets to the dist directory
+    "copy:favicon": "deno run --allow-read --allow-write scripts/copy_favicon_images.ts",
+    "copy:images": "cp -r src/showcase_images dist",
+    "copy:css": "cp -r src/css dist",
+    "copy:svg2png-wasm": "cp -r src/assets/svg2png-wasm dist",
+    "bulk-copy": "deno task copy:favicon && deno task copy:images && deno task copy:css && deno task copy:svg2png-wasm",
 
-      // Work around for svg2png-wasm with `deno bundle` that the file path of svg2png-wasm is incorrect in the bundled JS file
-      "fix-svg2png-wasm-file-path": "deno run --allow-read --allow-write scripts/fix_svg2png_wasm_file_path.ts",
+    // Work around for svg2png-wasm with `deno bundle` that the file path of svg2png-wasm is incorrect in the bundled JS file
+    "fix-svg2png-wasm-file-path": "deno run --allow-read --allow-write scripts/fix_svg2png_wasm_file_path.ts",
 
-      // Necessary post-processing tasks after building the project, both dev and production builds
-      "postprocessing": "deno task bulk-copy && deno task fix-svg2png-wasm-file-path",
+    // Necessary post-processing tasks after building the project, both dev and production builds
+    "postprocessing": "deno task bulk-copy && deno task fix-svg2png-wasm-file-path",
 
-      // Production build tasks, execute in scripts/build.sh only
-      "remove:console": "deno run --allow-read --allow-write scripts/remove_console_logs.ts",
+    // Production build tasks, execute in scripts/build.sh only
+    "remove:console": "deno run --allow-read --allow-write scripts/remove_console_logs.ts",
 
-      // Verification tasks for the stln-codec / TypeScript migration (plan §5 Phase 0).
-      // Scoped to new files only so legacy baselines do not block new work:
-      // src/js/**/*.js has 199 lint / 146 fmt findings, scripts/*.ts has
-      // 2 strict-check errors and fmt deviations, and tests/fixtures/* are
-      // byte-exact copies that must never be reformatted.
-      // Untouched legacy lines are never reformatted (plan §8.5).
-      "test": "deno test --allow-read tests/",
-      "check": "deno check tests/goldens_test.ts src/js/page-specific/index/main.ts src/js/page-specific/data-manipulator/main.ts",
-      "lint": "deno lint tests/goldens_test.ts",
-      "fmt": "deno fmt --check tests/goldens_test.ts tests/fixtures/README.md docs/stln-codec-and-typescript-migration-plan.md"
-   },
-   "compilerOptions": {
-      "strict": true,
-      "noUncheckedIndexedAccess": true,
-      "lib": ["dom", "dom.iterable", "dom.asynciterable", "deno.ns"]
-   },
-   "imports": {
-      // Test-only imports (plan §5 Phase 0; bare specifiers per repo lint rules)
-      "@std/assert":                                                         "jsr:@std/assert@^1.0.1",
+    // Verification tasks for the stln-codec / TypeScript migration (plan §5 Phase 0).
+    // Scoped to new files only so legacy baselines do not block new work:
+    // src/js/**/*.js has 199 lint / 146 fmt findings, scripts/*.ts has
+    // 2 strict-check errors and fmt deviations, and tests/fixtures/* are
+    // byte-exact copies that must never be reformatted.
+    // Untouched legacy lines are never reformatted (plan §8.5).
+    "test": "deno test --allow-read tests/",
+    "check": "deno check tests/goldens_test.ts src/js/page-specific/index/main.ts src/js/page-specific/data-manipulator/main.ts",
+    "lint": "deno lint tests/goldens_test.ts",
+    "fmt": "deno fmt --check tests/goldens_test.ts tests/fixtures/README.md docs/stln-codec-and-typescript-migration-plan.md"
+  },
+  "compilerOptions": {
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "lib": ["dom", "dom.iterable", "dom.asynciterable", "deno.ns"]
+  },
+  "imports": {
+    // Test-only imports (plan §5 Phase 0; bare specifiers per repo lint rules)
+    "@std/assert": "jsr:@std/assert@^1.0.1",
 
-      // Straightlines codec (plan Phase 6): published package.
-      "@tksh/stln-codec":                                                    "jsr:@tksh/stln-codec@^0.1.1",
+    // Straightlines codec (plan Phase 6): published package.
+    "@tksh/stln-codec": "jsr:@tksh/stln-codec@^0.1.1",
 
-      // index.html specific imports
-      "alwan":                                                               "npm:alwan@^2.3.1",
-      "@timepp/murmurhash":                                                  "jsr:@timepp/murmurhash@^0.1.1",
+    // index.html specific imports
+    "alwan": "npm:alwan@^2.3.1",
+    "@timepp/murmurhash": "jsr:@timepp/murmurhash@^0.1.1",
 
-      "init/adjust-layout":                                                  "./src/js/page-specific/index/init/adjust-layout.ts",
-      "init/initial-opacity-steps":                                          "./src/js/page-specific/index/init/initial-opacity-steps.ts",
-      "init/set-defaults":                                                   "./src/js/page-specific/index/init/set-defaults.ts",
-      "init/tab-setup":                                                      "./src/js/page-specific/index/init/tab-setup.ts",
+    "init/adjust-layout": "./src/js/page-specific/index/init/adjust-layout.ts",
+    "init/initial-opacity-steps": "./src/js/page-specific/index/init/initial-opacity-steps.ts",
+    "init/set-defaults": "./src/js/page-specific/index/init/set-defaults.ts",
+    "init/tab-setup": "./src/js/page-specific/index/init/tab-setup.ts",
 
-      "state/apply-url-state":                                               "./src/js/page-specific/index/state/apply-url-state.ts",
-      "state/resvg-option":                                                  "./src/js/page-specific/index/state/resvg-option.ts",
-      "state/url-decode":                                                    "./src/js/page-specific/index/state/url-decode.ts",
-      "state/url-state-manager":                                             "./src/js/page-specific/index/state/url-state-manager.ts",
+    "state/apply-url-state": "./src/js/page-specific/index/state/apply-url-state.ts",
+    "state/resvg-option": "./src/js/page-specific/index/state/resvg-option.ts",
+    "state/url-decode": "./src/js/page-specific/index/state/url-decode.ts",
+    "state/url-state-manager": "./src/js/page-specific/index/state/url-state-manager.ts",
 
-      "modal/modal-toggle":                                                  "./src/js/page-specific/index/modal/modal-toggle.ts",
-      "modal/optimize-svg":                                                  "./src/js/page-specific/index/modal/optimize-svg.ts",
-      "modal/reset-settings":                                                "./src/js/page-specific/index/modal/reset-settings.ts",
-      "svg2png-wasm": "npm:svg2png-wasm@^1.4.1",
+    "modal/modal-toggle": "./src/js/page-specific/index/modal/modal-toggle.ts",
+    "modal/optimize-svg": "./src/js/page-specific/index/modal/optimize-svg.ts",
+    "modal/reset-settings": "./src/js/page-specific/index/modal/reset-settings.ts",
+    "svg2png-wasm": "npm:svg2png-wasm@^1.4.1",
 
-      "tab-lines/apply-group-colors":                                        "./src/js/page-specific/index/tab-lines/apply-group-colors.ts",
-      "tab-lines/color-format":                                              "./src/js/page-specific/index/tab-lines/color-format.ts",
-      "tab-lines/details-toggle-listener":                                   "./src/js/page-specific/index/tab-lines/details-toggle-listener.ts",
-      "tab-lines/decode-colors-as-array":                                    "./src/js/page-specific/index/tab-lines/decode-colors-as-array.ts",
-      "tab-lines/encode-colors-as-hex":                                      "./src/js/page-specific/index/tab-lines/encode-colors-as-hex.ts",
-      "tab-lines/get-colors-from-svg":                                       "./src/js/page-specific/index/tab-lines/get-colors-from-svg.ts",
-      "tab-lines/group-colors-listener":                                     "./src/js/page-specific/index/tab-lines/group-colors-listener.ts",
-      "tab-lines/group-colors-generator":                                    "./src/js/page-specific/index/tab-lines/group-colors-generator.ts",
-      "tab-lines/opacity-steps":                                             "./src/js/page-specific/index/tab-lines/opacity-steps.ts",
-      "tab-lines/path-mode":                                                 "./src/js/page-specific/index/tab-lines/path-mode.ts",
-      "tab-lines/update-svg-color-format":                                   "./src/js/page-specific/index/tab-lines/update-svg-color-format.ts",
+    "tab-lines/apply-group-colors": "./src/js/page-specific/index/tab-lines/apply-group-colors.ts",
+    "tab-lines/color-format": "./src/js/page-specific/index/tab-lines/color-format.ts",
+    "tab-lines/details-toggle-listener": "./src/js/page-specific/index/tab-lines/details-toggle-listener.ts",
+    "tab-lines/decode-colors-as-array": "./src/js/page-specific/index/tab-lines/decode-colors-as-array.ts",
+    "tab-lines/encode-colors-as-hex": "./src/js/page-specific/index/tab-lines/encode-colors-as-hex.ts",
+    "tab-lines/get-colors-from-svg": "./src/js/page-specific/index/tab-lines/get-colors-from-svg.ts",
+    "tab-lines/group-colors-listener": "./src/js/page-specific/index/tab-lines/group-colors-listener.ts",
+    "tab-lines/group-colors-generator": "./src/js/page-specific/index/tab-lines/group-colors-generator.ts",
+    "tab-lines/opacity-steps": "./src/js/page-specific/index/tab-lines/opacity-steps.ts",
+    "tab-lines/path-mode": "./src/js/page-specific/index/tab-lines/path-mode.ts",
+    "tab-lines/update-svg-color-format": "./src/js/page-specific/index/tab-lines/update-svg-color-format.ts",
 
-      "tab-canvas/crop-side-margins":                                        "./src/js/page-specific/index/tab-canvas/crop-side-margins.ts",
-      "tab-canvas/shape-to-trim":                                            "./src/js/page-specific/index/tab-canvas/shape-to-trim.ts",
-      "tab-canvas/shape-to-trim-listener":                                   "./src/js/page-specific/index/tab-canvas/shape-to-trim-listener.ts",
+    "tab-canvas/crop-side-margins": "./src/js/page-specific/index/tab-canvas/crop-side-margins.ts",
+    "tab-canvas/shape-to-trim": "./src/js/page-specific/index/tab-canvas/shape-to-trim.ts",
+    "tab-canvas/shape-to-trim-listener": "./src/js/page-specific/index/tab-canvas/shape-to-trim-listener.ts",
 
-      "tab-render/height-pixel-size":                                        "./src/js/page-specific/index/tab-render/height-pixel-size.ts",
-      "tab-render/shape-rendering":                                          "./src/js/page-specific/index/tab-render/shape-rendering.ts",
-      "tab-render/sync-number-and-range":                                    "./src/js/page-specific/index/tab-render/sync-number-and-range.ts",
+    "tab-render/height-pixel-size": "./src/js/page-specific/index/tab-render/height-pixel-size.ts",
+    "tab-render/shape-rendering": "./src/js/page-specific/index/tab-render/shape-rendering.ts",
+    "tab-render/sync-number-and-range": "./src/js/page-specific/index/tab-render/sync-number-and-range.ts",
 
-      "tab-ui/checkerboard-bg":                                              "./src/js/page-specific/index/tab-ui/checkerboard-bg.ts",
-      "tab-ui/text-wrapping":                                                "./src/js/page-specific/index/tab-ui/text-wrapping.ts",
-      "tab-ui/theme-color":                                                  "./src/js/page-specific/index/tab-ui/theme-color.ts",
-      "tab-ui/view-scaling":                                                 "./src/js/page-specific/index/tab-ui/view-scaling.ts",
+    "tab-ui/checkerboard-bg": "./src/js/page-specific/index/tab-ui/checkerboard-bg.ts",
+    "tab-ui/text-wrapping": "./src/js/page-specific/index/tab-ui/text-wrapping.ts",
+    "tab-ui/theme-color": "./src/js/page-specific/index/tab-ui/theme-color.ts",
+    "tab-ui/view-scaling": "./src/js/page-specific/index/tab-ui/view-scaling.ts",
 
-      "utils/get-number-of-groups":                                          "./src/js/page-specific/index/utils/get-number-of-groups.ts",
-      "utils/number-rounding":                                               "./src/js/page-specific/index/utils/number-rounding.ts",
-      "utils/replace-at-index":                                              "./src/js/page-specific/index/utils/replace-at-index.ts",
+    "utils/get-number-of-groups": "./src/js/page-specific/index/utils/get-number-of-groups.ts",
+    "utils/number-rounding": "./src/js/page-specific/index/utils/number-rounding.ts",
+    "utils/replace-at-index": "./src/js/page-specific/index/utils/replace-at-index.ts",
 
-      "button/copy-to-clipboard":                                            "./src/js/page-specific/index/button/copy-to-clipboard.ts",
-      "button/download-as-file":                                             "./src/js/page-specific/index/button/download-as-file.ts",
-      "button/init-download-buttons":                                        "./src/js/page-specific/index/button/init-download-buttons.ts",
-      "button/update-button-text":                                           "./src/js/page-specific/index/button/update-button-text.ts",
+    "button/copy-to-clipboard": "./src/js/page-specific/index/button/copy-to-clipboard.ts",
+    "button/download-as-file": "./src/js/page-specific/index/button/download-as-file.ts",
+    "button/init-download-buttons": "./src/js/page-specific/index/button/init-download-buttons.ts",
+    "button/update-button-text": "./src/js/page-specific/index/button/update-button-text.ts",
 
-      "dynamic-ogp/constants":                                               "./src/js/page-specific/index/dynamic-ogp/constants.ts",
-      "dynamic-ogp/generate-and-upload":                                     "./src/js/page-specific/index/dynamic-ogp/generate-and-upload.ts",
-      "dynamic-ogp/params-for-uploading":                                    "./src/js/page-specific/index/dynamic-ogp/params-for-uploading.ts",
-      "dynamic-ogp/update-metadata":                                         "./src/js/page-specific/index/dynamic-ogp/update-metadata.ts",
+    "dynamic-ogp/constants": "./src/js/page-specific/index/dynamic-ogp/constants.ts",
+    "dynamic-ogp/generate-and-upload": "./src/js/page-specific/index/dynamic-ogp/generate-and-upload.ts",
+    "dynamic-ogp/params-for-uploading": "./src/js/page-specific/index/dynamic-ogp/params-for-uploading.ts",
+    "dynamic-ogp/update-metadata": "./src/js/page-specific/index/dynamic-ogp/update-metadata.ts",
 
-      "svg-to-png":                                                          "./src/js/page-specific/index/svg-to-png.ts",
+    "svg-to-png": "./src/js/page-specific/index/svg-to-png.ts",
 
-      "serve-svg-image":                                                     "./src/js/page-specific/serve-svg-image/serve-svg-image.ts",
+    "serve-svg-image": "./src/js/page-specific/serve-svg-image/serve-svg-image.ts",
 
-      // data-manipulator.html specific imports
-      // (display helpers for the stln-codec-based encode adapters)
-      "encode/show-best-mix-result":                                         "./src/js/encode-and-decode/encode/show-best-mix-result.ts",
-      "encode/show-result":                                                  "./src/js/encode-and-decode/encode/show-result.ts",
+    // data-manipulator.html specific imports
+    // (display helpers for the stln-codec-based encode adapters)
+    "encode/show-best-mix-result": "./src/js/encode-and-decode/encode/show-best-mix-result.ts",
+    "encode/show-result": "./src/js/encode-and-decode/encode/show-result.ts",
 
-      "io/copy-textarea":                                                    "./src/js/page-specific/data-manipulator/io/copy-textarea.ts",
-      "io/download-url-params":                                              "./src/js/page-specific/data-manipulator/io/download-url-params.ts",
-      "io/select-file":                                                      "./src/js/page-specific/data-manipulator/io/select-file.ts",
-      "data-manipulator/encode-adapters":                                    "./src/js/page-specific/data-manipulator/encode-adapters.ts",
+    "io/copy-textarea": "./src/js/page-specific/data-manipulator/io/copy-textarea.ts",
+    "io/download-url-params": "./src/js/page-specific/data-manipulator/io/download-url-params.ts",
+    "io/select-file": "./src/js/page-specific/data-manipulator/io/select-file.ts",
+    "data-manipulator/encode-adapters": "./src/js/page-specific/data-manipulator/encode-adapters.ts",
 
-      // Common imports for both index.html and data-manipulator.html
-      "@std/collections/zip":                                                "jsr:@std/collections@^1.3.0/zip",
+    // Common imports for both index.html and data-manipulator.html
+    "@std/collections/zip": "jsr:@std/collections@^1.3.0/zip",
+    "@std/encoding/base64": "jsr:@std/encoding@^1.0.11/base64",
+    "@std/encoding/base64url": "jsr:@std/encoding@^1.0.11/base64url",
 
-      "constants":                                                           "./src/js/constants.ts",
+    "constants": "./src/js/constants.ts",
 
-      "common-utils/compression-stream":                                     "./src/js/common-utils/compression-stream.ts",
-      "common-utils/format-as-float":                                        "./src/js/common-utils/format-as-float.ts",
-      "common-utils/get-uint-n":                                             "./src/js/common-utils/get-uint-n.ts",
-      "common-utils/is-non-empty":                                           "./src/js/common-utils/is-non-empty.ts",
-      "common-utils/output-to-textarea":                                     "./src/js/common-utils/output-to-textarea.ts",
-      "common-utils/read-textarea":                                          "./src/js/common-utils/read-textarea.ts",
-      "common-utils/read-url-params":                                        "./src/js/common-utils/read-url-params.ts",
-      "common-utils/select-output-textarea":                                 "./src/js/common-utils/select-output-textarea.ts",
-      "common-utils/show-processing-time":                                   "./src/js/common-utils/show-processing-time.ts",
+    "common-utils/compression-stream": "./src/js/common-utils/compression-stream.ts",
+    "common-utils/format-as-float": "./src/js/common-utils/format-as-float.ts",
+    "common-utils/get-uint-n": "./src/js/common-utils/get-uint-n.ts",
+    "common-utils/is-non-empty": "./src/js/common-utils/is-non-empty.ts",
+    "common-utils/output-to-textarea": "./src/js/common-utils/output-to-textarea.ts",
+    "common-utils/read-textarea": "./src/js/common-utils/read-textarea.ts",
+    "common-utils/read-url-params": "./src/js/common-utils/read-url-params.ts",
+    "common-utils/select-output-textarea": "./src/js/common-utils/select-output-textarea.ts",
+    "common-utils/show-processing-time": "./src/js/common-utils/show-processing-time.ts",
 
-      "color-formatter/format-converter":                                    "./src/js/color-formatter/format-converter.ts",
-      "color-formatter/hex-expand":                                          "./src/js/color-formatter/hex-expand.ts",
-      "color-formatter/hex-shorten":                                         "./src/js/color-formatter/hex-shorten.ts",
-      "color-formatter/normalized-from-hex":                                 "./src/js/color-formatter/normalized-from-hex.ts",
-      "color-formatter/normalized-to-hex":                                   "./src/js/color-formatter/normalized-to-hex.ts",
-      "color-formatter/rgb-to-lch":                                          "./src/js/color-formatter/rgb-to-lch.ts",
-      "color-formatter/try-delete-f":                                        "./src/js/color-formatter/try-delete-f.ts"
-   }
+    "color-formatter/format-converter": "./src/js/color-formatter/format-converter.ts",
+    "color-formatter/hex-expand": "./src/js/color-formatter/hex-expand.ts",
+    "color-formatter/hex-shorten": "./src/js/color-formatter/hex-shorten.ts",
+    "color-formatter/normalized-from-hex": "./src/js/color-formatter/normalized-from-hex.ts",
+    "color-formatter/normalized-to-hex": "./src/js/color-formatter/normalized-to-hex.ts",
+    "color-formatter/rgb-to-lch": "./src/js/color-formatter/rgb-to-lch.ts",
+    "color-formatter/try-delete-f": "./src/js/color-formatter/try-delete-f.ts"
+  }
 }

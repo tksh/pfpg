@@ -1,3 +1,6 @@
+import { decodeBase64, encodeBase64 } from "jsr:@std/encoding/base64";
+import { decodeBase64Url, encodeBase64Url } from "jsr:@std/encoding/base64url";
+
 export {
   compressToBlob,
   compressToEncodedURIComponent,
@@ -73,7 +76,7 @@ async function compressToBase64(
     new CompressionStream(method as CompressionFormat),
   );
   const compressed = new Uint8Array(buffer);
-  return btoa(String.fromCharCode(...compressed));
+  return encodeBase64(compressed);
 }
 
 /**
@@ -88,7 +91,7 @@ async function decompressFromBase64(
   method: string,
 ): Promise<string> {
   const textDecoder = getTextDecoder();
-  const compressedBytes = Uint8Array.from(atob(input), (c) => c.charCodeAt(0));
+  const compressedBytes = decodeBase64(input);
   const buffer = await runThrough(
     compressedBytes,
     new DecompressionStream(method as CompressionFormat),
@@ -107,11 +110,12 @@ async function compressToEncodedURIComponent(
   input: string,
   method: string,
 ): Promise<string> {
-  const withBase64 = await compressToBase64(input, method);
-  return withBase64
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/, "");
+  const buffer = await runThrough(
+    getTextEncoder().encode(input),
+    new CompressionStream(method as CompressionFormat),
+  );
+  const compressed = new Uint8Array(buffer);
+  return encodeBase64Url(compressed);
 }
 
 /**
@@ -125,13 +129,12 @@ async function decompressFromEncodedURIComponent(
   input: string,
   method: string,
 ): Promise<string> {
-  let base64 = input
-    .replace(/-/g, "+")
-    .replace(/_/g, "/");
-  while (base64.length % 4) {
-    base64 += "=";
-  }
-  return await decompressFromBase64(base64, method);
+  const compressedBytes = decodeBase64Url(input);
+  const buffer = await runThrough(
+    compressedBytes,
+    new DecompressionStream(method as CompressionFormat),
+  );
+  return getTextDecoder().decode(buffer);
 }
 
 /*
