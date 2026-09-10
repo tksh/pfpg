@@ -2,9 +2,20 @@
 
 ![logo of pfpg](src/favicon.ico)
 
-Profile picture generator
+Profile picture generator for
+[Straightlines](https://github.com/tksh/Straightlines) artwork.
 
-<https://pfpg.netlify.app>
+<https://pfpg.netlify.app> · <https://pfpg.pages.dev>
+
+## Pages
+
+- `index.html` — the main app: loads artwork data from URL parameters,
+  customizes it through settings tabs, and exports PNG/SVG.
+- `data-manipulator.html` — an authoring tool (deliberately not linked from
+  `index.html`): encodes artwork JSON files (basic data, lines data) into URL
+  parameters via [@tksh/stln-codec](https://jsr.io/@tksh/stln-codec), and
+  decodes URL parameters back to SVG for verification. Available on either
+  deployment above at the `/data-manipulator.html` path.
 
 ## Development
 
@@ -24,6 +35,13 @@ deno task build  # Build index.html and data-manipulator.html
 
 `git push` to run `build.sh` on Netlify, which forces installation of the latest
 Deno.
+
+## Deploy on Cloudflare Pages
+
+The repository is also connected to Cloudflare Pages, which serves the same
+`./dist` output at `https://pfpg.pages.dev`. The project name and output
+directory come from `wrangler.toml`; the remaining build settings live in the
+Cloudflare dashboard.
 
 ## Dependencies
 
