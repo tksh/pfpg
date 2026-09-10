@@ -2,7 +2,6 @@ import {
   convertColorFormatForArray,
   convertToRgbArr,
 } from "color-formatter/format-converter";
-import { convertRgbCommaToSpace } from "color-formatter/rgb-comma-to-space";
 import { rgbToLch } from "color-formatter/rgb-to-lch";
 import { removeOpacity } from "modal/optimize-svg";
 import { getState } from "state/url-state-manager";
@@ -337,7 +336,7 @@ function addEventListenerToAlwanOnChange(
     // e.g: Color changed for group 0: rgb(255, 255, 255) #ffffff
 
     // Refine the color format
-    const rgbAsSpaceDelimited = convertRgbCommaToSpace(ev.rgb); // e.g.: rgb(255, 255, 255) => rgb(255,255,255)
+    const rgbAsSpaceDelimited = ev.rgb.replace(/,\s*/g, " "); // e.g.: rgb(255, 255, 255) => rgb(255 255 255)
     const hexInUpperCase = ev.hex.toUpperCase(); // e.g.: #ffffff => #FFFFFF
 
     // Get color value as current selected color format (RGB(remove ",") or HEX)
