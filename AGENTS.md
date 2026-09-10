@@ -5,28 +5,18 @@ repository. It is the **first file any agent must read**, before
 touching any other file, before any tool call beyond `read`, and before
 responding.
 
-The repository may contain other documents under `./docs/`. They are
-**task-specific** and must be read only when the task explicitly
-references them. Do not pre-emptively read every markdown file in
-`./docs/`.
-
 ---
 
 ## 1. Project at a glance
 
-This is a Deno-first web application with the following moving parts:
+This is a Deno-first web application:
 
 - Runtime: **Deno** (no Node.js in production; npm packages are pulled
   in via `npm:` specifiers or `deno.lock` resolution).
-- Build: **`deno bundle`** for the browser bundle; Deno Deploy for the
-  serverless side.
-- SVG-to-PNG rendering: was `@resvg/resvg-js`, is being migrated to
-  `svg2png-wasm` (see `./docs/resvg-js_to_svg2png-wasm_migration.md`).
-- A planned dynamic OGP image feature, served from Deno Deploy.
-
-The current task is the migration to `svg2png-wasm`. Other tasks will
-follow. This file's guidance applies to all of them; the migration
-guide is specific to the migration.
+- Build: **`deno bundle`** for the browser bundle.
+- Deploy: Netlify and Cloudflare Pages.
+- SVG-to-PNG rendering: `svg2png-wasm`.
+- Straightlines codec: the external `jsr:@tksh/stln-codec` package.
 
 ---
 
@@ -62,14 +52,15 @@ Concretely:
 
 ### Read only when the task references it
 
-- `./docs/resvg-js_to_svg2png-wasm_migration.md` — the migration guide.
-  Read this **only** when the task is the SVG rendering migration.
-  Do not re-read it for unrelated tasks.
-- `./docs/migration-plan.md` (if present) — the plan produced for the
-  current migration. Read this only when executing or reviewing the
-  migration.
-- Other files under `./docs/` — read only when the human explicitly
-  references them, or when the task description names them.
+- Files under `./docs/` are **task-specific**. Read one only when the
+  human explicitly references it, or when the task description names it.
+  Do not pre-emptively read every markdown file in `./docs/`.
+
+### Writing documentation
+
+- During implementation, place documents directly under `./docs/`.
+- Once implementation is complete, move them under `./docs/archive/`
+  to archive them accordingly.
 
 ### Never read
 
@@ -105,8 +96,8 @@ re-debate their choices.
 
 ## 5. Dependency policy
 
-- Deno-native modules from `deno.land/x` and `esm.sh` are preferred.
-- npm packages are allowed when no Deno-native equivalent exists, or
+- Modules from `jsr.io` are preferred.
+- npm packages are allowed when no jsr.io equivalent exists, or
   when the user explicitly requests an npm package.
 - A package may be added during planning only if the plan justifies it
   in the "Dependency changes" section. The human must approve.
@@ -120,12 +111,9 @@ re-debate their choices.
 ## 6. Testing
 
 - The project's test command is `deno task test` (or whatever the
-  current `deno.json` defines — check first; do not assume).
+  current `deno.jsonc` defines — check first; do not assume).
 - Visual / pixel-equality tests, if any, must be reviewed by the
   human before being marked passing. Do not auto-approve pixel diffs.
-- For the SVG migration specifically, the migration guide's §3
-  prescribes an IHDR-only size helper. Do not introduce a PNG decoder
-  dependency for this.
 
 ---
 
@@ -133,7 +121,7 @@ re-debate their choices.
 
 - One logical change per commit.
 - Commit messages reference the section of the plan they implement,
-  e.g. `migration: step 4 — replace call site in src/render/icon.ts`.
+  e.g. `feat: step 2 — add empty-value check to basic-data decode`.
 - Do not force-push, do not rebase other people's work, do not amend
   commits that have been pushed.
 - Do not commit `dist/`, `node_modules/`, `_build/`, or any other
@@ -145,21 +133,12 @@ re-debate their choices.
 
 These are hard limits that apply regardless of what the plan says.
 
-- Do not modify the migration guide
-  (`./docs/resvg-js_to_svg2png-wasm_migration.md`). If the guide is
-  wrong, the human will edit it.
 - Do not modify this file (`AGENTS.md`). If the rules are wrong, the
   human will edit it.
-- Do not add fonts or font-handling code, even if the migration guide
-  mentions them. The project has a hard constraint of no fonts.
+- Do not add fonts or font-handling code. The project has a hard
+  constraint of no fonts.
 - Do not add BBox-related code. The project does not use BBox.
-- Do not add a native `resvg` fallback. The project is committed to
-  Wasm.
-- Do not introduce a PNG decoder package (`pngjs`, `sharp`,
-  `@jsquash/png`, etc.) solely to read image dimensions. Use the
-  IHDR helper from the migration guide.
-- Do not introduce zopfli, oxipng, or any PNG re-compressor. The
-  user has explicitly excluded this.
+- Do not add external libraries without explicit human approval.
 - Do not run `git push` without explicit human approval.
 - Do not merge a PR you opened. The human merges.
 
@@ -184,10 +163,10 @@ narrative.
 
 Stop and ask the human if:
 
-- The migration guide and the codebase contradict each other.
+- The task documents and the codebase contradict each other.
 - A real type error cannot be fixed without a design decision.
 - A test fails and the cause is not obvious from the diff.
-- The plan would require modifying `AGENTS.md` or the migration guide.
+- The plan would require modifying `AGENTS.md` or archived docs.
 - A new dependency seems necessary.
 - The task expands beyond what the user originally asked for.
 
