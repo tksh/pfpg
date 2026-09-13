@@ -35,9 +35,10 @@ async function getHashForOgImageUrl(): Promise<string> {
   return hashHexPadded;
 }
 
-async function getOgImageData(): Promise<
-  { artwork: string[][]; config: Array<SettingValue | null> }
-> {
+function getOgImageData(): {
+  artwork: string[][];
+  config: Array<SettingValue | null>;
+} {
   const params = new URLSearchParams(globalThis.location.search);
   console.log("params for OGP: ", params);
 

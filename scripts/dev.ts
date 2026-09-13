@@ -1,5 +1,5 @@
 // scripts/dev.ts
-import { TextLineStream } from "jsr:@std/streams/text-line-stream";
+import { TextLineStream } from "@std/streams/text-line-stream";
 
 const DIST = "./dist";
 const clients = new Set<ReadableStreamDefaultController>();

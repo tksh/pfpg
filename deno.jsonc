@@ -24,15 +24,11 @@
     // Necessary post-processing tasks after building the project, both dev and production builds
     "postprocessing": "deno task bulk-copy && deno task fix-svg2png-wasm-file-path",
 
-    // Verification tasks for the stln-codec / TypeScript migration (plan §5 Phase 0).
-    // Scoped to new files only so legacy baselines do not block new work:
-    // src/js/**/*.js has 199 lint / 146 fmt findings, scripts/*.ts has
-    // 2 strict-check errors and fmt deviations, and tests/fixtures/* are
-    // byte-exact copies that must never be reformatted.
-    // Untouched legacy lines are never reformatted (plan §8.5).
+    // Verification tasks apply to the whole project.
+    // tests/fixtures/* are byte-exact copies that must never be reformatted.
     "test": "deno test --allow-read tests/",
-    "check": "deno check tests/goldens_test.ts src/js/page-specific/index/main.ts src/js/page-specific/data-manipulator/main.ts",
-    "lint": "deno lint tests/goldens_test.ts",
+    "check": "deno check tests/ src/ scripts/",
+    "lint": "deno lint",
     "fmt": "deno fmt && deno task fmt:fixtures",
     "fmt:fixtures": "deno fmt tests/fixtures/*.json --check --line-width 9999"
   },
@@ -127,6 +123,7 @@
     "@std/collections/zip": "jsr:@std/collections@^1.3.0/zip",
     "@std/encoding/base64": "jsr:@std/encoding@^1.0.11/base64",
     "@std/encoding/base64url": "jsr:@std/encoding@^1.0.11/base64url",
+    "@std/streams/text-line-stream": "jsr:@std/streams@^1.1.2/text-line-stream",
 
     "constants": "./src/js/constants.ts",
 

@@ -4,7 +4,7 @@ export { copyPngToClipboard, copySvgToClipboard };
 
 // Copy PNG blob to clipboard
 
-async function copyPngToClipboard(): Promise<void> {
+function copyPngToClipboard(): void {
   try {
     const imgElem = document.getElementById("img") as HTMLImageElement | null;
     if (imgElem === null) {

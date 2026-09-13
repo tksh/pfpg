@@ -4,6 +4,8 @@ export {
   getState,
   getStateUrl,
   getStateUrlsAsMapExcludesSvgOptimization,
+  getStateUrlsAsRawWithDefaultFill,
+  getStateUrlsInRangeAsMapWithDefaultFill,
   getStateUrlsOfImageCustomization,
   getStateUrlsOfSvgOptimization,
   getStateUrlsOfUiConfiguration,

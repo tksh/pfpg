@@ -1,9 +1,11 @@
-import { decodeBase64, encodeBase64 } from "jsr:@std/encoding/base64";
-import { decodeBase64Url, encodeBase64Url } from "jsr:@std/encoding/base64url";
+import { decodeBase64, encodeBase64 } from "@std/encoding/base64";
+import { decodeBase64Url, encodeBase64Url } from "@std/encoding/base64url";
 
 export {
+  compressToBase64,
   compressToBlob,
   compressToEncodedURIComponent,
+  decompressFromBase64,
   decompressFromEncodedURIComponent,
 };
 

@@ -176,7 +176,7 @@ async function measureSvg2pngTime(
 }
 
 // Update .innerHtml text
-async function updateRenderingStatus(
+function updateRenderingStatus(
   text: string,
   element: HTMLElement | null | undefined,
 ): Promise<void> {

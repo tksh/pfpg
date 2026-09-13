@@ -58,7 +58,7 @@ function createBlobUrlFromPng(pngData: Uint8Array): string {
  * @param {string} url - Image URL to load
  * @returns {Promise<HTMLImageElement>} Loaded image element
  */
-async function loadImage(url: string): Promise<HTMLImageElement> {
+function loadImage(url: string): Promise<HTMLImageElement> {
   const img = new Image();
   return new Promise<HTMLImageElement>((resolve, reject) => {
     img.onload = () => resolve(img);
