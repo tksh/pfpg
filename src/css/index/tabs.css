@@ -1,121 +1,115 @@
- /* {
-    width: calc(100% - 1rem);
+/* {
+   width: calc(100% - 1rem);
 } */
 
 .tab-link-container {
-    width: 100%;
+  width: 100%;
 }
 
 .icon-font {
-    vertical-align: -6px;
+  vertical-align: -6px;
 }
 .icon-tab-link {
-    opacity: 0.7;
-    border: none;
-    outline: none;
-    font-size: 0.9rem;
-    flex: 0 1 auto;
-    /* This makes each tab size to its content */
-    width: auto;
-    /* Ensure width is auto */
-    min-width: 70px;
-    /* Set a minimum width */
-    flex-shrink: 0;
-    /* Prevent tabs from shrinking */
-    box-sizing: initial;
-    /* Ensure box model calculations are correct */
-    margin: 0;
-    /* padding: 0; */
-    padding: .25rem 0;
-    /* Adds some space between tabs */
-    background-color:  var(--color-bg);
+  opacity: 0.7;
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+  flex: 0 1 auto;
+  /* This makes each tab size to its content */
+  width: auto;
+  /* Ensure width is auto */
+  min-width: 70px;
+  /* Set a minimum width */
+  flex-shrink: 0;
+  /* Prevent tabs from shrinking */
+  box-sizing: initial;
+  /* Ensure box model calculations are correct */
+  margin: 0;
+  /* padding: 0; */
+  padding: .25rem 0;
+  /* Adds some space between tabs */
+  background-color: var(--color-bg);
 }
 
-
 .tab-link {
-    border-radius: 0.25rem 0.25rem 0rem 0rem;
-    opacity: 0.7;
-    outline: none;
-    cursor: pointer;
-    transition: 0.2s;
-    font-size: 0.9rem;
-    flex: 0 1 auto;
-    /* This makes each tab size to its content */
-    width: 20%;
-    /* Tab links are 5 (4 + 1 (icon)) */
-    min-width: 150px;
-    /* Set a minimum width */
-    max-width: 200px;
-    /* Set a maximum width */
-    flex-shrink: 0;
-    /* Prevent tabs from shrinking */
-    box-sizing: initial;
-    /* Ensure box model calculations are correct */
-    margin: 0;
-    padding: .5rem 0;
-    /* Adds some space between tabs */
-    background-color: var(--color-button-bg);
+  border-radius: 0.25rem 0.25rem 0rem 0rem;
+  opacity: 0.7;
+  outline: none;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 0.9rem;
+  flex: 0 1 auto;
+  /* This makes each tab size to its content */
+  width: 20%;
+  /* Tab links are 5 (4 + 1 (icon)) */
+  min-width: 150px;
+  /* Set a minimum width */
+  max-width: 200px;
+  /* Set a maximum width */
+  flex-shrink: 0;
+  /* Prevent tabs from shrinking */
+  box-sizing: initial;
+  /* Ensure box model calculations are correct */
+  margin: 0;
+  padding: .5rem 0;
+  /* Adds some space between tabs */
+  background-color: var(--color-button-bg);
 
-    /* Add border to clear the un-selected tabs shape */
-    /* especially for 'white' and 'black' theme */
-    border-bottom: none;
-    border-top: solid;
-    border-left: solid;
-    border-right: solid;
-    border-width: 1px;
-    border-color: var(--color-button-border);
+  /* Add border to clear the un-selected tabs shape */
+  /* especially for 'white' and 'black' theme */
+  border-bottom: none;
+  border-top: solid;
+  border-left: solid;
+  border-right: solid;
+  border-width: 1px;
+  border-color: var(--color-button-border);
 }
 
 /* dark/light テーマの時は 選ばれていないタブと背景の境界に 明度の差があり */
 /* black/white テーマの時よりも  境界が分かりやすいので ボーダーが見えないようにする */
 [data-theme='dark'] .tab,
 [data-theme='light'] .tab {
-    border-color: color-mix(in srgb, var(--color-button-bg) 10%, transparent);
+  border-color: color-mix(in srgb, var(--color-button-bg) 10%, transparent);
 }
-
 
 .tab-content {
-    width: 100%;
-    display: none;
-    border-top: solid;
-    border-left: solid;
-    border-width: 1px;
-    border-color: var(--color-button-border);
+  width: 100%;
+  display: none;
+  border-top: solid;
+  border-left: solid;
+  border-width: 1px;
+  border-color: var(--color-button-border);
 }
-
 
 .tab-link.active {
-    opacity: 1;
-    background-color: var(--color-button-border);
+  opacity: 1;
+  background-color: var(--color-button-border);
 
-    /* アクティブなタブは ボーダーの色をバックグラウンドと同じにして ボーダーが見えないようにする */
-    border-color: color-mix(in srgb, var(--color-button-border) 10%, transparent);
+  /* アクティブなタブは ボーダーの色をバックグラウンドと同じにして ボーダーが見えないようにする */
+  border-color: color-mix(in srgb, var(--color-button-border) 10%, transparent);
 }
-
 
 @media screen and (max-width: 1024px) {
-    .tab-link {
-        min-width: 60px;
-        max-width: 150px;
-    }
-    .icon-tab-link {
-        min-width: 50px;
-    }
+  .tab-link {
+    min-width: 60px;
+    max-width: 150px;
+  }
+  .icon-tab-link {
+    min-width: 50px;
+  }
 }
 
-
 @media screen and (max-width: 512px) {
+  .tabs {
+    text-align: center;
+  }
 
-    .tabs {
-        text-align: center;
-    }
-
-    .tab-link {
-        /* width: 20%; */
-        /* min-width: 50px; */
-        margin: 0;
-    }
-    .icon-tab-link {
-        min-width: 30px;
-    }
+  .tab-link {
+    /* width: 20%; */
+    /* min-width: 50px; */
+    margin: 0;
+  }
+  .icon-tab-link {
+    min-width: 30px;
+  }
 }

@@ -20,7 +20,6 @@ export async function main() {
     const src = `src/${f}`;
     const dest = `dist/${f}`;
 
-
     try {
       // Deno.copyFile is the native equivalent of `cp` for files
       await Deno.copyFile(src, dest);

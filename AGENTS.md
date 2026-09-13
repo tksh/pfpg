@@ -1,9 +1,8 @@
 # AGENTS.md
 
-This file describes how AI coding agents should operate inside this
-repository. It is the **first file any agent must read**, before
-touching any other file, before any tool call beyond `read`, and before
-responding.
+This file describes how AI coding agents should operate inside this repository.
+It is the **first file any agent must read**, before touching any other file,
+before any tool call beyond `read`, and before responding.
 
 ---
 
@@ -11,8 +10,8 @@ responding.
 
 This is a Deno-first web application:
 
-- Runtime: **Deno** (no Node.js in production; npm packages are pulled
-  in via `npm:` specifiers or `deno.lock` resolution).
+- Runtime: **Deno** (no Node.js in production; npm packages are pulled in via
+  `npm:` specifiers or `deno.lock` resolution).
 - Build: **`deno bundle`** for the browser bundle.
 - Deploy: Netlify and Cloudflare Pages.
 - SVG-to-PNG rendering: `svg2png-wasm`.
@@ -22,23 +21,23 @@ This is a Deno-first web application:
 
 ## 2. The agent's role
 
-You are a careful collaborator. You are not an autonomous operator. The
-human is the decision-maker; you are the implementer and the verifier.
+You are a careful collaborator. You are not an autonomous operator. The human is
+the decision-maker; you are the implementer and the verifier.
 
 Concretely:
 
-- **Plan before you act.** For any task that touches more than one
-  file, or that touches a non-trivial function, produce a written plan
-  first. Save it under `./docs/` and wait for the human to approve.
-- **Smallest possible diff.** Do not refactor, rename, or "improve"
-  code that is not directly in scope.
-- **No new dependencies without justification.** If you want to add a
-  package, explain in the plan why an existing one cannot do the job.
-- **No silent scope expansion.** If the plan surfaces a need that was
-  not in the original task, stop and ask.
-- **Verify before reporting done.** Run the project's tests, the
-  formatter, the linter, the type checker. Report exactly which
-  commands you ran and their outcomes.
+- **Plan before you act.** For any task that touches more than one file, or that
+  touches a non-trivial function, produce a written plan first. Save it under
+  `./docs/` and wait for the human to approve.
+- **Smallest possible diff.** Do not refactor, rename, or "improve" code that is
+  not directly in scope.
+- **No new dependencies without justification.** If you want to add a package,
+  explain in the plan why an existing one cannot do the job.
+- **No silent scope expansion.** If the plan surfaces a need that was not in the
+  original task, stop and ask.
+- **Verify before reporting done.** Run the project's tests, the formatter, the
+  linter, the type checker. Report exactly which commands you ran and their
+  outcomes.
 - **When in doubt, ask.** A focused question is cheaper than a wrong
   implementation.
 
@@ -52,80 +51,79 @@ Concretely:
 
 ### Read only when the task references it
 
-- Files under `./docs/` are **task-specific**. Read one only when the
-  human explicitly references it, or when the task description names it.
-  Do not pre-emptively read every markdown file in `./docs/`.
+- Files under `./docs/` are **task-specific**. Read one only when the human
+  explicitly references it, or when the task description names it. Do not
+  pre-emptively read every markdown file in `./docs/`.
 
 ### Writing documentation
 
 - During implementation, place documents directly under `./docs/`.
-- Once implementation is complete, move them under `./docs/archive/`
-  to archive them accordingly.
+- Once implementation is complete, move them under `./docs/archive/` to archive
+  them accordingly.
 
 ### Never read
 
-- Files unrelated to the current task. Do not browse the repository
-  beyond what the plan requires.
-- Build artifacts, `node_modules/`, `_build/`, `dist/`, lock files
-  beyond what is needed.
+- Files unrelated to the current task. Do not browse the repository beyond what
+  the plan requires.
+- Build artifacts, `node_modules/`, `_build/`, `dist/`, lock files beyond what
+  is needed.
 
 ---
 
 ## 4. Coding conventions
 
-The repository's coding conventions are enforced by the formatter and
-the linter. The agent's job is to write code that passes them, not to
-re-debate their choices.
+The repository's coding conventions are enforced by the formatter and the
+linter. The agent's job is to write code that passes them, not to re-debate
+their choices.
 
 - **Deno-style imports.** Use `import { ... } from "..."` with static
-  specifiers. No `require`. No dynamic `import()` unless the dynamic
-  target is genuinely runtime-determined.
-- **TypeScript strict mode.** All code must type-check under the
-  project's `deno check` configuration.
-- **Async functions return `Promise<T>`.** Sync functions return `T`.
-  No `// @ts-ignore`, no `any` to escape type errors. If a type error
-  is real, fix the types.
-- **Formatting is non-negotiable.** Run `deno fmt` before declaring
-  done. If `deno fmt` would change lines you did not edit, leave them
-  alone — only run the formatter on lines you changed.
-- **Comments explain *why*, not *what*.** The code shows *what*.
-- **No new top-level files unless the plan calls for one.** The
-  human-approved plan is the authority for what files exist.
+  specifiers. No `require`. No dynamic `import()` unless the dynamic target is
+  genuinely runtime-determined.
+- **TypeScript strict mode.** All code must type-check under the project's
+  `deno check` configuration.
+- **Async functions return `Promise<T>`.** Sync functions return `T`. No
+  `// @ts-ignore`, no `any` to escape type errors. If a type error is real, fix
+  the types.
+- **Formatting is non-negotiable.** Run `deno fmt` before declaring done. If
+  `deno fmt` would change lines you did not edit, leave them alone — only run
+  the formatter on lines you changed.
+- **Comments explain _why_, not _what_.** The code shows _what_.
+- **No new top-level files unless the plan calls for one.** The human-approved
+  plan is the authority for what files exist.
 
 ---
 
 ## 5. Dependency policy
 
 - Modules from `jsr.io` are preferred.
-- npm packages are allowed when no jsr.io equivalent exists, or
-  when the user explicitly requests an npm package.
-- A package may be added during planning only if the plan justifies it
-  in the "Dependency changes" section. The human must approve.
-- The Wasm binary that ships with `svg2png-wasm`
-  (`svg2png_wasm_bg.wasm`) must be vendored as a static asset, not
-  loaded from a CDN at runtime, unless the human explicitly approves a
-  CDN load.
+- npm packages are allowed when no jsr.io equivalent exists, or when the user
+  explicitly requests an npm package.
+- A package may be added during planning only if the plan justifies it in the
+  "Dependency changes" section. The human must approve.
+- The Wasm binary that ships with `svg2png-wasm` (`svg2png_wasm_bg.wasm`) must
+  be vendored as a static asset, not loaded from a CDN at runtime, unless the
+  human explicitly approves a CDN load.
 
 ---
 
 ## 6. Testing
 
-- The project's test command is `deno task test` (or whatever the
-  current `deno.jsonc` defines — check first; do not assume).
-- Visual / pixel-equality tests, if any, must be reviewed by the
-  human before being marked passing. Do not auto-approve pixel diffs.
+- The project's test command is `deno task test` (or whatever the current
+  `deno.jsonc` defines — check first; do not assume).
+- Visual / pixel-equality tests, if any, must be reviewed by the human before
+  being marked passing. Do not auto-approve pixel diffs.
 
 ---
 
 ## 7. Git hygiene
 
 - One logical change per commit.
-- Commit messages reference the section of the plan they implement,
-  e.g. `feat: step 2 — add empty-value check to basic-data decode`.
-- Do not force-push, do not rebase other people's work, do not amend
-  commits that have been pushed.
-- Do not commit `dist/`, `node_modules/`, `_build/`, or any other
-  generated artifact. Check `.gitignore` first if unsure.
+- Commit messages reference the section of the plan they implement, e.g.
+  `feat: step 2 — add empty-value check to basic-data decode`.
+- Do not force-push, do not rebase other people's work, do not amend commits
+  that have been pushed.
+- Do not commit `dist/`, `node_modules/`, `_build/`, or any other generated
+  artifact. Check `.gitignore` first if unsure.
 
 ---
 
@@ -133,10 +131,10 @@ re-debate their choices.
 
 These are hard limits that apply regardless of what the plan says.
 
-- Do not modify this file (`AGENTS.md`). If the rules are wrong, the
-  human will edit it.
-- Do not add fonts or font-handling code. The project has a hard
-  constraint of no fonts.
+- Do not modify this file (`AGENTS.md`). If the rules are wrong, the human will
+  edit it.
+- Do not add fonts or font-handling code. The project has a hard constraint of
+  no fonts.
 - Do not add BBox-related code. The project does not use BBox.
 - Do not add external libraries without explicit human approval.
 - Do not run `git push` without explicit human approval.
@@ -154,8 +152,7 @@ When you finish a task:
 4. Surface any deviation from the plan, with the reason.
 5. Surface any open question or follow-up the human should know.
 
-Keep the report short. The code is the artifact; the report is the
-narrative.
+Keep the report short. The code is the artifact; the report is the narrative.
 
 ---
 

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>pfpg | data-manipulator</title>
@@ -16,24 +15,26 @@
 
     <!-- JS -->
     <!-- Execute the decoding when page loaded -->
-    <script type="module" src="./js/page-specific/data-manipulator/main.ts"></script>
+    <script type="module"
+      src="./js/page-specific/data-manipulator/main.ts"></script>
+  </head>
 
-</head>
-
-<body>
+  <body>
     <h1>data-manipulator</h1>
     <h2>Encoding: <span class="display-block">JSONs → <span class="no-wrap">query string</span></span></h2>
     <div class="bg-0 pad">
-        <h3>Encode the Basic Data:</h3>
+      <h3>Encode the Basic Data:</h3>
 
-        <h4>1. ⬆ Basic Data:</h4>
-        <label for="select-file-basic-data" class="custom-file-upload-button">Select the JSON file that contains bits (required), version, title, desc, metadata</label>
-        <br />
-        <input type="file" id="select-file-basic-data" />
-        <br />
+      <h4>1. ⬆ Basic Data:</h4>
+      <label for="select-file-basic-data"
+        class="custom-file-upload-button">Select the JSON file that contains bits (required), version, title, desc, metadata</label>
+      <br />
+      <input type="file" id="select-file-basic-data" />
+      <br />
 
-        <!-- Textarea to input the basic data json -->
-        <textarea id="textarea-basic-data-uploaded" class="height-1" placeholder="./json_extracted/%{ARTWORK_ID}_basic_data.json">{
+      <!-- Textarea to input the basic data json -->
+      <textarea id="textarea-basic-data-uploaded" class="height-1"
+        placeholder="./json_extracted/%{ARTWORK_ID}_basic_data.json">{
             "bits": "~5",
             "version": "~0.9.0",
             "title": "~202407_001",
@@ -42,36 +43,35 @@
         }
         </textarea>
 
+      <div id="basic-data-options">
+        <div><input type="checkbox" id="include-bits" checked disabled><label for="include-bits"> bits (required)</label></div>
+        <div><input type="checkbox" id="include-version" checked><label for="include-version"> version</label></div>
+        <div><input type="checkbox" id="include-title" checked><label for="include-title"> title</label></div>
+        <div><input type="checkbox" id="include-desc" checked><label for="include-desc"> desc</label></div>
+        <div><input type="checkbox" id="include-metadata" checked><label for="include-metadata"> metadata</label></div>
+      </div>
 
-        <div id="basic-data-options">
-            <div><input type="checkbox" id="include-bits" checked disabled><label for="include-bits"> bits (required)</label></div>
-            <div><input type="checkbox" id="include-version" checked><label for="include-version"> version</label></div>
-            <div><input type="checkbox" id="include-title" checked><label for="include-title"> title</label></div>
-            <div><input type="checkbox" id="include-desc" checked><label for="include-desc"> desc</label></div>
-            <div><input type="checkbox" id="include-metadata" checked><label for="include-metadata"> metadata</label></div>
-        </div>
+      <button
+        id="encode-basic-data">Encode via <b>encodeBasicData()</b></button>
 
-
-
-
-        <button id="encode-basic-data">Encode via <b>encodeBasicData()</b></button>
-
-        <!-- Textarea to output the basic data encoded -->
-        <textarea id="textarea-basic-data-encoded" class="height-0" placeholder="Basic Data encoded"></textarea>
-        <!-- Show the result -->
-        <p id="encoded-basic-data-size"></p>
-        <p id="encoded-basic-data-time"></p>
-
+      <!-- Textarea to output the basic data encoded -->
+      <textarea id="textarea-basic-data-encoded" class="height-0"
+        placeholder="Basic Data encoded"></textarea>
+      <!-- Show the result -->
+      <p id="encoded-basic-data-size"></p>
+      <p id="encoded-basic-data-time"></p>
     </div>
     <div class="bg-1 pad">
-        <h3>Encode the Lines Data:</h3>
+      <h3>Encode the Lines Data:</h3>
 
-        <h4>2.1 ⬆ Lines Data:</h4>
-        <label for="select-file-lines-data">Select the JSON file that contains the grouped lines data extracted from SVG</label>
-        <br />
-        <input type="file" id="select-file-lines-data" />
-        <br />
-        <textarea id="textarea-lines-data-uploaded" class="height-1" placeholder="./json_extracted/%{ARTWORK_ID}_lines_data.json">[
+      <h4>2.1 ⬆ Lines Data:</h4>
+      <label
+        for="select-file-lines-data">Select the JSON file that contains the grouped lines data extracted from SVG</label>
+      <br />
+      <input type="file" id="select-file-lines-data" />
+      <br />
+      <textarea id="textarea-lines-data-uploaded" class="height-1"
+        placeholder="./json_extracted/%{ARTWORK_ID}_lines_data.json">[
             {
                 "g_id": 0,
                 "g_stroke": {
@@ -126,14 +126,16 @@
             }
         ]
         </textarea>
-        <br />
+      <br />
 
-        <h4>2.2 ⬆ Lines Data Aggregated for Encoding:</h4>
-        <label for="select-file-agg-data-for-comp">Select the JSON file that contains the data aggregated from grouped lines data</label>
-        <br />
-        <input type="file" id="select-file-agg-data-for-comp" />
-        <br />
-        <textarea id="textarea-agg-data-for-comp-uploaded" class="height-1" placeholder="./json_extracted/%{ARTWORK_ID}_liens_data_aggregated_for_encoding.json">[
+      <h4>2.2 ⬆ Lines Data Aggregated for Encoding:</h4>
+      <label
+        for="select-file-agg-data-for-comp">Select the JSON file that contains the data aggregated from grouped lines data</label>
+      <br />
+      <input type="file" id="select-file-agg-data-for-comp" />
+      <br />
+      <textarea id="textarea-agg-data-for-comp-uploaded" class="height-1"
+        placeholder="./json_extracted/%{ARTWORK_ID}_liens_data_aggregated_for_encoding.json">[
             {
                 "g_id": 0,
                 "stroke_width": {
@@ -234,89 +236,96 @@
             }
         ]
         </textarea>
-        <br />
+      <br />
 
-        <!-- Buttons to encode the strokes values -->
-        <h4>Select: Encoding Methods</h4>
+      <!-- Buttons to encode the strokes values -->
+      <h4>Select: Encoding Methods</h4>
 
-        <button id="encode-lines-data-via-bruteforce53">Encode via <b>bruteforce53Enc()</b></button>
-        <p>For: UIntNPortray<br>
+      <button
+        id="encode-lines-data-via-bruteforce53">Encode via <b>bruteforce53Enc()</b></button>
+      <p>For: UIntNPortray<br>
             With: Lines Data Aggregated for Encoding (stroke_width.list_of, stroke_width.counts, d.relative.diff_by_row, d.relative.frequent_diff_values_sorted and d.relative.frequent_diff_counts_sorted)</p>
-        <br />
+      <br />
 
-        <button id="encode-lines-data-via-bigint64">Encode via <b>bigint64Enc()</b></button>
-        <p>For: UIntNPortray<br>
+      <button
+        id="encode-lines-data-via-bigint64">Encode via <b>bigint64Enc()</b></button>
+      <p>For: UIntNPortray<br>
             With: Lines Data (d.absolute) and Lines Data Aggregated for Encoding (stroke_width.list_of and stroke_width.counts)</p>
-        <br />
+      <br />
 
-        <button id="encode-lines-data-via-swap63">Encode via <b>swap63Enc()</b></button>
-        <p>For: <b>Under UInt5Portray</b> (viewbox: 31 x 31)<br>
+      <button
+        id="encode-lines-data-via-swap63">Encode via <b>swap63Enc()</b></button>
+      <p>For: <b>Under UInt5Portray</b> (viewbox: 31 x 31)<br>
             With: Lines Data (d.relative) and Lines Data Aggregated for Encoding (stroke_width.list_of and stroke_width.counts)</p>
-        <br />
+      <br />
 
-        <button id="encode-lines-data-via-four16">Encode via <b>four16Enc()</b></button>
-        <p>For: <b>Under UInt8Portray</b> (viewbox: 255 x 255)<br>
+      <button
+        id="encode-lines-data-via-four16">Encode via <b>four16Enc()</b></button>
+      <p>For: <b>Under UInt8Portray</b> (viewbox: 255 x 255)<br>
             With (UInt8Portray): Lines Data (d.relative) and Lines Data Aggregated for Encoding (stroke_width.list_of and stroke_width.counts)<br>
             With (UInt7Portray): Lines Data Aggregated for Encoding (d.relative.diff_by_row, stroke_width.list_of and stroke_width.counts)</p>
-        <br />
+      <br />
 
+      <h4>Try Above Multiple Encoding Methods and Get Shortest Result By Group</h4>
 
-        <h4>Try Above Multiple Encoding Methods and Get Shortest Result By Group</h4>
+      <p>Choose the encoding methods to apply</p>
+      <div id="best-mix-enc-checkboxes">
+        <div><input type="checkbox" id="apply-bruteforce53" checked><label for="apply-bruteforce53">bruteforce53</label></div>
+        <div><input type="checkbox" id="apply-bigint64" checked><label for="apply-bigint64">bigint64</label></div>
+        <div><input type="checkbox" id="apply-swap63" checked><label for="apply-swap63">swap63 (max grid size: 31, UInt5Portray)</label></div>
+        <div><input type="checkbox" id="apply-four16" checked><label for="apply-four16">four16 (max grid size: 255, UInt8Portray)</label></div>
+      </div>
 
-        <p>Choose the encoding methods to apply</p>
-        <div id="best-mix-enc-checkboxes">
-            <div><input type="checkbox" id="apply-bruteforce53" checked><label for="apply-bruteforce53">bruteforce53</label></div>
-            <div><input type="checkbox" id="apply-bigint64" checked><label for="apply-bigint64">bigint64</label></div>
-            <div><input type="checkbox" id="apply-swap63" checked><label for="apply-swap63">swap63 (max grid size: 31, UInt5Portray)</label></div>
-            <div><input type="checkbox" id="apply-four16" checked><label for="apply-four16">four16 (max grid size: 255, UInt8Portray)</label></div>
-        </div>
+      <br />
+      <button
+        id="encode-lines-data-via-best-mix">Encode via <b>bestMixEnc()</b></button>
+      <br />
 
-        <br />
-        <button id="encode-lines-data-via-best-mix">Encode via <b>bestMixEnc()</b></button>
-        <br />
-
-        <!-- Textarea to output the lines data encoded -->
-        <textarea id="textarea-lines-data-encoded" class="height-1" placeholder="Lines Data encoded"></textarea>
-        <!-- Show the result -->
-        <p id="encoded-lines-data-size"></p>
-        <p id="encoded-lines-data-time"></p>
-
-
+      <!-- Textarea to output the lines data encoded -->
+      <textarea id="textarea-lines-data-encoded" class="height-1"
+        placeholder="Lines Data encoded"></textarea>
+      <!-- Show the result -->
+      <p id="encoded-lines-data-size"></p>
+      <p id="encoded-lines-data-time"></p>
     </div>
     <div class="bg-2 pad">
-        <h3>Merge the encoded Basic Data and Lines Data</h3>
+      <h3>Merge the encoded Basic Data and Lines Data</h3>
 
-        <h4>3. ⬇ Finished query string:</h4>
-        <button id="button-to-merge-as-url-params">Merge via <b>mergeBasicDataAndLinesData()</b></button>
-        <textarea id="textarea-encoded-url-params" class="height-2" placeholder="Finished query string = encoded Basic Data url params + encoded Lines Data url params"></textarea>
+      <h4>3. ⬇ Finished query string:</h4>
+      <button
+        id="button-to-merge-as-url-params">Merge via <b>mergeBasicDataAndLinesData()</b></button>
+      <textarea id="textarea-encoded-url-params" class="height-2"
+        placeholder="Finished query string = encoded Basic Data url params + encoded Lines Data url params"></textarea>
 
-        <!-- Button to copy -->
-        <button class="copy-button" data-textarea-id="textarea-encoded-url-params">Copy to clipboard</button>
-        <!-- Button to download as .txt -->
-        <button id="button-to-download-url-params-as-txt">Download as .txt</button>
+      <!-- Button to copy -->
+      <button class="copy-button"
+        data-textarea-id="textarea-encoded-url-params">Copy to clipboard</button>
+      <!-- Button to download as .txt -->
+      <button
+        id="button-to-download-url-params-as-txt">Download as .txt</button>
 
-        <pre id="encoded-url-params-size"></pre>
-
-
+      <pre id="encoded-url-params-size"></pre>
     </div>
     <br>
     <h2>Decoding: <span class="display-block">query string <span class="no-wrap">→ SVG</span></span></h2>
     <div class="bg-3 pad">
-        <h3>Decode the url params to generate the SVG string</h3>
+      <h3>Decode the url params to generate the SVG string</h3>
 
-        <h4>⬇ Path mode: Relative and Merged</h4>
-        <textarea id="textarea-decoded-svg-as-rel" class="height-2" placeholder="If inputted text at address bar includes the url params like /data-manipulator.html?..., Decoding to SVG is automatically starts when page loaded and result text will export here."></textarea>
-        <button class="copy-button" data-textarea-id="textarea-decoded-svg-as-rel">Copy to clipboard</button>
-        <p id="encoded-size-compare-for-rel"></p>
-        <p id="encoded-lines-data-time-for-rel"></p>
+      <h4>⬇ Path mode: Relative and Merged</h4>
+      <textarea id="textarea-decoded-svg-as-rel" class="height-2"
+        placeholder="If inputted text at address bar includes the url params like /data-manipulator.html?..., Decoding to SVG is automatically starts when page loaded and result text will export here."></textarea>
+      <button class="copy-button"
+        data-textarea-id="textarea-decoded-svg-as-rel">Copy to clipboard</button>
+      <p id="encoded-size-compare-for-rel"></p>
+      <p id="encoded-lines-data-time-for-rel"></p>
 
-        <h4>⬇ Path mode: Absolute and Separated</h4>
-        <textarea id="textarea-decoded-svg-as-abs" class="height-2" placeholder="If inputted text at address bar includes the url params like /data-manipulator.html?..., Decoding to SVG is automatically starts when page loaded and result text will export here."></textarea>
-        <button class="copy-button" data-textarea-id="textarea-decoded-svg-as-abs">Copy to clipboard</button>
-        <p id="encoded-size-compare-for-abs"></p>
-        <p id="encoded-lines-data-time-for-abs"></p>
-
+      <h4>⬇ Path mode: Absolute and Separated</h4>
+      <textarea id="textarea-decoded-svg-as-abs" class="height-2"
+        placeholder="If inputted text at address bar includes the url params like /data-manipulator.html?..., Decoding to SVG is automatically starts when page loaded and result text will export here."></textarea>
+      <button class="copy-button"
+        data-textarea-id="textarea-decoded-svg-as-abs">Copy to clipboard</button>
+      <p id="encoded-size-compare-for-abs"></p>
+      <p id="encoded-lines-data-time-for-abs"></p>
     </div>
-</body>
-
+  </body>
 </html>

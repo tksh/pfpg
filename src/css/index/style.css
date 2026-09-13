@@ -1,660 +1,640 @@
 html {
-    box-sizing: border-box;
-    background-color: var(--color-bg);
+  box-sizing: border-box;
+  background-color: var(--color-bg);
 }
 
 body {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-    min-height: 100dvh;
-    /* ビューポートの高さいっぱいに拡張 */
+  min-height: 100dvh;
+  /* ビューポートの高さいっぱいに拡張 */
 
-    margin-top: .5rem;
+  margin-top: .5rem;
 
-    padding: .5rem 1rem 0 1rem ;
+  padding: .5rem 1rem 0 1rem;
 
-    /* padding: .5rem 2rem 0 1rem ; */
-    /* 左に 1rem 右に 2rem のパディング */
+  /* padding: .5rem 2rem 0 1rem ; */
+  /* 左に 1rem 右に 2rem のパディング */
 
-    scrollbar-gutter: both-edges
-    /* ボックスのインライン方向の先頭/末尾の端のどちらかにガターを表示した場合 反対側の端にもガターを表示 */
+  scrollbar-gutter: both-edges
+    /* ボックスのインライン方向の先頭/末尾の端のどちらかにガターを表示した場合 反対側の端にもガターを表示 */;
 }
 
 *,
 *:before,
 *:after {
-    box-sizing: inherit;
+  box-sizing: inherit;
 }
 
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .display-none {
-    display: none;
+  display: none;
 }
 
-
 .display-flex-wrap {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .setting-container {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .tabs {
-    padding-left: 2rem;
+  padding-left: 2rem;
 }
 
 .tab-content {
-    padding-left: 2rem;
+  padding-left: 2rem;
 }
 
-
 .setting-item {
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
 }
 
 /* .setting-container 要素の直接の子要素で、かつ.opt-cell 要素に対してのみ適用 */
 /* 'UI' tab内の <fieldset>子要素の .opt-cell は対象にならない */
 .setting-container > .setting-item {
-    margin-top: 1rem;
-    min-width: 16rem;
+  margin-top: 1rem;
+  min-width: 16rem;
 }
-fieldset > .setting-item {       /* SVG/PNG|PNG|SVG settings in UI tab */
-    margin-top: 0.75rem;
+fieldset > .setting-item {
+  /* SVG/PNG|PNG|SVG settings in UI tab */
+  margin-top: 0.75rem;
 }
-
 
 legend {
-    padding: 0.25rem 1rem;
+  padding: 0.25rem 1rem;
 }
 
 fieldset {
-    margin: 0 1rem;
-    border-color: var(--color-fieldset-border);
-    border-style: none;
+  margin: 0 1rem;
+  border-color: var(--color-fieldset-border);
+  border-style: none;
 }
-
 
 /* On the "UI" tab, settings for the SVG and PNG output areas are categorized separately. */
 .tab-content fieldset {
-    margin: 1rem 0 0 ;   /* margin-top: 1rem; */
+  margin: 1rem 0 0; /* margin-top: 1rem; */
 }
 .tab-content legend {
-    padding-left: 0;
+  padding-left: 0;
 }
-
-
 
 /* 横幅いっぱいに広げてから 左右に 1rem 余白を取る */
 hr {
-    /* デフォルトの枠線を消す */
-    border: none;
-    /* 上側だけに実線を引く */
-    border-top: solid 1px var(--color-info-bg-and-hr);
-    margin: 0 1rem;
+  /* デフォルトの枠線を消す */
+  border: none;
+  /* 上側だけに実線を引く */
+  border-top: solid 1px var(--color-info-bg-and-hr);
+  margin: 0 1rem;
 }
 
 main {
-    flex-grow: 1;
-    padding-top: 1rem;
-    padding-bottom: 2rem;
+  flex-grow: 1;
+  padding-top: 1rem;
+  padding-bottom: 2rem;
 }
 
 /* IDs */
 /* header */
 #customization {
-    width: calc(100% - 1rem);
+  width: calc(100% - 1rem);
 }
 
 #input-and-output {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 .header-info {
-    width: 100%;
+  width: 100%;
 }
 
 #svg-info,
 #png-info {
-    white-space: normal;
-    word-break: keep-all;
-    /* 幅に余裕があれば1行で表示され、狭くなった場合にのみ <wbr>の位置で改行 */
+  white-space: normal;
+  word-break: keep-all;
+  /* 幅に余裕があれば1行で表示され、狭くなった場合にのみ <wbr>の位置で改行 */
 
-    padding: 0.125rem 1rem; /* 上下0.125rem、左右1remの余白 */
+  padding: 0.125rem 1rem; /* 上下0.125rem、左右1remの余白 */
 
-    font-size: 1rem;
-    text-align: center;
-    color: var(--color-info-text);
-    background-color: var(--color-info-bg-and-hr);
+  font-size: 1rem;
+  text-align: center;
+  color: var(--color-info-text);
+  background-color: var(--color-info-bg-and-hr);
 
-    border-radius: 0.25rem 0.25rem 0rem 0rem;
+  border-radius: 0.25rem 0.25rem 0rem 0rem;
 }
 
 /* 改行したくない範囲を <span>要素で囲み 改行位置を任意の箇所 (<span>要素の切れ目) で行うようにする */
 #png-info span,
 #svg-info span,
 #showcase span {
-    display: inline-block;
-    /* span要素を横並びにする */
+  display: inline-block;
+  /* span要素を横並びにする */
 }
 
 /* For #input and #output */
 .cell {
-    width: 50%;
-    padding: 1rem;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: center;
+  width: 50%;
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
 }
-
 
 /* Boxes for png and svg */
 #textarea-box,
 #img-box {
-    width: 100%;
-    max-width: 100%;
-    aspect-ratio: 1/1;
-    padding: 0;
-    margin: 1.5rem auto;
-    align-items: center;
-    text-align: center;
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 1/1;
+  padding: 0;
+  margin: 1.5rem auto;
+  align-items: center;
+  text-align: center;
 }
 
 /* PNG image */
 div#img-box img {
-    max-height: 100%;
-    width: auto;
+  max-height: 100%;
+  width: auto;
 }
 
 .fit-to-display-area {
-    image-rendering: pixelated;
-    height: 100%;
+  image-rendering: pixelated;
+  height: 100%;
 }
 
 /* .actual-image-size
 
 /* actual-image-size クラスが付いている場合の設定 */
 #img-box img.actual-image-size {
-    height: auto;
-    object-fit: none;
-    max-height: none; /* max-heightの制限を解除 */
+  height: auto;
+  object-fit: none;
+  max-height: none; /* max-heightの制限を解除 */
 }
 
 /* actual-image-size クラスが付いている場合の img-box の設定 */
 #img-box:has(img.actual-image-size) {
-    overflow: auto; /* スクロールバーを追加 */
+  overflow: auto; /* スクロールバーを追加 */
 }
 
 /* actual-image-size クラスが付いていて 'img-box' div要素より レンダリング画像が小さい場合は 表示位置を中央揃えにする */
 /* レンダリング画像が大きい場合にも 適用されたままだと スクロール範囲が不十分となってしまうので JSで動的に add/remove する*/
 #img-box.small-image {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
-
 .checker {
-    background-size: 1rem 1rem;
-    background-image: repeating-conic-gradient(from 0deg,
-            var(--color-checker) 0deg 90deg,
-            var(--color-checker-trans) 90deg 180deg);
-    background-repeat: repeat;
+  background-size: 1rem 1rem;
+  background-image: repeating-conic-gradient(from 0deg,
+    var(--color-checker) 0deg 90deg,
+    var(--color-checker-trans) 90deg 180deg);
+  background-repeat: repeat;
 }
 
 /* SVG text area */
 #svg-string {
-    width: 100%;
-    aspect-ratio: 1/1;
-    resize: none;
+  width: 100%;
+  aspect-ratio: 1/1;
+  resize: none;
 
-    /* font settings */
-    font-size: .9rem;
-    line-height: 1.3;
+  /* font settings */
+  font-size: .9rem;
+  line-height: 1.3;
 }
-
 
 header input,
 header select,
 main textarea {
-    color: var(--color-text-input);
-    background-color: var(--color-input-textarea-select);
-    padding-left: 0.5rem;
-    border: none;
+  color: var(--color-text-input);
+  background-color: var(--color-input-textarea-select);
+  padding-left: 0.5rem;
+  border: none;
 }
 
 textarea#svg-string.no-wrap {
-    white-space: pre;
-    overflow-x: auto;
+  white-space: pre;
+  overflow-x: auto;
 }
-
-
 
 div#group-colors-pickers {
-    padding-left: 1rem;
+  padding-left: 1rem;
 }
 .setting-item-for-group-colors {
-    margin-top: 0.25rem;
-    padding-right: 1rem;
-    margin-top: 0.75rem;
+  margin-top: 0.25rem;
+  padding-right: 1rem;
+  margin-top: 0.75rem;
 
-    font-size: 0; /* 空白によるずれを防ぐ */
-    line-height: 1.25rem; /* stroke <div>, opacities <select> の height と同じ値に設定 */
-    align-items: center; /* height と line-height の併用時は必要 */
+  font-size: 0; /* 空白によるずれを防ぐ */
+  line-height: 1.25rem; /* stroke <div>, opacities <select> の height と同じ値に設定 */
+  align-items: center; /* height と line-height の併用時は必要 */
 }
 
 /* Font for 'gId' */
 span.group-id-text {
-    font-size: 0.9rem;
-    vertical-align: middle; /* 垂直方向の中央揃え */
-    box-sizing: border-box;
-    height: 1.25rem;
-    margin-right: 0.5rem
+  font-size: 0.9rem;
+  vertical-align: middle; /* 垂直方向の中央揃え */
+  box-sizing: border-box;
+  height: 1.25rem;
+  margin-right: 0.5rem;
 }
 
 /* Font for 'stroke', 'opacity', 'stroke-opacity' selector */
 div.stroke-thumbnail,
 select.opacities-selector {
-    font-family: sans-serif;
-    font-size: 0.9rem;
-    vertical-align: middle; /* 垂直方向の中央揃え */
-    box-sizing: border-box;
+  font-family: sans-serif;
+  font-size: 0.9rem;
+  vertical-align: middle; /* 垂直方向の中央揃え */
+  box-sizing: border-box;
 }
 
 /* Selected 'stroke' color indicator */
 div.stroke-thumbnail {
-    display: inline-block;
-    height: 1.25rem;
-    padding-left: 0.5rem;
-    margin-right: 4px;
+  display: inline-block;
+  height: 1.25rem;
+  padding-left: 0.5rem;
+  margin-right: 4px;
 }
 
 /* 'opacity', 'stroke-opacity' */
 select.opacities-selector {
-    margin-right: 4px;
-    width: 3.5rem;
-    height: 1.25rem;
+  margin-right: 4px;
+  width: 3.5rem;
+  height: 1.25rem;
 }
-
 
 /* setting-item クラスを持つ <div> 要素内にある <input> 要素のみに スタイルを適用 */
 /* グローバルに input に対して適用すると Alwanが生成するカラーピッカーに 影響を与えてしまう */
 div.setting-item input {
-    border: 1px solid var(--color-picker-border);
+  border: 1px solid var(--color-picker-border);
 }
 
 /* 'stroke' */
 div.stroke-thumbnail.stroke-rgb {
-    width: 8.25rem;
+  width: 8.25rem;
 }
 div.stroke-thumbnail.stroke-hex {
-    width: 5.5rem;
+  width: 5.5rem;
 }
-
 
 /* Height pixel size */
 div.setting-item input#png-size-number {
-    width: 4rem;
+  width: 4rem;
 }
 
 div.setting-item input[type="range"] {
-    /* スライダーを親要素のフォントサイズの0.3倍下にずらす */
-    vertical-align: -0.3rem;
+  /* スライダーを親要素のフォントサイズの0.3倍下にずらす */
+  vertical-align: -0.3rem;
 }
 
 button#png-size-dec,
 button#png-size-inc {
-    width: 1.25rem
+  width: 1.25rem;
 }
 
 button#png-size-dec {
-    margin-left: 2rem;
-    margin-right: .5rem; /* スライダーとボタンの間の余白 */
+  margin-left: 2rem;
+  margin-right: .5rem; /* スライダーとボタンの間の余白 */
 }
 button#png-size-inc {
-    margin-left: .5rem;  /* スライダーとボタンの間の余白 */
+  margin-left: .5rem; /* スライダーとボタンの間の余白 */
 }
-
 
 /* テキストカラー */
 /* <label> など Alwan が生成するカラーピッカー内の要素に影響を与えてないようにするため セクション を限定する */
 header,
 main,
 footer {
-    span.group-id-text,
-    #customization,
-    figcaption,
-    summary,
-    legend,
-    label,
-    button,
-    dt,
-    dd,
-    p {
-        color: var(--color-text);
-    }
+  span.group-id-text,
+  #customization,
+  figcaption,
+  summary,
+  legend,
+  label,
+  button,
+  dt,
+  dd,
+  p {
+    color: var(--color-text);
+  }
 }
 
 footer > details {
-    padding: 1rem;
+  padding: 1rem;
 }
 
 div#footer-info > details {
-    padding: 1.5rem 1rem 0.5rem 2rem;
+  padding: 1.5rem 1rem 0.5rem 2rem;
 }
 
 dl.top-level,
 section.showcase-container {
-    padding-left: 3rem;
+  padding-left: 3rem;
 }
 
 dd {
-    padding: 0.25rem 0.5rem 0.25rem 1rem;
+  padding: 0.25rem 0.5rem 0.25rem 1rem;
 }
 
 dt {
-    padding: 1.5rem 0.5rem 0.25rem 0;
+  padding: 1.5rem 0.5rem 0.25rem 0;
 }
 div.reference-item,
 div.artwork-item {
-    padding-left: 1rem;
-    padding-top: 1rem;
+  padding-left: 1rem;
+  padding-top: 1rem;
 }
 
 ol,
 ul,
 div.reference-container,
 div.artworks-container {
-    padding: 0 1rem;
+  padding: 0 1rem;
 }
 
 .padding-top-1 {
-    padding-top: 1.5rem;
+  padding-top: 1.5rem;
 }
 
 .padding-top-2 {
-    padding-top: 3rem;
+  padding-top: 3rem;
 }
 
 .padding-bottom-1 {
-    padding-bottom: 2rem;
+  padding-bottom: 2rem;
 }
 
 .padding-left-1 {
-    padding-left: 1rem;
+  padding-left: 1rem;
 }
 
 main button {
-    background-color: var(--color-button-bg);
-    border-color: var(--color-button-border);
-    font-size: .9rem;
+  background-color: var(--color-button-bg);
+  border-color: var(--color-button-border);
+  font-size: .9rem;
 }
 
 button#png-action-button,
 button#svg-action-button {
-    max-width: 100%;
-    --button-height: 3.5rem; /* ボタン全体の高さ */
-    /* height: var(--button-height); */
-    line-height: 1.4;
+  max-width: 100%;
+  --button-height: 3.5rem; /* ボタン全体の高さ */
+  /* height: var(--button-height); */
+  line-height: 1.4;
 
-    padding: 0.5rem 1rem; /* 上下0.5rem、左右1remの余白 */
+  padding: 0.5rem 1rem; /* 上下0.5rem、左右1remの余白 */
 
-    white-space: normal;
-    /* 基本的に改行しない */
-    /* 幅に余裕があれば1行で表示され、狭くなった場合にのみ <wbr>の位置で改行 */
+  white-space: normal;
+  /* 基本的に改行しない */
+  /* 幅に余裕があれば1行で表示され、狭くなった場合にのみ <wbr>の位置で改行 */
 
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }
 
 .download-button {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 /* Footer */
 footer#footer-info {
-    font-size: 0.9rem;
-    padding: 2rem;
-    line-height: 1.6
+  font-size: 0.9rem;
+  padding: 2rem;
+  line-height: 1.6;
 }
 
 .font-size-small {
-    font-size: 0.85rem;
+  font-size: 0.85rem;
 }
 .font-color-lighter {
-    opacity: 80%;
+  opacity: 80%;
 }
 
 .text-align-center {
-    text-align: center;
+  text-align: center;
 }
 .align-items-center {
-    align-items: center;
+  align-items: center;
 }
 
 footer a {
-    color: var(--color-text);
-    text-decoration: underline;
+  color: var(--color-text);
+  text-decoration: underline;
 }
 
 /* Display number and range inputs inline for the 'Height pixel size' setting in the 'Render' tab */
 .flex-direction-column {
-    display: flex;
-    /* Use flexbox to align elements horizontally */
+  display: flex;
+  /* Use flexbox to align elements horizontally */
 }
-
-
 
 /* Showcase section */
 
 .artworks-container {
-    display: flex;
-    gap: 1rem;  /* Space between horizontal images */
-    justify-content: flex-start;
-    flex-wrap: wrap;
+  display: flex;
+  gap: 1rem; /* Space between horizontal images */
+  justify-content: flex-start;
+  flex-wrap: wrap;
 }
 
 .artwork-item {
-    flex: 0 1 auto;  /* Don't grow, can shrink, auto base size */
-    width: fit-content;
+  flex: 0 1 auto; /* Don't grow, can shrink, auto base size */
+  width: fit-content;
 }
 
 details#showcase figure {
-    padding-left: 1rem;
-    padding-bottom: 3rem;
+  padding-left: 1rem;
+  padding-bottom: 3rem;
 }
 
 /* Image title caption */
 .bold-italic {
-    font-weight: bold;
-    font-style: italic;
+  font-weight: bold;
+  font-style: italic;
 }
 
 /* Fit image size to mobile display width */
 #showcase img {
-    width: 100%;
-    height: auto;
-    max-width: 256px;
+  width: 100%;
+  height: auto;
+  max-width: 256px;
 }
 
-
 @media screen and (max-width: 1024px) {
-    footer#footer-info {
-        padding: 1rem;
-        /* default: 2rem; / max-width: 1024px => 1rem / max-width: 512px => 0.5rem */
-    }
+  footer#footer-info {
+    padding: 1rem;
+    /* default: 2rem; / max-width: 1024px => 1rem / max-width: 512px => 0.5rem */
+  }
 }
 
 @media screen and (max-width: 512px) {
+  body {
+    padding: 0;
+    /* margin-top: .25rem; */
+  }
+  footer#footer-info {
+    padding: 0.5rem;
+    /* default: 2rem; / max-width: 512px => 1rem / max-width: 512px => 0.5rem */
+  }
+  footer > details {
+    padding: 0.5rem;
+  }
 
-    body {
-        padding: 0;
-        /* margin-top: .25rem; */
+  #textarea-box,
+  #img-box {
+    height: auto;
+    margin: 1rem auto; /* Decrease the top and bottom spaces in mobile view */
+    /* default: 1.5rem; */
+  }
 
-    }
-    footer#footer-info {
-        padding: 0.5rem;
-        /* default: 2rem; / max-width: 512px => 1rem / max-width: 512px => 0.5rem */
-    }
-    footer > details {
-        padding: 0.5rem;
-    }
+  #input-and-output {
+    flex-direction: column;
+  }
 
-    #textarea-box,
-    #img-box {
-        height: auto;
-        margin: 1rem auto;  /* Decrease the top and bottom spaces in mobile view */
-        /* default: 1.5rem; */
-    }
+  .setting-container {
+    flex-direction: column;
+  }
 
-    #input-and-output {
-        flex-direction: column;
-    }
+  .tabs {
+    padding-left: 0;
+  }
 
-    .setting-container {
-        flex-direction: column;
-    }
+  .tab-content {
+    padding-left: 1rem;
+  }
 
-    .tabs {
-        padding-left: 0;
-    }
+  .cell {
+    width: 100%;
+  }
 
-    .tab-content {
-        padding-left: 1rem;
-    }
+  #png-info,
+  #svg-info {
+    font-size: 0.9rem;
+  }
 
-    .cell {
-        width: 100%;
-    }
+  .setting-item-for-group-colors {
+    padding-left: 0;
+  }
 
-    #png-info,
-    #svg-info {
-        font-size: 0.9rem;
-    }
+  /* .setting-container 要素の直接の子要素で、かつ.opt-cell 要素に対してのみ適用 */
+  /* 'UI' tab内の <fieldset>子要素の .opt-cell は対象にならない */
+  .setting-container > .setting-item {
+    margin-top: 0.5rem;
+    padding-left: 0;
+  }
+  fieldset > .setting-item {
+    /* SVG/PNG|PNG|SVG settings in UI tab */
+    margin-top: 0.25rem;
+  }
+  .tab-content fieldset {
+    margin: 0.75rem 0 0; /* margin-top: 0.75rem; */
+  }
 
-    .setting-item-for-group-colors {
-        padding-left: 0
-    }
+  /* >>> group-colors inputs */
 
-    /* .setting-container 要素の直接の子要素で、かつ.opt-cell 要素に対してのみ適用 */
-    /* 'UI' tab内の <fieldset>子要素の .opt-cell は対象にならない */
-    .setting-container > .setting-item {
-        margin-top: 0.5rem;
-        padding-left: 0;
-    }
-    fieldset > .setting-item {       /* SVG/PNG|PNG|SVG settings in UI tab */
-        margin-top: 0.25rem;
-    }
-    .tab-content fieldset {
-        margin: 0.75rem 0 0 ;   /* margin-top: 0.75rem; */
-    }
+  /* 'opacity', 'stroke-opacity' */
+  select.opacities-selector {
+    margin-right: 8px; /* default + 4px */
+  }
+  /* 'stroke' */
+  div.stroke-thumbnail {
+    margin-right: 8px; /* default + 4px */
+  }
 
-    /* >>> group-colors inputs */
+  /* <<< group-colors inputs */
 
-    /* 'opacity', 'stroke-opacity' */
-    select.opacities-selector {
-        margin-right: 8px;  /* default + 4px */
-    }
-    /* 'stroke' */
-    div.stroke-thumbnail {
-        margin-right: 8px;  /* default + 4px */
-    }
+  /* >>> 'Height pixel size' - buttons and input[range] */
 
-    /* <<< group-colors inputs */
+  .flex-direction-column {
+    flex-direction: column; /* 子要素を縦に並べる */
+  }
+  .buttons-and-range {
+    width: 100%;
+    padding-top: .75rem;
+  }
+  #png-size-range {
+    min-width: calc(100% - 7rem);
+  }
+  .flex-direction-column .display-inline-block {
+    display: inline-block;
+  }
 
+  .flex-direction-column button#png-size-dec {
+    /* 左側のボタン '-' */
+    margin-right: 1rem;
+    /* 右側に余白を追加 - タッチ操作しやすいように モバイルの時に より大きく余白を作る*/
 
-    /* >>> 'Height pixel size' - buttons and input[range] */
+    margin-left: 1rem;
+    /* モバイルでは改行がされ 隣に数値インプットボックスが無いので 余白をPCより狭くする */
+  }
+  .flex-direction-column button#png-size-inc {
+    /* 右側のボタン '+' */
+    margin-left: 1rem;
+    /* 左側に余白を追加 - タッチ操作しやすいように モバイルの時に より大きく余白を作る*/
+  }
 
-    .flex-direction-column {
-        flex-direction: column; /* 子要素を縦に並べる */
-    }
-    .buttons-and-range {
-        width: 100%;
-        padding-top: .75rem;
-    }
-    #png-size-range {
-        min-width: calc(100% - 7rem);
-    }
-    .flex-direction-column .display-inline-block {
-        display: inline-block;
-    }
+  /* <<< 'Height pixel size' - buttons and input[range] */
 
-    .flex-direction-column button#png-size-dec { /* 左側のボタン '-' */
-        margin-right: 1rem;
-        /* 右側に余白を追加 - タッチ操作しやすいように モバイルの時に より大きく余白を作る*/
+  legend {
+    padding-left: 0.5rem;
+  }
+  dl.top-level,
+  section.showcase-container {
+    padding-left: 1.5rem;
+  }
 
-        margin-left: 1rem;
-        /* モバイルでは改行がされ 隣に数値インプットボックスが無いので 余白をPCより狭くする */
-    }
-    .flex-direction-column button#png-size-inc { /* 右側のボタン '+' */
-        margin-left: 1rem;
-        /* 左側に余白を追加 - タッチ操作しやすいように モバイルの時に より大きく余白を作る*/
-    }
+  div.reference-container,
+  div.artworks-container {
+    padding: 0 0.5rem;
+  }
 
-    /* <<< 'Height pixel size' - buttons and input[range] */
+  div.reference-item,
+  div.artwork-item {
+    padding-left: 0rem;
+    padding-top: 1rem;
+  }
 
+  .artworks-container {
+    flex-direction: column; /* Stack vertically */
+    gap: 0; /* Vertical space between stacked images are defined by 'padding' property */
+  }
 
-
-    legend {
-        padding-left: 0.5rem;
-    }
-    dl.top-level,
-    section.showcase-container {
-        padding-left: 1.5rem;
-    }
-
-    div.reference-container,
-    div.artworks-container {
-        padding: 0 0.5rem;
-    }
-
-    div.reference-item,
-    div.artwork-item {
-        padding-left: 0rem;
-        padding-top: 1rem;
-    }
-
-    .artworks-container {
-        flex-direction: column;  /* Stack vertically */
-        gap: 0;  /* Vertical space between stacked images are defined by 'padding' property */
-    }
-
-    details#showcase figure {
-        padding-left: 0.5rem;
-        padding-bottom: 1.5rem;
-    }
+  details#showcase figure {
+    padding-left: 0.5rem;
+    padding-bottom: 1.5rem;
+  }
 }
-
 
 /* For more narrow wide mobile phones, Slim the inputs to make these inline. */
 @media screen and (max-width: 375px) {
+  /* 'opacity', 'stroke-opacity' */
+  select.opacities-selector {
+    width: 3.25rem; /* default - 0.25rem */
+  }
 
-    /* 'opacity', 'stroke-opacity' */
-    select.opacities-selector {
-        width: 3.25rem;        /* default - 0.25rem */
-    }
-
-    /* 'stroke' */
-    div.stroke-thumbnail.stroke-rgb {
-        width: 8rem;           /* default - 0.25rem */
-    }
-    div.stroke-thumbnail.stroke-hex {
-        width: 5.25rem;        /* default - 0.25rem */
-    }
+  /* 'stroke' */
+  div.stroke-thumbnail.stroke-rgb {
+    width: 8rem; /* default - 0.25rem */
+  }
+  div.stroke-thumbnail.stroke-hex {
+    width: 5.25rem; /* default - 0.25rem */
+  }
 }
