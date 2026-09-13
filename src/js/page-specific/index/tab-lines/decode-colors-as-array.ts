@@ -57,7 +57,7 @@ function getGroupOpacitiesAsMap(
       `${index}`, // group ID: uint as string: '0', '1', ...
       {
         groupColors: {
-          gOpacity: opacities[0], //        opacity value: float[0.0-1.0] as string
+          gOpacity: opacities[0], // opacity value: float[0.0-1.0] as string
           gStrokeOpacity: opacities[1], // stroke-opacity value: float[0.0-1.0] as string
         },
       },

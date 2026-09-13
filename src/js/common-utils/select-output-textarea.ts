@@ -19,9 +19,9 @@ function selectOutputTextareaId(
   isDataManipulatorPage: boolean,
 ): string | undefined {
   if (isDataManipulatorPage === true) { // on: data-manipulator.html
-    if (isRelative === true) { //      path style: relative-and-merged
+    if (isRelative === true) { // path style: relative-and-merged
       return "textarea-decoded-svg-as-rel";
-    } else if (isRelative === false) { //      path style: absolute-and-separated
+    } else if (isRelative === false) { // path style: absolute-and-separated
       return "textarea-decoded-svg-as-abs";
     }
   } else if (isDataManipulatorPage === false) { // on: index.html

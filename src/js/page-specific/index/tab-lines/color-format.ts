@@ -7,7 +7,7 @@ import { addEventListenerForGroupColorsInputs } from "tab-lines/group-colors-lis
 import { getNumberOfGroups } from "utils/get-number-of-groups";
 
 export function initColorFormatSelect(): void {
-  //  Event listeners for 'Color format' <select> changes
+  // Event listeners for 'Color format' <select> changes
   const colorFormatSelect = document.getElementById("color-format");
   if (colorFormatSelect === null) {
     throw new Error("initColorFormatSelect: element not found: #color-format");
