@@ -24,9 +24,6 @@
     // Necessary post-processing tasks after building the project, both dev and production builds
     "postprocessing": "deno task bulk-copy && deno task fix-svg2png-wasm-file-path",
 
-    // Production build tasks, execute in scripts/build.sh only
-    "remove:console": "deno run --allow-read --allow-write scripts/remove_console_logs.ts",
-
     // Verification tasks for the stln-codec / TypeScript migration (plan §5 Phase 0).
     // Scoped to new files only so legacy baselines do not block new work:
     // src/js/**/*.js has 199 lint / 146 fmt findings, scripts/*.ts has
@@ -36,7 +33,11 @@
     "test": "deno test --allow-read tests/",
     "check": "deno check tests/goldens_test.ts src/js/page-specific/index/main.ts src/js/page-specific/data-manipulator/main.ts",
     "lint": "deno lint tests/goldens_test.ts",
-    "fmt": "deno fmt --check tests/goldens_test.ts tests/fixtures/README.md docs/stln-codec-and-typescript-migration-plan.md"
+    "fmt": "deno fmt && deno task fmt:fixtures",
+    "fmt:fixtures": "deno fmt tests/fixtures/*.json --check --line-width 9999"
+  },
+  "fmt": {
+    "exclude": ["tests/fixtures/*.json"]
   },
   "compilerOptions": {
     "strict": true,
