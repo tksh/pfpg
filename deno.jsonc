@@ -53,7 +53,6 @@
 
     "init/adjust-layout": "./src/js/page-specific/index/init/adjust-layout.ts",
     "init/initial-opacity-steps": "./src/js/page-specific/index/init/initial-opacity-steps.ts",
-    "init/set-defaults": "./src/js/page-specific/index/init/set-defaults.ts",
     "init/tab-setup": "./src/js/page-specific/index/init/tab-setup.ts",
 
     "state/apply-url-state": "./src/js/page-specific/index/state/apply-url-state.ts",
@@ -107,8 +106,6 @@
 
     "svg-to-png": "./src/js/page-specific/index/svg-to-png.ts",
 
-    "serve-svg-image": "./src/js/page-specific/serve-svg-image/serve-svg-image.ts",
-
     // data-manipulator.html specific imports
     // (display helpers for the stln-codec-based encode adapters)
     "encode/show-best-mix-result": "./src/js/encode-and-decode/encode/show-best-mix-result.ts",
@@ -129,7 +126,6 @@
 
     "common-utils/compression-stream": "./src/js/common-utils/compression-stream.ts",
     "common-utils/format-as-float": "./src/js/common-utils/format-as-float.ts",
-    "common-utils/get-uint-n": "./src/js/common-utils/get-uint-n.ts",
     "common-utils/is-non-empty": "./src/js/common-utils/is-non-empty.ts",
     "common-utils/output-to-textarea": "./src/js/common-utils/output-to-textarea.ts",
     "common-utils/read-textarea": "./src/js/common-utils/read-textarea.ts",
