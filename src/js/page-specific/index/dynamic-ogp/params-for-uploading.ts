@@ -54,7 +54,13 @@ function getOgImageData(): {
   }
 
   const config: Array<SettingValue | null> = [];
-  for (const [key, defaultValue] of VISUAL_CONFIG_DEFAULTS) {
+  // Exclude opacitySteps from the hash input: it describes the opacity selector's
+  // step granularity rather than a rendered value, and it defaults to undefined
+  // at initial load, so the same appearance could hash differently once detected.
+  const visualConfigForHash = new Map(
+    [...VISUAL_CONFIG_DEFAULTS].filter(([key]) => key !== "opacitySteps"),
+  );
+  for (const [key, defaultValue] of visualConfigForHash) {
     config.push(params.has(key) ? params.get(key) : defaultValue);
   }
 
