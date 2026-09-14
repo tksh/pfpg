@@ -128,7 +128,7 @@ export const SVG_OPTIMIZE_DEFAULTS = new Map<string, SettingValue>([
  */
 export const VISUAL_CONFIG_DEFAULTS = new Map<string, SettingValue>([
   //  ['Attribute name',   default value],         // Appeared at: | Type:  | Possible values:
-  ["groupColors", undefined], //    Lines tab | String | 3|6|10 digits each group-colors hexes has joined with '_', e.g. 12345699FF_000123_FFF
+  ["groupColors", undefined], //    Lines tab | String | 1|3|5|6|10 digits each group-colors hexes has joined with '_', e.g. 12345699FF_000123_FFF_A
   ["pathMode", "absoluteSeparated"], //    Lines tab | String | 'absoluteSeparated', 'relativeMerged'
   ["opacitySteps", undefined], //    Lines tab | Float  | 0.2, 0.1, 0.04 (detected the nearest from initial decoded SVG)
   ["colorFormat", "rgb"], //    Lines tab | String | 'hex', 'rgb'

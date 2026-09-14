@@ -19,6 +19,7 @@
     "jsr:@std/streams@*": "1.1.2",
     "jsr:@std/streams@^1.1.2": "1.1.2",
     "jsr:@timepp/murmurhash@~0.1.1": "0.1.1",
+    "jsr:@tksh/group-colors-param-codec@~0.1.1": "0.1.1",
     "jsr:@tksh/stln-codec@~0.1.1": "0.1.1",
     "jsr:@tksh/url-compressor@^1.1.1": "1.1.1",
     "npm:alwan@^2.3.1": "2.3.1",
@@ -85,6 +86,9 @@
     "@timepp/murmurhash@0.1.1": {
       "integrity": "093a0014bb02465561f127845fc878010b095902ffc67a5d869d900ae01fccfc"
     },
+    "@tksh/group-colors-param-codec@0.1.1": {
+      "integrity": "5b59bddb81bf91832ca8b56c506a4ab4507425baf52b33a665ffa0c23f4ccdf3"
+    },
     "@tksh/stln-codec@0.1.1": {
       "integrity": "d47fd4eeeb637757c588a80396b27db1048fb633c3ddfc6476123ba431afb67e",
       "dependencies": [
@@ -112,6 +116,7 @@
       "jsr:@std/encoding@^1.0.11",
       "jsr:@std/streams@^1.1.2",
       "jsr:@timepp/murmurhash@~0.1.1",
+      "jsr:@tksh/group-colors-param-codec@~0.1.1",
       "jsr:@tksh/stln-codec@~0.1.1",
       "npm:alwan@^2.3.1",
       "npm:svg2png-wasm@^1.4.1"

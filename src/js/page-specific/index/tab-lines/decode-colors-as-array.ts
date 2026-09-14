@@ -1,5 +1,7 @@
-import { hexExpandToTen } from "color-formatter/hex-expand";
-import { hexShortenAsHalf } from "color-formatter/hex-shorten";
+import {
+  expandGroupColor,
+  shortenHexAsHalf,
+} from "@tksh/group-colors-param-codec";
 import { normalizedFromHex } from "color-formatter/normalized-from-hex";
 import { convertColorFormat } from "color-formatter/format-converter";
 
@@ -16,11 +18,8 @@ function decodeGroupColorsAsArray(
   const hexByGroups = joinedHex.split("_");
   return hexByGroups.map((hex): [undefined, string, number, number] => {
     // Decode
-    const tenDigitsHex = hexExpandToTen(hex);
-    if (tenDigitsHex instanceof Error) {
-      throw tenDigitsHex;
-    }
-    const strokeAsHex = "#" + hexShortenAsHalf(tenDigitsHex.slice(0, 6)); // 6 digits hex => Reduce to 3 digits if could
+    const tenDigitsHex = expandGroupColor(hex);
+    const strokeAsHex = "#" + shortenHexAsHalf(tenDigitsHex.slice(0, 6)); // 6 digits hex => Reduce to 3 digits if could
     const stroke = convertColorFormat(strokeAsHex, colorFormat); // Convert to RGB if it's currently selected, otherwise return as-is
     const opacity = normalizedFromHex(tenDigitsHex.slice(6, 8)); // 2 digits hex => Float [0-1]
     const strokeOpacity = normalizedFromHex(tenDigitsHex.slice(8)); // 2 digits hex => Float [0-1]

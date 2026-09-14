@@ -47,6 +47,9 @@
     // Straightlines codec: published package.
     "@tksh/stln-codec": "jsr:@tksh/stln-codec@^0.1.1",
 
+    // Shared group-color parameter codec (URL/state shortening + expansion).
+    "@tksh/group-colors-param-codec": "jsr:@tksh/group-colors-param-codec@^0.1.1",
+
     // index.html specific imports
     "alwan": "npm:alwan@^2.3.1",
     "@timepp/murmurhash": "jsr:@timepp/murmurhash@^0.1.1",
@@ -138,7 +141,6 @@
     "color-formatter/hex-shorten": "./src/js/color-formatter/hex-shorten.ts",
     "color-formatter/normalized-from-hex": "./src/js/color-formatter/normalized-from-hex.ts",
     "color-formatter/normalized-to-hex": "./src/js/color-formatter/normalized-to-hex.ts",
-    "color-formatter/rgb-to-lch": "./src/js/color-formatter/rgb-to-lch.ts",
-    "color-formatter/try-delete-f": "./src/js/color-formatter/try-delete-f.ts"
+    "color-formatter/rgb-to-lch": "./src/js/color-formatter/rgb-to-lch.ts"
   }
 }

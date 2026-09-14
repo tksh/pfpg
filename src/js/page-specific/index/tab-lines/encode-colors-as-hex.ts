@@ -1,6 +1,8 @@
-import { hexShortenAsHalf } from "color-formatter/hex-shorten";
+import {
+  expandHexToSix,
+  shortenGroupColor,
+} from "@tksh/group-colors-param-codec";
 import { normalizedToHex } from "color-formatter/normalized-to-hex";
-import { tryDeleteFs } from "color-formatter/try-delete-f";
 import { convertColorFormatForArray } from "color-formatter/format-converter";
 import { getGroupColorsValues } from "tab-lines/get-colors-from-svg";
 
@@ -27,7 +29,7 @@ export function getGroupColorsAsJoinedHex(inputSvg: string): string {
   console.log(soArray); // Type: String | e.g.: Array(5) [ "1", "0.8", "1", "1", "1" ]
 
   const stHexArray = stArray.map((colorValueStr) =>
-    colorValueStr.slice(1).toUpperCase()
+    expandHexToSix(colorValueStr.slice(1))
   ); // Delete '#'
   const opHexArray = opArray.map((colorValueStr) =>
     normalizedToHex(Number(colorValueStr)).toUpperCase()
@@ -39,8 +41,8 @@ export function getGroupColorsAsJoinedHex(inputSvg: string): string {
   console.log(opHexArray); // 2 chars hex | e.g.: Array(5) [ "80", "FF", "FF", "FF", "FF" ]
   console.log(soHexArray); // 2 chars hex | e.g.: Array(5) [ "FF", "CC", "FF", "FF", "FF" ]
 
-  // The formatting hex digits could be possible as 7 (3+2+2) or 10 (6+2+2)
-  //   - 'stroke' (3|6) + 'opacity' (2) + 'stroke-opacity' (2)
+  // Each group is normalized to a 6-digit stroke + 2-digit opacity +
+  // 2-digit stroke-opacity, i.e. always 10 hex digits.
 
   // join the values without any delimiters to form: [stroke][opacity][stroke-opacity]
   // String() preserves the legacy coercion for out-of-range index access (undefined => "undefined").
@@ -48,12 +50,11 @@ export function getGroupColorsAsJoinedHex(inputSvg: string): string {
     item + String(opHexArray[index]) + String(soHexArray[index])
   );
 
-  // Reducing into half length if all hex pairs are duplicated.                  10 => 5
-  // And deleting for "FF" (in 5 chars hex) or "FFFF" (in 10 chars hex) at last. 10 => 6, 5 => 3
-  const compressedHexArray = mergedHexArray.map((tenCharsHex) =>
-    tryDeleteFs(hexShortenAsHalf(tenCharsHex))
+  // Shorten each group's 10-digit value to its shortest 10|6|5|3|1 form.
+  const shortenedHexArray = mergedHexArray.map((tenCharsHex) =>
+    shortenGroupColor(tenCharsHex)
   );
 
   // Join the formatted each groups hex with underscore '_'
-  return compressedHexArray.join("_");
+  return shortenedHexArray.join("_");
 }
