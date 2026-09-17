@@ -2,11 +2,21 @@ import { TAB_SPACE } from "constants";
 import { tryRemoveSpaces } from "modal/optimize-svg";
 import { getState, updateState } from "state/url-state-manager";
 import {
+  calculateSquircleSlimmedSides,
   extractViewboxValues,
-  viewboxSlimmed,
   viewboxUnSlimmed,
 } from "tab-canvas/crop-side-margins";
-import { roundToTwoDecimals } from "utils/number-rounding";
+import { roundToTwoDecimals, toFixedTrimmed } from "utils/number-rounding";
+
+// Rounded 'Squircle, slimmed' geometry shared by the clip path and the viewBox
+interface SquircleSlimmedGeometry {
+  gridSize: number;
+  center: number;
+  left: number;
+  right: number;
+  topControlPoint: number;
+  pathData: string;
+}
 
 // Update SVG with selected shape path
 export async function updateSvgWithNewShapePath(
@@ -28,12 +38,15 @@ export async function updateSvgWithNewShapePath(
   const center = roundToTwoDecimals(gridSize / 2);
 
   // Generate new shape path to trim
-  const shapePath = shape === "squircleSlimmed"
+  const squircleSlimmedGeometry = shape === "squircleSlimmed"
     ? generateClippathShapeOfSquircleSlimmed(
       inputSvg,
       getWidthNarrowness(),
       getTopHeavyRatio(),
     )
+    : null;
+  const shapePath = squircleSlimmedGeometry
+    ? squircleSlimmedGeometry.pathData
     : shape === "square"
     ? `<rect width="100%" height="100%" />`
     : shape === "circle"
@@ -62,26 +75,46 @@ export async function updateSvgWithNewShapePath(
     );
 
   // Update the viewBox string
-  // - If 'squircleSlimmed' selected, update the viewBox by current 'cropSideMargin' bool.
+  // - If 'squircleSlimmed' selected, update the viewBox from the same rounded
+  //   left/right values used for the clip path, by current 'cropSideMargin' bool.
   // - If 'square|circle|squircle' selected, always apply the viewboxUnSlimmed() to reset the viewBox to original grid dimension.
-  const clippathAndViewboxUpdatedSvg = shape === "squircleSlimmed"
-    ? isCropSideMargins()
-      ? viewboxSlimmed(newClippathSvg)
-      : await viewboxUnSlimmed(newClippathSvg)
-    : await viewboxUnSlimmed(newClippathSvg);
+  const clippathAndViewboxUpdatedSvg =
+    squircleSlimmedGeometry && isCropSideMargins()
+      ? viewboxSlimmedFromGeometry(
+        newClippathSvg,
+        squircleSlimmedGeometry,
+        viewboxValues,
+      )
+      : await viewboxUnSlimmed(newClippathSvg);
 
   return clippathAndViewboxUpdatedSvg;
 }
 
+// Update the viewBox from the same rounded geometry used for the clip path
+function viewboxSlimmedFromGeometry(
+  inputSvg: string,
+  geometry: SquircleSlimmedGeometry,
+  viewboxValues: Map<string, number>,
+): string {
+  const newViewboxString = `viewBox="${toFixedTrimmed(geometry.left)} ${
+    viewboxValues.get("y")
+  } ${toFixedTrimmed(geometry.right - geometry.left)} ${
+    viewboxValues.get("h")
+  }"`;
+
+  // Replace the viewBox string with new one
+  const patternForViewboxStr = /viewBox="[^"]+"/;
+  return inputSvg.replace(patternForViewboxStr, newViewboxString);
+}
+
 // For 'Squircle, slimmed' selected
 
-// Generate the path string of 'Squircle, slimmed'
+// Generate the geometry of 'Squircle, slimmed'
 function generateClippathShapeOfSquircleSlimmed(
   inputSvg: string,
   widthNarrowness: number,
   topHeavyRatio: number,
-): string {
-  // function generateClippathShapeOfSquircleSlimmed(widthNarrowness, topHeavyRatio) {
+): SquircleSlimmedGeometry {
   console.log(
     "widthNarrowness, topHeavyRatio: ",
     widthNarrowness,
@@ -97,17 +130,18 @@ function generateClippathShapeOfSquircleSlimmed(
   const gridSize = gridHeight;
   const center = getCenter(gridSize);
 
-  // generate the path of squircle slimmed
-  const eachSideWidthForNarrowing = (gridSize / 100) * (widthNarrowness / 2);
-  const left = roundToTwoDecimals(0 + eachSideWidthForNarrowing);
-  //console.log('left: ', left)
-  const right = roundToTwoDecimals(gridSize - eachSideWidthForNarrowing);
-  //console.log('right: ', right)
-  const topInflationAmount = roundToTwoDecimals(
+  // generate the geometry of squircle slimmed
+  const { left, right } = calculateSquircleSlimmedSides(
+    gridSize,
+    widthNarrowness,
+  );
+  const topControlPoint = roundToTwoDecimals(
     left - ((gridSize / 100) * topHeavyRatio),
   );
-  //console.log('topInflationAmount: ', topInflationAmount)
-  return `<path d="M ${left} ${center} Q ${topInflationAmount} 0 ${center} 0 T ${right} ${center} ${center} ${gridSize} ${left} ${center}" />`;
+  const pathData =
+    `<path d="M ${left} ${center} Q ${topControlPoint} 0 ${center} 0 T ${right} ${center} ${center} ${gridSize} ${left} ${center}" />`;
+
+  return { gridSize, center, left, right, topControlPoint, pathData };
 }
 
 // Get center (the half of grid size)
