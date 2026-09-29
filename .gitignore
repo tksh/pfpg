@@ -1,10 +1,4 @@
-.vscode
-.devin
-
 node_modules/
-
-# For build using www.farmfe.org
-farm/
 
 temp/
 dist/
