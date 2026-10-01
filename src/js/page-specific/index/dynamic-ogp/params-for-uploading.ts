@@ -1,70 +1,39 @@
-import { murmurHash3_x64_128 } from "@timepp/murmurhash";
+import { decodeUrlParams } from "@tksh/stln-codec";
+import { excludeStateKeys } from "common-utils/read-url-params";
 import {
-  BASIC_DATA_KEYS,
-  SETTINGS_DEFAULTS,
-  type SettingValue,
-  VISUAL_CONFIG_DEFAULTS,
-} from "constants";
+  buildCanonicalImageInput,
+  hashCanonicalImageInput,
+  OGP_KEY_VERSION,
+} from "dynamic-ogp/canonical-image-input";
 
 export { getHashForOgImageUrl, getYearAndMonth };
 
 /**
- * Generates a unique hash for an OG image URL by combining artwork and configuration hashes.
+ * Generates the key of the shared image for the current URL.
+ *
+ * The key identifies the rendered drawing, not the URL text: two URLs that
+ * decode to the same geometry, effective colors and rasterization settings
+ * get the same key, whichever encoding the codec happened to produce for it.
+ * The file format the pixels are stored in is not part of the key either; the
+ * upload appends the format to it instead.
  *
  * @async
  * @function getHashForOgImageUrl
- * @returns {Promise<string>} A 32-character hexadecimal string representing the final hash
+ * @returns {Promise<string>} A 32-character hexadecimal string
  */
 async function getHashForOgImageUrl(): Promise<string> {
-  // Hash string of artwork data and its visual config settings
-  const { artwork, config } = await getOgImageData();
-  console.log("artwork, config: ", artwork, config);
-
-  const hashInputStr = JSON.stringify([artwork, config]);
-  console.log("hashInputStr", hashInputStr);
-  // e.g.: [[["A","08fEKQ-VoisNalNhZy9GsmZzPU"],["0","08cJqY-3JMVTyH83QAsTiL3FDTn ... ,null,"rgb","square",10,1,true,"crispEdges",256]]
-
-  const hashBigInt = murmurHash3_x64_128(hashInputStr);
-  console.log("hashBigInt", hashBigInt);
-  // e.g.: 323066209079833201260614758727406931990n
-
-  const hashHexPadded = hashBigInt.toString(16).padStart(32, "0");
-  console.log("hashHexPadded", hashHexPadded);
-  // e.g.: 4327a70c6f036487c22f4075c965c9e3
+  const urlParams = new URLSearchParams(globalThis.location.search);
+  // State keys are the app's own settings, not artwork data
+  const artworkParams = excludeStateKeys(urlParams);
+  const decoded = await decodeUrlParams(artworkParams);
+  const hashHexPadded = hashCanonicalImageInput(
+    buildCanonicalImageInput(urlParams, decoded),
+  );
+  // Only the version and the key: the canonical input holds the whole
+  // artwork and is far too large to log.
+  console.log(`Shared image key (${OGP_KEY_VERSION}):`, hashHexPadded);
 
   return hashHexPadded;
-}
-
-function getOgImageData(): {
-  artwork: string[][];
-  config: Array<SettingValue | null>;
-} {
-  const params = new URLSearchParams(globalThis.location.search);
-  console.log("params for OGP: ", params);
-
-  const artwork: string[][] = [];
-
-  for (const [key, value] of params) {
-    if (
-      !SETTINGS_DEFAULTS.has(key) &&
-      !(BASIC_DATA_KEYS as readonly string[]).includes(key)
-    ) { // Extract the lines data only
-      artwork.push([key, value]);
-    }
-  }
-
-  const config: Array<SettingValue | null> = [];
-  // Exclude opacitySteps from the hash input: it describes the opacity selector's
-  // step granularity rather than a rendered value, and it defaults to undefined
-  // at initial load, so the same appearance could hash differently once detected.
-  const visualConfigForHash = new Map(
-    [...VISUAL_CONFIG_DEFAULTS].filter(([key]) => key !== "opacitySteps"),
-  );
-  for (const [key, defaultValue] of visualConfigForHash) {
-    config.push(params.has(key) ? params.get(key) : defaultValue);
-  }
-
-  return { artwork, config };
 }
 
 function getYearAndMonth(): { yyyy: number; yyyymm: string } {

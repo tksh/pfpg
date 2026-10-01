@@ -24,8 +24,12 @@ export async function generateAndUploadImage(
 
     // Get 32 characters string hash from
     const hashHexPadded = await getHashForOgImageUrl();
+    // The key identifies the drawing, so both encodings of the same drawing
+    // would collide on one asset name. Suffixing the format lets the PNG and
+    // the WebP of a drawing coexist under one key.
+    const publicId = `${hashHexPadded}-${image.extension}`;
 
-    return await uploadToCloudinary(imageBlob, hashHexPadded);
+    return await uploadToCloudinary(imageBlob, publicId);
   } catch (error) {
     console.error("Error generating image:", error);
     throw error;
@@ -35,12 +39,12 @@ export async function generateAndUploadImage(
 /**
  * Uploads an image to Cloudinary
  * @param {Blob} imageBlob - Image blob to upload
- * @param {string} configuredArtworkHashHex - Hash for the image URL
+ * @param {string} publicId - Asset name to store the image under
  * @returns {Promise<string>} Uploaded image URL
  */
 async function uploadToCloudinary(
   imageBlob: Blob,
-  configuredArtworkHashHex: string,
+  publicId: string,
 ): Promise<string> {
   const uploadUrl =
     `${CLOUDINARY_CONFIG.baseUploadUrl}/${CLOUDINARY_CONFIG.cloudName}/image/upload`;
@@ -49,7 +53,7 @@ async function uploadToCloudinary(
   const formData = new FormData();
   formData.append("file", imageBlob);
   formData.append("upload_preset", CLOUDINARY_CONFIG.uploadPreset);
-  formData.append("public_id", configuredArtworkHashHex);
+  formData.append("public_id", publicId);
   // FormData stringifies arrays with commas; join explicitly for the same value
   formData.append("tags", ["pfpg", yyyy, yyyymm].join(","));
 

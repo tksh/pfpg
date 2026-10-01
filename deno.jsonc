@@ -103,6 +103,7 @@
     "button/init-download-buttons": "./src/js/page-specific/index/button/init-download-buttons.ts",
     "button/update-button-text": "./src/js/page-specific/index/button/update-button-text.ts",
 
+    "dynamic-ogp/canonical-image-input": "./src/js/page-specific/index/dynamic-ogp/canonical-image-input.ts",
     "dynamic-ogp/constants": "./src/js/page-specific/index/dynamic-ogp/constants.ts",
     "dynamic-ogp/generate-and-upload": "./src/js/page-specific/index/dynamic-ogp/generate-and-upload.ts",
     "dynamic-ogp/params-for-uploading": "./src/js/page-specific/index/dynamic-ogp/params-for-uploading.ts",
