@@ -12,7 +12,7 @@ deno --version
 # Install
 deno install
 
-# Build with `deno bundle` into ./dist/, and then remove console.log statements from the bundled files
-deno task build && deno task remove:console
+# Build the production site into ./dist/
+deno task build
 
 echo "Build complete."
