@@ -147,6 +147,7 @@ export const UI_CONFIG_DEFAULTS = new Map<string, SettingValue>([
   ["viewScaling", "fit"], //       UI tab | String | 'fit', 'actual'
   ["checkerboardBg", true], //       UI tab | Bool   | true, false
   ["textWrapping", false], //       UI tab | Bool   | true, false
+  ["imageFormat", "png"], //       UI tab | String | 'png', 'webp'
 ]);
 
 export const SETTINGS_DEFAULTS: Map<string, SettingValue> = mergeMaps(

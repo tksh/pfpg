@@ -3,22 +3,24 @@ import {
   getHashForOgImageUrl,
   getYearAndMonth,
 } from "dynamic-ogp/params-for-uploading";
+import type { EncodedImage } from "svg-to-png";
 
 /**
  * Main function to generate and upload image
  *
- * The PNG is uploaded as the renderer produced it: no resizing, centering or
- * background compositing is applied here, so the uploaded pixels and the
- * previewed pixels are identical and independent of the UI theme.
+ * The encoded image is uploaded as the renderer produced it: no resizing,
+ * centering or background compositing is applied here, so the uploaded
+ * pixels and the previewed pixels are identical and independent of the
+ * UI theme.
  *
- * @param {Uint8Array} pngData - PNG data rendered from the artwork SVG
+ * @param {EncodedImage} image - The rendered artwork in the selected format
  * @returns {Promise<string>} Final image URL
  */
 export async function generateAndUploadImage(
-  pngData: Uint8Array,
+  image: EncodedImage,
 ): Promise<string> {
   try {
-    const imageBlob = new Blob([pngData.slice()], { type: "image/png" });
+    const imageBlob = new Blob([image.bytes.slice()], { type: image.mimeType });
 
     // Get 32 characters string hash from
     const hashHexPadded = await getHashForOgImageUrl();

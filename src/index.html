@@ -228,6 +228,17 @@
             </div>
           </div>
 
+          <!-- Image format -->
+          <div class="setting-container">
+            <div class="setting-item">
+              <label for="image-format">Image format: </label>
+              <select name="image-format" id="image-format" autocomplete="off">
+                <option value="png" selected>PNG</option>
+                <option value="webp">WebP</option>
+              </select>
+            </div>
+          </div>
+
           <!-- Last rendering time -->
           <div class="setting-container">
             <div class="setting-item padding-top-1">
@@ -321,7 +332,7 @@
 
           <div id="img-box">
             <img id="img" class="checker fit-to-display-area"
-              alt="Output PNG" />
+              alt="Output image" />
           </div>
           <!-- End of img-box -->
           <div class="download-button">
@@ -597,7 +608,8 @@
           <dt>License:</dt>
           <dd><a href="https://www.mozilla.org/en-US/MPL/2.0/" title="Mozilla Public License, version 2.0">MPL 2.0 license</a></dd>
           <dt>Built with:</dt>
-          <dd><a href="https://github.com/ssssota/svg2png-wasm" title="ssssota/svg2png-wasm: SVG to PNG converter JS library made with WASM + resvg (no native dependencies).">svg2png-wasm (MIT license)</a></dd>
+          <dd><a href="https://jsr.io/@tksh/svg2ui8a" title="@tksh/svg2ui8a: SVG rasterizer returning raw RGBA pixels.">svg2ui8a (MIT license)</a></dd>
+          <dd><a href="https://jsr.io/@denext/photon" title="@denext/photon: A Deno-native WebAssembly build of photon-rs, used here to encode the rasterized pixels as PNG or WebP.">photon (MIT license)</a></dd>
           <dd><a href="https://github.com/sefianecho/alwan" title="sefianecho/alwan: A lightweight, touch-friendly color picker in vanilla JavaScript with no dependencies.">Alwan (MIT license)</a></dd>
           <dd><a href="https://github.com/tksh/url-compressor" title="tksh/url-compressor: An ESM-first, dependency-free URL compression library for Deno and modern JavaScript runtimes.">URLCompressor (MIT license)</a></dd>
           <dd><a href="https://github.com/denoland/std" title="denoland/std: The Deno Standard Library">Deno standard library (MIT license)</a></dd>

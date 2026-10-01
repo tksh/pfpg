@@ -13,6 +13,7 @@ import {
   tryRemoveSpaces,
 } from "modal/optimize-svg";
 import { getState, getStateUrl, updateState } from "state/url-state-manager";
+import { getImageFormat } from "state/image-format";
 import { applyGroupColors } from "tab-lines/apply-group-colors";
 import {
   decodeGroupColorsAsArray,
@@ -222,6 +223,15 @@ function applyUiConfiguration(): void {
   }
   (themeColorElem as HTMLSelectElement).value = String(themeColor);
   changeThemeColor(themeColor as string);
+
+  ///////////////////////////// imageFormat /////////////////////////////
+  // The initial render already happened in this format, so only the select
+  // element has to reflect it here
+  const imageFormatElem = document.getElementById("image-format");
+  if (imageFormatElem === null) {
+    throw new Error("applyUiConfiguration: missing element #image-format");
+  }
+  (imageFormatElem as HTMLSelectElement).value = getImageFormat();
 }
 
 function applySvgOptimization(svgString: string): string {

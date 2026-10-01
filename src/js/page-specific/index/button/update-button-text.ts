@@ -1,5 +1,6 @@
 import { updateState } from "state/url-state-manager";
 import { roundToOneDecimal } from "utils/number-rounding";
+import type { EncodedImage } from "svg-to-png";
 
 export {
   initButtonActionSelect,
@@ -63,16 +64,20 @@ function replaceButtonText(buttonAction: string, button: HTMLElement): void {
   }
 }
 
-// PNG/SVG ファイルサイズを ダウンロードボタンに 表示する関数
-
-function updateButtonText(pngOrSvg: string, byteSize: number): void {
+// SVG/画像ファイルサイズを ダウンロードボタンに 表示する関数
+// `buttonId` は対象ボタンの id の接頭辞（'png' | 'svg'）、`label` は表示する形式名
+function updateButtonText(
+  buttonId: string,
+  label: string,
+  byteSize: number,
+): void {
   // Get button element
   const actionButtonElement = document.getElementById(
-    `${pngOrSvg}-action-button`,
+    `${buttonId}-action-button`,
   );
   if (actionButtonElement === null) {
     throw new Error(
-      `updateButtonText: missing element #${pngOrSvg}-action-button`,
+      `updateButtonText: missing element #${buttonId}-action-button`,
     );
   }
 
@@ -84,7 +89,7 @@ function updateButtonText(pngOrSvg: string, byteSize: number): void {
 
   // Create action element
   const action = document.createElement("span");
-  action.textContent = `${actionType} as ${pngOrSvg.toUpperCase()}:\u00A0`;
+  action.textContent = `${actionType} as ${label.toUpperCase()}:\u00A0`;
 
   // Create size element
   const size = document.createElement("span");
@@ -125,11 +130,10 @@ function byteCount(s: string): number {
 function updateButtonWithSvgSize(svgString: string): void {
   // SVGテキストの サイズ（バイト数）を計算して表示
   const svgByteSize = byteCount(svgString);
-  updateButtonText("svg", svgByteSize);
+  updateButtonText("svg", "svg", svgByteSize);
 }
-// PNG
-function updateButtonWithPngSize(pngBuffer: Uint8Array): void {
-  // PNGデータの サイズ（バイト数）を取得して表示
-  const pngByteSize = pngBuffer.length;
-  updateButtonText("png", pngByteSize);
+// 画像 (PNG / WebP)
+function updateButtonWithPngSize(image: EncodedImage): void {
+  // 画像データの サイズ（バイト数）を取得して表示
+  updateButtonText("png", image.extension, image.bytes.length);
 }

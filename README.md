@@ -49,7 +49,8 @@ Cloudflare dashboard.
 | ------------------------------------------------------------------------------- | ------- | -------------------------------------------- |
 | [@tksh/stln-codec](https://jsr.io/@tksh/stln-codec)                             | MPL-2.0 | Straightlines URL codec + SVG generator      |
 | [@tksh/group-colors-param-codec](https://jsr.io/@tksh/group-colors-param-codec) | MPL-2.0 | Shortens/expands `groupColors` URL params    |
-| [svg2png-wasm](https://www.npmjs.com/package/svg2png-wasm)                      | MIT     | Renders SVG into PNG images                  |
+| [@tksh/svg2ui8a](https://jsr.io/@tksh/svg2ui8a)                                 | MIT     | Renders SVG into raw RGBA pixels             |
+| [@denext/photon](https://jsr.io/@denext/photon)                                 | MIT     | Encodes the pixels as PNG or WebP            |
 | [Alwan](https://www.npmjs.com/package/alwan)                                    | MIT     | Color picker UI                              |
 | [@tksh/url-compressor](https://jsr.io/@tksh/url-compressor)                     | MIT     | URL-safe string compression (via stln-codec) |
 | [@std/collections](https://jsr.io/@std/collections)                             | MIT     | Deno standard library array/object utilities |

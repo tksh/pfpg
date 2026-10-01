@@ -1,5 +1,6 @@
 import { extractViewboxValues } from "tab-canvas/crop-side-margins";
 import { getGroupColorsAsJoinedHex } from "tab-lines/encode-colors-as-hex";
+import { getImageFormat, IMAGE_FORMATS } from "state/image-format";
 
 export { downloadPngAsFile, downloadSvgAsFile, getSvgString };
 
@@ -136,7 +137,7 @@ function getCurrentStatusForFilename(): string {
   return `g_${groupColorsHexString}-p_${pathMode}-t_${shapeToTrim}-r_${shapeRendering}`;
 }
 
-// Download PNG as file
+// Download the rendered image (PNG or WebP) as file
 
 function downloadPngAsFile(): void {
   // Get a Blob URL from rasterized img
@@ -164,8 +165,12 @@ function downloadPngAsFile(): void {
   // current status
   const currentStatus = getCurrentStatusForFilename();
 
+  // The extension follows the selected output format
+  const { extension } = IMAGE_FORMATS[getImageFormat()];
+
   // Set the filename
-  link.download = `${artworkTitle}-${pixelSize}px-${currentStatus}.png`;
+  link.download =
+    `${artworkTitle}-${pixelSize}px-${currentStatus}.${extension}`;
 
   link.click();
 }

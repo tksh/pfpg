@@ -36,6 +36,7 @@ import {
   initNumberInputValidatorListener,
 } from "tab-render/height-pixel-size";
 import { initShapeRenderingSelect } from "tab-render/shape-rendering";
+import { initImageFormatSelect } from "tab-render/image-format";
 import { initCheckerboardBgCheckbox } from "tab-ui/checkerboard-bg";
 import { initTextWrappingCheckbox } from "tab-ui/text-wrapping";
 import {
@@ -43,7 +44,6 @@ import {
   initThemeColorSelect,
 } from "tab-ui/theme-color";
 import { initViewScalingSelect } from "tab-ui/view-scaling";
-import { initialize } from "svg2png-wasm";
 
 (async function (): Promise<void> {
   // Initialize sample artwork data.
@@ -111,10 +111,8 @@ import { initialize } from "svg2png-wasm";
     svg2pngOption,
   );
 
-  // Initial PNG rendering - initialize svg2png-wasm
-  await initialize(
-    await fetch("../../../assets/svg2png-wasm/svg2png_wasm_bg.wasm"),
-  );
+  // Initial rendering. The rasterizer initializes its Wasm module lazily on
+  // the first call, so there is no separate initialization step here.
   executeSvg2png({ target: { value: svgString } }, svg2pngOption);
 
   // Restore SVG string optimization
@@ -170,6 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initShapeRenderingSelect();
   initHeightPixelSizeInputElements();
   initNumberInputValidatorListener();
+  initImageFormatSelect();
 
   // Tab - UI
   initViewScalingSelect();

@@ -1,55 +1,42 @@
 import { getSvgString } from "button/download-as-file";
+import { getLastRenderedImage } from "svg-to-png";
 
 export { copyPngToClipboard, copySvgToClipboard };
 
-// Copy PNG blob to clipboard
+// Copy the rendered image to clipboard
 
-function copyPngToClipboard(): void {
+async function copyPngToClipboard(): Promise<void> {
   try {
-    const imgElem = document.getElementById("img") as HTMLImageElement | null;
-    if (imgElem === null) {
-      throw new Error("copyPngToClipboard: missing element #img");
-    }
-    //console.log("imgElem:", imgElem)
-    // e.g.: <img id="img" class="checker fit-to-display-area" alt="Output PNG" src="blob:http://172.19.175.1…6-4350-9c80-553a0e4fceaf">
-
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    if (ctx === null) {
-      throw new Error("copyPngToClipboard: 2d context unavailable");
+    // The already encoded bytes are copied as-is, so the clipboard holds the
+    // selected format rather than a re-encoded image
+    const image = getLastRenderedImage();
+    if (image === null) {
+      throw new Error("copyPngToClipboard: no rendered image to copy");
     }
 
-    canvas.width = imgElem.naturalWidth;
-    canvas.height = imgElem.naturalHeight;
-    ctx.drawImage(imgElem, 0, 0);
-
-    canvas.toBlob(async (blob) => {
-      if (blob === null) {
-        throw new Error("copyPngToClipboard: toBlob returned null");
-      }
-      await navigator.clipboard.write([
-        new ClipboardItem({ "image/png": blob }),
-      ]);
-      console.log("PNG image copied to clipboard");
-
-      const pngActionButtonElement = document.getElementById(
-        "png-action-button",
-      );
-      if (pngActionButtonElement === null) {
-        throw new Error(
-          "copyPngToClipboard: missing element #png-action-button",
-        );
-      }
-      const originalText = pngActionButtonElement.innerHTML;
-
-      pngActionButtonElement.textContent = "✔️ Successfully copied!";
-
-      setTimeout(() => {
-        pngActionButtonElement.innerHTML = originalText;
-      }, 1500);
+    const clipboardItem = new ClipboardItem({
+      [image.mimeType]: new Blob([image.bytes.slice()], { type: image.mimeType }),
     });
+    await navigator.clipboard.write([clipboardItem]);
+    console.log(`${image.extension.toUpperCase()} image copied to clipboard`);
+
+    const pngActionButtonElement = document.getElementById(
+      "png-action-button",
+    );
+    if (pngActionButtonElement === null) {
+      throw new Error(
+        "copyPngToClipboard: missing element #png-action-button",
+      );
+    }
+    const originalText = pngActionButtonElement.innerHTML;
+
+    pngActionButtonElement.textContent = "✔️ Successfully copied!";
+
+    setTimeout(() => {
+      pngActionButtonElement.innerHTML = originalText;
+    }, 1500);
   } catch (error) {
-    console.error("Failed to copy PNG image: ", error);
+    console.error("Failed to copy the rendered image: ", error);
   }
 }
 

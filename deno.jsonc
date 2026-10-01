@@ -15,14 +15,10 @@
     "copy:favicon": "deno run --allow-read --allow-write scripts/copy_favicon_images.ts",
     "copy:images": "cp -r src/showcase_images dist",
     "copy:css": "cp -r src/css dist",
-    "copy:svg2png-wasm": "cp -r src/assets/svg2png-wasm dist",
-    "bulk-copy": "deno task copy:favicon && deno task copy:images && deno task copy:css && deno task copy:svg2png-wasm",
-
-    // Work around for svg2png-wasm with `deno bundle` that the file path of svg2png-wasm is incorrect in the bundled JS file
-    "fix-svg2png-wasm-file-path": "deno run --allow-read --allow-write scripts/fix_svg2png_wasm_file_path.ts",
+    "bulk-copy": "deno task copy:favicon && deno task copy:images && deno task copy:css",
 
     // Necessary post-processing tasks after building the project, both dev and production builds
-    "postprocessing": "deno task bulk-copy && deno task fix-svg2png-wasm-file-path",
+    "postprocessing": "deno task bulk-copy",
 
     // Verification tasks apply to the whole project.
     // tests/fixtures/* are byte-exact copies that must never be reformatted.
@@ -59,6 +55,7 @@
     "init/tab-setup": "./src/js/page-specific/index/init/tab-setup.ts",
 
     "state/apply-url-state": "./src/js/page-specific/index/state/apply-url-state.ts",
+    "state/image-format": "./src/js/page-specific/index/state/image-format.ts",
     "state/resvg-option": "./src/js/page-specific/index/state/resvg-option.ts",
     "state/url-decode": "./src/js/page-specific/index/state/url-decode.ts",
     "state/url-state-manager": "./src/js/page-specific/index/state/url-state-manager.ts",
@@ -66,7 +63,10 @@
     "modal/modal-toggle": "./src/js/page-specific/index/modal/modal-toggle.ts",
     "modal/optimize-svg": "./src/js/page-specific/index/modal/optimize-svg.ts",
     "modal/reset-settings": "./src/js/page-specific/index/modal/reset-settings.ts",
-    "svg2png-wasm": "npm:svg2png-wasm@^1.4.1",
+
+    // SVG rasterizer: returns pixels only. The image file encoder is separate.
+    "svg2ui8a": "jsr:@tksh/svg2ui8a@^0.5.0/svg2rgba",
+    "photon": "jsr:@denext/photon@~0.3.6",
 
     "tab-lines/apply-group-colors": "./src/js/page-specific/index/tab-lines/apply-group-colors.ts",
     "tab-lines/color-format": "./src/js/page-specific/index/tab-lines/color-format.ts",
@@ -85,6 +85,7 @@
     "tab-canvas/shape-to-trim-listener": "./src/js/page-specific/index/tab-canvas/shape-to-trim-listener.ts",
 
     "tab-render/height-pixel-size": "./src/js/page-specific/index/tab-render/height-pixel-size.ts",
+    "tab-render/image-format": "./src/js/page-specific/index/tab-render/image-format.ts",
     "tab-render/shape-rendering": "./src/js/page-specific/index/tab-render/shape-rendering.ts",
     "tab-render/sync-number-and-range": "./src/js/page-specific/index/tab-render/sync-number-and-range.ts",
 
