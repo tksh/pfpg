@@ -6,7 +6,7 @@ import {
   VISUAL_CONFIG_DEFAULTS,
 } from "constants";
 
-export { getBackgroundColorByTheme, getHashForOgImageUrl, getYearAndMonth };
+export { getHashForOgImageUrl, getYearAndMonth };
 
 /**
  * Generates a unique hash for an OG image URL by combining artwork and configuration hashes.
@@ -65,24 +65,6 @@ function getOgImageData(): {
   }
 
   return { artwork, config };
-}
-
-// Get the bg fill color as themeColor's `--color-bg` via css/index/color.css
-// - white: white    = #ffffff = rgba(255, 255, 255, 1)
-// - light: darkgray = #a9a9a9 = rgba(169, 169, 169, 1)
-// - dark : #222     = #222222 = rgba( 34,  34,  34, 1)
-// - black: #000     = #000000 = rgba(  0,   0,   0, 1)
-
-// テーマカラーに基づいて背景色のRGBA値を取得する関数
-function getBackgroundColorByTheme(themeName: string): string {
-  const themeColors: Record<string, string> = {
-    "white": "rgba(255, 255, 255, 1)",
-    "light": "rgba(169, 169, 169, 1)",
-    "dark": "rgba(34, 34, 34, 1)",
-    "black": "rgba(0, 0, 0, 1)",
-  };
-
-  return themeColors[themeName] || "rgba(255, 255, 255, 0)"; // デフォルトは透明
 }
 
 function getYearAndMonth(): { yyyy: number; yyyymm: string } {
