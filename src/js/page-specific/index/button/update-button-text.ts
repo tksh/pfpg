@@ -1,6 +1,6 @@
 import { updateState } from "state/url-state-manager";
 import { roundToOneDecimal } from "utils/number-rounding";
-import type { EncodedImage } from "svg-to-png";
+import type { EncodedImage } from "state/image-encoder";
 
 export {
   initButtonActionSelect,

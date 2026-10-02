@@ -1,39 +1,13 @@
-import { PhotonImage } from "photon";
 import { svg2rgba } from "svg2ui8a";
 import {
   updateButtonWithPngSize,
   updateButtonWithSvgSize,
 } from "button/update-button-text";
 import { generateAndUploadImage } from "dynamic-ogp/generate-and-upload";
-import { getImageFormat, IMAGE_FORMATS } from "state/image-format";
+import { type EncodedImage, encodeRasterImage } from "state/image-encoder";
 import { extractViewboxValues } from "tab-canvas/crop-side-margins";
 
-export {
-  type EncodedImage,
-  executeSvg2png,
-  getLastRenderedImage,
-  measureSvg2pngTime,
-};
-
-/**
- * The rasterized artwork, encoded as the selected image file format.
- *
- * Carrying the MIME type and the extension alongside the bytes keeps the
- * preview, the download filename, the clipboard item and the upload in sync
- * with the format the user selected.
- */
-interface EncodedImage {
-  /** Encoded image file bytes */
-  bytes: Uint8Array;
-  /** MIME type of `bytes` */
-  mimeType: string;
-  /** File extension of `bytes`, without the leading dot */
-  extension: string;
-  /** Raster width in pixels */
-  width: number;
-  /** Raster height in pixels */
-  height: number;
-}
+export { executeSvg2png, getLastRenderedImage, measureSvg2pngTime };
 
 // Option type for the svg2ui8a rendering call (uses the package types as imported)
 type RasterOption = NonNullable<Parameters<typeof svg2rgba>[1]>;
@@ -96,18 +70,7 @@ async function rasterize(
   // Render via svg2ui8a: the returned dimensions are authoritative for
   // everything downstream, including the aspect ratio of the output.
   const { pixels, width, height } = await svg2rgba(svgString, rasterOption);
-
-  const { mimeType, extension } = IMAGE_FORMATS[getImageFormat()];
-  const photonImage = new PhotonImage(pixels, width, height);
-  try {
-    const bytes = extension === "webp"
-      ? photonImage.get_bytes_webp()
-      : photonImage.get_bytes();
-    return { bytes, mimeType, extension, width, height };
-  } finally {
-    // Release the Wasm memory even when encoding failed
-    photonImage.free();
-  }
+  return await encodeRasterImage(pixels, width, height);
 }
 
 // Encoding the raster and updating the preview, the size and the dimensions

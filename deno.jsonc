@@ -15,7 +15,16 @@
     "copy:favicon": "deno run --allow-read --allow-write scripts/copy_favicon_images.ts",
     "copy:images": "cp -r src/showcase_images dist",
     "copy:css": "cp -r src/css dist",
-    "bulk-copy": "deno task copy:favicon && deno task copy:images && deno task copy:css",
+    // The encoder Wasm is served as a file: `deno bundle` inlines the JS glue
+    // but never emits the Wasm those packages load with `new URL(...)`.
+    "copy:encoder-wasm": "cp -r src/assets/jsquash dist",
+    // Third-party license texts, reachable from the deployed site
+    "copy:licenses": "cp -r src/licenses dist",
+    "bulk-copy": "deno task copy:favicon && deno task copy:images && deno task copy:css && deno task copy:encoder-wasm && deno task copy:licenses",
+
+    // Maintenance: refresh the vendored encoder Wasm and license texts from the
+    // pinned packages. Run after changing their versions in `imports`.
+    "vendor:jsquash": "deno run --allow-read --allow-write --allow-env scripts/vendor_jsquash.ts",
 
     // Necessary post-processing tasks after building the project, both dev and production builds
     "postprocessing": "deno task bulk-copy",
@@ -38,6 +47,11 @@
   "imports": {
     // Test-only imports
     "@std/assert": "jsr:@std/assert@^1.0.1",
+    // Decoders, to verify in tests that an encoded file decodes back to the
+    // exact pixels the renderer produced. Never imported by src/, so neither
+    // package reaches the shipped bundle.
+    "@jsquash/png": "npm:@jsquash/png@^3.1.1",
+    "@jsquash/webp-decode": "npm:@jsquash/webp@^1.5.0/decode.js",
 
     // Straightlines codec: published package.
     "@tksh/stln-codec": "jsr:@tksh/stln-codec@^0.1.1",
@@ -55,6 +69,7 @@
 
     "state/apply-url-state": "./src/js/page-specific/index/state/apply-url-state.ts",
     "state/image-format": "./src/js/page-specific/index/state/image-format.ts",
+    "state/image-encoder": "./src/js/page-specific/index/state/image-encoder.ts",
     "state/resvg-option": "./src/js/page-specific/index/state/resvg-option.ts",
     "state/url-decode": "./src/js/page-specific/index/state/url-decode.ts",
     "state/url-state-manager": "./src/js/page-specific/index/state/url-state-manager.ts",
@@ -63,9 +78,12 @@
     "modal/optimize-svg": "./src/js/page-specific/index/modal/optimize-svg.ts",
     "modal/reset-settings": "./src/js/page-specific/index/modal/reset-settings.ts",
 
-    // SVG rasterizer: returns pixels only. The image file encoder is separate.
+    // SVG rasterizer: returns pixels only. The image file encoders are separate.
     "svg2ui8a": "jsr:@tksh/svg2ui8a@^0.5.0/svg2rgba",
-    "photon": "jsr:@denext/photon@~0.3.6",
+    // Encoders. The `.js` subpaths are required: the packages declare no
+    // `exports` map, so the extension must be spelled out.
+    "jsquash/webp-encode": "npm:@jsquash/webp@^1.5.0/encode.js",
+    "jsquash/oxipng-optimise": "npm:@jsquash/oxipng@^2.3.0/optimise.js",
 
     "tab-lines/apply-group-colors": "./src/js/page-specific/index/tab-lines/apply-group-colors.ts",
     "tab-lines/color-format": "./src/js/page-specific/index/tab-lines/color-format.ts",

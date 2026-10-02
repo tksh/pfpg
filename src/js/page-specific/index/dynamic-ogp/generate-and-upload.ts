@@ -3,7 +3,7 @@ import {
   getHashForOgImageUrl,
   getYearAndMonth,
 } from "dynamic-ogp/params-for-uploading";
-import type { EncodedImage } from "svg-to-png";
+import type { EncodedImage } from "state/image-encoder";
 
 /**
  * Main function to generate and upload image
