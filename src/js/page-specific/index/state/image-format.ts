@@ -4,7 +4,7 @@ export { getImageFormat, IMAGE_FORMATS, type ImageFormat };
 
 // Image file formats the rendered artwork can be encoded into.
 // The rasterizer (`svg2ui8a`) only produces pixels, so the format is
-// decided here and applied by the encoder (`photon`).
+// decided here and applied by the encoder (see `image-encoder.ts`).
 
 type ImageFormat = "png" | "webp";
 

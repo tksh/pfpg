@@ -1,12 +1,9 @@
 {
   "version": "5",
   "specifiers": {
-    "jsr:@denext/photon@0.3.6": "0.3.6",
-    "jsr:@std/assert@*": "1.0.19",
     "jsr:@std/assert@^1.0.1": "1.0.19",
     "jsr:@std/cli@^1.0.32": "1.0.32",
-    "jsr:@std/collections@^1.3.0": "1.3.0",
-    "jsr:@std/encoding@*": "1.0.11",
+    "jsr:@std/collections@^1.3.0": "1.4.0",
     "jsr:@std/encoding@^1.0.11": "1.0.11",
     "jsr:@std/fmt@^1.0.10": "1.0.10",
     "jsr:@std/fs@^1.0.24": "1.0.24",
@@ -17,28 +14,18 @@
     "jsr:@std/media-types@^1.1.0": "1.1.0",
     "jsr:@std/net@^1.0.6": "1.0.6",
     "jsr:@std/path@^1.1.6": "1.1.6",
-    "jsr:@std/streams@*": "1.1.2",
     "jsr:@std/streams@^1.1.2": "1.1.2",
     "jsr:@timepp/murmurhash@~0.1.1": "0.1.1",
     "jsr:@tksh/group-colors-param-codec@~0.1.1": "0.1.1",
-    "jsr:@tksh/stln-codec@0.1.1": "0.1.1",
-    "jsr:@tksh/stln-codec@~0.1.1": "0.1.1",
-    "jsr:@tksh/svg2ui8a@*": "0.5.0",
+    "jsr:@tksh/stln-codec@~0.1.1": "0.1.3",
     "jsr:@tksh/svg2ui8a@0.5": "0.5.0",
-    "jsr:@tksh/svg2ui8a@0.5.0": "0.5.0",
     "jsr:@tksh/url-compressor@^1.1.1": "1.1.1",
-    "npm:@jsquash/oxipng@*": "2.3.0",
     "npm:@jsquash/oxipng@^2.3.0": "2.3.0",
     "npm:@jsquash/png@^3.1.1": "3.1.1",
-    "npm:@jsquash/webp@*": "1.5.0",
-    "npm:@jsquash/webp@1.5.0": "1.5.0",
     "npm:@jsquash/webp@^1.5.0": "1.5.0",
     "npm:alwan@^2.3.1": "2.3.1"
   },
   "jsr": {
-    "@denext/photon@0.3.6": {
-      "integrity": "a7ed32df0786fe71d793b387b8c34742b8a97975ed04cdd8ee067222af96cb68"
-    },
     "@std/assert@1.0.19": {
       "integrity": "eaada96ee120cb980bc47e040f82814d786fe8162ecc53c91d8df60b8755991e",
       "dependencies": [
@@ -48,8 +35,8 @@
     "@std/cli@1.0.32": {
       "integrity": "188b3a100d6202d64e3f5bd3d799c7fa4f6d77f92cc65eb7f641c1fa0aa92a66"
     },
-    "@std/collections@1.3.0": {
-      "integrity": "eb36b43d784477ea0b476483ac034a14bdd182aff921c812ecf662a1fcef9498"
+    "@std/collections@1.4.0": {
+      "integrity": "bd7f74966e11de11b1f0420b7e8cb7bb381d8af7872b738443b92050db28c9c0"
     },
     "@std/encoding@1.0.11": {
       "integrity": "e7cef2f0b3153bccc17431e7c864a1de03a4b6d9647389c43e08aaa775d37385"
@@ -67,14 +54,14 @@
       "integrity": "73a98e05ff58aa18bea562d286172e6c815b1eddd4fcab194beda19e3683b88c",
       "dependencies": [
         "jsr:@std/cli",
-        "jsr:@std/encoding@^1.0.11",
+        "jsr:@std/encoding",
         "jsr:@std/fmt",
         "jsr:@std/fs",
         "jsr:@std/html",
         "jsr:@std/media-types",
         "jsr:@std/net",
         "jsr:@std/path",
-        "jsr:@std/streams@^1.1.2"
+        "jsr:@std/streams"
       ]
     },
     "@std/internal@1.0.14": {
@@ -101,8 +88,8 @@
     "@tksh/group-colors-param-codec@0.1.1": {
       "integrity": "5b59bddb81bf91832ca8b56c506a4ab4507425baf52b33a665ffa0c23f4ccdf3"
     },
-    "@tksh/stln-codec@0.1.1": {
-      "integrity": "d47fd4eeeb637757c588a80396b27db1048fb633c3ddfc6476123ba431afb67e",
+    "@tksh/stln-codec@0.1.3": {
+      "integrity": "41c0e1b29376d99e06357943e3803d2b69e79daa3ab811ac90741c4e2cbcc32a",
       "dependencies": [
         "jsr:@std/collections",
         "jsr:@tksh/url-compressor"

@@ -37,7 +37,9 @@
     "fmt": "deno fmt"
   },
   "fmt": {
-    "exclude": ["tests/fixtures/*.json"]
+    // Byte-exact files: fixture data, and the vendored third-party license
+    // texts, which must stay identical to the packages they were copied from.
+    "exclude": ["tests/fixtures/*.json", "src/licenses/*.md"]
   },
   "compilerOptions": {
     "strict": true,

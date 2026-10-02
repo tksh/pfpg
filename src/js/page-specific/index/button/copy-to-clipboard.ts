@@ -15,7 +15,9 @@ async function copyPngToClipboard(): Promise<void> {
     }
 
     const clipboardItem = new ClipboardItem({
-      [image.mimeType]: new Blob([image.bytes.slice()], { type: image.mimeType }),
+      [image.mimeType]: new Blob([image.bytes.slice()], {
+        type: image.mimeType,
+      }),
     });
     await navigator.clipboard.write([clipboardItem]);
     console.log(`${image.extension.toUpperCase()} image copied to clipboard`);

@@ -91,7 +91,9 @@ account, and are not covered by `deno task test`:
   (Cloudinary documents that unsigned uploads do not overwrite an existing
   asset; treat a conflict as a rejected upload rather than assuming it replaces
   the asset, and confirm it on the real account).
-- First render timing in the browser. Note that the bundle grew from ~184 KB to
-  ~3.6 MB when the renderer and encoder Wasm modules started shipping inside it;
-  the Wasm still initializes lazily, but the cost should be measured in the
-  deployment before the next release.
+- First render timing in the browser. The index bundle peaked at ~3.6 MB while
+  the encoder's Wasm was inlined into it as base64; the encoder now serves its
+  Wasm as a file from the site's own origin (`src/assets/jsquash/`, copied to
+  `dist/jsquash/` by the `copy:encoder-wasm` task), which brought the bundle
+  back to ~1.5 MB. First render and encode timings still want a look in the
+  deployment.
