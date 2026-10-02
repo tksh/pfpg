@@ -18,8 +18,8 @@ and use the same values for both the clip path and the cropped `viewBox`.
 
 1. Add a small internal geometry result containing the rounded center, left,
    right, top control point, grid size, and generated path data.
-2. Make `squircleSlimmed` generation return that result rather than only a
-   path string.
+2. Make `squircleSlimmed` generation return that result rather than only a path
+   string.
 3. Build the clip path from the result's path data.
 4. When crop-side-margins is enabled, update `viewBox` directly from the same
    rounded left/right values.
