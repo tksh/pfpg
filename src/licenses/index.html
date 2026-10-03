@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Third-party licenses — pfpg</title>
+    <style>
+    /* Standalone page: it is copied to dist as a static file rather than
+       bundled, so it carries its own styling and follows the site's
+       background and text colors for both color schemes. */
+    :root {
+      --bg: darkgray;
+      --fg: #666;
+      --rule: #ccc6;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #222;
+        --fg: #666;
+        --rule: #6669;
+      }
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      margin: 0 auto;
+      max-width: 46rem;
+      padding: 2.5rem 1.25rem 4rem;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin: 0 0 1rem;
+    }
+
+    p {
+      margin: 0 0 1rem;
+    }
+
+    ul {
+      list-style: none;
+      margin: 1.5rem 0;
+      padding: 0;
+    }
+
+    li {
+      border-top: 1px solid var(--rule);
+      padding: 0.75rem 0;
+    }
+
+    li:last-child {
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .license {
+      font-weight: 600;
+    }
+
+    .component {
+      display: block;
+      font-size: 0.9rem;
+    }
+
+    footer {
+      margin-top: 2.5rem;
+      font-size: 0.9rem;
+    }
+    </style>
+  </head>
+  <body>
+    <h1>Third-party licenses</h1>
+
+    <p>
+      pfpg itself is distributed under the
+      <a href="https://www.mozilla.org/en-US/MPL/2.0/">Mozilla Public License 2.0</a>.
+      This page reproduces the license texts of the third-party software this
+      site ships whose licenses require the text to travel with the software:
+      the image encoders and the codecs compiled into their WebAssembly
+      modules. Every library the site uses is credited in the
+      <a href="../">About</a> section of the main page.
+    </p>
+
+    <ul>
+      <li>
+        <span class="license">jsquash-webp-Apache-2.0.txt</span>
+        <span class="component">
+          <a href="jsquash-webp-Apache-2.0.txt">@jsquash/webp</a> — the WebP
+          encoder's JavaScript, bundled into the page.
+        </span>
+      </li>
+      <li>
+        <span class="license">jsquash-webp-codec-libwebp-BSD-3-Clause.md</span>
+        <span class="component">
+          libwebp — the WebP codec, compiled into the WebP encoder's
+          WebAssembly module.
+        </span>
+      </li>
+      <li>
+        <span class="license">jsquash-oxipng-Apache-2.0.txt</span>
+        <span class="component">
+          <a href="jsquash-oxipng-Apache-2.0.txt">@jsquash/oxipng</a> — the PNG
+          optimizer's JavaScript, bundled into the page.
+        </span>
+      </li>
+      <li>
+        <span class="license">jsquash-oxipng-codec-oxipng-MIT.md</span>
+        <span class="component">
+          <a href="jsquash-oxipng-codec-oxipng-MIT.md">oxipng</a> — the PNG
+          optimizer, compiled into the PNG optimizer's WebAssembly module.
+        </span>
+      </li>
+    </ul>
+
+    <footer>
+      <a href="../">← Back to pfpg</a>
+    </footer>
+  </body>
+</html>
