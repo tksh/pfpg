@@ -100,11 +100,22 @@ Deno.serve({ port: 8000 }, async (req) => {
 
   // --- 静的ファイル配信 ---
   const path = url.pathname === "/" ? "/index.html" : url.pathname;
-  const fullPath = `${DIST}${path}`;
+  let fullPath = `${DIST}${path}`;
+
+  // ディレクトリへの要求は、その中の index.html を返す。
+  // 静的ホスティングは `/licenses/` をこう解釈するので、ここだけ挙動が
+  // 異なるとローカルのみ 404 になる。
+  try {
+    if ((await Deno.stat(fullPath)).isDirectory) {
+      fullPath = `${fullPath}/index.html`;
+    }
+  } catch {
+    // 存在しないパス。次の readFile が 404 を返すのでここでは何もしない。
+  }
 
   try {
     const bytes = await Deno.readFile(fullPath);
-    const ext = path.slice(path.lastIndexOf("."));
+    const ext = fullPath.slice(fullPath.lastIndexOf("."));
 
     // HTML はライブリロードスクリプトを挿入
     if (ext === ".html") {
