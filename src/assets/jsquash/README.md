@@ -20,3 +20,26 @@ subresources `index.html` loads.
 
 The license texts of the packages and of the codecs live in `src/licenses/` and
 are copied to `dist/licenses/` by the `copy:licenses` task.
+
+## The JavaScript glue is bundled, not served
+
+Only the Wasm is a file. The matching JavaScript glue is imported statically by
+`state/image-encoder.ts`, deliberately bypassing the packages' `optimise()` and
+`encode()` wrappers.
+
+The wrappers reach the same glue with a dynamic `import()`, and `deno bundle`
+emits every dynamic import as a separate chunk under `_.._/` — a path derived
+from the absolute location of the source file on the build machine, so it also
+contains the build user's home directory. Static hosts do not all publish that
+path: the first render 404'd on Netlify while working on Cloudflare Pages, from
+an otherwise identical build. With static imports there is no dynamic import to
+split, so no `_.._` directory is produced and nothing can depend on the host
+publishing one.
+
+Two consequences to keep in mind when upgrading the pinned versions:
+
+- The glue module paths and their exported names are package internals. A
+  version bump that moves them fails `deno task check`, because those imports
+  are type-checked like any other.
+- Both WebP glue variants are bundled so the SIMD choice can still be made at
+  runtime, at a cost of roughly 80 KB of extra JavaScript.

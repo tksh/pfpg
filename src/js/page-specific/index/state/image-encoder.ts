@@ -1,7 +1,10 @@
-import { init as initWebpEncode } from "jsquash/webp-encode";
-import encodeWebp from "jsquash/webp-encode";
-import { init as initOxipng } from "jsquash/oxipng-optimise";
-import optimisePng from "jsquash/oxipng-optimise";
+import initOxiGlue, { optimise_raw } from "jsquash/oxipng-glue";
+import { defaultOptions as oxipngDefaults } from "jsquash/oxipng-meta";
+import webpFactory from "jsquash/webp-enc";
+import type { WebPModule } from "jsquash/webp-enc";
+import webpSimdFactory from "jsquash/webp-enc-simd";
+import { defaultOptions as webpDefaults } from "jsquash/webp-meta";
+import { initEmscriptenModule } from "jsquash/webp-utils";
 import {
   getImageFormat,
   IMAGE_FORMATS,
@@ -41,6 +44,18 @@ interface EncodedImage {
 // from our own origin; see src/assets/jsquash/README.md.
 const WASM_DIRECTORY = "./jsquash/";
 
+// The encoder glue is imported statically rather than through the packages'
+// `optimise()` / `encode()` wrappers. Those wrappers reach the same modules
+// with `import()`, and `deno bundle` emits every dynamic import as a separate
+// chunk under `_.._/`, a path derived from the absolute location of the source
+// file on the build machine. Static hosts do not all publish that path, so the
+// first render 404s on some of them while working on others.
+const OXI_WASM_FILE = "squoosh_oxipng_bg.wasm";
+const WEBP_WASM_FILES = {
+  simd: "webp_enc_simd.wasm",
+  plain: "webp_enc.wasm",
+} as const;
+
 /**
  * WebP encoding options.
  *
@@ -54,8 +69,8 @@ const WASM_DIRECTORY = "./jsquash/";
 const WEBP_LOSSLESS_OPTIONS = { lossless: 1, exact: 1 } as const;
 
 // The canonical SIMD feature probe: a minimal module using a SIMD opcode.
-// Compiled with WebAssembly.validate(), it answers whether this browser can
-// run the SIMD encoder without instantiating anything.
+// Validated rather than instantiated, it answers whether this browser can run
+// the SIMD encoder without loading anything.
 const SIMD_PROBE = new Uint8Array([
   0,
   97,
@@ -94,9 +109,9 @@ function browserHasWasmSimd(): boolean {
   return WebAssembly.validate(SIMD_PROBE);
 }
 
-// Init once per session, per format. Both packages cache their module
+// Initialize once per session, per format. The packages keep their module
 // internally, so re-initializing on every render would only cost time.
-let webpReady: Promise<void> | null = null;
+let webpReady: Promise<WebPModule> | null = null;
 let oxipngReady: Promise<void> | null = null;
 
 async function compileWasm(url: URL): Promise<WebAssembly.Module> {
@@ -111,22 +126,30 @@ async function compileWasm(url: URL): Promise<WebAssembly.Module> {
   return await WebAssembly.compile(await response.arrayBuffer());
 }
 
-async function ensureWebp(wasmBaseUrl: string): Promise<void> {
+async function ensureWebp(wasmBaseUrl: string): Promise<WebPModule> {
   if (webpReady === null) {
     webpReady = (async () => {
-      const file = browserHasWasmSimd()
-        ? "webp_enc_simd.wasm"
-        : "webp_enc.wasm";
-      // Passing a compiled module skips the package's own SIMD detection,
-      // which is what chose the file above.
-      await initWebpEncode(await compileWasm(new URL(file, wasmBaseUrl)));
+      const simd = browserHasWasmSimd();
+      const module = await compileWasm(
+        new URL(
+          simd ? WEBP_WASM_FILES.simd : WEBP_WASM_FILES.plain,
+          wasmBaseUrl,
+        ),
+      );
+      // The package's own helper for injecting a compiled module; using it
+      // keeps this on the supported manual-init path.
+      return await initEmscriptenModule(
+        simd ? webpSimdFactory : webpFactory,
+        module,
+        {},
+      );
     })().catch((error: unknown) => {
       // Do not cache the failure: a later render may have a working URL.
       webpReady = null;
       throw error;
     });
   }
-  await webpReady;
+  return await webpReady;
 }
 
 async function ensureOxipng(wasmBaseUrl: string): Promise<void> {
@@ -134,11 +157,12 @@ async function ensureOxipng(wasmBaseUrl: string): Promise<void> {
     oxipngReady = (async () => {
       // The single-threaded build: the multi-threaded one only engages inside
       // a Worker and needs COOP/COEP headers that would apply to the whole
-      // page. Outside a Worker the package picks this build by itself.
-      await initOxipng(
-        await compileWasm(new URL("squoosh_oxipng_bg.wasm", wasmBaseUrl)),
+      // page.
+      await initOxiGlue(
+        await compileWasm(new URL(OXI_WASM_FILE, wasmBaseUrl)),
       );
     })().catch((error: unknown) => {
+      // Do not cache the failure: a later render may have a working URL.
       oxipngReady = null;
       throw error;
     });
@@ -182,10 +206,18 @@ async function encodeRasterImage(
   );
 
   if (format === "webp") {
-    await ensureWebp(wasmBaseUrl);
-    const buffer = await encodeWebp(imageData, WEBP_LOSSLESS_OPTIONS);
+    const webpModule = await ensureWebp(wasmBaseUrl);
+    const encoded = webpModule.encode(
+      imageData.data,
+      imageData.width,
+      imageData.height,
+      { ...webpDefaults, ...WEBP_LOSSLESS_OPTIONS },
+    );
+    if (encoded === null) {
+      throw new Error("image-encoder: the WebP encoder returned no data");
+    }
     return {
-      bytes: new Uint8Array(buffer),
+      bytes: new Uint8Array(encoded),
       mimeType,
       extension,
       width,
@@ -194,11 +226,18 @@ async function encodeRasterImage(
   }
 
   await ensureOxipng(wasmBaseUrl);
-  // No options: oxipng's defaults (level 2, no interlacing, no alpha
-  // alteration) are the settings this project wants.
-  const buffer = await optimisePng(imageData);
+  // The package's own defaults (level 2, no interlacing, no alpha alteration)
+  // are the settings this project wants.
+  const encoded = optimise_raw(
+    imageData.data,
+    imageData.width,
+    imageData.height,
+    oxipngDefaults.level,
+    oxipngDefaults.interlace,
+    oxipngDefaults.optimiseAlpha,
+  );
   return {
-    bytes: new Uint8Array(buffer),
+    bytes: new Uint8Array(encoded),
     mimeType,
     extension,
     width,

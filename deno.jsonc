@@ -82,10 +82,20 @@
 
     // SVG rasterizer: returns pixels only. The image file encoders are separate.
     "svg2ui8a": "jsr:@tksh/svg2ui8a@^0.5.0/svg2rgba",
-    // Encoders. The `.js` subpaths are required: the packages declare no
-    // `exports` map, so the extension must be spelled out.
+    // Encoder glue, imported statically. The packages' own wrapper modules
+    // reach the same glue through `import()`, and `deno bundle` emits every
+    // dynamic import as a separate chunk whose path a static host may not
+    // publish. The `.js` extension is required: the packages declare no
+    // `exports` map.
+    // `jsquash/webp-encode` is used only by tests, to show that WebP is not
+    // lossless without `exact`.
     "jsquash/webp-encode": "npm:@jsquash/webp@^1.5.0/encode.js",
-    "jsquash/oxipng-optimise": "npm:@jsquash/oxipng@^2.3.0/optimise.js",
+    "jsquash/webp-enc": "npm:@jsquash/webp@^1.5.0/codec/enc/webp_enc.js",
+    "jsquash/webp-enc-simd": "npm:@jsquash/webp@^1.5.0/codec/enc/webp_enc_simd.js",
+    "jsquash/webp-meta": "npm:@jsquash/webp@^1.5.0/meta.js",
+    "jsquash/webp-utils": "npm:@jsquash/webp@^1.5.0/utils.js",
+    "jsquash/oxipng-glue": "npm:@jsquash/oxipng@^2.3.0/codec/pkg/squoosh_oxipng.js",
+    "jsquash/oxipng-meta": "npm:@jsquash/oxipng@^2.3.0/meta.js",
 
     "tab-lines/apply-group-colors": "./src/js/page-specific/index/tab-lines/apply-group-colors.ts",
     "tab-lines/color-format": "./src/js/page-specific/index/tab-lines/color-format.ts",
