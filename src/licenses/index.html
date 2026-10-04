@@ -79,12 +79,30 @@
       <a href="https://www.mozilla.org/en-US/MPL/2.0/">Mozilla Public License 2.0</a>.
       This page reproduces the license texts of the third-party software this
       site ships whose licenses require the text to travel with the software:
-      the image encoders and the codecs compiled into their WebAssembly
-      modules. Every library the site uses is credited in the
-      <a href="../">About</a> section of the main page.
+      the WebAssembly rasterizer, the image encoders, and the libraries
+      compiled into those modules. Every library the site uses is credited in
+      the <a href="../">About</a> section of the main page.
     </p>
 
     <ul>
+      <li>
+        <span class="license">svg2ui8a-MIT.txt</span>
+        <span class="component">
+          <a href="svg2ui8a-MIT.txt">svg2ui8a</a> — the SVG rasterizer's
+          JavaScript, bundled into the page.
+        </span>
+      </li>
+      <li>
+        <span
+          class="license"><a href="resvg-LICENSE-MIT.txt">resvg-LICENSE-MIT.txt</a>
+          / <a href="resvg-LICENSE-APACHE.txt">resvg-LICENSE-APACHE.txt</a></span>
+        <span class="component">
+          <a href="https://github.com/linebender/resvg">resvg</a> — the Rust SVG
+          rendering library compiled into the rasterizer's WebAssembly module.
+          Copyright the Resvg Authors. Used under the Apache-2.0 or MIT license;
+          both texts are included, and you may choose either.
+        </span>
+      </li>
       <li>
         <span class="license">jsquash-webp-Apache-2.0.txt</span>
         <span class="component">

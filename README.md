@@ -57,6 +57,28 @@ Cloudflare dashboard.
 | [@std/collections](https://jsr.io/@std/collections)                             | MIT                      | Deno standard library array/object utilities        |
 | [murmurhash](https://jsr.io/@timepp/murmurhash)                                 | MIT                      | MurmurHash3 typescript implementation               |
 
+## Vendored license texts
+
+`src/licenses/` holds the third-party license texts that ship with the site,
+copied verbatim. The build copies them to `dist/licenses/`, where `index.html`
+lists them, so visitors of the deployed site can read them.
+
+| File                                         | From                                             |
+| -------------------------------------------- | ------------------------------------------------ |
+| `svg2ui8a-MIT.txt`                           | `@tksh/svg2ui8a` `LICENSE`                       |
+| `resvg-LICENSE-MIT.txt`                      | `linebender/resvg` `v0.47.0` `LICENSE-MIT`       |
+| `resvg-LICENSE-APACHE.txt`                   | `linebender/resvg` `v0.47.0` `LICENSE-APACHE`    |
+| `jsquash-webp-Apache-2.0.txt`                | `@jsquash/webp@1.5.0` `LICENSE`                  |
+| `jsquash-webp-codec-libwebp-BSD-3-Clause.md` | `@jsquash/webp@1.5.0` `codec/LICENSE.codec.md`   |
+| `jsquash-oxipng-Apache-2.0.txt`              | `@jsquash/oxipng@2.3.0` `LICENSE`                |
+| `jsquash-oxipng-codec-oxipng-MIT.md`         | `@jsquash/oxipng@2.3.0` `codec/LICENSE.codec.md` |
+
+The `@jsquash/*` texts and the WebAssembly binaries are refreshed by
+`deno task vendor:jsquash`. The three rasterizer texts are copied by hand:
+`resvg` is a Rust crate that ships inside `svg2ui8a`'s Wasm, so it is not in the
+package cache that task reads from. Both of resvg's license texts are included
+because it is dual-licensed and either may be chosen.
+
 ## License
 
 [Mozilla Public License Version 2.0](https://www.mozilla.org/en-US/MPL/2.0/)
