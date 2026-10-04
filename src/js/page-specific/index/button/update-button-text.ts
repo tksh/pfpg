@@ -89,7 +89,10 @@ function updateButtonText(
 
   // Create action element
   const action = document.createElement("span");
-  action.textContent = `${actionType} as ${label.toUpperCase()}:\u00A0`;
+  const formattedLabel = label.toLowerCase() === "webp"
+    ? "WebP"
+    : label.toUpperCase();
+  action.textContent = `${actionType} as ${formattedLabel}:\u00A0`;
 
   // Create size element
   const size = document.createElement("span");
