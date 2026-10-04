@@ -608,15 +608,34 @@
           <dt>License:</dt>
           <dd><a href="https://www.mozilla.org/en-US/MPL/2.0/" title="Mozilla Public License, version 2.0">MPL 2.0 license</a></dd>
           <dt>Built with:</dt>
-          <!-- Wasm rasterizer and encoder libraries each have their upstream
-               codec nested under them, so the collapsible groups below mirror
-               the structure of the license texts in `dist/licenses/`. -->
+          <!-- Containment is shown by nesting: each library that wraps
+               another credited library is a collapsible group, and what it
+               wraps is indented beneath it. Versions are the ones the shipped
+               Wasm was built from, since a license can change between them. -->
           <dd>
             <details>
               <summary>svg2ui8a</summary>
               <dl>
                 <dd><a href="https://github.com/tksh/svg2ui8a" title="@tksh/svg2ui8a: SVG rasterizer returning raw RGBA pixels.">svg2ui8a (MIT license)</a></dd>
-                <dd><a href="https://github.com/linebender/resvg" title="resvg: The Rust SVG rendering library compiled into the rasterizer's Wasm module. Dual-licensed Apache-2.0 or MIT.">resvg (Apache-2.0 or MIT license)</a></dd>
+                <dd>
+                  <details>
+                    <summary>resvg</summary>
+                    <dl>
+                      <dd><a href="https://github.com/linebender/resvg" title="resvg: The Rust SVG rendering library compiled into the rasterizer's Wasm module. Dual-licensed Apache-2.0 or MIT.">resvg 0.47.0 (Apache-2.0 or MIT license)</a></dd>
+                      <dd>
+                        <details>
+                          <summary>usvg</summary>
+                          <dl>
+                            <dd><a href="https://github.com/linebender/resvg" title="usvg: The SVG parser resvg builds on, compiled into the same Wasm module.">usvg 0.47.0 (Apache-2.0 or MIT license)</a></dd>
+                            <dd><a href="https://github.com/RazrFalcon/roxmltree" title="roxmltree: The XML parser usvg uses, compiled into the same Wasm module.">roxmltree 0.21.1 (MIT or Apache-2.0 license)</a></dd>
+                          </dl>
+                        </details>
+                      </dd>
+                      <dd><a href="https://github.com/linebender/tiny-skia" title="tiny-skia: The 2D rasterizer resvg draws with, compiled into the same Wasm module.">tiny-skia 0.12.0 (BSD-3-Clause license)</a></dd>
+                      <dd><a href="https://github.com/linebender/svgtypes" title="svgtypes: The shared SVG data types used by resvg and usvg.">svgtypes 0.16.1 (Apache-2.0 or MIT license)</a></dd>
+                    </dl>
+                  </details>
+                </dd>
               </dl>
             </details>
           </dd>
@@ -624,10 +643,16 @@
             <details>
               <summary>jSquash</summary>
               <dl>
-                <dd><a href="https://github.com/jamsinclair/jSquash" title="@jsquash/webp: Wasm WebP encoder, repackaged from the Squoosh app.">@jsquash/webp (Apache-2.0 license)</a></dd>
-                <dd><a href="https://github.com/jamsinclair/jSquash" title="@jsquash/oxipng: Wasm PNG optimizer built on oxipng, repackaged from the Squoosh app.">@jsquash/oxipng (Apache-2.0 license)</a></dd>
-                <dd><a href="https://github.com/webmproject/libwebp" title="libwebp: The WebP codec compiled into the WebP encoder's Wasm module.">libwebp (BSD-3-Clause license)</a></dd>
-                <dd><a href="https://github.com/shssoichiro/oxipng" title="oxipng: The PNG optimizer compiled into the PNG optimizer's Wasm module.">oxipng (MIT license)</a></dd>
+                <dd><a href="https://github.com/jamsinclair/jSquash" title="@jsquash/webp: Wasm WebP encoder, repackaged from the Squoosh app.">@jsquash/webp (Apache-2.0 license)</a>
+                  <dl>
+                    <dd><a href="https://github.com/webmproject/libwebp" title="libwebp: The WebP codec compiled into the WebP encoder's Wasm module.">libwebp (BSD-3-Clause license)</a></dd>
+                  </dl>
+                </dd>
+                <dd><a href="https://github.com/jamsinclair/jSquash" title="@jsquash/oxipng: Wasm PNG optimizer built on oxipng, repackaged from the Squoosh app.">@jsquash/oxipng (Apache-2.0 license)</a>
+                  <dl>
+                    <dd><a href="https://github.com/shssoichiro/oxipng" title="oxipng: The PNG optimizer compiled into the PNG optimizer's Wasm module.">oxipng (MIT license)</a></dd>
+                  </dl>
+                </dd>
               </dl>
             </details>
           </dd>
