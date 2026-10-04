@@ -67,16 +67,21 @@ lists them, so visitors of the deployed site can read them.
 | -------------------------------------------- | ------------------------------------------------ |
 | `svg2ui8a-MIT.txt`                           | `@tksh/svg2ui8a` `LICENSE`                       |
 | `resvg-LICENSE-MIT.txt`                      | `linebender/resvg` `v0.47.0` `LICENSE-MIT`       |
+| `roxmltree-LICENSE-MIT.txt`                  | `RazrFalcon/roxmltree` `v0.21.1` `LICENSE-MIT`   |
+| `tiny-skia-LICENSE-BSD-3-Clause.txt`         | `linebender/tiny-skia` `v0.12.0` `LICENSE`       |
+| `svgtypes-LICENSE-MIT.txt`                   | `linebender/svgtypes` `v0.16.1` `LICENSE-MIT`    |
 | `jsquash-webp-Apache-2.0.txt`                | `@jsquash/webp@1.5.0` `LICENSE`                  |
 | `jsquash-webp-codec-libwebp-BSD-3-Clause.md` | `@jsquash/webp@1.5.0` `codec/LICENSE.codec.md`   |
 | `jsquash-oxipng-Apache-2.0.txt`              | `@jsquash/oxipng@2.3.0` `LICENSE`                |
 | `jsquash-oxipng-codec-oxipng-MIT.md`         | `@jsquash/oxipng@2.3.0` `codec/LICENSE.codec.md` |
 
 The `@jsquash/*` texts and the WebAssembly binaries are refreshed by
-`deno task vendor:jsquash`. The two rasterizer texts are copied by hand: `resvg`
-is a Rust crate that ships inside `svg2ui8a`'s Wasm, so it is not in the package
-cache that task reads from. resvg is dual-licensed upstream; this distribution
-applies its MIT license, so only that text is included.
+`deno task vendor:jsquash`. The five rasterizer-side texts are copied by hand:
+`resvg` and its dependencies are Rust crates that ship inside `svg2ui8a`'s Wasm,
+so they are not in the package cache that task reads from. `resvg` and `usvg`
+carry an identical MIT notice, so one file covers both and the licenses page
+says so. `resvg`, `usvg`, `svgtypes` and `roxmltree` are dual-licensed upstream;
+this distribution applies the MIT option to each.
 
 ## License
 

@@ -79,10 +79,11 @@
       <a href="https://www.mozilla.org/en-US/MPL/2.0/">Mozilla Public License 2.0</a>.
       This page reproduces the license texts of the third-party software this
       site ships whose licenses require the text to travel with the software:
-      the WebAssembly rasterizer with the renderer compiled into it, and the
-      image encoders with the codecs compiled into their modules. Every
-      library the site uses is credited in the <a href="../">About</a> section
-      of the main page, including the Rust libraries that resvg depends on.
+      the WebAssembly rasterizer with everything compiled into it, and the
+      image encoders with the codecs compiled into their modules. Each entry
+      here corresponds to a credit in the
+      <a href="../">About</a> section of the main page, where the libraries
+      are listed with what contains what.
     </p>
 
     <ul>
@@ -101,6 +102,43 @@
           <a href="https://github.com/linebender/resvg">resvg</a> — the Rust SVG
           rendering library compiled into the rasterizer's WebAssembly module.
           Distributed under the MIT license.
+        </span>
+      </li>
+      <li>
+        <span
+          class="license"><a href="resvg-LICENSE-MIT.txt">resvg-LICENSE-MIT.txt</a></span>
+        <span class="component">
+          <a href="https://github.com/linebender/resvg">usvg</a> — the SVG parser
+          resvg builds on, compiled into the rasterizer's WebAssembly module.
+          Distributed under the MIT license; its text is the same file as
+          resvg's, listed above, because both crates carry an identical notice.
+        </span>
+      </li>
+      <li>
+        <span
+          class="license"><a href="roxmltree-LICENSE-MIT.txt">roxmltree-LICENSE-MIT.txt</a></span>
+        <span class="component">
+          <a href="https://github.com/RazrFalcon/roxmltree">roxmltree</a> — the XML
+          parser usvg uses, compiled into the rasterizer's WebAssembly module.
+          Distributed under the MIT license.
+        </span>
+      </li>
+      <li>
+        <span
+          class="license"><a href="tiny-skia-LICENSE-BSD-3-Clause.txt">tiny-skia-LICENSE-BSD-3-Clause.txt</a></span>
+        <span class="component">
+          <a href="https://github.com/linebender/tiny-skia">tiny-skia</a> — the 2D
+          rasterizer resvg draws with, compiled into the rasterizer's
+          WebAssembly module.
+        </span>
+      </li>
+      <li>
+        <span
+          class="license"><a href="svgtypes-LICENSE-MIT.txt">svgtypes-LICENSE-MIT.txt</a></span>
+        <span class="component">
+          <a href="https://github.com/linebender/svgtypes">svgtypes</a> — the SVG
+          data types shared by resvg and usvg, compiled into the rasterizer's
+          WebAssembly module. Distributed under the MIT license.
         </span>
       </li>
       <li>
