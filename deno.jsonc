@@ -32,7 +32,7 @@
     // Verification tasks apply to the whole project.
     // tests/fixtures/* are byte-exact copies that must never be reformatted.
     "test": "deno test --allow-read tests/",
-    "check": "deno check tests/ src/ scripts/",
+    "check": "deno check tests/ src/ scripts/ functions/ netlify/",
     "lint": "deno lint",
     "fmt": "deno fmt"
   },

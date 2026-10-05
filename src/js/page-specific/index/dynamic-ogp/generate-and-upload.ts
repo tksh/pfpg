@@ -49,13 +49,31 @@ async function uploadToCloudinary(
   const uploadUrl =
     `${CLOUDINARY_CONFIG.baseUploadUrl}/${CLOUDINARY_CONFIG.cloudName}/image/upload`;
   const { yyyy, yyyymm } = getYearAndMonth();
+  const tags = ["pfpg", yyyy, yyyymm].join(",");
+
+  const signResponse = await fetch(CLOUDINARY_CONFIG.signEndpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ publicId, tags }),
+  });
+  const signed: unknown = await signResponse.json();
+  if (
+    !signResponse.ok || typeof signed !== "object" || signed === null ||
+    !("timestamp" in signed) || typeof signed.timestamp !== "number" ||
+    !("signature" in signed) || typeof signed.signature !== "string"
+  ) {
+    throw new Error("uploadToCloudinary: failed to obtain upload signature");
+  }
 
   const formData = new FormData();
   formData.append("file", imageBlob);
+  formData.append("api_key", CLOUDINARY_CONFIG.apiKey);
+  formData.append("timestamp", String(signed.timestamp));
+  formData.append("signature", signed.signature);
   formData.append("upload_preset", CLOUDINARY_CONFIG.uploadPreset);
   formData.append("public_id", publicId);
   // FormData stringifies arrays with commas; join explicitly for the same value
-  formData.append("tags", ["pfpg", yyyy, yyyymm].join(","));
+  formData.append("tags", tags);
 
   const response: Response = await fetch(uploadUrl, {
     method: "POST",

@@ -5,3 +5,10 @@
 [build.environment]
   # NPMのインストールを無効化
   NPM_FLAGS = "--version"
+
+# フロントエンドからの署名リクエストをNetlify Functionに届けるための書き換え
+[[redirects]]
+  from = "/api/sign-cloudinary-upload"
+  to = "/.netlify/functions/sign-cloudinary-upload"
+  status = 200
+  force = true
