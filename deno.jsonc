@@ -5,10 +5,11 @@
 
     // Just build the project, no watch mode, for production build
     // - For development: using with `deno task serve`
-    "build": "rm -rf dist/ && deno task build:index && deno task build:data-manipulator && deno task build:404 && deno task postprocessing",
+    "build": "rm -rf dist/ && deno task build:index && deno task build:data-manipulator && deno task build:404 && deno task build:history && deno task postprocessing",
     "build:index": "deno bundle src/index.html --platform=browser --outdir dist/",
     "build:data-manipulator": "deno bundle src/data-manipulator.html --platform=browser --outdir dist/",
     "build:404": "deno bundle src/404.html --platform=browser --outdir dist/",
+    "build:history": "deno bundle src/history.html --platform=browser --outdir dist/",
     "serve": "deno run --allow-net --allow-read jsr:@std/http/file-server",
 
     // Copy the assets to the dist directory
@@ -137,6 +138,8 @@
     "dynamic-ogp/generate-and-upload": "./src/js/page-specific/index/dynamic-ogp/generate-and-upload.ts",
     "dynamic-ogp/params-for-uploading": "./src/js/page-specific/index/dynamic-ogp/params-for-uploading.ts",
     "dynamic-ogp/update-metadata": "./src/js/page-specific/index/dynamic-ogp/update-metadata.ts",
+
+    "history/theme-color": "./src/js/page-specific/history/theme-color.ts",
 
     "svg-to-png": "./src/js/page-specific/index/svg-to-png.ts",
 

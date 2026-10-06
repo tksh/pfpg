@@ -12,3 +12,9 @@
   to = "/.netlify/functions/sign-cloudinary-upload"
   status = 200
   force = true
+
+[[redirects]]
+  from = "/api/list-history"
+  to = "/.netlify/functions/list-history"
+  status = 200
+  force = true

@@ -29,7 +29,16 @@ export async function generateAndUploadImage(
     // the WebP of a drawing coexist under one key.
     const publicId = `${hashHexPadded}-${image.extension}`;
 
-    return await uploadToCloudinary(imageBlob, publicId);
+    const imageUrl = await uploadToCloudinary(imageBlob, publicId, "image");
+
+    // The raw sidecar feeds the history page only; never fail the image URL.
+    try {
+      await uploadParamsSidecar(publicId, globalThis.location.search);
+    } catch (sidecarError) {
+      console.error("Error uploading params sidecar:", sidecarError);
+    }
+
+    return imageUrl;
   } catch (error) {
     console.error("Error generating image:", error);
     throw error;
@@ -37,19 +46,37 @@ export async function generateAndUploadImage(
 }
 
 /**
- * Uploads an image to Cloudinary
- * @param {Blob} imageBlob - Image blob to upload
- * @param {string} publicId - Asset name to store the image under
- * @returns {Promise<string>} Uploaded image URL
+ * Uploads the URL params that reproduce this customization as a raw asset
+ * under the same public_id as the image, so the history page can map a
+ * thumbnail back to its reproducing query string.
+ * @param {string} publicId - Asset name shared with the uploaded image
+ * @param {string} params - Reproducing query string (with leading "?")
+ * @returns {Promise<string>} Uploaded raw asset URL
+ */
+async function uploadParamsSidecar(
+  publicId: string,
+  params: string,
+): Promise<string> {
+  const blob = new Blob([params], { type: "text/plain" });
+  return await uploadToCloudinary(blob, publicId, "raw");
+}
+
+/**
+ * Uploads an asset to Cloudinary
+ * @param {Blob} blob - Asset blob to upload
+ * @param {string} publicId - Asset name to store the asset under
+ * @param {"image" | "raw"} resourceType - Cloudinary resource type endpoint
+ * @returns {Promise<string>} Uploaded asset URL
  */
 async function uploadToCloudinary(
-  imageBlob: Blob,
+  blob: Blob,
   publicId: string,
+  resourceType: "image" | "raw",
 ): Promise<string> {
   const uploadUrl =
-    `${CLOUDINARY_CONFIG.baseUploadUrl}/${CLOUDINARY_CONFIG.cloudName}/image/upload`;
+    `${CLOUDINARY_CONFIG.baseUploadUrl}/${CLOUDINARY_CONFIG.cloudName}/${resourceType}/upload`;
   const { yyyy, yyyymm } = getYearAndMonth();
-  const tags = ["pfpg", yyyy, yyyymm].join(",");
+  const tags = ["pfpg", "history", yyyy, yyyymm].join(",");
 
   const signResponse = await fetch(CLOUDINARY_CONFIG.signEndpoint, {
     method: "POST",
@@ -66,7 +93,7 @@ async function uploadToCloudinary(
   }
 
   const formData = new FormData();
-  formData.append("file", imageBlob);
+  formData.append("file", blob, resourceType === "raw" ? "params.txt" : "file");
   formData.append("api_key", CLOUDINARY_CONFIG.apiKey);
   formData.append("timestamp", String(signed.timestamp));
   formData.append("signature", signed.signature);

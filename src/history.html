@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pfpg | history</title>
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+    <link rel="manifest" href="./site.webmanifest">
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="./css/index/color.css">
+    <link rel="stylesheet" href="./css/history/style.css">
+
+    <!-- JS -->
+    <script type="module" src="./js/page-specific/history/main.ts"></script>
+  </head>
+
+  <body>
+    <h1>History</h1>
+
+    <div class="setting-container">
+      <div class="setting-item">
+        <label for="theme-color">Theme color: </label>
+        <select name="theme-color" id="theme-color" autocomplete="off">
+          <option value="white">White</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="black" selected>Black</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="history-grid" class="history-grid"></div>
+  </body>
+</html>
