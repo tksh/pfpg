@@ -11,6 +11,7 @@ interface RawResource {
   public_id: string;
   secure_url: string;
   created_at: string;
+  format?: string;
 }
 
 /**
@@ -51,13 +52,22 @@ export async function listHistoryEntries(
     const textResponse = await fetch(r.secure_url);
     if (!textResponse.ok) continue;
 
-    const imageExtension = r.public_id.split("-").pop();
+    // Raw public_ids come back with the txt extension appended
+    // (e.g. "<hash>-png.txt"). Strip it so the image URL can be derived:
+    // "<hash>-png" -> "<hash>-png.png".
+    const suffix = typeof r.format === "string" && r.format.length > 0
+      ? `.${r.format}`
+      : ".txt";
+    const baseId = r.public_id.endsWith(suffix)
+      ? r.public_id.slice(0, -suffix.length)
+      : r.public_id;
+    const imageExtension = baseId.split("-").pop();
     entries.push({
-      publicId: r.public_id,
+      publicId: baseId,
       createdAt: r.created_at,
       params: (await textResponse.text()).trim(),
       imageUrl:
-        `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${r.public_id}.${imageExtension}`,
+        `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${baseId}.${imageExtension}`,
     });
   }
 
