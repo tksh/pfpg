@@ -27,7 +27,7 @@ export {
  * are not a durable content address: they are practical Cloudinary asset
  * names, and MurmurHash3 offers no collision resistance.
  */
-const SHARED_IMAGE_KEY_VERSION = "pfpg-ogp-v1";
+const SHARED_IMAGE_KEY_VERSION = "pfpg-shared-v1";
 
 // Canonical projection of everything that decides the rendered pixels.
 //
