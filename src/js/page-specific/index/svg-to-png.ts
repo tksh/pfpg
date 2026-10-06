@@ -4,6 +4,7 @@ import {
   updateButtonWithSvgSize,
 } from "button/update-button-text";
 import { generateAndUploadImage } from "dynamic-ogp/generate-and-upload";
+import { getHashForOgImageUrl } from "dynamic-ogp/params-for-uploading";
 import { type EncodedImage, encodeRasterImage } from "state/image-encoder";
 import { extractViewboxValues } from "tab-canvas/crop-side-margins";
 
@@ -19,6 +20,30 @@ let lastRenderedImage: EncodedImage | null = null;
 
 function getLastRenderedImage(): EncodedImage | null {
   return lastRenderedImage;
+}
+
+// 連続操作が止まってからアップロードするまでの待ち時間
+const UPLOAD_DEBOUNCE_MS = 5000;
+let uploadTimer: number | undefined;
+// 直前にアップロードした画像の識別子。同一画像の再アップロードを防ぐ。
+let lastUploadedPublicId: string | null = null;
+
+// Debounced upload target: skip when the artwork hash matches the last one
+async function uploadOgImage(image: EncodedImage): Promise<void> {
+  try {
+    const hashHexPadded = await getHashForOgImageUrl();
+    const publicId = `${hashHexPadded}-${image.extension}`;
+    if (publicId === lastUploadedPublicId) {
+      console.log("Skipping upload of the identical image:", publicId);
+      return;
+    }
+
+    const ogImageUrl = await generateAndUploadImage(image);
+    lastUploadedPublicId = publicId;
+    console.log("ogImageUrl: ", ogImageUrl); // Uploaded image URL, version path removed.
+  } catch (error) {
+    console.error("Error uploading image:", error);
+  }
 }
 
 // svg2rgba() を呼び出し 処理時間を計測する measureSvg2pngTime() を実行し 処理時間結果を表示する
@@ -45,9 +70,13 @@ async function executeSvg2png(
     console.log("encoded image: ", image);
 
     //////////////// OGP ////////////////
-    // エンコード済みの画像から  OGイメージを生成 Cloudinary に アップロード
-    const ogImageUrl = await generateAndUploadImage(image);
-    console.log("ogImageUrl: ", ogImageUrl); // Uploaded image URL, version path removed.
+    // エンコード済みの画像から OGイメージを生成 Cloudinary にアップロード。
+    // 連続レンダリングのたびに即アップロードすると似た画像が並ぶため、
+    // 最後のレンダリングから一定時間経ってから1回だけ実行する (デバウンス)。
+    if (uploadTimer !== undefined) clearTimeout(uploadTimer);
+    uploadTimer = setTimeout(() => {
+      void uploadOgImage(image);
+    }, UPLOAD_DEBOUNCE_MS);
     //////////////// OGP ////////////////
 
     console.log("Rendering processing has completed.");
