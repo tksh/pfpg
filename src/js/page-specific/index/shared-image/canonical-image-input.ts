@@ -15,8 +15,8 @@ export {
   type CanonicalImageInput,
   type CanonicalSettings,
   hashCanonicalImageInput,
-  OGP_KEY_VERSION,
   serializeCanonicalImageInput,
+  SHARED_IMAGE_KEY_VERSION,
 };
 
 /**
@@ -27,7 +27,7 @@ export {
  * are not a durable content address: they are practical Cloudinary asset
  * names, and MurmurHash3 offers no collision resistance.
  */
-const OGP_KEY_VERSION = "pfpg-ogp-v1";
+const SHARED_IMAGE_KEY_VERSION = "pfpg-ogp-v1";
 
 // Canonical projection of everything that decides the rendered pixels.
 //
@@ -283,7 +283,7 @@ function buildCanonicalImageInput(
 }
 
 function serializeCanonicalImageInput(input: CanonicalImageInput): string {
-  return JSON.stringify([OGP_KEY_VERSION, input]);
+  return JSON.stringify([SHARED_IMAGE_KEY_VERSION, input]);
 }
 
 /** The 32-character hexadecimal key for a canonical input. */

@@ -3,8 +3,8 @@ import {
   updateButtonWithPngSize,
   updateButtonWithSvgSize,
 } from "button/update-button-text";
-import { generateAndUploadImage } from "dynamic-ogp/generate-and-upload";
-import { getHashForOgImageUrl } from "dynamic-ogp/params-for-uploading";
+import { uploadRenderedImage } from "shared-image/generate-and-upload";
+import { getSharedImageKeyHash } from "shared-image/shared-image-key";
 import { type EncodedImage, encodeRasterImage } from "state/image-encoder";
 import { extractViewboxValues } from "tab-canvas/crop-side-margins";
 
@@ -31,16 +31,16 @@ let lastUploadedPublicId: string | null = null;
 // Debounced upload target: skip when the artwork hash matches the last one
 async function uploadOgImage(image: EncodedImage): Promise<void> {
   try {
-    const hashHexPadded = await getHashForOgImageUrl();
+    const hashHexPadded = await getSharedImageKeyHash();
     const publicId = `${hashHexPadded}-${image.extension}`;
     if (publicId === lastUploadedPublicId) {
       console.log("Skipping upload of the identical image:", publicId);
       return;
     }
 
-    const ogImageUrl = await generateAndUploadImage(image);
+    const uploadedImageUrl = await uploadRenderedImage(image);
     lastUploadedPublicId = publicId;
-    console.log("ogImageUrl: ", ogImageUrl); // Uploaded image URL, version path removed.
+    console.log("uploadedImageUrl: ", uploadedImageUrl); // Uploaded image URL, version path removed.
   } catch (error) {
     console.error("Error uploading image:", error);
   }
@@ -69,7 +69,7 @@ async function executeSvg2png(
     );
     console.log("encoded image: ", image);
 
-    //////////////// OGP ////////////////
+    //////////// shared image upload ////////////
     // エンコード済みの画像から OGイメージを生成 Cloudinary にアップロード。
     // 連続レンダリングのたびに即アップロードすると似た画像が並ぶため、
     // 最後のレンダリングから一定時間経ってから1回だけ実行する (デバウンス)。
@@ -77,7 +77,7 @@ async function executeSvg2png(
     uploadTimer = setTimeout(() => {
       void uploadOgImage(image);
     }, UPLOAD_DEBOUNCE_MS);
-    //////////////// OGP ////////////////
+    //////////// shared image upload ////////////
 
     console.log("Rendering processing has completed.");
   } catch (error) {

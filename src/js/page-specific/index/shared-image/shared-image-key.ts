@@ -3,10 +3,10 @@ import { excludeStateKeys } from "common-utils/read-url-params";
 import {
   buildCanonicalImageInput,
   hashCanonicalImageInput,
-  OGP_KEY_VERSION,
-} from "dynamic-ogp/canonical-image-input";
+  SHARED_IMAGE_KEY_VERSION,
+} from "shared-image/canonical-image-input";
 
-export { getHashForOgImageUrl, getYearAndMonth };
+export { getSharedImageKeyHash, getYearAndMonth };
 
 /**
  * Generates the key of the shared image for the current URL.
@@ -18,10 +18,10 @@ export { getHashForOgImageUrl, getYearAndMonth };
  * upload appends the format to it instead.
  *
  * @async
- * @function getHashForOgImageUrl
+ * @function getSharedImageKeyHash
  * @returns {Promise<string>} A 32-character hexadecimal string
  */
-async function getHashForOgImageUrl(): Promise<string> {
+async function getSharedImageKeyHash(): Promise<string> {
   const urlParams = new URLSearchParams(globalThis.location.search);
   // State keys are the app's own settings, not artwork data
   const artworkParams = excludeStateKeys(urlParams);
@@ -31,7 +31,7 @@ async function getHashForOgImageUrl(): Promise<string> {
   );
   // Only the version and the key: the canonical input holds the whole
   // artwork and is far too large to log.
-  console.log(`Shared image key (${OGP_KEY_VERSION}):`, hashHexPadded);
+  console.log(`Shared image key (${SHARED_IMAGE_KEY_VERSION}):`, hashHexPadded);
 
   return hashHexPadded;
 }

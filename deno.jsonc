@@ -133,11 +133,10 @@
     "button/init-download-buttons": "./src/js/page-specific/index/button/init-download-buttons.ts",
     "button/update-button-text": "./src/js/page-specific/index/button/update-button-text.ts",
 
-    "dynamic-ogp/canonical-image-input": "./src/js/page-specific/index/dynamic-ogp/canonical-image-input.ts",
-    "dynamic-ogp/constants": "./src/js/page-specific/index/dynamic-ogp/constants.ts",
-    "dynamic-ogp/generate-and-upload": "./src/js/page-specific/index/dynamic-ogp/generate-and-upload.ts",
-    "dynamic-ogp/params-for-uploading": "./src/js/page-specific/index/dynamic-ogp/params-for-uploading.ts",
-    "dynamic-ogp/update-metadata": "./src/js/page-specific/index/dynamic-ogp/update-metadata.ts",
+    "shared-image/canonical-image-input": "./src/js/page-specific/index/shared-image/canonical-image-input.ts",
+    "shared-image/constants": "./src/js/page-specific/index/shared-image/constants.ts",
+    "shared-image/generate-and-upload": "./src/js/page-specific/index/shared-image/generate-and-upload.ts",
+    "shared-image/shared-image-key": "./src/js/page-specific/index/shared-image/shared-image-key.ts",
 
     "history/theme-color": "./src/js/page-specific/history/theme-color.ts",
 

@@ -1,12 +1,12 @@
-import { CLOUDINARY_CONFIG } from "dynamic-ogp/constants";
+import { CLOUDINARY_CONFIG } from "shared-image/constants";
 import {
-  getHashForOgImageUrl,
+  getSharedImageKeyHash,
   getYearAndMonth,
-} from "dynamic-ogp/params-for-uploading";
+} from "shared-image/shared-image-key";
 import type { EncodedImage } from "state/image-encoder";
 
 /**
- * Main function to generate and upload image
+ * Main function to upload a rendered image to Cloudinary
  *
  * The encoded image is uploaded as the renderer produced it: no resizing,
  * centering or background compositing is applied here, so the uploaded
@@ -16,14 +16,14 @@ import type { EncodedImage } from "state/image-encoder";
  * @param {EncodedImage} image - The rendered artwork in the selected format
  * @returns {Promise<string>} Final image URL
  */
-export async function generateAndUploadImage(
+export async function uploadRenderedImage(
   image: EncodedImage,
 ): Promise<string> {
   try {
     const imageBlob = new Blob([image.bytes.slice()], { type: image.mimeType });
 
     // Get 32 characters string hash from
-    const hashHexPadded = await getHashForOgImageUrl();
+    const hashHexPadded = await getSharedImageKeyHash();
     // The key identifies the drawing, so both encodings of the same drawing
     // would collide on one asset name. Suffixing the format lets the PNG and
     // the WebP of a drawing coexist under one key.

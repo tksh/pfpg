@@ -29,9 +29,9 @@ import {
   buildCanonicalImageInput,
   CANONICAL_SETTING_KEYS,
   hashCanonicalImageInput,
-  OGP_KEY_VERSION,
   serializeCanonicalImageInput,
-} from "dynamic-ogp/canonical-image-input";
+  SHARED_IMAGE_KEY_VERSION,
+} from "shared-image/canonical-image-input";
 
 const FIXTURES = new URL("./fixtures/", import.meta.url);
 const UINT_N = 5;
@@ -154,7 +154,7 @@ Deno.test("showcase artwork decodes to a stable 32-char key", async () => {
   );
   assert(
     serializeCanonicalImageInput(first.input).startsWith(
-      `["${OGP_KEY_VERSION}",`,
+      `["${SHARED_IMAGE_KEY_VERSION}",`,
     ),
     "the version must be part of the hashed text",
   );
