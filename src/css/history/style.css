@@ -21,4 +21,7 @@ body {
   width: 100%;
   height: auto;
   border: 1px solid var(--color-fieldset-border);
+  /* Keep the pixel-art look crisp when the small source is upscaled */
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
