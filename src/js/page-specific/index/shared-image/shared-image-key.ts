@@ -6,10 +6,10 @@ import {
   SHARED_IMAGE_KEY_VERSION,
 } from "shared-image/canonical-image-input";
 
-export { getSharedImageKeyHash };
+export { getSharedImageKeyHash, getSharedImageKeyHashForCurrentUrl };
 
 /**
- * Generates the key of the shared image for the current URL.
+ * Generates the key of the shared image for the given URL parameters.
  *
  * The key identifies the rendered drawing, not the URL text: two URLs that
  * decode to the same geometry, effective colors and rasterization settings
@@ -19,10 +19,12 @@ export { getSharedImageKeyHash };
  *
  * @async
  * @function getSharedImageKeyHash
+ * @param {URLSearchParams} urlParams - The full query parameters of the URL
  * @returns {Promise<string>} A 32-character hexadecimal string
  */
-async function getSharedImageKeyHash(): Promise<string> {
-  const urlParams = new URLSearchParams(globalThis.location.search);
+async function getSharedImageKeyHash(
+  urlParams: URLSearchParams,
+): Promise<string> {
   // State keys are the app's own settings, not artwork data
   const artworkParams = excludeStateKeys(urlParams);
   const decoded = await decodeUrlParams(artworkParams);
@@ -34,4 +36,11 @@ async function getSharedImageKeyHash(): Promise<string> {
   console.log(`Shared image key (${SHARED_IMAGE_KEY_VERSION}):`, hashHexPadded);
 
   return hashHexPadded;
+}
+
+// Current-page wrapper for the browser callers
+function getSharedImageKeyHashForCurrentUrl(): Promise<string> {
+  return getSharedImageKeyHash(
+    new URLSearchParams(globalThis.location.search),
+  );
 }

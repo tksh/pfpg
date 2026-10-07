@@ -4,7 +4,7 @@ import {
   updateButtonWithSvgSize,
 } from "button/update-button-text";
 import { uploadRenderedImage } from "shared-image/generate-and-upload";
-import { getSharedImageKeyHash } from "shared-image/shared-image-key";
+import { getSharedImageKeyHashForCurrentUrl } from "shared-image/shared-image-key";
 import { type EncodedImage, encodeRasterImage } from "state/image-encoder";
 import { extractViewboxValues } from "tab-canvas/crop-side-margins";
 
@@ -31,7 +31,7 @@ let lastUploadedPublicId: string | null = null;
 // Debounced upload target: skip when the artwork hash matches the last one
 async function uploadOgImage(image: EncodedImage): Promise<void> {
   try {
-    const hashHexPadded = await getSharedImageKeyHash();
+    const hashHexPadded = await getSharedImageKeyHashForCurrentUrl();
     const publicId = `${hashHexPadded}-${image.extension}`;
     if (publicId === lastUploadedPublicId) {
       console.log("Skipping upload of the identical image:", publicId);

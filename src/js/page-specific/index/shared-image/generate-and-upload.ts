@@ -28,7 +28,9 @@ export async function uploadRenderedImage(
     const imageBlob = new Blob([image.bytes.slice()], { type: image.mimeType });
 
     // Get 32 characters string hash from
-    const hashHexPadded = await getSharedImageKeyHash();
+    const hashHexPadded = await getSharedImageKeyHash(
+      new URLSearchParams(globalThis.location.search),
+    );
     // The key identifies the drawing, so both encodings of the same drawing
     // would collide on one asset name. Suffixing the format lets the PNG and
     // the WebP of a drawing coexist under one key.
