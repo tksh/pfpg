@@ -4,7 +4,7 @@ import {
 } from "@tksh/group-colors-param-codec";
 import { normalizedToHex } from "color-formatter/normalized-to-hex";
 import { convertColorFormatForArray } from "color-formatter/format-converter";
-import { getGroupColorsValues } from "tab-lines/get-colors-from-svg";
+import { getGroupColorsValues } from "group-colors-svg/group-colors-svg";
 
 export function getGroupColorsAsJoinedHex(inputSvg: string): string {
   // Lines group color attributes (stroke(st), opacity(op), stroke-opacity(so))

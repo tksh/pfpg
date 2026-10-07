@@ -1,9 +1,10 @@
 import { getSvgString } from "button/download-as-file";
+import { GROUP_COLORS_ELEMENT_REGEX } from "group-colors-svg/group-colors-svg";
 import { convertColorFormat } from "color-formatter/format-converter";
 import { generateGroupColorsSvgTags } from "tab-lines/group-colors-generator";
 import { getElementValueById } from "tab-lines/opacity-steps";
-import { getNumberOfGroups } from "utils/get-number-of-groups";
-import { replaceAtIndex } from "utils/replace-at-index";
+import { getNumberOfGroups } from "group-colors-svg/group-colors-svg";
+import { replaceAtIndex } from "group-colors-svg/group-colors-svg";
 
 export function updateSvgAsNewColorFormat(colorFormat: string): string {
   // Get the SVG string value
@@ -45,7 +46,7 @@ export function updateSvgAsNewColorFormat(colorFormat: string): string {
     const changedGroupElem = generateGroupColorsSvgTags(gId, groupColorsArr);
 
     // Replace the <g> elements via group ID
-    const pattern = /<g[^>]*stroke=[^>]*>/g;
+    const pattern = GROUP_COLORS_ELEMENT_REGEX;
     return replaceAtIndex(inputSvg, pattern, changedGroupElem, gId);
   };
 

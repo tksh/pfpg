@@ -1,10 +1,11 @@
 import { getSvgString } from "button/download-as-file";
+import { GROUP_COLORS_ELEMENT_REGEX } from "group-colors-svg/group-colors-svg";
 import { decodeUrlToSvgForPage } from "state/url-decode";
 import { optimizeSvg } from "modal/optimize-svg";
 import { svg2pngOption } from "state/resvg-option";
 import { getState, updateState } from "state/url-state-manager";
 import { executeSvg2png } from "svg-to-png";
-import { replaceAtIndex } from "utils/replace-at-index";
+import { replaceAtIndex } from "group-colors-svg/group-colors-svg";
 
 export { decodeAsSelectedPathMode, initPathModeSelect };
 
@@ -23,7 +24,7 @@ function initPathModeSelect(): void {
     // Lines tab
 
     // Group colors
-    const patternGroupColors = /<g[^>]*stroke=[^>]*>/g;
+    const patternGroupColors = GROUP_COLORS_ELEMENT_REGEX;
     const matchOfGroupColors = currentPathModeSvg.match(patternGroupColors);
     console.log("matchOfGroupColors: ", matchOfGroupColors);
     // e.g.: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="# ...

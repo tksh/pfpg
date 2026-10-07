@@ -1,4 +1,5 @@
 import { getSvgString } from "button/download-as-file";
+import { GROUP_COLORS_ELEMENT_REGEX } from "group-colors-svg/group-colors-svg";
 import { svg2pngOption } from "state/resvg-option";
 import { updateState } from "state/url-state-manager";
 import { executeSvg2png } from "svg-to-png";
@@ -9,9 +10,9 @@ import {
   getStroke,
   getStrokeOpacity,
   regexMatchesOfGroupColors,
-} from "tab-lines/get-colors-from-svg";
-import { replaceAtIndex } from "utils/replace-at-index";
-import { getNumberOfGroups } from "utils/get-number-of-groups";
+} from "group-colors-svg/group-colors-svg";
+import { replaceAtIndex } from "group-colors-svg/group-colors-svg";
+import { getNumberOfGroups } from "group-colors-svg/group-colors-svg";
 
 export {
   addEventListenerForGroupColorsInputs,
@@ -143,7 +144,7 @@ function updateSvgWithNewColorValue(
   // e.g: <g (id="0") stroke="#FF7523" opacity="1" stroke-opacity="1">
 
   // Replace the changed <g> element via specific group ID
-  const pattern = /<g[^>]*stroke=[^>]*>/g;
+  const pattern = GROUP_COLORS_ELEMENT_REGEX;
   const updatedSvg = replaceAtIndex(svgString, pattern, changedGroupElem, gId);
 
   // Update the svg string in html

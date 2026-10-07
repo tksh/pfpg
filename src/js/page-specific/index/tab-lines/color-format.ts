@@ -4,7 +4,7 @@ import { getState, updateState } from "state/url-state-manager";
 import { updateSvgAsNewColorFormat } from "tab-lines/update-svg-color-format";
 import { generateGroupColorsHtmlElements } from "tab-lines/group-colors-generator";
 import { addEventListenerForGroupColorsInputs } from "tab-lines/group-colors-listener";
-import { getNumberOfGroups } from "utils/get-number-of-groups";
+import { getNumberOfGroups } from "group-colors-svg/group-colors-svg";
 
 export function initColorFormatSelect(): void {
   // Event listeners for 'Color format' <select> changes

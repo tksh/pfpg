@@ -6,7 +6,7 @@ import { rgbToLch } from "color-formatter/rgb-to-lch";
 import { removeOpacity } from "modal/optimize-svg";
 import { getState } from "state/url-state-manager";
 import { executeSvg2png } from "svg-to-png";
-import { getGroupColorsValues } from "tab-lines/get-colors-from-svg";
+import { getGroupColorsValues } from "group-colors-svg/group-colors-svg";
 import { numbersIncrementByStep } from "tab-lines/opacity-steps";
 import { updateSvgWithNewColorValue } from "tab-lines/group-colors-listener";
 

@@ -103,7 +103,6 @@
     "tab-lines/details-toggle-listener": "./src/js/page-specific/index/tab-lines/details-toggle-listener.ts",
     "tab-lines/decode-colors-as-array": "./src/js/page-specific/index/tab-lines/decode-colors-as-array.ts",
     "tab-lines/encode-colors-as-hex": "./src/js/page-specific/index/tab-lines/encode-colors-as-hex.ts",
-    "tab-lines/get-colors-from-svg": "./src/js/page-specific/index/tab-lines/get-colors-from-svg.ts",
     "tab-lines/group-colors-listener": "./src/js/page-specific/index/tab-lines/group-colors-listener.ts",
     "tab-lines/group-colors-generator": "./src/js/page-specific/index/tab-lines/group-colors-generator.ts",
     "tab-lines/opacity-steps": "./src/js/page-specific/index/tab-lines/opacity-steps.ts",
@@ -124,9 +123,8 @@
     "tab-ui/theme-color": "./src/js/page-specific/index/tab-ui/theme-color.ts",
     "tab-ui/view-scaling": "./src/js/page-specific/index/tab-ui/view-scaling.ts",
 
-    "utils/get-number-of-groups": "./src/js/page-specific/index/utils/get-number-of-groups.ts",
+    "group-colors-svg/group-colors-svg": "./src/js/group-colors-svg/group-colors-svg.ts",
     "utils/number-rounding": "./src/js/page-specific/index/utils/number-rounding.ts",
-    "utils/replace-at-index": "./src/js/page-specific/index/utils/replace-at-index.ts",
 
     "button/copy-to-clipboard": "./src/js/page-specific/index/button/copy-to-clipboard.ts",
     "button/download-as-file": "./src/js/page-specific/index/button/download-as-file.ts",

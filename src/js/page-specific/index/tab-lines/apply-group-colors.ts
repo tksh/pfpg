@@ -1,11 +1,12 @@
 import { getState } from "state/url-state-manager";
+import { GROUP_COLORS_ELEMENT_REGEX } from "group-colors-svg/group-colors-svg";
 import {
   generateGroupColorsHtmlElements,
   generateGroupColorsSvgTags,
 } from "tab-lines/group-colors-generator";
 import { addEventListenerForGroupColorsInputs } from "tab-lines/group-colors-listener";
-import { getNumberOfGroups } from "utils/get-number-of-groups";
-import { replaceAtIndex } from "utils/replace-at-index";
+import { getNumberOfGroups } from "group-colors-svg/group-colors-svg";
+import { replaceAtIndex } from "group-colors-svg/group-colors-svg";
 
 export function applyGroupColors(
   svgString: string,
@@ -24,7 +25,7 @@ export function applyGroupColors(
   // e.g.: (3) ['<g (id="0") stroke="#38AA34" opacity="1" stroke-opacity="1">', '<g stroke="#000" opacity="1" stroke-opacity="1">', '<g stroke="#FFF" opacity="1" stroke-opacity="1">']
 
   // Replace the whole groups <g> element, via group ID = index number of array
-  const pattern = /<g[^>]*stroke=[^>]*>/g;
+  const pattern = GROUP_COLORS_ELEMENT_REGEX;
   let updatedSvg = svgString;
 
   // Replace each group element
