@@ -6,7 +6,7 @@ import {
   SHARED_IMAGE_KEY_VERSION,
 } from "shared-image/canonical-image-input";
 
-export { getSharedImageKeyHash, getYearAndMonth };
+export { getSharedImageKeyHash };
 
 /**
  * Generates the key of the shared image for the current URL.
@@ -34,19 +34,4 @@ async function getSharedImageKeyHash(): Promise<string> {
   console.log(`Shared image key (${SHARED_IMAGE_KEY_VERSION}):`, hashHexPadded);
 
   return hashHexPadded;
-}
-
-function getYearAndMonth(): { yyyy: number; yyyymm: string } {
-  const dt = new Date();
-
-  const yyyy = dt.getFullYear();
-  console.log("yyyy: ", yyyy); // e.g.: 2024
-
-  const mm = ("00" + (dt.getMonth() + 1)).slice(-2); // getMonth() 関数は １月を 0 として返却するので １を加算
-  console.log("mm: ", mm); // e.g.: 12
-
-  const yyyymm = `${yyyy}${mm}`;
-  console.log("yyyymm: ", yyyymm); // e.g.: 202412
-
-  return { yyyy, yyyymm };
 }

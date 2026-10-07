@@ -1,9 +1,14 @@
 import { CLOUDINARY_CONFIG } from "shared-image/constants";
-import {
-  getSharedImageKeyHash,
-  getYearAndMonth,
-} from "shared-image/shared-image-key";
+import { getSharedImageKeyHash } from "shared-image/shared-image-key";
 import type { EncodedImage } from "state/image-encoder";
+
+// Year/month of upload, used for Cloudinary tags (e.g. "2026", "2026-10")
+function getYearAndMonth(): { yyyy: number; yyyyMm: string } {
+  const dt = new Date();
+  const yyyy = dt.getFullYear();
+  const mm = ("00" + (dt.getMonth() + 1)).slice(-2);
+  return { yyyy, yyyyMm: `${yyyy}-${mm}` };
+}
 
 /**
  * Main function to upload a rendered image to Cloudinary
@@ -75,8 +80,8 @@ async function uploadToCloudinary(
 ): Promise<string> {
   const uploadUrl =
     `${CLOUDINARY_CONFIG.baseUploadUrl}/${CLOUDINARY_CONFIG.cloudName}/${resourceType}/upload`;
-  const { yyyy, yyyymm } = getYearAndMonth();
-  const tags = ["pfpg", "history", yyyy, yyyymm].join(",");
+  const { yyyy, yyyyMm } = getYearAndMonth();
+  const tags = ["pfpg", "history", yyyy, yyyyMm].join(",");
 
   const signResponse = await fetch(CLOUDINARY_CONFIG.signEndpoint, {
     method: "POST",
