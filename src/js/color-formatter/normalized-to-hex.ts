@@ -1,7 +1,12 @@
-import { tryAddHash } from "color-formatter/hex-expand";
-import { tryDeleteHash } from "color-formatter/hex-shorten";
-
 export { normalizedToHex, rgbObjToHex, rgbStrToRgbArr, rgbToHex, uint8ToHex };
+
+function tryAddHash(hexString: string): string {
+  return hexString.startsWith("#") ? hexString : "#" + hexString;
+}
+
+function tryDeleteHash(hexStr: string): string {
+  return hexStr.startsWith("#") ? hexStr.slice(1) : hexStr;
+}
 
 // 0から1の範囲に正規化された数値を引数として受け取り
 // 2桁のHEX文字列として返す関数

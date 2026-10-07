@@ -1,7 +1,24 @@
-import { hexExpandToSix } from "color-formatter/hex-expand";
-import { tryDeleteHash } from "color-formatter/hex-shorten";
-
 export { hexToRgbArr, hexToUint8, normalizedFromHex, rgbStringify };
+
+// strip a leading "#" if present
+function tryDeleteHash(hexStr: string): string {
+  return hexStr.startsWith("#") ? hexStr.slice(1) : hexStr;
+}
+
+// Expand 3-digit hex to 6 digits; 6-digit hex passes through;
+// anything else yields an Error object (kept for legacy behavior).
+function hexExpandToSix(hex: string): string | undefined | Error {
+  if (!hex) {
+    return undefined;
+  }
+  if (hex.length === 6) {
+    return hex;
+  } else if (hex.length === 3) {
+    return hex.split("").map((char) => char.repeat(2)).join("");
+  } else {
+    return new Error("Invalid hex code");
+  }
+}
 
 // 2桁のHEX文字列を引数として受け取り
 // 0から1の範囲に 正規化された数値として 返す関数

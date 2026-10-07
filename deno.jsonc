@@ -170,8 +170,6 @@
     "common-utils/show-processing-time": "./src/js/common-utils/show-processing-time.ts",
 
     "color-formatter/format-converter": "./src/js/color-formatter/format-converter.ts",
-    "color-formatter/hex-expand": "./src/js/color-formatter/hex-expand.ts",
-    "color-formatter/hex-shorten": "./src/js/color-formatter/hex-shorten.ts",
     "color-formatter/normalized-from-hex": "./src/js/color-formatter/normalized-from-hex.ts",
     "color-formatter/normalized-to-hex": "./src/js/color-formatter/normalized-to-hex.ts",
     "color-formatter/rgb-to-lch": "./src/js/color-formatter/rgb-to-lch.ts"
