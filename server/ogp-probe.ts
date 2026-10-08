@@ -30,6 +30,20 @@ Deno.serve(async (req: Request): Promise<Response> => {
   if (pathname === "/ogp" && req.method === "GET") {
     return await handleProbe(url);
   }
+  if (pathname === "/ogp/image-meta" && req.method === "GET") {
+    try {
+      const key = await getSharedImageKeyHash(url.searchParams);
+      const publicId = `${key}-png`;
+      const imageUrl =
+        `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${publicId}.png`;
+      return new Response(
+        JSON.stringify({ key, publicId, imageUrl }),
+        { headers: { "content-type": "application/json" } },
+      );
+    } catch (error) {
+      return jsonError(error);
+    }
+  }
   if (pathname === "/ogp/render" && req.method === "POST") {
     try {
       const data = await renderAndUpload(url);

@@ -1,14 +1,15 @@
 // Shared helper for the Pages-level OGP meta injection on Cloudflare Pages
-// (`functions/index.html.ts`) and Netlify (`netlify/functions/...`): both
-// platforms intercept `GET /index.html?...` and must
+// (`functions/_middleware.ts`) and Netlify (`netlify/functions/index-html-og.ts`):
+// both platforms intercept `GET /index.html?...` and must
 //
 //  - serve the plain static index.html as-is when there is no artwork query,
-//  - otherwise proxy the Deno Deploy /share route (which returns the same
-//    index.html shell with `og:image` / `og:url` baked in), and then rewrite
-//    the `og:url` meta to the actual origin URL the user shared.
+//  - otherwise take the CURRENT site's own `/index-raw.html` build artifact
+//    and inject an `og:image` URL computed by the Deno Deploy helper API
+//    `/ogp/image-meta`, plus the visitor's original URL in `og:url`.
 //
-// The `fallback` returns the static index.html when no query is present;
-// platform providers wire it differently because their asset serving differs.
+// Proxying the Deno Deploy /share HTML would embed Cloudflare's bundle hashes,
+// which then 404 on Netlify (and vice versa), so each platform injects into
+// its own copy of the shell instead.
 export async function serveOgPage(
   req: Request,
   fallback: () => Promise<Response> | Response,
@@ -17,29 +18,43 @@ export async function serveOgPage(
   const search = url.search;
 
   if (search === "" || search === "?") {
-    const res = await fallback();
-    // Netlify/Cloudflare functions respond well to a plain Response, but a
-    // proxied or computed fallback already has the right content-type
-    return res;
+    return await fallback();
   }
 
-  const upstream = await fetch(
-    `https://pfpg-ogp.tksh.deno.net/share${search}`,
-  );
-  if (!upstream.ok) {
-    return new Response(await upstream.text(), {
-      status: upstream.status,
-      headers: { "content-type": "application/json" },
+  try {
+    const pageResp = await fetch(`${url.origin}/index-raw.html`);
+    if (!pageResp.ok) {
+      return await fallback();
+    }
+    const baseHtml = await pageResp.text();
+
+    const metaResp = await fetch(
+      `https://pfpg-ogp.tksh.deno.net/ogp/image-meta${search}`,
+    );
+    const meta: unknown = await metaResp.json();
+    let imageUrl: string | null = null;
+    if (
+      typeof meta === "object" && meta !== null && "imageUrl" in meta &&
+      typeof (meta as { imageUrl: unknown }).imageUrl === "string"
+    ) {
+      imageUrl = (meta as { imageUrl: string }).imageUrl;
+    }
+
+    let html = baseHtml;
+    html = html.replace(
+      /<meta property="og:url" content="[^"]*"\s*\/>/,
+      `<meta property="og:url" content="${url.toString()}" />`,
+    );
+    if (imageUrl !== null) {
+      html = html.replace(
+        /<meta property="og:image" content="[^"]*"\s*\/>/,
+        `<meta property="og:image" content="${imageUrl}" />`,
+      );
+    }
+    return new Response(html, {
+      headers: { "content-type": "text/html; charset=utf-8" },
     });
+  } catch {
+    return await fallback();
   }
-
-  let html = await upstream.text();
-  html = html.replace(
-    /<meta property="og:url" content="[^"]*"\s*\/>/,
-    `<meta property="og:url" content="${url.toString()}" />`,
-  );
-
-  return new Response(html, {
-    headers: { "content-type": "text/html; charset=utf-8" },
-  });
 }
