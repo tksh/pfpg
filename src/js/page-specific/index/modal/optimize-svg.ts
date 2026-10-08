@@ -28,7 +28,6 @@ function tryRemoveOpacity(
   svgString: string,
   isOpacityRemoved: unknown,
 ): string {
-  console.log("tryRemoveOpacity executed.");
   if (isOpacityRemoved) {
     return removeOpacity(svgString);
   } else {
@@ -39,7 +38,6 @@ function tryRemoveLineBreaks(
   svgString: string,
   isLineBreaksRemoved: unknown,
 ): string {
-  console.log("tryRemoveLineBreaks executed.");
   if (isLineBreaksRemoved) {
     return removeLineBreaks(svgString);
   } else {
@@ -47,7 +45,6 @@ function tryRemoveLineBreaks(
   }
 }
 function tryRemoveSpaces(svgString: string, isSpacesRemoved: unknown): string {
-  console.log("tryRemoveSpaces executed.");
   if (isSpacesRemoved) {
     return removeSpaces(svgString);
   } else {

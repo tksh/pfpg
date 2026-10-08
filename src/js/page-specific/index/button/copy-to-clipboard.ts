@@ -20,7 +20,6 @@ async function copyPngToClipboard(): Promise<void> {
       }),
     });
     await navigator.clipboard.write([clipboardItem]);
-    console.log(`${image.extension.toUpperCase()} image copied to clipboard`);
 
     const pngActionButtonElement = document.getElementById(
       "png-action-button",
@@ -47,7 +46,6 @@ async function copyPngToClipboard(): Promise<void> {
 async function copySvgToClipboard(): Promise<void> {
   try {
     await navigator.clipboard.writeText(getSvgString());
-    console.log("SVG Text copied to clipboard");
 
     const svgActionButtonElement = document.getElementById("svg-action-button");
     if (svgActionButtonElement === null) {

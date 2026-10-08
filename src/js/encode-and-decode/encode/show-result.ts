@@ -5,10 +5,6 @@ function showStringSize(
   inputStr: string,
   outputElemId: string,
 ): void {
-  console.log(
-    `//////////////////////// Result: ${inputDataTitle} ////////////////////////`,
-  );
-
   // Show the size in html
   const outputTextElem = document.getElementById(`${outputElemId}`);
   if (outputTextElem === null) {
@@ -16,7 +12,4 @@ function showStringSize(
   }
   outputTextElem.textContent =
     `Result length of ${inputDataTitle}: ${inputStr.length} characters (bytes)`;
-
-  // Show the size in console
-  console.log(`Length of encoded string via: `, inputStr.length);
 }

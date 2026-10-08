@@ -18,13 +18,9 @@ async function decodeUrlToSvgForPage(
   isRelative: boolean,
 ): Promise<string | undefined> {
   const startTime = performance.now();
-  console.log(
-    `Start the decoding from URL params to SVG (isRelative = ${isRelative}) ...`,
-  );
 
   const params = getUrlParamsExceptsStates();
   if (params.toString() === "") {
-    console.log("There is no url params to decode.");
     return;
   }
 

@@ -16,13 +16,11 @@ export function setupCopyButtons(): void {
       navigator.clipboard.writeText(textToCopy)
         .then(() => {
           if (textToCopy.length === 0) {
-            console.log("There is no text to copy.");
             this.textContent = "❌ There is no text to copy";
             setTimeout(() => {
               this.textContent = originalText;
             }, 3000);
           } else {
-            console.log("Text copied to clipboard successfully.");
             this.textContent = "✔️ Successfully copied!";
             setTimeout(() => {
               this.textContent = originalText;

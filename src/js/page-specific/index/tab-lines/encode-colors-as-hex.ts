@@ -24,9 +24,6 @@ export function getGroupColorsAsJoinedHex(inputSvg: string): string {
   const stArray = convertColorFormatForArray(strokeArrayValues, "hex");
   const opArray = opacityArrayValues;
   const soArray = strokeOpacityArrayValues;
-  console.log(stArray); // Type: String | e.g.: Array(5) [ "#97FF6E", "#000000", "#8ACAFF", "#eeeeee", "#ffffff" ]
-  console.log(opArray); // Type: String | e.g.: Array(5) [ "0.5", "1", "1", "1", "1" ]
-  console.log(soArray); // Type: String | e.g.: Array(5) [ "1", "0.8", "1", "1", "1" ]
 
   const stHexArray = stArray.map((colorValueStr) =>
     expandHexToSix(colorValueStr.slice(1))
@@ -37,9 +34,6 @@ export function getGroupColorsAsJoinedHex(inputSvg: string): string {
   const soHexArray = soArray.map((colorValueStr) =>
     normalizedToHex(Number(colorValueStr)).toUpperCase()
   );
-  console.log(stHexArray); // 6 chars hex | e.g.: Array(5) [ "97FF6E", "000000", "8ACAFF", "EEEEEE", "FFFFFF" ]
-  console.log(opHexArray); // 2 chars hex | e.g.: Array(5) [ "80", "FF", "FF", "FF", "FF" ]
-  console.log(soHexArray); // 2 chars hex | e.g.: Array(5) [ "FF", "CC", "FF", "FF", "FF" ]
 
   // Each group is normalized to a 6-digit stroke + 2-digit opacity +
   // 2-digit stroke-opacity, i.e. always 10 hex digits.

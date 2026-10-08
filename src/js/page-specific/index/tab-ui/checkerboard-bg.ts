@@ -9,7 +9,6 @@ function initCheckerboardBgCheckbox(): void {
 
   checkboxInput.addEventListener("change", () => {
     const isCheckerboardBg = checkboxInput.checked;
-    console.log("isCheckerboardBg: ", isCheckerboardBg);
     updateState("checkerboardBg", isCheckerboardBg);
     toggleCheckerboardBg(isCheckerboardBg);
   });

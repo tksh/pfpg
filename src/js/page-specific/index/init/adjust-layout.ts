@@ -6,7 +6,7 @@ function initViewportLister(): void {
     throw new Error("initViewportLister: globalThis.visualViewport is null");
   }
   viewport.addEventListener("resize", () => {
-    console.log("viewport changed.");
+    console.debug("viewport changed.");
     adjustLayoutIfNotMobile();
   });
 }
@@ -16,14 +16,14 @@ function adjustLayoutIfNotMobile(_reason?: string): void {
 
   // ウィンドウサイズによって 適用するかどうかを判定する
   if (globalThis.innerWidth > 512) { // モバイルではない場合 JSで レイアウトを調節する
-    console.log(
+    console.debug(
       "window.innerWidth > 512, window.innerWidth, window.innerHeight: ",
       globalThis.innerWidth,
       globalThis.innerHeight,
     );
     resizeOutputRectBoxes(newOutputBoxSize);
   } else { // モバイルの場合 何もしない (CSSだけで レイアウトは 機能している)
-    console.log(`window.innerWidth < 512`);
+    console.debug(`window.innerWidth < 512`);
   }
 }
 
@@ -49,7 +49,7 @@ function getNewOutputBoxSize(): number {
 
   // window.innerHeightを使用してビューポートの高さを取得
   const windowInnerHeight = globalThis.innerHeight;
-  console.log("windowInnerHeight: ", windowInnerHeight);
+  console.debug("windowInnerHeight: ", windowInnerHeight);
 
   // <body>
   const bodyElem = document.querySelector("body");
@@ -57,7 +57,7 @@ function getNewOutputBoxSize(): number {
     throw new Error("getNewOutputBoxSize: missing element body");
   }
   const bodyRect = bodyElem.getBoundingClientRect();
-  console.log("body: ", bodyRect.width, bodyRect.height);
+  console.debug("body: ", bodyRect.width, bodyRect.height);
 
   // <header>
   const headerElem = document.querySelector("header");
@@ -65,7 +65,7 @@ function getNewOutputBoxSize(): number {
     throw new Error("getNewOutputBoxSize: missing element header");
   }
   const headerRect = headerElem.getBoundingClientRect();
-  console.log("headerRect.height: ", headerRect.height);
+  console.debug("headerRect.height: ", headerRect.height);
 
   // <main>
   const mainElem = document.querySelector("main");
@@ -73,7 +73,7 @@ function getNewOutputBoxSize(): number {
     throw new Error("getNewOutputBoxSize: missing element main");
   }
   const mainRect = mainElem.getBoundingClientRect();
-  console.log("main: ", mainRect.width, mainRect.height);
+  console.debug("main: ", mainRect.width, mainRect.height);
 
   // <div id="img-box">
   const imgBoxElem = document.getElementById("img-box");
@@ -81,7 +81,7 @@ function getNewOutputBoxSize(): number {
     throw new Error("getNewOutputBoxSize: missing element #img-box");
   }
   const imgBoxRect = imgBoxElem.getBoundingClientRect();
-  console.log("img-box: ", imgBoxRect.width, imgBoxRect.height);
+  console.debug("img-box: ", imgBoxRect.width, imgBoxRect.height);
 
   // Result size will be same as above "img-box" rect
   // <div id="textarea-box">
@@ -90,7 +90,11 @@ function getNewOutputBoxSize(): number {
     throw new Error("getNewOutputBoxSize: missing element #textarea-box");
   }
   const textareaBoxRect = textareaBoxElem.getBoundingClientRect();
-  console.log("textarea-box: ", textareaBoxRect.width, textareaBoxRect.height);
+  console.debug(
+    "textarea-box: ",
+    textareaBoxRect.width,
+    textareaBoxRect.height,
+  );
 
   // Calc
 
@@ -98,18 +102,18 @@ function getNewOutputBoxSize(): number {
 
   // header + main の height を算出
   const headerAndMainHeight = headerRect.height + mainRect.height;
-  console.log("headerAndMainHeight (header + main):", headerAndMainHeight);
+  console.debug("headerAndMainHeight (header + main):", headerAndMainHeight);
 
   // window.innerHeight と比較してどちらが 大きい数値か？ (画面から はみ出ているか？ そうではないか？)
   // はみ出ていたら diffHeight の分だけ 正方形 (imgBoxElem, textareaBoxElem) の box を小さくする
   const diffHeight = Math.round(globalThis.innerHeight - headerAndMainHeight);
-  console.log(
+  console.debug(
     `diffHeight (window.innerHeight - headerAndMainHeight) = ${globalThis.innerHeight} - ${headerAndMainHeight} = ${diffHeight}`,
   );
 
   // 'img-box', 'textarea=box' に適用すべき imgBoxHeightNew を算出
   const imgBoxHeightNew = Math.round(imgBoxRect.height + diffHeight);
-  console.log(
+  console.debug(
     "imgBoxRect.height => imgBoxHeightNew: ",
     imgBoxRect.height,
     imgBoxHeightNew,
@@ -125,7 +129,7 @@ function getNewOutputBoxSize(): number {
     throw new Error("getNewOutputBoxSize: missing element #png-info");
   }
   const pngInfoRect = pngInfoElem.getBoundingClientRect();
-  console.log("pngInfo: ", pngInfoRect.width, pngInfoRect.height);
+  console.debug("pngInfo: ", pngInfoRect.width, pngInfoRect.height);
 
   // Width limit
   // Browser default root font size = 1 rem = 16px
@@ -135,13 +139,13 @@ function getNewOutputBoxSize(): number {
   // imgWidthLimit と比較してどちらが 大きい数値か？ (画面から はみ出ているか？ そうではないか？)
   // はみ出ていたら diffWidth の分だけ 正方形 (imgBoxElem, textareaBoxElem) の box を小さくする
   const diffWidth = Math.round(imgWidthLimit - imgBoxHeightNew);
-  console.log(
+  console.debug(
     `diffWidth (imgWidthLimit - imgBoxHeightNew) = ${imgWidthLimit} - ${imgBoxHeightNew} = ${diffWidth}`,
   );
 
   // 'img-box', 'textarea=box' に適用すべき imgBoxWidthNew を算出
   const imgBoxWidthNew = Math.round(imgBoxHeightNew + diffWidth);
-  console.log(
+  console.debug(
     "imgBoxHeightNew, imgBoxWidthNew: ",
     imgBoxHeightNew,
     imgBoxWidthNew,
@@ -153,7 +157,7 @@ function getNewOutputBoxSize(): number {
     ? imgBoxHeightNew
     : imgBoxWidthNew;
 
-  console.log(
+  console.debug(
     "imgBoxRect.width, imgBoxRect.height, newOutputBoxSize, textareaBoxRect.width, textareaBoxRect.height, newOutputBoxSize: ",
     imgBoxRect.width,
     imgBoxRect.height,

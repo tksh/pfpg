@@ -50,9 +50,4 @@ export function selectFileToInput(
       updateBasicDataKeysCheckboxStates(basicData);
     }
   };
-
-  // ファイル読み込みエラー時の処理
-  reader.onerror = () => {
-    console.log("Failed to read the file");
-  };
 }

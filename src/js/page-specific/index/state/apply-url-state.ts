@@ -56,10 +56,6 @@ async function applyImageCustomization(
   // Use possibly temporary 'opacitySteps' value as argument in this timing.
   // Calculate it from original lines data.
   let opacitySteps = await getInitialOpacitySteps(); // Getting the steps - 1st of 3
-  console.log(
-    "Default opacitySteps calculated via original lines data: ",
-    opacitySteps,
-  ); // Stored as default
   SETTINGS_DEFAULTS.set("opacitySteps", opacitySteps); // Set as default values
 
   // Update the html elements
@@ -104,7 +100,6 @@ async function applyImageCustomization(
   // The only way to get the default value is calculated from original lines data. (at above 'colorFormat' section)
   const opacityStepsViaUrl = getStateUrl("opacitySteps"); // Getting the steps - 3rd of 3
   if (opacityStepsViaUrl) {
-    console.log("opacityStepsViaUrl: ", opacityStepsViaUrl);
     opacityStepsSelect.value = String(opacityStepsViaUrl);
     changeOpacitySelectOptionsAsNewStep(updatedSvg, Number(opacityStepsViaUrl)); // Update the group colors input elements
     updatedSvg = updateSvgWithNewSteps(updatedSvg); // Extract the steps value from input elements selected
@@ -113,7 +108,6 @@ async function applyImageCustomization(
   ////////////////////////////////////////////////// shapeToTrim //////////////////////////////////////////////////
   /////////////////////////// includes: widthNarrowness, topHeavyRatio, cropSideMargins ///////////////////////////
   const shapeToTrim = getState("shapeToTrim");
-  console.log("shapeToTrim                   from url param: ", shapeToTrim);
   updatedSvg = await updateSvgWithNewShapePath(
     shapeToTrim as string,
     updatedSvg,

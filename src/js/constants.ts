@@ -72,8 +72,6 @@ FLAGS_MAP.get("2nd")?.forEach((value, key) => {
 });
 FLAGS_MAP.set("rev_2nd", reverse2nd);
 
-// Result
-console.log("FLAGS_MAP: ", FLAGS_MAP);
 // FLAGS_MAP:
 // Map(4) { 1st → Map(2), 2nd → Map(4), rev_1st → Map(2), rev_2nd → Map(4) }
 //   size: 4

@@ -73,7 +73,6 @@ function initWidthNarrownessSelect(): void {
   }
   widthNarrownessSelect.addEventListener("change", async (event: Event) => {
     const widthNarrowness = (event.target as HTMLSelectElement).value;
-    console.log("widthNarrowness: ", widthNarrowness);
     updateState("widthNarrowness", widthNarrowness);
 
     const updatedSvg = await updateSvgWithNewShapePath(
@@ -95,7 +94,6 @@ function initTopHeavyRatioSelect(): void {
   }
   topHeavyRatioSelect.addEventListener("change", async (event: Event) => {
     const topHeavyRatio = (event.target as HTMLSelectElement).value;
-    console.log("topHeavyRatio: ", topHeavyRatio);
     updateState("topHeavyRatio", topHeavyRatio);
 
     const updatedSvg = await updateSvgWithNewShapePath(

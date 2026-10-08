@@ -48,10 +48,6 @@ function getGroupColorsValues(
     strokeOpacityArray.push(strokeOpacity);
   }
 
-  console.log("strokeArray: ", strokeArray);
-  console.log("opacityArray: ", opacityArray);
-  console.log("strokeOpacityArray: ", strokeOpacityArray);
-
   return new Map<string, number | string[]>([
     ["number_of_groups", numberOfGroups],
     ["stroke_array", strokeArray],
@@ -62,10 +58,6 @@ function getGroupColorsValues(
 
 export function getNumberOfGroups(inputSvg: string): number {
   const matches = inputSvg.match(GROUP_COLORS_ELEMENT_REGEX);
-  console.log(
-    'matches like <g (id="0") stroke="rgb(0 0 0)|#000000" ... >: ',
-    matches,
-  );
   return matches?.length ?? 0;
 }
 
@@ -127,7 +119,6 @@ export function replaceAtIndex(
     replacement +
     inputString.slice(matchToReplace.index + firstMatch.length);
 
-  console.log("replacedString: ", replacedString);
   return replacedString;
 }
 

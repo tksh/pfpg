@@ -23,8 +23,6 @@ export function updateSvgAsNewColorFormat(colorFormat: string): string {
       getElementValueById(strokeElementId),
       colorFormat,
     );
-    console.log("stroke: ", stroke); // Current SVG string,  e.g.: "rgb(170,170,170)"
-    console.log("colorFormat: ", colorFormat); // New selected format, e.g.: "hex"
 
     // Get 'opacity' value
     const opacityElementId = `group-colors-opacity-${gId}`;

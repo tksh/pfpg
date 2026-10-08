@@ -31,7 +31,6 @@ function getArtworkTitle(): string {
   if (titleText === undefined) {
     throw new Error("getArtworkTitle: no <title> found in SVG");
   }
-  console.log("titleText: ", titleText); // e.g.: 202304_001
 
   return titleText;
 }
@@ -47,7 +46,6 @@ function getPixelSizeWxH(): string {
   if (pngInfoText === null) {
     throw new Error("getPixelSizeWxH: missing text in #png-info");
   }
-  console.log("pngInfoElem.textContent: ", pngInfoElem.textContent);
 
   // extract WxH from like 'Converted PNG size: 352 x 352 px'
   const patternForPngSize = /(\d+) x (\d+)/;
@@ -64,7 +62,6 @@ function getPixelSizeWxH(): string {
     throw new Error("getPixelSizeWxH: no WxH found in #png-info");
   }
   const pngSizeWxH = `${pngSizeWidth}x${pngSizeHeight}`;
-  console.log("pngSizeWxH: ", pngSizeWxH);
 
   return pngSizeWxH;
 }
@@ -73,7 +70,6 @@ function getPixelSizeWxH(): string {
 function getCurrentStatusForFilename(): string {
   // Group colors
   const groupColorsHexString = getGroupColorsAsJoinedHex(getSvgString());
-  console.log("groupColorsHexString: ", groupColorsHexString); // e.g.: "FCFF4280FF_000FC_8F52FF_EEE_FFF"
 
   // Path mode
   const pathModeSelect = document.getElementById("path-mode") as
@@ -105,7 +101,6 @@ function getCurrentStatusForFilename(): string {
     );
   }
   let shapeToTrim = shapeToTrimSelect.value; // 要素の値は文字列として扱われる
-  console.log("shapeToTrim: ", shapeToTrim);
 
   // 'Shape to trim' に 'squircleSlimmed' が 適用されている場合だけ ふたつのオプションの値を取得し それを含むファイル名を生成する
   if (shapeToTrim === "squircleSlimmed") {
@@ -145,7 +140,6 @@ function downloadPngAsFile(): void {
   if (imgElem === null) {
     throw new Error("downloadPngAsFile: missing element #img");
   }
-  console.log("imgElem.src ", imgElem.src);
   const url = imgElem.src;
 
   // Generate an <a> element

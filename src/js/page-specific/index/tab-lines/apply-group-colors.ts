@@ -21,7 +21,6 @@ export function applyGroupColors(
   const gElemByGroups = groupColorsByGroups.map((groupColorsArr, gId) =>
     generateGroupColorsSvgTags(gId, groupColorsArr)
   );
-  console.log("gElemByGroups: ", gElemByGroups);
   // e.g.: (3) ['<g (id="0") stroke="#38AA34" opacity="1" stroke-opacity="1">', '<g stroke="#000" opacity="1" stroke-opacity="1">', '<g stroke="#FFF" opacity="1" stroke-opacity="1">']
 
   // Replace the whole groups <g> element, via group ID = index number of array

@@ -115,12 +115,6 @@ function generateClippathShapeOfSquircleSlimmed(
   widthNarrowness: number,
   topHeavyRatio: number,
 ): SquircleSlimmedGeometry {
-  console.log(
-    "widthNarrowness, topHeavyRatio: ",
-    widthNarrowness,
-    topHeavyRatio,
-  );
-
   const viewboxValues = extractViewboxValues(inputSvg);
   if (!viewboxValues) throw new Error("viewBox not found in SVG string");
   const gridHeight = viewboxValues.get("h");

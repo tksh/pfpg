@@ -16,7 +16,6 @@ function initImageFormatSelect(): void {
     "change",
     (event: Event) => {
       const imageFormat = (event.target as HTMLSelectElement).value; // 'png' | 'webp'
-      console.log("Updated value of 'Image format': ", imageFormat);
       updateState("imageFormat", imageFormat);
 
       // Re-render and re-upload in the newly selected format

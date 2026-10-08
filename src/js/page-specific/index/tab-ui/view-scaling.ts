@@ -12,7 +12,6 @@ function initViewScalingSelect(): void {
   viewScalingSelect.addEventListener("change", () => {
     // チェックされたセレクトメニューの値を取得
     const viewScaling = viewScalingSelect.value;
-    console.log("viewScaling: ", viewScaling);
 
     // Update the state
     updateState("viewScaling", viewScaling);

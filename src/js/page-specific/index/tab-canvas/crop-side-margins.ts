@@ -14,13 +14,11 @@ export {
 };
 
 async function cropSideMargins(inputSvg: string): Promise<string> {
-  console.log("Crop side margins: [x]");
   updateState("cropSideMargins", true);
   return await updateSvg(inputSvg, true);
 }
 
 async function resetSideMargins(inputSvg: string): Promise<string> {
-  console.log("Crop side margins: [ ]");
   updateState("cropSideMargins", false);
   return await updateSvg(inputSvg, false);
 }
@@ -59,7 +57,6 @@ function viewboxSlimmed(inputSvg: string): string {
   const newViewboxString = `viewBox="${toFixedTrimmed(left)} ${
     viewboxValues.get("y")
   } ${toFixedTrimmed(right - left)} ${viewboxValues.get("h")}"`;
-  console.log("newViewboxString: ", newViewboxString); // e.g.: viewBox="1.55 0 27.9 31"
 
   // Replace the viewBox string with new one
   const patternForViewboxStr = /viewBox="[^"]+"/; // viewBox属性 全体 を抽出する正規表現
@@ -97,7 +94,6 @@ function extractViewboxValues(inputSvg: string): Map<string, number> | null {
   const match = inputSvg.match(
     /viewBox="([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)"/,
   );
-  console.log("viewBox matches: ", match);
 
   // Check if the match was successful
   if (match && match.length === 5) {
@@ -134,12 +130,10 @@ async function viewboxUnSlimmed(inputSvg: string): Promise<string> {
 
   // Generate new string with original viewBox size
   const originalViewboxString = sizeDataObj.viewbox; // e.g.: '0 0 31 31'
-  console.log("originalViewboxString: ", originalViewboxString);
 
   // Replace the viewBox string with new one
   const patternForViewboxStr = /viewBox="([^"]+)"/;
   const matchesForViewboxStr = patternForViewboxStr.exec(inputSvg); // e.g.: 'viewBox="0 0 31 31"'
-  console.log("matchesForViewboxStr: ", matchesForViewboxStr);
   if (!matchesForViewboxStr) throw new Error("viewBox not found in SVG string");
   const matchForViewboxValueStr = matchesForViewboxStr[1]; // e.g.: '0 0 31 31'
   if (matchForViewboxValueStr === undefined) {

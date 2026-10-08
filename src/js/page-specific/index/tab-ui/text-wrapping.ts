@@ -9,7 +9,6 @@ function initTextWrappingCheckbox(): void {
 
   checkbox.addEventListener("change", () => {
     const isTextWrapping = checkboxInput.checked;
-    console.log("isTextWrapping: ", isTextWrapping);
     updateState("textWrapping", isTextWrapping);
     toggleTextWrapping(isTextWrapping);
   });

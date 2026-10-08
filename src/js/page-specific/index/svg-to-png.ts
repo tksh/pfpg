@@ -34,13 +34,11 @@ async function uploadOgImage(image: EncodedImage): Promise<void> {
     const hashHexPadded = await getSharedImageKeyHashForCurrentUrl();
     const publicId = `${hashHexPadded}-${image.extension}`;
     if (publicId === lastUploadedPublicId) {
-      console.log("Skipping upload of the identical image:", publicId);
       return;
     }
 
-    const uploadedImageUrl = await uploadRenderedImage(image);
+    await uploadRenderedImage(image);
     lastUploadedPublicId = publicId;
-    console.log("uploadedImageUrl: ", uploadedImageUrl); // Uploaded image URL, version path removed.
   } catch (error) {
     console.error("Error uploading image:", error);
   }
@@ -67,7 +65,6 @@ async function executeSvg2png(
       rasterOption,
       renderingStatusElements,
     );
-    console.log("encoded image: ", image);
 
     //////////// shared image upload ////////////
     // エンコード済みの画像から OGイメージを生成 Cloudinary にアップロード。
@@ -78,8 +75,6 @@ async function executeSvg2png(
       void uploadOgImage(image);
     }, UPLOAD_DEBOUNCE_MS);
     //////////// shared image upload ////////////
-
-    console.log("Rendering processing has completed.");
   } catch (error) {
     console.error(
       "An error occurred during the processing of the rendering:",
@@ -189,20 +184,17 @@ async function measureSvg2pngTime(
 
     // 開始時刻を記録
     const startTime = performance.now();
-    console.log("rendering startTime: ", startTime);
 
     // 画像をエンコードする
     const image = await encode(svgString, rasterOption);
 
     // 終了時刻を記録
     const endTime = performance.now();
-    console.log("rendering endTime: ", endTime);
 
     // 処理時間を計算
     const elapsedTime = Math.floor(endTime - startTime);
 
     // 処理時間をコンソールに出力
-    console.log(`rendering time: ${elapsedTime} ms`);
 
     // 処理完了メッセージを表示
     await updateRenderingStatus(

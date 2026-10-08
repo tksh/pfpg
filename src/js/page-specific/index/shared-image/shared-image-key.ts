@@ -3,7 +3,6 @@ import { excludeStateKeys } from "common-utils/read-url-params";
 import {
   buildCanonicalImageInput,
   hashCanonicalImageInput,
-  SHARED_IMAGE_KEY_VERSION,
 } from "shared-image/canonical-image-input";
 
 export { getSharedImageKeyHash, getSharedImageKeyHashForCurrentUrl };
@@ -31,9 +30,6 @@ async function getSharedImageKeyHash(
   const hashHexPadded = hashCanonicalImageInput(
     buildCanonicalImageInput(urlParams, decoded),
   );
-  // Only the version and the key: the canonical input holds the whole
-  // artwork and is far too large to log.
-  console.log(`Shared image key (${SHARED_IMAGE_KEY_VERSION}):`, hashHexPadded);
 
   return hashHexPadded;
 }

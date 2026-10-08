@@ -59,10 +59,6 @@ function generateGroupColorsHtmlElements(
   colorFormat: string,
   opacitySteps: number,
 ): void {
-  console.log(
-    `generateGroupColorsHtmlElements() started. (Opacity step = ${opacitySteps})`,
-  );
-
   // Get the group-colors values from SVG string in textarea
   const groupColorsValues = getGroupColorsValues(inputSvg);
   const numberOfGroupsValue = groupColorsValues.get("number_of_groups");
@@ -187,7 +183,6 @@ function generateGroupColorsHtmlElements(
 function cleanupExistingPickers(): void {
   // 既存のピッカー要素を取得
   const existingPickers = document.querySelectorAll(".alwan");
-  console.log("existingPickers: ", existingPickers);
   // e.g.: NodeList(3) [ div#alwan-picker-0.alwan, div#alwan-picker-1.alwan, div#alwan-picker-2.alwan ]
 
   existingPickers.forEach((picker) => {
@@ -248,12 +243,6 @@ function getTextLightness(colorString: string): number {
   const lch = rgbToLch(Number(rgbArr[0]), Number(rgbArr[1]), Number(rgbArr[2])); // r, g, b UInt8 [0-255]
   const fillLightness = Math.round(lch.lightness); // Integer [0-100]
   const textLightness = calculateContrast(fillLightness);
-  console.log(
-    "colorString, fillLightness, textLightness: ",
-    colorString,
-    fillLightness,
-    textLightness,
-  );
   return textLightness;
 }
 
@@ -285,7 +274,6 @@ function createOpacitiesSelectElement(
 ): HTMLSelectElement {
   // 選択肢となる数値のリストを作成
   const values = numbersIncrementByStep(step);
-  console.log("values: ", values);
   // e.g.: 0.2  => //  (6) [0, 0.2, 0.4, 0.6, 0.8, 1]
 
   // 現在の値を設定
@@ -329,8 +317,6 @@ function addEventListenerToAlwanOnChange(
   svg2pngOption: { height: number },
 ): void {
   alwanInstance.on("change", (ev) => {
-    console.log("ev.source: ", ev.source);
-    console.log(`Color changed for group ${gId}:`, ev.rgb, ev.hex);
     // e.g: Color changed for group 0: rgb(255, 255, 255) #ffffff
 
     // Refine the color format

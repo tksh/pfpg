@@ -16,10 +16,6 @@ function initShapeRenderingSelect(): void {
     (event: Event) => {
       // 選択された値を 取得
       const shapeRendering = (event.target as HTMLSelectElement).value; // 'geometricPrecision' | 'crispEdges'
-      console.log(
-        "Updated value of 'Anti-aliasing (shape-rendering)': ",
-        shapeRendering,
-      );
       updateState("shapeRendering", shapeRendering);
 
       // <textarea>の value属性を 取得

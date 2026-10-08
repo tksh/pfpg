@@ -21,7 +21,6 @@ export function initColorFormatSelect(): void {
       );
     }
     const colorFormat = target.value; // rgb | hex
-    console.log("Color format: ", colorFormat);
 
     // グローバルステートを 更新
     updateState("colorFormat", colorFormat);

@@ -17,7 +17,6 @@ function initThemeColorSelect(): void {
 
 function changeThemeColor(themeColor: string): void {
   document.documentElement.setAttribute("data-theme", themeColor);
-  console.log("Set new theme color:", themeColor);
   updateState("themeColor", themeColor);
 }
 

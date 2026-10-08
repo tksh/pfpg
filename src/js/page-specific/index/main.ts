@@ -51,8 +51,6 @@ import { initViewScalingSelect } from "tab-ui/view-scaling";
   // If no URL parameters are present (e.g., on initial page load),
   // select a random artwork from the .artwork-item in 'Showcase' section and update the URL.
   if (!globalThis.location.search) {
-    console.log("No URL parameters found. Selecting a random sample artwork.");
-
     // Retrieve query strings from showcase artwork links.
     const hrefArray = Array.from(
       document.querySelectorAll("figure .artworks-container .artwork-item a"),
@@ -83,7 +81,6 @@ import { initViewScalingSelect } from "tab-ui/view-scaling";
   // Get the path-mode value
   // - If there is no url param of 'pathMode', use 'absoluteSeparated' as default.
   const isRelative = getState("pathMode") === "relativeMerged";
-  console.log("isRelative: ", isRelative);
   const pathModeSelect = document.getElementById("path-mode");
   if (!pathModeSelect) throw new Error("Element 'path-mode' not found");
   (pathModeSelect as HTMLSelectElement).value = isRelative
@@ -92,7 +89,6 @@ import { initViewScalingSelect } from "tab-ui/view-scaling";
 
   // Decode the SVG from url params
   const initialDecodedSvgString = await decodeUrlToSvg(isRelative);
-  console.log("initialDecodedSvgString: ", initialDecodedSvgString);
 
   // URLに themeColor が既にある場合はそれを尊重し、ブラウザ設定による検知・上書きは行わない
   const existingThemeColor = getState("themeColor");

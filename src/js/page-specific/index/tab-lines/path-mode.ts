@@ -26,7 +26,6 @@ function initPathModeSelect(): void {
     // Group colors
     const patternGroupColors = GROUP_COLORS_ELEMENT_REGEX;
     const matchOfGroupColors = currentPathModeSvg.match(patternGroupColors);
-    console.log("matchOfGroupColors: ", matchOfGroupColors);
     // e.g.: (5) ['<g stroke="#000000" opacity="1" stroke-opacity="1">', '<g stroke="# ...
 
     // Opacity steps の選択肢の値は svgのコンテンツではなく UIのみに関わるので 保存しておいて元に戻す 必要はない
@@ -70,7 +69,6 @@ function initPathModeSelect(): void {
       );
     }
     const pathMode = target.value; // 'relativeMerged' | 'absoluteSeparated'
-    console.log(`"${pathMode}" selected.`);
 
     // Re-decode as new 'Path mode' styled svg string from url params
     const newPathModeSvg = await decodeAsSelectedPathMode(pathMode);
@@ -104,7 +102,6 @@ function initPathModeSelect(): void {
       patternGroupColors,
       matchOfGroupColors,
     );
-    console.log("updatedSvg: ", updatedSvg);
 
     // Update the state
     updateState("pathMode", pathMode);
@@ -138,10 +135,8 @@ async function decodeAsSelectedPathMode(
   pathMode: string,
 ): Promise<string | undefined> {
   if (pathMode === "relativeMerged") {
-    console.log("Path mode: Relative and merged");
     return await decodeUrlToSvgForPage(true);
   } else { // (pathMode === 'absoluteSeparated')
-    console.log("Path mode: Absolute and separated");
     return await decodeUrlToSvgForPage(false);
   }
 }

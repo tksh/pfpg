@@ -48,7 +48,6 @@ function initNumberInputValidatorListener(): void {
 // Update svg2pngOption with new height size, and convert from SVG to PNG
 
 function updateAndConvert(value: string | number): void {
-  console.log("Updated value of 'Height pixel size':", value);
   updateState("heightPixelSize", value);
 
   // update the 'svg2pngOption'
@@ -81,7 +80,6 @@ function adjustImageDisplay(value: number): void {
 
   // 画像サイズを取得
   const boxWidth = imgBox.clientWidth;
-  console.log("value, boxWidth: ", value, boxWidth);
 
   if (value <= boxWidth) {
     // 小さい画像の場合は中央揃え

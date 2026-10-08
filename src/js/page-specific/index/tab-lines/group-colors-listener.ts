@@ -26,7 +26,6 @@ export {
 
 function initGroupColorsInputs(): void {
   const numberOfGroups = getNumberOfGroups(getSvgString());
-  console.log("numberOfGroups: ", numberOfGroups);
   addEventListenerForGroupColorsInputs(
     numberOfGroups,
     svg2pngOption,
@@ -58,7 +57,6 @@ function addEventListenerForGroupColorsInputs(
         `addEventListenerForGroupColorsInputs: element not found: #${elementId}`,
       );
     }
-    console.log("i, element: ", i, element);
     // e.g.: i, element:  0 <select id="group-colors-opacity-0" class="opacity" name="group-colors-opacity-0">
 
     element.addEventListener("change", function (event: Event): void {
@@ -69,7 +67,6 @@ function addEventListenerForGroupColorsInputs(
         );
       }
       const inputValue = target.value; // 'attrName' の input値を 取得
-      console.log(`'${attrName}' changes to ${inputValue}`);
 
       // elementId最後の idの数値のみ を抽出して 変更されたグループの indexナンバー を特定
       const gId = parseInt(

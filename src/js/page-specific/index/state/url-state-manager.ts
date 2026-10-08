@@ -131,7 +131,6 @@ function getStateUrlsInRangeAsMapWithDefaultFill(
   endIndex: number,
 ): Map<string, SettingValue> {
   const allParams = getStateUrlsAsMapWithDefaultFill(); // return Map
-  console.log("allParams: ", allParams);
   const stateKeys = Array.from(SETTINGS_DEFAULTS.keys()).slice(
     startIndex,
     endIndex,
