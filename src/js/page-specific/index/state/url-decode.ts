@@ -21,6 +21,7 @@ async function decodeUrlToSvgForPage(
 
   const params = getUrlParamsExceptsStates();
   if (params.toString() === "") {
+    console.log("There is no url params to decode.");
     return;
   }
 

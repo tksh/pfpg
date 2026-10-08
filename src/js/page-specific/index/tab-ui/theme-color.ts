@@ -42,9 +42,13 @@ function getDefaultThemeViaPrefersColorScheme(): string {
     globalThis.matchMedia("(prefers-color-scheme: dark)").matches
   ) {
     // ダークテーマが設定されている場合の処理
+    console.log("Detect default theme color via browser preference: Dark mode");
     return "dark";
   } else {
     // ライトテーマが設定されている場合の処理
+    console.log(
+      "Detect default theme color via browser preference: Light mode",
+    );
     return "light";
   }
 }

@@ -34,6 +34,7 @@ async function uploadOgImage(image: EncodedImage): Promise<void> {
     const hashHexPadded = await getSharedImageKeyHashForCurrentUrl();
     const publicId = `${hashHexPadded}-${image.extension}`;
     if (publicId === lastUploadedPublicId) {
+      console.log("Skipping upload of the identical image:", publicId);
       return;
     }
 

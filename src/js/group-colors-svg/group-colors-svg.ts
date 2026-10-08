@@ -58,6 +58,10 @@ function getGroupColorsValues(
 
 export function getNumberOfGroups(inputSvg: string): number {
   const matches = inputSvg.match(GROUP_COLORS_ELEMENT_REGEX);
+  console.log(
+    'matches like <g (id="0") stroke="rgb(0 0 0)|#000000" ... >: ',
+    matches,
+  );
   return matches?.length ?? 0;
 }
 
