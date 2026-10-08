@@ -56,7 +56,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
     }
   }
   if (pathname === "/share" && req.method === "GET") {
-    return await handleShare(url);
+    return handleShare(url);
   }
   return new Response(JSON.stringify({ error: "not found" }), {
     status: 404,
@@ -73,45 +73,18 @@ function jsonError(error: unknown): Response {
   );
 }
 
-// Rewrite the static index.html's OGP meta tags with the computed Cloudinary
-// image URL, for SNS crawlers that run no JavaScript.
-async function handleShare(url: URL): Promise<Response> {
-  const params = url.searchParams;
-  if (params.toString() === "") {
-    return new Response(
-      JSON.stringify({ error: "missing artwork params" }),
-      { status: 400, headers: { "content-type": "application/json" } },
-    );
-  }
-  try {
-    const data = await renderAndUpload(url);
-    const base = await fetchBaseIndexHtml();
-    const html = base
-      .replace(
-        /<meta property="og:image" content="[^"]*"\s*\/>/,
-        `<meta property="og:image" content="${data.imageUrl}" />`,
-      )
-      .replace(
-        /<meta property="og:url" content="[^"]*"\s*\/>/,
-        `<meta property="og:url" content="${url.toString()}" />`,
-      );
-    return new Response(html, {
-      headers: { "content-type": "text/html; charset=utf-8" },
-    });
-  } catch (error) {
-    return jsonError(error);
-  }
-}
-
-let cachedBaseHtml: string | null = null;
-async function fetchBaseIndexHtml(): Promise<string> {
-  if (cachedBaseHtml !== null) return cachedBaseHtml;
-  const resp = await fetch("https://pfpg.pages.dev/");
-  if (!resp.ok) {
-    throw new Error(`Failed to fetch base index.html: ${resp.status}`);
-  }
-  cachedBaseHtml = await resp.text();
-  return cachedBaseHtml;
+// The Deno Deploy host serves no static assets, so redirect /share directly
+// to the production pages site, where the Pages middleware injects the OGP
+// tags. Kept for OG tools that might visit a stale Deno /share link.
+function handleShare(url: URL): Response {
+  const search = url.search;
+  const target = `https://pfpg.pages.dev/index.html${
+    search === "" ? "" : search
+  }`;
+  return new Response(null, {
+    status: 302,
+    headers: { Location: target },
+  });
 }
 
 async function renderAndUpload(url: URL): Promise<{
