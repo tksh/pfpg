@@ -31,13 +31,113 @@ Deno.serve(async (req: Request): Promise<Response> => {
     return await handleProbe(url);
   }
   if (pathname === "/ogp/render" && req.method === "POST") {
-    return await handleRender(url);
+    try {
+      const data = await renderAndUpload(url);
+      return new Response(
+        JSON.stringify(data),
+        { headers: { "content-type": "application/json" } },
+      );
+    } catch (error) {
+      return jsonError(error);
+    }
+  }
+  if (pathname === "/share" && req.method === "GET") {
+    return await handleShare(url);
   }
   return new Response(JSON.stringify({ error: "not found" }), {
     status: 404,
     headers: { "content-type": "application/json" },
   });
 });
+
+function jsonError(error: unknown): Response {
+  return new Response(
+    JSON.stringify({
+      error: error instanceof Error ? error.message : String(error),
+    }),
+    { status: 500, headers: { "content-type": "application/json" } },
+  );
+}
+
+// Rewrite the static index.html's OGP meta tags with the computed Cloudinary
+// image URL, for SNS crawlers that run no JavaScript.
+async function handleShare(url: URL): Promise<Response> {
+  const params = url.searchParams;
+  if (params.toString() === "") {
+    return new Response(
+      JSON.stringify({ error: "missing artwork params" }),
+      { status: 400, headers: { "content-type": "application/json" } },
+    );
+  }
+  try {
+    const data = await renderAndUpload(url);
+    const base = await fetchBaseIndexHtml();
+    const html = base
+      .replace(
+        /<meta property="og:image" content="[^"]*"\s*\/>/,
+        `<meta property="og:image" content="${data.imageUrl}" />`,
+      )
+      .replace(
+        /<meta property="og:url" content="[^"]*"\s*\/>/,
+        `<meta property="og:url" content="${url.toString()}" />`,
+      );
+    return new Response(html, {
+      headers: { "content-type": "text/html; charset=utf-8" },
+    });
+  } catch (error) {
+    return jsonError(error);
+  }
+}
+
+let cachedBaseHtml: string | null = null;
+async function fetchBaseIndexHtml(): Promise<string> {
+  if (cachedBaseHtml !== null) return cachedBaseHtml;
+  const resp = await fetch("https://pfpg.pages.dev/");
+  if (!resp.ok) {
+    throw new Error(`Failed to fetch base index.html: ${resp.status}`);
+  }
+  cachedBaseHtml = await resp.text();
+  return cachedBaseHtml;
+}
+
+async function renderAndUpload(url: URL): Promise<{
+  key: string;
+  publicId: string;
+  imageUrl: string;
+  svgBytes: number;
+}> {
+  const params = url.searchParams;
+  const apiSecret = Deno.env.get("CLOUDINARY_API_SECRET");
+  if (!apiSecret) {
+    throw new Error("CLOUDINARY_API_SECRET is not configured");
+  }
+
+  const { key, svg, pixels, width, height } = await renderPipeline(params);
+
+  // Encode RGBA to PNG via photon (same strategy as svg2ui8a-demo)
+  using img = new PhotonImage(pixels, width, height);
+  const pngBytes = img.get_bytes();
+  const publicId = `${key}-png`;
+  const imageUrl = await uploadAsset(
+    "image",
+    new Blob([new Uint8Array(pngBytes)], { type: "image/png" }),
+    publicId,
+    apiSecret,
+  );
+  const paramsBlob = new Blob([url.search], { type: "text/plain" });
+  try {
+    await uploadAsset("raw", paramsBlob, publicId, apiSecret, "params.txt");
+  } catch (sidecarError) {
+    console.error("Error uploading params sidecar:", sidecarError);
+  }
+
+  return {
+    key,
+    publicId,
+    imageUrl,
+    svgBytes: new TextEncoder().encode(svg).length,
+  };
+}
 
 async function handleProbe(url: URL): Promise<Response> {
   const params = url.searchParams;
@@ -57,61 +157,6 @@ async function handleProbe(url: URL): Promise<Response> {
         rgbaBytes: pixels.length,
         width,
         height,
-      }),
-      { headers: { "content-type": "application/json" } },
-    );
-  } catch (error) {
-    return new Response(
-      JSON.stringify({
-        error: error instanceof Error ? error.message : String(error),
-      }),
-      { status: 500, headers: { "content-type": "application/json" } },
-    );
-  }
-}
-
-async function handleRender(url: URL): Promise<Response> {
-  const params = url.searchParams;
-  if (params.toString() === "") {
-    return new Response(
-      JSON.stringify({ error: "missing artwork params" }),
-      { status: 400, headers: { "content-type": "application/json" } },
-    );
-  }
-  const apiSecret = Deno.env.get("CLOUDINARY_API_SECRET");
-  if (!apiSecret) {
-    return new Response(
-      JSON.stringify({ error: "CLOUDINARY_API_SECRET is not configured" }),
-      { status: 500, headers: { "content-type": "application/json" } },
-    );
-  }
-  try {
-    const { key, svg, pixels, width, height } = await renderPipeline(params);
-
-    // Encode RGBA to PNG via photon (same strategy as svg2ui8a-demo)
-    using img = new PhotonImage(pixels, width, height);
-    const pngBytes = img.get_bytes();
-    const publicId = `${key}-png`;
-    const imageUrl = await uploadAsset(
-      "image",
-      new Blob([new Uint8Array(pngBytes)], { type: "image/png" }),
-      publicId,
-      apiSecret,
-    );
-    const paramsBlob = new Blob([url.search], { type: "text/plain" });
-    try {
-      await uploadAsset("raw", paramsBlob, publicId, apiSecret, "params.txt");
-    } catch (sidecarError) {
-      console.error("Error uploading params sidecar:", sidecarError);
-    }
-
-    return new Response(
-      JSON.stringify({
-        key,
-        publicId,
-        imageUrl,
-        svgBytes: new TextEncoder()
-          .encode(svg).length,
       }),
       { headers: { "content-type": "application/json" } },
     );
