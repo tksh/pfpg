@@ -27,3 +27,9 @@
   to = "/.netlify/functions/index-html-og"
   status = 200
   force = true
+
+[[redirects]]
+  from = "/"
+  to = "/.netlify/functions/index-html-og"
+  status = 200
+  force = true
