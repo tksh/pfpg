@@ -1,6 +1,10 @@
 import { TAB_SPACE } from "constants";
 import { getSvgString } from "button/download-as-file";
 import { updateButtonWithSvgSize } from "button/update-button-text";
+import {
+  removeOpacity,
+  restoreOpacity,
+} from "group-colors-svg/group-colors-svg";
 import { getState, updateState } from "state/url-state-manager";
 import { decodeAsSelectedPathMode } from "tab-lines/path-mode";
 
@@ -166,73 +170,6 @@ async function updateSvg(event: Event): Promise<void> {
     updateButtonWithSvgSize(svgString);
   }
 }
-
-// Remove and restore functions
-
-function removeOpacity(svgString: string): string {
-  return svgString.replace(/\s(opacity|stroke-opacity)="1(\.0)?"/g, "");
-}
-
-function restoreOpacity(svgString: string): string {
-  return svgString.replace(
-    /<g\b([^>]*)>/g,
-    function (match: string, attributes: string) {
-      console.log("match: ", match); // e.g.:  <g stroke="rgb(255,255,255)" opacity="1.0" stroke-opacity="1.0">
-      console.log("attributes: ", attributes); // e.g.:   stroke="rgb(255,255,255)" opacity="1.0" stroke-opacity="1.0"
-
-      // stroke属性があるかチェック
-      if (!/\bstroke="[^"]*"/.test(attributes)) {
-        return match; // stroke属性がなければ変更しない
-      }
-
-      // 既存の属性を解析
-      const attrs = attributes.split(/\s+/).filter((attr) =>
-        attr.trim() !== ""
-      );
-      console.log("attrs: ", attrs); // e.g.: (3) ['stroke="rgb(255,255,255)"', 'opacity="1.0"', 'stroke-opacity="1.0"']
-
-      let opacityValue = "1.0";
-      let strokeOpacityValue = "1.0";
-      const newAttrs: string[] = [];
-
-      // 既存の属性を処理し、opacity と stroke-opacity の値を取得
-      for (const attr of attrs) {
-        if (attr.startsWith('opacity="')) {
-          const opacityPart = attr.split('"')[1];
-          if (opacityPart !== undefined) {
-            opacityValue = opacityPart;
-          }
-        } else if (attr.startsWith('stroke-opacity="')) {
-          const strokeOpacityPart = attr.split('"')[1];
-          if (strokeOpacityPart !== undefined) {
-            strokeOpacityValue = strokeOpacityPart;
-          }
-        } else {
-          newAttrs.push(attr);
-        }
-      }
-
-      // opacity と stroke-opacity を追加
-      newAttrs.push(`opacity="${opacityValue}"`);
-      newAttrs.push(`stroke-opacity="${strokeOpacityValue}"`);
-
-      console.log("newAttrs: ", newAttrs); // e.g.: (3) ['stroke="rgb(255,255,255)"', 'opacity="1.0"', 'stroke-opacity="1.0"']
-      return `<g ${newAttrs.join(" ")}>`;
-    },
-  );
-}
-// // Test
-// console.log(restoreOpacity('<g stroke="#FF7523">'))
-// console.log(restoreOpacity('<g stroke="#FF7523" opacity="1.0">'))
-// console.log(restoreOpacity('<g stroke="#FF7523" stroke-opacity="1.0">'))
-// console.log(restoreOpacity('<g stroke="#FF7523" opacity="0.5" stroke-opacity="0.8">'))
-// console.log(restoreOpacity('<g fill="#FF7523">'))  // 'stroke'属性がない場合 変更しない
-//
-// <g stroke="#FF7523" opacity="1.0" stroke-opacity="1.0">
-// <g stroke="#FF7523" opacity="1.0" stroke-opacity="1.0">
-// <g stroke="#FF7523" opacity="1.0" stroke-opacity="1.0">
-// <g stroke="#FF7523" opacity="0.5" stroke-opacity="0.8">
-// <g fill="#FF7523>
 
 function removeLineBreaks(svgString: string): string {
   return svgString.replace(/>\s+</g, "><");

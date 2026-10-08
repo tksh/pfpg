@@ -130,3 +130,98 @@ export function replaceAtIndex(
   console.log("replacedString: ", replacedString);
   return replacedString;
 }
+
+// Strip the default-opaque opacity/stroke-opacity attributes from every
+// element; the <g> element generator above omits them entirely. This remains
+// for post-processing arbitrary SVG text.
+export function removeOpacity(svgString: string): string {
+  return svgString.replace(/\s(opacity|stroke-opacity)="1(\.0)?"/g, "");
+}
+
+// Re-insert default opacity attributes on <g> elements that have a stroke.
+export function restoreOpacity(svgString: string): string {
+  return svgString.replace(
+    /<g\b([^>]*)>/g,
+    function (match: string, attributes: string) {
+      if (!/\bstroke="[^"]*"/.test(attributes)) {
+        return match;
+      }
+
+      const attrs = attributes.split(/\s+/).filter((attr) =>
+        attr.trim() !== ""
+      );
+
+      let opacityValue = "1.0";
+      let strokeOpacityValue = "1.0";
+      const newAttrs: string[] = [];
+
+      for (const attr of attrs) {
+        if (attr.startsWith('opacity="')) {
+          const opacityPart = attr.split('"')[1];
+          if (opacityPart !== undefined) {
+            opacityValue = opacityPart;
+          }
+        } else if (attr.startsWith('stroke-opacity="')) {
+          const strokeOpacityPart = attr.split('"')[1];
+          if (strokeOpacityPart !== undefined) {
+            strokeOpacityValue = strokeOpacityPart;
+          }
+        } else {
+          newAttrs.push(attr);
+        }
+      }
+
+      newAttrs.push(`opacity="${opacityValue}"`);
+      newAttrs.push(`stroke-opacity="${strokeOpacityValue}"`);
+
+      return `<g ${newAttrs.join(" ")}>`;
+    },
+  );
+}
+
+// Build one <g> element string from a decoded color entry
+// ([undefined, stroke, opacity, strokeOpacity]) while honoring the UI state
+// for removing default-opacity attributes.
+export function buildGroupColorElement(
+  gId: number,
+  stroke: string | number | undefined,
+  opacity: string | number | undefined,
+  strokeOpacity: string | number | undefined,
+  opts?: { removeOpacity?: boolean },
+): string {
+  const opacityValue = opacity !== undefined ? opacity : "1.0";
+  const strokeOpacityValue = strokeOpacity !== undefined
+    ? strokeOpacity
+    : "1.0";
+  const groupElem =
+    `<g id="${gId}" stroke="${stroke}" opacity="${opacityValue}" stroke-opacity="${strokeOpacityValue}">`;
+
+  return opts?.removeOpacity ? removeOpacity(groupElem) : groupElem;
+}
+
+// Replace every `<g stroke=...>` element in the SVG with the decoded colors.
+// Works on arbitrary strings (browser applyGroupColors and the Deno Deploy
+// pipeline share it), so no document/state access happens here.
+export function applyGroupColorsToSvg(
+  svgString: string,
+  colorsByGroups: Array<[undefined, string, number, number]>,
+  opts?: { removeOpacity?: boolean },
+): string {
+  let updatedSvg = svgString;
+  colorsByGroups.forEach((groupColorsArr, gId) => {
+    const gElem = buildGroupColorElement(
+      gId,
+      groupColorsArr[1],
+      groupColorsArr[2],
+      groupColorsArr[3],
+      opts,
+    );
+    updatedSvg = replaceAtIndex(
+      updatedSvg,
+      GROUP_COLORS_ELEMENT_REGEX,
+      gElem,
+      gId,
+    );
+  });
+  return updatedSvg;
+}

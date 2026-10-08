@@ -3,10 +3,12 @@ import {
   convertToRgbArr,
 } from "color-formatter/format-converter";
 import { rgbToLch } from "color-formatter/rgb-to-lch";
-import { removeOpacity } from "modal/optimize-svg";
+import {
+  buildGroupColorElement,
+  getGroupColorsValues,
+} from "group-colors-svg/group-colors-svg";
 import { getState } from "state/url-state-manager";
 import { executeSvg2png } from "svg-to-png";
-import { getGroupColorsValues } from "group-colors-svg/group-colors-svg";
 import { numbersIncrementByStep } from "tab-lines/opacity-steps";
 import { updateSvgWithNewColorValue } from "tab-lines/group-colors-listener";
 
@@ -32,19 +34,15 @@ function generateGroupColorsSvgTags(
 ): string {
   //console.log('matches: ', matches) // e.g.: (4) [undefined, '#4E8D09', '0.6', '1.0']
 
-  const stroke = matches[1]; // e.g.: "rgb(0,0,0)" | "#FFF"
-  const opacity = matches[2] !== undefined ? matches[2] : "1.0"; // opacity が明示的に指定されていない場合は 1.0 とみなす
-  const strokeOpacity = matches[3] !== undefined ? matches[3] : "1.0"; // strokeOpacity が明示的に指定されていない場合は 1.0 とみなす
-  const groupElem =
-    `<g id="${gId}" stroke="${stroke}" opacity="${opacity}" stroke-opacity="${strokeOpacity}">`;
-
   // Apply 'removeOpacity()' if 'removeOpacity=true'
   const isOpacityRemoved = getState("removeOpacity");
-  if (isOpacityRemoved) {
-    return removeOpacity(groupElem); // e.g.: <g (id="0") stroke="#4E8D09">
-  } else {
-    return groupElem; // e.g.: <g (id="0") stroke="#4E8D09" opacity="0.6" stroke-opacity="1.0">
-  }
+  return buildGroupColorElement(
+    gId,
+    matches[1],
+    matches[2],
+    matches[3],
+    { removeOpacity: isOpacityRemoved === true },
+  );
 }
 
 // HTML
