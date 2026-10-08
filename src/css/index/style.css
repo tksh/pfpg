@@ -14,9 +14,6 @@ body {
 
   padding: .5rem 1rem 0 1rem;
 
-  /* padding: .5rem 2rem 0 1rem ; */
-  /* 左に 1rem 右に 2rem のパディング */
-
   scrollbar-gutter: both-edges
     /* ボックスのインライン方向の先頭/末尾の端のどちらかにガターを表示した場合 反対側の端にもガターを表示 */;
 }

@@ -1,7 +1,3 @@
-/* {
-   width: calc(100% - 1rem);
-} */
-
 .tab-link-container {
   width: 100%;
 }
@@ -25,7 +21,6 @@
   box-sizing: initial;
   /* Ensure box model calculations are correct */
   margin: 0;
-  /* padding: 0; */
   padding: .25rem 0;
   /* Adds some space between tabs */
   background-color: var(--color-bg);
@@ -105,8 +100,6 @@
   }
 
   .tab-link {
-    /* width: 20%; */
-    /* min-width: 50px; */
     margin: 0;
   }
   .icon-tab-link {

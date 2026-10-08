@@ -36,7 +36,9 @@
     <meta property="og:url" content="https://pfpg.netlify.app/index.html" />
     <meta property="og:description"
       content="A custom profile picture generator for a specific svg artwork that was made with the UIntNPortray ruleset." />
-    <!-- og:image is filled in per-request by the Deno Deploy /share route -->
+    <!-- og:image / og:url are filled in per-request by the platform edge
+         (Cloudflare Pages middleware or the Netlify function), which asks
+         Deno Deploy GET /ogp/image-meta for the shared image URL. -->
     <meta property="og:image" content="" />
   </head>
 
@@ -50,11 +52,6 @@
           <button class="tab-link" data-tab="tab-4">UI</button>
           <button class="icon-tab-link" data-tab="tab-5"
             id="reset-icon"><span class="icon-font material-symbols-outlined">restart_alt</span></button>
-
-          <!-- For debugging -->
-          <!-- <button id="wih_value" class="tab-link">wih_value</button> -->
-          <!-- <button id="wvvh_value" class="tab-link">wvvh_value</button> -->
-          <!-- <button id="bwh_value" class="tab-link">bwh_value</button> -->
         </div>
 
         <div id="tab-1" class="tab-content">
@@ -599,7 +596,6 @@
           <dt>Description:</dt>
           <dd>A custom <b>p</b>ro<b>f</b>ile <b>p</b>icture <b>g</b>enerator for a specific svg artwork that was made with the <a href="https://github.com/tksh/straightlines" title="tksh/straightlines: A focused SVG subset that unlocks expressive vector art through deliberate simplicity.">Straightlines</a> ruleset.</dd>
           <dt>Creator (both artwork and website):</dt>
-          <!-- <dt>Creator of the website and artwork:</dt> -->
           <dd><a href="https://github.com/tksh" title="tksh on GitHub">SAITO Takashi (tksh)</a></dd>
           <dt>Source:</dt>
           <dd><a href="https://github.com/tksh/pfpg" title="tksh/pfpg: A custom profile picture generator for a specific svg artwork that was made with the UIntNPortray ruleset.">github.com/tksh/pfpg</a></dd>

@@ -1,13 +1,5 @@
 export { adjustLayoutIfNotMobile, initViewportLister };
 
-// For debugging /////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// // JavaScriptを使用して CSSのDVH（デバイスビューポートハイト）で得られる ビューポートの高さ の数値を取得
-// const dvh = window.visualViewport.height;
-// console.log("window.visualViewport.height: ", dvh); // ビューポートの高さをピクセル単位で表示
-//
-// ////////////////////////////////////////////////////////////////////////////////////////////////////// For debugging //
-
 function initViewportLister(): void {
   const viewport = globalThis.visualViewport;
   if (viewport === null) {

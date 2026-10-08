@@ -145,7 +145,6 @@ function downloadPngAsFile(): void {
   if (imgElem === null) {
     throw new Error("downloadPngAsFile: missing element #img");
   }
-  //console.log('imgElem ', imgElem)
   console.log("imgElem.src ", imgElem.src);
   const url = imgElem.src;
 

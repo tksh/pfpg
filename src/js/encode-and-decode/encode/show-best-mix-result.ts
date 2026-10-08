@@ -15,11 +15,6 @@ export function showBestMixResult(
 
   // Transpose the data as each array represents each group's result info.
   const transposed = zip(...Array.from(dataToShow.values()));
-  //console.log('transposed: ', transposed)
-  // Array [ (7) […], (7) […] ]
-  //   0: Array(7) [ 1, "0", 2458, … ]
-  //   1: Array(7) [ 2, "f", 132, … ]
-  //   length: 2
 
   // Generate the text contents of encoded result, by group.
   transposed.map((v) => {

@@ -24,8 +24,6 @@
 
 code {
   font-family: monospace;
-  /* または、具体的なフォント名を指定 */
-  /* font-family: Courier New, Courier, monospace; */
 }
 
 .option-applied {
@@ -49,7 +47,6 @@ code {
   padding-left: 1.5rem;
 }
 
-/* button#close-svg-opt-modal { */
 button#reset-settings {
   width: 70%;
   padding: 0.5rem 0;

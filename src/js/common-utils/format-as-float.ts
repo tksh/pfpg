@@ -13,12 +13,3 @@ function addDecimalToZeroAndOne(num: number): string {
     return num.toString();
   }
 }
-
-// console.log(typeof(addDecimalToZeroAndOne(1)))  // string
-// console.log(addDecimalToZeroAndOne(1))          // 1.0
-// console.log(addDecimalToZeroAndOne(0))          // 0.0
-// console.log(addDecimalToZeroAndOne(1.0))        // 1.0
-// console.log(addDecimalToZeroAndOne(0.0))        // 0.0
-// console.log(addDecimalToZeroAndOne(1.00))       // 1.0
-// console.log(addDecimalToZeroAndOne(0.00))       // 0.0
-// console.log(addDecimalToZeroAndOne(0.5))        // 0.5

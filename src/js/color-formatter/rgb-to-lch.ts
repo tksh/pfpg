@@ -51,15 +51,3 @@ function rgbToLch(
   const [lightness, chroma, hue] = labToLch(l, a, bLab);
   return { lightness, chroma, hue };
 }
-
-// // Test
-// console.log(rgbToLch(0, 0, 0))
-// console.log(rgbToLch(128, 128, 128))
-// console.log(rgbToLch(255, 255, 255))
-// console.log(rgbToLch(255, 0, 0))
-//
-// // Result
-// Object { lightness: 0,                 chroma: 0,                  hue: 0 }
-// Object { lightness: 53.58501345216902, chroma: 11.709261942096738, hue: 262.9881351595042 }
-// Object { lightness: 100,               chroma: 19.519639616321484, hue: 262.9881351595041 }
-// Object { lightness: 53.23288178584245, chroma: 99.98211639728977,  hue: 38.449733047756986 }
