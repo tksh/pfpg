@@ -40,7 +40,13 @@
   "fmt": {
     // Byte-exact files: fixture data, and the vendored third-party license
     // texts, which must stay identical to the packages they were copied from.
-    "exclude": ["tests/fixtures/*.json", "src/licenses/*.md"]
+    // The showcase SVGs are golden renderings: their exact bytes are what the
+    // golden tests compare against, so the formatter must not touch them.
+    "exclude": [
+      "tests/fixtures/*.json",
+      "tests/fixtures/*.svg",
+      "src/licenses/*.md"
+    ]
   },
   "compilerOptions": {
     "strict": true,
