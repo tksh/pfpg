@@ -82,6 +82,7 @@
     "modal/reset-settings": "./src/js/page-specific/index/modal/reset-settings.ts",
 
     // SVG rasterizer: returns pixels only. The image file encoders are separate.
+    "@denext/photon": "jsr:@denext/photon@^0.3.6",
     "svg2ui8a": "jsr:@tksh/svg2ui8a@^0.5.0/svg2rgba",
     // Encoder glue, imported statically. The packages' own wrapper modules
     // reach the same glue through `import()`, and `deno bundle` emits every
