@@ -18,3 +18,12 @@
   to = "/.netlify/functions/list-history"
   status = 200
   force = true
+
+# Serve the same index.html through a function so og:image/og:url can be
+# injected per artwork params (static assets are passed through only when
+# no artwork query string is present).
+[[redirects]]
+  from = "/index.html"
+  to = "/.netlify/functions/index-html-og"
+  status = 200
+  force = true

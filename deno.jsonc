@@ -28,7 +28,7 @@
     "vendor:jsquash": "deno run --allow-read --allow-write --allow-env scripts/vendor_jsquash.ts",
 
     // Necessary post-processing tasks after building the project, both dev and production builds
-    "postprocessing": "deno task bulk-copy",
+    "postprocessing": "deno task bulk-copy && cp dist/index.html dist/index-raw.html",
 
     // Verification tasks apply to the whole project.
     // tests/fixtures/* are byte-exact copies that must never be reformatted.
