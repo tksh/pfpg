@@ -1,8 +1,5 @@
-import {
-  convertColorFormatForArray,
-  convertToRgbArr,
-} from "color-formatter/format-converter";
-import { rgbToLch } from "color-formatter/rgb-to-lch";
+import { convertColorFormatForArray } from "color-formatter/format-converter";
+import { getTextLightness } from "color-formatter/text-lightness";
 import {
   buildGroupColorElement,
   getGroupColorsValues,
@@ -220,7 +217,7 @@ function createStrokeThumbnailDivElement(
 
   // Set text color with calculated lightness for optimal contrast
   const textLightness = getTextLightness(strokeColorStr);
-  strokeThumbDiv.style.color = `lch(${textLightness} 0 0)`;
+  strokeThumbDiv.style.color = `oklch(${textLightness} 0 0)`;
 
   // Input box size defined by css class by color format: 'rgb' or 'hex'
   if (colorFormat === "rgb") {
@@ -230,27 +227,6 @@ function createStrokeThumbnailDivElement(
   }
 
   return strokeThumbDiv;
-}
-
-/**
- * Get text color with calculated lightness for optimal contrast
- * @param {string} colorString - RGB|HEX color value string, e.g.: "rgb(0 0 0)"|"#000000"
- * @return {number} - Lightness value for LCH, [0-100]
- */
-function getTextLightness(colorString: string): number {
-  const rgbArr = convertToRgbArr(colorString);
-  // Number() preserves the legacy coercion for invalid input (sentinel strings flow the same way).
-  const lch = rgbToLch(Number(rgbArr[0]), Number(rgbArr[1]), Number(rgbArr[2])); // r, g, b UInt8 [0-255]
-  const fillLightness = Math.round(lch.lightness); // Integer [0-100]
-  const textLightness = calculateContrast(fillLightness);
-  return textLightness;
-}
-
-function calculateContrast(fillLightness: number): number {
-  const contrastDiff = 50;
-  return fillLightness <= 50
-    ? fillLightness + contrastDiff
-    : fillLightness - contrastDiff;
 }
 
 // Determines color picker theme ('light'/'dark') based on active base UI theme
@@ -340,7 +316,7 @@ function addEventListenerToAlwanOnChange(
     strokeThumbDiv.style.backgroundColor = inputValue; // Fill with selected color
     strokeThumbDiv.innerHTML = inputValue; // Add text
     const textLightness = getTextLightness(inputValue); // Get text color
-    strokeThumbDiv.style.color = `lch(${textLightness} 0 0)`; // Apply text color
+    strokeThumbDiv.style.color = `oklch(${textLightness} 0 0)`; // Apply text color
 
     // Apply the value to SVG string
     // @attrName = 'stroke'
