@@ -32,7 +32,9 @@
 
     // Verification tasks apply to the whole project.
     // tests/fixtures/* are byte-exact copies that must never be reformatted.
-    "test": "deno test --allow-read tests/",
+    // --allow-env=NODE_ENV is required by colorjs.io (it reads process.env.NODE_ENV
+    // at module load); the narrow grant is enough, a blanket --allow-env is not.
+    "test": "deno test --allow-read --allow-env=NODE_ENV tests/",
     "check": "deno check tests/ src/ scripts/ functions/ netlify/ server/",
     "lint": "deno lint",
     "fmt": "deno fmt"
