@@ -52,6 +52,7 @@ Cloudflare dashboard.
 | [@tksh/svg2ui8a](https://jsr.io/@tksh/svg2ui8a)                                 | MIT                      | Renders SVG into raw RGBA pixels                    |
 | [@jsquash/webp](https://www.npmjs.com/package/@jsquash/webp)                    | Apache-2.0, BSD-3-Clause | Encodes the pixels as lossless WebP (libwebp codec) |
 | [@jsquash/oxipng](https://www.npmjs.com/package/@jsquash/oxipng)                | Apache-2.0, MIT          | Optimizes the pixels into a PNG (oxipng codec)      |
+| [colorjs.io](https://www.npmjs.com/package/colorjs.io)                          | MIT                      | sRGB/OKLCH conversion and CSS gamut mapping         |
 | [Alwan](https://www.npmjs.com/package/alwan)                                    | MIT                      | Color picker UI                                     |
 | [@tksh/url-compressor](https://jsr.io/@tksh/url-compressor)                     | MIT                      | URL-safe string compression (via stln-codec)        |
 | [@std/collections](https://jsr.io/@std/collections)                             | MIT                      | Deno standard library array/object utilities        |
@@ -74,6 +75,7 @@ lists them, so visitors of the deployed site can read them.
 | `jsquash-webp-codec-libwebp-BSD-3-Clause.md` | `@jsquash/webp@1.5.0` `codec/LICENSE.codec.md`   |
 | `jsquash-oxipng-Apache-2.0.txt`              | `@jsquash/oxipng@2.3.0` `LICENSE`                |
 | `jsquash-oxipng-codec-oxipng-MIT.md`         | `@jsquash/oxipng@2.3.0` `codec/LICENSE.codec.md` |
+| `colorjs-MIT.txt`                            | `colorjs.io@0.7.1` `LICENSE`                     |
 
 The `@jsquash/*` texts and the WebAssembly binaries are refreshed by
 `deno task vendor:jsquash`. The five rasterizer-side texts are copied by hand:
