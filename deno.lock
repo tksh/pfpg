@@ -24,7 +24,8 @@
     "npm:@jsquash/oxipng@^2.3.0": "2.3.0",
     "npm:@jsquash/png@^3.1.1": "3.1.1",
     "npm:@jsquash/webp@^1.5.0": "1.5.0",
-    "npm:alwan@^2.3.1": "2.3.1"
+    "npm:alwan@^2.3.1": "2.3.1",
+    "npm:colorjs.io@0.7.1": "0.7.1"
   },
   "jsr": {
     "@denext/photon@0.3.6": {
@@ -125,6 +126,9 @@
     "alwan@2.3.1": {
       "integrity": "sha512-hyBrwuER87B/gBC6IvlR6IGpgpiet174dUXNN+016QanRO7VFPye/1e9ObUmoucZGgD3THVUIZT9IJO4Ot2Ltg=="
     },
+    "colorjs.io@0.7.1": {
+      "integrity": "sha512-LY7OHnJZxHwT5UlzNa9bbhHHDbzB6yE5+3MIPwJEQKRvSCt/T4G7epsj+9j2BExUIIfXFIJGsIXUKdfrK9Q5tA=="
+    },
     "wasm-feature-detect@1.9.0": {
       "integrity": "sha512-zonE+xlIIYtxPy++L24ow0hAD8CICb4+FgPyROd3buyXIqsJvUEDkBgfCCoXOd1Hu3DUr0GOfnPIdcGV+YpNaA=="
     }
@@ -143,7 +147,8 @@
       "npm:@jsquash/oxipng@^2.3.0",
       "npm:@jsquash/png@^3.1.1",
       "npm:@jsquash/webp@^1.5.0",
-      "npm:alwan@^2.3.1"
+      "npm:alwan@^2.3.1",
+      "npm:colorjs.io@0.7.1"
     ]
   }
 }

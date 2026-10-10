@@ -68,6 +68,12 @@
     // Shared group-color parameter codec (URL/state shortening + expansion).
     "@tksh/group-colors-param-codec": "jsr:@tksh/group-colors-param-codec@^0.1.1",
 
+    // Color-space conversion: sRGB <-> OKLCH, plus CSS Color 4 gamut mapping.
+    // The "fn" entry is Color.js's tree-shakeable procedural API. Color.js
+    // registers no color space by default; color-formatter/colorjs-spaces
+    // registers the two spaces the app converts between.
+    "colorjs.io/fn": "npm:colorjs.io@0.7.1/fn",
+
     // index.html specific imports
     "alwan": "npm:alwan@^2.3.1",
     "@timepp/murmurhash": "jsr:@timepp/murmurhash@^0.1.1",
@@ -177,6 +183,9 @@
     "color-formatter/format-converter": "./src/js/color-formatter/format-converter.ts",
     "color-formatter/normalized-from-hex": "./src/js/color-formatter/normalized-from-hex.ts",
     "color-formatter/normalized-to-hex": "./src/js/color-formatter/normalized-to-hex.ts",
+    "color-formatter/colorjs-spaces": "./src/js/color-formatter/colorjs-spaces.ts",
+    "color-formatter/rgb-to-oklch": "./src/js/color-formatter/rgb-to-oklch.ts",
+    "color-formatter/oklch-to-rgb": "./src/js/color-formatter/oklch-to-rgb.ts",
     "color-formatter/rgb-to-lch": "./src/js/color-formatter/rgb-to-lch.ts"
   }
 }
