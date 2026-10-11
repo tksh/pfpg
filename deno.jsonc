@@ -188,6 +188,7 @@
     "color-formatter/colorjs-spaces": "./src/js/color-formatter/colorjs-spaces.ts",
     "color-formatter/rgb-to-oklch": "./src/js/color-formatter/rgb-to-oklch.ts",
     "color-formatter/oklch-to-rgb": "./src/js/color-formatter/oklch-to-rgb.ts",
+    "color-formatter/randomize-oklch": "./src/js/color-formatter/randomize-oklch.ts",
     "color-formatter/text-lightness": "./src/js/color-formatter/text-lightness.ts"
   }
 }
