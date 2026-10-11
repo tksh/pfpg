@@ -289,26 +289,38 @@ div.stroke-thumbnail.stroke-hex {
   width: 5.5rem;
 }
 
-/* Height pixel size */
-div.setting-item input#png-size-number {
+/* Height pixel size, and the three Color randomization ranges: each is a
+   <number> input beside its label, a <range> slider below it, and a -/+ button
+   pair on either side of the slider. All four share these rules, keyed on the
+   .buttons-and-range wrapper rather than on any one control's ids.
+
+   box-sizing is restated on each because `*, ::before, ::after { box-sizing:
+   inherit }` resolves against Chrome's `::details-content` box for anything
+   inside a <details>, which hands down content-box rather than the
+   border-box the rest of the app gets. Without it the controls that live in a
+   <details> render wider than their declared widths and the trailing button
+   wraps onto its own line. */
+div.setting-item input[type="number"] {
   width: 4rem;
+  box-sizing: border-box;
 }
 
 div.setting-item input[type="range"] {
   /* スライダーを親要素のフォントサイズの0.3倍下にずらす */
   vertical-align: -0.3rem;
+  box-sizing: border-box;
 }
 
-button#png-size-dec,
-button#png-size-inc {
+.buttons-and-range button {
   width: 1.25rem;
+  box-sizing: border-box;
 }
 
-button#png-size-dec {
+.buttons-and-range button:first-of-type {
   margin-left: 2rem;
   margin-right: .5rem; /* スライダーとボタンの間の余白 */
 }
-button#png-size-inc {
+.buttons-and-range button:last-of-type {
   margin-left: .5rem; /* スライダーとボタンの間の余白 */
 }
 
@@ -387,11 +399,13 @@ main button {
 }
 
 /* 'Randomize colors' sits in the Lines tab, which `main button` does not
-   reach, so it takes the same button colors explicitly. */
+   reach, so it takes the same button colors explicitly, and the same padding
+   as the 'Download as PNG/SVG' buttons. */
 button#randomize-colors {
   background-color: var(--color-button-bg);
   border-color: var(--color-button-border);
   font-size: .9rem;
+  padding: 0.5rem 1rem;
 }
 
 button#png-action-button,
@@ -566,7 +580,7 @@ details#showcase figure {
 
   /* <<< group-colors inputs */
 
-  /* >>> 'Height pixel size' - buttons and input[range] */
+  /* >>> 'Height pixel size', 'Color randomization' - buttons and input[range] */
 
   .flex-direction-column {
     flex-direction: column; /* 子要素を縦に並べる */
@@ -575,14 +589,14 @@ details#showcase figure {
     width: 100%;
     padding-top: .75rem;
   }
-  #png-size-range {
+  .buttons-and-range input[type="range"] {
     min-width: calc(100% - 7rem);
   }
   .flex-direction-column .display-inline-block {
     display: inline-block;
   }
 
-  .flex-direction-column button#png-size-dec {
+  .flex-direction-column .buttons-and-range button:first-of-type {
     /* 左側のボタン '-' */
     margin-right: 1rem;
     /* 右側に余白を追加 - タッチ操作しやすいように モバイルの時に より大きく余白を作る*/
@@ -590,13 +604,13 @@ details#showcase figure {
     margin-left: 1rem;
     /* モバイルでは改行がされ 隣に数値インプットボックスが無いので 余白をPCより狭くする */
   }
-  .flex-direction-column button#png-size-inc {
+  .flex-direction-column .buttons-and-range button:last-of-type {
     /* 右側のボタン '+' */
     margin-left: 1rem;
     /* 左側に余白を追加 - タッチ操作しやすいように モバイルの時に より大きく余白を作る*/
   }
 
-  /* <<< 'Height pixel size' - buttons and input[range] */
+  /* <<< 'Height pixel size', 'Color randomization' - buttons and input[range] */
 
   legend {
     padding-left: 0.5rem;

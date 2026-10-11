@@ -67,7 +67,7 @@ function pngSizeElement(event: Event): void {
 
 // Function to handle button clicks
 function handleButtonClick(step: number): void {
-  const value = adjustInputValueViaButton(step);
+  const value = adjustInputValueViaButton("png-size", step);
   if (value !== null) {
     updateAndConvert(value);
   }

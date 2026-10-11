@@ -19,6 +19,10 @@ import { rgbObjToHex } from "color-formatter/normalized-to-hex";
 import { applyGroupColors } from "tab-lines/apply-group-colors";
 import { getGroupColorsAsJoinedHex } from "tab-lines/encode-colors-as-hex";
 import { svg2pngOption } from "state/resvg-option";
+import {
+  adjustInputValueViaButton,
+  syncInputNumberAndRange,
+} from "tab-render/sync-number-and-range";
 import { getState, updateState } from "state/url-state-manager";
 import { executeSvg2png } from "svg-to-png";
 
@@ -39,25 +43,41 @@ function rememberOriginalGroupStrokes(
 }
 
 function initRandomizeGroupColors(): void {
-  initRangeReadouts();
+  initSpreadControls();
   initRandomizeButtonListener();
 }
 
 // `0`, `0.1`, `0.4` and `30` are not inferable from a thumb position, so each
-// slider shows its own value beside its label.
-function initRangeReadouts(): void {
-  for (const channel of ["lightness", "chroma", "hue"]) {
-    const range = getRangeInput(channel);
-    const readout = document.getElementById(`${channel}-range-value`);
-    if (readout === null) {
-      throw new Error(
-        `initRangeReadouts: element not found: #${channel}-range-value`,
-      );
-    }
-    range.addEventListener("input", () => {
-      readout.textContent = range.value;
+// channel gets the same control the 'Height pixel size:' setting uses: a number
+// input beside the label, a slider below it, and -/+ buttons on either side of
+// the slider.
+function initSpreadControls(): void {
+  for (const channel of SPREAD_CHANNELS) {
+    const number = getNumberInput(channel);
+    number.addEventListener("change", (event: Event) => {
+      syncNumberAndRange(channel, event);
+      // Constraint validation
+      number.reportValidity();
+    });
+    getRangeInput(channel).addEventListener("change", (event: Event) => {
+      syncNumberAndRange(channel, event);
+    });
+    getStepButton(channel, "dec").addEventListener("click", () => {
+      adjustInputValueViaButton(channel, -1);
+    });
+    getStepButton(channel, "inc").addEventListener("click", () => {
+      adjustInputValueViaButton(channel, 1);
     });
   }
+}
+
+// Keep the number input and the slider showing the same figure. The slider is
+// the one that clamps, so its value is read back into the number box: a figure
+// typed past the slider's range must not leave the two controls disagreeing.
+function syncNumberAndRange(channel: string, event: Event): void {
+  syncInputNumberAndRange(event.target as HTMLInputElement);
+  const number = getNumberInput(channel);
+  number.value = getRangeInput(channel).value;
 }
 
 function initRandomizeButtonListener(): void {
@@ -182,12 +202,32 @@ function readRangeValue(channel: string): number {
   return Number(getRangeInput(channel).value);
 }
 
+// The three OKLCH coordinates the sliders widen, in the order they are shown.
+const SPREAD_CHANNELS = ["lightness", "chroma", "hue"];
+
 function getRangeInput(channel: string): HTMLInputElement {
-  const range = document.getElementById(`${channel}-range`);
-  if (range === null) {
-    throw new Error(`getRangeInput: element not found: #${channel}-range`);
+  return getSpreadInput(`${channel}-range`);
+}
+
+function getNumberInput(channel: string): HTMLInputElement {
+  return getSpreadInput(`${channel}-number`);
+}
+
+function getStepButton(channel: string, direction: "dec" | "inc"): HTMLElement {
+  const id = `${channel}-${direction}`;
+  const button = document.getElementById(id);
+  if (button === null) {
+    throw new Error(`getStepButton: element not found: #${id}`);
   }
-  return range as HTMLInputElement;
+  return button;
+}
+
+function getSpreadInput(id: string): HTMLInputElement {
+  const input = document.getElementById(id);
+  if (input === null) {
+    throw new Error(`getSpreadInput: element not found: #${id}`);
+  }
+  return input as HTMLInputElement;
 }
 
 function readDistributionFromSelect(): OffsetDistribution {
