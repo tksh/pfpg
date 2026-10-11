@@ -20,6 +20,7 @@ import {
   getGroupOpacitiesAsMap,
 } from "tab-lines/decode-colors-as-array";
 import { generateGroupColorsHtmlElements } from "tab-lines/group-colors-generator";
+import { rememberOriginalGroupStrokes } from "tab-lines/randomize-group-colors";
 import {
   changeOpacitySelectOptionsAsNewStep,
   updateSvgWithNewSteps,
@@ -88,6 +89,14 @@ async function applyImageCustomization(
       groupColorsByGroupsArr,
       opacitySteps,
     );
+
+    // Snapshot the decoded colors as the randomization anchor, before anything
+    // can overwrite them. Every later 'Randomize colors' click draws from this
+    // snapshot rather than from the live colors, so repeated clicks give
+    // variations of the one decoded palette instead of walking it into noise.
+    // Taken here, at decode time, rather than inside applyGroupColors() to keep
+    // that module free of a dependency back onto the randomizer.
+    rememberOriginalGroupStrokes(groupColorsByGroupsArr);
 
     // Get the opacitySteps from customized group colors
     const opacitiesByGroupMap = getGroupOpacitiesAsMap(groupColorsByGroupsArr);

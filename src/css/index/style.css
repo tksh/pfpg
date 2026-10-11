@@ -386,6 +386,14 @@ main button {
   font-size: .9rem;
 }
 
+/* 'Randomize colors' sits in the Lines tab, which `main button` does not
+   reach, so it takes the same button colors explicitly. */
+button#randomize-colors {
+  background-color: var(--color-button-bg);
+  border-color: var(--color-button-border);
+  font-size: .9rem;
+}
+
 button#png-action-button,
 button#svg-action-button {
   max-width: 100%;

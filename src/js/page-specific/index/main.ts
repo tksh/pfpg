@@ -31,6 +31,7 @@ import { initOptionDetailsToggleListener } from "tab-lines/details-toggle-listen
 import { initGroupColorsInputs } from "tab-lines/group-colors-listener";
 import { initOpacityStepsSelect } from "tab-lines/opacity-steps";
 import { initPathModeSelect } from "tab-lines/path-mode";
+import { initRandomizeGroupColors } from "tab-lines/randomize-group-colors";
 import {
   initHeightPixelSizeInputElements,
   initNumberInputValidatorListener,
@@ -153,6 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initOpacityStepsSelect();
   initColorFormatSelect();
   initOptionDetailsToggleListener();
+  initRandomizeGroupColors();
 
   // Tab - Canvas
   initShapeToTrimSelect();
