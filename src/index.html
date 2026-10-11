@@ -73,7 +73,7 @@
 
           <details id="lines-option-details" class="padding-top-1">
             <summary
-              class="font-size-small font-color-lighter">More settings:</summary>
+              class="font-size-small font-color-lighter">Artwork format:</summary>
 
             <div id="lines-options" class="padding-left-1">
               <!-- Path mode -->
@@ -109,6 +109,82 @@
                     <option value="rgb">RGB</option>
                     <option value="hex">Hex</option>
                   </select>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <!-- A sibling of the collapsible above, not nested inside it: this
+            feature acts on the colors rather than configuring the lines' format. -->
+          <details id="color-randomization" class="padding-top-1">
+            <summary
+              class="font-size-small font-color-lighter">Color randomization:</summary>
+
+            <div class="padding-left-1">
+              <!-- The randomization trigger -->
+              <div class="setting-container">
+                <div class="setting-item">
+                  <button type="button"
+                    id="randomize-colors">Randomize colors</button>
+                </div>
+              </div>
+
+              <!-- Lightness range -->
+              <div class="setting-container">
+                <div class="setting-item flex-direction-column">
+                  <div class="display-inline-block">
+                    <label for="lightness-range">Lightness range: </label>
+                    <span id="lightness-range-value">0</span>
+                  </div>
+                  <input type="range" id="lightness-range"
+                    name="lightness-range"
+                    min="0" max="1" step="0.01" value="0" autocomplete="off">
+                </div>
+              </div>
+
+              <!-- Chroma range -->
+              <div class="setting-container">
+                <div class="setting-item flex-direction-column">
+                  <div class="display-inline-block">
+                    <label for="chroma-range">Chroma range: </label>
+                    <span id="chroma-range-value">0.1</span>
+                  </div>
+                  <input type="range" id="chroma-range" name="chroma-range"
+                    min="0" max="0.4" step="0.01" value="0.1"
+                    autocomplete="off">
+                </div>
+              </div>
+
+              <!-- Hue range -->
+              <div class="setting-container">
+                <div class="setting-item flex-direction-column">
+                  <div class="display-inline-block">
+                    <label for="hue-range">Hue range: </label>
+                    <span id="hue-range-value">30</span>
+                  </div>
+                  <input type="range" id="hue-range" name="hue-range"
+                    min="0" max="180" step="1" value="30" autocomplete="off">
+                </div>
+              </div>
+
+              <!-- Distribution -->
+              <div class="setting-container">
+                <div class="setting-item">
+                  <label for="randomization-distribution">Distribution: </label>
+                  <select name="randomization-distribution"
+                    id="randomization-distribution" autocomplete="off">
+                    <option value="uniform" selected>Uniform</option>
+                    <option value="triangular">Triangular</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="setting-container">
+                <div class="setting-item">
+                  <p class="font-size-small font-color-lighter">
+                    0 keeps each color's original value; a larger value widens its
+                    random range. Hue has no effect on gray, whose chroma is zero.
+                  </p>
                 </div>
               </div>
             </div>
@@ -517,6 +593,15 @@
                 <ul>
                   <li><i>Relative and merged</i>: 'stroke-opacity' applies to entire line groups.</li>
                   <li><i>Absolute and separated</i>: 'stroke-opacity' applies to individual lines</li>
+                </ul>
+              </dd>
+            </dl>
+            <dl>
+              <dt>Effect of the <i>Color randomization</i> options (in <i>Lines</i> tab):</dt>
+              <dd>
+                <ul>
+                  <li>Each click draws every line group's new color from the original artwork's colors, so repeated clicks give variations of the same palette.</li>
+                  <li><i>Hue range</i> has no visible effect on gray, because hue is meaningless when chroma is zero — raise <i>Chroma range</i> as well to change a gray's color.</li>
                 </ul>
               </dd>
             </dl>
