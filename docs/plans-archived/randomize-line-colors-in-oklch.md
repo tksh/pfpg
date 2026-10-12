@@ -281,17 +281,58 @@ lightness ordering of the groups is preserved exactly.** Only a non-zero
 lightness spread can reorder groups. That is a useful property — the default is
 structurally safe, and the slider is what trades safety for variety.
 
-### 5.2 Anchor: the original artwork colors (decided, see §8.1)
+### 5.2 Anchor: the artwork's own line colors
 
-Every click draws from a snapshot of the **original artwork colors**, not from
-the current, already-randomized ones. Repeated clicks therefore produce a family
-of variations of the one palette rather than random-walking into noise.
+> Corrected 2026-10-13. The text originally specified here — a snapshot taken
+> from the decoded `groupColorsByGroups` array inside `applyGroupColors`, with
+> the current-color anchor as a fallback — was wrong on both counts. See
+> `docs/plans/base-colors-dropdown.md`, which supersedes this section and §4.6.
 
-The snapshot is taken once, at decode time in `applyGroupColors`, where the
-decoded `groupColorsByGroups` array is already in hand, and held where the
-randomizer can read it. If that proves awkward to place, the fallback is the
-current-color anchor — which needs no stored state but drifts with repeated
-clicks, and would need to be documented as such.
+There are exactly **two** sets of line colors, not three:
+
+| Anchor                  | Where it lives                                                                                   |
+| ----------------------- | ------------------------------------------------------------------------------------------------ |
+| **Artwork line colors** | the `<g stroke>` values in the decoded SVG, taken _before_ the `groupColors` override is applied |
+| **Current line colors** | the `groupColors` value                                                                          |
+
+There is no third "live" state waiting independently between them. The live
+`#svg-string` is **always** equal to `groupColors`, because the textarea is
+`readonly` (`src/index.html:441`), the only two operations that change a stroke
+— the Alwan picker and the randomizer — both write `groupColors` back via
+`updateState("groupColors", getGroupColorsAsJoinedHex(updatedSvg))`
+(`group-colors-listener.ts:158`, `randomize-group-colors.ts:153`), and every
+other writer recovers and re-emits strokes unchanged (`path-mode.ts:162`,
+`opacity-steps.ts:197`). `color-format.ts` only rewrites the hex ↔ `rgb()`
+spelling of the same color.
+
+So `Current line colors` **is** the `groupColors` value, and it needs no stored
+snapshot of its own. Only `Original line colors` needs state, because it must be
+captured before the override is applied.
+
+**Capture it unconditionally, from the decoded `svgString`, not from
+`groupColorsByGroups`.** The `groupColorsByGroups` array is the wrong anchor: it
+is the override, not the artwork. And capturing it conditionally — inside
+`if (groupColors)`, as an earlier implementation did — leaves the snapshot
+`null` on any URL without that key, so a fallback reads the live value, which
+advances with every click, and repeated clicks random-walk the palette:
+
+```
+roll 0 (artwork as decoded): rgb(170 170 170)  rgb(0 0 0)  rgb(255 255 255)
+roll 1:                      rgb(170 170 170)  rgb(0 0 0)  rgb(255 255 255)
+roll 2:                      rgb(219 144 175)  rgb(0 0 0)  rgb(255 255 255)
+roll 3:                      rgb(193 158 177)  rgb(0 0 0)  rgb(255 255 255)
+roll 4:                      rgb(212 150 160)  rgb(0 0 0)  rgb(255 255 255)
+roll 5:                      rgb(214 152 143)  rgb(0 0 0)  rgb(255 255 255)
+```
+
+A silent fallback is what let that ship unnoticed. With the artwork snapshot
+taken unconditionally there is no missing-anchor case left to fall back from, so
+the new code should have no path that substitutes one anchor for another.
+
+_One caveat, for accuracy:_ the live-equals-`groupColors` invariant holds for
+**stroke** only. Changing `Opacity steps` rewrites the live SVG without calling
+`updateState("groupColors", …)`, so the opacity bytes in the URL can go stale.
+That does not affect anchoring, which only reads strokes.
 
 ### 5.3 Achromatic colors
 
