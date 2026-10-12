@@ -20,7 +20,7 @@ import {
   getGroupOpacitiesAsMap,
 } from "tab-lines/decode-colors-as-array";
 import { generateGroupColorsHtmlElements } from "tab-lines/group-colors-generator";
-import { rememberOriginalGroupStrokes } from "tab-lines/randomize-group-colors";
+import { rememberArtworkLineStrokes } from "tab-lines/randomize-group-colors";
 import {
   changeOpacitySelectOptionsAsNewStep,
   updateSvgWithNewSteps,
@@ -77,6 +77,14 @@ async function applyImageCustomization(
   ////////////////////////////////////////////////// groupColors //////////////////////////////////////////////////
   // Apply the image customization values via url params if exists
 
+  // Snapshot the artwork's own line colors before anything can overwrite them.
+  // This is what 'Base colors: Original line colors' anchors to, so it is taken
+  // unconditionally: `groupColors` is an override of these colors, not the
+  // artwork, and only exists on some URLs. Taken here, at decode time, rather
+  // than inside applyGroupColors() to keep that module free of a dependency back
+  // onto the randomizer.
+  rememberArtworkLineStrokes(svgString);
+
   const groupColors = getState("groupColors");
   if (groupColors) {
     const groupColorsByGroupsArr = decodeGroupColorsAsArray(
@@ -89,14 +97,6 @@ async function applyImageCustomization(
       groupColorsByGroupsArr,
       opacitySteps,
     );
-
-    // Snapshot the decoded colors as the randomization anchor, before anything
-    // can overwrite them. Every later 'Randomize colors' click draws from this
-    // snapshot rather than from the live colors, so repeated clicks give
-    // variations of the one decoded palette instead of walking it into noise.
-    // Taken here, at decode time, rather than inside applyGroupColors() to keep
-    // that module free of a dependency back onto the randomizer.
-    rememberOriginalGroupStrokes(groupColorsByGroupsArr);
 
     // Get the opacitySteps from customized group colors
     const opacitiesByGroupMap = getGroupOpacitiesAsMap(groupColorsByGroupsArr);

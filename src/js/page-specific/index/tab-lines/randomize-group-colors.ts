@@ -8,6 +8,8 @@ import type {
   OklchSpread,
 } from "color-formatter/randomize-oklch";
 import { rgbToOklch } from "color-formatter/rgb-to-oklch";
+import { resolveAnchorStrokes } from "color-formatter/resolve-anchor-strokes";
+import type { BaseMode } from "color-formatter/resolve-anchor-strokes";
 import {
   getOpacity,
   getStroke,
@@ -26,25 +28,52 @@ import {
 import { getState, updateState } from "state/url-state-manager";
 import { executeSvg2png } from "svg-to-png";
 
-export { initRandomizeGroupColors, rememberOriginalGroupStrokes };
+export { initRandomizeGroupColors, rememberArtworkLineStrokes };
 
-// The decoded artwork colors, captured once at decode time. Every click draws
-// from this snapshot rather than from the current, already-randomized colors:
-// otherwise repeated clicks random-walk the palette into noise instead of
-// producing variations of the one palette the URL described.
-let originalGroupStrokes: string[] | null = null;
+// The artwork's own line colors, captured once at decode time from the decoded
+// SVG *before* the `groupColors` override is applied.
+//
+// This is what 'Base colors: Original line colors' anchors to. It is captured
+// unconditionally rather than from the decoded `groupColors` array: that array
+// is the override, not the artwork, and capturing it conditionally — inside
+// `if (groupColors)` — left this null on any URL without that key, so a
+// fallback read the live value, which advances with every click, and repeated
+// clicks random-walked the palette.
+let artworkLineStrokes: string[] | null = null;
 
-function rememberOriginalGroupStrokes(
-  groupColorsByGroups: Array<Array<string | number | undefined>>,
-): void {
-  originalGroupStrokes = groupColorsByGroups.map((groupColorsArr) =>
-    String(groupColorsArr[1])
+function rememberArtworkLineStrokes(svgString: string): void {
+  artworkLineStrokes = regexMatchesOfGroupColors(svgString).map(
+    (match, gId) => {
+      const stroke = getStroke(match);
+      if (stroke === undefined) {
+        throw new Error(
+          `rememberArtworkLineStrokes: no stroke for group ${gId}: ${match}`,
+        );
+      }
+      return stroke;
+    },
   );
 }
 
 function initRandomizeGroupColors(): void {
   initSpreadControls();
+  initBaseColorsSelect();
   initRandomizeButtonListener();
+}
+
+// The base is only consulted when the button is pressed, so the listener exists
+// to keep a stale value from being applied if the element were ever repainted.
+// It deliberately does nothing else: the two dropdowns need no cross-wiring.
+function initBaseColorsSelect(): void {
+  const select = document.getElementById("randomization-base");
+  if (select === null) {
+    throw new Error(
+      "initBaseColorsSelect: element not found: #randomization-base",
+    );
+  }
+  select.addEventListener("change", () => {
+    // Read on each click; nothing to do on change.
+  });
 }
 
 // `0`, `0.1`, `0.4` and `30` are not inferable from a thumb position, so each
@@ -98,18 +127,27 @@ function randomizeEveryGroupColor(): void {
   const svgString = getSvgString();
   const matches = regexMatchesOfGroupColors(svgString);
 
-  // Fall back to the current colors when there is no decoded snapshot, i.e. when
-  // the artwork carried no groupColors to decode. That is exact on the first
-  // click, since nothing has been randomized yet.
-  const anchors = originalGroupStrokes ?? matches.map((match, gId) => {
+  const currentStrokes = matches.map((match, gId) => {
     const stroke = getStroke(match);
     if (stroke === undefined) {
       throw new Error(
-        `randomizeEveryGroupColor: could not parse a stroke to anchor from group ${gId}: ${match}`,
+        `randomizeEveryGroupColor: could not parse a stroke at group ${gId}: ${match}`,
       );
     }
     return stroke;
   });
+
+  if (artworkLineStrokes === null) {
+    throw new Error(
+      "randomizeEveryGroupColor: artwork snapshot was never taken",
+    );
+  }
+
+  const anchors = resolveAnchorStrokes(
+    readBaseFromSelect(),
+    artworkLineStrokes,
+    currentStrokes,
+  );
 
   // Opacity and stroke-opacity are carried over untouched; only the stroke is
   // regenerated.
@@ -240,4 +278,19 @@ function readDistributionFromSelect(): OffsetDistribution {
   return (select as HTMLSelectElement).value === "triangular"
     ? "triangular"
     : "uniform";
+}
+
+// Which set of line colors the ranges are applied around. Anything other than an
+// explicit "current" is treated as "original", so an unrecognised value cannot
+// silently select the drifting anchor.
+function readBaseFromSelect(): BaseMode {
+  const select = document.getElementById("randomization-base");
+  if (select === null) {
+    throw new Error(
+      "readBaseFromSelect: element not found: #randomization-base",
+    );
+  }
+  return (select as HTMLSelectElement).value === "current"
+    ? "current"
+    : "original";
 }

@@ -196,6 +196,19 @@
                 </div>
               </div>
 
+              <!-- Base colors, directly below Distribution — the two are a pair -->
+              <div class="setting-container">
+                <div class="setting-item">
+                  <label for="randomization-base">Base colors: </label>
+                  <select name="randomization-base"
+                    id="randomization-base" autocomplete="off">
+                    <option value="original"
+                      selected>Original line colors</option>
+                    <option value="current">Current line colors</option>
+                  </select>
+                </div>
+              </div>
+
               <div class="setting-container">
                 <div class="setting-item">
                   <p class="font-size-small font-color-lighter">
@@ -617,7 +630,7 @@
               <dt>Effect of the <i>Color randomization</i> options (in <i>Lines</i> tab):</dt>
               <dd>
                 <ul>
-                  <li>Each click draws every line group's new color from the original artwork's colors, so repeated clicks give variations of the same palette.</li>
+                  <li><i>Base colors</i>: <i>Original line colors</i> draws every group from the line colors the artwork defines, ignoring any color override in the link, so repeated clicks give variations of the same palette; <i>Current line colors</i> draws from the colors the link currently carries, so each click builds on the last and repeated clicks drift away from the original.</li>
                   <li><i>Hue range</i> has no visible effect on gray, because hue is meaningless when chroma is zero — raise <i>Chroma range</i> as well to change a gray's color.</li>
                 </ul>
               </dd>
