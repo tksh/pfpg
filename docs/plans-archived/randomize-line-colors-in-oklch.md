@@ -2,7 +2,7 @@
 
 Date: 2026-10-11 Scope: **planning only**. No application code is changed by
 this document. It follows the Color.js / OKLCH migration (plan:
-`pfpg/docs/plans/colorjs-oklch-migration.md`, commit `942a305`), whose
+`pfpg/docs/plans-archived/colorjs-oklch-migration.md`, commit `942a305`), whose
 `oklchToRgb()` this feature is the first consumer of.
 
 Related implementation (already merged): the migration added
