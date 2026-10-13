@@ -33,7 +33,7 @@ export { initRandomizeGroupColors, rememberArtworkLineStrokes };
 // The artwork's own line colors, captured once at decode time from the decoded
 // SVG *before* the `groupColors` override is applied.
 //
-// This is what 'Base colors: Original line colors' anchors to. It is captured
+// This is what 'Anchor: Original line colors' anchors to. It is captured
 // unconditionally rather than from the decoded `groupColors` array: that array
 // is the override, not the artwork, and capturing it conditionally — inside
 // `if (groupColors)` — left this null on any URL without that key, so a

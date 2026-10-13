@@ -78,7 +78,7 @@ async function applyImageCustomization(
   // Apply the image customization values via url params if exists
 
   // Snapshot the artwork's own line colors before anything can overwrite them.
-  // This is what 'Base colors: Original line colors' anchors to, so it is taken
+  // This is what 'Anchor: Original line colors' anchors to, so it is taken
   // unconditionally: `groupColors` is an override of these colors, not the
   // artwork, and only exists on some URLs. Taken here, at decode time, rather
   // than inside applyGroupColors() to keep that module free of a dependency back
