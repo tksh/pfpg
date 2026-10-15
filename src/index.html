@@ -51,7 +51,9 @@
           <button class="tab-link" data-tab="tab-3">Render</button>
           <button class="tab-link" data-tab="tab-4">UI</button>
           <button class="icon-tab-link" data-tab="tab-5"
-            id="reset-icon"><span class="icon-font material-symbols-outlined">restart_alt</span></button>
+            id="reset-icon" command="show-modal"
+            commandfor="reset-settings-modal"><span
+              class="icon-font material-symbols-outlined">restart_alt</span></button>
         </div>
 
         <div id="tab-1" class="tab-content">
@@ -466,7 +468,7 @@
       <!-- End of input-and-output box -->
 
       <!-- SVG optimization modal window content-->
-      <div id="svg-opt-modal" class="modal">
+      <dialog id="svg-opt-modal" class="modal" closedby="any">
         <div class="modal-content">
           <h2 class="text-align-center">SVG Text Optimization</h2>
           <form>
@@ -522,14 +524,15 @@
             </fieldset>
           </form>
           <div class="align-items-center text-align-center 1">
-            <span id="svg-opt-close-icon"
-              class="material-symbols-outlined">close</span>
+            <button id="svg-opt-close-icon" type="button" command="close"
+              commandfor="svg-opt-modal" class="modal-close-icon"><span
+                class="material-symbols-outlined">close</span></button>
           </div>
         </div>
-      </div>
+      </dialog>
 
       <!-- Reset settings modal window content-->
-      <div id="reset-settings-modal" class="modal">
+      <dialog id="reset-settings-modal" class="modal" closedby="any">
         <div class="modal-content">
           <h2 class="text-align-center">Reset Settings by Category</h2>
           <form>
@@ -568,11 +571,13 @@
             <button id="reset-settings">Clear and Reload</button>
           </div>
           <div class="align-items-center text-align-center padding-top-2">
-            <span id="reset-settings-close-icon"
-              class="material-symbols-outlined">close</span>
+            <button id="reset-settings-close-icon" type="button"
+              command="close" commandfor="reset-settings-modal"
+              class="modal-close-icon"><span
+                class="material-symbols-outlined">close</span></button>
           </div>
         </div>
-      </div>
+      </dialog>
     </main>
 
     <hr>

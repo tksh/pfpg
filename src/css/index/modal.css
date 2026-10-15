@@ -1,18 +1,25 @@
+/* Both modals are native <dialog> elements now: the UA centres them, renders
+ * them in the top layer (no z-index needed), and manages Escape and focus.
+ * The dim layer lives on ::backdrop, and closedby="any" on each dialog closes
+ * it on a click outside — except in browsers without closedby (Safari), where
+ * the close button is the way out. */
 .modal {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.32); /* #00000052*/
+  /* The `* { margin: 0 }` reset also hits dialogs, wiping the UA stylesheet's
+   * `margin: auto` that centres them — restore it explicitly. */
+  margin: auto;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
+.modal::backdrop {
+  background-color: rgba(0, 0, 0, 0.32); /* #00000052 */
 }
 
 .modal-content {
   background-color: rgba(200, 200, 200, 1); /* #C8C8C8FF */
   color: rgb(102, 102, 102); /* #666 = 'dark': var(--color-text); */
-  margin: 10% auto;
+  margin: 0; /* the <dialog> box itself is already centred */
   padding: 1rem;
   border: 2px solid rgba(200, 200, 200, 0.48); /* #C8C8C87A */
   width: max-content;
@@ -47,6 +54,15 @@ code {
   padding-left: 1.5rem;
 }
 
+/* The close control is a real <button> (keyboard operable) but keeps the
+ * bare-icon look it had as a <span>; the `main button` rule would box it. */
+button.modal-close-icon {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+}
+
 button#reset-settings {
   width: 70%;
   padding: 0.5rem 0;
@@ -57,9 +73,12 @@ div#reset-button-box {
 }
 
 @media screen and (max-width: 512px) {
+  .modal {
+    width: 90%;
+  }
   .modal-content {
     padding: 1rem;
-    width: 90%;
+    width: 100%;
   }
   .modal-content fieldset {
     margin: 0;

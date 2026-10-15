@@ -1,5 +1,10 @@
-export { initResetSettingsModalToggle, initSvgOptimizationModalToggle };
+export { initSvgOptimizationModalToggle };
 
+// The SVG optimization window opens on a click on the readonly output textarea.
+// Invoker command attributes (command/commandfor) only work on <button>/<input>,
+// so this listener is the one piece of popup JavaScript the <dialog> migration
+// cannot remove. Close button, outside click (closedby="any") and Escape are
+// all handled by the dialog itself.
 function initSvgOptimizationModalToggle(): void {
   const textarea = document.getElementById("svg-string");
   if (textarea === null) {
@@ -13,59 +18,15 @@ function initSvgOptimizationModalToggle(): void {
       "initSvgOptimizationModalToggle: missing element #svg-opt-modal",
     );
   }
-  const closeIcon = document.getElementById("svg-opt-close-icon");
-  if (closeIcon === null) {
+  if (!(modal instanceof HTMLDialogElement)) {
     throw new Error(
-      "initSvgOptimizationModalToggle: missing element #svg-opt-close-icon",
+      "initSvgOptimizationModalToggle: element #svg-opt-modal is not a <dialog>",
     );
   }
 
   textarea.addEventListener("click", function () {
-    modal.style.display = "block";
-  });
-
-  closeIcon.addEventListener("click", function () {
-    modal.style.display = "none";
-  });
-
-  globalThis.addEventListener("click", function (event: MouseEvent) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  });
-}
-
-function initResetSettingsModalToggle(): void {
-  const button = document.getElementById("reset-icon");
-  if (button === null) {
-    throw new Error(
-      "initResetSettingsModalToggle: missing element #reset-icon",
-    );
-  }
-  const modal = document.getElementById("reset-settings-modal");
-  if (modal === null) {
-    throw new Error(
-      "initResetSettingsModalToggle: missing element #reset-settings-modal",
-    );
-  }
-  const closeIcon = document.getElementById("reset-settings-close-icon");
-  if (closeIcon === null) {
-    throw new Error(
-      "initResetSettingsModalToggle: missing element #reset-settings-close-icon",
-    );
-  }
-
-  button.addEventListener("click", function () {
-    modal.style.display = "block";
-  });
-
-  closeIcon.addEventListener("click", function () {
-    modal.style.display = "none";
-  });
-
-  globalThis.addEventListener("click", function (event: MouseEvent) {
-    if (event.target == modal) {
-      modal.style.display = "none";
+    if (!modal.open) {
+      modal.showModal();
     }
   });
 }

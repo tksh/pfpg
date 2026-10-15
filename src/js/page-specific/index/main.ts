@@ -6,10 +6,7 @@ import {
   initViewportLister,
 } from "init/adjust-layout";
 import { initTabs } from "init/tab-setup";
-import {
-  initResetSettingsModalToggle,
-  initSvgOptimizationModalToggle,
-} from "modal/modal-toggle";
+import { initSvgOptimizationModalToggle } from "modal/modal-toggle";
 import { initSvgOptimization } from "modal/optimize-svg";
 import { initResetSettings } from "modal/reset-settings";
 import {
@@ -189,7 +186,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initSvgOptimization();
 
   // Modal - Reset settings
-  initResetSettingsModalToggle();
   initResetSettings();
 
   // Add event lister to viewport for continuous resizing the output boxes (PNG and SVG)

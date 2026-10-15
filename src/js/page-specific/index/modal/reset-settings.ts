@@ -6,10 +6,6 @@ import {
 } from "state/url-state-manager";
 
 export function initResetSettings(): void {
-  const modal = document.getElementById("reset-settings-modal");
-  if (modal === null) {
-    throw new Error("initResetSettings: missing element #reset-settings-modal");
-  }
   const resetButton = document.getElementById("reset-settings");
   if (resetButton === null) {
     throw new Error("initResetSettings: missing element #reset-settings");
@@ -57,9 +53,6 @@ export function initResetSettings(): void {
 
     //console.log("paramsToReset: ", paramsToReset)  // e.g.: (3) ['groupColors', 'shapeToTrim', 'themeColor']
     removeUrlParams(paramsToReset);
-
-    // モーダルを閉じる
-    modal.style.display = "none";
 
     // ページをリロード
     globalThis.location.reload();
