@@ -78,7 +78,13 @@ button.info-icon {
 /* The hint popover: a <dialog> carrying the popover attribute, so it needs no
  * JavaScript to open and brings no backdrop or focus trap. The UA centres a
  * popover in the viewport; anchor it to the icon where CSS anchor positioning
- * is supported, and let it fall back to centred elsewhere. */
+ * is supported, and let it fall back to centred elsewhere.
+ *
+ * It is centred on the icon rather than spanning to one side of it. Spanning
+ * right meant the available width was whatever was left to the icon's right, so
+ * on a phone the hint was squeezed into a narrow column; spanning left would
+ * mirror the problem. justify-self: anchor-center centres the box on the anchor
+ * at every viewport width. */
 dialog.hint-dialog {
   margin: 0;
   padding: 0;
@@ -86,7 +92,8 @@ dialog.hint-dialog {
   background: transparent;
   box-sizing: border-box;
   position-anchor: --randomize-hint-anchor;
-  position-area: bottom span-right;
+  position-area: bottom;
+  justify-self: anchor-center;
 }
 
 .hint-content {
