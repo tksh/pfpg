@@ -545,11 +545,12 @@
               </div>
             </fieldset>
           </form>
-          <div class="align-items-center text-align-center 1">
-            <button id="svg-opt-close-icon" type="button" command="close"
-              commandfor="svg-opt-modal" class="modal-close-icon"><span
-                class="material-symbols-outlined">close</span></button>
-          </div>
+          <!-- Close control is positioned into the corner by
+            button.modal-close-icon; it stays last in the DOM so the tab order
+            is unchanged. -->
+          <button id="svg-opt-close-icon" type="button" command="close"
+            commandfor="svg-opt-modal" class="modal-close-icon"><span
+              class="material-symbols-outlined">close</span></button>
         </div>
       </dialog>
 
@@ -592,12 +593,13 @@
           <div id="reset-button-box">
             <button id="reset-settings">Clear and Reload</button>
           </div>
-          <div class="align-items-center text-align-center padding-top-2">
-            <button id="reset-settings-close-icon" type="button"
-              command="close" commandfor="reset-settings-modal"
-              class="modal-close-icon"><span
-                class="material-symbols-outlined">close</span></button>
-          </div>
+          <!-- Close control is positioned into the corner by
+            button.modal-close-icon; it stays last in the DOM so the tab order
+            is unchanged. -->
+          <button id="reset-settings-close-icon" type="button"
+            command="close" commandfor="reset-settings-modal"
+            class="modal-close-icon"><span
+            class="material-symbols-outlined">close</span></button>
         </div>
       </dialog>
     </main>

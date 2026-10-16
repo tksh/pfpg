@@ -23,6 +23,8 @@
   padding: 1rem;
   border: 2px solid rgba(200, 200, 200, 0.48); /* #C8C8C87A */
   width: max-content;
+  /* The close control is absolutely positioned into the top-right corner. */
+  position: relative;
 }
 
 .input-group {
@@ -46,6 +48,11 @@ code {
 
 .modal-content > h2 {
   font-size: 1rem;
+  /* One line of space above the title. The cornered close control occupies the
+   * top padding band and reaches ~31px down the content box, so a bare 1rem
+   * left the heading's text all but touching it; 1.5rem clears it by ~11px and
+   * still reads as a single line rather than a gap. */
+  padding-top: 1.5rem;
   padding-bottom: 2rem;
 }
 
@@ -55,12 +62,18 @@ code {
 }
 
 /* The close control is a real <button> (keyboard operable) but keeps the
- * bare-icon look it had as a <span>; the `main button` rule would box it. */
+ * bare-icon look it had as a <span>; the `main button` rule would box it.
+ * It is pinned to the top-right corner of .modal-content / .hint-content, both
+ * of which are `position: relative`. It stays last in the DOM so the keyboard
+ * tab order is unchanged. */
 button.modal-close-icon {
   background: none;
   border: none;
   color: inherit;
   cursor: pointer;
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
 }
 
 /* The ⓘ beside 'Randomize colors'. Its reset mirrors button.modal-close-icon:
@@ -102,8 +115,11 @@ dialog.hint-dialog {
   background-color: var(--color-bg);
   color: var(--color-text);
   border: 1px solid var(--color-button-border);
-  padding: 0.75rem;
+  /* The right padding is wider than the others: it reserves a gutter for the
+   * cornered close control so no line of the hint runs underneath it. */
+  padding: 0.75rem 2rem 0.75rem 0.75rem;
   max-width: min(20rem, 80vw);
+  position: relative;
 }
 
 button#reset-settings {
