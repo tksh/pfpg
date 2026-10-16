@@ -1,7 +1,8 @@
 export { resolveAnchorStrokes };
 
 // Which of the app's two sets of line colors the L/C/H ranges are applied
-// around. See docs/plans/base-colors-dropdown.md.
+// around. See the plan in the lsvg-memo repo:
+// pfpg/plans-archived/base-colors-dropdown.md
 export type BaseMode = "original" | "current";
 
 // Pick the anchor colors for one randomization.
