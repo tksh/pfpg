@@ -63,6 +63,42 @@ button.modal-close-icon {
   cursor: pointer;
 }
 
+/* The ⓘ beside 'Randomize colors'. Its reset mirrors button.modal-close-icon:
+ * header buttons get no app styling, so without it the browser default boxes
+ * the icon. The colour is left to the existing `header ... button` rule rather
+ * than overridden here. */
+button.info-icon {
+  anchor-name: --randomize-hint-anchor;
+  background: none;
+  border: none;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+/* The hint popover: a <dialog> carrying the popover attribute, so it needs no
+ * JavaScript to open and brings no backdrop or focus trap. The UA centres a
+ * popover in the viewport; anchor it to the icon where CSS anchor positioning
+ * is supported, and let it fall back to centred elsewhere. */
+dialog.hint-dialog {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-sizing: border-box;
+  position-anchor: --randomize-hint-anchor;
+  position-area: bottom span-right;
+}
+
+.hint-content {
+  /* var(--color-bg), not the modal's hard-coded #C8C8C8: this floats over the
+   * artwork panel rather than over a dimmed page. */
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-button-border);
+  padding: 0.75rem;
+  max-width: min(20rem, 80vw);
+}
+
 button#reset-settings {
   width: 70%;
   padding: 0.5rem 0;

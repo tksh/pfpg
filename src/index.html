@@ -24,8 +24,10 @@
     <!-- Icon -->
 
     <!-- Material Design Icons via Google Fonts -->
+    <!-- icon_names restricts the served subset, so every glyph used anywhere on
+         the page must be listed here or it renders as its literal letters. -->
     <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&icon_names=close,restart_alt,swap_vert" />
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&icon_names=close,info,restart_alt,swap_vert" />
 
     <!-- OGP -->
     <meta property="og:site_name" content="pfpg — Profile picture generator" />
@@ -123,11 +125,16 @@
               class="font-size-small font-color-lighter">Color randomization:</summary>
 
             <div class="padding-left-1">
-              <!-- The randomization trigger -->
+              <!-- The randomization trigger, and the hint's ⓘ beside it -->
               <div class="setting-container">
                 <div class="setting-item">
                   <button type="button"
                     id="randomize-colors">Randomize colors</button>
+                  <button type="button" class="info-icon"
+                    popovertarget="randomize-hint"
+                    aria-label="What do the Color randomization options do?">
+                    <span class="material-symbols-outlined">info</span>
+                  </button>
                 </div>
               </div>
 
@@ -210,17 +217,32 @@
                   </select>
                 </div>
               </div>
-
-              <div class="setting-container">
-                <div class="setting-item">
-                  <p class="font-size-small font-color-lighter">
-                    0 keeps each color's original value; a larger value widens its
-                    random range. Hue has no effect on gray, whose chroma is zero.
-                  </p>
-                </div>
-              </div>
             </div>
           </details>
+
+          <!-- The hint, as a popover opened by the ⓘ above. It sits outside
+            #color-randomization on purpose: a popover inside a <details> is
+            suppressed by ::details-content's content-visibility, and everything
+            inside a <details> also computes box-sizing: content-box here.
+
+            The close control uses popovertarget, not command="close" the way
+            the two modals do: dialog commands are ignored on an open popover
+            ("Dialog commands are ignored on open popovers"), which would
+            leave the hint with no way out on the browsers that lack
+            closedby="any". A popovertarget button toggles its own popover. -->
+          <dialog id="randomize-hint" class="hint-dialog" popover
+            closedby="any">
+            <div class="hint-content">
+              <p class="font-size-small font-color-lighter">
+                0 keeps each color's original value; a larger value widens its
+                random range. Hue has no effect on gray, whose chroma is zero.
+              </p>
+              <button type="button" class="modal-close-icon"
+                popovertarget="randomize-hint">
+                <span class="material-symbols-outlined">close</span>
+              </button>
+            </div>
+          </dialog>
         </div>
 
         <div id="tab-2" class="tab-content">
