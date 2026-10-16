@@ -89,6 +89,12 @@
                       value="absoluteSeparated">Absolute and separated</option>
                     <option value="relativeMerged">Relative and merged</option>
                   </select>
+                  <button type="button" class="info-icon"
+                    id="path-mode-info"
+                    popovertarget="path-mode-hint"
+                    aria-label="What does the Path mode option do?">
+                    <span class="material-symbols-outlined">info</span>
+                  </button>
                 </div>
               </div>
 
@@ -131,6 +137,7 @@
                   <button type="button"
                     id="randomize-colors">Randomize colors</button>
                   <button type="button" class="info-icon"
+                    id="randomize-colors-info"
                     popovertarget="randomize-hint"
                     aria-label="What do the Color randomization options do?">
                     <span class="material-symbols-outlined">info</span>
@@ -215,6 +222,12 @@
                       selected>Original line colors</option>
                     <option value="current">Current line colors</option>
                   </select>
+                  <button type="button" class="info-icon"
+                    id="randomization-base-info"
+                    popovertarget="randomization-base-hint"
+                    aria-label="What does the Anchor option do?">
+                    <span class="material-symbols-outlined">info</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -235,10 +248,48 @@
             <div class="hint-content">
               <p class="font-size-small">
                 0 keeps each color's original value; a larger value widens its
-                random range. Hue has no effect on gray, whose chroma is zero.
+                random range. Hue has no effect on gray, whose chroma is zero,
+                so raise Chroma range as well to change a gray's color.
               </p>
               <button type="button" class="modal-close-icon"
                 popovertarget="randomize-hint">
+                <span class="material-symbols-outlined">close</span>
+              </button>
+            </div>
+          </dialog>
+
+          <!-- The Anchor and Path mode hints follow the same pattern, and for
+            the same reason sit outside the <details> that hold their controls.
+            Path mode's own control is in #artwork-format, so its popover is
+            parked here too. -->
+          <dialog id="randomization-base-hint" class="hint-dialog" popover
+            closedby="any">
+            <div class="hint-content">
+              <p class="font-size-small">
+                <i>Original line colors</i> draws every group from the colors the
+                artwork defines, ignoring any color override in the link, so
+                repeated clicks give variations of the same palette;
+                <i>Current line colors</i> draws from the colors the link
+                currently carries, so each click builds on the last and repeated
+                clicks drift away from the original.
+              </p>
+              <button type="button" class="modal-close-icon"
+                popovertarget="randomization-base-hint">
+                <span class="material-symbols-outlined">close</span>
+              </button>
+            </div>
+          </dialog>
+
+          <dialog id="path-mode-hint" class="hint-dialog" popover
+            closedby="any">
+            <div class="hint-content">
+              <p class="font-size-small">
+                <i>Relative and merged</i>: 'stroke-opacity' applies to entire
+                line groups. <i>Absolute and separated</i>: 'stroke-opacity'
+                applies to individual lines.
+              </p>
+              <button type="button" class="modal-close-icon"
+                popovertarget="path-mode-hint">
                 <span class="material-symbols-outlined">close</span>
               </button>
             </div>
@@ -343,6 +394,11 @@
                 <label for="png-size-number">Height pixel size:</label>
                 <input type="number" id="png-size-number" name="png-size-number"
                   class="width-size" min="1" value="256" autocomplete="off">
+                <button type="button" class="info-icon" id="png-size-info"
+                  popovertarget="png-size-hint"
+                  aria-label="How large can the Height pixel size option be?">
+                  <span class="material-symbols-outlined">info</span>
+                </button>
               </div>
               <div class="display-inline-block buttons-and-range">
                 <button type="button" id="png-size-dec">-</button>
@@ -371,6 +427,22 @@
                 class="font-size-small font-color-lighter"></p>
             </div>
           </div>
+
+          <!-- The Height pixel size hint. Nothing on this tab lives in a
+            <details>, so it needs no parking outside one. -->
+          <dialog id="png-size-hint" class="hint-dialog" popover closedby="any">
+            <div class="hint-content">
+              <p class="font-size-small">
+                The slider supports sizes up to 512 pixels, but you can manually
+                enter a larger value into the box. Larger sizes will
+                exponentially increase rendering time.
+              </p>
+              <button type="button" class="modal-close-icon"
+                popovertarget="png-size-hint">
+                <span class="material-symbols-outlined">close</span>
+              </button>
+            </div>
+          </dialog>
         </div>
 
         <div id="tab-4" class="tab-content">
@@ -640,34 +712,6 @@
                   <li>Click/tap the source SVG input field to access optimization settings.</li>
                 </ul>
               </dd>
-            </dl>
-          </dd>
-        </dl>
-        <dl class="top-level padding-top-1 padding-bottom-1">
-          <dt>Additional Information:</dt>
-          <dd class="padding-left-1">
-            <dl>
-              <dt>Effect of the <i>Path mode</i> option (in <i>Lines</i> tab):</dt>
-              <dd>
-                <ul>
-                  <li><i>Relative and merged</i>: 'stroke-opacity' applies to entire line groups.</li>
-                  <li><i>Absolute and separated</i>: 'stroke-opacity' applies to individual lines</li>
-                </ul>
-              </dd>
-            </dl>
-            <dl>
-              <dt>Effect of the <i>Color randomization</i> options (in <i>Lines</i> tab):</dt>
-              <dd>
-                <ul>
-                  <li><i>Anchor</i>: <i>Original line colors</i> draws every group from the line colors the artwork defines, ignoring any color override in the link, so repeated clicks give variations of the same palette; <i>Current line colors</i> draws from the colors the link currently carries, so each click builds on the last and repeated clicks drift away from the original.</li>
-                  <li><i>Hue range</i> has no visible effect on gray, because hue is meaningless when chroma is zero — raise <i>Chroma range</i> as well to change a gray's color.</li>
-                </ul>
-              </dd>
-            </dl>
-            <dl>
-              <dt>Maximum rendering size for <i>Height pixel size</i> option (in <i>Render</i> tab):</dt>
-              <dd>The slider supports sizes up to 512 pixels, but you can manually enter a larger value into the box.</dd>
-              <dd>(Note: Larger sizes will exponentially increase rendering time)</dd>
             </dl>
           </dd>
         </dl>

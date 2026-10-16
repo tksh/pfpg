@@ -76,18 +76,34 @@ button.modal-close-icon {
   right: 0.25rem;
 }
 
-/* The ⓘ beside 'Randomize colors'. Its reset mirrors button.modal-close-icon:
- * header buttons get no app styling, so without it the browser default boxes
- * the icon. The colour is left to the existing `header ... button` rule rather
- * than overridden here; the opacity matches .icon-tab-link, which is what
- * gives the reset icon its weight. */
+/* The ⓘ beside a setting. Its reset mirrors button.modal-close-icon: header
+ * buttons get no app styling, so without it the browser default boxes the icon.
+ * The colour is left to the existing `header ... button` rule rather than
+ * overridden here; the opacity matches .icon-tab-link, which is what gives the
+ * reset icon its weight.
+ *
+ * The anchor name is not here but on the per-icon rules below: an anchor name
+ * shared by several elements resolves to the last of them in DOM order, which
+ * would drag every hint to whichever ⓘ comes last. */
 button.info-icon {
-  anchor-name: --randomize-hint-anchor;
   background: none;
   border: none;
   cursor: pointer;
   opacity: 0.7;
   vertical-align: middle;
+}
+
+button#randomize-colors-info {
+  anchor-name: --randomize-hint-anchor;
+}
+button#randomization-base-info {
+  anchor-name: --randomization-base-hint-anchor;
+}
+button#path-mode-info {
+  anchor-name: --path-mode-hint-anchor;
+}
+button#png-size-info {
+  anchor-name: --png-size-hint-anchor;
 }
 
 /* The hint popover: a <dialog> carrying the popover attribute, so it needs no
@@ -106,9 +122,21 @@ dialog.hint-dialog {
   border: none;
   background: transparent;
   box-sizing: border-box;
-  position-anchor: --randomize-hint-anchor;
   position-area: bottom;
   justify-self: anchor-center;
+}
+
+dialog#randomize-hint {
+  position-anchor: --randomize-hint-anchor;
+}
+dialog#randomization-base-hint {
+  position-anchor: --randomization-base-hint-anchor;
+}
+dialog#path-mode-hint {
+  position-anchor: --path-mode-hint-anchor;
+}
+dialog#png-size-hint {
+  position-anchor: --png-size-hint-anchor;
 }
 
 .hint-content {
