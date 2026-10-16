@@ -450,9 +450,6 @@ footer#footer-info {
 .text-align-center {
   text-align: center;
 }
-.align-items-center {
-  align-items: center;
-}
 
 footer a {
   color: var(--color-text);

@@ -79,12 +79,14 @@ button.modal-close-icon {
 /* The ⓘ beside 'Randomize colors'. Its reset mirrors button.modal-close-icon:
  * header buttons get no app styling, so without it the browser default boxes
  * the icon. The colour is left to the existing `header ... button` rule rather
- * than overridden here. */
+ * than overridden here; the opacity matches .icon-tab-link, which is what
+ * gives the reset icon its weight. */
 button.info-icon {
   anchor-name: --randomize-hint-anchor;
   background: none;
   border: none;
   cursor: pointer;
+  opacity: 0.7;
   vertical-align: middle;
 }
 
