@@ -171,7 +171,8 @@ div#reset-button-box {
 
 .img-opt-row {
   display: grid;
-  grid-template-columns: minmax(8rem, max-content) minmax(9rem, max-content) minmax(5rem, max-content) max-content;
+  grid-template-columns: minmax(8rem, max-content) minmax(9rem, max-content)
+    minmax(5rem, max-content) max-content;
   align-items: center;
   gap: 0.25rem 1rem;
 }
