@@ -21,8 +21,15 @@
     "jsr:@tksh/stln-codec@~0.1.1": "0.1.3",
     "jsr:@tksh/svg2ui8a@0.5": "0.5.0",
     "jsr:@tksh/url-compressor@^1.1.1": "1.1.1",
+    "npm:@jsquash/avif@2.1.1": "2.1.1",
+    "npm:@jsquash/avif@^2.1.1": "2.1.1",
+    "npm:@jsquash/jxl@1.3.0": "1.3.0",
+    "npm:@jsquash/jxl@^1.3.0": "1.3.0",
     "npm:@jsquash/oxipng@^2.3.0": "2.3.0",
     "npm:@jsquash/png@^3.1.1": "3.1.1",
+    "npm:@jsquash/qoi@1.1.0": "1.1.0",
+    "npm:@jsquash/qoi@^1.1.0": "1.1.0",
+    "npm:@jsquash/webp@1.5.0": "1.5.0",
     "npm:@jsquash/webp@^1.5.0": "1.5.0",
     "npm:alwan@^2.3.1": "2.3.1",
     "npm:colorjs.io@0.7.1": "0.7.1"
@@ -108,6 +115,18 @@
     }
   },
   "npm": {
+    "@jsquash/avif@2.1.1": {
+      "integrity": "sha512-LMRxd0fMgfCLtobDh0/sFYJMMiRJTNYSEEWvRDKXlAeZ08t3gI5V+1thIT0XjXJ+SVG7Zug9B0XPyx0Ti5VRNA==",
+      "dependencies": [
+        "wasm-feature-detect"
+      ]
+    },
+    "@jsquash/jxl@1.3.0": {
+      "integrity": "sha512-IVOPTneyOd9eBAuow+FnCYIP6wkIc7CjrCDnZGiqAPyJ63vMVxv3zoWiucGiZVh6u9vi/l40AkcS9QwkoVSAqA==",
+      "dependencies": [
+        "wasm-feature-detect"
+      ]
+    },
     "@jsquash/oxipng@2.3.0": {
       "integrity": "sha512-aQ8wiEp6ztlTMXc+RMt/CG8crU3mEHDU+h+JYkIi6ctMhlh8+Ltj5XwQFfBuyzKYrp8NxaFW80Dp824bqjr+zA==",
       "dependencies": [
@@ -116,6 +135,9 @@
     },
     "@jsquash/png@3.1.1": {
       "integrity": "sha512-C10pc+0H6j0h8fENOfnGOvkXCmvpSQTDGlfGd0sHphZhPSGTyLjIrHba0FaZZdsKqA/wlmhYicUHb92vfZphaw=="
+    },
+    "@jsquash/qoi@1.1.0": {
+      "integrity": "sha512-GV+Gy3zSMSEsjXjeiVO6vTPp4bTSKXVe4CjbHQFEu60edt09gl0cqEuEU5Sp0V5tXvU91sB5MW8tKZyDLEdWlQ=="
     },
     "@jsquash/webp@1.5.0": {
       "integrity": "sha512-KggLoj2MnRSfIqTeKe1EmbljTX2vuV7mh79k89PCL1pyqiDULcPM1L47twxXt0hkb68F70bXiL31MxsuoZtKFw==",
@@ -144,8 +166,14 @@
       "jsr:@tksh/group-colors-param-codec@~0.1.1",
       "jsr:@tksh/stln-codec@~0.1.1",
       "jsr:@tksh/svg2ui8a@0.5",
+      "npm:@jsquash/avif@2.1.1",
+      "npm:@jsquash/avif@^2.1.1",
+      "npm:@jsquash/jxl@1.3.0",
+      "npm:@jsquash/jxl@^1.3.0",
       "npm:@jsquash/oxipng@^2.3.0",
       "npm:@jsquash/png@^3.1.1",
+      "npm:@jsquash/qoi@1.1.0",
+      "npm:@jsquash/qoi@^1.1.0",
       "npm:@jsquash/webp@^1.5.0",
       "npm:alwan@^2.3.1",
       "npm:colorjs.io@0.7.1"

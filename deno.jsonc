@@ -63,6 +63,9 @@
     // package reaches the shipped bundle.
     "@jsquash/png": "npm:@jsquash/png@^3.1.1",
     "@jsquash/webp-decode": "npm:@jsquash/webp@^1.5.0/decode.js",
+    "@jsquash/jxl-decode": "npm:@jsquash/jxl@^1.3.0/decode.js",
+    "@jsquash/avif-decode": "npm:@jsquash/avif@^2.1.1/decode.js",
+    "@jsquash/qoi-decode": "npm:@jsquash/qoi@^1.1.0/decode.js",
 
     // Straightlines codec: published package.
     "@tksh/stln-codec": "jsr:@tksh/stln-codec@^0.1.1",
@@ -112,6 +115,17 @@
     "jsquash/webp-utils": "npm:@jsquash/webp@^1.5.0/utils.js",
     "jsquash/oxipng-glue": "npm:@jsquash/oxipng@^2.3.0/codec/pkg/squoosh_oxipng.js",
     "jsquash/oxipng-meta": "npm:@jsquash/oxipng@^2.3.0/meta.js",
+    // The image optimization modal's extra formats. Pinned exactly like the
+    // vendored Wasm they load.
+    "jsquash/jxl-enc": "npm:@jsquash/jxl@1.3.0/codec/enc/jxl_enc.js",
+    "jsquash/jxl-meta": "npm:@jsquash/jxl@1.3.0/meta.js",
+    "jsquash/jxl-utils": "npm:@jsquash/jxl@1.3.0/utils.js",
+    "jsquash/avif-enc": "npm:@jsquash/avif@2.1.1/codec/enc/avif_enc.js",
+    "jsquash/avif-meta": "npm:@jsquash/avif@2.1.1/meta.js",
+    "jsquash/avif-utils": "npm:@jsquash/avif@2.1.1/utils.js",
+    "jsquash/qoi-enc": "npm:@jsquash/qoi@1.1.0/codec/enc/qoi_enc.js",
+    "jsquash/qoi-meta": "npm:@jsquash/qoi@1.1.0/meta.js",
+    "jsquash/qoi-utils": "npm:@jsquash/qoi@1.1.0/utils.js",
 
     "tab-lines/apply-group-colors": "./src/js/page-specific/index/tab-lines/apply-group-colors.ts",
     "tab-lines/color-format": "./src/js/page-specific/index/tab-lines/color-format.ts",

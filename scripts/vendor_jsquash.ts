@@ -14,6 +14,9 @@
 // The versions must match the `imports` in deno.jsonc.
 const WEBP = "npm:@jsquash/webp@1.5.0";
 const OXIPNG = "npm:@jsquash/oxipng@2.3.0";
+const JXL = "npm:@jsquash/jxl@1.3.0";
+const AVIF = "npm:@jsquash/avif@2.1.1";
+const QOI = "npm:@jsquash/qoi@1.1.0";
 
 interface VendoredFile {
   /** Path inside the npm package, as `import.meta.resolve` knows it. */
@@ -47,6 +50,24 @@ const FILES: VendoredFile[] = [
       "and COOP/COEP headers, which pfpg does not use",
   },
   {
+    from: `${JXL}/codec/enc/jxl_enc.wasm`,
+    to: `${WASM_DEST}/jxl_enc.wasm`,
+    note:
+      "libjxl encoder, single-threaded build; the multi-threaded variants " +
+      "need a Worker and COOP/COEP headers",
+  },
+  {
+    from: `${AVIF}/codec/enc/avif_enc.wasm`,
+    to: `${WASM_DEST}/avif_enc.wasm`,
+    note: "libavif/libaom encoder, single-threaded build; the multi-threaded " +
+      "variant needs a Worker and COOP/COEP headers",
+  },
+  {
+    from: `${QOI}/codec/enc/qoi_enc.wasm`,
+    to: `${WASM_DEST}/qoi_enc.wasm`,
+    note: "QOI encoder; the package ships no multi-threaded build",
+  },
+  {
     from: `${WEBP}/LICENSE`,
     to: `${LICENSE_DEST}/jsquash-webp-Apache-2.0.txt`,
     note: "license of the @jsquash/webp glue we ship as JavaScript",
@@ -66,12 +87,32 @@ const FILES: VendoredFile[] = [
     to: `${LICENSE_DEST}/jsquash-oxipng-codec-oxipng-MIT.md`,
     note: "license of the oxipng code inside the PNG optimizer Wasm",
   },
+  {
+    from: `${JXL}/LICENSE`,
+    to: `${LICENSE_DEST}/jsquash-jxl-Apache-2.0.txt`,
+    note: "license of the @jsquash/jxl glue we ship as JavaScript",
+  },
+  {
+    from: `${AVIF}/LICENSE`,
+    to: `${LICENSE_DEST}/jsquash-avif-Apache-2.0.txt`,
+    note: "license of the @jsquash/avif glue we ship as JavaScript",
+  },
+  {
+    from: `${QOI}/LICENSE`,
+    to: `${LICENSE_DEST}/jsquash-qoi-Apache-2.0.txt`,
+    note: "license of the @jsquash/qoi glue we ship as JavaScript",
+  },
+  {
+    from: `${QOI}/codec/LICENSE.codec.md`,
+    to: `${LICENSE_DEST}/jsquash-qoi-codec-qoi-MIT.md`,
+    note: "license of the QOI code inside the QOI encoder Wasm",
+  },
 ];
 
 const PROVENANCE = `# Vendored image encoder assets
 
 These files are copied verbatim out of the pinned packages by
-\`deno task vendor:jsquash\`; do not edit them by hand. The two encoders load
+\`deno task vendor:jsquash\`; do not edit them by hand. The encoders load
 their Wasm with \`new URL("<name>.wasm", import.meta.url)\`, which \`deno bundle\`
 does not turn into an emitted asset, so the page fetches them from here (the
 build copies this directory to \`dist/jsquash/\`).
@@ -81,15 +122,26 @@ build copies this directory to \`dist/jsquash/\`).
 | \`webp_enc.wasm\` | \`@jsquash/webp@1.5.0\` \`codec/enc/\` | 281 KB | BSD-3-Clause (libwebp) |
 | \`webp_enc_simd.wasm\` | \`@jsquash/webp@1.5.0\` \`codec/enc/\` | 346 KB | BSD-3-Clause (libwebp) |
 | \`squoosh_oxipng_bg.wasm\` | \`@jsquash/oxipng@2.3.0\` \`codec/pkg/\` | 164 KB | MIT (oxipng) |
+| \`jxl_enc.wasm\` | \`@jsquash/jxl@1.3.0\` \`codec/enc/\` | 1332 KB | BSD-3-Clause (libjxl) |
+| \`avif_enc.wasm\` | \`@jsquash/avif@2.1.1\` \`codec/enc/\` | 3404 KB | BSD-2-Clause (libavif, libaom) |
+| \`qoi_enc.wasm\` | \`@jsquash/qoi@1.1.0\` \`codec/enc/\` | 14 KB | MIT (QOI) |
 
-The multi-threaded \`squoosh_oxipng_bg.wasm\` variant is deliberately not
-vendored: it only engages inside a Worker and additionally requires
-\`Cross-Origin-Opener-Policy\` and \`Cross-Origin-Embedder-Policy\` headers,
-which would apply to the whole page and block the Google Fonts and Cloudinary
-subresources \`index.html\` loads.
+The multi-threaded variants of the oxipng, JPEG XL and AVIF encoders are
+deliberately not vendored: they only engage inside a Worker and additionally
+require \`Cross-Origin-Opener-Policy\` and \`Cross-Origin-Embedder-Policy\`
+headers, which would apply to the whole page and block the Google Fonts and
+Cloudinary subresources \`index.html\` loads. The QOI package has no
+multi-threaded build.
 
 The license texts of the packages and of the codecs live in \`src/licenses/\`
 and are copied to \`dist/licenses/\` by the \`copy:licenses\` task.
+\`@jsquash/jxl\` and \`@jsquash/avif\` ship no \`codec/LICENSE.codec.md\`, so the
+licenses of the code compiled into their Wasm are checked in directly:
+\`jsquash-jxl-codec-libjxl-BSD-3-Clause.md\` (libjxl at the commit the package
+pins), \`jsquash-avif-codec-libavif-BSD-2-Clause.md\` (libavif v1.0.1) and
+\`jsquash-avif-codec-libaom-BSD-2-Clause.md\` (libaom v3.7.0). The AVIF encoder
+also links libwebp's libsharpyuv, whose BSD-3-Clause license is the libwebp
+text already shipped for the WebP encoder.
 `;
 
 // `import.meta.resolve` answers with a `file:` URL once Deno has the package,
