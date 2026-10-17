@@ -626,6 +626,74 @@
         </div>
       </dialog>
 
+      <!-- Image optimization modal window content-->
+      <dialog id="img-opt-modal" class="modal" closedby="any">
+        <div class="modal-content">
+          <h2 class="text-align-center">Image Optimization</h2>
+          <div id="img-opt-results">
+            <div class="img-opt-row" data-target="webp-lossless">
+              <span class="img-opt-format">WebP (lossless)</span>
+              <span class="img-opt-size"></span>
+              <span class="img-opt-time"></span>
+              <button type="button" class="img-opt-download" disabled>
+                Download
+              </button>
+            </div>
+
+            <div class="img-opt-row" data-target="webp-near-lossless">
+              <span class="img-opt-format">WebP (near lossless)</span>
+              <span class="img-opt-size"></span>
+              <span class="img-opt-time"></span>
+              <button type="button" class="img-opt-download" disabled>
+                Download
+              </button>
+            </div>
+
+            <div class="img-opt-row" data-target="jxl-lossless">
+              <span class="img-opt-format">Jpeg XL (lossless)</span>
+              <span class="img-opt-size"></span>
+              <span class="img-opt-time"></span>
+              <button type="button" class="img-opt-download" disabled>
+                Download
+              </button>
+            </div>
+
+            <div class="img-opt-row" data-target="png">
+              <span class="img-opt-format">PNG</span>
+              <span class="img-opt-size"></span>
+              <span class="img-opt-time"></span>
+              <button type="button" class="img-opt-download" disabled>
+                Download
+              </button>
+            </div>
+
+            <div class="img-opt-row" data-target="avif-lossless">
+              <span class="img-opt-format">AVIF (lossless)</span>
+              <span class="img-opt-size"></span>
+              <span class="img-opt-time"></span>
+              <button type="button" class="img-opt-download" disabled>
+                Download
+              </button>
+            </div>
+
+            <div class="img-opt-row" data-target="qoi">
+              <span class="img-opt-format">QOI</span>
+              <span class="img-opt-size"></span>
+              <span class="img-opt-time"></span>
+              <button type="button" class="img-opt-download" disabled>
+                Download
+              </button>
+            </div>
+          </div>
+          <!-- Close control is positioned into the corner by
+            button.modal-close-icon; it stays last in the DOM so the tab order
+            is unchanged. -->
+          <button id="img-opt-close-icon" type="button" command="close"
+            commandfor="img-opt-modal" class="modal-close-icon"><span
+              class="material-symbols-outlined">close</span></button>
+        </div>
+      </dialog>
+
       <!-- Reset settings modal window content-->
       <dialog id="reset-settings-modal" class="modal" closedby="any">
         <div class="modal-content">
