@@ -2,7 +2,7 @@ import { extractViewboxValues } from "tab-canvas/crop-side-margins";
 import { getGroupColorsAsJoinedHex } from "tab-lines/encode-colors-as-hex";
 import { getImageFormat, IMAGE_FORMATS } from "state/image-format";
 
-export { downloadPngAsFile, downloadSvgAsFile, getSvgString };
+export { downloadPngAsFile, downloadSvgAsFile, getArtworkTitle, getSvgString };
 
 // Get Artwork data
 

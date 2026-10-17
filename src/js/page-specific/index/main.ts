@@ -6,7 +6,11 @@ import {
   initViewportLister,
 } from "init/adjust-layout";
 import { initTabs } from "init/tab-setup";
-import { initSvgOptimizationModalToggle } from "modal/modal-toggle";
+import {
+  initImageOptimizationModalToggle,
+  initSvgOptimizationModalToggle,
+} from "modal/modal-toggle";
+import { initImageOptimization } from "modal/optimize-image";
 import { initSvgOptimization } from "modal/optimize-svg";
 import { initResetSettings } from "modal/reset-settings";
 import {
@@ -184,6 +188,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // Modal - SVG optimization
   initSvgOptimizationModalToggle();
   initSvgOptimization();
+
+  // Modal - Image optimization. The toggle runs first: it opens the dialog on
+  // the click that also starts the conversions.
+  initImageOptimizationModalToggle();
+  initImageOptimization();
 
   // Modal - Reset settings
   initResetSettings();

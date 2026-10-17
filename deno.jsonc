@@ -95,6 +95,7 @@
     "state/url-state-manager": "./src/js/page-specific/index/state/url-state-manager.ts",
 
     "modal/modal-toggle": "./src/js/page-specific/index/modal/modal-toggle.ts",
+    "modal/optimize-image": "./src/js/page-specific/index/modal/optimize-image.ts",
     "modal/optimize-svg": "./src/js/page-specific/index/modal/optimize-svg.ts",
     "modal/reset-settings": "./src/js/page-specific/index/modal/reset-settings.ts",
 
