@@ -5,6 +5,17 @@ import type { WebPModule } from "jsquash/webp-enc";
 import webpSimdFactory from "jsquash/webp-enc-simd";
 import { defaultOptions as webpDefaults } from "jsquash/webp-meta";
 import { initEmscriptenModule } from "jsquash/webp-utils";
+import jxlFactory from "jsquash/jxl-enc";
+import type { JXLModule } from "jsquash/jxl-enc";
+import { defaultOptions as jxlDefaults } from "jsquash/jxl-meta";
+import { initEmscriptenModule as initJxlModule } from "jsquash/jxl-utils";
+import avifFactory from "jsquash/avif-enc";
+import type { AVIFModule } from "jsquash/avif-enc";
+import { defaultOptions as avifDefaults } from "jsquash/avif-meta";
+import { initEmscriptenModule as initAvifModule } from "jsquash/avif-utils";
+import qoiFactory from "jsquash/qoi-enc";
+import type { QOIModule } from "jsquash/qoi-enc";
+import { initEmscriptenModule as initQoiModule } from "jsquash/qoi-utils";
 import {
   getImageFormat,
   IMAGE_FORMATS,
@@ -12,11 +23,17 @@ import {
 } from "state/image-format";
 
 export {
+  AVIF_LOSSLESS_OPTIONS,
   type EncodedImage,
   encodeRasterImage,
   type EncodeRasterOptions,
+  encodeRasterVariant,
+  type ImageOptimizationVariant,
+  JXL_LOSSLESS_OPTIONS,
+  type OptimizedImage,
   WASM_DIRECTORY,
   WEBP_LOSSLESS_OPTIONS,
+  WEBP_NEAR_LOSSLESS_OPTIONS,
 };
 
 /**
@@ -39,6 +56,39 @@ interface EncodedImage {
   height: number;
 }
 
+/**
+ * An encode requested by the image optimization modal.
+ *
+ * The extra flag lets the modal say when a measurement includes the one-off
+ * Wasm download and compile, which would otherwise make the first row look
+ * slower than the format really is.
+ */
+interface OptimizedImage extends EncodedImage {
+  /** True when this encode had to load its Wasm module first. */
+  wasmLoaded: boolean;
+}
+
+/** The formats offered by the image optimization modal. */
+type ImageOptimizationVariant =
+  | "webp-lossless"
+  | "webp-near-lossless"
+  | "jxl-lossless"
+  | "png"
+  | "avif-lossless"
+  | "qoi";
+
+const VARIANT_FORMATS: Record<
+  ImageOptimizationVariant,
+  { mimeType: string; extension: string }
+> = {
+  "webp-lossless": { mimeType: "image/webp", extension: "webp" },
+  "webp-near-lossless": { mimeType: "image/webp", extension: "webp" },
+  "jxl-lossless": { mimeType: "image/jxl", extension: "jxl" },
+  "png": { mimeType: "image/png", extension: "png" },
+  "avif-lossless": { mimeType: "image/avif", extension: "avif" },
+  "qoi": { mimeType: "image/qoi", extension: "qoi" },
+};
+
 // Where the build copies the vendored Wasm to. `deno bundle` inlines the
 // encoders' JavaScript but emits no Wasm asset, so the binaries are served
 // from our own origin; see src/assets/jsquash/README.md.
@@ -55,6 +105,10 @@ const WEBP_WASM_FILES = {
   simd: "webp_enc_simd.wasm",
   plain: "webp_enc.wasm",
 } as const;
+// Single-threaded builds only; see src/assets/jsquash/README.md.
+const JXL_WASM_FILE = "jxl_enc.wasm";
+const AVIF_WASM_FILE = "avif_enc.wasm";
+const QOI_WASM_FILE = "qoi_enc.wasm";
 
 /**
  * WebP encoding options.
@@ -67,6 +121,46 @@ const WEBP_WASM_FILES = {
  * "WebP (lossless)" label true.
  */
 const WEBP_LOSSLESS_OPTIONS = { lossless: 1, exact: 1 } as const;
+
+/**
+ * WebP near-lossless options.
+ *
+ * `near_lossless` below 100 makes libwebp preprocess the pixels and then run
+ * the lossless engine; `quality: 100` is the ceiling that preprocessing aims
+ * at. The value is fixed because the modal offers no choice of strength.
+ */
+const WEBP_NEAR_LOSSLESS_OPTIONS = { near_lossless: 60, quality: 100 } as const;
+
+/**
+ * JPEG XL lossless options.
+ *
+ * The package's `encode()` wrapper treats `lossless: true` as `quality: 100`
+ * and turns the two lossy modes off before it calls the glue. The glue has no
+ * `lossless` field of its own: 100 is what selects modular coding with an
+ * identity color transform, which round-trips RGBA exactly. pfpg calls the
+ * glue directly, so it repeats that normalization here (same reason as the
+ * WebP `exact: 1` note above).
+ */
+const JXL_LOSSLESS_OPTIONS = {
+  lossless: true,
+  quality: 100,
+  lossyModular: false,
+  lossyPalette: false,
+} as const;
+
+/**
+ * AVIF lossless options.
+ *
+ * Same story as JPEG XL: the package's `encode()` wrapper normalizes
+ * `lossless: true` to `quality: 100`, `qualityAlpha: -1` and `subsample: 3`
+ * (YUV 4:4:4). The glue recognizes exactly that combination and switches to
+ * the identity color matrix, which is what makes the encode lossless.
+ */
+const AVIF_LOSSLESS_OPTIONS = {
+  quality: 100,
+  qualityAlpha: -1,
+  subsample: 3,
+} as const;
 
 // The canonical SIMD feature probe: a minimal module using a SIMD opcode.
 // Validated rather than instantiated, it answers whether this browser can run
@@ -113,6 +207,9 @@ function browserHasWasmSimd(): boolean {
 // internally, so re-initializing on every render would only cost time.
 let webpReady: Promise<WebPModule> | null = null;
 let oxipngReady: Promise<void> | null = null;
+let jxlReady: Promise<JXLModule> | null = null;
+let avifReady: Promise<AVIFModule> | null = null;
+let qoiReady: Promise<QOIModule> | null = null;
 
 async function compileWasm(url: URL): Promise<WebAssembly.Module> {
   const response = await fetch(url);
@@ -168,6 +265,48 @@ async function ensureOxipng(wasmBaseUrl: string): Promise<void> {
     });
   }
   await oxipngReady;
+}
+
+async function ensureJxl(wasmBaseUrl: string): Promise<JXLModule> {
+  if (jxlReady === null) {
+    jxlReady = (async () => {
+      const module = await compileWasm(new URL(JXL_WASM_FILE, wasmBaseUrl));
+      return await initJxlModule(jxlFactory, module, {});
+    })().catch((error: unknown) => {
+      // Do not cache the failure: a later render may have a working URL.
+      jxlReady = null;
+      throw error;
+    });
+  }
+  return await jxlReady;
+}
+
+async function ensureAvif(wasmBaseUrl: string): Promise<AVIFModule> {
+  if (avifReady === null) {
+    avifReady = (async () => {
+      const module = await compileWasm(new URL(AVIF_WASM_FILE, wasmBaseUrl));
+      return await initAvifModule(avifFactory, module, {});
+    })().catch((error: unknown) => {
+      // Do not cache the failure: a later render may have a working URL.
+      avifReady = null;
+      throw error;
+    });
+  }
+  return await avifReady;
+}
+
+async function ensureQoi(wasmBaseUrl: string): Promise<QOIModule> {
+  if (qoiReady === null) {
+    qoiReady = (async () => {
+      const module = await compileWasm(new URL(QOI_WASM_FILE, wasmBaseUrl));
+      return await initQoiModule(qoiFactory, module, {});
+    })().catch((error: unknown) => {
+      // Do not cache the failure: a later render may have a working URL.
+      qoiReady = null;
+      throw error;
+    });
+  }
+  return await qoiReady;
 }
 
 /** Resolve the Wasm directory against the page, for the browser entry point. */
@@ -242,5 +381,147 @@ async function encodeRasterImage(
     extension,
     width,
     height,
+  };
+}
+
+interface EncodeVariantOptions {
+  /** Where the vendored Wasm is served from; defaults to the page's. */
+  wasmBaseUrl?: string;
+}
+
+/** Whether the variant's Wasm module has already been initialized. */
+function isVariantReady(variant: ImageOptimizationVariant): boolean {
+  switch (variant) {
+    case "png":
+      return oxipngReady !== null;
+    case "webp-lossless":
+    case "webp-near-lossless":
+      return webpReady !== null;
+    case "jxl-lossless":
+      return jxlReady !== null;
+    case "avif-lossless":
+      return avifReady !== null;
+    case "qoi":
+      return qoiReady !== null;
+  }
+}
+
+/**
+ * Encode raw RGBA pixels into one of the optimization modal's formats.
+ *
+ * PNG and WebP (lossless) deliberately go through encodeRasterImage(), the
+ * same path the Render tab uses, so their sizes are comparable with the main
+ * output's. The other formats call their glue directly, since the packages'
+ * wrappers would load the Wasm dynamically.
+ *
+ * @param {Uint8Array} pixels - Straight-alpha RGBA, row-major, 4 bytes per pixel
+ * @param {number} width - Raster width in pixels
+ * @param {number} height - Raster height in pixels
+ * @param {ImageOptimizationVariant} variant - Format and encoder settings
+ * @param {EncodeVariantOptions} options - Wasm location override
+ */
+async function encodeRasterVariant(
+  pixels: Uint8Array,
+  width: number,
+  height: number,
+  variant: ImageOptimizationVariant,
+  options: EncodeVariantOptions = {},
+): Promise<OptimizedImage> {
+  const wasmBaseUrl = options.wasmBaseUrl ?? defaultWasmBaseUrl();
+  const wasmLoaded = !isVariantReady(variant);
+
+  if (variant === "png" || variant === "webp-lossless") {
+    const image = await encodeRasterImage(pixels, width, height, {
+      format: variant === "png" ? "png" : "webp",
+      wasmBaseUrl,
+    });
+    return { ...image, wasmLoaded };
+  }
+
+  const imageData = new ImageData(
+    new Uint8ClampedArray(pixels),
+    width,
+    height,
+  );
+  const { mimeType, extension } = VARIANT_FORMATS[variant];
+
+  if (variant === "webp-near-lossless") {
+    const webpModule = await ensureWebp(wasmBaseUrl);
+    const encoded = webpModule.encode(
+      imageData.data,
+      imageData.width,
+      imageData.height,
+      { ...webpDefaults, ...WEBP_NEAR_LOSSLESS_OPTIONS },
+    );
+    if (encoded === null) {
+      throw new Error(
+        "image-encoder: the near-lossless WebP encoder returned no data",
+      );
+    }
+    return {
+      bytes: new Uint8Array(encoded),
+      mimeType,
+      extension,
+      width,
+      height,
+      wasmLoaded,
+    };
+  }
+
+  if (variant === "jxl-lossless") {
+    const jxlModule = await ensureJxl(wasmBaseUrl);
+    const encoded = jxlModule.encode(
+      imageData.data,
+      imageData.width,
+      imageData.height,
+      { ...jxlDefaults, ...JXL_LOSSLESS_OPTIONS },
+    );
+    if (encoded === null) {
+      throw new Error("image-encoder: the JPEG XL encoder returned no data");
+    }
+    return {
+      bytes: new Uint8Array(encoded),
+      mimeType,
+      extension,
+      width,
+      height,
+      wasmLoaded,
+    };
+  }
+
+  if (variant === "avif-lossless") {
+    const avifModule = await ensureAvif(wasmBaseUrl);
+    const encoded = avifModule.encode(
+      new Uint8Array(imageData.data.buffer),
+      imageData.width,
+      imageData.height,
+      { ...avifDefaults, ...AVIF_LOSSLESS_OPTIONS },
+    );
+    if (encoded === null) {
+      throw new Error("image-encoder: the AVIF encoder returned no data");
+    }
+    return {
+      bytes: new Uint8Array(encoded),
+      mimeType,
+      extension,
+      width,
+      height,
+      wasmLoaded,
+    };
+  }
+
+  const qoiModule = await ensureQoi(wasmBaseUrl);
+  const encoded = qoiModule.encode(
+    imageData.data,
+    imageData.width,
+    imageData.height,
+  );
+  return {
+    bytes: new Uint8Array(encoded),
+    mimeType,
+    extension,
+    width,
+    height,
+    wasmLoaded,
   };
 }
