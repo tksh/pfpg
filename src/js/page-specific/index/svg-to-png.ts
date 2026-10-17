@@ -8,7 +8,13 @@ import { getSharedImageKeyHashForCurrentUrl } from "shared-image/shared-image-ke
 import { type EncodedImage, encodeRasterImage } from "state/image-encoder";
 import { extractViewboxValues } from "tab-canvas/crop-side-margins";
 
-export { executeSvg2png, getLastRenderedImage, measureSvg2pngTime };
+export {
+  executeSvg2png,
+  getLastRasterizedPixels,
+  getLastRenderedImage,
+  measureSvg2pngTime,
+  type RasterizedPixels,
+};
 
 // Option type for the svg2ui8a rendering call (uses the package types as imported)
 type RasterOption = NonNullable<Parameters<typeof svg2rgba>[1]>;
@@ -20,6 +26,29 @@ let lastRenderedImage: EncodedImage | null = null;
 
 function getLastRenderedImage(): EncodedImage | null {
   return lastRenderedImage;
+}
+
+/**
+ * The raw RGBA pixels of the latest render, before encoding.
+ *
+ * The image optimization modal re-encodes them into formats the Render tab
+ * cannot make. Only the newest raster is kept: it is `width * height * 4`
+ * bytes (64 MB at 4096 x 4096), so keeping earlier renders would grow without
+ * bound as the user drags the size controls.
+ */
+interface RasterizedPixels {
+  /** Straight-alpha RGBA, row-major, 4 bytes per pixel */
+  pixels: Uint8Array;
+  /** Raster width in pixels */
+  width: number;
+  /** Raster height in pixels */
+  height: number;
+}
+
+let lastRasterizedPixels: RasterizedPixels | null = null;
+
+function getLastRasterizedPixels(): RasterizedPixels | null {
+  return lastRasterizedPixels;
 }
 
 // 連続操作が止まってからアップロードするまでの待ち時間
@@ -95,6 +124,8 @@ async function rasterize(
   // Render via svg2ui8a: the returned dimensions are authoritative for
   // everything downstream, including the aspect ratio of the output.
   const { pixels, width, height } = await svg2rgba(svgString, rasterOption);
+  // Keep the pixels for the image optimization modal; see RasterizedPixels.
+  lastRasterizedPixels = { pixels, width, height };
   return await encodeRasterImage(pixels, width, height);
 }
 
