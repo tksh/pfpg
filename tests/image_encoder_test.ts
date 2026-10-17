@@ -1,11 +1,16 @@
 import { assert, assertEquals, assertMatch, assertRejects } from "@std/assert";
 import { decode as decodePng } from "@jsquash/png";
 import decodeWebp from "@jsquash/webp-decode";
+import decodeJxl from "@jsquash/jxl-decode";
+import decodeAvif from "@jsquash/avif-decode";
+import decodeQoi from "@jsquash/qoi-decode";
 import encodeWebpDirectly from "jsquash/webp-encode";
 import {
   encodeRasterImage,
+  encodeRasterVariant,
   WASM_DIRECTORY,
   WEBP_LOSSLESS_OPTIONS,
+  WEBP_NEAR_LOSSLESS_OPTIONS,
 } from "state/image-encoder";
 
 // The vendored Wasm, exactly as the build serves it to the page
@@ -80,6 +85,9 @@ Deno.test("the Wasm is vendored and the build serves it from dist/jsquash", asyn
       "webp_enc.wasm",
       "webp_enc_simd.wasm",
       "squoosh_oxipng_bg.wasm",
+      "jxl_enc.wasm",
+      "avif_enc.wasm",
+      "qoi_enc.wasm",
     ]
   ) {
     const stat = await Deno.stat(new URL(file, WASM_BASE));
@@ -155,4 +163,90 @@ Deno.test("the 'exact' option is what makes WebP lossless", async () => {
   );
 
   assertEquals(WEBP_LOSSLESS_OPTIONS, { lossless: 1, exact: 1 });
+});
+
+Deno.test("WebP near-lossless encoding produces a WebP file", async () => {
+  const image = await encodeRasterVariant(
+    PIXELS,
+    WIDTH,
+    HEIGHT,
+    "webp-near-lossless",
+    {
+      wasmBaseUrl: WASM_BASE,
+    },
+  );
+
+  assertEquals(image.extension, "webp");
+  assertEquals(image.mimeType, "image/webp");
+  const asText = (offset: number, length: number) =>
+    new TextDecoder().decode(image.bytes.slice(offset, offset + length));
+  assertEquals(asText(0, 4), "RIFF");
+  assertEquals(asText(8, 4), "WEBP");
+  // The near-lossless strength is fixed; the modal has no picker for it.
+  assertEquals(WEBP_NEAR_LOSSLESS_OPTIONS, { near_lossless: 60, quality: 100 });
+});
+
+Deno.test("JPEG XL lossless encoding keeps every pixel", async () => {
+  const image = await encodeRasterVariant(
+    PIXELS,
+    WIDTH,
+    HEIGHT,
+    "jxl-lossless",
+    {
+      wasmBaseUrl: WASM_BASE,
+    },
+  );
+
+  assertEquals(image.extension, "jxl");
+  assertEquals(image.mimeType, "image/jxl");
+  assertEquals(image.width, WIDTH);
+  assertEquals(image.height, HEIGHT);
+
+  const decoded = await decodeJxl(image.bytes.slice().buffer);
+  assertPixelsEqual(decoded.data);
+});
+
+Deno.test("AVIF lossless encoding keeps every pixel", async () => {
+  const image = await encodeRasterVariant(
+    PIXELS,
+    WIDTH,
+    HEIGHT,
+    "avif-lossless",
+    {
+      wasmBaseUrl: WASM_BASE,
+    },
+  );
+
+  assertEquals(image.extension, "avif");
+  assertEquals(image.mimeType, "image/avif");
+  // AVIF is ISO-BMFF: the ftyp box starts at offset 4.
+  const asText = (offset: number, length: number) =>
+    new TextDecoder().decode(image.bytes.slice(offset, offset + length));
+  assertEquals(asText(4, 4), "ftyp");
+
+  const decoded = await decodeAvif(image.bytes.slice().buffer);
+  assert(decoded !== null, "AVIF decode must return pixels");
+  assertPixelsEqual(decoded.data);
+});
+
+Deno.test("QOI encoding keeps every pixel and carries the qoif header", async () => {
+  const image = await encodeRasterVariant(PIXELS, WIDTH, HEIGHT, "qoi", {
+    wasmBaseUrl: WASM_BASE,
+  });
+
+  assertEquals(image.extension, "qoi");
+  assertEquals(image.mimeType, "image/qoi");
+  const asText = (offset: number, length: number) =>
+    new TextDecoder().decode(image.bytes.slice(offset, offset + length));
+  assertEquals(asText(0, 4), "qoif");
+  const view = new DataView(
+    image.bytes.buffer,
+    image.bytes.byteOffset,
+    image.bytes.byteLength,
+  );
+  assertEquals(view.getUint32(4), WIDTH);
+  assertEquals(view.getUint32(8), HEIGHT);
+
+  const decoded = await decodeQoi(image.bytes.slice().buffer);
+  assertPixelsEqual(decoded.data);
 });
