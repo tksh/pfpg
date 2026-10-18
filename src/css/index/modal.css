@@ -164,8 +164,9 @@ div#reset-button-box {
 /* The image optimization results: one row per format, filling in as its
  * encode finishes, under a heading row. The table's five columns are format
  * name / size value / size unit / elapsed time / download button. The size is
- * split into value and unit so that the value can be flushed right against
- * the unit, which lines the KB and the bytes up down the table.
+ * split into value and unit so that the KB figures stay in a column of their
+ * own, right-aligned against their KB units, instead of having the exact byte
+ * counts run through that column.
  *
  * #img-opt-results owns the column tracks; each row takes the same tracks
  * with `subgrid`, so the rows line up with the headings and with each other.
@@ -173,13 +174,14 @@ div#reset-button-box {
  * support: the rows then size their own columns, as before. */
 #img-opt-results {
   --img-opt-columns: minmax(8rem, max-content) minmax(4.5rem, max-content)
-    minmax(3.5rem, max-content) minmax(6rem, max-content) max-content;
+    minmax(5rem, max-content) minmax(6rem, max-content) max-content;
   display: grid;
   grid-template-columns: var(--img-opt-columns);
   column-gap: 1rem;
-  row-gap: 0.5rem;
-  /* The same 1rem side inset the SVG optimization modal's fieldset gets. */
-  margin: 0 1rem;
+  row-gap: 0.75rem;
+  /* 1rem to the sides, like the SVG optimization modal's fieldset, and the
+   * 3rem of room its last input group leaves under the controls. */
+  margin: 0 1rem 3rem;
 }
 
 .img-opt-row {
@@ -205,7 +207,10 @@ div#reset-button-box {
 .img-opt-time {
   /* Keeps the numbers from jittering as the rows fill in one after another. */
   font-variant-numeric: tabular-nums;
-  /* finishRow() breaks these where the design wants the line ends. */
+}
+
+.img-opt-time {
+  /* finishRow() breaks the elapsed time itself. */
   white-space: pre-line;
 }
 
@@ -255,11 +260,12 @@ div#reset-button-box {
    * its own line, and the size and the time stack beside the download
    * button. */
   #img-opt-results {
-    --img-opt-columns: minmax(4.5rem, max-content) minmax(3.5rem, max-content)
+    --img-opt-columns: minmax(4.5rem, max-content) minmax(5rem, max-content)
       minmax(0, 1fr);
     column-gap: 0.75rem;
-    /* The 1rem inset is desktop-only, like the SVG modal's fieldset margin. */
-    margin: 0;
+    /* The side inset is desktop-only, like the SVG modal's fieldset margin.
+     * The room at the bottom is the mobile half of the SVG modal's inset. */
+    margin: 0 0 2rem;
   }
   .img-opt-header {
     display: none;

@@ -190,14 +190,15 @@ function finishRow(
   row.classList.remove("is-working");
 
   const byteSize = image.bytes.byteLength;
-  // The size runs over two cells and two lines: the value cell holds the KB
-  // figure and the opening of the exact byte count, the unit cell holds their
-  // units. `white-space: pre-line` turns the `\n`s into the line breaks that
-  // stack "4.3 KB" over "(4,392 bytes)".
+  // The size is one line over two cells: the value cell carries the KB figure
+  // and the unit cell the exact byte count. Keeping them apart is what holds
+  // the KB figures in a column of their own, right-aligned against the KB
+  // units, instead of running the byte counts through that column.
   getRowSizeValue(row, target).textContent = `${
     roundToOneDecimal(byteSize / 1024)
-  }\n(${byteSize.toLocaleString()}`;
-  getRowSizeUnit(row, target).textContent = "KB\nbytes)";
+  } KB`;
+  getRowSizeUnit(row, target).textContent =
+    `(${byteSize.toLocaleString()} bytes)`;
   getRowTime(row, target).textContent = `${Math.round(elapsed)} ms${
     image.wasmLoaded ? "\n(+ wasm load)" : ""
   }`;
@@ -289,8 +290,8 @@ function getRowPart(
   return part;
 }
 
-// The size is two cells: the value (`4.3` over `(4,392`) and the unit (`KB`
-// over `bytes)`). finishRow() is what fills them in.
+// The size is two cells: the value (`4.3 KB`) and the exact byte count
+// (`(4,392 bytes)`). finishRow() is what fills them in.
 function getRowSizeValue(
   row: HTMLElement,
   target: ImageOptimizationTarget,
