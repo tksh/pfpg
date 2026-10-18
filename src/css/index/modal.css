@@ -168,10 +168,10 @@ div#reset-button-box {
  * carries the numbers alone, right-aligned under headings that end where the
  * figures do, and the digits line up down the table.
  *
- * #img-opt-results owns the column tracks; each row takes the same tracks
- * with `subgrid`, so the rows line up with the headings and with each other.
- * The custom property is the fallback template for browsers without subgrid
- * support: the rows then size their own columns, as before.
+ * #img-opt-results owns the column tracks; the heading row and each data row
+ * take the same tracks with `subgrid`, so the headings and the figures line up
+ * with each other. The custom property is the fallback template for browsers
+ * without subgrid support: the rows then size their own columns, as before.
  *
  * Each track is sized to its content, so the space between two columns is the
  * column gap and nothing else. The size columns are held open by their

@@ -631,17 +631,22 @@
         <div class="modal-content">
           <h2 class="text-align-center">Image Optimization</h2>
           <div id="img-opt-results">
-            <span
-              class="img-opt-header img-opt-header-format font-size-small font-color-lighter">Format</span>
-            <span
-              class="img-opt-header img-opt-header-kb font-size-small font-color-lighter">Size
-              (KB)</span>
-            <span
-              class="img-opt-header img-opt-header-bytes font-size-small font-color-lighter">Size
-              (bytes)</span>
-            <span
-              class="img-opt-header img-opt-header-time font-size-small font-color-lighter">Time
-              (ms)</span>
+            <!-- The headings are laid out as a row of the table rather than as
+              items of the table itself, so that they take the same subgrid
+              tracks as the rows below them and end where the figures do. -->
+            <div class="img-opt-row img-opt-header-row">
+              <span
+                class="img-opt-header img-opt-header-format font-size-small font-color-lighter">Format</span>
+              <span
+                class="img-opt-header img-opt-header-kb font-size-small font-color-lighter">Size
+                (KB)</span>
+              <span
+                class="img-opt-header img-opt-header-bytes font-size-small font-color-lighter">Size
+                (bytes)</span>
+              <span
+                class="img-opt-header img-opt-header-time font-size-small font-color-lighter">Time
+                (ms)</span>
+            </div>
 
             <div class="img-opt-row" data-target="png">
               <span class="img-opt-format">PNG</span>
