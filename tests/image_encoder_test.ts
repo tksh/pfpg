@@ -183,7 +183,9 @@ Deno.test("WebP near-lossless encoding produces a WebP file", async () => {
   assertEquals(asText(0, 4), "RIFF");
   assertEquals(asText(8, 4), "WEBP");
   // The near-lossless strength is fixed; the modal has no picker for it.
-  assertEquals(WEBP_NEAR_LOSSLESS_OPTIONS, { near_lossless: 60, quality: 100 });
+  // `lossless: 1` is load-bearing: without it libwebp ignores `near_lossless`
+  // and this row is a plain lossy encode that outgrows the lossless one.
+  assertEquals(WEBP_NEAR_LOSSLESS_OPTIONS, { lossless: 1, near_lossless: 20 });
 });
 
 Deno.test("JPEG XL lossless encoding keeps every pixel", async () => {

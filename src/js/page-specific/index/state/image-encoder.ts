@@ -125,11 +125,20 @@ const WEBP_LOSSLESS_OPTIONS = { lossless: 1, exact: 1 } as const;
 /**
  * WebP near-lossless options.
  *
- * `near_lossless` below 100 makes libwebp preprocess the pixels and then run
- * the lossless engine; `quality: 100` is the ceiling that preprocessing aims
- * at. The value is fixed because the modal offers no choice of strength.
+ * `lossless: 1` must be explicit: unlike the `cwebp` CLI, libwebp does not
+ * switch to lossless when `near_lossless` is below 100, and the option is
+ * ignored entirely on the lossy path. The preprocessing then only runs in
+ * entropy configurations that use neither the palette nor the predictor
+ * transform, so flat-color art comes out the same size as
+ * "WebP (lossless)" — that is libwebp's design, not a fallback.
+ *
+ * The strength (0 = strongest preprocessing, 100 = off) is fixed because the
+ * modal offers no picker; 20 measured at most an 8/255 per-channel change.
+ * `quality` stays at the package default (75): on the lossless path it is an
+ * effort knob, not an image-quality ceiling, and 100 made the flat-color
+ * probe 24 bytes larger than the lossless row.
  */
-const WEBP_NEAR_LOSSLESS_OPTIONS = { near_lossless: 60, quality: 100 } as const;
+const WEBP_NEAR_LOSSLESS_OPTIONS = { lossless: 1, near_lossless: 20 } as const;
 
 /**
  * JPEG XL lossless options.
