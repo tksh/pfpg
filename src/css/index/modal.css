@@ -165,20 +165,27 @@ div#reset-button-box {
  * encode finishes, under a heading row. The table's five columns are format
  * name / size value / size unit / elapsed time / download button. The size is
  * split into value and unit so that the KB figures stay in a column of their
- * own, right-aligned against their KB units, instead of having the exact byte
- * counts run through that column.
+ * own, instead of having the exact byte counts run through that column: the
+ * figures and the counts then each line up down the table, under a "Size"
+ * heading that sits over the figures rather than over an inset.
  *
  * #img-opt-results owns the column tracks; each row takes the same tracks
  * with `subgrid`, so the rows line up with the headings and with each other.
  * The custom property is the fallback template for browsers without subgrid
- * support: the rows then size their own columns, as before. */
+ * support: the rows then size their own columns, as before.
+ *
+ * Each track is sized to its content, so the space between two columns is the
+ * column gap and nothing else; the minima in the template are only there so
+ * that a column does not collapse, and shuffle the columns after it, before
+ * its rows have filled in. The one exception is the byte count, which is the
+ * KB figure's unit rather than a column of its own; see `.img-opt-size-unit`. */
 #img-opt-results {
-  --img-opt-columns: minmax(8rem, max-content) minmax(4.5rem, max-content)
+  --img-opt-columns: max-content minmax(3.5rem, max-content)
     minmax(5rem, max-content) minmax(6rem, max-content) max-content;
   display: grid;
   grid-template-columns: var(--img-opt-columns);
-  column-gap: 1rem;
-  row-gap: 0.75rem;
+  column-gap: 2rem;
+  row-gap: 1rem;
   /* 1rem to the sides, like the SVG optimization modal's fieldset, and the
    * 3rem of room its last input group leaves under the controls. */
   margin: 0 1rem 3rem;
@@ -189,7 +196,7 @@ div#reset-button-box {
   display: grid;
   grid-template-columns: var(--img-opt-columns);
   grid-template-columns: subgrid;
-  column-gap: 1rem;
+  column-gap: 2rem;
   align-items: center;
 }
 
@@ -214,8 +221,12 @@ div#reset-button-box {
   white-space: pre-line;
 }
 
-.img-opt-size-value {
-  text-align: right;
+/* The byte count is one value with the KB figure, so it sits 1rem after it
+ * even though the columns are 2rem apart: half the gap taken back off the
+ * left of the track, which also makes the track that much narrower, so the
+ * time column after it still starts a whole gap away. */
+.img-opt-size-unit {
+  margin-left: -1rem;
 }
 
 .img-opt-row.has-error .img-opt-size-value,
@@ -279,9 +290,16 @@ div#reset-button-box {
   }
   .img-opt-size-value {
     grid-column: 1;
+    /* No headings at this width, and the byte count sits in the next column
+     * rather than a column later, so keeping the figure to the right edge of
+     * its column brings the two closer together. */
+    text-align: right;
   }
   .img-opt-size-unit {
     grid-column: 2;
+    /* The desktop margin ties the byte count to its KB figure across the
+     * wider column gap; here the two cells are plain neighbours. */
+    margin-left: 0;
   }
   .img-opt-time {
     grid-column: 1 / span 2;
