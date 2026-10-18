@@ -27,10 +27,18 @@ interface ImageOptimizationTarget {
   ): Promise<OptimizedImage>;
 }
 
-// Encode order: the two formats the Render tab already produced come first,
-// then the new ones. AVIF and JPEG XL are the slow rows, and each row's
-// spinner shows while its own encode runs.
+// Encode order: the two formats the Render tab offers come first, in the same
+// order as its 'Image format' select, then the new ones. AVIF and JPEG XL are
+// the slow rows, and each row's spinner shows while its own encode runs.
 const TARGETS: ImageOptimizationTarget[] = [
+  {
+    id: "png",
+    label: "PNG",
+    extension: "png",
+    mimeType: "image/png",
+    encode: (pixels, width, height) =>
+      encodeRasterVariant(pixels, width, height, "png"),
+  },
   {
     id: "webp-lossless",
     label: "WebP (lossless)",
@@ -54,14 +62,6 @@ const TARGETS: ImageOptimizationTarget[] = [
     mimeType: "image/jxl",
     encode: (pixels, width, height) =>
       encodeRasterVariant(pixels, width, height, "jxl-lossless"),
-  },
-  {
-    id: "png",
-    label: "PNG",
-    extension: "png",
-    mimeType: "image/png",
-    encode: (pixels, width, height) =>
-      encodeRasterVariant(pixels, width, height, "png"),
   },
   {
     id: "avif-lossless",
