@@ -45,18 +45,21 @@ Cloudflare dashboard.
 
 ## Dependencies
 
-| Library                                                                         | License                  | Purpose                                             |
-| ------------------------------------------------------------------------------- | ------------------------ | --------------------------------------------------- |
-| [@tksh/stln-codec](https://jsr.io/@tksh/stln-codec)                             | MPL-2.0                  | Straightlines URL codec + SVG generator             |
-| [@tksh/group-colors-param-codec](https://jsr.io/@tksh/group-colors-param-codec) | MPL-2.0                  | Shortens/expands `groupColors` URL params           |
-| [@tksh/svg2ui8a](https://jsr.io/@tksh/svg2ui8a)                                 | MIT                      | Renders SVG into raw RGBA pixels                    |
-| [@jsquash/webp](https://www.npmjs.com/package/@jsquash/webp)                    | Apache-2.0, BSD-3-Clause | Encodes the pixels as lossless WebP (libwebp codec) |
-| [@jsquash/oxipng](https://www.npmjs.com/package/@jsquash/oxipng)                | Apache-2.0, MIT          | Optimizes the pixels into a PNG (oxipng codec)      |
-| [colorjs.io](https://www.npmjs.com/package/colorjs.io)                          | MIT                      | sRGB/OKLCH conversion and CSS gamut mapping         |
-| [Alwan](https://www.npmjs.com/package/alwan)                                    | MIT                      | Color picker UI                                     |
-| [@tksh/url-compressor](https://jsr.io/@tksh/url-compressor)                     | MIT                      | URL-safe string compression (via stln-codec)        |
-| [@std/collections](https://jsr.io/@std/collections)                             | MIT                      | Deno standard library array/object utilities        |
-| [murmurhash](https://jsr.io/@timepp/murmurhash)                                 | MIT                      | MurmurHash3 typescript implementation               |
+| Library                                                                         | License                  | Purpose                                               |
+| ------------------------------------------------------------------------------- | ------------------------ | ----------------------------------------------------- |
+| [@tksh/stln-codec](https://jsr.io/@tksh/stln-codec)                             | MPL-2.0                  | Straightlines URL codec + SVG generator               |
+| [@tksh/group-colors-param-codec](https://jsr.io/@tksh/group-colors-param-codec) | MPL-2.0                  | Shortens/expands `groupColors` URL params             |
+| [@tksh/svg2ui8a](https://jsr.io/@tksh/svg2ui8a)                                 | MIT                      | Renders SVG into raw RGBA pixels                      |
+| [@jsquash/webp](https://www.npmjs.com/package/@jsquash/webp)                    | Apache-2.0, BSD-3-Clause | Encodes the pixels as lossless WebP (libwebp codec)   |
+| [@jsquash/oxipng](https://www.npmjs.com/package/@jsquash/oxipng)                | Apache-2.0, MIT          | Optimizes the pixels into a PNG (oxipng codec)        |
+| [@jsquash/jxl](https://www.npmjs.com/package/@jsquash/jxl)                      | Apache-2.0, BSD-3-Clause | Encodes the pixels as lossless JPEG XL (libjxl codec) |
+| [@jsquash/avif](https://www.npmjs.com/package/@jsquash/avif)                    | Apache-2.0, BSD-2-Clause | Encodes the pixels as lossless AVIF (libavif codec)   |
+| [@jsquash/qoi](https://www.npmjs.com/package/@jsquash/qoi)                      | Apache-2.0, MIT          | Encodes the pixels as QOI (QOI codec)                 |
+| [colorjs.io](https://www.npmjs.com/package/colorjs.io)                          | MIT                      | sRGB/OKLCH conversion and CSS gamut mapping           |
+| [Alwan](https://www.npmjs.com/package/alwan)                                    | MIT                      | Color picker UI                                       |
+| [@tksh/url-compressor](https://jsr.io/@tksh/url-compressor)                     | MIT                      | URL-safe string compression (via stln-codec)          |
+| [@std/collections](https://jsr.io/@std/collections)                             | MIT                      | Deno standard library array/object utilities          |
+| [murmurhash](https://jsr.io/@timepp/murmurhash)                                 | MIT                      | MurmurHash3 typescript implementation                 |
 
 ## Vendored license texts
 
@@ -75,10 +78,21 @@ lists them, so visitors of the deployed site can read them.
 | `jsquash-webp-codec-libwebp-BSD-3-Clause.md` | `@jsquash/webp@1.5.0` `codec/LICENSE.codec.md`   |
 | `jsquash-oxipng-Apache-2.0.txt`              | `@jsquash/oxipng@2.3.0` `LICENSE`                |
 | `jsquash-oxipng-codec-oxipng-MIT.md`         | `@jsquash/oxipng@2.3.0` `codec/LICENSE.codec.md` |
+| `jsquash-jxl-Apache-2.0.txt`                 | `@jsquash/jxl@1.3.0` `LICENSE`                   |
+| `jsquash-jxl-codec-libjxl-BSD-3-Clause.md`   | `libjxl` `LICENSE` (at the pinned commit)        |
+| `jsquash-avif-Apache-2.0.txt`                | `@jsquash/avif@2.1.1` `LICENSE`                  |
+| `jsquash-avif-codec-libavif-BSD-2-Clause.md` | `libavif` `LICENSE.md` (v1.0.1)                  |
+| `jsquash-avif-codec-libaom-BSD-2-Clause.md`  | `libaom` `LICENSE` (v3.7.0)                      |
+| `jsquash-qoi-Apache-2.0.txt`                 | `@jsquash/qoi@1.1.0` `LICENSE`                   |
+| `jsquash-qoi-codec-qoi-MIT.md`               | `@jsquash/qoi@1.1.0` `codec/LICENSE.codec.md`    |
 | `colorjs-MIT.txt`                            | `colorjs.io@0.7.1` `LICENSE`                     |
 
-The `@jsquash/*` texts and the WebAssembly binaries are refreshed by
-`deno task vendor:jsquash`. The five rasterizer-side texts are copied by hand:
+The `@jsquash/*` package texts, the QOI codec's text and the WebAssembly
+binaries are refreshed by `deno task vendor:jsquash`. The three codec texts the
+task cannot fetch are copied by hand: `@jsquash/jxl` and `@jsquash/avif` ship no
+`codec/LICENSE.codec.md`, so the licenses of the code compiled into their Wasm
+are checked in directly, and `src/assets/jsquash/README.md` records which
+upstream they come from. The five rasterizer-side texts are copied by hand:
 `resvg` and its dependencies are Rust crates that ship inside `svg2ui8a`'s Wasm,
 so they are not in the package cache that task reads from. `resvg` and `usvg`
 carry an identical MIT notice, so one file covers both and the licenses page
