@@ -275,47 +275,44 @@ div#reset-button-box {
   .input-group {
     padding-bottom: 2rem;
   }
-  /* The five-column table no longer fits and the byte count is dropped with
-   * it: the format takes its own line, and the size and the time stack beside
-   * the download button. The headings stay — they carry the units — and take
-   * the same cells as the rows. */
+  /* The row keeps the desktop's single horizontal line; only the byte count's
+   * column is dropped, and its heading goes with it, leaving the format, the
+   * KB figure, the elapsed time and the control. The heading row follows the
+   * same four tracks by auto-placement, as on the desktop.
+   *
+   * The tracks are the desktop's, less the byte count: the format may shrink to
+   * its narrowest (a long name then wraps) and the column gap is trimmed, while
+   * the KB column holds its heading's width and the time column the width of
+   * its "(+ wasm load)" note, so neither heading nor note breaks. The room the
+   * table does not use is shared between the columns rather than left after
+   * them, so the control still ends at the right edge. */
   #img-opt-results {
-    --img-opt-columns: minmax(4.5rem, max-content) minmax(0, 1fr);
-    column-gap: 0.75rem;
+    --img-opt-columns: minmax(min-content, max-content) max-content
+      minmax(6rem, max-content) max-content;
+    column-gap: 0.5rem;
+    justify-content: space-between;
     /* The side inset is desktop-only, like the SVG modal's fieldset margin.
      * The room at the bottom is the mobile half of the SVG modal's inset. */
     margin: 0 0 2rem;
-  }
-  .img-opt-header-format {
-    grid-column: 1 / -1;
-  }
-  .img-opt-header-kb {
-    grid-column: 1;
   }
   .img-opt-header-bytes,
   .img-opt-size-unit {
     display: none;
   }
-  .img-opt-header-time {
-    grid-column: 1;
-  }
   .img-opt-row {
-    column-gap: 0.75rem;
-    row-gap: 0.25rem;
+    /* The fallback template's gap, for browsers without subgrid. */
+    column-gap: 0.5rem;
+    justify-content: space-between;
   }
-  .img-opt-format {
-    grid-column: 1 / -1;
-  }
-  .img-opt-size-value {
-    grid-column: 1;
-  }
-  .img-opt-time {
-    grid-column: 1;
-  }
-  .img-opt-download {
-    grid-column: 2;
-    grid-row: 2 / span 2;
-    justify-self: end;
-    align-self: center;
+}
+
+/* The narrowest phones, where the four columns no longer fit however far the
+ * format name wraps: the time column gives up the width of its "(+ wasm load)"
+ * note, and the KB column the width of its heading, rather than let the
+ * control run into the dialog's edge. */
+@media screen and (max-width: 355px) {
+  #img-opt-results {
+    --img-opt-columns: minmax(min-content, max-content)
+      minmax(min-content, max-content) minmax(4.5rem, max-content) max-content;
   }
 }
