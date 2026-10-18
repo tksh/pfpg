@@ -200,11 +200,16 @@ div#reset-button-box {
 
 /* The figures are right-aligned, so their headings are too: each unit sits in
  * its heading, and the heading ends where the figures do. The format column
- * keeps its left-aligned heading over its left-aligned names. */
+ * keeps its left-aligned heading over its left-aligned names.
+ *
+ * All three headings end in ')', whose ink stops short of the box because of
+ * its right side bearing, so the digits below read as overhanging. The heading
+ * is nudged right by the width of that bearing to line the two ink edges up. */
 .img-opt-header-kb,
 .img-opt-header-bytes,
 .img-opt-header-time {
   text-align: right;
+  margin-right: -0.3em;
 }
 
 .img-opt-size-value,
@@ -322,7 +327,7 @@ div#reset-button-box {
  * note, and the KB column the width of its heading, rather than let the
  * control run into the dialog's edge.
  *
- * The row fits down to 332px without a persistent scrollbar and to 347px with
+ * The row fits down to 328px without a persistent scrollbar and to 343px with
  * one, so the breakpoint sits between the two. */
 @media screen and (max-width: 340px) {
   #img-opt-results {
