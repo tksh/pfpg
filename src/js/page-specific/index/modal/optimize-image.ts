@@ -148,8 +148,9 @@ async function runOptimizations(modal: HTMLDialogElement): Promise<void> {
   const raster = getLastRasterizedPixels();
   if (raster === null) {
     for (const target of TARGETS) {
-      getRowSize(getRow(modal, target), target).textContent =
-        "No rendered image yet";
+      const row = getRow(modal, target);
+      getRowSizeValue(row, target).textContent = "No rendered image yet";
+      getRowSizeUnit(row, target).textContent = "";
     }
     return;
   }
@@ -189,11 +190,16 @@ function finishRow(
   row.classList.remove("is-working");
 
   const byteSize = image.bytes.byteLength;
-  getRowSize(row, target).textContent = `${
+  // The size runs over two cells and two lines: the value cell holds the KB
+  // figure and the opening of the exact byte count, the unit cell holds their
+  // units. `white-space: pre-line` turns the `\n`s into the line breaks that
+  // stack "4.3 KB" over "(4,392 bytes)".
+  getRowSizeValue(row, target).textContent = `${
     roundToOneDecimal(byteSize / 1024)
-  } KB (${byteSize.toLocaleString()} bytes)`;
+  }\n(${byteSize.toLocaleString()}`;
+  getRowSizeUnit(row, target).textContent = "KB\nbytes)";
   getRowTime(row, target).textContent = `${Math.round(elapsed)} ms${
-    image.wasmLoaded ? " (+ wasm load)" : ""
+    image.wasmLoaded ? "\n(+ wasm load)" : ""
   }`;
 
   // `.slice()` copies: the Blob must outlive the encoder's Wasm memory.
@@ -216,7 +222,8 @@ function failRow(
 ): void {
   row.classList.remove("is-working");
   row.classList.add("has-error");
-  getRowSize(row, target).textContent = "Failed";
+  getRowSizeValue(row, target).textContent = "Failed";
+  getRowSizeUnit(row, target).textContent = "";
   console.error(`Image optimization (${target.id}: ${target.label}):`, error);
 }
 
@@ -246,7 +253,8 @@ function clearResults(modal: HTMLDialogElement): void {
   for (const target of TARGETS) {
     const row = getRow(modal, target);
     row.classList.remove("is-working", "has-error");
-    getRowSize(row, target).textContent = "";
+    getRowSizeValue(row, target).textContent = "";
+    getRowSizeUnit(row, target).textContent = "";
     getRowTime(row, target).textContent = "";
     getRowButton(row, target).disabled = true;
   }
@@ -281,11 +289,20 @@ function getRowPart(
   return part;
 }
 
-function getRowSize(
+// The size is two cells: the value (`4.3` over `(4,392`) and the unit (`KB`
+// over `bytes)`). finishRow() is what fills them in.
+function getRowSizeValue(
   row: HTMLElement,
   target: ImageOptimizationTarget,
 ): HTMLElement {
-  return getRowPart(row, target, ".img-opt-size");
+  return getRowPart(row, target, ".img-opt-size-value");
+}
+
+function getRowSizeUnit(
+  row: HTMLElement,
+  target: ImageOptimizationTarget,
+): HTMLElement {
+  return getRowPart(row, target, ".img-opt-size-unit");
 }
 
 function getRowTime(

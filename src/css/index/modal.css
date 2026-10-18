@@ -161,38 +161,65 @@ div#reset-button-box {
   text-align: center;
 }
 
-/* The image optimization results: one row per format, each filling in as its
- * encode finishes. The columns are format name / size / elapsed time /
- * download button. */
+/* The image optimization results: one row per format, filling in as its
+ * encode finishes, under a heading row. The table's five columns are format
+ * name / size value / size unit / elapsed time / download button. The size is
+ * split into value and unit so that the value can be flushed right against
+ * the unit, which lines the KB and the bytes up down the table.
+ *
+ * #img-opt-results owns the column tracks; each row takes the same tracks
+ * with `subgrid`, so the rows line up with the headings and with each other.
+ * The custom property is the fallback template for browsers without subgrid
+ * support: the rows then size their own columns, as before. */
 #img-opt-results {
+  --img-opt-columns: minmax(8rem, max-content) minmax(4.5rem, max-content)
+    minmax(3.5rem, max-content) minmax(6rem, max-content) max-content;
   display: grid;
-  gap: 0.5rem;
+  grid-template-columns: var(--img-opt-columns);
+  column-gap: 1rem;
+  row-gap: 0.5rem;
+  /* The same 1rem side inset the SVG optimization modal's fieldset gets. */
+  margin: 0 1rem;
 }
 
 .img-opt-row {
+  grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: minmax(8rem, max-content) minmax(9rem, max-content)
-    minmax(5rem, max-content) max-content;
+  grid-template-columns: var(--img-opt-columns);
+  grid-template-columns: subgrid;
+  column-gap: 1rem;
   align-items: center;
-  gap: 0.25rem 1rem;
+}
+
+/* 'Size' covers the value column and the unit column. */
+.img-opt-header-size {
+  grid-column: span 2;
 }
 
 .img-opt-format {
   font-weight: bold;
 }
 
-.img-opt-size,
+.img-opt-size-value,
+.img-opt-size-unit,
 .img-opt-time {
   /* Keeps the numbers from jittering as the rows fill in one after another. */
   font-variant-numeric: tabular-nums;
+  /* finishRow() breaks these where the design wants the line ends. */
+  white-space: pre-line;
 }
 
-.img-opt-row.has-error .img-opt-size {
+.img-opt-size-value {
+  text-align: right;
+}
+
+.img-opt-row.has-error .img-opt-size-value,
+.img-opt-row.has-error .img-opt-size-unit {
   color: rgb(139, 0, 0); /* #8B0000 */
 }
 
-/* The spinner replaces the size while the row's encode runs. */
-.img-opt-row.is-working .img-opt-size::before {
+/* The spinner replaces the size unit while the row's encode runs. */
+.img-opt-row.is-working .img-opt-size-unit::before {
   content: "";
   display: inline-block;
   width: 0.75em;
@@ -224,22 +251,39 @@ div#reset-button-box {
   .input-group {
     padding-bottom: 2rem;
   }
-  /* The four-column row no longer fits: the format takes its own line and
-   * the download button spans the two text lines beside it. */
+  /* The five-column table no longer fits: the headings go, the format takes
+   * its own line, and the size and the time stack beside the download
+   * button. */
+  #img-opt-results {
+    --img-opt-columns: minmax(4.5rem, max-content) minmax(3.5rem, max-content)
+      minmax(0, 1fr);
+    column-gap: 0.75rem;
+    /* The 1rem inset is desktop-only, like the SVG modal's fieldset margin. */
+    margin: 0;
+  }
+  .img-opt-header {
+    display: none;
+  }
   .img-opt-row {
-    grid-template-columns: minmax(0, 1fr) max-content;
-    gap: 0.25rem 0.75rem;
+    column-gap: 0.75rem;
+    row-gap: 0.25rem;
   }
   .img-opt-format {
     grid-column: 1 / -1;
   }
-  .img-opt-size,
-  .img-opt-time {
+  .img-opt-size-value {
     grid-column: 1;
   }
-  .img-opt-download {
+  .img-opt-size-unit {
     grid-column: 2;
+  }
+  .img-opt-time {
+    grid-column: 1 / span 2;
+  }
+  .img-opt-download {
+    grid-column: 3;
     grid-row: 2 / span 2;
+    justify-self: end;
     align-self: center;
   }
 }
