@@ -224,15 +224,29 @@ div#reset-button-box {
   white-space: pre-line;
 }
 
-/* The row's control is an icon button: a square tap target with the Material
- * 'download' glyph centred in it. Its padding is its own — the shared
- * action-button padding is for the text buttons — and 40px square is a tap
- * target the rows can stand to grow to. */
+/* The row's control is the Material 'download' glyph on its own, like the
+ * modal's close control and the ⓘ icons: a real <button>, so it stays keyboard
+ * operable, with the box the `main button` rule puts round it taken off. The
+ * glyph is centred through the button, which is what keeps it level with the
+ * row's text; the `main button` colour it keeps comes from the app's text
+ * colour, so a row that is still encoding shows the same glyph, only inert. */
 .img-opt-download {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem;
+  /* The control's box holds nothing but the glyph, but the grid stretches the
+   * item to its track, which is wider than 24px once there is slack to
+   * distribute. Pinning it to the track's end keeps the glyph level with the
+   * figures above it at every width. */
+  justify-self: end;
+}
+
+.img-opt-download:disabled {
+  cursor: default;
 }
 
 .img-opt-row.has-error .img-opt-size-value,
@@ -309,8 +323,11 @@ div#reset-button-box {
 /* The narrowest phones, where the four columns no longer fit however far the
  * format name wraps: the time column gives up the width of its "(+ wasm load)"
  * note, and the KB column the width of its heading, rather than let the
- * control run into the dialog's edge. */
-@media screen and (max-width: 355px) {
+ * control run into the dialog's edge.
+ *
+ * The row fits down to 332px without a persistent scrollbar and to 347px with
+ * one, so the breakpoint sits between the two. */
+@media screen and (max-width: 340px) {
   #img-opt-results {
     --img-opt-columns: minmax(min-content, max-content)
       minmax(min-content, max-content) minmax(4.5rem, max-content) max-content;
