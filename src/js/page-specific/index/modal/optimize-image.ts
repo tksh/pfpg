@@ -190,16 +190,14 @@ function finishRow(
   row.classList.remove("is-working");
 
   const byteSize = image.bytes.byteLength;
-  // The size is one line over two cells: the value cell carries the KB figure
-  // and the unit cell the exact byte count. Keeping them apart is what holds
-  // the KB figures in a column of their own, right-aligned against the KB
-  // units, instead of running the byte counts through that column.
-  getRowSizeValue(row, target).textContent = `${
-    roundToOneDecimal(byteSize / 1024)
-  } KB`;
-  getRowSizeUnit(row, target).textContent =
-    `(${byteSize.toLocaleString()} bytes)`;
-  getRowTime(row, target).textContent = `${Math.round(elapsed)} ms${
+  // Each unit is in its heading, so a row carries the numbers alone. The KB
+  // figure keeps one decimal place even when it lands on a whole number, so
+  // the figures stack digit for digit.
+  getRowSizeValue(row, target).textContent = roundToOneDecimal(
+    byteSize / 1024,
+  ).toFixed(1);
+  getRowSizeUnit(row, target).textContent = byteSize.toLocaleString();
+  getRowTime(row, target).textContent = `${Math.round(elapsed)}${
     image.wasmLoaded ? "\n(+ wasm load)" : ""
   }`;
 
@@ -290,8 +288,8 @@ function getRowPart(
   return part;
 }
 
-// The size is two cells: the value (`4.3 KB`) and the exact byte count
-// (`(4,392 bytes)`). finishRow() is what fills them in.
+// The size is two cells: the value (`4.3`) and the exact byte count
+// (`4,392`). finishRow() is what fills them in.
 function getRowSizeValue(
   row: HTMLElement,
   target: ImageOptimizationTarget,
