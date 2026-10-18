@@ -398,14 +398,21 @@ main button {
   font-size: .9rem;
 }
 
+/* The inner padding shared by every action button: the two download buttons,
+   'Randomize colors' and the image optimization rows' Download buttons. */
+button#randomize-colors,
+button#png-action-button,
+button#svg-action-button,
+button.img-opt-download {
+  padding: 0.5rem 1rem;
+}
+
 /* 'Randomize colors' sits in the Lines tab, which `main button` does not
-   reach, so it takes the same button colors explicitly, and the same padding
-   as the 'Download as PNG/SVG' buttons. */
+   reach, so it takes the same button colors explicitly. */
 button#randomize-colors {
   background-color: var(--color-button-bg);
   border-color: var(--color-button-border);
   font-size: .9rem;
-  padding: 0.5rem 1rem;
 }
 
 button#png-action-button,
@@ -414,8 +421,6 @@ button#svg-action-button {
   --button-height: 3.5rem; /* ボタン全体の高さ */
   /* height: var(--button-height); */
   line-height: 1.4;
-
-  padding: 0.5rem 1rem; /* 上下0.5rem、左右1remの余白 */
 
   white-space: normal;
   /* 基本的に改行しない */
