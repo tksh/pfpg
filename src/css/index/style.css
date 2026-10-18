@@ -398,12 +398,11 @@ main button {
   font-size: .9rem;
 }
 
-/* The inner padding shared by every action button: the two download buttons,
-   'Randomize colors' and the image optimization rows' Download buttons. */
+/* The inner padding shared by every text action button: the two download
+   buttons and 'Randomize colors'. */
 button#randomize-colors,
 button#png-action-button,
-button#svg-action-button,
-button.img-opt-download {
+button#svg-action-button {
   padding: 0.5rem 1rem;
 }
 

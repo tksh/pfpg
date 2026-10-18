@@ -224,6 +224,17 @@ div#reset-button-box {
   white-space: pre-line;
 }
 
+/* The row's control is an icon button: a square tap target with the Material
+ * 'download' glyph centred in it. Its padding is its own — the shared
+ * action-button padding is for the text buttons — and 40px square is a tap
+ * target the rows can stand to grow to. */
+.img-opt-download {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
 .img-opt-row.has-error .img-opt-size-value,
 .img-opt-row.has-error .img-opt-size-unit {
   color: rgb(139, 0, 0); /* #8B0000 */
@@ -301,13 +312,10 @@ div#reset-button-box {
   .img-opt-time {
     grid-column: 1;
   }
-  button.img-opt-download {
+  .img-opt-download {
     grid-column: 2;
     grid-row: 2 / span 2;
     justify-self: end;
     align-self: center;
-    /* Half the desktop's side padding: the byte count's column is gone, so
-     * the button sits on its own and can be that much slimmer. */
-    padding: 0.5rem;
   }
 }
