@@ -207,9 +207,6 @@ div#reset-button-box {
   text-align: right;
 }
 
-/* The format names take the same plain style as the option names in the SVG
- * optimization modal: no weight of their own. */
-
 .img-opt-size-value,
 .img-opt-size-unit,
 .img-opt-time {
