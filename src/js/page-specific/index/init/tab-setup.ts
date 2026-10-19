@@ -64,6 +64,20 @@ function openTab(
 
 function handleKeyPress(event: KeyboardEvent): void {
   const key = event.key.toLowerCase();
+  if (key === "r") {
+    event.preventDefault();
+    const modal = document.getElementById("reset-settings-modal");
+    if (!(modal instanceof HTMLDialogElement)) {
+      throw new Error(
+        "handleKeyPress: missing or invalid #reset-settings-modal",
+      );
+    }
+    if (!modal.open) {
+      modal.showModal();
+    }
+    return;
+  }
+
   const keyMap: Record<string, string> = {
     "a": "tab-1",
     "s": "tab-2",
