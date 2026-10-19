@@ -63,6 +63,10 @@ function openTab(
 }
 
 function handleKeyPress(event: KeyboardEvent): void {
+  if (event.ctrlKey || event.altKey || event.shiftKey || event.metaKey) {
+    return;
+  }
+
   const key = event.key.toLowerCase();
   if (key === "r") {
     event.preventDefault();
