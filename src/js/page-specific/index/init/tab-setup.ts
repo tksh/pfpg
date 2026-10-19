@@ -63,15 +63,12 @@ function openTab(
 }
 
 function handleKeyPress(event: KeyboardEvent): void {
-  // Altキーが押されていない場合は、処理を行わない
-  if (!event.altKey) return;
-
   const key = event.key.toLowerCase();
   const keyMap: Record<string, string> = {
-    "h": "tab-1", // Alt + h
-    "j": "tab-2", // Alt + j
-    "k": "tab-3", // Alt + k
-    "l": "tab-4", // Alt + l
+    "a": "tab-1",
+    "s": "tab-2",
+    "d": "tab-3",
+    "f": "tab-4",
   };
 
   if (key in keyMap) {
