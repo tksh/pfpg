@@ -76,10 +76,10 @@ function initBaseColorsSelect(): void {
   });
 }
 
-// `0`, `0.1`, `0.4` and `30` are not inferable from a thumb position, so each
-// channel gets the same control the 'Height pixel size:' setting uses: a number
-// input beside the label, a slider below it, and -/+ buttons on either side of
-// the slider.
+// A thumb position alone does not make the exact value obvious, so each channel
+// gets the same controls the 'Height pixel size:' setting uses: a number input
+// beside the label, a slider below it, and -/+ buttons on either side of the
+// slider.
 function initSpreadControls(): void {
   for (const channel of SPREAD_CHANNELS) {
     const number = getNumberInput(channel);
