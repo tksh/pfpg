@@ -77,6 +77,17 @@ function handleKeyPress(event: KeyboardEvent): void {
     }
     return;
   }
+  if (key === "e") {
+    event.preventDefault();
+    const randomizeButton = document.getElementById("randomize-colors");
+    if (!(randomizeButton instanceof HTMLButtonElement)) {
+      throw new Error(
+        "handleKeyPress: missing or invalid #randomize-colors",
+      );
+    }
+    randomizeButton.click();
+    return;
+  }
 
   const keyMap: Record<string, string> = {
     "a": "tab-1",
