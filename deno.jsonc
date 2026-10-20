@@ -19,9 +19,12 @@
     // The encoder Wasm is served as a file: `deno bundle` inlines the JS glue
     // but never emits the Wasm those packages load with `new URL(...)`.
     "copy:encoder-wasm": "cp -r src/assets/jsquash dist",
+    // The rasterizer Wasm is served as a file for the same reason: the
+    // package loads it from a URL, and `deno bundle` emits no Wasm asset.
+    "copy:rasterizer-wasm": "cp -r src/assets/svg2ui8a dist",
     // Third-party license texts, reachable from the deployed site
     "copy:licenses": "cp -r src/licenses dist",
-    "bulk-copy": "deno task copy:favicon && deno task copy:images && deno task copy:css && deno task copy:encoder-wasm && deno task copy:licenses",
+    "bulk-copy": "deno task copy:favicon && deno task copy:images && deno task copy:css && deno task copy:encoder-wasm && deno task copy:rasterizer-wasm && deno task copy:licenses",
 
     // Maintenance: refresh the vendored encoder Wasm and license texts from the
     // pinned packages. Run after changing their versions in `imports`.
@@ -106,7 +109,7 @@
 
     // SVG rasterizer: returns pixels only. The image file encoders are separate.
     "@denext/photon": "jsr:@denext/photon@^0.3.6",
-    "svg2ui8a": "jsr:@tksh/svg2ui8a@^0.5.0/svg2rgba",
+    "svg2ui8a": "jsr:@tksh/svg2ui8a@^0.6.0/svg2rgba",
     // Encoder glue, imported statically. The packages' own wrapper modules
     // reach the same glue through `import()`, and `deno bundle` emits every
     // dynamic import as a separate chunk whose path a static host may not

@@ -1,4 +1,4 @@
-import { svg2rgba } from "svg2ui8a";
+import { initSvg2rgba, svg2rgba } from "svg2ui8a";
 import {
   updateButtonWithPngSize,
   updateButtonWithSvgSize,
@@ -18,6 +18,24 @@ export {
 
 // Option type for the svg2ui8a rendering call (uses the package types as imported)
 type RasterOption = NonNullable<Parameters<typeof svg2rgba>[1]>;
+
+// Where the build copies the vendored rasterizer Wasm to. The package loads
+// its binary from a URL, and `deno bundle` inlines the JavaScript but emits
+// no Wasm asset, so the binary is served from our own origin; see
+// src/assets/svg2ui8a/README.md.
+const RASTERIZER_WASM_PATH = "./svg2ui8a/svg2rgba_bg.wasm";
+
+// The rasterizer's Wasm module, once it has been loaded. The package takes
+// the binary's location only before the module is loaded, so the
+// initialization happens once, on the first render.
+let rasterizerReady: Promise<void> | null = null;
+
+function ensureRasterizer(): Promise<void> {
+  rasterizerReady ??= initSvg2rgba({
+    wasmUrl: new URL(RASTERIZER_WASM_PATH, globalThis.location.href).href,
+  });
+  return rasterizerReady;
+}
 
 // The encoded bytes of the latest render, for the download and clipboard
 // actions. Those run outside the render call, but must write the same bytes
@@ -121,6 +139,8 @@ async function rasterize(
   svgString: string,
   rasterOption: RasterOption,
 ): Promise<EncodedImage> {
+  // Point the rasterizer at the vendored binary before the first render.
+  await ensureRasterizer();
   // Render via svg2ui8a: the returned dimensions are authoritative for
   // everything downstream, including the aspect ratio of the output.
   const { pixels, width, height } = await svg2rgba(svgString, rasterOption);

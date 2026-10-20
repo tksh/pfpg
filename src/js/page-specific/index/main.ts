@@ -109,8 +109,9 @@ import { initViewScalingSelect } from "tab-ui/view-scaling";
     svg2pngOption,
   );
 
-  // Initial rendering. The rasterizer initializes its Wasm module lazily on
-  // the first call, so there is no separate initialization step here.
+  // Initial rendering. The rasterizer loads its Wasm module on the first
+  // render, and the render path points it at the vendored binary, so there is
+  // no separate initialization step here.
   executeSvg2png({ target: { value: svgString } }, svg2pngOption);
 
   // Restore SVG string optimization
