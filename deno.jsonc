@@ -27,6 +27,11 @@
     // pinned packages. Run after changing their versions in `imports`.
     "vendor:jsquash": "deno run --allow-read --allow-write --allow-env scripts/vendor_jsquash.ts",
 
+    // Maintenance: refresh the vendored rasterizer Wasm from the published
+    // package. Run after changing the pinned version in `imports`.
+    // `--allow-run` is for the `deno fmt` call that formats the provenance file.
+    "vendor:svg2ui8a": "deno run --allow-net --allow-read --allow-write --allow-run scripts/vendor_svg2ui8a.ts",
+
     // Necessary post-processing tasks after building the project, both dev and production builds
     "postprocessing": "deno task bulk-copy && cp dist/index.html dist/index-raw.html",
 
