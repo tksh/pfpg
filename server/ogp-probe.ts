@@ -21,7 +21,26 @@ import {
   createSignedUpload,
   UPLOAD_PRESET,
 } from "../functions/lib/sign-upload.ts";
-import { svg2rgba } from "svg2ui8a";
+import { initSvg2rgba, svg2rgba } from "svg2ui8a";
+
+// The rasterizer's Wasm binary is published next to the package on JSR, and
+// the package loads it from a URL. A deployment bundles the module into a
+// single file, so the module's own URL cannot point at the binary the way it
+// does in the published package: the location is pinned here instead.
+//
+// The version must match the `svg2ui8a` import in deno.jsonc.
+const RASTERIZER_WASM_URL =
+  "https://jsr.io/@tksh/svg2ui8a/0.6.0/assets/svg2rgba_bg.wasm";
+
+// The rasterizer's Wasm module, once it has been loaded. The package takes
+// the binary's location only before the module is loaded, so the
+// initialization happens once, on the first render.
+let rasterizerReady: Promise<void> | null = null;
+
+function ensureRasterizer(): Promise<void> {
+  rasterizerReady ??= initSvg2rgba({ wasmUrl: RASTERIZER_WASM_URL });
+  return rasterizerReady;
+}
 
 Deno.serve(async (req: Request): Promise<Response> => {
   const url = new URL(req.url);
@@ -189,6 +208,7 @@ async function renderPipeline(params: URLSearchParams): Promise<{
   }
 
   const key = await getSharedImageKeyHash(params);
+  await ensureRasterizer();
   const { width, height, pixels } = await svg2rgba(svg, { height: 256 });
   return { key, svg, pixels, width, height };
 }
