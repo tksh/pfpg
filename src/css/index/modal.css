@@ -22,13 +22,14 @@
   margin: 0; /* the <dialog> box itself is already centred */
   padding: 1rem;
   border: 2px solid rgba(200, 200, 200, 0.48); /* #C8C8C87A */
-  width: max-content;
-  /* The close control is absolutely positioned into the top-right corner. */
+  inline-size: max-content;
+  /* The close control is absolutely positioned into the block-start, inline-end
+   * corner. */
   position: relative;
 }
 
 .input-group {
-  padding-bottom: 3rem;
+  padding-block-end: 3rem;
 }
 
 code {
@@ -41,39 +42,38 @@ code {
 
 .arrow {
   display: block;
-  padding-left: 1rem;
-  padding-top: .5rem;
+  padding-inline-start: 1rem;
+  padding-block-start: .5rem;
   color: rgba(128, 128, 128); /* #808080 */
 }
 
 .modal-content > h2 {
   font-size: 1rem;
   /* One line of space above the title. The cornered close control occupies the
-   * top padding band and reaches ~31px down the content box, so a bare 1rem
-   * left the heading's text all but touching it; 1.5rem clears it by ~11px and
-   * still reads as a single line rather than a gap. */
-  padding-top: 1.5rem;
-  padding-bottom: 2rem;
+   * block-start padding band and reaches ~31px down the content box, so a bare
+   * 1rem left the heading's text all but touching it; 1.5rem clears it by ~11px
+   * and still reads as a single line rather than a gap. */
+  padding-block: 1.5rem 2rem;
 }
 
 .modal-content .example {
-  padding-top: 0.5rem;
-  padding-left: 1.5rem;
+  padding-block-start: 0.5rem;
+  padding-inline-start: 1.5rem;
 }
 
 /* The close control is a real <button> (keyboard operable) but keeps the
  * bare-icon look it had as a <span>; the `main button` rule would box it.
- * It is pinned to the top-right corner of .modal-content / .hint-content, both
- * of which are `position: relative`. It stays last in the DOM so the keyboard
- * tab order is unchanged. */
+ * It is pinned to the block-start, inline-end corner of .modal-content /
+ * .hint-content, both of which are `position: relative`. It stays last in the
+ * DOM so the keyboard tab order is unchanged. */
 button.modal-close-icon {
   background: none;
   border: none;
   color: inherit;
   cursor: pointer;
   position: absolute;
-  top: 0.25rem;
-  right: 0.25rem;
+  inset-block-start: 0.25rem;
+  inset-inline-end: 0.25rem;
 }
 
 /* The ⓘ beside a setting. Its reset mirrors button.modal-close-icon: header
@@ -112,10 +112,10 @@ button#png-size-info {
  * is supported, and let it fall back to centred elsewhere.
  *
  * It is centred on the icon rather than spanning to one side of it. Spanning
- * right meant the available width was whatever was left to the icon's right, so
- * on a phone the hint was squeezed into a narrow column; spanning left would
- * mirror the problem. justify-self: anchor-center centres the box on the anchor
- * at every viewport width. */
+ * to one side meant the available width was whatever was left on that side of
+ * the icon, so on a phone the hint was squeezed into a narrow column; spanning
+ * the other way would mirror the problem. justify-self: anchor-center centres
+ * the box on the anchor at every viewport width. */
 dialog.hint-dialog {
   margin: 0;
   padding: 0;
@@ -145,16 +145,18 @@ dialog#png-size-hint {
   background-color: var(--color-bg);
   color: var(--color-text);
   border: 1px solid var(--color-button-border);
-  /* The right padding is wider than the others: it reserves a gutter for the
-   * cornered close control so no line of the hint runs underneath it. */
-  padding: 0.75rem 2rem 0.75rem 0.75rem;
-  max-width: min(20rem, 80vw);
+  /* The inline-end padding is wider than the others: it reserves a gutter for
+   * the cornered close control so no line of the hint runs underneath it. */
+  padding-block: 0.75rem;
+  padding-inline: 0.75rem 2rem;
+  max-inline-size: min(20rem, 80vw);
   position: relative;
 }
 
 button#reset-settings {
-  width: 70%;
-  padding: 0.5rem 0;
+  inline-size: 70%;
+  padding-block: 0.5rem;
+  padding-inline: 0;
 }
 
 div#reset-button-box {
@@ -186,7 +188,8 @@ div#reset-button-box {
   row-gap: 1rem;
   /* 1rem to the sides, like the SVG optimization modal's fieldset, and the
    * 3rem of room its last input group leaves under the controls. */
-  margin: 0 1rem 3rem;
+  margin-block: 0 3rem;
+  margin-inline: 1rem;
 }
 
 .img-opt-row {
@@ -198,26 +201,27 @@ div#reset-button-box {
   align-items: center;
 }
 
-/* The figures are right-aligned, so their headings are too: each unit sits in
+/* The figures are end-aligned, so their headings are too: each unit sits in
  * its heading, and the heading ends where the figures do. The format column
- * keeps its left-aligned heading over its left-aligned names.
+ * keeps its start-aligned heading over its start-aligned names.
  *
  * All three headings end in ')', whose ink stops short of its advance edge, so
  * the digits below read as overhanging the heading. The headings are nudged
- * right to close that optical gap: 0.15em, where the bearing itself is only
- * 0.04em, because ')' is a light curved glyph and reads as ending early. */
+ * toward the inline end to close that optical gap: 0.15em, where the bearing
+ * itself is only 0.04em, because ')' is a light curved glyph and reads as
+ * ending early. */
 .img-opt-header-kb,
 .img-opt-header-bytes,
 .img-opt-header-time {
-  text-align: right;
-  margin-right: -0.15em;
+  text-align: end;
+  margin-inline-end: -0.15em;
 }
 
 .img-opt-size-value,
 .img-opt-size-unit,
 .img-opt-time {
   /* The columns hold numbers, so they end where their heading ends. */
-  text-align: right;
+  text-align: end;
   /* Keeps the numbers from jittering as the rows fill in one after another. */
   font-variant-numeric: tabular-nums;
 }
@@ -263,11 +267,11 @@ div#reset-button-box {
 .img-opt-row.is-working .img-opt-time::before {
   content: "";
   display: inline-block;
-  width: 0.75em;
-  height: 0.75em;
-  margin-right: 0.4em;
+  inline-size: 0.75em;
+  block-size: 0.75em;
+  margin-inline-end: 0.4em;
   border: 2px solid currentColor;
-  border-top-color: transparent;
+  border-block-start-color: transparent;
   border-radius: 50%;
   animation: img-opt-spin 0.8s linear infinite;
 }
@@ -280,17 +284,17 @@ div#reset-button-box {
 
 @media screen and (max-width: 512px) {
   .modal {
-    width: 90%;
+    inline-size: 90%;
   }
   .modal-content {
     padding: 1rem;
-    width: 100%;
+    inline-size: 100%;
   }
   .modal-content fieldset {
     margin: 0;
   }
   .input-group {
-    padding-bottom: 2rem;
+    padding-block-end: 2rem;
   }
   /* The row keeps the desktop's single horizontal line; only the byte count's
    * column is dropped, and its heading goes with it, leaving the format, the
@@ -310,7 +314,8 @@ div#reset-button-box {
     justify-content: space-between;
     /* The side inset is desktop-only, like the SVG modal's fieldset margin.
      * The room at the bottom is the mobile half of the SVG modal's inset. */
-    margin: 0 0 2rem;
+    margin-block: 0 2rem;
+    margin-inline: 0;
   }
   .img-opt-header-bytes,
   .img-opt-size-unit {

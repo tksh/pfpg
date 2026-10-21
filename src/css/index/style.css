@@ -7,12 +7,13 @@ body {
   display: flex;
   flex-direction: column;
 
-  min-height: 100dvh;
+  min-block-size: 100dvh;
   /* ビューポートの高さいっぱいに拡張 */
 
-  margin-top: .5rem;
+  margin-block-start: .5rem;
 
-  padding: .5rem 1rem 0 1rem;
+  padding-block: .5rem 0;
+  padding-inline: 1rem;
 
   scrollbar-gutter: both-edges
     /* ボックスのインライン方向の先頭/末尾の端のどちらかにガターを表示した場合 反対側の端にもガターを表示 */;
@@ -44,45 +45,47 @@ body {
 }
 
 .tabs {
-  padding-left: 2rem;
+  padding-inline-start: 2rem;
 }
 
 .tab-content {
-  padding-left: 2rem;
+  padding-inline-start: 2rem;
 }
 
 .setting-item {
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
+  padding-block: 0.25rem;
 }
 
 /* .setting-container 要素の直接の子要素で、かつ.opt-cell 要素に対してのみ適用 */
 /* 'UI' tab内の <fieldset>子要素の .opt-cell は対象にならない */
 .setting-container > .setting-item {
-  margin-top: 1rem;
-  min-width: 16rem;
+  margin-block-start: 1rem;
+  min-inline-size: 16rem;
 }
 fieldset > .setting-item {
   /* SVG/PNG|PNG|SVG settings in UI tab */
-  margin-top: 0.75rem;
+  margin-block-start: 0.75rem;
 }
 
 legend {
-  padding: 0.25rem 1rem;
+  padding-block: 0.25rem;
+  padding-inline: 1rem;
 }
 
 fieldset {
-  margin: 0 1rem;
+  margin-block: 0;
+  margin-inline: 1rem;
   border-color: var(--color-fieldset-border);
   border-style: none;
 }
 
 /* On the "UI" tab, settings for the SVG and PNG output areas are categorized separately. */
 .tab-content fieldset {
-  margin: 1rem 0 0; /* margin-top: 1rem; */
+  margin-block: 1rem 0;
+  margin-inline: 0;
 }
 .tab-content legend {
-  padding-left: 0;
+  padding-inline-start: 0;
 }
 
 /* 横幅いっぱいに広げてから 左右に 1rem 余白を取る */
@@ -90,20 +93,20 @@ hr {
   /* デフォルトの枠線を消す */
   border: none;
   /* 上側だけに実線を引く */
-  border-top: solid 1px var(--color-info-bg-and-hr);
-  margin: 0 1rem;
+  border-block-start: solid 1px var(--color-info-bg-and-hr);
+  margin-block: 0;
+  margin-inline: 1rem;
 }
 
 main {
   flex-grow: 1;
-  padding-top: 1rem;
-  padding-bottom: 2rem;
+  padding-block: 1rem 2rem;
 }
 
 /* IDs */
 /* header */
 #customization {
-  width: calc(100% - 1rem);
+  inline-size: calc(100% - 1rem);
 }
 
 #input-and-output {
@@ -114,7 +117,7 @@ main {
 }
 
 .header-info {
-  width: 100%;
+  inline-size: 100%;
 }
 
 #svg-info,
@@ -123,14 +126,18 @@ main {
   word-break: keep-all;
   /* 幅に余裕があれば1行で表示され、狭くなった場合にのみ <wbr>の位置で改行 */
 
-  padding: 0.125rem 1rem; /* 上下0.125rem、左右1remの余白 */
+  padding-block: 0.125rem; /* 上下0.125remの余白 */
+  padding-inline: 1rem; /* 左右1remの余白 */
 
   font-size: 1rem;
   text-align: center;
   color: var(--color-info-text);
   background-color: var(--color-info-bg-and-hr);
 
-  border-radius: 0.25rem 0.25rem 0rem 0rem;
+  border-start-start-radius: 0.25rem;
+  border-start-end-radius: 0.25rem;
+  border-end-start-radius: 0rem;
+  border-end-end-radius: 0rem;
 }
 
 /* 改行したくない範囲を <span>要素で囲み 改行位置を任意の箇所 (<span>要素の切れ目) で行うようにする */
@@ -143,7 +150,7 @@ main {
 
 /* For #input and #output */
 .cell {
-  width: 50%;
+  inline-size: 50%;
   padding: 1rem;
   flex: 1;
   display: flex;
@@ -155,33 +162,34 @@ main {
 /* Boxes for png and svg */
 #textarea-box,
 #img-box {
-  width: 100%;
-  max-width: 100%;
+  inline-size: 100%;
+  max-inline-size: 100%;
   aspect-ratio: 1/1;
   padding: 0;
-  margin: 1.5rem auto;
+  margin-block: 1.5rem;
+  margin-inline: auto;
   align-items: center;
   text-align: center;
 }
 
 /* PNG image */
 div#img-box img {
-  max-height: 100%;
-  width: auto;
+  max-block-size: 100%;
+  inline-size: auto;
 }
 
 .fit-to-display-area {
   image-rendering: pixelated;
-  height: 100%;
+  block-size: 100%;
 }
 
 /* .actual-image-size
 
 /* actual-image-size クラスが付いている場合の設定 */
 #img-box img.actual-image-size {
-  height: auto;
+  block-size: auto;
   object-fit: none;
-  max-height: none; /* max-heightの制限を解除 */
+  max-block-size: none; /* max-block-sizeの制限を解除 */
 }
 
 /* actual-image-size クラスが付いている場合の img-box の設定 */
@@ -206,7 +214,7 @@ div#img-box img {
 
 /* SVG text area */
 #svg-string {
-  width: 100%;
+  inline-size: 100%;
   aspect-ratio: 1/1;
   resize: none;
 
@@ -220,26 +228,26 @@ header select,
 main textarea {
   color: var(--color-text-input);
   background-color: var(--color-input-textarea-select);
-  padding-left: 0.5rem;
+  padding-inline-start: 0.5rem;
   border: none;
 }
 
 textarea#svg-string.no-wrap {
   white-space: pre;
-  overflow-x: auto;
+  overflow-inline: auto;
 }
 
 div#group-colors-pickers {
-  padding-left: 1rem;
+  padding-inline-start: 1rem;
 }
 .setting-item-for-group-colors {
-  margin-top: 0.25rem;
-  padding-right: 1rem;
-  margin-top: 0.75rem;
+  margin-block-start: 0.25rem;
+  padding-inline-end: 1rem;
+  margin-block-start: 0.75rem;
 
   font-size: 0; /* 空白によるずれを防ぐ */
-  line-height: 1.25rem; /* stroke <div>, opacities <select> の height と同じ値に設定 */
-  align-items: center; /* height と line-height の併用時は必要 */
+  line-height: 1.25rem; /* stroke <div>, opacities <select> の block-size と同じ値に設定 */
+  align-items: center; /* block-size と line-height の併用時は必要 */
 }
 
 /* Font for 'gId' */
@@ -247,8 +255,8 @@ span.group-id-text {
   font-size: 0.9rem;
   vertical-align: middle; /* 垂直方向の中央揃え */
   box-sizing: border-box;
-  height: 1.25rem;
-  margin-right: 0.5rem;
+  block-size: 1.25rem;
+  margin-inline-end: 0.5rem;
 }
 
 /* Font for 'stroke', 'opacity', 'stroke-opacity' selector */
@@ -263,16 +271,16 @@ select.opacities-selector {
 /* Selected 'stroke' color indicator */
 div.stroke-thumbnail {
   display: inline-block;
-  height: 1.25rem;
-  padding-left: 0.5rem;
-  margin-right: 4px;
+  block-size: 1.25rem;
+  padding-inline-start: 0.5rem;
+  margin-inline-end: 4px;
 }
 
 /* 'opacity', 'stroke-opacity' */
 select.opacities-selector {
-  margin-right: 4px;
-  width: 3.5rem;
-  height: 1.25rem;
+  margin-inline-end: 4px;
+  inline-size: 3.5rem;
+  block-size: 1.25rem;
 }
 
 /* setting-item クラスを持つ <div> 要素内にある <input> 要素のみに スタイルを適用 */
@@ -283,10 +291,10 @@ div.setting-item input {
 
 /* 'stroke' */
 div.stroke-thumbnail.stroke-rgb {
-  width: 8.25rem;
+  inline-size: 8.25rem;
 }
 div.stroke-thumbnail.stroke-hex {
-  width: 5.5rem;
+  inline-size: 5.5rem;
 }
 
 /* Height pixel size, and the three Color randomization ranges: each is a
@@ -301,7 +309,7 @@ div.stroke-thumbnail.stroke-hex {
    <details> render wider than their declared widths and the trailing button
    wraps onto its own line. */
 div.setting-item input[type="number"] {
-  width: 4rem;
+  inline-size: 4rem;
   box-sizing: border-box;
 }
 
@@ -312,16 +320,16 @@ div.setting-item input[type="range"] {
 }
 
 .buttons-and-range button {
-  width: 1.25rem;
+  inline-size: 1.25rem;
   box-sizing: border-box;
 }
 
 .buttons-and-range button:first-of-type {
-  margin-left: 2rem;
-  margin-right: .5rem; /* スライダーとボタンの間の余白 */
+  margin-inline-start: 2rem;
+  margin-inline-end: .5rem; /* スライダーとボタンの間の余白 */
 }
 .buttons-and-range button:last-of-type {
-  margin-left: .5rem; /* スライダーとボタンの間の余白 */
+  margin-inline-start: .5rem; /* スライダーとボタンの間の余白 */
 }
 
 /* テキストカラー */
@@ -348,48 +356,52 @@ footer > details {
 }
 
 div#footer-info > details {
-  padding: 1.5rem 1rem 0.5rem 2rem;
+  padding-block: 1.5rem 0.5rem;
+  padding-inline: 2rem 1rem;
 }
 
 dl.top-level,
 section.showcase-container {
-  padding-left: 3rem;
+  padding-inline-start: 3rem;
 }
 
 dd {
-  padding: 0.25rem 0.5rem 0.25rem 1rem;
+  padding-block: 0.25rem;
+  padding-inline: 1rem 0.5rem;
 }
 
 dt {
-  padding: 1.5rem 0.5rem 0.25rem 0;
+  padding-block: 1.5rem 0.25rem;
+  padding-inline: 0 0.5rem;
 }
 div.reference-item,
 div.artwork-item {
-  padding-left: 1rem;
-  padding-top: 1rem;
+  padding-inline-start: 1rem;
+  padding-block-start: 1rem;
 }
 
 ol,
 ul,
 div.reference-container,
 div.artworks-container {
-  padding: 0 1rem;
+  padding-block: 0;
+  padding-inline: 1rem;
 }
 
-.padding-top-1 {
-  padding-top: 1.5rem;
+.padding-block-start-1 {
+  padding-block-start: 1.5rem;
 }
 
-.padding-top-2 {
-  padding-top: 3rem;
+.padding-block-start-2 {
+  padding-block-start: 3rem;
 }
 
-.padding-bottom-1 {
-  padding-bottom: 2rem;
+.padding-block-end-1 {
+  padding-block-end: 2rem;
 }
 
-.padding-left-1 {
-  padding-left: 1rem;
+.padding-inline-start-1 {
+  padding-inline-start: 1rem;
 }
 
 main button {
@@ -416,9 +428,9 @@ button#randomize-colors {
 
 button#png-action-button,
 button#svg-action-button {
-  max-width: 100%;
+  max-inline-size: 100%;
   --button-height: 3.5rem; /* ボタン全体の高さ */
-  /* height: var(--button-height); */
+  /* block-size: var(--button-height); */
   line-height: 1.4;
 
   white-space: normal;
@@ -432,7 +444,7 @@ button#svg-action-button {
 }
 
 .download-button {
-  width: 100%;
+  inline-size: 100%;
   display: flex;
   justify-content: center;
 }
@@ -477,12 +489,12 @@ footer a {
 
 .artwork-item {
   flex: 0 1 auto; /* Don't grow, can shrink, auto base size */
-  width: fit-content;
+  inline-size: fit-content;
 }
 
 details#showcase figure {
-  padding-left: 1rem;
-  padding-bottom: 3rem;
+  padding-inline-start: 1rem;
+  padding-block-end: 3rem;
 }
 
 /* Image title caption */
@@ -493,9 +505,9 @@ details#showcase figure {
 
 /* Fit image size to mobile display width */
 #showcase img {
-  width: 100%;
-  height: auto;
-  max-width: 256px;
+  inline-size: 100%;
+  block-size: auto;
+  max-inline-size: 256px;
 }
 
 @media screen and (max-width: 1024px) {
@@ -508,7 +520,7 @@ details#showcase figure {
 @media screen and (max-width: 512px) {
   body {
     padding: 0;
-    /* margin-top: .25rem; */
+    /* margin-block-start: .25rem; */
   }
   footer#footer-info {
     padding: 0.5rem;
@@ -520,8 +532,9 @@ details#showcase figure {
 
   #textarea-box,
   #img-box {
-    height: auto;
-    margin: 1rem auto; /* Decrease the top and bottom spaces in mobile view */
+    block-size: auto;
+    margin-block: 1rem; /* Decrease the top and bottom spaces in mobile view */
+    margin-inline: auto;
     /* default: 1.5rem; */
   }
 
@@ -534,15 +547,15 @@ details#showcase figure {
   }
 
   .tabs {
-    padding-left: 0;
+    padding-inline-start: 0;
   }
 
   .tab-content {
-    padding-left: 1rem;
+    padding-inline-start: 1rem;
   }
 
   .cell {
-    width: 100%;
+    inline-size: 100%;
   }
 
   #png-info,
@@ -551,32 +564,33 @@ details#showcase figure {
   }
 
   .setting-item-for-group-colors {
-    padding-left: 0;
+    padding-inline-start: 0;
   }
 
   /* .setting-container 要素の直接の子要素で、かつ.opt-cell 要素に対してのみ適用 */
   /* 'UI' tab内の <fieldset>子要素の .opt-cell は対象にならない */
   .setting-container > .setting-item {
-    margin-top: 0.5rem;
-    padding-left: 0;
+    margin-block-start: 0.5rem;
+    padding-inline-start: 0;
   }
   fieldset > .setting-item {
     /* SVG/PNG|PNG|SVG settings in UI tab */
-    margin-top: 0.25rem;
+    margin-block-start: 0.25rem;
   }
   .tab-content fieldset {
-    margin: 0.75rem 0 0; /* margin-top: 0.75rem; */
+    margin-block: 0.75rem 0;
+    margin-inline: 0;
   }
 
   /* >>> group-colors inputs */
 
   /* 'opacity', 'stroke-opacity' */
   select.opacities-selector {
-    margin-right: 8px; /* default + 4px */
+    margin-inline-end: 8px; /* default + 4px */
   }
   /* 'stroke' */
   div.stroke-thumbnail {
-    margin-right: 8px; /* default + 4px */
+    margin-inline-end: 8px; /* default + 4px */
   }
 
   /* <<< group-colors inputs */
@@ -587,49 +601,50 @@ details#showcase figure {
     flex-direction: column; /* 子要素を縦に並べる */
   }
   .buttons-and-range {
-    width: 100%;
-    padding-top: .75rem;
+    inline-size: 100%;
+    padding-block-start: .75rem;
   }
   .buttons-and-range input[type="range"] {
-    min-width: calc(100% - 7rem);
+    min-inline-size: calc(100% - 7rem);
   }
   .flex-direction-column .display-inline-block {
     display: inline-block;
   }
 
   .flex-direction-column .buttons-and-range button:first-of-type {
-    /* 左側のボタン '-' */
-    margin-right: 1rem;
-    /* 右側に余白を追加 - タッチ操作しやすいように モバイルの時に より大きく余白を作る*/
+    /* '-' のボタン */
+    margin-inline-end: 1rem;
+    /* ボタンの外側に余白を追加 - タッチ操作しやすいように モバイルの時に より大きく余白を作る*/
 
-    margin-left: 1rem;
+    margin-inline-start: 1rem;
     /* モバイルでは改行がされ 隣に数値インプットボックスが無いので 余白をPCより狭くする */
   }
   .flex-direction-column .buttons-and-range button:last-of-type {
-    /* 右側のボタン '+' */
-    margin-left: 1rem;
-    /* 左側に余白を追加 - タッチ操作しやすいように モバイルの時に より大きく余白を作る*/
+    /* '+' のボタン */
+    margin-inline-start: 1rem;
+    /* ボタンの外側に余白を追加 - タッチ操作しやすいように モバイルの時に より大きく余白を作る*/
   }
 
   /* <<< 'Height pixel size', 'Color randomization' - buttons and input[range] */
 
   legend {
-    padding-left: 0.5rem;
+    padding-inline-start: 0.5rem;
   }
   dl.top-level,
   section.showcase-container {
-    padding-left: 1.5rem;
+    padding-inline-start: 1.5rem;
   }
 
   div.reference-container,
   div.artworks-container {
-    padding: 0 0.5rem;
+    padding-block: 0;
+    padding-inline: 0.5rem;
   }
 
   div.reference-item,
   div.artwork-item {
-    padding-left: 0rem;
-    padding-top: 1rem;
+    padding-inline-start: 0;
+    padding-block-start: 1rem;
   }
 
   .artworks-container {
@@ -638,8 +653,8 @@ details#showcase figure {
   }
 
   details#showcase figure {
-    padding-left: 0.5rem;
-    padding-bottom: 1.5rem;
+    padding-inline-start: 0.5rem;
+    padding-block-end: 1.5rem;
   }
 }
 
@@ -647,14 +662,14 @@ details#showcase figure {
 @media screen and (max-width: 375px) {
   /* 'opacity', 'stroke-opacity' */
   select.opacities-selector {
-    width: 3.25rem; /* default - 0.25rem */
+    inline-size: 3.25rem; /* default - 0.25rem */
   }
 
   /* 'stroke' */
   div.stroke-thumbnail.stroke-rgb {
-    width: 8rem; /* default - 0.25rem */
+    inline-size: 8rem; /* default - 0.25rem */
   }
   div.stroke-thumbnail.stroke-hex {
-    width: 5.25rem; /* default - 0.25rem */
+    inline-size: 5.25rem; /* default - 0.25rem */
   }
 }

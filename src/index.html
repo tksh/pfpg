@@ -46,7 +46,7 @@
 
   <body>
     <header>
-      <div id="customization" class="padding-left-1">
+      <div id="customization" class="padding-inline-start-1">
         <div class="tab-link-container">
           <button class="tab-link" data-tab="tab-1">Lines</button>
           <button class="tab-link" data-tab="tab-2">Canvas</button>
@@ -68,18 +68,18 @@
             </div>
             <div class="setting-item">
               <p
-                class="padding-left-1"><i>id</i>: <i>stroke</i>, <i>opacity</i>, <i>stroke-opacity</i></p>
+                class="padding-inline-start-1"><i>id</i>: <i>stroke</i>, <i>opacity</i>, <i>stroke-opacity</i></p>
             </div>
           </div>
 
           <!-- Insert generated color picker elements -->
           <div id="group-colors-pickers" class="setting-container"></div>
 
-          <details id="artwork-format" class="padding-top-1">
+          <details id="artwork-format" class="padding-block-start-1">
             <summary
               class="font-size-small font-color-lighter">Artwork format:</summary>
 
-            <div class="padding-left-1">
+            <div class="padding-inline-start-1">
               <!-- Path mode -->
               <div class="setting-container">
                 <div class="setting-item">
@@ -126,11 +126,11 @@
 
           <!-- A sibling of the collapsible above, not nested inside it: this
             feature acts on the colors rather than configuring the lines' format. -->
-          <details id="color-randomization" class="padding-top-1">
+          <details id="color-randomization" class="padding-block-start-1">
             <summary
               class="font-size-small font-color-lighter">Color randomization:</summary>
 
-            <div class="padding-left-1">
+            <div class="padding-inline-start-1">
               <!-- The randomization trigger, and the hint's ⓘ beside it -->
               <div class="setting-container">
                 <div class="setting-item">
@@ -315,7 +315,7 @@
           </div>
 
           <!-- Three options for 'Squircle, slimmed' -->
-          <div id="squircle-slimmed-options" class="padding-left-1">
+          <div id="squircle-slimmed-options" class="padding-inline-start-1">
             <!-- Width narrowness -->
             <div id="width-narrowness-div"
               class="setting-container display-none">
@@ -423,7 +423,7 @@
 
           <!-- Last rendering time -->
           <div class="setting-container">
-            <div class="setting-item padding-top-1">
+            <div class="setting-item padding-block-start-1">
               <p id="last-rendering-time"
                 class="font-size-small font-color-lighter"></p>
             </div>
@@ -468,7 +468,7 @@
                 class="font-size-small font-color-lighter">PNG/SVG:</legend>
 
               <!-- Button action -->
-              <div class="setting-item padding-left-1">
+              <div class="setting-item padding-inline-start-1">
                 <label for="button-action">Button action: </label>
                 <select id="button-action">
                   <option value="download" selected>Download as file</option>
@@ -483,7 +483,7 @@
               <legend class="font-size-small font-color-lighter">PNG:</legend>
 
               <!-- View scaling -->
-              <div class="setting-item padding-left-1">
+              <div class="setting-item padding-inline-start-1">
                 <label for="view-scaling">View scaling: </label>
                 <select name="view-scaling" id="view-scaling"
                   autocomplete="off">
@@ -493,7 +493,7 @@
               </div>
 
               <!-- Checkerboard background -->
-              <div class="setting-item padding-left-1">
+              <div class="setting-item padding-inline-start-1">
                 <label for="checkerboard-bg">Checkerboard background: </label>
                 <input type="checkbox" id="checkerboard-bg"
                   name="checkerboard-bg" value="enabled" checked>
@@ -506,7 +506,7 @@
               <legend class="font-size-small font-color-lighter">SVG:</legend>
 
               <!-- Text wrapping -->
-              <div class="setting-item padding-left-1">
+              <div class="setting-item padding-inline-start-1">
                 <label for="text-wrapping">Text wrapping: </label>
                 <input type="checkbox" id="text-wrapping" name="text-wrapping"
                   value="enabled">
@@ -516,7 +516,7 @@
         </div>
         <!-- end of <div id="tab-4" class="tab-content"> -->
       </div>
-      <!-- end of <div id="customization" class="padding-left-1"> -->
+      <!-- end of <div id="customization" class="padding-inline-start-1"> -->
     </header>
 
     <main>
@@ -575,7 +575,7 @@
                   value="enabled">
                 <label
                   for="remove-opacity">Remove Default Opacity(= 1.0) Attributes</label>
-                <div class="example padding-left-1">
+                <div class="example padding-inline-start-1">
                   <code id="before-remove-opacity"
                     class="option-applied">&lt;g stroke=&quot;rgb(0 0 0)&quot; opacity=&quot;1.0&quot; stroke-opacity=&quot;1.0&quot;&gt;</code>
                   <span
@@ -589,7 +589,7 @@
                 <input type="checkbox" id="remove-line-breaks"
                   name="remove-line-breaks" value="enabled">
                 <label for="remove-line-breaks">Remove Line Breaks</label>
-                <div class="example padding-left-1">
+                <div class="example padding-inline-start-1">
                   <code id="before-remove-line-breaks" class="option-applied">
                                     &lt;tag&gt;<br>
                                     &emsp;&emsp;content-text<br>
@@ -607,7 +607,7 @@
                 <input type="checkbox" id="remove-spaces" name="remove-spaces"
                   value="enabled" checked>
                 <label for="remove-spaces">Remove Extra Spaces</label>
-                <div class="example padding-left-1">
+                <div class="example padding-inline-start-1">
                   <code id="before-remove-spaces"
                     class="option-applied">&lt;path d="M 12 34 L 56 78" /&gt;</code>
                   <span
@@ -724,7 +724,7 @@
                 <input type="checkbox" id="image-custom" name="image-custom"
                   value="enabled" checked>
                 <label for="image-custom">Image Customization</label>
-                <div class="example padding-left-1">
+                <div class="example padding-inline-start-1">
                   <p>All settings in the <i>Lines</i>, <i>Canvas</i>, and <i>Render</i> tabs.</p>
                 </div>
               </div>
@@ -733,7 +733,7 @@
                 <input type="checkbox" id="ui-config" name="ui-config"
                   value="enabled">
                 <label for="ui-config">UI Configuration</label>
-                <div class="example padding-left-1">
+                <div class="example padding-inline-start-1">
                   <p>All settings in the <i>UI</i> tab.</p>
                 </div>
               </div>
@@ -742,7 +742,7 @@
                 <input type="checkbox" id="svg-optimize" name="svg-optimize"
                   value="enabled">
                 <label for="svg-optimize">SVG Optimization</label>
-                <div class="example padding-left-1">
+                <div class="example padding-inline-start-1">
                   <p>All settings in the modal window accessed via the SVG textarea.</p>
                 </div>
               </div>
@@ -769,7 +769,7 @@
         <summary>Usage</summary>
         <dl class="top-level">
           <dt>Basic flow:</dt>
-          <dd class="padding-top-1">
+          <dd class="padding-block-start-1">
             <ol>
               <li>Import artwork data from a URL containing a <a href="https://en.wikipedia.org/wiki/Query_string" title="Query string - Wikipedia">query string</a>.</li>
               <li>Modify your artwork freely using the options in each category tab.</li>
@@ -777,9 +777,9 @@
             </ol>
           </dd>
         </dl>
-        <dl class="top-level padding-top-1 padding-bottom-1">
+        <dl class="top-level padding-block-start-1 padding-block-end-1">
           <dt>Configuration options:</dt>
-          <dd class="padding-left-1">
+          <dd class="padding-inline-start-1">
             <dl>
               <dt>Tab Sections:</dt>
               <dd>
@@ -814,15 +814,17 @@
       </details>
       <details id="showcase">
         <summary>Showcase</summary>
-        <section class="showcase-container padding-top-1 padding-bottom-1">
-          <p class="padding-bottom-1">
+        <section
+          class="showcase-container padding-block-start-1 padding-block-end-1">
+          <p class="padding-block-end-1">
                     Reference Photo and Derived Artworks (click/tap image to jump)
                 </p>
 
           <figure>
             <p>Reference photo:</p>
             <!-- Reference photo container for fixed layout with single image-->
-            <div class="reference-container padding-top-1 padding-bottom-1">
+            <div
+              class="reference-container padding-block-start-1 padding-block-end-1">
               <div class="reference-item">
                 <figcaption>
                                 <span>By <a href="https://unsplash.com/@chrisjoelcampbell">Christopher Campbell</a></span><span>&nbsp;on&nbsp;<a href="https://unsplash.com/">Unsplash.com</a></span>
@@ -842,7 +844,8 @@
           <figure>
             <p>Artworks:</p>
             <!-- Artwork container for responsive layout with multiple images -->
-            <div class="artworks-container padding-top-1 padding-bottom-1">
+            <div
+              class="artworks-container padding-block-start-1 padding-block-end-1">
               <!-- First artwork -->
               <div class="artwork-item">
                 <figcaption>
@@ -952,6 +955,6 @@
       </details>
 
       <p
-        class="text-align-center padding-top-2">© 2023-present, SAITO Takashi (tksh)</p>
+        class="text-align-center padding-block-start-2">© 2023-present, SAITO Takashi (tksh)</p>
     </footer>
   </body>

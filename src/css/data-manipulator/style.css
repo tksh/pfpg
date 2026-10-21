@@ -3,7 +3,7 @@
 }
 
 h2 {
-  padding-left: 1rem;
+  padding-inline-start: 1rem;
   font-size: 2rem;
   font-weight: normal;
 }
@@ -18,7 +18,7 @@ h2 .no-wrap {
 @media screen and (max-width: 512px) {
   h2 .display-block {
     display: block;
-    padding-left: 1rem;
+    padding-inline-start: 1rem;
   }
 }
 
@@ -26,12 +26,12 @@ h3 {
   background-color: #0009;
   color: white;
   letter-spacing: .1rem;
-  padding-left: .2rem;
+  padding-inline-start: .2rem;
 }
 
 h4 {
   background-color: #fff6;
-  padding-left: .2rem;
+  padding-inline-start: .2rem;
 }
 
 button,
@@ -46,9 +46,9 @@ input[type="file"]::file-selector-button:hover {
 }
 
 textarea {
-  width: 100%;
+  inline-size: 100%;
   background-color: #fffc;
-  margin-bottom: 1rem;
+  margin-block-end: 1rem;
   resize: vertical;
   word-break: break-all;
   font-family: monospace, ui-monospace;
@@ -66,19 +66,19 @@ button,
 /* <input type="file"> */ ::-webkit-file-upload-button {
   /* <input type="file"> */
   padding: .7rem;
-  min-height: 4rem;
+  min-block-size: 4rem;
 }
 
-.height-0 {
-  height: 1rem;
+.block-size-0 {
+  block-size: 1rem;
 }
 
-.height-1 {
-  height: 8rem;
+.block-size-1 {
+  block-size: 8rem;
 }
 
-.height-2 {
-  height: 16rem;
+.block-size-2 {
+  block-size: 16rem;
 }
 
 .bg-0 {

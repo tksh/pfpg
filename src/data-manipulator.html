@@ -33,7 +33,7 @@
       <br />
 
       <!-- Textarea to input the basic data json -->
-      <textarea id="textarea-basic-data-uploaded" class="height-1"
+      <textarea id="textarea-basic-data-uploaded" class="block-size-1"
         placeholder="./json_extracted/%{ARTWORK_ID}_basic_data.json">{
             "bits": "~5",
             "version": "~0.9.0",
@@ -55,7 +55,7 @@
         id="encode-basic-data">Encode via <b>encodeBasicData()</b></button>
 
       <!-- Textarea to output the basic data encoded -->
-      <textarea id="textarea-basic-data-encoded" class="height-0"
+      <textarea id="textarea-basic-data-encoded" class="block-size-0"
         placeholder="Basic Data encoded"></textarea>
       <!-- Show the result -->
       <p id="encoded-basic-data-size"></p>
@@ -70,7 +70,7 @@
       <br />
       <input type="file" id="select-file-lines-data" />
       <br />
-      <textarea id="textarea-lines-data-uploaded" class="height-1"
+      <textarea id="textarea-lines-data-uploaded" class="block-size-1"
         placeholder="./json_extracted/%{ARTWORK_ID}_lines_data.json">[
             {
                 "g_id": 0,
@@ -134,7 +134,7 @@
       <br />
       <input type="file" id="select-file-agg-data-for-comp" />
       <br />
-      <textarea id="textarea-agg-data-for-comp-uploaded" class="height-1"
+      <textarea id="textarea-agg-data-for-comp-uploaded" class="block-size-1"
         placeholder="./json_extracted/%{ARTWORK_ID}_liens_data_aggregated_for_encoding.json">[
             {
                 "g_id": 0,
@@ -282,7 +282,7 @@
       <br />
 
       <!-- Textarea to output the lines data encoded -->
-      <textarea id="textarea-lines-data-encoded" class="height-1"
+      <textarea id="textarea-lines-data-encoded" class="block-size-1"
         placeholder="Lines Data encoded"></textarea>
       <!-- Show the result -->
       <p id="encoded-lines-data-size"></p>
@@ -294,7 +294,7 @@
       <h4>3. ⬇ Finished query string:</h4>
       <button
         id="button-to-merge-as-url-params">Merge via <b>mergeBasicDataAndLinesData()</b></button>
-      <textarea id="textarea-encoded-url-params" class="height-2"
+      <textarea id="textarea-encoded-url-params" class="block-size-2"
         placeholder="Finished query string = encoded Basic Data url params + encoded Lines Data url params"></textarea>
 
       <!-- Button to copy -->
@@ -312,7 +312,7 @@
       <h3>Decode the url params to generate the SVG string</h3>
 
       <h4>⬇ Path mode: Relative and Merged</h4>
-      <textarea id="textarea-decoded-svg-as-rel" class="height-2"
+      <textarea id="textarea-decoded-svg-as-rel" class="block-size-2"
         placeholder="If inputted text at address bar includes the url params like /data-manipulator.html?..., Decoding to SVG is automatically starts when page loaded and result text will export here."></textarea>
       <button class="copy-button"
         data-textarea-id="textarea-decoded-svg-as-rel">Copy to clipboard</button>
@@ -320,7 +320,7 @@
       <p id="encoded-lines-data-time-for-rel"></p>
 
       <h4>⬇ Path mode: Absolute and Separated</h4>
-      <textarea id="textarea-decoded-svg-as-abs" class="height-2"
+      <textarea id="textarea-decoded-svg-as-abs" class="block-size-2"
         placeholder="If inputted text at address bar includes the url params like /data-manipulator.html?..., Decoding to SVG is automatically starts when page loaded and result text will export here."></textarea>
       <button class="copy-button"
         data-textarea-id="textarea-decoded-svg-as-abs">Copy to clipboard</button>
