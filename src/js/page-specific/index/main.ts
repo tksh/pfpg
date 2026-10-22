@@ -6,6 +6,7 @@ import {
   initViewportLister,
 } from "init/adjust-layout";
 import { initTabs } from "init/tab-setup";
+import { applyLocaleFromUrl, initLanguageSelector } from "i18n/i18n";
 import {
   initImageOptimizationModalToggle,
   initSvgOptimizationModalToggle,
@@ -46,6 +47,10 @@ import {
   initThemeColorSelect,
 } from "tab-ui/theme-color";
 import { initViewScalingSelect } from "tab-ui/view-scaling";
+
+// Module scripts run after the DOM is parsed, so the locale from the URL can
+// be applied before anything renders or any JS text is produced.
+applyLocaleFromUrl();
 
 (async function (): Promise<void> {
   // Initialize sample artwork data.
@@ -171,6 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initImageFormatSelect();
 
   // Tab - UI
+  initLanguageSelector();
   initViewScalingSelect();
   initCheckerboardBgCheckbox();
   initTextWrappingCheckbox();

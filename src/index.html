@@ -485,6 +485,18 @@
         <div id="tab-4" class="tab-content">
           <!-- UI -->
 
+          <!-- Language. The option labels are endonyms: they must stay
+            readable under whichever language is currently applied. -->
+          <div class="setting-container">
+            <div class="setting-item">
+              <label for="language" data-i18n="ui.language">Language: </label>
+              <select name="language" id="language" autocomplete="off">
+                <option value="en" selected>English</option>
+                <option value="ja">日本語</option>
+              </select>
+            </div>
+          </div>
+
           <!-- Theme -->
           <div class="setting-container">
             <div class="setting-item">
