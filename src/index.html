@@ -48,10 +48,14 @@
     <header>
       <div id="customization" class="padding-inline-start-1">
         <div class="tab-link-container">
-          <button class="tab-link" data-tab="tab-1">Lines</button>
-          <button class="tab-link" data-tab="tab-2">Canvas</button>
-          <button class="tab-link" data-tab="tab-3">Render</button>
-          <button class="tab-link" data-tab="tab-4">UI</button>
+          <button class="tab-link" data-tab="tab-1"
+            data-i18n="tabs.lines">Lines</button>
+          <button class="tab-link" data-tab="tab-2"
+            data-i18n="tabs.canvas">Canvas</button>
+          <button class="tab-link" data-tab="tab-3"
+            data-i18n="tabs.render">Render</button>
+          <button class="tab-link" data-tab="tab-4"
+            data-i18n="tabs.ui">UI</button>
           <button class="icon-tab-link" data-tab="tab-5"
             id="reset-icon" command="show-modal"
             commandfor="reset-settings-modal"><span
@@ -64,7 +68,8 @@
           <!-- Color-pickers for group colors (Generated dynamically) -->
           <div id="group-colors-header" class="setting-container">
             <div class="setting-item">
-              <p>Color and two opacities for line groups:</p>
+              <p data-i18n="lines.groups.header">Color and two opacities
+                for line groups:</p>
             </div>
             <div class="setting-item">
               <p
@@ -76,22 +81,25 @@
           <div id="group-colors-pickers" class="setting-container"></div>
 
           <details id="artwork-format" class="padding-block-start-1">
-            <summary
+            <summary data-i18n="lines.artworkFormatSummary"
               class="font-size-small font-color-lighter">Artwork format:</summary>
 
             <div class="padding-inline-start-1">
               <!-- Path mode -->
               <div class="setting-container">
                 <div class="setting-item">
-                  <label for="path-mode">Path mode: </label>
+                  <label for="path-mode"
+                    data-i18n="lines.pathMode">Path mode: </label>
                   <select name="path-mode" id="path-mode">
-                    <option
-                      value="absoluteSeparated">Absolute and separated</option>
-                    <option value="relativeMerged">Relative and merged</option>
+                    <option value="absoluteSeparated"
+                      data-i18n="lines.pathMode.absoluteSeparated">Absolute and separated</option>
+                    <option value="relativeMerged"
+                      data-i18n="lines.pathMode.relativeMerged">Relative and merged</option>
                   </select>
                   <button type="button" class="info-icon"
                     id="path-mode-info"
                     popovertarget="path-mode-hint"
+                    data-i18n-aria="lines.pathMode.info"
                     aria-label="What does the Path mode option do?">
                     <span class="material-symbols-outlined">info</span>
                   </button>
@@ -101,7 +109,8 @@
               <!-- Opacity steps -->
               <div class="setting-container">
                 <div class="setting-item">
-                  <label for="opacity-steps">Opacity steps: </label>
+                  <label for="opacity-steps"
+                    data-i18n="lines.opacitySteps">Opacity steps: </label>
                   <select name="opacity-steps" id="opacity-steps"
                     autocomplete="off">
                     <option value="0.04">0.04</option>
@@ -114,7 +123,8 @@
               <!-- Color format -->
               <div class="setting-container">
                 <div class="setting-item">
-                  <label for="color-format">Color format: </label>
+                  <label for="color-format"
+                    data-i18n="lines.colorFormat">Color format: </label>
                   <select name="color-format" id="color-format">
                     <option value="rgb">RGB</option>
                     <option value="hex">Hex</option>
@@ -127,7 +137,7 @@
           <!-- A sibling of the collapsible above, not nested inside it: this
             feature acts on the colors rather than configuring the lines' format. -->
           <details id="color-randomization" class="padding-block-start-1">
-            <summary
+            <summary data-i18n="lines.colorRandomizationSummary"
               class="font-size-small font-color-lighter">Color randomization:</summary>
 
             <div class="padding-inline-start-1">
@@ -135,10 +145,12 @@
               <div class="setting-container">
                 <div class="setting-item">
                   <button type="button"
-                    id="randomize-colors">Randomize colors</button>
+                    id="randomize-colors"
+                    data-i18n="lines.randomizeColors">Randomize colors</button>
                   <button type="button" class="info-icon"
                     id="randomize-colors-info"
                     popovertarget="randomize-hint"
+                    data-i18n-aria="lines.randomizeColors.info"
                     aria-label="What do the Color randomization options do?">
                     <span class="material-symbols-outlined">info</span>
                   </button>
@@ -149,7 +161,8 @@
               <div class="setting-container">
                 <div class="setting-item flex-direction-column">
                   <div class="display-inline-block">
-                    <label for="lightness-number">Lightness range: </label>
+                    <label for="lightness-number"
+                      data-i18n="lines.lightnessRange">Lightness range: </label>
                     <input type="number" id="lightness-number"
                       name="lightness-number" min="0" max="1" step="0.01"
                       value="0.1" autocomplete="off">
@@ -169,7 +182,8 @@
               <div class="setting-container">
                 <div class="setting-item flex-direction-column">
                   <div class="display-inline-block">
-                    <label for="chroma-number">Chroma range: </label>
+                    <label for="chroma-number"
+                      data-i18n="lines.chromaRange">Chroma range: </label>
                     <input type="number" id="chroma-number" name="chroma-number"
                       min="0" max="0.4" step="0.01" value="0.2"
                       autocomplete="off">
@@ -188,7 +202,8 @@
               <div class="setting-container">
                 <div class="setting-item flex-direction-column">
                   <div class="display-inline-block">
-                    <label for="hue-number">Hue range: </label>
+                    <label for="hue-number"
+                      data-i18n="lines.hueRange">Hue range: </label>
                     <input type="number" id="hue-number" name="hue-number"
                       min="0" max="180" step="1" value="90" autocomplete="off">
                   </div>
@@ -204,11 +219,14 @@
               <!-- Distribution -->
               <div class="setting-container">
                 <div class="setting-item">
-                  <label for="randomization-distribution">Distribution: </label>
+                  <label for="randomization-distribution"
+                    data-i18n="lines.distribution">Distribution: </label>
                   <select name="randomization-distribution"
                     id="randomization-distribution" autocomplete="off">
-                    <option value="uniform" selected>Uniform</option>
-                    <option value="triangular">Triangular</option>
+                    <option value="uniform" selected
+                      data-i18n="lines.distribution.uniform">Uniform</option>
+                    <option value="triangular"
+                      data-i18n="lines.distribution.triangular">Triangular</option>
                   </select>
                 </div>
               </div>
@@ -216,16 +234,19 @@
               <!-- Anchor, directly below Distribution — the two are a pair -->
               <div class="setting-container">
                 <div class="setting-item">
-                  <label for="randomization-base">Anchor: </label>
+                  <label for="randomization-base"
+                    data-i18n="lines.anchor">Anchor: </label>
                   <select name="randomization-base"
                     id="randomization-base" autocomplete="off">
-                    <option value="original"
-                      selected>Original line colors</option>
-                    <option value="current">Current line colors</option>
+                    <option value="original" selected
+                      data-i18n="lines.anchor.original">Original line colors</option>
+                    <option value="current"
+                      data-i18n="lines.anchor.current">Current line colors</option>
                   </select>
                   <button type="button" class="info-icon"
                     id="randomization-base-info"
                     popovertarget="randomization-base-hint"
+                    data-i18n-aria="lines.anchor.info"
                     aria-label="What does the Anchor option do?">
                     <span class="material-symbols-outlined">info</span>
                   </button>
@@ -247,7 +268,8 @@
           <dialog id="randomize-hint" class="hint-dialog" popover
             closedby="any">
             <div class="hint-content">
-              <p class="font-size-small">
+              <p class="font-size-small"
+                data-i18n="hint.randomizeRange">
                 0 keeps each color's original value; a larger value widens its
                 random range. Hue has no effect on gray, whose chroma is zero,
                 so raise Chroma range as well to change a gray's color.
@@ -266,7 +288,7 @@
           <dialog id="randomization-base-hint" class="hint-dialog" popover
             closedby="any">
             <div class="hint-content">
-              <p class="font-size-small">
+              <p class="font-size-small" data-i18n-html="hint.anchor">
                 <i>Original line colors</i> draws every group from the colors the
                 artwork defines, ignoring any color override in the link, so
                 repeated clicks give variations of the same palette;
@@ -284,7 +306,7 @@
           <dialog id="path-mode-hint" class="hint-dialog" popover
             closedby="any">
             <div class="hint-content">
-              <p class="font-size-small">
+              <p class="font-size-small" data-i18n-html="hint.pathMode">
                 <i>Relative and merged</i>: 'stroke-opacity' applies to entire
                 line groups. <i>Absolute and separated</i>: 'stroke-opacity'
                 applies to individual lines.
@@ -303,13 +325,18 @@
           <!-- Shape to trim -->
           <div class="setting-container">
             <div class="setting-item">
-              <label for="shape-to-trim">Shape to trim: </label>
+              <label for="shape-to-trim"
+                data-i18n="canvas.shapeToTrim">Shape to trim: </label>
               <select name="shape-to-trim" id="shape-to-trim"
                 autocomplete="off">
-                <option value="square" selected>Square</option>
-                <option value="circle">Circle</option>
-                <option value="squircle">Squircle</option>
-                <option value="squircleSlimmed">Squircle, slimmed</option>
+                <option value="square" selected
+                  data-i18n="canvas.shape.square">Square</option>
+                <option value="circle"
+                  data-i18n="canvas.shape.circle">Circle</option>
+                <option value="squircle"
+                  data-i18n="canvas.shape.squircle">Squircle</option>
+                <option value="squircleSlimmed"
+                  data-i18n="canvas.shape.squircleSlimmed">Squircle, slimmed</option>
               </select>
             </div>
           </div>
@@ -320,7 +347,8 @@
             <div id="width-narrowness-div"
               class="setting-container display-none">
               <div class="setting-item">
-                <label for="width-narrowness">Width narrowness: </label>
+                <label for="width-narrowness"
+                  data-i18n="canvas.widthNarrowness">Width narrowness: </label>
                 <select name="width-narrowness" id="width-narrowness"
                   autocomplete="off">
                   <option value="0">0</option>
@@ -346,7 +374,8 @@
             <div id="top-heavy-ratio-div"
               class="setting-container display-none">
               <div class="setting-item">
-                <label for="top-heavy-ratio">Top-heavy ratio: </label>
+                <label for="top-heavy-ratio"
+                  data-i18n="canvas.topHeavyRatio">Top-heavy ratio: </label>
                 <select name="top-heavy-ratio" id="top-heavy-ratio"
                   autocomplete="off">
                   <option value="3">3</option>
@@ -364,7 +393,8 @@
             <div id="crop-side-margins-div"
               class="setting-container display-none">
               <div class="setting-item">
-                <label for="crop-side-margins">Crop side margins:</label>
+                <label for="crop-side-margins"
+                  data-i18n="canvas.cropSideMargins">Crop side margins:</label>
                 <input type="checkbox" name="crop-side-margins"
                   id="crop-side-margins" autocomplete="off">
               </div>
@@ -378,12 +408,14 @@
           <!-- Anti-aliasing -->
           <div class="setting-container">
             <div class="setting-item">
-              <label for="shape-rendering">Anti-aliasing: </label>
+              <label for="shape-rendering"
+                data-i18n="render.antiAliasing">Anti-aliasing: </label>
               <select name="shape-rendering" id="shape-rendering"
                 autocomplete="off">
-                <option value="crispEdges" selected>Off (crispEdges)</option>
-                <option
-                  value="geometricPrecision">On (geometricPrecision)</option>
+                <option value="crispEdges" selected
+                  data-i18n="render.antiAliasing.off">Off (crispEdges)</option>
+                <option value="geometricPrecision"
+                  data-i18n="render.antiAliasing.on">On (geometricPrecision)</option>
               </select>
             </div>
           </div>
@@ -392,11 +424,13 @@
           <div class="setting-container">
             <div class="setting-item flex-direction-column">
               <div class="display-inline-block">
-                <label for="png-size-number">Height pixel size:</label>
+                <label for="png-size-number"
+                  data-i18n="render.heightPixelSize">Height pixel size:</label>
                 <input type="number" id="png-size-number" name="png-size-number"
                   class="width-size" min="1" value="256" autocomplete="off">
                 <button type="button" class="info-icon" id="png-size-info"
                   popovertarget="png-size-hint"
+                  data-i18n-aria="render.heightPixelSize.info"
                   aria-label="How large can the Height pixel size option be?">
                   <span class="material-symbols-outlined">info</span>
                 </button>
@@ -413,10 +447,12 @@
           <!-- Image format -->
           <div class="setting-container">
             <div class="setting-item">
-              <label for="image-format">Image format: </label>
+              <label for="image-format"
+                data-i18n="render.imageFormat">Image format: </label>
               <select name="image-format" id="image-format" autocomplete="off">
                 <option value="png" selected>PNG</option>
-                <option value="webp">WebP (lossless)</option>
+                <option value="webp"
+                  data-i18n="render.imageFormat.webpLossless">WebP (lossless)</option>
               </select>
             </div>
           </div>
@@ -433,7 +469,7 @@
             <details>, so it needs no parking outside one. -->
           <dialog id="png-size-hint" class="hint-dialog" popover closedby="any">
             <div class="hint-content">
-              <p class="font-size-small">
+              <p class="font-size-small" data-i18n="hint.pngSize">
                 The slider supports sizes up to 512 pixels, but you can manually
                 enter a larger value into the box. Larger sizes will
                 exponentially increase rendering time.
@@ -452,27 +488,35 @@
           <!-- Theme -->
           <div class="setting-container">
             <div class="setting-item">
-              <label for="theme-color">Theme color: </label>
+              <label for="theme-color"
+                data-i18n="ui.themeColor">Theme color: </label>
               <select name="theme-color" id="theme-color" autocomplete="off">
-                <option value="white">White</option>
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
-                <option value="black" selected>Black</option>
+                <option value="white"
+                  data-i18n="ui.themeColor.white">White</option>
+                <option value="light"
+                  data-i18n="ui.themeColor.light">Light</option>
+                <option value="dark"
+                  data-i18n="ui.themeColor.dark">Dark</option>
+                <option value="black" selected
+                  data-i18n="ui.themeColor.black">Black</option>
               </select>
             </div>
           </div>
 
           <div class="setting-container">
             <fieldset>
-              <legend
+              <legend data-i18n="ui.legend.pngSvg"
                 class="font-size-small font-color-lighter">PNG/SVG:</legend>
 
               <!-- Button action -->
               <div class="setting-item padding-inline-start-1">
-                <label for="button-action">Button action: </label>
+                <label for="button-action"
+                  data-i18n="ui.buttonAction">Button action: </label>
                 <select id="button-action">
-                  <option value="download" selected>Download as file</option>
-                  <option value="copy">Copy to clipboard</option>
+                  <option value="download" selected
+                    data-i18n="ui.buttonAction.download">Download as file</option>
+                  <option value="copy"
+                    data-i18n="ui.buttonAction.copy">Copy to clipboard</option>
                 </select>
               </div>
             </fieldset>
@@ -480,21 +524,26 @@
 
           <div class="setting-container">
             <fieldset>
-              <legend class="font-size-small font-color-lighter">PNG:</legend>
+              <legend data-i18n="ui.legend.png"
+                class="font-size-small font-color-lighter">PNG:</legend>
 
               <!-- View scaling -->
               <div class="setting-item padding-inline-start-1">
-                <label for="view-scaling">View scaling: </label>
+                <label for="view-scaling"
+                  data-i18n="ui.viewScaling">View scaling: </label>
                 <select name="view-scaling" id="view-scaling"
                   autocomplete="off">
-                  <option value="fit" selected>Fit to display area</option>
-                  <option value="actual">Actual image size</option>
+                  <option value="fit" selected
+                    data-i18n="ui.viewScaling.fit">Fit to display area</option>
+                  <option value="actual"
+                    data-i18n="ui.viewScaling.actual">Actual image size</option>
                 </select>
               </div>
 
               <!-- Checkerboard background -->
               <div class="setting-item padding-inline-start-1">
-                <label for="checkerboard-bg">Checkerboard background: </label>
+                <label for="checkerboard-bg"
+                  data-i18n="ui.checkerboardBg">Checkerboard background: </label>
                 <input type="checkbox" id="checkerboard-bg"
                   name="checkerboard-bg" value="enabled" checked>
               </div>
@@ -503,11 +552,13 @@
 
           <div class="setting-container">
             <fieldset>
-              <legend class="font-size-small font-color-lighter">SVG:</legend>
+              <legend data-i18n="ui.legend.svg"
+                class="font-size-small font-color-lighter">SVG:</legend>
 
               <!-- Text wrapping -->
               <div class="setting-item padding-inline-start-1">
-                <label for="text-wrapping">Text wrapping: </label>
+                <label for="text-wrapping"
+                  data-i18n="ui.textWrapping">Text wrapping: </label>
                 <input type="checkbox" id="text-wrapping" name="text-wrapping"
                   value="enabled">
               </div>
@@ -525,16 +576,18 @@
           <!-- Output PNG -->
 
           <div class="header-info">
-            <div id="png-info">png-info placeholder text</div>
+            <div id="png-info"
+              data-i18n="output.pngInfoPlaceholder">png-info placeholder text</div>
           </div>
 
           <div id="img-box">
             <img id="img" class="checker fit-to-display-area"
-              alt="Output image" />
+              data-i18n-alt="output.image.alt" alt="Output image" />
           </div>
           <!-- End of img-box -->
           <div class="download-button">
-            <button id="png-action-button">Download as PNG</button>
+            <button id="png-action-button"
+              data-i18n="output.downloadPng">Download as PNG</button>
           </div>
         </div>
         <!-- End of Output PNG cell -->
@@ -543,19 +596,22 @@
           <!-- Input SVG cell -->
 
           <div class="header-info">
-            <div id="svg-info">svg-info placeholder text</div>
+            <div id="svg-info"
+              data-i18n="output.svgInfoPlaceholder">svg-info placeholder text</div>
           </div>
 
           <!-- svgTextarea -->
           <div id="textarea-box">
             <textarea id="svg-string" name="svg-string" rows="7"
+              data-i18n-placeholder="output.svgString.placeholder"
               placeholder="Enter the svg string" readonly>
                     </textarea>
             <!-- End of svgTextarea -->
           </div>
           <!-- End of div textarea-box -->
           <div class="download-button">
-            <button id="svg-action-button">Download as SVG</button>
+            <button id="svg-action-button"
+              data-i18n="output.downloadSvg">Download as SVG</button>
           </div>
         </div>
         <!-- End of Input SVG cell -->
@@ -565,16 +621,18 @@
       <!-- SVG optimization modal window content-->
       <dialog id="svg-opt-modal" class="modal" closedby="any">
         <div class="modal-content">
-          <h2 class="text-align-center">SVG Text Optimization</h2>
+          <h2 class="text-align-center"
+            data-i18n="svgOpt.heading">SVG Text Optimization</h2>
           <form>
             <fieldset>
-              <legend class="display-none">Optimization Options</legend>
+              <legend data-i18n="svgOpt.legend"
+                class="display-none">Optimization Options</legend>
 
               <div class="input-group">
                 <input type="checkbox" id="remove-opacity" name="remove-opacity"
                   value="enabled">
-                <label
-                  for="remove-opacity">Remove Default Opacity(= 1.0) Attributes</label>
+                <label for="remove-opacity"
+                  data-i18n="svgOpt.removeOpacity">Remove Default Opacity(= 1.0) Attributes</label>
                 <div class="example padding-inline-start-1">
                   <code id="before-remove-opacity"
                     class="option-applied">&lt;g stroke=&quot;rgb(0 0 0)&quot; opacity=&quot;1.0&quot; stroke-opacity=&quot;1.0&quot;&gt;</code>
@@ -588,7 +646,8 @@
               <div class="input-group">
                 <input type="checkbox" id="remove-line-breaks"
                   name="remove-line-breaks" value="enabled">
-                <label for="remove-line-breaks">Remove Line Breaks</label>
+                <label for="remove-line-breaks"
+                  data-i18n="svgOpt.removeLineBreaks">Remove Line Breaks</label>
                 <div class="example padding-inline-start-1">
                   <code id="before-remove-line-breaks" class="option-applied">
                                     &lt;tag&gt;<br>
@@ -606,7 +665,8 @@
               <div class="input-group">
                 <input type="checkbox" id="remove-spaces" name="remove-spaces"
                   value="enabled" checked>
-                <label for="remove-spaces">Remove Extra Spaces</label>
+                <label for="remove-spaces"
+                  data-i18n="svgOpt.removeSpaces">Remove Extra Spaces</label>
                 <div class="example padding-inline-start-1">
                   <code id="before-remove-spaces"
                     class="option-applied">&lt;path d="M 12 34 L 56 78" /&gt;</code>
@@ -630,22 +690,27 @@
       <!-- Image optimization modal window content-->
       <dialog id="img-opt-modal" class="modal" closedby="any">
         <div class="modal-content">
-          <h2 class="text-align-center">Image Optimization</h2>
+          <h2 class="text-align-center"
+            data-i18n="imgOpt.heading">Image Optimization</h2>
           <div id="img-opt-results">
             <!-- The headings are laid out as a row of the table rather than as
               items of the table itself, so that they take the same subgrid
               tracks as the rows below them and end where the figures do. -->
             <div class="img-opt-row img-opt-header-row">
               <span
-                class="img-opt-header img-opt-header-format font-size-small font-color-lighter">Format</span>
+                class="img-opt-header img-opt-header-format font-size-small font-color-lighter"
+                data-i18n="imgOpt.header.format">Format</span>
               <span
-                class="img-opt-header img-opt-header-kb font-size-small font-color-lighter">Size
+                class="img-opt-header img-opt-header-kb font-size-small font-color-lighter"
+                data-i18n="imgOpt.header.sizeKb">Size
                 (KB)</span>
               <span
-                class="img-opt-header img-opt-header-bytes font-size-small font-color-lighter">Size
+                class="img-opt-header img-opt-header-bytes font-size-small font-color-lighter"
+                data-i18n="imgOpt.header.sizeBytes">Size
                 (bytes)</span>
               <span
-                class="img-opt-header img-opt-header-time font-size-small font-color-lighter">Time
+                class="img-opt-header img-opt-header-time font-size-small font-color-lighter"
+                data-i18n="imgOpt.header.timeMs">Time
                 (ms)</span>
             </div>
 
@@ -715,41 +780,50 @@
       <!-- Reset settings modal window content-->
       <dialog id="reset-settings-modal" class="modal" closedby="any">
         <div class="modal-content">
-          <h2 class="text-align-center">Reset Settings by Category</h2>
+          <h2 class="text-align-center"
+            data-i18n="reset.heading">Reset Settings by Category</h2>
           <form>
             <fieldset>
-              <legend class="display-none">Settings Categories</legend>
+              <legend data-i18n="reset.legend"
+                class="display-none">Settings Categories</legend>
 
               <div class="input-group">
                 <input type="checkbox" id="image-custom" name="image-custom"
                   value="enabled" checked>
-                <label for="image-custom">Image Customization</label>
+                <label for="image-custom"
+                  data-i18n="reset.imageCustomization">Image Customization</label>
                 <div class="example padding-inline-start-1">
-                  <p>All settings in the <i>Lines</i>, <i>Canvas</i>, and <i>Render</i> tabs.</p>
+                  <p
+                    data-i18n-html="reset.imageCustomization.details">All settings in the <i>Lines</i>, <i>Canvas</i>, and <i>Render</i> tabs.</p>
                 </div>
               </div>
 
               <div class="input-group">
                 <input type="checkbox" id="ui-config" name="ui-config"
                   value="enabled">
-                <label for="ui-config">UI Configuration</label>
+                <label for="ui-config"
+                  data-i18n="reset.uiConfiguration">UI Configuration</label>
                 <div class="example padding-inline-start-1">
-                  <p>All settings in the <i>UI</i> tab.</p>
+                  <p
+                    data-i18n-html="reset.uiConfiguration.details">All settings in the <i>UI</i> tab.</p>
                 </div>
               </div>
 
               <div class="input-group">
                 <input type="checkbox" id="svg-optimize" name="svg-optimize"
                   value="enabled">
-                <label for="svg-optimize">SVG Optimization</label>
+                <label for="svg-optimize"
+                  data-i18n="reset.svgOptimization">SVG Optimization</label>
                 <div class="example padding-inline-start-1">
-                  <p>All settings in the modal window accessed via the SVG textarea.</p>
+                  <p
+                    data-i18n="reset.svgOptimization.details">All settings in the modal window accessed via the SVG textarea.</p>
                 </div>
               </div>
             </fieldset>
           </form>
           <div id="reset-button-box">
-            <button id="reset-settings">Clear and Reload</button>
+            <button id="reset-settings"
+              data-i18n="reset.clearAndReload">Clear and Reload</button>
           </div>
           <!-- Close control is positioned into the corner by
             button.modal-close-icon; it stays last in the DOM so the tab order

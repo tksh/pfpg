@@ -70,3 +70,27 @@ Deno.test("interpolation leaves messages untouched without matching vars", () =>
   assertEquals(t("ui.themeColor", {}), "Theme color: ");
   assertEquals(t("ui.themeColor", { unrelated: 3 }), "Theme color: ");
 });
+
+// The marked-up strings this test reads are the source of truth for which keys
+// the index page needs: JSON-side keys used only by TS (t()-calls) are checked
+// by review, but every HTML key must exist in the default locale.
+const INDEX_HTML_URL = new URL("../src/index.html", import.meta.url);
+
+Deno.test("every data-i18n key marked in index.html exists in en.json", async () => {
+  const html = await Deno.readTextFile(INDEX_HTML_URL);
+  const keyPattern =
+    /data-i18n(?:-html|-aria|-title|-placeholder|-alt)?="([^"]+)"/g;
+  const markedKeys = new Set<string>();
+  for (const match of html.matchAll(keyPattern)) {
+    const key = match[1];
+    if (key !== undefined) markedKeys.add(key);
+  }
+  assert(markedKeys.size > 40, `only ${markedKeys.size} keys found in HTML`);
+  for (const key of markedKeys) {
+    const enValue = en[key];
+    assert(
+      typeof enValue === "string",
+      `index.html marks unknown key "${key}"`,
+    );
+  }
+});
