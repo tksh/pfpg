@@ -60,6 +60,10 @@ Concretely:
 - During implementation, place documents directly under `./docs/`.
 - Once implementation is complete, move them under `./docs/archive/` to archive
   them accordingly.
+- The human may instead ask for a document to live in an external repository: a
+  private one that collects the documents of this and of the related projects.
+  Refer to it only as "the external repository", and do not name it in what you
+  write here.
 
 ### Never read
 
@@ -118,8 +122,14 @@ their choices.
 ## 7. Git hygiene
 
 - One logical change per commit.
+- Commit messages follow the Conventional Commits style:
+  `<type>[(<scope>)]: <description>`, with a body that says why. The types in
+  use here are `feat`, `fix`, `refactor`, `style`, `docs`, `test` and `chore`.
 - Commit messages reference the section of the plan they implement, e.g.
   `feat: step 2 — add empty-value check to basic-data decode`.
+- Do not add a `Co-Authored-By:` trailer, nor a "Generated with" line, to a
+  commit message. The history here carries neither, and the commits are the
+  project's own.
 - Do not force-push, do not rebase other people's work, do not amend commits
   that have been pushed.
 - Do not commit `dist/`, `node_modules/`, `_build/`, or any other generated
