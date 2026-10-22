@@ -163,3 +163,15 @@ function mergeMaps(
   }
   return out;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Used for URL params that are app configuration, not artwork data
+////////////////////////////////////////////////////////////////////////////////
+
+// `lang` selects the UI language (see src/js/i18n/i18n.ts). stln-codec rejects
+// unknown keys, and the shared-image key must describe pixels — which a
+// language choice cannot change — so the artwork-param filters drop these.
+export const LOCALE_URL_PARAM = "lang";
+export const URL_PARAMS_EXCLUDED_FROM_ARTWORK: readonly string[] = [
+  LOCALE_URL_PARAM,
+];

@@ -1,5 +1,7 @@
 import { initDownloadButtons } from "button/init-download-buttons";
 import { initButtonActionSelect } from "button/update-button-text";
+import { LOCALE_URL_PARAM } from "constants";
+import { getUrlParamsExceptsStates } from "common-utils/read-url-params";
 import { decodeUrlToSvgForPage as decodeUrlToSvg } from "state/url-decode";
 import {
   adjustLayoutIfNotMobile,
@@ -55,9 +57,11 @@ applyLocaleFromUrl();
 (async function (): Promise<void> {
   // Initialize sample artwork data.
 
-  // If no URL parameters are present (e.g., on initial page load),
+  // If no artwork URL parameters are present (e.g., on initial page load),
   // select a random artwork from the .artwork-item in 'Showcase' section and update the URL.
-  if (!globalThis.location.search) {
+  // App-configuration params like `lang` are not artwork params, so a URL
+  // carrying only `?lang=ja` counts as "no artwork URL params" here.
+  if (getUrlParamsExceptsStates().toString() === "") {
     // Retrieve query strings from showcase artwork links.
     const hrefArray = Array.from(
       document.querySelectorAll("figure .artworks-container .artwork-item a"),
@@ -75,11 +79,19 @@ applyLocaleFromUrl();
       throw new Error("No artwork query string found in showcase");
     }
 
-    // Update the browser's history and URL with the selected query string.
+    // Update the browser's history and URL with the selected query string,
+    // keeping the current UI language in place.
+    const artworkUrl = new URL(randomQueryString, globalThis.location.href);
+    const requestedLang = new URLSearchParams(globalThis.location.search).get(
+      LOCALE_URL_PARAM,
+    );
+    if (requestedLang !== null) {
+      artworkUrl.searchParams.set(LOCALE_URL_PARAM, requestedLang);
+    }
     globalThis.history.pushState(
       {},
       "",
-      globalThis.location.pathname + randomQueryString,
+      globalThis.location.pathname + artworkUrl.search,
     );
   }
 

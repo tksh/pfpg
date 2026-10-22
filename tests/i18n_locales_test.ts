@@ -1,4 +1,5 @@
 import { assert, assertEquals } from "@std/assert";
+import { excludeStateKeys } from "common-utils/read-url-params";
 import { getLocale, resolveLocale, setLocale, t } from "i18n/i18n";
 import enJson from "../src/js/i18n/locales/en.json" with { type: "json" };
 import jaJson from "../src/js/i18n/locales/ja.json" with { type: "json" };
@@ -51,6 +52,23 @@ Deno.test("resolution ignores neighboring artwork state params", () => {
     resolveLocale("?bits=~5&pathMode=relativeMerged"),
     "en",
   );
+});
+
+// The artwork-param filter must drop `lang` too: stln-codec rejects unknown
+// keys, and the shared-image key must describe pixels, which a language
+// choice cannot change. (Regression: with `&lang=ja` in the URL the decode
+// threw and the output area rendered empty.)
+Deno.test("artwork-param filter drops lang but keeps artwork params", () => {
+  const artwork = excludeStateKeys(
+    new URLSearchParams(
+      "?bits=~7&title=~202401_001&desc=x&themeColor=black&lang=ja",
+    ),
+  );
+  assertEquals(artwork.get("bits"), "~7");
+  assertEquals(artwork.get("title"), "~202401_001");
+  assertEquals(artwork.get("desc"), "x");
+  assertEquals(artwork.get("lang"), null);
+  assertEquals(artwork.get("themeColor"), null);
 });
 
 Deno.test("t() serves the current locale and falls back to English", () => {

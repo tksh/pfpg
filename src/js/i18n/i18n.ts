@@ -1,3 +1,4 @@
+import { LOCALE_URL_PARAM } from "constants";
 import enJson from "./locales/en.json" with { type: "json" };
 import jaJson from "./locales/ja.json" with { type: "json" };
 
@@ -8,7 +9,6 @@ const SUPPORTED_LOCALES = ["en", "ja"] as const;
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
 
 const DEFAULT_LOCALE: Locale = "en";
-const LOCALE_URL_PARAM = "lang";
 const LANGUAGE_SELECT_ID = "language";
 
 type LocaleData = Readonly<Record<string, string>>;
