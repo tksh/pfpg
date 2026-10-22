@@ -1,0 +1,19 @@
+{
+  "ui.language": "Language: ",
+  "ui.themeColor": "Theme color: ",
+  "ui.themeColor.white": "White",
+  "ui.themeColor.light": "Light",
+  "ui.themeColor.dark": "Dark",
+  "ui.themeColor.black": "Black",
+  "ui.legend.pngSvg": "PNG/SVG:",
+  "ui.legend.png": "PNG:",
+  "ui.legend.svg": "SVG:",
+  "ui.buttonAction": "Button action: ",
+  "ui.buttonAction.download": "Download as file",
+  "ui.buttonAction.copy": "Copy to clipboard",
+  "ui.viewScaling": "View scaling: ",
+  "ui.viewScaling.fit": "Fit to display area",
+  "ui.viewScaling.actual": "Actual image size",
+  "ui.checkerboardBg": "Checkerboard background: ",
+  "ui.textWrapping": "Text wrapping: "
+}

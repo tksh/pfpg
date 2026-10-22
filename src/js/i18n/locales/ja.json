@@ -1,0 +1,19 @@
+{
+  "ui.language": "言語:",
+  "ui.themeColor": "テーマカラー:",
+  "ui.themeColor.white": "白",
+  "ui.themeColor.light": "ライト",
+  "ui.themeColor.dark": "ダーク",
+  "ui.themeColor.black": "黒",
+  "ui.legend.pngSvg": "PNG/SVG:",
+  "ui.legend.png": "PNG:",
+  "ui.legend.svg": "SVG:",
+  "ui.buttonAction": "ボタンの動作:",
+  "ui.buttonAction.download": "ファイルとして保存",
+  "ui.buttonAction.copy": "クリップボードにコピー",
+  "ui.viewScaling": "表示スケール:",
+  "ui.viewScaling.fit": "表示領域に合わせる",
+  "ui.viewScaling.actual": "実際の画像サイズ",
+  "ui.checkerboardBg": "チェッカーボード背景:",
+  "ui.textWrapping": "テキストの折り返し:"
+}

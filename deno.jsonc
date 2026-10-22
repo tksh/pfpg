@@ -179,6 +179,10 @@
 
     "svg-to-png": "./src/js/page-specific/index/svg-to-png.ts",
 
+    // Multi-language UI text. Locale JSON is statically imported at build
+    // time, so a page's bundle carries every locale its own text needs.
+    "i18n/i18n": "./src/js/i18n/i18n.ts",
+
     // data-manipulator.html specific imports
     // (display helpers for the stln-codec-based encode adapters)
     "encode/show-best-mix-result": "./src/js/encode-and-decode/encode/show-best-mix-result.ts",
