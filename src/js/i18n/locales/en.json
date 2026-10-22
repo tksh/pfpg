@@ -147,5 +147,17 @@
   "footer.title.colorjs": "colorjs.io: Color-space conversion (sRGB to OKLCH) and CSS Color 4 gamut mapping.",
   "footer.title.urlCompressor": "tksh/url-compressor: An ESM-first, dependency-free URL compression library for Deno and modern JavaScript runtimes.",
   "footer.title.denoStd": "denoland/std: The Deno Standard Library",
-  "footer.title.murmurhash": "timepp/murmurhash: typescript implementation of murmurhash3"
+  "footer.title.murmurhash": "timepp/murmurhash: typescript implementation of murmurhash3",
+  "render.sourceSvgViewBoxSize": "Source SVG viewBox size: ",
+  "render.renderedPixelSize": "Rendered {format} pixel size: ",
+  "render.nowRendering": "Now rendering ...<br> Please wait a moment :)",
+  "render.lastRenderingTime": "Last rendering time: {ms} milliseconds",
+  "render.errorOccurred": "An error occurred",
+  "button.downloadFormat": "Download as {format}: ",
+  "button.copyFormat": "Copy as {format}: ",
+  "button.size": "({kb} KB, {bytes} bytes)",
+  "msg.copied": "✔️ Successfully copied!",
+  "imgOpt.noImage": "No rendered image yet",
+  "imgOpt.wasmLoadSuffix": "\n(+ wasm load)",
+  "imgOpt.failed": "Failed"
 }

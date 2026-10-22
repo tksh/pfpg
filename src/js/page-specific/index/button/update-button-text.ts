@@ -1,6 +1,7 @@
-import { updateState } from "state/url-state-manager";
 import { roundToOneDecimal } from "utils/number-rounding";
+import { updateState } from "state/url-state-manager";
 import type { EncodedImage } from "state/image-encoder";
+import { t } from "i18n/i18n";
 
 export {
   initButtonActionSelect,
@@ -8,6 +9,56 @@ export {
   updateButtonWithPngSize,
   updateButtonWithSvgSize,
 };
+
+// Per-button display state: the format shown (PNG, WebP, ...) and the size
+// line of the last render. The action select re-renders the buttons without a
+// new render, so this state is what lets swapping Download for Copy keep the
+// size display instead of leaking an English-only word search through the
+// current HTML.
+interface ActionButtonState {
+  format: string;
+  sizeText: string;
+}
+
+const buttonStates = new Map<string, ActionButtonState>();
+
+function getActionType(): "download" | "copy" {
+  const actionSelect = document.getElementById("button-action") as
+    | HTMLSelectElement
+    | null;
+  if (actionSelect === null) {
+    throw new Error("getActionType: missing element #button-action");
+  }
+  return actionSelect.value === "download" ? "download" : "copy";
+}
+
+// Rebuilds the button's label (and size line, if a render already ran) out of
+// the i18n messages for the given action.
+function renderActionButton(
+  buttonId: string,
+  action: "download" | "copy",
+): void {
+  const button = document.getElementById(buttonId);
+  if (button === null) {
+    throw new Error(`updateButtonText: missing element #${buttonId}`);
+  }
+  const state = buttonStates.get(buttonId) ?? {
+    format: buttonId === "svg-action-button" ? "SVG" : "PNG",
+    sizeText: "",
+  };
+  const actionSpan = document.createElement("span");
+  actionSpan.textContent = action === "download"
+    ? t("button.downloadFormat", { format: state.format })
+    : t("button.copyFormat", { format: state.format });
+
+  button.innerHTML = "";
+  button.appendChild(actionSpan);
+  if (state.sizeText !== "") {
+    const sizeSpan = document.createElement("span");
+    sizeSpan.textContent = state.sizeText;
+    button.appendChild(sizeSpan);
+  }
+}
 
 function initButtonActionSelect(): void {
   // セレクトメニューの変更時にボタンのテキストを更新
@@ -47,21 +98,13 @@ function initButtonActionSelect(): void {
 }
 
 function replaceButtonText(buttonAction: string, button: HTMLElement): void {
-  const buttonText = button.innerHTML;
-
-  // "Download" または "Copy" を含む部分を探す
-  const regex = /(Download|Copy)/i;
-  const match = buttonText.match(regex);
-
-  if (match) {
-    // マッチした部分を置き換える
-    const matched = match[0];
-    if (matched === undefined) {
-      throw new Error("replaceButtonText: unreachable match index");
-    }
-    const replacement = buttonAction === "download" ? "Download" : "Copy";
-    button.innerHTML = buttonText.replace(matched, replacement);
+  if (button.id === "") {
+    throw new Error("replaceButtonText: button without an id");
   }
+  renderActionButton(
+    button.id,
+    buttonAction === "download" ? "download" : "copy",
+  );
 }
 
 // SVG/画像ファイルサイズを ダウンロードボタンに 表示する関数
@@ -72,55 +115,29 @@ function updateButtonText(
   byteSize: number,
 ): void {
   // Get button element
-  const actionButtonElement = document.getElementById(
-    `${buttonId}-action-button`,
-  );
+  const actionButtonElementId = `${buttonId}-action-button`;
+  const actionButtonElement = document.getElementById(actionButtonElementId);
   if (actionButtonElement === null) {
     throw new Error(
-      `updateButtonText: missing element #${buttonId}-action-button`,
+      `updateButtonText: missing element #${actionButtonElementId}`,
     );
   }
 
-  // Get current action type as string
-  const actionType = getActionType();
-
   // Convert number value from 'byte' to 'KB'
   const sizeAsKb = roundToOneDecimal(byteSize / 1024);
-
-  // Create action element
-  const action = document.createElement("span");
   const formattedLabel = label.toLowerCase() === "webp"
     ? "WebP"
     : label.toUpperCase();
-  action.textContent = `${actionType} as ${formattedLabel}:\u00A0`;
 
-  // Create size element
-  const size = document.createElement("span");
-  size.textContent = `(${sizeAsKb} KB, ${byteSize.toLocaleString()} bytes)`;
-
-  // Clear existing content
-  actionButtonElement.innerHTML = "";
-
-  // Append new elements
-  actionButtonElement.appendChild(action);
-  actionButtonElement.appendChild(size);
-}
-
-// Get current action type as string
-function getActionType(): string | undefined {
-  const actionSelect = document.getElementById("button-action") as
-    | HTMLSelectElement
-    | null;
-  if (actionSelect === null) {
-    throw new Error("getActionType: missing element #button-action");
-  }
-  const buttonAction = actionSelect.value;
-
-  if (buttonAction === "download") {
-    return "Download";
-  } else if (buttonAction === "copy") {
-    return "Copy";
-  }
+  const sizeText = t("button.size", {
+    kb: sizeAsKb,
+    bytes: byteSize.toLocaleString(),
+  });
+  buttonStates.set(actionButtonElementId, {
+    format: formattedLabel,
+    sizeText,
+  });
+  renderActionButton(actionButtonElementId, getActionType());
 }
 
 // SVGテキストのバイトサイズを計算する関数

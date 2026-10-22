@@ -4,6 +4,7 @@ import {
   type ImageOptimizationVariant,
   type OptimizedImage,
 } from "state/image-encoder";
+import { t } from "i18n/i18n";
 import { getLastRasterizedPixels } from "svg-to-png";
 import { roundToOneDecimal } from "utils/number-rounding";
 
@@ -149,7 +150,7 @@ async function runOptimizations(modal: HTMLDialogElement): Promise<void> {
   if (raster === null) {
     for (const target of TARGETS) {
       const row = getRow(modal, target);
-      getRowSizeValue(row, target).textContent = "No rendered image yet";
+      getRowSizeValue(row, target).textContent = t("imgOpt.noImage");
       getRowSizeUnit(row, target).textContent = "";
     }
     return;
@@ -198,7 +199,7 @@ function finishRow(
   ).toFixed(1);
   getRowSizeUnit(row, target).textContent = byteSize.toLocaleString();
   getRowTime(row, target).textContent = `${Math.round(elapsed)}${
-    image.wasmLoaded ? "\n(+ wasm load)" : ""
+    image.wasmLoaded ? t("imgOpt.wasmLoadSuffix") : ""
   }`;
 
   // `.slice()` copies: the Blob must outlive the encoder's Wasm memory.
@@ -221,7 +222,7 @@ function failRow(
 ): void {
   row.classList.remove("is-working");
   row.classList.add("has-error");
-  getRowSizeValue(row, target).textContent = "Failed";
+  getRowSizeValue(row, target).textContent = t("imgOpt.failed");
   getRowSizeUnit(row, target).textContent = "";
   console.error(`Image optimization (${target.id}: ${target.label}):`, error);
 }

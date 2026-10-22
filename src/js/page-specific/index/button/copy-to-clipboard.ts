@@ -1,4 +1,5 @@
 import { getSvgString } from "button/download-as-file";
+import { t } from "i18n/i18n";
 import { getLastRenderedImage } from "svg-to-png";
 
 export { copyPngToClipboard, copySvgToClipboard };
@@ -31,7 +32,7 @@ async function copyPngToClipboard(): Promise<void> {
     }
     const originalText = pngActionButtonElement.innerHTML;
 
-    pngActionButtonElement.textContent = "✔️ Successfully copied!";
+    pngActionButtonElement.textContent = t("msg.copied");
 
     setTimeout(() => {
       pngActionButtonElement.innerHTML = originalText;
@@ -54,7 +55,7 @@ async function copySvgToClipboard(): Promise<void> {
     const originalHtml = svgActionButtonElement.innerHTML;
 
     // 成功メッセージを表示し、success-message クラスを追加
-    svgActionButtonElement.textContent = "✔️ Successfully copied!";
+    svgActionButtonElement.textContent = t("msg.copied");
 
     setTimeout(() => {
       svgActionButtonElement.innerHTML = originalHtml;

@@ -147,5 +147,17 @@
   "footer.title.colorjs": "colorjs.io: 色空間変換 (sRGB から OKLCH) と CSS Color 4 のガーマットマッピング。",
   "footer.title.urlCompressor": "tksh/url-compressor: Deno とモダンな JavaScript ランタイム向けの、ESM ファーストで依存のない URL 圧縮ライブラリ。",
   "footer.title.denoStd": "denoland/std: Deno 標準ライブラリ",
-  "footer.title.murmurhash": "timepp/murmurhash: murmurhash3 の TypeScript 実装"
+  "footer.title.murmurhash": "timepp/murmurhash: murmurhash3 の TypeScript 実装",
+  "render.sourceSvgViewBoxSize": "ソース SVG の viewBox サイズ:",
+  "render.renderedPixelSize": "描画後の {format} ピクセルサイズ:",
+  "render.nowRendering": "描画中... <br> 少々お待ちください :)",
+  "render.lastRenderingTime": "前回の描画時間: {ms} ミリ秒",
+  "render.errorOccurred": "エラーが発生しました",
+  "button.downloadFormat": "{format} として保存: ",
+  "button.copyFormat": "{format} としてコピー: ",
+  "button.size": "({kb} KB、{bytes} バイト)",
+  "msg.copied": "✔️ コピーしました!",
+  "imgOpt.noImage": "まだ描画画像がありません",
+  "imgOpt.wasmLoadSuffix": "\n(+ Wasm 読み込み)",
+  "imgOpt.failed": "失敗"
 }

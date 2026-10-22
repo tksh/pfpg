@@ -3,6 +3,7 @@ import {
   updateButtonWithPngSize,
   updateButtonWithSvgSize,
 } from "button/update-button-text";
+import { t } from "i18n/i18n";
 import { uploadRenderedImage } from "shared-image/generate-and-upload";
 import { getSharedImageKeyHashForCurrentUrl } from "shared-image/shared-image-key";
 import { type EncodedImage, encodeRasterImage } from "state/image-encoder";
@@ -206,8 +207,8 @@ function updateDimensionInfo(
   // Create label element
   const labelElement = document.createElement("span");
   labelElement.textContent = label === "svg"
-    ? "Source SVG viewBox size:\u00A0"
-    : `Rendered ${label.toUpperCase()} pixel size:\u00A0`;
+    ? t("render.sourceSvgViewBoxSize")
+    : t("render.renderedPixelSize", { format: label.toUpperCase() });
 
   // Create value element
   const value = document.createElement("span");
@@ -230,7 +231,7 @@ async function measureSvg2pngTime(
   try {
     // 処理中メッセージを表示
     await updateRenderingStatus(
-      "Now rendering ...<br> Please wait a moment :)",
+      t("render.nowRendering"),
       renderingStatusElements.get("pngActionButton"),
     );
 
@@ -250,7 +251,7 @@ async function measureSvg2pngTime(
 
     // 処理完了メッセージを表示
     await updateRenderingStatus(
-      `Last rendering time: ${elapsedTime} milliseconds`,
+      t("render.lastRenderingTime", { ms: elapsedTime }),
       renderingStatusElements.get("lastRenderingTimeP"),
     );
 
@@ -263,7 +264,7 @@ async function measureSvg2pngTime(
       error,
     );
     await updateRenderingStatus(
-      "An error occurred",
+      t("render.errorOccurred"),
       renderingStatusElements.get("pngActionButton"),
     );
     throw error;
