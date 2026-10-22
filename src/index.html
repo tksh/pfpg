@@ -840,46 +840,58 @@
 
     <footer id="footer-info">
       <details>
-        <summary>Usage</summary>
+        <summary data-i18n="footer.usage">Usage</summary>
         <dl class="top-level">
-          <dt>Basic flow:</dt>
+          <dt data-i18n="footer.basicFlow">Basic flow:</dt>
           <dd class="padding-block-start-1">
             <ol>
-              <li>Import artwork data from a URL containing a <a href="https://en.wikipedia.org/wiki/Query_string" title="Query string - Wikipedia">query string</a>.</li>
-              <li>Modify your artwork freely using the options in each category tab.</li>
-              <li>Export your artwork as a <a href="https://en.wikipedia.org/wiki/PNG" title="PNG - Wikipedia">PNG</a> (raster) or <a href="https://en.wikipedia.org/wiki/SVG" title="SVG - Wikipedia">SVG</a> (vector) format via export buttons.</li>
+              <li
+                data-i18n-html="footer.basicFlow.step1">Import artwork data from a URL containing a <a href="https://en.wikipedia.org/wiki/Query_string" title="Query string - Wikipedia">query string</a>.</li>
+              <li
+                data-i18n="footer.basicFlow.step2">Modify your artwork freely using the options in each category tab.</li>
+              <li
+                data-i18n-html="footer.basicFlow.step3">Export your artwork as a <a href="https://en.wikipedia.org/wiki/PNG" title="PNG - Wikipedia">PNG</a> (raster) or <a href="https://en.wikipedia.org/wiki/SVG" title="SVG - Wikipedia">SVG</a> (vector) format via export buttons.</li>
             </ol>
           </dd>
         </dl>
         <dl class="top-level padding-block-start-1 padding-block-end-1">
-          <dt>Configuration options:</dt>
+          <dt
+            data-i18n="footer.configurationOptions">Configuration options:</dt>
           <dd class="padding-inline-start-1">
             <dl>
-              <dt>Tab Sections:</dt>
+              <dt data-i18n="footer.tabSections">Tab Sections:</dt>
               <dd>
                 <ul>
-                  <li>The <i>Lines</i>, <i>Canvas</i>, <i>Render</i> tabs offer settings to customize the artwork's appearance.</li>
-                  <li>The <i>UI</i> tab allows you to adjust the website's behavior.</li>
+                  <li
+                    data-i18n-html="footer.tabSections.artwork">The <i>Lines</i>, <i>Canvas</i>, <i>Render</i> tabs offer settings to customize the artwork's appearance.</li>
+                  <li
+                    data-i18n-html="footer.tabSections.ui">The <i>UI</i> tab allows you to adjust the website's behavior.</li>
                 </ul>
               </dd>
             </dl>
             <dl>
-              <dt>Modal Dialogs:</dt>
+              <dt data-i18n="footer.modalDialogs">Modal Dialogs:</dt>
               <dd>
                 <ul>
-                  <li>Click/tap the reset icon (<span class="icon-font material-symbols-outlined">restart_alt</span>) to reset settings by category.</li>
-                  <li>Click/tap the rendered PNG image to access the sharing feature.</li>
-                  <li>Click/tap the source SVG input field to access optimization settings.</li>
+                  <li
+                    data-i18n-html="footer.modalDialogs.resetIcon">Click/tap the reset icon (<span class="icon-font material-symbols-outlined">restart_alt</span>) to reset settings by category.</li>
+                  <li
+                    data-i18n="footer.modalDialogs.share">Click/tap the rendered PNG image to access the sharing feature.</li>
+                  <li
+                    data-i18n="footer.modalDialogs.svgInfo">Click/tap the source SVG input field to access optimization settings.</li>
                 </ul>
               </dd>
             </dl>
             <dl>
-              <dt>Shortcut Keys:</dt>
+              <dt data-i18n="footer.shortcutKeys">Shortcut Keys:</dt>
               <dd>
                 <ul>
-                  <li>Press <kbd>A</kbd>, <kbd>S</kbd>, <kbd>D</kbd>, or <kbd>F</kbd> to switch between the <i>Lines</i>, <i>Canvas</i>, <i>Render</i>, and <i>UI</i> tabs, respectively.</li>
-                  <li>Press <kbd>R</kbd> to open the reset settings dialog.</li>
-                  <li>Press <kbd>E</kbd> to randomize colors.</li>
+                  <li
+                    data-i18n-html="footer.shortcutKeys.tabs">Press <kbd>A</kbd>, <kbd>S</kbd>, <kbd>D</kbd>, or <kbd>F</kbd> to switch between the <i>Lines</i>, <i>Canvas</i>, <i>Render</i>, and <i>UI</i> tabs, respectively.</li>
+                  <li
+                    data-i18n-html="footer.shortcutKeys.reset">Press <kbd>R</kbd> to open the reset settings dialog.</li>
+                  <li
+                    data-i18n-html="footer.shortcutKeys.randomize">Press <kbd>E</kbd> to randomize colors.</li>
                 </ul>
               </dd>
             </dl>
@@ -887,15 +899,16 @@
         </dl>
       </details>
       <details id="showcase">
-        <summary>Showcase</summary>
+        <summary data-i18n="footer.showcase">Showcase</summary>
         <section
           class="showcase-container padding-block-start-1 padding-block-end-1">
-          <p class="padding-block-end-1">
-                    Reference Photo and Derived Artworks (click/tap image to jump)
-                </p>
+          <p class="padding-block-end-1"
+            data-i18n="footer.showcase.intro">
+            Reference Photo and Derived Artworks (click/tap image to jump)
+          </p>
 
           <figure>
-            <p>Reference photo:</p>
+            <p data-i18n="footer.showcase.referencePhoto">Reference photo:</p>
             <!-- Reference photo container for fixed layout with single image-->
             <div
               class="reference-container padding-block-start-1 padding-block-end-1">
@@ -907,6 +920,7 @@
                   href="https://unsplash.com/photos/shallow-focus-photography-of-woman-outdoor-during-day-rDEOVtE7vOs">
                   <img class="reference-photo-at-showcase"
                     src="./showcase_images/unsplash-chrisjoelcampbell-rDEOVtE7vOs-small.lossless.webp"
+                    data-i18n-alt="footer.showcase.referencePhoto.alt"
                     alt="shallow focus photography of woman outdoor during day"
                     height="171" width="256">
                   <!-- Downloaded small size image from unsplash.com is 400 x 267, and resize to width 256 px (same as below artworks thumbnails): 256 x 171(170.88) -->
@@ -916,31 +930,35 @@
           </figure>
 
           <figure>
-            <p>Artworks:</p>
+            <p data-i18n="footer.showcase.artworks">Artworks:</p>
             <!-- Artwork container for responsive layout with multiple images -->
             <div
               class="artworks-container padding-block-start-1 padding-block-end-1">
               <!-- First artwork -->
               <div class="artwork-item">
                 <figcaption>
-                                <span class="bold-italic">202401_001</span>&nbsp;<span>(grid: 127x127, line groups: 3)</span>
+                                <span class="bold-italic">202401_001</span>&nbsp;<span
+                                  data-i18n="footer.showcase.gridInfo.202401">(grid: 127x127, line groups: 3)</span>
                             </figcaption>
                 <a
                   href="?bits=~7&title=~202401_001&desc=001kObPFhaNkBHUZJE0kMCGBFCDo8j7lBr_44z9CIqW3Ba7eLr9kVIlASMdS4&metadata=01p0oUdqIavqvtRKIHBt6NXiYteLcXbRKDSYZxUvq0iChyl3QzjiOqHuFNm7Yh7FxvfVouHuyHlFtlgVicDtP0QQvacAuauchBVBSAEBNwHFyYnHE4H4_PlL_NK6Khs9Y5ezyZTNRNQ_W_6WDhCCM6aK8hNaYsOpzGHbeaeG3F2JmojjAptx43DpLkdJW00oFQfE5INinLI4DdJoihJpCqJQMjzKPwm_9zYGyxrbwuMwbEgFjmpCRxQjSlTyWDFVcWNbBbjOAOLuOGemZD9rQ-sm0wbSw2B2KWXiU4Om8IjjtKSetOWV1FeJ_PQWCCIHLWIk94kVci0Mb0sjy6hLB8cJw7OrRNcR7ug6bE5XdEY2RLhp8sti1jb1IJvN_fBMxgTwMYKVvYpwUsYcxwXAHWBOiYqxDZAAwrMxHYfqCUFEesGViQgV0RPPz9hveyyHZVvuoxNTuCgynDTlOGlynRt6nKeyDKeysp7LKdAcAlsViO2qJ3xx4HJpMEvIUiMIMsbl4xusWw5NbhGNVSG3ZB2yLYfkOHrGgzR7PJFcRBwjSK3LAb6gwpA77CwjH6Mp&A=08fEKQ-VoisNalNhZy9GsmZzPU&0=08cJqY-3JMVTyH83QAsTiL3FDTnD61hpJcS8kPFWtVBM_n7KwZPoKrvVK5tIF1dLYIRCbKt0inU9MAPBVpcI2lR7kucA3g1jDC0fJqoQuXwQDLXBLjkpJqaHAXbZjjRASJWCJVUqZevC5ON3J2T_sf90WnyPRBQDmstuAHrgUnYdI3itH3EAVh00xHYH4zw32Cxh81iWNAtYm5ptyRqwSYSvYJHfzlBZ0B8dwwRZoDPgTHxh4nl98SJNLKhligDTkafBnhB81Lp0Xo24RLkTGOq0Ct3Y01CCYPVAkERzXy0xrCgg0Ni53d7xkiq3HEM6j3Ey24N7UWT8M4XA1J1BtLIlrE0UZeAC0bGCyZvPBbef3PgB7eZkXPxK8xS8zU67A_Lu-kYMRlbdazsbRfZRwea-60Dmrfr0wxG3KJz9ibAMrbYCV0dFkLDjnqEkFfeC_HmCC02PMHpcXTD22JXq2A3XbqAaxzaunU0tB286XDNUnO88VDKPw_rOBE2bYA7DsK29Ub1EXOdOTy_sySaHqznKGTSAoLLjNJuuzhAJdi_VdxrsPvsu1Hj1oy9suW7uMoIzgcUZ6J7WxQN9Ssa8tPlCNXwezDBT8S03XX8Y-1KcOxv4qqukX1oKDZXb0DYAdsuab7YZXEvxk3gXFVdJTiiYjF6qY9nZZsGzxlVZ1HKoPbNmeF3DxzoFIsIadDxfxDxWhcORr6qLEh5KloAW9hvZ7pwjKBcj9lOC-DBiki-FGQ-GF5T7z0ycZmvj5juCUnhCeF14ggQHGt_A7TLhsWhEtU-sowXAztUWOYMYCS16YamTYy_FjGgOW4dPSzm9hCguOX4MnHyNVAU21CP0Z8Zwf0Wk0mmUgFvCfcl2in5T2xZz_-QZLaVONBloSACBo2KWAtyl85UhY_scI9QQB6PKA0ERYYT3Tpx--rN546x463gQO2SWt6a-EKLAMJScEyuBOIHB-lfkrcuA_IgdJtvpCGVNtC4Luggd2iSqA3Y2SPNHSlLpbPHC6aiHDB3JO9tMHOqQrNMgCKpQ6YOCboxzSjnrHLXAYDXbm95DFvjw0pjiH4DRKSvJvFWo4ZkZCAQQflHz82tYUVa1SkkoPiPgIzRMM6yHDKU-90hlCH4lQO1YPWGgWTR8AYS1GKkDTmOGWwyVE_Or3bH-SjX0TjE7iyZM7c7txUHs-pXRO7mHb4G4OZ2muPsnneWxO6a0PAjhDTnRTld04gSgu4wAWUF3wjBJI5ZyaM9zOt7g72kuZS6T2CZaYbcRWdv3d5rfXZCFYEMUxCVwAXV0aS14V4PJppYpidA812f3aMfMLOzccbBLwnOYKGHxdffzWTcXU9kO3mhFbDXSCV5DQZg-3DspMILUMqEMtArnMp0hmNiZF2MycTQ-vh1wmPRecheKPGHkcjPNTHJMwEM3GvBNL-zWqGpkDlxWDx3bCmbBmbDkZUVGp3sQs2O9rRK0EhpV5cF9hMIEVFdK75SZXAK8ygAPUUS1rU3sZ7McE3n7dzqeAB9elsPGJEB5Mhb0YmYVJsJYLU7hwVI-4hBuWemayeSxS0OAW-hb3EYrCIMEDil4rzcsQyyKwWBo96430Yn5cFtd2lwWJFyy7_KXBtGbLtG49Y6k4ABFriR2mVohWEpa5ViZWub0tmmTowcR50N6kdXekxNaX15viSYMfOMUmEsmCEmLYnak4F3ViBkTgprlTi0ecQeUyPcpE4kTtJjRxPCY4zkp2lTUnjnduTN_lHnSdluxMWJ5eHC3AcNrzqcOKUY-8-WPOQ7YjkaJtPqjo8a70nh84WTibc1nMV32JlOO004jTmXY5MKJkRYcExwmHaYTYcTAGxQxM2BxkhyJqlhYw8izSGDJWO045cDGLNwwlySYoYBqXMLGlvOWMMODCsDLMMX7gMg7eGXkY3ugGPcwGJUcBbhxkZGLQZPlAyhlrD8dGQLIFpkF1tfDrTbGmKXeY5aqbIzJ0KUaaNXcgMFvhvTGOMH1UZuh5sGA9kaThpJGVPhhVZxJwWjKSMRrNqvjD2MMRfVsopGAka4hgDaOQSOvvl1ovFrDEo1SUjSCMD6lDnjikeBXxw0GZEDya5y9b5iXa6IKGUOBNmaz1hUft3zJ04t49xeYzfH6P4Iyu6xh846-gpzzLeenxe5pDz-uL0nbyX8hng1FT8hWZ7x_YeLMPoqfJBSKj8_XgU-OUaZ2FlShs2MuBPlp7MUGUZhl3Yp4SBvBdK6CfK36zEtIjfGuEX3P-UHMKk3OVfxNe0nwQ-yANnvVC-V5l_BDmsf8t-lXwoxGx2VZqsLJ83c38BZM2iDeijwFgwDmSmd3co_gCLgWtE94Kn-q_4P7gm3sDZhDvwuq-qzcKgjeyL2Z-CRh7w6InbHRGaexxWkPiyU3zS9IxsvuCVrDZ0BP6gajalZz7DRGoGwC2PCMAfI4mWA62mxm5fGpoe2MWDQtjA&F=08fOlodzcFekVL549cs3S7h45fSV4dswktZ2vY1MTNSLq-Bpt91wHlP8Bc8UGCi2WSP98Uuzhl2lWyUDdjTqXd64qWQkIYvJzEUG6k6wDW6V-leCsC74Y0DijpKYE_m9iQ">
                   <img class="reference-photo-at-showcase"
                     src="./showcase_images/202401_001-256x256px-g_AAA_000_FFF-p_absoluteSeparated-t_square-r_crispEdges.lossless.webp"
+                    data-i18n-alt="footer.showcase.imgAlt.202401"
                     alt="Title: 202401_001">
                 </a>
               </div>
               <!-- Second artwork -->
               <div class="artwork-item">
                 <figcaption>
-                                <span class="bold-italic">202412_001</span>&nbsp;<span>(grid: 31x31, line groups: 6)</span>
+                                <span class="bold-italic">202412_001</span>&nbsp;<span
+                                  data-i18n="footer.showcase.gridInfo.202412">(grid: 31x31, line groups: 6)</span>
                             </figcaption>
                 <a
                   href="?bits=~5&title=~202412_001&B=~231b-Kwv0vv__&999CF=098JSYvv2djHK9D5wP2bgcJqicJVDDi8uH65VZhKUkldzRzQMVOv8pk-AkTZ6cQxmf-GoKS1xBuAqG1UFpcRsODG_HW4kdbDtetXDCz7Wgtdl4o4K90Egb2uPQqAgjFRWFJPhQ4USyllHlUk3hRDvWXjhH9maBTYXNfiAXHp8TkBmfip6iwxPW&3=099yKYnqK1ZdV3dkGDgf5wBg8YVLaaOLLrq5VBvge1dNHxLhOJxtnFWLtUU2cKzbxeOmiUpcMvRNgIMBFAaljykZMZu9uXH7b2ZBuKDVshBICAJr2lyCipJ7BMsfvkUJo8U9pXuCh&DDDDD199FF=09_ZGCdWFpNgx-ug1nNdWywHE9Cw6BvgkVsRmPNPUroh9edMWvoeebLOAtfC7s2tdXeyd1_bFzBYMBgW_xiENuCPO_mWMalraeKO7PD24HU8&DDDDE966FF=09_Zq1iJek2Ya6uZRp_OAvSJE_fSoWY_deAHZbxJNG_XXy0xDXMLHFdDm&0=09_elogQ_NGU5ygFWdDaXCGHlF7Vg2MFl1AxypSIHTYREJTwxYm8b6DEa8sTSwkx_xJmY1oimHSeYwaFihIb-&66666C99FF=09_SEpdWf5jZ1K8AhNCWiLZTV6K_jJ1czHSU-rPVDycxrDoIkOhQAvAUNw1MDllCdt0_AzVl98_4VvYKEaAivwGy3NF4kq9DfEff3CgGVwoER2rgI0Ha9F6HHa3g3wCwC4AZMDIvzAEzCDzao2Rxw4-a_bcdNX7ZMGx4c87S-mHVzmGZPuDoqS9EejEejIxnrJ96jCW">
                   <img class="reference-photo-at-showcase"
                     src="./showcase_images/202412_001-256x256px-g_BBB_999CF_333_DDDDD199FF_DDDDE966FF_000_66666C99FF-p_absoluteSeparated-t_square-r_crispEdges.lossless.webp"
+                    data-i18n-alt="footer.showcase.imgAlt.202412"
                     alt="Title: 202412_001">
                 </a>
               </div>
@@ -950,19 +968,22 @@
       </details>
 
       <details>
-        <summary>About</summary>
+        <summary data-i18n="footer.about">About</summary>
         <dl class="top-level">
-          <dt>Title:</dt>
-          <dd><a href="https://pfpg.netlify.app" title="Link to this site (pfpg.netlify.app) without any URL parameters. Once the page loads, you will automatically get a sample artwork with URL parameters.">pfpg</a></dd>
-          <dt>Description:</dt>
-          <dd>A custom <b>p</b>ro<b>f</b>ile <b>p</b>icture <b>g</b>enerator for a specific svg artwork that was made with the <a href="https://github.com/tksh/straightlines" title="tksh/straightlines: A focused SVG subset that unlocks expressive vector art through deliberate simplicity.">Straightlines</a> ruleset.</dd>
-          <dt>Creator (both artwork and website):</dt>
-          <dd><a href="https://github.com/tksh" title="tksh on GitHub">SAITO Takashi (tksh)</a></dd>
-          <dt>Source:</dt>
-          <dd><a href="https://github.com/tksh/pfpg" title="tksh/pfpg: A custom profile picture generator for a specific svg artwork that was made with the UIntNPortray ruleset.">github.com/tksh/pfpg</a></dd>
-          <dt>License:</dt>
-          <dd><a href="https://www.mozilla.org/en-US/MPL/2.0/" title="Mozilla Public License, version 2.0">MPL 2.0 license</a></dd>
-          <dt>Built with:</dt>
+          <dt data-i18n="footer.about.title">Title:</dt>
+          <dd><a href="https://pfpg.netlify.app" data-i18n-title="footer.title.pfpgSite" title="Link to this site (pfpg.netlify.app) without any URL parameters. Once the page loads, you will automatically get a sample artwork with URL parameters.">pfpg</a></dd>
+          <dt data-i18n="footer.about.description">Description:</dt>
+          <dd
+            data-i18n-html="footer.about.description.text">A custom <b>p</b>ro<b>f</b>ile <b>p</b>icture <b>g</b>enerator for a specific svg artwork that was made with the <a href="https://github.com/tksh/straightlines" title="tksh/straightlines: A focused SVG subset that unlocks expressive vector art through deliberate simplicity.">Straightlines</a> ruleset.</dd>
+          <dt
+            data-i18n="footer.about.creator">Creator (both artwork and website):</dt>
+          <dd><a href="https://github.com/tksh" data-i18n-title="footer.title.tksh" title="tksh on GitHub">SAITO Takashi (tksh)</a></dd>
+          <dt data-i18n="footer.about.source">Source:</dt>
+          <dd><a href="https://github.com/tksh/pfpg" data-i18n-title="footer.title.pfpgRepo" title="tksh/pfpg: A custom profile picture generator for a specific svg artwork that was made with the UIntNPortray ruleset.">github.com/tksh/pfpg</a></dd>
+          <dt data-i18n="footer.about.license">License:</dt>
+          <dd
+            data-i18n-html="footer.about.mpl2"><a href="https://www.mozilla.org/en-US/MPL/2.0/" title="Mozilla Public License, version 2.0">MPL 2.0 license</a></dd>
+          <dt data-i18n="footer.about.builtWith">Built with:</dt>
           <!-- Only the two wrapper libraries are collapsible. Everything they
                contain is shown by indentation alone, so the whole tree can be
                read at a glance instead of one click per level. -->
@@ -970,16 +991,16 @@
             <details>
               <summary>svg2ui8a</summary>
               <dl>
-                <dd><a href="https://github.com/tksh/svg2ui8a" title="@tksh/svg2ui8a: SVG rasterizer returning raw RGBA pixels.">svg2ui8a (MIT license)</a></dd>
-                <dd><a href="https://github.com/linebender/resvg" title="resvg: The Rust SVG rendering library compiled into the rasterizer's Wasm module. Distributed here under its MIT license.">resvg (MIT license)</a>
+                <dd><a href="https://github.com/tksh/svg2ui8a" data-i18n-title="footer.title.svg2ui8a" title="@tksh/svg2ui8a: SVG rasterizer returning raw RGBA pixels.">svg2ui8a (MIT license)</a></dd>
+                <dd><a href="https://github.com/linebender/resvg" data-i18n-title="footer.title.resvg" title="resvg: The Rust SVG rendering library compiled into the rasterizer's Wasm module. Distributed here under its MIT license.">resvg (MIT license)</a>
                   <dl>
-                    <dd><a href="https://github.com/linebender/resvg" title="usvg: The SVG parser resvg builds on, compiled into the same Wasm module. Distributed here under its MIT license.">usvg (MIT license)</a>
+                    <dd><a href="https://github.com/linebender/resvg" data-i18n-title="footer.title.usvg" title="usvg: The SVG parser resvg builds on, compiled into the same Wasm module. Distributed here under its MIT license.">usvg (MIT license)</a>
                       <dl>
-                        <dd><a href="https://github.com/RazrFalcon/roxmltree" title="roxmltree: The XML parser usvg uses, compiled into the same Wasm module. Distributed here under its MIT license.">roxmltree (MIT license)</a></dd>
+                        <dd><a href="https://github.com/RazrFalcon/roxmltree" data-i18n-title="footer.title.roxmltree" title="roxmltree: The XML parser usvg uses, compiled into the same Wasm module. Distributed here under its MIT license.">roxmltree (MIT license)</a></dd>
                       </dl>
                     </dd>
-                    <dd><a href="https://github.com/linebender/tiny-skia" title="tiny-skia: The 2D rasterizer resvg draws with, compiled into the same Wasm module.">tiny-skia (BSD-3-Clause license)</a></dd>
-                    <dd><a href="https://github.com/linebender/svgtypes" title="svgtypes: The shared SVG data types used by resvg and usvg. Distributed here under its MIT license.">svgtypes (MIT license)</a></dd>
+                    <dd><a href="https://github.com/linebender/tiny-skia" data-i18n-title="footer.title.tinySkia" title="tiny-skia: The 2D rasterizer resvg draws with, compiled into the same Wasm module.">tiny-skia (BSD-3-Clause license)</a></dd>
+                    <dd><a href="https://github.com/linebender/svgtypes" data-i18n-title="footer.title.svgtypes" title="svgtypes: The shared SVG data types used by resvg and usvg. Distributed here under its MIT license.">svgtypes (MIT license)</a></dd>
                   </dl>
                 </dd>
               </dl>
@@ -989,42 +1010,43 @@
             <details>
               <summary>jSquash</summary>
               <dl>
-                <dd><a href="https://github.com/jamsinclair/jSquash" title="@jsquash/webp: Wasm WebP encoder, repackaged from the Squoosh app.">@jsquash/webp (Apache-2.0 license)</a>
+                <dd><a href="https://github.com/jamsinclair/jSquash" data-i18n-title="footer.title.jsquashWebp" title="@jsquash/webp: Wasm WebP encoder, repackaged from the Squoosh app.">@jsquash/webp (Apache-2.0 license)</a>
                   <dl>
-                    <dd><a href="https://github.com/webmproject/libwebp" title="libwebp: The WebP codec compiled into the WebP encoder's Wasm module.">libwebp (BSD-3-Clause license)</a></dd>
+                    <dd><a href="https://github.com/webmproject/libwebp" data-i18n-title="footer.title.libwebp" title="libwebp: The WebP codec compiled into the WebP encoder's Wasm module.">libwebp (BSD-3-Clause license)</a></dd>
                   </dl>
                 </dd>
-                <dd><a href="https://github.com/jamsinclair/jSquash" title="@jsquash/oxipng: Wasm PNG optimizer built on oxipng, repackaged from the Squoosh app.">@jsquash/oxipng (Apache-2.0 license)</a>
+                <dd><a href="https://github.com/jamsinclair/jSquash" data-i18n-title="footer.title.jsquashOxipng" title="@jsquash/oxipng: Wasm PNG optimizer built on oxipng, repackaged from the Squoosh app.">@jsquash/oxipng (Apache-2.0 license)</a>
                   <dl>
-                    <dd><a href="https://github.com/shssoichiro/oxipng" title="oxipng: The PNG optimizer compiled into the PNG optimizer's Wasm module.">oxipng (MIT license)</a></dd>
+                    <dd><a href="https://github.com/shssoichiro/oxipng" data-i18n-title="footer.title.oxipng" title="oxipng: The PNG optimizer compiled into the PNG optimizer's Wasm module.">oxipng (MIT license)</a></dd>
                   </dl>
                 </dd>
-                <dd><a href="https://github.com/jamsinclair/jSquash" title="@jsquash/jxl: Wasm JPEG XL encoder, repackaged from the Squoosh app.">@jsquash/jxl (Apache-2.0 license)</a>
+                <dd><a href="https://github.com/jamsinclair/jSquash" data-i18n-title="footer.title.jsquashJxl" title="@jsquash/jxl: Wasm JPEG XL encoder, repackaged from the Squoosh app.">@jsquash/jxl (Apache-2.0 license)</a>
                   <dl>
-                    <dd><a href="https://github.com/libjxl/libjxl" title="libjxl: The JPEG XL codec compiled into the JPEG XL encoder's Wasm module.">libjxl (BSD-3-Clause license)</a></dd>
+                    <dd><a href="https://github.com/libjxl/libjxl" data-i18n-title="footer.title.libjxl" title="libjxl: The JPEG XL codec compiled into the JPEG XL encoder's Wasm module.">libjxl (BSD-3-Clause license)</a></dd>
                   </dl>
                 </dd>
-                <dd><a href="https://github.com/jamsinclair/jSquash" title="@jsquash/avif: Wasm AVIF encoder, repackaged from the Squoosh app.">@jsquash/avif (Apache-2.0 license)</a>
+                <dd><a href="https://github.com/jamsinclair/jSquash" data-i18n-title="footer.title.jsquashAvif" title="@jsquash/avif: Wasm AVIF encoder, repackaged from the Squoosh app.">@jsquash/avif (Apache-2.0 license)</a>
                   <dl>
-                    <dd><a href="https://github.com/AOMediaCodec/libavif" title="libavif: The AVIF container library compiled into the AVIF encoder's Wasm module.">libavif (BSD-2-Clause license)</a></dd>
-                    <dd><a href="https://aomedia.googlesource.com/aom" title="libaom: The AV1 codec libavif encodes through, compiled into the same Wasm module.">libaom (BSD-2-Clause license)</a></dd>
-                    <dd><a href="https://github.com/webmproject/libwebp" title="libsharpyuv: The RGB to YUV conversion libavif encodes lossless images through, compiled into the same Wasm module. It carries no license file of its own and is under libwebp's, listed above.">libsharpyuv (BSD-3-Clause license)</a></dd>
+                    <dd><a href="https://github.com/AOMediaCodec/libavif" data-i18n-title="footer.title.libavif" title="libavif: The AVIF container library compiled into the AVIF encoder's Wasm module.">libavif (BSD-2-Clause license)</a></dd>
+                    <dd><a href="https://aomedia.googlesource.com/aom" data-i18n-title="footer.title.libaom" title="libaom: The AV1 codec libavif encodes through, compiled into the same Wasm module.">libaom (BSD-2-Clause license)</a></dd>
+                    <dd><a href="https://github.com/webmproject/libwebp" data-i18n-title="footer.title.libsharpyuv" title="libsharpyuv: The RGB to YUV conversion libavif encodes lossless images through, compiled into the same Wasm module. It carries no license file of its own and is under libwebp's, listed above.">libsharpyuv (BSD-3-Clause license)</a></dd>
                   </dl>
                 </dd>
-                <dd><a href="https://github.com/jamsinclair/jSquash" title="@jsquash/qoi: Wasm QOI encoder, repackaged from the Squoosh app.">@jsquash/qoi (Apache-2.0 license)</a>
+                <dd><a href="https://github.com/jamsinclair/jSquash" data-i18n-title="footer.title.jsquashQoi" title="@jsquash/qoi: Wasm QOI encoder, repackaged from the Squoosh app.">@jsquash/qoi (Apache-2.0 license)</a>
                   <dl>
-                    <dd><a href="https://github.com/phoboslab/qoi" title="QOI: The reference implementation of the Quite OK Image format, compiled into the QOI encoder's Wasm module.">QOI (MIT license)</a></dd>
+                    <dd><a href="https://github.com/phoboslab/qoi" data-i18n-title="footer.title.qoi" title="QOI: The reference implementation of the Quite OK Image format, compiled into the QOI encoder's Wasm module.">QOI (MIT license)</a></dd>
                   </dl>
                 </dd>
               </dl>
             </details>
           </dd>
-          <dd><a href="https://github.com/sefianecho/alwan" title="sefianecho/alwan: A lightweight, touch-friendly color picker in vanilla JavaScript with no dependencies.">Alwan (MIT license)</a></dd>
-          <dd><a href="https://colorjs.io" title="colorjs.io: Color-space conversion (sRGB to OKLCH) and CSS Color 4 gamut mapping.">colorjs.io (MIT license)</a></dd>
-          <dd><a href="https://github.com/tksh/url-compressor" title="tksh/url-compressor: An ESM-first, dependency-free URL compression library for Deno and modern JavaScript runtimes.">url-compressor (MIT license)</a></dd>
-          <dd><a href="https://github.com/denoland/std" title="denoland/std: The Deno Standard Library">Deno standard library (MIT license)</a></dd>
-          <dd><a href="https://github.com/timepp/murmurhash" title="timepp/murmurhash: typescript implementation of murmurhash3">murmurHash (MIT license)</a></dd>
-          <dd><a href="./licenses/">Third-party license texts</a></dd>
+          <dd><a href="https://github.com/sefianecho/alwan" data-i18n-title="footer.title.alwan" title="sefianecho/alwan: A lightweight, touch-friendly color picker in vanilla JavaScript with no dependencies.">Alwan (MIT license)</a></dd>
+          <dd><a href="https://colorjs.io" data-i18n-title="footer.title.colorjs" title="colorjs.io: Color-space conversion (sRGB to OKLCH) and CSS Color 4 gamut mapping.">colorjs.io (MIT license)</a></dd>
+          <dd><a href="https://github.com/tksh/url-compressor" data-i18n-title="footer.title.urlCompressor" title="tksh/url-compressor: An ESM-first, dependency-free URL compression library for Deno and modern JavaScript runtimes.">url-compressor (MIT license)</a></dd>
+          <dd><a href="https://github.com/denoland/std" data-i18n-title="footer.title.denoStd" title="denoland/std: The Deno Standard Library">Deno standard library (MIT license)</a></dd>
+          <dd><a href="https://github.com/timepp/murmurhash" data-i18n-title="footer.title.murmurhash" title="timepp/murmurhash: typescript implementation of murmurhash3">murmurHash (MIT license)</a></dd>
+          <dd
+            data-i18n-html="footer.about.thirdPartyLicenses"><a href="./licenses/">Third-party license texts</a></dd>
         </dl>
       </details>
 
