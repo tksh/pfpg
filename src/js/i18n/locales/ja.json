@@ -96,7 +96,7 @@
   "footer.tabSections.ui": "<i>UI</i> タブでは、サイトの動作を調整できます。",
   "footer.modalDialogs": "モーダルダイアログ:",
   "footer.modalDialogs.resetIcon": "リセットアイコン(<span class=\"icon-font material-symbols-outlined\">restart_alt</span>)をクリック/タップすると、カテゴリ別に設定をリセットできます。",
-  "footer.modalDialogs.share": "描画された PNG 画像をクリック/タップすると、共有機能を利用できます。",
+  "footer.modalDialogs.imageOpt": "描画された PNG 画像をクリック/タップすると、画像最適化の設定を利用できます。",
   "footer.modalDialogs.svgInfo": "ソース SVG の入力欄をクリック/タップすると、最適化の設定を利用できます。",
   "footer.shortcutKeys": "ショートカットキー:",
   "footer.shortcutKeys.tabs": "<kbd>A</kbd>、<kbd>S</kbd>、<kbd>D</kbd>、<kbd>F</kbd> キーで、それぞれ <i>線</i>、<i>キャンバス</i>、<i>描画</i>、<i>UI</i> タブに切り替わります。",

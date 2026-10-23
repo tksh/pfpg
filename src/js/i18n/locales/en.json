@@ -96,7 +96,7 @@
   "footer.tabSections.ui": "The <i>UI</i> tab allows you to adjust the website's behavior.",
   "footer.modalDialogs": "Modal Dialogs:",
   "footer.modalDialogs.resetIcon": "Click/tap the reset icon (<span class=\"icon-font material-symbols-outlined\">restart_alt</span>) to reset settings by category.",
-  "footer.modalDialogs.share": "Click/tap the rendered PNG image to access the sharing feature.",
+  "footer.modalDialogs.imageOpt": "Click/tap the rendered PNG image to access image optimization settings.",
   "footer.modalDialogs.svgInfo": "Click/tap the source SVG input field to access optimization settings.",
   "footer.shortcutKeys": "Shortcut Keys:",
   "footer.shortcutKeys.tabs": "Press <kbd>A</kbd>, <kbd>S</kbd>, <kbd>D</kbd>, or <kbd>F</kbd> to switch between the <i>Lines</i>, <i>Canvas</i>, <i>Render</i>, and <i>UI</i> tabs, respectively.",
