@@ -228,6 +228,13 @@
                     <option value="triangular"
                       data-i18n="lines.distribution.triangular">Triangular</option>
                   </select>
+                  <button type="button" class="info-icon"
+                    id="randomization-distribution-info"
+                    popovertarget="randomization-distribution-hint"
+                    data-i18n-aria="lines.distribution.info"
+                    aria-label="What does the Distribution option do?">
+                    <span class="material-symbols-outlined">info</span>
+                  </button>
                 </div>
               </div>
 
@@ -285,6 +292,25 @@
             the same reason sit outside the <details> that hold their controls.
             Path mode's own control is in #artwork-format, so its popover is
             parked here too. -->
+          <dialog id="randomization-distribution-hint" class="hint-dialog"
+            popover closedby="any">
+            <div class="hint-content">
+              <p class="font-size-small" data-i18n-html="hint.distribution">
+                Each randomize click redraws every line group's Lightness,
+                Chroma, and Hue offsets within the ranges set above.
+                <i>Uniform</i>: every amount within each range is equally
+                likely, so a color can move anywhere in the range.
+                <i>Triangular</i>: offsets cluster near zero and thin out
+                toward the range edges, so most lines barely change and large
+                shifts are rare.
+              </p>
+              <button type="button" class="modal-close-icon"
+                popovertarget="randomization-distribution-hint">
+                <span class="material-symbols-outlined">close</span>
+              </button>
+            </div>
+          </dialog>
+
           <dialog id="randomization-base-hint" class="hint-dialog" popover
             closedby="any">
             <div class="hint-content">
