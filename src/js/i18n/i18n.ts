@@ -1,4 +1,5 @@
 import { LOCALE_URL_PARAM } from "constants";
+import arJson from "./locales/ar.json" with { type: "json" };
 import zhJson from "./locales/zh.json" with { type: "json" };
 import enJson from "./locales/en.json" with { type: "json" };
 import esJson from "./locales/es.json" with { type: "json" };
@@ -17,6 +18,7 @@ const SUPPORTED_LOCALES = [
   "en",
   "zh",
   "es",
+  "ar",
   "id",
   "pt",
   "fr",
@@ -48,6 +50,7 @@ function validatedLocaleData(locale: Locale, json: unknown): LocaleData {
 
 const localeData = new Map<Locale, LocaleData>([
   ["en", validatedLocaleData("en", enJson)],
+  ["ar", validatedLocaleData("ar", arJson)],
   ["zh", validatedLocaleData("zh", zhJson)],
   ["es", validatedLocaleData("es", esJson)],
   ["id", validatedLocaleData("id", idJson)],
@@ -134,6 +137,11 @@ const I18N_MARKED_SELECTOR = [
   ...Object.keys(DATA_I18N_ATTRIBUTES),
 ].join(",");
 
+// Arabic writes right-to-left; the page layout is built from CSS logical
+// properties, so flipping the document direction is the entire mechanism.
+// Artwork output stays untouched: it is language-independent.
+const RTL_LOCALES: ReadonlyArray<Locale> = ["ar"];
+
 export function applyI18n(): void {
   for (const element of document.querySelectorAll(I18N_MARKED_SELECTOR)) {
     const htmlElement = element as HTMLElement;
@@ -157,6 +165,9 @@ export function applyI18n(): void {
     }
   }
   document.documentElement.lang = currentLocale;
+  document.documentElement.dir = RTL_LOCALES.includes(currentLocale)
+    ? "rtl"
+    : "ltr";
 }
 
 export function applyLocaleFromUrl(): void {

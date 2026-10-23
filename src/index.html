@@ -520,6 +520,7 @@
                 <option value="en" selected>English</option>
                 <option value="zh">中文</option>
                 <option value="es">Español</option>
+                <option value="ar">العربية</option>
                 <option value="id">Bahasa Indonesia</option>
                 <option value="pt">Português</option>
                 <option value="fr">Français</option>
@@ -647,7 +648,9 @@
 
           <!-- svgTextarea -->
           <div id="textarea-box">
-            <textarea id="svg-string" name="svg-string" rows="7"
+            <!-- dir="ltr": the textarea holds code, which must not mirror
+              under the RTL Arabic UI. It is a no-op in every other locale. -->
+            <textarea id="svg-string" name="svg-string" rows="7" dir="ltr"
               data-i18n-placeholder="output.svgString.placeholder"
               placeholder="Enter the svg string" readonly>
                     </textarea>

@@ -3,6 +3,7 @@ import { excludeStateKeys } from "common-utils/read-url-params";
 import { getLocale, resolveLocale, setLocale, t } from "i18n/i18n";
 import deJson from "../src/js/i18n/locales/de.json" with { type: "json" };
 import enJson from "../src/js/i18n/locales/en.json" with { type: "json" };
+import arJson from "../src/js/i18n/locales/ar.json" with { type: "json" };
 import esJson from "../src/js/i18n/locales/es.json" with { type: "json" };
 import frJson from "../src/js/i18n/locales/fr.json" with { type: "json" };
 import idJson from "../src/js/i18n/locales/id.json" with { type: "json" };
@@ -28,6 +29,7 @@ function asLocaleJson(value: unknown, label: string): Record<string, string> {
 const LOCALE_JSONS: ReadonlyArray<readonly [string, Record<string, string>]> = [
   ["de", asLocaleJson(deJson, "de.json")],
   ["en", asLocaleJson(enJson, "en.json")],
+  ["ar", asLocaleJson(arJson, "ar.json")],
   ["es", asLocaleJson(esJson, "es.json")],
   ["fr", asLocaleJson(frJson, "fr.json")],
   ["id", asLocaleJson(idJson, "id.json")],
