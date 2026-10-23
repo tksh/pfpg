@@ -1,8 +1,13 @@
 import { assert, assertEquals } from "@std/assert";
 import { excludeStateKeys } from "common-utils/read-url-params";
 import { getLocale, resolveLocale, setLocale, t } from "i18n/i18n";
+import deJson from "../src/js/i18n/locales/de.json" with { type: "json" };
 import enJson from "../src/js/i18n/locales/en.json" with { type: "json" };
+import esJson from "../src/js/i18n/locales/es.json" with { type: "json" };
+import frJson from "../src/js/i18n/locales/fr.json" with { type: "json" };
+import idJson from "../src/js/i18n/locales/id.json" with { type: "json" };
 import jaJson from "../src/js/i18n/locales/ja.json" with { type: "json" };
+import ptJson from "../src/js/i18n/locales/pt.json" with { type: "json" };
 
 function isLocaleJson(value: unknown): value is Record<string, string> {
   if (typeof value !== "object" || value === null) return false;
@@ -16,30 +21,45 @@ function asLocaleJson(value: unknown, label: string): Record<string, string> {
   return value;
 }
 
-const en = asLocaleJson(enJson, "en.json");
-const ja = asLocaleJson(jaJson, "ja.json");
+// Kept in step with SUPPORTED_LOCALES in i18n.ts; the parity tests below
+// make a drift between the two lists fail loudly.
+const LOCALE_JSONS: ReadonlyArray<readonly [string, Record<string, string>]> = [
+  ["de", asLocaleJson(deJson, "de.json")],
+  ["en", asLocaleJson(enJson, "en.json")],
+  ["es", asLocaleJson(esJson, "es.json")],
+  ["fr", asLocaleJson(frJson, "fr.json")],
+  ["id", asLocaleJson(idJson, "id.json")],
+  ["ja", asLocaleJson(jaJson, "ja.json")],
+  ["pt", asLocaleJson(ptJson, "pt.json")],
+];
 
-Deno.test("locales share an identical key set", () => {
+const en = LOCALE_JSONS.find(([code]) => code === "en")![1];
+const ja = LOCALE_JSONS.find(([code]) => code === "ja")![1];
+
+Deno.test("all locales share an identical key set", () => {
   const enKeys = Object.keys(en).sort();
-  const jaKeys = Object.keys(ja).sort();
-  assertEquals(jaKeys, enKeys);
+  for (const [code, json] of LOCALE_JSONS) {
+    assertEquals(Object.keys(json).sort(), enKeys, code);
+  }
 });
 
-Deno.test("locale values are non-empty strings in both files", () => {
+Deno.test("locale values are non-empty strings in every file", () => {
   for (const key of Object.keys(en)) {
-    const enValue = en[key];
-    const jaValue = ja[key];
-    assert(typeof enValue === "string" && enValue.length > 0, `en: ${key}`);
-    assert(typeof jaValue === "string" && jaValue.length > 0, `ja: ${key}`);
+    for (const [code, json] of LOCALE_JSONS) {
+      const value = json[key];
+      assert(typeof value === "string" && value.length > 0, `${code}: ${key}`);
+    }
   }
 });
 
 Deno.test("locale resolution defaults to English and honors ?lang", () => {
   assertEquals(resolveLocale(""), "en");
-  assertEquals(resolveLocale("?lang=ja"), "ja");
-  assertEquals(resolveLocale("?lang=JA"), "ja");
-  assertEquals(resolveLocale("?lang=zh"), "en");
+  for (const [code] of LOCALE_JSONS) {
+    // Uppercase on purpose: resolution normalizes the requested code.
+    assertEquals(resolveLocale(`?lang=${code.toUpperCase()}`), code);
+  }
   assertEquals(resolveLocale("?lang="), "en");
+  assertEquals(resolveLocale("?lang=xx"), "en");
   assertEquals(resolveLocale("?foo=2&title=~202401_001"), "en");
 });
 

@@ -1,10 +1,17 @@
 import { LOCALE_URL_PARAM } from "constants";
 import enJson from "./locales/en.json" with { type: "json" };
+import esJson from "./locales/es.json" with { type: "json" };
+import idJson from "./locales/id.json" with { type: "json" };
 import jaJson from "./locales/ja.json" with { type: "json" };
+import ptJson from "./locales/pt.json" with { type: "json" };
+import frJson from "./locales/fr.json" with { type: "json" };
+import deJson from "./locales/de.json" with { type: "json" };
 
 // Adding a language = one JSON file under ./locales, one entry here, and one
 // <option> for the Language select in index.html. Nothing else.
-const SUPPORTED_LOCALES = ["en", "ja"] as const;
+// Mirrors the <option> order in index.html (top-ten languages by internet
+// users, endonym-labeled).
+const SUPPORTED_LOCALES = ["en", "es", "id", "pt", "fr", "ja", "de"] as const;
 
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
 
@@ -30,6 +37,11 @@ function validatedLocaleData(locale: Locale, json: unknown): LocaleData {
 const localeData = new Map<Locale, LocaleData>([
   ["en", validatedLocaleData("en", enJson)],
   ["ja", validatedLocaleData("ja", jaJson)],
+  ["es", validatedLocaleData("es", esJson)],
+  ["id", validatedLocaleData("id", idJson)],
+  ["pt", validatedLocaleData("pt", ptJson)],
+  ["fr", validatedLocaleData("fr", frJson)],
+  ["de", validatedLocaleData("de", deJson)],
 ]);
 
 // Pure so the resolution rules stay unit-testable without a DOM.
