@@ -1,17 +1,29 @@
 import { LOCALE_URL_PARAM } from "constants";
+import zhJson from "./locales/zh.json" with { type: "json" };
 import enJson from "./locales/en.json" with { type: "json" };
 import esJson from "./locales/es.json" with { type: "json" };
 import idJson from "./locales/id.json" with { type: "json" };
 import jaJson from "./locales/ja.json" with { type: "json" };
 import ptJson from "./locales/pt.json" with { type: "json" };
 import frJson from "./locales/fr.json" with { type: "json" };
+import ruJson from "./locales/ru.json" with { type: "json" };
 import deJson from "./locales/de.json" with { type: "json" };
 
 // Adding a language = one JSON file under ./locales, one entry here, and one
 // <option> for the Language select in index.html. Nothing else.
 // Mirrors the <option> order in index.html (top-ten languages by internet
 // users, endonym-labeled).
-const SUPPORTED_LOCALES = ["en", "es", "id", "pt", "fr", "ja", "de"] as const;
+const SUPPORTED_LOCALES = [
+  "en",
+  "zh",
+  "es",
+  "id",
+  "pt",
+  "fr",
+  "ja",
+  "ru",
+  "de",
+] as const;
 
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
 
@@ -36,11 +48,13 @@ function validatedLocaleData(locale: Locale, json: unknown): LocaleData {
 
 const localeData = new Map<Locale, LocaleData>([
   ["en", validatedLocaleData("en", enJson)],
-  ["ja", validatedLocaleData("ja", jaJson)],
+  ["zh", validatedLocaleData("zh", zhJson)],
   ["es", validatedLocaleData("es", esJson)],
   ["id", validatedLocaleData("id", idJson)],
   ["pt", validatedLocaleData("pt", ptJson)],
   ["fr", validatedLocaleData("fr", frJson)],
+  ["ja", validatedLocaleData("ja", jaJson)],
+  ["ru", validatedLocaleData("ru", ruJson)],
   ["de", validatedLocaleData("de", deJson)],
 ]);
 

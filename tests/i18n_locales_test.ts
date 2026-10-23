@@ -8,6 +8,8 @@ import frJson from "../src/js/i18n/locales/fr.json" with { type: "json" };
 import idJson from "../src/js/i18n/locales/id.json" with { type: "json" };
 import jaJson from "../src/js/i18n/locales/ja.json" with { type: "json" };
 import ptJson from "../src/js/i18n/locales/pt.json" with { type: "json" };
+import ruJson from "../src/js/i18n/locales/ru.json" with { type: "json" };
+import zhJson from "../src/js/i18n/locales/zh.json" with { type: "json" };
 
 function isLocaleJson(value: unknown): value is Record<string, string> {
   if (typeof value !== "object" || value === null) return false;
@@ -31,6 +33,8 @@ const LOCALE_JSONS: ReadonlyArray<readonly [string, Record<string, string>]> = [
   ["id", asLocaleJson(idJson, "id.json")],
   ["ja", asLocaleJson(jaJson, "ja.json")],
   ["pt", asLocaleJson(ptJson, "pt.json")],
+  ["ru", asLocaleJson(ruJson, "ru.json")],
+  ["zh", asLocaleJson(zhJson, "zh.json")],
 ];
 
 const en = LOCALE_JSONS.find(([code]) => code === "en")![1];
