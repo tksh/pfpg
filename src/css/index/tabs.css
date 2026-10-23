@@ -10,6 +10,10 @@
   border: none;
   outline: none;
   font-size: 0.9rem;
+  /* `normal` derives the line box from each font's metrics, so a label's
+     height differed per locale (Latin vs CJK fonts). A unitless explicit
+     value keeps every tab the same height in every language. */
+  line-height: 1;
   flex: 0 1 auto;
   /* This makes each tab size to its content */
   inline-size: auto;
@@ -37,6 +41,8 @@
   cursor: pointer;
   transition: 0.2s;
   font-size: 0.9rem;
+  /* Same locale-independent line box as .icon-tab-link. */
+  line-height: 1;
   flex: 0 1 auto;
   /* This makes each tab size to its content */
   inline-size: 20%;
