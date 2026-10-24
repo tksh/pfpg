@@ -40,7 +40,6 @@ const LOCALE_JSONS: ReadonlyArray<readonly [string, Record<string, string>]> = [
 ];
 
 const en = LOCALE_JSONS.find(([code]) => code === "en")![1];
-const ja = LOCALE_JSONS.find(([code]) => code === "ja")![1];
 
 Deno.test("all locales share an identical key set", () => {
   const enKeys = Object.keys(en).sort();
