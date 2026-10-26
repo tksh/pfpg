@@ -28,7 +28,8 @@ Concretely:
 
 - **Plan before you act.** For any task that touches more than one file, or that
   touches a non-trivial function, produce a written plan first. Save it under
-  `./docs/` and wait for the human to approve.
+  `./docs/` with a filename starting with `yyyy-mm-dd-` and wait for the human
+  to approve.
 - **Smallest possible diff.** Do not refactor, rename, or "improve" code that is
   not directly in scope.
 - **No new dependencies without justification.** If you want to add a package,
@@ -57,13 +58,16 @@ Concretely:
 
 ### Writing documentation
 
-- During implementation, place documents directly under `./docs/`.
-- Once implementation is complete, move them under `./docs/archive/` to archive
-  them accordingly.
-- The human may instead ask for a document to live in an external repository: a
-  private one that collects the documents of this and of the related projects.
-  Refer to it only as "the external repository", and do not name it in what you
-  write here.
+- During implementation, place plan documents directly under `./docs/` with a
+  filename starting with `yyyy-mm-dd-` (e.g. `./docs/yyyy-mm-dd-<topic>.md`).
+- Do not include plan documents in commits for this repository (`pfpg`). Keep
+  them uncommitted (`git add` not run) throughout development.
+- Leave plan documents uncommitted until the human gives explicit instructions
+  on moving or archiving them after the task is completed.
+- The human may ask for a document to live in an external repository: a private
+  one that collects the documents of this and of the related projects. Refer to
+  it only as "the external repository", and do not name it in what you write
+  here.
 
 ### Never read
 
