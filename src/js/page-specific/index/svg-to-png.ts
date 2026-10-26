@@ -7,6 +7,7 @@ import { t } from "i18n/i18n";
 import { uploadRenderedImage } from "shared-image/generate-and-upload";
 import { getSharedImageKeyHashForCurrentUrl } from "shared-image/shared-image-key";
 import { type EncodedImage, encodeRasterImage } from "state/image-encoder";
+import { displayFormatName } from "state/image-format";
 import { extractViewboxValues } from "tab-canvas/crop-side-margins";
 
 export {
@@ -208,7 +209,7 @@ function updateDimensionInfo(
   const labelElement = document.createElement("span");
   labelElement.textContent = label === "svg"
     ? t("render.sourceSvgViewBoxSize")
-    : t("render.renderedPixelSize", { format: label.toUpperCase() });
+    : t("render.renderedPixelSize", { format: displayFormatName(label) });
 
   // Create value element
   const value = document.createElement("span");

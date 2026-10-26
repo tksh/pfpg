@@ -1,6 +1,6 @@
 import { getState } from "state/url-state-manager";
 
-export { getImageFormat, IMAGE_FORMATS, type ImageFormat };
+export { displayFormatName, getImageFormat, IMAGE_FORMATS, type ImageFormat };
 
 // Image file formats the rendered artwork can be encoded into.
 // The rasterizer (`svg2ui8a`) only produces pixels, so the format is
@@ -26,4 +26,12 @@ const IMAGE_FORMATS: Record<ImageFormat, ImageFormatConfig> = {
 // the browser, not silently swapped here.
 function getImageFormat(): ImageFormat {
   return getState("imageFormat") === "webp" ? "webp" : "png";
+}
+
+// How a format is spelled in UI text: PNG is shouted because it is an
+// acronym, while WebP is a brand name that is not. Every display path (the
+// size line above the image, the download/copy button) goes through this one
+// rule so the paths cannot disagree on the casing again.
+function displayFormatName(format: string): string {
+  return format.toLowerCase() === "webp" ? "WebP" : format.toUpperCase();
 }

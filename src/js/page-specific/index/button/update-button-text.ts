@@ -1,6 +1,7 @@
 import { roundToOneDecimal } from "utils/number-rounding";
 import { updateState } from "state/url-state-manager";
 import type { EncodedImage } from "state/image-encoder";
+import { displayFormatName } from "state/image-format";
 import { t } from "i18n/i18n";
 
 export {
@@ -125,9 +126,7 @@ function updateButtonText(
 
   // Convert number value from 'byte' to 'KB'
   const sizeAsKb = roundToOneDecimal(byteSize / 1024);
-  const formattedLabel = label.toLowerCase() === "webp"
-    ? "WebP"
-    : label.toUpperCase();
+  const formattedLabel = displayFormatName(label);
 
   const sizeText = t("button.size", {
     kb: sizeAsKb,
