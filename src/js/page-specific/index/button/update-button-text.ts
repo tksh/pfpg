@@ -1,12 +1,13 @@
 import { roundToOneDecimal } from "utils/number-rounding";
 import { updateState } from "state/url-state-manager";
 import type { EncodedImage } from "state/image-encoder";
-import { displayFormatName } from "state/image-format";
+import { displayFormatName, getImageFormat } from "state/image-format";
 import { t } from "i18n/i18n";
 
 export {
   initButtonActionSelect,
   replaceButtonText,
+  syncCopyAvailability,
   updateButtonWithPngSize,
   updateButtonWithSvgSize,
 };
@@ -95,7 +96,47 @@ function initButtonActionSelect(): void {
     // Update the button innerHtml as selected action
     replaceButtonText(buttonAction, pngActionButton);
     replaceButtonText(buttonAction, svgActionButton);
+    syncCopyAvailability();
   });
+}
+
+// WebP never reaches the system clipboard: the clipboard API refuses the
+// write, so the click used to disappear into the console. While that
+// combination is selected, the image button is disabled and the ⓘ beside the
+// action select explains why; the hint describes WebP only, so it is tied to
+// the image format rather than to the action.
+function syncCopyAvailability(): void {
+  const webpSelected = getImageFormat() === "webp";
+  const copySelected = getActionType() === "copy";
+
+  const pngActionButton = document.getElementById("png-action-button");
+  if (pngActionButton === null) {
+    throw new Error(
+      "syncCopyAvailability: missing element #png-action-button",
+    );
+  }
+  (pngActionButton as HTMLButtonElement).disabled = webpSelected &&
+    copySelected;
+
+  const infoButton = document.getElementById("button-action-info");
+  if (infoButton === null) {
+    throw new Error(
+      "syncCopyAvailability: missing element #button-action-info",
+    );
+  }
+  infoButton.hidden = !webpSelected;
+
+  // Switching back to PNG while the hint is open must dismiss it, or the
+  // explanation of a disabled button would float over an enabled one.
+  const hint = document.getElementById("button-action-hint");
+  if (hint === null) {
+    throw new Error(
+      "syncCopyAvailability: missing element #button-action-hint",
+    );
+  }
+  if (!webpSelected && hint.matches(":popover-open")) {
+    hint.hidePopover();
+  }
 }
 
 function replaceButtonText(buttonAction: string, button: HTMLElement): void {

@@ -1,4 +1,5 @@
 import { getSvgString } from "button/download-as-file";
+import { syncCopyAvailability } from "button/update-button-text";
 import { getImageFormat, type ImageFormat } from "state/image-format";
 import { svg2pngOption } from "state/resvg-option";
 import { updateState } from "state/url-state-manager";
@@ -40,6 +41,7 @@ function initImageFormatSelect(): void {
       const imageFormat = (event.target as HTMLSelectElement).value; // 'png' | 'webp'
       updateState("imageFormat", imageFormat);
       updateFormatLegends(getImageFormat());
+      syncCopyAvailability();
 
       // Re-render and re-upload in the newly selected format
       executeSvg2png({ target: { value: getSvgString() } }, svg2pngOption);

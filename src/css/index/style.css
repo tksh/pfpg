@@ -449,6 +449,14 @@ button#svg-action-button {
   justify-content: center;
 }
 
+/* WebP cannot go to the system clipboard, so its copy button is disabled
+ * instead of being left to fail silently. Only the PNG/WebP button can ever
+ * reach this state. */
+button#png-action-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Footer */
 footer#footer-info {
   font-size: 0.9rem;

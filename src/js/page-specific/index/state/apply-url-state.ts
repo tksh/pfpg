@@ -1,5 +1,6 @@
 import {
   replaceButtonText,
+  syncCopyAvailability,
   updateButtonWithSvgSize,
 } from "button/update-button-text";
 import { SETTINGS_DEFAULTS } from "constants";
@@ -235,6 +236,10 @@ function applyUiConfiguration(): void {
     throw new Error("applyUiConfiguration: missing element #image-format");
   }
   (imageFormatElem as HTMLSelectElement).value = getImageFormat();
+
+  // Both selects now hold the restored values, so the copy button and its ⓘ
+  // have to reflect them before anything else can change them.
+  syncCopyAvailability();
 }
 
 function applySvgOptimization(svgString: string): string {

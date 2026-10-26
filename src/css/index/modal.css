@@ -105,6 +105,9 @@ button#path-mode-info {
 button#png-size-info {
   anchor-name: --png-size-hint-anchor;
 }
+button#button-action-info {
+  anchor-name: --button-action-hint-anchor;
+}
 
 /* The hint popover: a <dialog> carrying the popover attribute, so it needs no
  * JavaScript to open and brings no backdrop or focus trap. The UA centres a
@@ -137,6 +140,9 @@ dialog#path-mode-hint {
 }
 dialog#png-size-hint {
   position-anchor: --png-size-hint-anchor;
+}
+dialog#button-action-hint {
+  position-anchor: --button-action-hint-anchor;
 }
 
 .hint-content {

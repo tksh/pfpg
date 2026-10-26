@@ -564,9 +564,34 @@
                   <option value="copy"
                     data-i18n="ui.buttonAction.copy">Copy to clipboard</option>
                 </select>
+                <!-- Shown only while the Render tab selects WebP: that is the
+                  only case where copying cannot work. The script unhides it. -->
+                <button type="button" class="info-icon" id="button-action-info"
+                  popovertarget="button-action-hint" hidden
+                  data-i18n-aria="ui.buttonAction.copyWebpInfo"
+                  aria-label="Why can't WebP be copied?">
+                  <span class="material-symbols-outlined">info</span>
+                </button>
               </div>
             </fieldset>
           </div>
+
+          <!-- The WebP copy hint. It explains why the button above is grayed
+            out, so it lives beside the fieldset it describes. -->
+          <dialog id="button-action-hint" class="hint-dialog" popover
+            closedby="any">
+            <div class="hint-content">
+              <p class="font-size-small" data-i18n-html="hint.copyWebp">
+                WebP is not supported by the browser's clipboard API, so it
+                cannot be copied. Please select PNG as the <i>Image format</i>
+                in the <i>Render</i> tab instead.
+              </p>
+              <button type="button" class="modal-close-icon"
+                popovertarget="button-action-hint">
+                <span class="material-symbols-outlined">close</span>
+              </button>
+            </div>
+          </dialog>
 
           <div class="setting-container">
             <fieldset>
