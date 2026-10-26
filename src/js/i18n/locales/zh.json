@@ -60,7 +60,7 @@
   "render.imageFormat": "图像格式:",
   "render.imageFormat.webpLossless": "WebP（无损）",
   "hint.pngSize": "滑块最多支持 512 像素，但可以在输入框中手动输入更大的值。尺寸越大，渲染时间呈指数增长。",
-  "hint.copyWebp": "浏览器的剪贴板 API 不支持 WebP，因此无法复制。请在 <i>Render</i> 标签页的 <i>Image format</i> 中选择 PNG。",
+  "hint.copyWebp": "浏览器的剪贴板 API 不支持 WebP，因此无法复制。请在 <i>渲染</i> 标签页的 <i>图像格式</i> 中选择 PNG。",
   "output.pngInfoPlaceholder": "png-info 占位文本",
   "output.svgInfoPlaceholder": "svg-info 占位文本",
   "output.image.alt": "输出图像",

@@ -60,7 +60,7 @@
   "render.imageFormat": "تنسيق الصورة:",
   "render.imageFormat.webpLossless": "WebP (بلا فقدان)",
   "hint.pngSize": "يدعم المنزلق المقاسات حتى 512 بكسل، لكن يمكنك إدخال قيمة أكبر يدويًا في المربع. المقاسات الأكبر تزيد زمن التصيير أُسّيًا.",
-  "hint.copyWebp": "واجهة برمجة الحافظة في المتصفح لا تدعم WebP، لذا لا يمكن نسخه. يُرجى اختيار PNG في <i>Image format</i> ضمن علامة التبويب <i>Render</i>.",
+  "hint.copyWebp": "واجهة برمجة الحافظة في المتصفح لا تدعم WebP، لذا لا يمكن نسخه. يُرجى اختيار PNG في <i>تنسيق الصورة</i> ضمن علامة التبويب <i>التصيير</i>.",
   "output.pngInfoPlaceholder": "نص العنصر البديل png-info",
   "output.svgInfoPlaceholder": "نص العنصر البديل svg-info",
   "output.image.alt": "الصورة الناتجة",

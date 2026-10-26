@@ -60,7 +60,7 @@
   "render.imageFormat": "Formato de imagem: ",
   "render.imageFormat.webpLossless": "WebP (sem perdas)",
   "hint.pngSize": "O controle deslizante aceita tamanhos de até 512 pixels, mas você pode digitar manualmente um valor maior na caixa. Tamanhos maiores aumentam de forma exponencial o tempo de renderização.",
-  "hint.copyWebp": "A API da área de transferência do navegador não suporta WebP, então não é possível copiá-lo. Selecione PNG como <i>Image format</i> na aba <i>Render</i>.",
+  "hint.copyWebp": "A API da área de transferência do navegador não suporta WebP, então não é possível copiá-lo. Selecione PNG como <i>Formato de imagem</i> na aba <i>Render</i>.",
   "output.pngInfoPlaceholder": "Marcador de png-info",
   "output.svgInfoPlaceholder": "Marcador de svg-info",
   "output.image.alt": "Imagem gerada",

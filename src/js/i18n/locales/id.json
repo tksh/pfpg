@@ -60,7 +60,7 @@
   "render.imageFormat": "Format gambar: ",
   "render.imageFormat.webpLossless": "WebP (tanpa kehilangan)",
   "hint.pngSize": "Penggeser mendukung ukuran hingga 512 piksel, tetapi nilai yang lebih besar bisa ditentukan langsung di kotak masukan. Ukuran yang lebih besar menambah waktu render secara eksponensial.",
-  "hint.copyWebp": "API papan klip browser tidak mendukung WebP, sehingga tidak dapat disalin. Pilih PNG pada <i>Image format</i> di tab <i>Render</i>.",
+  "hint.copyWebp": "API papan klip browser tidak mendukung WebP, sehingga tidak dapat disalin. Pilih PNG pada <i>Format gambar</i> di tab <i>Render</i>.",
   "output.pngInfoPlaceholder": "Teks petunjuk png-info",
   "output.svgInfoPlaceholder": "Teks petunjuk svg-info",
   "output.image.alt": "Gambar keluaran",

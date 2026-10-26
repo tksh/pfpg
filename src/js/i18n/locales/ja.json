@@ -60,7 +60,7 @@
   "render.imageFormat": "画像形式:",
   "render.imageFormat.webpLossless": "WebP（ロスレス）",
   "hint.pngSize": "スライダーでは最大 512 ピクセルまで指定できますが、入力ボックスにはそれより大きい値を直接入力できます。サイズが大きいほど描画時間は急激に増えます。",
-  "hint.copyWebp": "ブラウザのクリップボード API は WebP に対応していないため、コピーできません。<i>Render</i> タブの <i>Image format</i> で PNG を選択してください。",
+  "hint.copyWebp": "ブラウザのクリップボード API は WebP に対応していないため、コピーできません。<i>描画</i> タブの <i>画像形式</i> で PNG を選択してください。",
   "output.pngInfoPlaceholder": "PNG 情報のプレースホルダー",
   "output.svgInfoPlaceholder": "SVG 情報のプレースホルダー",
   "output.image.alt": "出力画像",

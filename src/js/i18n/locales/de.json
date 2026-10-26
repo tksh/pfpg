@@ -60,7 +60,7 @@
   "render.imageFormat": "Bildformat: ",
   "render.imageFormat.webpLossless": "WebP (verlustfrei)",
   "hint.pngSize": "Der Schieberegler unterstützt Größen bis 512 Pixel, aber du kannst in das Feld einen größeren Wert eingeben. Größere Werte erhöhen die Renderingzeit exponentiell.",
-  "hint.copyWebp": "Die Clipboard-API des Browsers unterstützt WebP nicht, daher lässt es sich nicht kopieren. Wähle stattdessen PNG als <i>Image format</i> im Tab <i>Render</i>.",
+  "hint.copyWebp": "Die Clipboard-API des Browsers unterstützt WebP nicht, daher lässt es sich nicht kopieren. Wähle stattdessen PNG als <i>Bildformat</i> im Tab <i>Rendering</i>.",
   "output.pngInfoPlaceholder": "Platzhaltertext für png-info",
   "output.svgInfoPlaceholder": "Platzhaltertext für svg-info",
   "output.image.alt": "Erzeugtes Bild",
