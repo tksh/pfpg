@@ -131,10 +131,13 @@ const DATA_I18N_ATTRIBUTES: Readonly<Record<string, string>> = {
   "data-i18n-alt": "alt",
 };
 
+// The attribute names need their brackets here: without them the selector
+// reads `data-i18n-aria` as an element name and matches nothing, leaving
+// every aria-label, title, placeholder and alt in the markup untranslated.
 const I18N_MARKED_SELECTOR = [
   "[data-i18n]",
   "[data-i18n-html]",
-  ...Object.keys(DATA_I18N_ATTRIBUTES),
+  ...Object.keys(DATA_I18N_ATTRIBUTES).map((name) => `[${name}]`),
 ].join(",");
 
 // Arabic writes right-to-left; the page layout is built from CSS logical
