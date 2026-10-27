@@ -140,12 +140,14 @@ main {
   border-end-end-radius: 0rem;
 }
 
-/* 改行したくない範囲を <span>要素で囲み 改行位置を任意の箇所 (<span>要素の切れ目) で行うようにする */
+/* 改行したくない範囲を <span>要素や <bdi>要素で囲み 改行位置を任意の箇所で行うようにする */
 #png-info span,
+#png-info bdi,
 #svg-info span,
+#svg-info bdi,
 #showcase span {
   display: inline-block;
-  /* span要素を横並びにする */
+  /* 要素を横並びにする */
 }
 
 /* For #input and #output */

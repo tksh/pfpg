@@ -212,7 +212,7 @@ function updateDimensionInfo(
     : t("render.renderedPixelSize", { format: displayFormatName(label) });
 
   // Create value element
-  const value = document.createElement("span");
+  const value = document.createElement("bdi");
   value.textContent = `${widthValue} x ${heightValue}`;
 
   // Clear existing content
