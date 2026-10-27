@@ -57,6 +57,7 @@ function renderActionButton(
   button.appendChild(actionSpan);
   if (state.sizeText !== "") {
     const sizeSpan = document.createElement("span");
+    sizeSpan.dir = "ltr";
     sizeSpan.textContent = state.sizeText;
     button.appendChild(sizeSpan);
   }
