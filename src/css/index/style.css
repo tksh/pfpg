@@ -145,7 +145,8 @@ main {
 #png-info bdi,
 #svg-info span,
 #svg-info bdi,
-#showcase span {
+#showcase span,
+#showcase bdi {
   display: inline-block;
   /* 要素を横並びにする */
 }
