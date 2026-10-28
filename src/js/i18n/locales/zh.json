@@ -90,7 +90,7 @@
   "footer.basicFlow": "基本流程:",
   "footer.basicFlow.step1": "从包含 <a href=\"https://en.wikipedia.org/wiki/Query_string\" title=\"Query string - Wikipedia\">查询字符串</a> 的 URL 导入作品数据。",
   "footer.basicFlow.step2": "使用各分类标签页中的选项自由修改作品。",
-  "footer.basicFlow.step3": "通过导出按钮将作品导出为栅格（<a href=\"https://en.wikipedia.org/wiki/PNG\" title=\"PNG - Wikipedia\">PNG</a>/<a href=\"https://en.wikipedia.org/wiki/WebP\" title=\"WebP - Wikipedia\">WebP</a>）或矢量（<a href=\"https://en.wikipedia.org/wiki/SVG\" title=\"SVG - Wikipedia\">SVG</a>)格式。",
+  "footer.basicFlow.step3": "通过导出按钮将作品导出为栅格（<a href=\"https://en.wikipedia.org/wiki/PNG\" title=\"PNG - Wikipedia\">PNG</a>/<a href=\"https://en.wikipedia.org/wiki/WebP\" title=\"WebP - Wikipedia\">WebP</a>）或矢量（<a href=\"https://en.wikipedia.org/wiki/SVG\" title=\"SVG - Wikipedia\">SVG</a>）格式。",
   "footer.configurationOptions": "配置选项:",
   "footer.tabSections": "标签页构成:",
   "footer.tabSections.artwork": "<i>线条</i>、<i>画布</i>、<i>渲染</i> 标签页提供自定义作品外观的设置。",
