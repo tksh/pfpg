@@ -90,7 +90,7 @@
   "footer.basicFlow": "Flujo básico:",
   "footer.basicFlow.step1": "Importa los datos de la obra desde una URL que contenga una <a href=\"https://en.wikipedia.org/wiki/Query_string\" title=\"Query string - Wikipedia\">cadena de consulta</a>.",
   "footer.basicFlow.step2": "Modifica tu obra libremente con las opciones de cada pestaña de categoría.",
-  "footer.basicFlow.step3": "Exporta tu obra en formato <a href=\"https://en.wikipedia.org/wiki/PNG\" title=\"PNG - Wikipedia\">PNG</a> (rasterizado) o <a href=\"https://en.wikipedia.org/wiki/SVG\" title=\"SVG - Wikipedia\">SVG</a> (vectorial) mediante los botones de exportación.",
+  "footer.basicFlow.step3": "Exporta tu obra en formato rasterizado (<a href=\"https://en.wikipedia.org/wiki/PNG\" title=\"PNG - Wikipedia\">PNG</a>/<a href=\"https://en.wikipedia.org/wiki/WebP\" title=\"WebP - Wikipedia\">WebP</a>) o vectorial (<a href=\"https://en.wikipedia.org/wiki/SVG\" title=\"SVG - Wikipedia\">SVG</a>) mediante los botones de exportación.",
   "footer.configurationOptions": "Opciones de configuración:",
   "footer.tabSections": "Pestañas:",
   "footer.tabSections.artwork": "Las pestañas <i>Líneas</i>, <i>Lienzo</i> y <i>Render</i> ofrecen opciones para personalizar la apariencia de la obra.",

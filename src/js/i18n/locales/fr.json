@@ -90,7 +90,7 @@
   "footer.basicFlow": "Flux de base :",
   "footer.basicFlow.step1": "Importe les données de l'œuvre depuis une URL contenant une <a href=\"https://en.wikipedia.org/wiki/Query_string\" title=\"Query string - Wikipedia\">chaîne de requête</a>.",
   "footer.basicFlow.step2": "Modifie ton œuvre librement grâce aux options de chaque onglet de catégorie.",
-  "footer.basicFlow.step3": "Exporte ton œuvre au format <a href=\"https://en.wikipedia.org/wiki/PNG\" title=\"PNG - Wikipedia\">PNG</a> (raster) ou <a href=\"https://en.wikipedia.org/wiki/SVG\" title=\"SVG - Wikipedia\">SVG</a> (vectoriel) via les boutons d'export.",
+  "footer.basicFlow.step3": "Exporte ton œuvre au format raster (<a href=\"https://en.wikipedia.org/wiki/PNG\" title=\"PNG - Wikipedia\">PNG</a>/<a href=\"https://en.wikipedia.org/wiki/WebP\" title=\"WebP - Wikipedia\">WebP</a>) ou vectoriel (<a href=\"https://en.wikipedia.org/wiki/SVG\" title=\"SVG - Wikipedia\">SVG</a>) via les boutons d'export.",
   "footer.configurationOptions": "Options de configuration :",
   "footer.tabSections": "Sections d'onglets :",
   "footer.tabSections.artwork": "Les onglets <i>Lignes</i>, <i>Canevas</i> et <i>Rendu</i> proposent des réglages pour personnaliser l'apparence de l'œuvre.",

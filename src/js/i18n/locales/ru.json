@@ -90,7 +90,7 @@
   "footer.basicFlow": "Основной порядок:",
   "footer.basicFlow.step1": "Импортируйте данные работы из URL, содержащего <a href=\"https://en.wikipedia.org/wiki/Query_string\" title=\"Query string - Wikipedia\">строку запроса</a>.",
   "footer.basicFlow.step2": "Свободно изменяйте работу с помощью параметров на вкладках категорий.",
-  "footer.basicFlow.step3": "Экспортируйте работу в формате <a href=\"https://en.wikipedia.org/wiki/PNG\" title=\"PNG - Wikipedia\">PNG</a> (растр) или <a href=\"https://en.wikipedia.org/wiki/SVG\" title=\"SVG - Wikipedia\">SVG</a> (вектор) через кнопки экспорта.",
+  "footer.basicFlow.step3": "Экспортируйте работу в растровом формате (<a href=\"https://en.wikipedia.org/wiki/PNG\" title=\"PNG - Wikipedia\">PNG</a>/<a href=\"https://en.wikipedia.org/wiki/WebP\" title=\"WebP - Wikipedia\">WebP</a>) или векторном формате (<a href=\"https://en.wikipedia.org/wiki/SVG\" title=\"SVG - Wikipedia\">SVG</a>) через кнопки экспорта.",
   "footer.configurationOptions": "Параметры конфигурации:",
   "footer.tabSections": "Вкладки:",
   "footer.tabSections.artwork": "Вкладки <i>Линии</i>, <i>Холст</i> и <i>Рендер</i> содержат настройки внешнего вида работы.",

@@ -90,7 +90,7 @@
   "footer.basicFlow": "Alur dasar:",
   "footer.basicFlow.step1": "Impor data karya dari URL yang memuat <a href=\"https://en.wikipedia.org/wiki/Query_string\" title=\"Query string - Wikipedia\">string kueri</a>.",
   "footer.basicFlow.step2": "Sunting karya bebas dengan opsi pada tiap tab kategori.",
-  "footer.basicFlow.step3": "Ekspor karya ke format <a href=\"https://en.wikipedia.org/wiki/PNG\" title=\"PNG - Wikipedia\">PNG</a> (raster) atau <a href=\"https://en.wikipedia.org/wiki/SVG\" title=\"SVG - Wikipedia\">SVG</a> (vektor) lewat tombol ekspor.",
+  "footer.basicFlow.step3": "Ekspor karya ke format raster (<a href=\"https://en.wikipedia.org/wiki/PNG\" title=\"PNG - Wikipedia\">PNG</a>/<a href=\"https://en.wikipedia.org/wiki/WebP\" title=\"WebP - Wikipedia\">WebP</a>) atau vektor (<a href=\"https://en.wikipedia.org/wiki/SVG\" title=\"SVG - Wikipedia\">SVG</a>) lewat tombol ekspor.",
   "footer.configurationOptions": "Opsi konfigurasi:",
   "footer.tabSections": "Bagian tab:",
   "footer.tabSections.artwork": "Tab <i>Garis</i>, <i>Kanvas</i>, dan <i>Render</i> menampung pengaturan penampilan karya.",

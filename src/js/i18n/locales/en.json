@@ -90,7 +90,7 @@
   "footer.basicFlow": "Basic flow:",
   "footer.basicFlow.step1": "Import artwork data from a URL containing a <a href=\"https://en.wikipedia.org/wiki/Query_string\" title=\"Query string - Wikipedia\">query string</a>.",
   "footer.basicFlow.step2": "Modify your artwork freely using the options in each category tab.",
-  "footer.basicFlow.step3": "Export your artwork as a <a href=\"https://en.wikipedia.org/wiki/PNG\" title=\"PNG - Wikipedia\">PNG</a> (raster) or <a href=\"https://en.wikipedia.org/wiki/SVG\" title=\"SVG - Wikipedia\">SVG</a> (vector) format via export buttons.",
+  "footer.basicFlow.step3": "Export your artwork as a raster (<a href=\"https://en.wikipedia.org/wiki/PNG\" title=\"PNG - Wikipedia\">PNG</a>/<a href=\"https://en.wikipedia.org/wiki/WebP\" title=\"WebP - Wikipedia\">WebP</a>) or vector (<a href=\"https://en.wikipedia.org/wiki/SVG\" title=\"SVG - Wikipedia\">SVG</a>) format via export buttons.",
   "footer.configurationOptions": "Configuration options:",
   "footer.tabSections": "Tab Sections:",
   "footer.tabSections.artwork": "The <i>Lines</i>, <i>Canvas</i>, <i>Render</i> tabs offer settings to customize the artwork's appearance.",

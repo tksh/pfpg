@@ -90,7 +90,7 @@
   "footer.basicFlow": "基本の流れ:",
   "footer.basicFlow.step1": "<a href=\"https://en.wikipedia.org/wiki/Query_string\" title=\"Query string - Wikipedia\">クエリ文字列</a>を含む URL から、アートワークデータを読み込みます。",
   "footer.basicFlow.step2": "各カテゴリタブのオプションで、アートワークを自由に編集できます。",
-  "footer.basicFlow.step3": "書き出しボタンから、<a href=\"https://en.wikipedia.org/wiki/PNG\" title=\"PNG - Wikipedia\">PNG</a>(ラスター)または <a href=\"https://en.wikipedia.org/wiki/SVG\" title=\"SVG - Wikipedia\">SVG</a>(ベクター)形式でアートワークを出力できます。",
+  "footer.basicFlow.step3": "書き出しボタンから、ラスター (<a href=\"https://en.wikipedia.org/wiki/PNG\" title=\"PNG - Wikipedia\">PNG</a>/<a href=\"https://en.wikipedia.org/wiki/WebP\" title=\"WebP - Wikipedia\">WebP</a>) またはベクター (<a href=\"https://en.wikipedia.org/wiki/SVG\" title=\"SVG - Wikipedia\">SVG</a>) 形式でアートワークを出力できます。",
   "footer.configurationOptions": "設定オプション:",
   "footer.tabSections": "タブの構成:",
   "footer.tabSections.artwork": "<i>線</i>、<i>キャンバス</i>、<i>描画</i> タブには、アートワークの見た目をカスタマイズする設定があります。",

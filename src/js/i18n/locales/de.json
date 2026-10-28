@@ -90,7 +90,7 @@
   "footer.basicFlow": "Grundablauf:",
   "footer.basicFlow.step1": "Artwork-Daten aus einer URL mit einem <a href=\"https://en.wikipedia.org/wiki/Query_string\" title=\"Query string - Wikipedia\">Query String</a> importieren.",
   "footer.basicFlow.step2": "Frei bearbeiten mit den Optionen je Kategorie-Tab.",
-  "footer.basicFlow.step3": "Exportieren als <a href=\"https://en.wikipedia.org/wiki/PNG\" title=\"PNG - Wikipedia\">PNG</a> (Raster) oder <a href=\"https://en.wikipedia.org/wiki/SVG\" title=\"SVG - Wikipedia\">SVG</a> (Vektor) über die Export-Schaltflächen.",
+  "footer.basicFlow.step3": "Exportieren als Rasterformat (<a href=\"https://en.wikipedia.org/wiki/PNG\" title=\"PNG - Wikipedia\">PNG</a>/<a href=\"https://en.wikipedia.org/wiki/WebP\" title=\"WebP - Wikipedia\">WebP</a>) oder Vektorformat (<a href=\"https://en.wikipedia.org/wiki/SVG\" title=\"SVG - Wikipedia\">SVG</a>) über die Export-Schaltflächen.",
   "footer.configurationOptions": "Konfigurationsoptionen:",
   "footer.tabSections": "Tab-Bereiche:",
   "footer.tabSections.artwork": "Die Tabs <i>Linien</i>, <i>Leinwand</i> und <i>Rendering</i> bieten Einstellungen für das Aussehen.",
