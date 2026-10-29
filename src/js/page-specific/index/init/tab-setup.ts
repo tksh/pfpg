@@ -1,5 +1,47 @@
 import { adjustLayoutIfNotMobile } from "init/adjust-layout";
 
+const TAB_STORAGE_KEY = "pfpg.activeTab";
+const DEFAULT_TAB_NAME = "tab-1";
+
+function readInitialTabName(): string {
+  try {
+    const storedTabName = sessionStorage.getItem(TAB_STORAGE_KEY);
+    if (storedTabName !== null) {
+      const storedTabPanel = document.getElementById(storedTabName);
+      if (storedTabPanel?.classList.contains("tab-content")) {
+        return storedTabName;
+      }
+    }
+  } catch {
+    // sessionStorage can be unavailable (for example, blocked by browser
+    // settings). Tab persistence is a convenience, so fall back quietly.
+  }
+  return DEFAULT_TAB_NAME;
+}
+
+function rememberTabName(tabName: string): void {
+  try {
+    sessionStorage.setItem(TAB_STORAGE_KEY, tabName);
+  } catch {
+    // Never block tab switching just because persistence failed.
+  }
+}
+
+function findTabLink(tabName: string): HTMLElement | null {
+  const tabLinks = document.getElementsByClassName("tab-link");
+  for (let i = 0; i < tabLinks.length; i++) {
+    const link = tabLinks[i];
+    if (link === undefined) {
+      continue;
+    }
+    const linkElement = link as HTMLElement;
+    if (linkElement.dataset.tab === tabName) {
+      return linkElement;
+    }
+  }
+  return null;
+}
+
 export function initTabs(): void {
   const tabs = document.querySelectorAll(".tab-link");
   tabs.forEach((tab) => {
@@ -9,8 +51,8 @@ export function initTabs(): void {
     );
   });
 
-  // Open the first tab when the page loads
-  openTab(null, "tab-1");
+  // Restore the tab that was open before the reload; fall back to the first tab.
+  openTab(null, readInitialTabName());
 
   // Add keyboard event listener
   document.addEventListener("keydown", handleKeyPress);
@@ -44,6 +86,7 @@ function openTab(
   if (tabPanel === null) {
     throw new Error(`openTab: missing element #${tabName}`);
   }
+  rememberTabName(tabName);
   tabPanel.style.display = "block";
   if (evt) {
     const currentTarget = evt.currentTarget as Element | null;
@@ -52,12 +95,13 @@ function openTab(
     }
     currentTarget.classList.add("active"); // Add 'active' class to the clicked tab
   } else {
-    // If no event, then it's the initial load, so manually set the first tab link as active
-    const firstTabLink = document.querySelector(".tab-link");
-    if (firstTabLink === null) {
-      throw new Error("openTab: missing element .tab-link");
+    // Without an event, this is a restore or initial load, so mark the
+    // matching tab link as active.
+    const activeTabLink = findTabLink(tabName);
+    if (activeTabLink === null) {
+      throw new Error(`openTab: missing .tab-link for ${tabName}`);
     }
-    firstTabLink.classList.add("active");
+    activeTabLink.classList.add("active");
   }
   adjustLayoutIfNotMobile("tabChanged");
 }
