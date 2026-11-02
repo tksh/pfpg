@@ -31,6 +31,19 @@ deno install
 deno task build  # Build index.html and data-manipulator.html
 ```
 
+## OGP server
+
+`server/ogp-probe.ts` runs as a separate Deno Deploy service. It reads the
+vendored rasterizer binary from `src/assets/svg2ui8a/` and initializes
+`svg2ui8a` from those bytes before `Deno.serve()` starts listening. No jsr.io
+Wasm request is made at runtime, and a missing local file stops startup rather
+than failing the first render.
+
+The browser still loads the same binary from this origin through `wasmUrl`;
+`deno task build` copies `src/assets/svg2ui8a/` to `dist/svg2ui8a/`. Run
+`deno task vendor:svg2ui8a` to refresh the file and its provenance after a
+package version bump.
+
 ## Deploy on Netlify
 
 `git push` to run `build.sh` on Netlify, which forces installation of the latest
