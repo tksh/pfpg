@@ -9,13 +9,14 @@
  *
  * The binary is fetched from JSR's file server, which serves the published
  * package files as they are. The pinned checksum proves the vendored copy is
- * the published one.
+ * the published one. The browser loads this copy with `wasmUrl`; the OGP
+ * server reads it as bytes instead, so neither path fetches jsr.io at runtime.
  *
  * Run after changing the pinned version: `deno task vendor:svg2ui8a`.
  */
 
 // The version must match the `imports` in deno.jsonc.
-const SVG2UI8A_VERSION = "0.6.0";
+export const SVG2UI8A_VERSION = "0.6.1";
 
 // JSR's file server serves the published files of a version. The
 // `@scope/name@version` form of the URL is not a file-server path.
@@ -23,37 +24,44 @@ const PACKAGE_URL = `https://jsr.io/@tksh/svg2ui8a/${SVG2UI8A_VERSION}`;
 
 const WASM_DEST = "src/assets/svg2ui8a";
 
-interface VendoredFile {
+export interface VendoredFile {
   /** Path inside the published package. */
   from: string;
   /** Path under `src/`, where the build reads it from. */
   to: string;
-  /** sha256 of the published file. */
+  /** Size of the published file in bytes. */
+  size: number;
+  /** sha256 of the published file, as 64 lowercase hex characters. */
   sha256: string;
   /** Why the file is here. */
   note: string;
 }
 
-const FILES: VendoredFile[] = [
-  {
-    from: "/assets/svg2rgba_bg.wasm",
-    to: `${WASM_DEST}/svg2rgba_bg.wasm`,
-    sha256: "efe5a798399e181b1acecd7b7f4b9e736f2a13451222e4f9cb513415717a4bb6",
-    note: "the rasterizer (resvg/usvg/tiny-skia), loaded by `svg2rgba`",
-  },
-];
+const SVG2RGBA_FILE: VendoredFile = {
+  from: "/assets/svg2rgba_bg.wasm",
+  to: `${WASM_DEST}/svg2rgba_bg.wasm`,
+  size: 998801,
+  sha256: "efe5a798399e181b1acecd7b7f4b9e736f2a13451222e4f9cb513415717a4bb6",
+  note: "the rasterizer (resvg/usvg/tiny-skia), loaded by `svg2rgba`",
+};
+
+export const FILES: VendoredFile[] = [SVG2RGBA_FILE];
 
 const PROVENANCE = `# Vendored rasterizer assets
 
 These files are copied verbatim out of the published package by
-\`deno task vendor:svg2ui8a\`; do not edit them by hand. \`@tksh/svg2ui8a\`
-loads its Wasm with a URL, which \`deno bundle\` does not turn into an
-emitted asset, so the page fetches it from here (the build copies this
-directory to \`dist/svg2ui8a/\`).
+\`deno task vendor:svg2ui8a\`; do not edit them by hand. The browser loads
+its Wasm with \`wasmUrl\`, which \`deno bundle\` does not turn into an emitted
+asset, so the page fetches it from here (the build copies this directory to
+\`dist/svg2ui8a/\`). The OGP server reads the same local file with
+\`Deno.readFile()\` and initializes from \`wasmBytes\`, without a runtime
+jsr.io fetch.
 
 | File | From | Size | sha256 |
 | --- | --- | --- | --- |
-| \`svg2rgba_bg.wasm\` | \`@tksh/svg2ui8a@${SVG2UI8A_VERSION}\` \`assets/\` | 975 KB | \`efe5a798…a4bb6\` |
+| \`svg2rgba_bg.wasm\` | \`@tksh/svg2ui8a@${SVG2UI8A_VERSION}\` \`assets/\` | ${
+  (SVG2RGBA_FILE.size / 1024).toFixed(0)
+} KB | \`efe5a798…a4bb6\` |
 
 The binary contains the \`resvg\`, \`usvg\`, \`tiny-skia\` and \`roxmltree\`
 code; their licenses are listed in the Credits section of \`index.html\`, and
@@ -61,11 +69,32 @@ the package itself is published at <https://jsr.io/@tksh/svg2ui8a>.
 `;
 
 /** The sha256 of the given bytes, as lowercase hex. */
-async function sha256(bytes: ArrayBuffer): Promise<string> {
-  const digest = await crypto.subtle.digest("SHA-256", bytes);
+export async function sha256(bytes: Uint8Array): Promise<string> {
+  const digest = await crypto.subtle.digest(
+    "SHA-256",
+    bytes.slice().buffer as ArrayBuffer,
+  );
   return [...new Uint8Array(digest)]
     .map((byte) => byte.toString(16).padStart(2, "0"))
     .join("");
+}
+
+/** Fail unless the bytes match the recorded size and sha256. */
+export async function verifyFile(
+  file: VendoredFile,
+  bytes: Uint8Array,
+): Promise<void> {
+  if (bytes.byteLength !== file.size) {
+    throw new Error(
+      `vendor_svg2ui8a: ${file.to} has ${bytes.byteLength} bytes, expected ${file.size}`,
+    );
+  }
+  const actual = await sha256(bytes);
+  if (actual !== file.sha256) {
+    throw new Error(
+      `vendor_svg2ui8a: ${file.to} has sha256 ${actual}, expected ${file.sha256}`,
+    );
+  }
 }
 
 /**
@@ -109,14 +138,9 @@ export async function main(): Promise<void> {
         `vendor_svg2ui8a: cannot fetch ${url} (${response.status} ${response.statusText})`,
       );
     }
-    const bytes = await response.arrayBuffer();
-    const actual = await sha256(bytes);
-    if (actual !== file.sha256) {
-      throw new Error(
-        `vendor_svg2ui8a: ${url} has sha256 ${actual}, expected ${file.sha256}`,
-      );
-    }
-    await Deno.writeFile(file.to, new Uint8Array(bytes));
+    const bytes = new Uint8Array(await response.arrayBuffer());
+    await verifyFile(file, bytes);
+    await Deno.writeFile(file.to, bytes);
     const size = `${(bytes.byteLength / 1024).toFixed(0)} KB`;
     console.log(`✅ ${file.to} (${size}) — ${file.note}`);
   }
