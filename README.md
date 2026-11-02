@@ -42,7 +42,16 @@ than failing the first render.
 The browser still loads the same binary from this origin through `wasmUrl`;
 `deno task build` copies `src/assets/svg2ui8a/` to `dist/svg2ui8a/`. Run
 `deno task vendor:svg2ui8a` to refresh the file and its provenance after a
-package version bump.
+package version bump. The provenance and the expected size and SHA-256 are
+recorded in `src/assets/svg2ui8a/README.md`.
+
+The deployed OGP service is <https://pfpg-ogp.tksh.deno.net>:
+
+- `GET /ogp?<artwork params>` renders the artwork and returns the key, SVG and
+  RGBA byte counts, and output dimensions. It does not upload.
+- `GET /ogp/image-meta?<artwork params>` returns the Cloudinary key and image
+  URL without rendering or uploading.
+- `POST /ogp/render` renders and uploads the PNG.
 
 ## Deploy on Netlify
 
