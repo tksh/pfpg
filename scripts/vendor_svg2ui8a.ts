@@ -127,7 +127,28 @@ async function formatMarkdown(text: string): Promise<string> {
   return new TextDecoder().decode(output.stdout);
 }
 
+/** Fail unless the pinned version matches the import in `deno.jsonc`. */
+async function verifyConfiguredVersion(): Promise<void> {
+  const config = await Deno.readTextFile(
+    new URL("../deno.jsonc", import.meta.url),
+  );
+  const match = config.match(
+    /"svg2ui8a":\s*"jsr:@tksh\/svg2ui8a@\^([^/"]+)\/svg2rgba"/,
+  );
+  if (match === null) {
+    throw new Error("vendor_svg2ui8a: cannot read the svg2ui8a import version");
+  }
+  if (match[1] !== SVG2UI8A_VERSION) {
+    throw new Error(
+      `vendor_svg2ui8a: deno.jsonc imports ${
+        match[1]
+      }, but the vendor script expects ${SVG2UI8A_VERSION}`,
+    );
+  }
+}
+
 export async function main(): Promise<void> {
+  await verifyConfiguredVersion();
   await Deno.mkdir(WASM_DEST, { recursive: true });
 
   for (const file of FILES) {
