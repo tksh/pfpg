@@ -46,8 +46,8 @@ package version bump.
 
 ## Deploy on Netlify
 
-`git push` to run `build.sh` on Netlify, which forces installation of the latest
-Deno.
+`git push` to run `scripts/build.sh` on Netlify, which forces installation of
+the latest Deno.
 
 ## Deploy on Cloudflare Pages
 
