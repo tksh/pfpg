@@ -76,7 +76,7 @@
     "@jsquash/qoi-decode": "npm:@jsquash/qoi@^1.1.0/decode.js",
 
     // Straightlines codec: published package.
-    "@tksh/stln-codec": "jsr:@tksh/stln-codec@^0.1.1",
+    "@tksh/stln-codec": "jsr:@tksh/stln-codec@^0.1.4",
 
     // Shared group-color parameter codec (URL/state shortening + expansion).
     "@tksh/group-colors-param-codec": "jsr:@tksh/group-colors-param-codec@^0.1.1",
