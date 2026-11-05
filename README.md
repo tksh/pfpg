@@ -47,11 +47,34 @@ recorded in `src/assets/svg2ui8a/README.md`.
 
 The deployed OGP service is <https://pfpg-ogp.tksh.deno.net>:
 
-- `GET /ogp?<artwork params>` renders the artwork and returns the key, SVG and
-  RGBA byte counts, and output dimensions. It does not upload.
-- `GET /ogp/image-meta?<artwork params>` returns the Cloudinary key and image
-  URL without rendering or uploading.
-- `POST /ogp/render` renders and uploads the PNG.
+The production `og:image` is not rendered by this service. The browser page
+uploads its own rendered PNG (or WebP) to Cloudinary under a key derived from
+the drawing itself (see `docs/shared-image-key.md`). The Netlify/Cloudflare
+middleware computes that deterministic URL from the params and injects it as
+`og:image`; the server never renders or uploads on that path. A URL that has
+never been opened in a browser therefore has no `og:image` asset (404) until
+someone renders it or ops calls `POST /ogp/render`.
+
+`GET /ogp/image-meta?<artwork params>` returns the Cloudinary key and image URL
+without rendering or uploading — the image URL is deterministic from the
+`publicId`. It always returns the `-png` variant: PNG is the OGP-compatible
+default (WebP is not widely supported by crawlers), a deliberate special case —
+the library built from this pipeline (`@tksh/libpfpg`, when published) honors
+`imageFormat` and would return the WebP.
+
+`POST /ogp/render` renders the params server-side and uploads the PNG. It is the
+manual/ops route for pre-rendering a URL that has never been opened in a
+browser. Note: the current server-side renderer is not yet pixel-faithful to the
+browser preview (it does not apply `shapeToTrim` / `shapeRendering` /
+`opacitySteps` / `widthNarrowness` / `topHeavyRatio` / `cropSideMargins`); it is
+being reworked onto the same pure renderer the browser uses. Because it uploads
+under the same `publicId`, a server re-render can overwrite a correct
+browser-uploaded image.
+
+`GET /ogp?<artwork params>` renders the artwork and returns the key, SVG and
+RGBA byte counts and output dimensions for diagnosis. It does not upload. (Note:
+`GET /ogp` is slated for removal — it was never part of the OGP flow and its
+existence invited the misreading that the server produces the `og:image`.)
 
 ## Deploy on Netlify
 

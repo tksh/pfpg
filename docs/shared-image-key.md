@@ -146,8 +146,44 @@ logging the skip.
 Deploy endpoints always agree with the browser on the key:
 
 - `GET /ogp/image-meta` returns `{ key, publicId, imageUrl }` without uploading
-  anything — the image URL is deterministic from the `publicId` (`<key>-png`).
+  anything — the image URL is deterministic from the `publicId` (`<key>-png`,
+  see below).
 - `POST /ogp/render` decodes the same params, renders and uploads. Its SVG
   assembly mirrors the browser pipeline (state keys filtered, `<g>` color
-  overrides applied, `removeOpacity` honored) so server-rendered pixels match
-  the preview.
+  overrides applied, `removeOpacity` honored). Note that it does not yet apply
+  `shapeToTrim` / `shapeRendering` / `opacitySteps` / `widthNarrowness` /
+  `topHeavyRatio` / `cropSideMargins`, so the uploaded image does not yet match
+  the browser preview exactly. It is being reworked to the same pure renderer
+  the browser uses.
+
+### Where the `og:image` actually comes from
+
+The `og:image` that crawlers (and unfurl previews in chat tools) show is not
+produced by the server. The browser page renders the artwork, and — after a page
+render settles (`UPLOAD_DEBOUNCE_MS`) — uploads its rendered PNG (or, if
+`imageFormat=webp`, WebP) under `<key>-png` (`<key>-webp`) via
+`uploadRenderedImage`. The Netlify / Cloudflare middleware computes the same
+deterministic URL from the params and injects it into `og:image`; nothing is
+rendered server-side on that path, and no server-side job checks that the asset
+exists.
+
+Consequences:
+
+- A URL that has never been opened in a browser has no `og:image` asset at that
+  URL (it 404s) until someone renders it, or ops calls `POST /ogp/render` for
+  it.
+- The browser's upload is the asset that wins — a later, reduced-fidelity server
+  render from `POST /ogp/render` would overwrite a correct image with a
+  different one. Re-uploading by mistake is destructive to the OGP preview of
+  that URL.
+- `/ogp/image-meta` always returns the `-png` URL on purpose: OGP crawlers
+  support PNG widely, whereas WebP support is spotty. This is a deliberate
+  special case for the OGP path, not the general contract of the renderer — the
+  library built from this pipeline (`@tksh/libpfpg`, when published) honors
+  `imageFormat` and would return the WebP.
+- `pfpg-ogp.tksh.deno.net` is the Deno Deploy service hosting these endpoints;
+  the site previously used it for all server-side rendering. The production
+  `og:image` path depends on it only for `/ogp/image-meta`.
+- `POST /ogp/render` is the manual/ops route for pre-rendering a URL that has
+  never been opened in a browser (so its `og:image` is valid from the start).
+  `GET /ogp` (diagnostic) may be removed without affecting the production path.
