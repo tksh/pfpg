@@ -13,7 +13,12 @@ import {
   tryRemoveOpacity,
   tryRemoveSpaces,
 } from "modal/optimize-svg";
-import { getState, getStateUrl, updateState } from "state/url-state-manager";
+import {
+  getState,
+  getStateUrl,
+  removeUrlParams,
+  updateState,
+} from "state/url-state-manager";
 import { getImageFormat } from "state/image-format";
 import { applyGroupColors } from "tab-lines/apply-group-colors";
 import {
@@ -109,9 +114,29 @@ async function applyImageCustomization(
   // 'opacitySteps' does not have default value in 'SETTINGS_DEFAULTS' map object, before the decoding svg.
   // The only way to get the default value is calculated from original lines data. (at above 'colorFormat' section)
   const opacityStepsViaUrl = getStateUrl("opacitySteps"); // Getting the steps - 3rd of 3
-  if (opacityStepsViaUrl) {
-    opacityStepsSelect.value = String(opacityStepsViaUrl);
-    changeOpacitySelectOptionsAsNewStep(updatedSvg, Number(opacityStepsViaUrl)); // Update the group colors input elements
+  // Guard: a zero/negative/NaN/non-finite `opacitySteps` in the URL would
+  // make `numbersIncrementByStep` loop forever (i += step * 100 never grows)
+  // or snap everything to 0 (NaN). Drop the broken param and keep the
+  // artwork-derived default instead of applying it.
+  const parsedOpacityStepsViaUrl = opacityStepsViaUrl === undefined
+    ? undefined
+    : Number(opacityStepsViaUrl);
+  const opacityStepsViaUrlIsValid = parsedOpacityStepsViaUrl !== undefined &&
+    Number.isFinite(parsedOpacityStepsViaUrl) &&
+    parsedOpacityStepsViaUrl > 0 && parsedOpacityStepsViaUrl <= 1;
+
+  if (opacityStepsViaUrl !== undefined && !opacityStepsViaUrlIsValid) {
+    console.warn(
+      `applyImageCustomization: ignoring invalid opacitySteps in URL: ${
+        String(opacityStepsViaUrl)
+      }`,
+    );
+    removeUrlParams(["opacitySteps"]); // so downstream reads fall back to the default
+  } else if (
+    parsedOpacityStepsViaUrl !== undefined && opacityStepsViaUrlIsValid
+  ) {
+    opacityStepsSelect.value = String(parsedOpacityStepsViaUrl);
+    changeOpacitySelectOptionsAsNewStep(updatedSvg, parsedOpacityStepsViaUrl); // Update the group colors input elements
     updatedSvg = updateSvgWithNewSteps(updatedSvg); // Extract the steps value from input elements selected
   }
 
