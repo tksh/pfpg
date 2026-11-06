@@ -85,12 +85,55 @@ Values are read the way the app reads them:
 - `title`, `desc`, `metadata` (SVG tag content) and `bits` (decode-only).
 - `groupColors` as a raw string — only its _effective_ per-group colors enter
   the key (a state override spelling the same color keeps the key).
-- `opacitySteps` (the opacity selector's step size, not a rendered value).
+- `opacitySteps` (the parameter itself). Its _effect_ goes into the key — see
+  "Opacity steps" below.
 - `pathMode` and `colorFormat`: they change the markup, not the pixels.
 - All other UI state, including `themeColor` (the shared image has no
   background) and `imageFormat` (the file format is not part of the drawing;
   both `png` and `webp` of one drawing share the key and differ only in the
   `public_id` suffix).
+
+## Opacity steps
+
+`opacitySteps` is the one parameter whose exclusion needs an asterisk. The
+parameter is not part of the canonical settings — the renderer may spell the
+same effective drawing many ways, and two URLs producing identical pixels must
+share a key — but its **effect on the pixels is included**:
+
+- When the URL carries a supported step (`0.04`, `0.1`, `0.2`), every group's
+  `opacity` and `stroke-opacity` — including overrides supplied via
+  `groupColors` — are quantized onto the step grid before projection onto the
+  canonical input. The snap rule and tie-break are the same as the renderer's:
+  nearest grid value, plain `<` comparison (ties go to the earlier/larger grid
+  value). Grid values are the three-decimal-grid the UI emits (`"1.0"`,
+  `"0.96"`, …).
+- Unsupported or invalid values (anything but `0.04` / `0.1` / `0.2`) are
+  treated as "opacitySteps not specified": the artwork keeps the opacities it
+  was drawn with, and the key is identical to the same URL without the param.
+  The browser does the same thing — it drops the invalid param and keeps the
+  artwork-derived default.
+- The raw parameter is not re-included under any supported value, so an artwork
+  already on the grid (e.g. showcase artworks snapped by construction) keeps its
+  current key no matter which allowed step the URL carries.
+
+The rules are implemented by `readOpacitySteps()` and `effectiveOpacityUint8()`
+in `canonical-image-input.ts`. `shared-image-key-test.ts` asserts that:
+
+- the fixture artwork (opacity `1.0` / `0.8` / `0.6` / `0.4`, on every grid)
+  keeps its key for all three steps and for every unsupported value (`0`,
+  `-0.1`, `0.3`, `0.5`, `0.07`, `1`, `true`, `abc`, empty);
+- a `groupColors` override encoding an off-grid `0.5` stroke-opacity changes the
+  key under `opacitySteps=0.04` and `opacitySteps=0.2` (it snaps to 0.52 / 0.6),
+  and keeps the plain key under `opacitySteps=0.1`;
+- `effectiveOpacityUint8()` snaps with the nearest-grid rule and the same
+  earlier/larger tie-break as the UI.
+
+Bumping `SHARED_IMAGE_KEY_VERSION` is not required for this change: this project
+has no users or shared assets to protect (dev-era decision, 2026-11-06), and
+bumping would change the Cloudinary `public_id` of every re-render without any
+quality gain. The key format version is therefore left at `pfpg-shared-v1`. When
+the renderer projection changes in the future (e.g. honoring other
+pixel-affecting settings), bump the version as documented below.
 
 ## State-key filtering
 

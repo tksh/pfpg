@@ -6,7 +6,13 @@ import {
   decodeGroupColors,
 } from "@tksh/stln-codec";
 import { murmurHash3_x64_128 } from "@timepp/murmurhash";
-import { type SettingValue, VISUAL_CONFIG_DEFAULTS } from "constants";
+import {
+  type AllowedOpacityStep,
+  isAllowedOpacityStep,
+  type SettingValue,
+  VISUAL_CONFIG_DEFAULTS,
+} from "constants";
+import { numbersIncrementByStep } from "tab-lines/opacity-steps-grid";
 
 export {
   buildCanonicalImageInput,
@@ -14,7 +20,9 @@ export {
   type CanonicalGroup,
   type CanonicalImageInput,
   type CanonicalSettings,
+  effectiveOpacityUint8,
   hashCanonicalImageInput,
+  readOpacitySteps,
   serializeCanonicalImageInput,
   SHARED_IMAGE_KEY_VERSION,
 };
@@ -40,11 +48,26 @@ const SHARED_IMAGE_KEY_VERSION = "pfpg-shared-v1";
 // artwork variants), and the file format the pixels are encoded into is not
 // part of the drawing either.
 //
+// `opacitySteps` is the interesting case: the parameter itself is left out,
+// but the *effective* (snapped) opacity it produces is not. When a URL
+// carries a supported `opacitySteps`, every group's opacity and stroke-opacity
+// are quantized onto the step grid before projection (same rule and tie-break
+// as the app's renderer — ties go to the earlier/larger grid value). Two
+// URLs that rasterize identically therefore get the same key, whichever
+// uploading path produced them.
+//
 // The shape is a plain tuple/array tree of finite numbers, strings and
 // booleans: `JSON.stringify` order is therefore the declaration order, and no
 // `undefined`, `null` or `Map` can leak into the hashed text.
 
-/** `[strokeR, strokeG, strokeB, opacity, strokeOpacity]`, all 0-255. */
+/**
+ * `[strokeR, strokeG, strokeB, opacity, strokeOpacity]`, all 0-255.
+ *
+ * With `opacitySteps` specified, the opacity / stroke-opacity entries hold the
+ * **snapped** (effective) values the renderer applies — e.g. a UI `0.6` step
+ * grid turns raw `0.5` into `0.6`. Raw decode values correspond to the
+ * "unspecified" case.
+ */
 type CanonicalStyle = [number, number, number, number, number];
 
 /** One line as `[x1, y1, x2, y2]` in absolute canvas coordinates. */
@@ -145,6 +168,68 @@ function readCropSideMargins(raw: SettingValue): boolean {
   return String(value).toLowerCase() === "true";
 }
 
+// `opacitySteps` helpers. The parameter itself is never part of the canonical
+// settings — its *effect* on the drawn opacities is (see the header comment).
+const OPACITY_STEP_GRIDS = new Map<AllowedOpacityStep, readonly number[]>();
+
+/**
+ * The supported `opacitySteps` from the URL (`0.04` / `0.1` / `0.2`), or
+ * `undefined` for "not specified" (missing, `0`, `0.3`, `true`, `abc`, …).
+ */
+function readOpacitySteps(
+  params: URLSearchParams,
+): AllowedOpacityStep | undefined {
+  const raw = params.get("opacitySteps");
+  if (!isAllowedOpacityStep(raw)) return undefined;
+  const step = Number(raw);
+  switch (step) {
+    case 0.04:
+    case 0.1:
+    case 0.2:
+      return step;
+    default:
+      throw new Error(
+        `buildCanonicalImageInput: unreachable opacitySteps after allowlist: ${step}`,
+      );
+  }
+}
+
+function opacityStepGrid(
+  step: AllowedOpacityStep,
+): readonly number[] {
+  const cached = OPACITY_STEP_GRIDS.get(step);
+  if (cached !== undefined) return cached;
+  // numbersIncrementByStep returns the descending grid ("1.0" … "0.0"),
+  // matching the option order the UI uses.
+  const grid = numbersIncrementByStep(step).map(Number);
+  OPACITY_STEP_GRIDS.set(step, grid);
+  return grid;
+}
+
+/**
+ * Snap a uint8 opacity onto the grid selected by `opacitySteps`, with the
+ * same rule as the app (nearest grid value, plain `<` comparison so a tie
+ * goes to the earlier/larger value). `step` of `undefined` means "no opacities
+ * snapped" (artwork stays on its own values).
+ */
+function effectiveOpacityUint8(
+  uint8: number,
+  step: AllowedOpacityStep | undefined,
+): number {
+  if (step === undefined) return uint8;
+  const value = uint8 / 255;
+  let chosen = 1;
+  let bestDistance = Number.POSITIVE_INFINITY;
+  for (const candidate of opacityStepGrid(step)) {
+    const distance = Math.abs(candidate - value);
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      chosen = candidate;
+    }
+  }
+  return Math.round(chosen * 255);
+}
+
 function readSettings(params: URLSearchParams): CanonicalSettings {
   return [
     readShapeToTrim(params.get("shapeToTrim") ?? undefined),
@@ -182,7 +267,10 @@ function readColorOverrides(
   return overrides;
 }
 
-function styleOf(colors: DecodedGroupColors): CanonicalStyle {
+function styleOf(
+  colors: DecodedGroupColors,
+  opacitySteps: AllowedOpacityStep | undefined,
+): CanonicalStyle {
   const [r, g, b] = colors.gStrokeRgbArr;
   if (r === undefined || g === undefined || b === undefined) {
     throw new Error("buildCanonicalImageInput: incomplete stroke color");
@@ -191,8 +279,8 @@ function styleOf(colors: DecodedGroupColors): CanonicalStyle {
     r,
     g,
     b,
-    colors.gOpacityUint8,
-    colors.gStrokeOpacityUint8,
+    effectiveOpacityUint8(colors.gOpacityUint8, opacitySteps),
+    effectiveOpacityUint8(colors.gStrokeOpacityUint8, opacitySteps),
   ];
 }
 
@@ -238,8 +326,9 @@ function linesOf(group: DecodedGroup): CanonicalLine[] {
 function groupOf(
   group: DecodedGroup,
   override: DecodedGroupColors | undefined,
+  opacitySteps: AllowedOpacityStep | undefined,
 ): CanonicalGroup {
-  const style = styleOf(override ?? group.groupColors);
+  const style = styleOf(override ?? group.groupColors, opacitySteps);
   const widths = widthsOf(group);
   const lines = linesOf(group);
   if (widths.length !== lines.length) {
@@ -262,13 +351,14 @@ function buildCanonicalImageInput(
   decoded: DecodedParams,
 ): CanonicalImageInput {
   const overrides = readColorOverrides(params.get("groupColors"));
+  const opacitySteps = readOpacitySteps(params);
 
   // Map iteration order is the group order of the URL, which is the draw
   // order. It is kept as-is: reordering groups changes the drawing.
   const groups: CanonicalGroup[] = [];
   let index = 0;
   for (const group of decoded.linesData.values()) {
-    groups.push(groupOf(group, overrides.get(index)));
+    groups.push(groupOf(group, overrides.get(index), opacitySteps));
     index++;
   }
   if (groups.length === 0) {

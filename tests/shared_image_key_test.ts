@@ -28,6 +28,7 @@ import { excludeStateKeys } from "common-utils/read-url-params";
 import {
   buildCanonicalImageInput,
   CANONICAL_SETTING_KEYS,
+  effectiveOpacityUint8,
   hashCanonicalImageInput,
   serializeCanonicalImageInput,
   SHARED_IMAGE_KEY_VERSION,
@@ -264,6 +265,67 @@ Deno.test("settings that cannot change the pixels keep the key", async () => {
     const { key } = await keyFor(artworkSearch(override));
     assertEquals(key, reference.key, `${JSON.stringify(override)} must match`);
   }
+});
+
+Deno.test("opacitySteps is only reflected through the effective pixels", async () => {
+  const reference = await keyFor(artworkSearch());
+
+  // Unsupported values are "not specified": the drawn pixels are unchanged,
+  // so the key stays identical.
+  for (
+    const step of ["0", "-0.1", "0.3", "0.5", "0.07", "1", "true", "abc", ""]
+  ) {
+    assertEquals(
+      (await keyFor(artworkSearch({ opacitySteps: step }))).key,
+      reference.key,
+      `opacitySteps=${step} must not change the key`,
+    );
+  }
+
+  // The fixture artwork sits exactly on the 0.04 / 0.1 / 0.2 grids, so the
+  // allowed steps snap nothing and the key is unchanged.
+  for (const step of ["0.04", "0.1", "0.2"]) {
+    assertEquals(
+      (await keyFor(artworkSearch({ opacitySteps: step }))).key,
+      reference.key,
+      `opacitySteps=${step} must not change these pixels`,
+    );
+  }
+
+  // Off-grid artwork: the same drawing, but snap pulls it onto the grid.
+  // 10-digit groupColors slot "FF00000080" → stroke color red, strokeOpacity 0.5.
+  const override = { groupColors: "FF00000080" };
+  const plain = await keyFor(artworkSearch(override));
+  assertEquals(
+    (await keyFor(artworkSearch({ ...override, opacitySteps: "0.1" }))).key,
+    plain.key,
+    "0.1 includes 0.5 exactly — same drawing, same key",
+  );
+  for (const step of ["0.04", "0.2"]) {
+    assert(
+      (await keyFor(artworkSearch({ ...override, opacitySteps: step }))).key !==
+        plain.key,
+      `step ${step} pulls 0.5 onto the grid — different pixels, different key`,
+    );
+  }
+});
+
+Deno.test("effectiveOpacityUint8: snap rules match the UI", () => {
+  // No opacitySteps → verbatim.
+  assertEquals(effectiveOpacityUint8(128, undefined), 128);
+  // 0.1 grid includes 0.5 exactly.
+  assertEquals(effectiveOpacityUint8(128, 0.1), 128);
+  // 0.2 grid: 0.5 is equidistant to 0.4 and 0.6; the earlier/larger wins.
+  assertEquals(effectiveOpacityUint8(128, 0.2), 153); // 0.6
+  // 0.04 grid: 0.5 is not on the grid; tie between 0.48 and 0.52.
+  assertEquals(effectiveOpacityUint8(128, 0.04), 133); // 0.52
+  // Values already on a grid stay put.
+  assertEquals(effectiveOpacityUint8(102, 0.04), 102); // 0.4
+  assertEquals(effectiveOpacityUint8(153, 0.1), 153); // 0.6
+  assertEquals(effectiveOpacityUint8(204, 0.2), 204); // 0.8
+  // Endpoints.
+  assertEquals(effectiveOpacityUint8(0, 0.1), 0);
+  assertEquals(effectiveOpacityUint8(255, 0.1), 255);
 });
 
 Deno.test("group color overrides canonicalize to the effective colors", async () => {
