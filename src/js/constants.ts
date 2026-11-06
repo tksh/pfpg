@@ -175,3 +175,33 @@ export const LOCALE_URL_PARAM = "lang";
 export const URL_PARAMS_EXCLUDED_FROM_ARTWORK: readonly string[] = [
   LOCALE_URL_PARAM,
 ];
+
+////////////////////////////////////////////////////////////////////////////////
+// Opacity steps
+////////////////////////////////////////////////////////////////////////////////
+
+// Opacity steps come from a closed three-value set the UI can express
+// (`#opacity-steps` options in `index.html`, matching
+// `init/initial-opacity-steps.ts`'s `findLargestStep`, which only ever
+// returns 0.04 / 0.1 / 0.2). Anything else — from a URL, a stored favorites
+// entry, or a shared link — is treated as "not specified" and the
+// artwork-derived default is used instead.
+//
+// The order mirrors the <option> order in the HTML.
+export const OPACITY_STEP_VALUES = [0.04, 0.1, 0.2] as const;
+
+export type AllowedOpacityStep = (typeof OPACITY_STEP_VALUES)[number];
+
+// Compare numerically: values from the URL arrive as strings ("0.1"), and
+// "0.20" / "0.040" must be accepted. `true` / `false` must not —
+// `Number(true) === 1` would otherwise pass a naive `0 < step <= 1` check.
+export function isAllowedOpacityStep(
+  value: unknown,
+): value is AllowedOpacityStep {
+  if (typeof value === "boolean" || value === undefined || value === null) {
+    return false;
+  }
+  const n = Number(value);
+  if (!Number.isFinite(n)) return false;
+  return (OPACITY_STEP_VALUES as readonly number[]).includes(n);
+}

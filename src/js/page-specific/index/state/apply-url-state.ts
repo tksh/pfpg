@@ -3,7 +3,7 @@ import {
   syncCopyAvailability,
   updateButtonWithSvgSize,
 } from "button/update-button-text";
-import { SETTINGS_DEFAULTS } from "constants";
+import { isAllowedOpacityStep, SETTINGS_DEFAULTS } from "constants";
 import {
   calculateStepsFromTwoOpacities,
   getInitialOpacitySteps,
@@ -114,27 +114,25 @@ async function applyImageCustomization(
   // 'opacitySteps' does not have default value in 'SETTINGS_DEFAULTS' map object, before the decoding svg.
   // The only way to get the default value is calculated from original lines data. (at above 'colorFormat' section)
   const opacityStepsViaUrl = getStateUrl("opacitySteps"); // Getting the steps - 3rd of 3
-  // Guard: a zero/negative/NaN/non-finite `opacitySteps` in the URL would
-  // make `numbersIncrementByStep` loop forever (i += step * 100 never grows)
-  // or snap everything to 0 (NaN). Drop the broken param and keep the
-  // artwork-derived default instead of applying it.
-  const parsedOpacityStepsViaUrl = opacityStepsViaUrl === undefined
-    ? undefined
-    : Number(opacityStepsViaUrl);
-  const opacityStepsViaUrlIsValid = parsedOpacityStepsViaUrl !== undefined &&
-    Number.isFinite(parsedOpacityStepsViaUrl) &&
-    parsedOpacityStepsViaUrl > 0 && parsedOpacityStepsViaUrl <= 1;
+  // Guard: `opacitySteps` is a closed three-value set ({0.04, 0.1, 0.2}).
+  // Anything else in the URL (0, abc, true, 0.3, 1, ...) is treated as
+  // "not specified": the param is dropped and the artwork-derived default is
+  // used. The same rule applies on the server / render path, so the two
+  // never disagree. (`numbersIncrementByStep` keeps its own finite
+  // `0 < step <= 1` RangeError guard as programmer-error defence.)
+  const opacityStepsViaUrlIsValid = isAllowedOpacityStep(opacityStepsViaUrl);
+  const parsedOpacityStepsViaUrl = opacityStepsViaUrlIsValid
+    ? Number(opacityStepsViaUrl)
+    : undefined;
 
   if (opacityStepsViaUrl !== undefined && !opacityStepsViaUrlIsValid) {
     console.warn(
-      `applyImageCustomization: ignoring invalid opacitySteps in URL: ${
+      `applyImageCustomization: ignoring opacitySteps="${
         String(opacityStepsViaUrl)
-      }`,
+      }" — not one of 0.04/0.1/0.2; using the artwork-derived default`,
     );
     removeUrlParams(["opacitySteps"]); // so downstream reads fall back to the default
-  } else if (
-    parsedOpacityStepsViaUrl !== undefined && opacityStepsViaUrlIsValid
-  ) {
+  } else if (parsedOpacityStepsViaUrl !== undefined) {
     opacityStepsSelect.value = String(parsedOpacityStepsViaUrl);
     changeOpacitySelectOptionsAsNewStep(updatedSvg, parsedOpacityStepsViaUrl); // Update the group colors input elements
     updatedSvg = updateSvgWithNewSteps(updatedSvg); // Extract the steps value from input elements selected

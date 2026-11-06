@@ -144,6 +144,7 @@
     "tab-lines/group-colors-listener": "./src/js/page-specific/index/tab-lines/group-colors-listener.ts",
     "tab-lines/group-colors-generator": "./src/js/page-specific/index/tab-lines/group-colors-generator.ts",
     "tab-lines/opacity-steps": "./src/js/page-specific/index/tab-lines/opacity-steps.ts",
+    "tab-lines/opacity-steps-grid": "./src/js/page-specific/index/tab-lines/opacity-steps-grid.ts",
     "tab-lines/path-mode": "./src/js/page-specific/index/tab-lines/path-mode.ts",
     "tab-lines/randomize-group-colors": "./src/js/page-specific/index/tab-lines/randomize-group-colors.ts",
     "tab-lines/update-svg-color-format": "./src/js/page-specific/index/tab-lines/update-svg-color-format.ts",
