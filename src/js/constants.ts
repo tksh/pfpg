@@ -123,6 +123,11 @@ export const SVG_OPTIMIZE_DEFAULTS = new Map<string, SettingValue>([
  *
  * Entry order is the canonical serialization order.
  * Do not reorder entries unless the canonical format is intentionally changed.
+ *
+ * URL-state axis: `SETTINGS_DEFAULTS[3, 3 + this map's size)`, the slice
+ * `getStateUrlsOfImageCustomization()` and Reset's "Image customization"
+ * box read. Inserting a key moves the boundary that the hard-coded 13 in
+ * `url-state-manager.ts` relies on; appending only widens this slice.
  */
 export const VISUAL_CONFIG_DEFAULTS = new Map<string, SettingValue>([
   //  ['Attribute name',   default value],         // Appeared at: | Type:  | Possible values:
@@ -138,6 +143,15 @@ export const VISUAL_CONFIG_DEFAULTS = new Map<string, SettingValue>([
   ["heightPixelSize", 256], //   Render tab | Uint   | 0 <
 ]);
 
+/**
+ * UI configuration schema.
+ *
+ * URL-state axis: `SETTINGS_DEFAULTS[3 + VISUAL_CONFIG_DEFAULTS.size, size)`,
+ * the slice `getStateUrlsOfUiConfiguration()` and Reset's "UI configuration"
+ * box read. Appending here only widens the last slice. `lang` is UI
+ * configuration but not state (`LOCALE_URL_PARAM`), so it must not be added
+ * here: Reset would then drop it and reload the page in another language.
+ */
 export const UI_CONFIG_DEFAULTS = new Map<string, SettingValue>([
   //  ['Attribute name',   default value],         // Appeared at: | Type:  | Possible values:
   ["themeColor", undefined], //       UI tab | String | 'white', 'light', 'dark', 'black'
