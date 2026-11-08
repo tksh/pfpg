@@ -102,12 +102,14 @@
   position: relative;
   /* A <div> is block-level, so without this it would span the whole row and
      push the tabs down. The reset control is a <button> (inline-block,
-     shrink-to-fit); inline-flex gives the div the same shrink-to-fit width.
+     shrink-to-fit); inline-block gives the div the same shrink-to-fit width
+     and the same inline layout, so `.icon-font`'s `vertical-align: -6px`
+     aligns the globe with the reset icon and the tab titles. Keep it
+     inline-block here: display:inline-flex would make the span a flex
+     item, where vertical-align is ignored and the glyph sits 6px high.
      At <=512px, .icon-tab-link's display:flex (later in this file) takes
      over for vertical centering inside the flex row. */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-block;
 }
 
 .language-control #language {
