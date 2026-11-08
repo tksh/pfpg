@@ -110,6 +110,12 @@
      At <=512px, .icon-tab-link's display:flex (later in this file) takes
      over for vertical centering inside the flex row. */
   display: inline-block;
+  /* A <button> centers its contents by UA default; a <div> starts them.
+     Without this the globe hugs the left edge (0px left / 46px right slack
+     in a 70px box) and the gap to the `Lines` tab looks lopsided. Centering
+     gives it the reset icon's 23px/23px balance. Harmless at <=512px,
+     where the flex centering already applies. */
+  text-align: center;
 }
 
 .language-control #language {
