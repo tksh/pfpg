@@ -107,13 +107,13 @@
      aligns the globe with the reset icon and the tab titles. Keep it
      inline-block here: display:inline-flex would make the span a flex
      item, where vertical-align is ignored and the glyph sits 6px high.
-     At <=512px, .icon-tab-link's display:flex (later in this file) takes
+     At <=1024px, .icon-tab-link's display:flex (later in this file) takes
      over for vertical centering inside the flex row. */
   display: inline-block;
   /* A <button> centers its contents by UA default; a <div> starts them.
      Without this the globe hugs the left edge (0px left / 46px right slack
      in a 70px box) and the gap to the `Lines` tab looks lopsided. Centering
-     gives it the reset icon's 23px/23px balance. Harmless at <=512px,
+     gives it the reset icon's 23px/23px balance. Harmless at <=1024px,
      where the flex centering already applies. */
   text-align: center;
 }
@@ -146,9 +146,36 @@
   .tab-link {
     min-inline-size: 60px;
     max-inline-size: 150px;
+    /* Base: allow the 20% tabs to shrink a few px (down to the 60px min)
+       instead of wrapping. Above ~600px nothing shrinks; at 513px the
+       shrink is ~4.5px per tab, still far wider than the longest label
+       (`Rendering`). Without this the 20% tabs + two 50px icon slots +
+       ~21px of inline-block whitespace exceed the container between
+       513px and ~708px, dropping the reset icon to a second row. The
+       `flex: 0 1 auto` shorthand above already asks for shrink 1; the
+       later `flex-shrink: 0` in the base rule cancels it, hence this. */
+    flex-shrink: 1;
   }
   .icon-tab-link {
     min-inline-size: 50px;
+    /* flex 化でアイコンは行の高さまで伸びる。`.icon-font` の
+       vertical-align: -6px は flex アイテムでは効かないため、中で中央寄せにする。
+       （拡大側の幅では inline-block のままなので影響しない） */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* inline-block の要素間空白 4px × 5 を落とす（flex には空白が無い）。
+     これが無いとタブが縮んでもなお折り返す幅が残る（513px で約 21px）。
+     wrap のままだと折り返し判定が縮小前の仮サイズで行われ、縮小が効く前に
+     リセットが次行に回るので、この帯では nowrap にする。最小合計幅は
+     タブ 62px × 4 + アイコン 52px × 2 ≒ 352px で、この帯の最小コンテナ
+     （513px → 449px）より十分小さいので nowrap でも溢れない。
+     ≤512px では下のブロックで wrap に戻す（280px 帯は 2 行に落とす）。 */
+  .tab-link-container {
+    display: flex;
+    flex-wrap: nowrap;
   }
 }
 
@@ -157,21 +184,10 @@
     text-align: center;
   }
 
-  /* inline-block の要素間空白 4px × 4 を落とす。実測 +16px。 */
+  /* 302px 未満の端末（Galaxy Fold の 280px など）は今までどおり 2 行に落とす。
+     nowrap にすると横スクロールになるので、退避は wrap に任せる。 */
   .tab-link-container {
-    display: flex;
-    /* 302px 未満の端末（Galaxy Fold の 280px など）は今までどおり 2 行に落とす。
-       nowrap にすると横スクロールになるので、退避は wrap に任せる。 */
     flex-wrap: wrap;
-  }
-
-  /* flex 化でアイコンは行の高さまで伸びる。`.icon-font` の
-     vertical-align: -6px は flex アイテムでは効かないため、中で中央寄せにする。
-     （拡大側の幅では inline-block のままなので影響しない） */
-  .icon-tab-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
   /* 案①': `UI` は 10 言語すべて同じ 2 文字なので、ここだけ content 幅にする。
