@@ -149,6 +149,33 @@
     text-align: center;
   }
 
+  /* inline-block の要素間空白 4px × 4 を落とす。実測 +16px。 */
+  .tab-link-container {
+    display: flex;
+    /* 302px 未満の端末（Galaxy Fold の 280px など）は今までどおり 2 行に落とす。
+       nowrap にすると横スクロールになるので、退避は wrap に任せる。 */
+    flex-wrap: wrap;
+  }
+
+  /* flex 化でアイコンは行の高さまで伸びる。`.icon-font` の
+     vertical-align: -6px は flex アイテムでは効かないため、中で中央寄せにする。
+     （拡大側の幅では inline-block のままなので影響しない） */
+  .icon-tab-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 案①': `UI` は 10 言語すべて同じ 2 文字なので、ここだけ content 幅にする。
+     他の 3 タブは 20% のまま = 現行と同じ見た目。 */
+  .tab-link[data-tab='tab-4'] {
+    inline-size: auto;
+    /* ≤1024 の min-inline-size: 60px を外す（これが残ると 62px になる）。 */
+    min-inline-size: 0;
+    /* 12px。現行の padding-inline は 0 なので「新しい最小余白」のルール。 */
+    padding-inline: 0.75rem;
+  }
+
   .tab-link {
     margin: 0;
   }
