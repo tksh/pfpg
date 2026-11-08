@@ -95,6 +95,45 @@
   border-color: color-mix(in srgb, var(--color-button-border) 10%, transparent);
 }
 
+/* 言語セレクタ: 見た目は地球アイコン、実体は透明にした <select>。
+   `initLanguageSelector()` は #language が HTMLSelectElement であることしか
+   要求しないので、重ねても JS は無変更。 */
+.language-control {
+  position: relative;
+  /* A <div> is block-level, so without this it would span the whole row and
+     push the tabs down. The reset control is a <button> (inline-block,
+     shrink-to-fit); inline-flex gives the div the same shrink-to-fit width.
+     At <=512px, .icon-tab-link's display:flex (later in this file) takes
+     over for vertical centering inside the flex row. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.language-control #language {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  /* 見えているのは下のアイコンだけ。native の選択 UI はタップで開く。 */
+  opacity: 0;
+  cursor: pointer;
+  /* `header select`（style.css）の背景色・内側余白を打ち消す。
+     opacity: 0 の今は見えないが、後で opacity を上げたときにタブの中で
+     浮かないようにするための予防。 */
+  background-color: transparent;
+}
+
+/* opacity: 0 の <select> がフォーカスを持つと、リングも一緒に消える。
+   ラッパー側で出す。 */
+.language-control:focus-within {
+  outline: 2px solid var(--color-text);
+  outline-offset: -2px;
+}
+
 @media screen and (max-width: 1024px) {
   .tab-link {
     min-inline-size: 60px;

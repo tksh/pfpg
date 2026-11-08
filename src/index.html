@@ -27,7 +27,7 @@
     <!-- icon_names restricts the served subset, so every glyph used anywhere on
          the page must be listed here or it renders as its literal letters. -->
     <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&icon_names=close,download,info,restart_alt,swap_vert" />
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&icon_names=close,download,info,language,restart_alt,swap_vert" />
 
     <!-- OGP -->
     <meta property="og:site_name" content="pfpg — Profile picture generator" />
@@ -48,6 +48,27 @@
     <header>
       <div id="customization" class="padding-inline-start-1">
         <div class="tab-link-container">
+          <!-- 言語。先頭に置くと、破壊的なリセット（末尾）とタップ位置が離れる。
+               見た目は地球アイコン、実体は透明にした <select>（CSS: tabs.css）。
+               option は endonym のまま: どの言語で表示中でも読める。 -->
+          <div class="icon-tab-link language-control" id="language-control"
+            title="Language: " data-i18n-title="ui.language">
+            <span class="icon-font material-symbols-outlined"
+              aria-hidden="true">language</span>
+            <select id="language" name="language" autocomplete="off"
+              aria-label="Language: " data-i18n-aria="ui.language">
+              <option value="en" selected>English</option>
+              <option value="zh">中文</option>
+              <option value="es">Español</option>
+              <option value="ar">العربية</option>
+              <option value="id">Bahasa Indonesia</option>
+              <option value="pt">Português</option>
+              <option value="fr">Français</option>
+              <option value="ja">日本語</option>
+              <option value="ru">Русский</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
           <button class="tab-link" data-tab="tab-1"
             data-i18n="tabs.lines">Lines</button>
           <button class="tab-link" data-tab="tab-2"
@@ -510,26 +531,6 @@
 
         <div id="tab-4" class="tab-content">
           <!-- UI -->
-
-          <!-- Language. The option labels are endonyms: they must stay
-            readable under whichever language is currently applied. -->
-          <div class="setting-container">
-            <div class="setting-item">
-              <label for="language" data-i18n="ui.language">Language: </label>
-              <select name="language" id="language" autocomplete="off">
-                <option value="en" selected>English</option>
-                <option value="zh">中文</option>
-                <option value="es">Español</option>
-                <option value="ar">العربية</option>
-                <option value="id">Bahasa Indonesia</option>
-                <option value="pt">Português</option>
-                <option value="fr">Français</option>
-                <option value="ja">日本語</option>
-                <option value="ru">Русский</option>
-                <option value="de">Deutsch</option>
-              </select>
-            </div>
-          </div>
 
           <!-- Theme -->
           <div class="setting-container">
