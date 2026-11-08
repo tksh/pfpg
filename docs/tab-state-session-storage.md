@@ -79,13 +79,14 @@ for Render, and `F` for UI.
 
 ## Language changes and reloads
 
-The language selector is inside `tab-4`. Changing it sets the `lang` URL param
-and calls `location.assign(url)`, which performs a full reload while preserving
-the other URL params. The next `DOMContentLoaded` cycle runs the restore flow
-above, so the page returns to the tab that was open before the language change.
-Language application and tab restoration are independent: i18n controls the
-document language and text, while the tab storage only controls which panel is
-visible.
+The language selector is in the tab bar, outside any tab panel, at the head of
+the `.tab-link-container` (before the `tab-1` link). Changing it sets the `lang`
+URL param and calls `location.assign(url)`, which performs a full reload while
+preserving the other URL params. The next `DOMContentLoaded` cycle runs the
+restore flow above, so the page returns to the tab that was open before the
+language change. Language application and tab restoration are independent: i18n
+controls the document language and text, while the tab storage only controls
+which panel is visible.
 
 Because this uses `sessionStorage`, the same tab is also kept across ordinary
 reloads, the Reset Settings reload, and navigation to another artwork in the
