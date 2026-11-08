@@ -207,3 +207,12 @@
     min-inline-size: 30px;
   }
 }
+
+@media screen and (max-width: 375px) {
+  /* 512px 超では 50px、512px 以下では 30px のアイコン幅を、さらに狭い
+     画面では中間の 40px に戻す。24px のグリフに対し左右各 8px の余白が
+     残り、タッチ操作しやすくなる。 */
+  .icon-tab-link {
+    min-inline-size: 40px;
+  }
+}
