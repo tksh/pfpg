@@ -3,6 +3,16 @@ html {
   background-color: var(--color-bg);
 }
 
+/* 日本語だけに `palt` を適用し、全角文字の字幅を詰める。狭い画面で
+   「キャンバス」のようなラベルが折り返しにくくなるよう、サイト全体の
+   日本語テキストに効かせる。無条件に全言語へ適用すると中国語の句読点などに
+   も影響し得るため、ロケールで絞る。`html` への継承だけだと、フォントを
+   リセットする UA 既定スタイルを持つボタン等に届かないため、`:lang(ja)` で
+   日本語の各要素へ直接当てる。 */
+:lang(ja) {
+  font-feature-settings: "palt";
+}
+
 body {
   display: flex;
   flex-direction: column;
