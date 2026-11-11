@@ -1,8 +1,3 @@
-import {
-  parseBasicDataFromTextarea as parseBasicData,
-  updateBasicDataKeysCheckboxStates,
-} from "data-manipulator/encode-adapters";
-
 export function selectFileToInput(
   selectButtonId: string,
   textAreaId: string,
@@ -31,7 +26,9 @@ export function selectFileToInput(
 
   // ファイル読み込み完了時の処理
   reader.onload = () => {
-    const textareaElem = document.querySelector(`#${textAreaId}`);
+    const textareaElem = document.querySelector(
+      `#${textAreaId}`,
+    ) as HTMLTextAreaElement | null;
     if (textareaElem === null) {
       throw new Error(`selectFileToInput: missing element #${textAreaId}`);
     }
@@ -41,14 +38,8 @@ export function selectFileToInput(
         "selectFileToInput: expected text result from FileReader",
       );
     }
-    textareaElem.innerHTML = result;
-
-    // Update checkboxes status for Basic Data decoding
-    if (textAreaId === "textarea-basic-data-uploaded") {
-      // Update checkbox status based on data
-      const basicData = parseBasicData();
-      updateBasicDataKeysCheckboxStates(basicData);
-    }
+    textareaElem.value = result;
+    textareaElem.dispatchEvent(new Event("input", { bubbles: true }));
   };
 
   // ファイル読み込みエラー時の処理
