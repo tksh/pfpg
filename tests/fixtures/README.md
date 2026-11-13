@@ -14,3 +14,31 @@ Provenance (inputs only, byte-exact copies):
 Expected OUTPUT goldens (finished query strings, decoded rel/abs SVGs) are NOT
 hand-written here; they are captured by running the codec during library
 conformance (plan Phase 3) and reviewed by the human before being frozen.
+
+## DOM-postprocessing output goldens
+
+The existing `showcase-*.svg` files and
+`svg_and_shared_image_key_golden_test.ts` cover the codec decode output. They
+remain unchanged. The DOM-postprocessing output goldens are captured from the
+browser's `#svg-string` textarea after optimization, using the variants listed
+in Phase 0.3 of the favorites implementation checklist. Each SVG is an L1
+byte-exact golden; its PNG preview is reviewed by a human before freezing.
+
+L2 acceptance compares decoded RGBA pixels, not hashes. L2 does not replace L1:
+the byte comparison also catches textual changes from opacity removal, line
+break removal, or space removal. A candidate may be pinned L2-only only when
+byte output is genuinely nondeterministic, with the reason recorded alongside
+the fixture.
+
+Capture procedure: run `deno task build && deno task serve`, open the fixture
+URL and variant in the browser, and copy the complete `#svg-string` value as the
+candidate SVG. Render a small PNG preview with `svg2rgba` for human review. On
+approval, freeze candidates with
+`deno run --allow-read --allow-write
+scripts/freeze_goldens.ts <candidate-directory> --human-reviewed`.
+Record the browser name and version, capture date, and exact command used here.
+The freeze script uses create-new writes and refuses existing targets, so it
+cannot silently replace a frozen golden.
+
+No browser-output goldens have been captured by this implementation change;
+their provenance and previews must be supplied at the human review gate.
