@@ -30,15 +30,35 @@ break removal, or space removal. A candidate may be pinned L2-only only when
 byte output is genuinely nondeterministic, with the reason recorded alongside
 the fixture.
 
-Capture procedure: run `deno task build && deno task serve`, open the fixture
-URL and variant in the browser, and copy the complete `#svg-string` value as the
-candidate SVG. Render a small PNG preview with `svg2rgba` for human review. On
-approval, freeze candidates with
+Capture procedure: run `deno task build` and then
+`deno task serve dist --port 8000`, open the fixture URL and variant in the
+browser, and copy the complete `#svg-string` value as the candidate SVG. Render
+a small PNG preview with `svg2rgba` for human review. On approval, freeze
+candidates with
 `deno run --allow-read --allow-write
 scripts/freeze_goldens.ts <candidate-directory> --human-reviewed`.
 Record the browser name and version, capture date, and exact command used here.
 The freeze script uses create-new writes and refuses existing targets, so it
 cannot silently replace a frozen golden.
 
-No browser-output goldens have been captured by this implementation change;
-their provenance and previews must be supplied at the human review gate.
+## Review candidates (not frozen)
+
+On 2026-11-14, the ten Phase 0.3 variants for `showcase-202412_001` were
+captured from `#svg-string` in Google Chrome 151.0.7922.173. A same-origin
+iframe wrapper read the textarea's `.value` after page initialization. The
+candidate PNG previews were rendered with `svg2rgba` at 128 px and are awaiting
+human review; none of the candidate SVGs has been added as a frozen golden.
+
+Capture commands:
+
+```sh
+deno task build
+deno task serve dist --port 8000
+google-chrome --headless --no-sandbox --disable-gpu --user-data-dir=/tmp/pfpg-chrome-profile-capture --virtual-time-budget=30000 --dump-dom http://127.0.0.1:8000/__capture.html
+```
+
+The variants are default, groupColors override, shapeToTrim square/circle/
+squircle, squircleSlimmed with `cropSideMargins=false|true`, explicit
+`opacitySteps`, explicit `shapeRendering`, and explicit `heightPixelSize`. Human
+approval of the PNG previews is required before passing the candidate directory
+to the freeze script.
