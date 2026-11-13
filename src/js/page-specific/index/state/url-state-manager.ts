@@ -1,4 +1,5 @@
 import { SETTINGS_DEFAULTS, type SettingValue } from "constants";
+import { readLastParam } from "common-utils/read-url-params";
 
 export {
   getState,
@@ -56,7 +57,7 @@ function getStateUrlsAsMapWithDefaultFill(): Map<string, SettingValue> {
   for (const [key, defaultValue] of SETTINGS_DEFAULTS) {
     if (params.has(key)) {
       // URLパラメータに存在する場合はその値を使用
-      result.set(key, params.get(key) ?? defaultValue);
+      result.set(key, readLastParam(params, key) ?? defaultValue);
     } else {
       // URLパラメータに存在しない場合はデフォルト値を使用
       result.set(key, defaultValue);
@@ -70,7 +71,7 @@ function getStateUrlsAsRawWithDefaultFill(): Record<string, SettingValue> {
   const params = new URLSearchParams(globalThis.location.search);
   return Object.fromEntries(
     Array.from(SETTINGS_DEFAULTS.keys()).map((key): [string, SettingValue] => {
-      const valueFromUrl = params.get(key);
+      const valueFromUrl = readLastParam(params, key);
       return [key, valueFromUrl ?? SETTINGS_DEFAULTS.get(key)]; // valueFromUrl が undefined の場合、SETTINGS_DEFAULTS からデフォルト値を取得
     }),
   );

@@ -1,7 +1,10 @@
 import { initDownloadButtons } from "button/init-download-buttons";
 import { initButtonActionSelect } from "button/update-button-text";
 import { LOCALE_URL_PARAM } from "constants";
-import { getUrlParamsExceptsStates } from "common-utils/read-url-params";
+import {
+  getUrlParamsExceptsStates,
+  normalizeScalarParams,
+} from "common-utils/read-url-params";
 import { decodeUrlToSvgForPage as decodeUrlToSvg } from "state/url-decode";
 import {
   adjustLayoutIfNotMobile,
@@ -52,6 +55,18 @@ import { initViewScalingSelect } from "tab-ui/view-scaling";
 
 // Module scripts run after the DOM is parsed, so the locale from the URL can
 // be applied before anything renders or any JS text is produced.
+const originalSearch = globalThis.location.search;
+const normalizedSearch = normalizeScalarParams(
+  new URLSearchParams(originalSearch),
+).toString();
+if (normalizedSearch !== originalSearch.slice(1)) {
+  const search = normalizedSearch === "" ? "" : `?${normalizedSearch}`;
+  globalThis.history.replaceState(
+    {},
+    "",
+    `${globalThis.location.pathname}${search}${globalThis.location.hash}`,
+  );
+}
 applyLocaleFromUrl();
 
 (async function (): Promise<void> {

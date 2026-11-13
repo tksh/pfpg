@@ -1,5 +1,8 @@
 import { decodeUrlParams } from "@tksh/stln-codec";
-import { excludeStateKeys } from "common-utils/read-url-params";
+import {
+  excludeStateKeys,
+  normalizeScalarParams,
+} from "common-utils/read-url-params";
 import {
   buildCanonicalImageInput,
   hashCanonicalImageInput,
@@ -24,6 +27,7 @@ export { getSharedImageKeyHash, getSharedImageKeyHashForCurrentUrl };
 async function getSharedImageKeyHash(
   urlParams: URLSearchParams,
 ): Promise<string> {
+  urlParams = normalizeScalarParams(urlParams);
   // State keys are the app's own settings, not artwork data
   const artworkParams = excludeStateKeys(urlParams);
   const decoded = await decodeUrlParams(artworkParams);
