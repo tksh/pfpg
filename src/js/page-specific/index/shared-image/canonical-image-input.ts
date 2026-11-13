@@ -216,12 +216,12 @@ function effectiveOpacityUint8(
   uint8: number,
   step: AllowedOpacityStep | undefined,
 ): number {
-  if (step === undefined) return uint8;
-  const value = uint8 / 255;
+  const displayed = Number((uint8 / 255).toFixed(2));
+  if (step === undefined) return Math.round(displayed * 255);
   let chosen = 1;
   let bestDistance = Number.POSITIVE_INFINITY;
   for (const candidate of opacityStepGrid(step)) {
-    const distance = Math.abs(candidate - value);
+    const distance = Math.abs(candidate - displayed);
     if (distance < bestDistance) {
       bestDistance = distance;
       chosen = candidate;

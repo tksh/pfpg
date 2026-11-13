@@ -25,6 +25,7 @@ import {
 } from "@tksh/stln-codec";
 import { BASIC_DATA_KEYS, FLAGS_MAP, VISUAL_CONFIG_DEFAULTS } from "constants";
 import { excludeStateKeys } from "common-utils/read-url-params";
+import { getSharedImageKeyHash } from "shared-image/shared-image-key";
 import {
   buildCanonicalImageInput,
   CANONICAL_SETTING_KEYS,
@@ -311,14 +312,17 @@ Deno.test("opacitySteps is only reflected through the effective pixels", async (
 });
 
 Deno.test("effectiveOpacityUint8: snap rules match the UI", () => {
-  // No opacitySteps → verbatim.
+  // No opacitySteps → use the displayed two-decimal SVG opacity.
   assertEquals(effectiveOpacityUint8(128, undefined), 128);
+  assertEquals(effectiveOpacityUint8(127, undefined), 128);
   // 0.1 grid includes 0.5 exactly.
   assertEquals(effectiveOpacityUint8(128, 0.1), 128);
-  // 0.2 grid: 0.5 is equidistant to 0.4 and 0.6; the earlier/larger wins.
+  // Both 127 and 128 display 0.5, which is equidistant on the 0.2 grid.
   assertEquals(effectiveOpacityUint8(128, 0.2), 153); // 0.6
+  assertEquals(effectiveOpacityUint8(127, 0.2), 153); // 0.6
   // 0.04 grid: 0.5 is not on the grid; tie between 0.48 and 0.52.
   assertEquals(effectiveOpacityUint8(128, 0.04), 133); // 0.52
+  assertEquals(effectiveOpacityUint8(127, 0.04), 133); // 0.52
   // Values already on a grid stay put.
   assertEquals(effectiveOpacityUint8(102, 0.04), 102); // 0.4
   assertEquals(effectiveOpacityUint8(153, 0.1), 153); // 0.6
@@ -326,6 +330,28 @@ Deno.test("effectiveOpacityUint8: snap rules match the UI", () => {
   // Endpoints.
   assertEquals(effectiveOpacityUint8(0, 0.1), 0);
   assertEquals(effectiveOpacityUint8(255, 0.1), 255);
+});
+
+Deno.test("shared-image keys follow the rendered two-decimal opacity", async () => {
+  const sevenF = artworkSearch({ groupColors: "FF0000007F" });
+  const eightZero = artworkSearch({ groupColors: "FF00000080" });
+  assertEquals(
+    await getSharedImageKeyHash(sevenF),
+    await getSharedImageKeyHash(eightZero),
+  );
+
+  const snapped = artworkSearch({
+    groupColors: "FF00000066",
+    opacitySteps: "0.2",
+  });
+  const different = artworkSearch({
+    groupColors: "FF0000007F",
+    opacitySteps: "0.2",
+  });
+  assert(
+    await getSharedImageKeyHash(snapped) !==
+      await getSharedImageKeyHash(different),
+  );
 });
 
 Deno.test("group color overrides canonicalize to the effective colors", async () => {

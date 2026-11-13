@@ -101,12 +101,12 @@ same effective drawing many ways, and two URLs producing identical pixels must
 share a key — but its **effect on the pixels is included**:
 
 - When the URL carries a supported step (`0.04`, `0.1`, `0.2`), every group's
-  `opacity` and `stroke-opacity` — including overrides supplied via
-  `groupColors` — are quantized onto the step grid before projection onto the
-  canonical input. The snap rule and tie-break are the same as the renderer's:
-  nearest grid value, plain `<` comparison (ties go to the earlier/larger grid
-  value). Grid values are the three-decimal-grid the UI emits (`"1.0"`,
-  `"0.96"`, …).
+  displayed SVG `opacity` and `stroke-opacity` value (the 2-decimal value
+  written into the SVG) — including overrides supplied via `groupColors` — is
+  quantized onto the step grid before projection onto the canonical input. The
+  snap rule and tie-break are the same as the renderer's: nearest grid value,
+  plain `<` comparison (ties go to the earlier/larger grid value). Grid values
+  are the three-decimal-grid the UI emits (`"1.0"`, `"0.96"`, …).
 - Unsupported or invalid values (anything but `0.04` / `0.1` / `0.2`) are
   treated as "opacitySteps not specified": the artwork keeps the opacities it
   was drawn with, and the key is identical to the same URL without the param.
