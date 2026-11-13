@@ -64,12 +64,14 @@ the library built from this pipeline (`@tksh/libpfpg`, when published) honors
 
 `POST /ogp/render` renders the params server-side and uploads the PNG. It is the
 manual/ops route for pre-rendering a URL that has never been opened in a
-browser. Note: the current server-side renderer is not yet pixel-faithful to the
-browser preview (it does not apply `shapeToTrim` / `shapeRendering` /
-`opacitySteps` / `widthNarrowness` / `topHeavyRatio` / `cropSideMargins`); it is
-being reworked onto the same pure renderer the browser uses. Because it uploads
-under the same `publicId`, a server re-render can overwrite a correct
-browser-uploaded image.
+browser. It requires `x-ogp-shared-secret` matching `OGP_SHARED_SECRET`.
+Temporarily, requests carrying `opacitySteps` receive 400 until Phase 1's
+renderer applies the same snapping as the shared-image key. Note: the current
+server-side renderer is not yet pixel-faithful to the browser preview (it does
+not apply `shapeToTrim` / `shapeRendering` / `opacitySteps` / `widthNarrowness`
+/ `topHeavyRatio` / `cropSideMargins`); it is being reworked onto the same pure
+renderer the browser uses. Because it uploads under the same `publicId`, a
+server re-render can overwrite a correct browser-uploaded image.
 
 `GET /ogp?<artwork params>` renders the artwork and returns the key, SVG and
 RGBA byte counts and output dimensions for diagnosis. It does not upload. (Note:

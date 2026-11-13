@@ -7,7 +7,10 @@
 // via the shared group-colors-svg helpers, then the optimize-svg state keys
 // (like `removeOpacity`) are applied.
 import { decodeUrlToSvg } from "@tksh/stln-codec";
-import { excludeStateKeys } from "common-utils/read-url-params";
+import {
+  excludeStateKeys,
+  normalizeScalarParams,
+} from "common-utils/read-url-params";
 import { PhotonImage } from "@denext/photon";
 import {
   applyGroupColorsToSvg,
@@ -23,6 +26,7 @@ import {
 } from "../functions/lib/sign-upload.ts";
 import { svg2rgba } from "svg2ui8a";
 import { initializeRasterizer } from "./rasterizer.ts";
+import { renderGuardResponse } from "./ogp-render-guard.ts";
 
 // Read the vendored Wasm and initialize eagerly, before the server listens.
 // The asset must be present at startup; the runtime performs no jsr.io Wasm
@@ -52,6 +56,13 @@ Deno.serve(async (req: Request): Promise<Response> => {
     }
   }
   if (pathname === "/ogp/render" && req.method === "POST") {
+    // Temporary until renderPipeline is replaced by Phase 1's snapping renderer.
+    const guardResponse = renderGuardResponse(
+      req,
+      url,
+      Deno.env.get("OGP_SHARED_SECRET"),
+    );
+    if (guardResponse !== null) return guardResponse;
     try {
       const data = await renderAndUpload(url);
       return new Response(
@@ -172,6 +183,7 @@ async function renderPipeline(params: URLSearchParams): Promise<{
   width: number;
   height: number;
 }> {
+  params = normalizeScalarParams(params);
   const pathMode = params.get("pathMode") === "relativeMerged"
     ? "relativeMerged"
     : "absoluteSeparated";

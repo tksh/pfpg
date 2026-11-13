@@ -128,6 +128,12 @@ in `canonical-image-input.ts`. `shared-image-key-test.ts` asserts that:
 - `effectiveOpacityUint8()` snaps with the nearest-grid rule and the same
   earlier/larger tie-break as the UI.
 
+Until Phase 1 replaces the server's `renderPipeline`, `POST /ogp/render` rejects
+any request carrying `opacitySteps` with 400 after checking
+`x-ogp-shared-secret` against `OGP_SHARED_SECRET`. This temporary guard prevents
+an unsnapped render from being uploaded under a key that describes snapped
+pixels; Phase 2 removes it with the renderer replacement.
+
 Bumping `SHARED_IMAGE_KEY_VERSION` is not required for this change: this project
 has no users or shared assets to protect (dev-era decision, 2026-11-06), and
 bumping would change the Cloudinary `public_id` of every re-render without any
