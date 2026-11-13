@@ -54,7 +54,6 @@ Capture commands and browser invocation:
 ```sh
 deno task build
 deno task serve dist --port 8000
-python3 /tmp/capture_pfpg_phase0.py
 google-chrome --headless --no-sandbox --disable-gpu --user-data-dir=/tmp/pfpg-chrome-profile-capture --virtual-time-budget=30000 --dump-dom http://127.0.0.1:8000/__capture.html
 ```
 
