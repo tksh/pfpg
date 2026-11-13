@@ -41,24 +41,32 @@ Record the browser name and version, capture date, and exact command used here.
 The freeze script uses create-new writes and refuses existing targets, so it
 cannot silently replace a frozen golden.
 
-## Review candidates (not frozen)
+## Frozen DOM-postprocessing outputs
 
 On 2026-11-14, the ten Phase 0.3 variants for `showcase-202412_001` were
 captured from `#svg-string` in Google Chrome 151.0.7922.173. A same-origin
 iframe wrapper read the textarea's `.value` after page initialization. The
-candidate PNG previews were rendered with `svg2rgba` at 128 px and are awaiting
-human review; none of the candidate SVGs has been added as a frozen golden.
+candidate PNG previews were rendered with `svg2rgba` at 128 px and approved by a
+human before the SVGs were frozen with `scripts/freeze_goldens.ts`.
 
-Capture commands:
+Capture commands and browser invocation:
 
 ```sh
 deno task build
 deno task serve dist --port 8000
+python3 /tmp/capture_pfpg_phase0.py
 google-chrome --headless --no-sandbox --disable-gpu --user-data-dir=/tmp/pfpg-chrome-profile-capture --virtual-time-budget=30000 --dump-dom http://127.0.0.1:8000/__capture.html
 ```
 
-The variants are default, groupColors override, shapeToTrim square/circle/
-squircle, squircleSlimmed with `cropSideMargins=false|true`, explicit
-`opacitySteps`, explicit `shapeRendering`, and explicit `heightPixelSize`. Human
-approval of the PNG previews is required before passing the candidate directory
-to the freeze script.
+The frozen files are `showcase-202412_001-default.svg`,
+`showcase-202412_001-groupColors_override.svg`,
+`showcase-202412_001-shape_square.svg`, `showcase-202412_001-shape_circle.svg`,
+`showcase-202412_001-shape_squircle.svg`,
+`showcase-202412_001-shape_squircleSlimmed_cropFalse.svg`,
+`showcase-202412_001-shape_squircleSlimmed_cropTrue.svg`,
+`showcase-202412_001-opacitySteps_explicit.svg`,
+`showcase-202412_001-shapeRendering_explicit.svg`, and
+`showcase-202412_001-heightPixelSize_explicit.svg`. The variants cover default,
+groupColors override, all requested trim shapes, both slimmed crop settings,
+explicit `opacitySteps`, explicit `shapeRendering`, and explicit
+`heightPixelSize`.
