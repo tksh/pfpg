@@ -133,7 +133,7 @@ export const VISUAL_CONFIG_DEFAULTS = new Map<string, SettingValue>([
   //  ['Attribute name',   default value],         // Appeared at: | Type:  | Possible values:
   ["groupColors", undefined], //    Lines tab | String | 1|3|5|6|10 digits each group-colors hexes has joined with '_', e.g. 12345699FF_000123_FFF_A
   ["pathMode", "absoluteSeparated"], //    Lines tab | String | 'absoluteSeparated', 'relativeMerged'
-  ["opacitySteps", undefined], //    Lines tab | Float  | 0.2, 0.1, 0.04 (detected the nearest from initial decoded SVG)
+  ["opacitySteps", undefined], //    Lines tab | Float  | 0.2, 0.1, 0.04; other values mean unspecified (detected from initial decoded SVG)
   ["colorFormat", "rgb"], //    Lines tab | String | 'hex', 'rgb'
   ["shapeToTrim", "square"], //   Canvas tab | String | 'square', 'circle', 'squircle', 'squircleSlimmed'
   ["widthNarrowness", 10], //   Canvas tab | Uint   | 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30
