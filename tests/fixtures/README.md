@@ -69,3 +69,14 @@ The frozen files are `showcase-202412_001-default.svg`,
 groupColors override, all requested trim shapes, both slimmed crop settings,
 explicit `opacitySteps`, explicit `shapeRendering`, and explicit
 `heightPixelSize`.
+
+On 2026-11-14, two `showcase-202401_001` outputs were captured from
+`#svg-string` in Google Chrome 151.0.7922.173 using a same-origin iframe
+wrapper. The default and `shapeToTrim=circle` PNG previews were rendered at 256
+px and approved before freezing. The candidate SVGs matched `renderParamsToSvg`
+byte-for-byte. The frozen files are `showcase-202401_001-default.svg` and
+`showcase-202401_001-shape_circle.svg`.
+
+```sh
+google-chrome --headless --no-sandbox --disable-gpu --user-data-dir=$(mktemp -d) --virtual-time-budget=60000 --dump-dom http://127.0.0.1:8000/__capture_<variant>.html
+```

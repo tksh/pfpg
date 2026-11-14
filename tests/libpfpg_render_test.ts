@@ -6,6 +6,10 @@ const fixtureParams = new URLSearchParams(
   (await Deno.readTextFile("tests/fixtures/showcase-202412_001.search.txt"))
     .trim().slice(1),
 );
+const fixture202401Params = new URLSearchParams(
+  (await Deno.readTextFile("tests/fixtures/showcase-202401_001.search.txt"))
+    .trim().slice(1),
+);
 Deno.test("libpfpg renderer matches approved showcase goldens", async (t) => {
   const cases: Array<[string, string]> = [
     ["default", ""],
@@ -42,6 +46,22 @@ Deno.test("libpfpg renderer matches approved showcase goldens", async (t) => {
         `${fixtureParams.toString()}${suffix}${
           groupColors ? `&groupColors=${groupColors}` : ""
         }`,
+      );
+      assertEquals(actual, expected);
+    });
+  }
+});
+
+Deno.test("libpfpg renderer matches 202401 default and custom goldens", async (t) => {
+  const cases: Array<[string, string]> = [["default", ""], [
+    "shape_circle",
+    "&shapeToTrim=circle",
+  ]];
+  for (const [name, suffix] of cases) {
+    await t.step(name, async () => {
+      const actual = await renderParamsToSvg(`${fixture202401Params}${suffix}`);
+      const expected = await Deno.readTextFile(
+        `tests/fixtures/showcase-202401_001-${name}.svg`,
       );
       assertEquals(actual, expected);
     });
@@ -145,6 +165,30 @@ Deno.test("libpfpg renderer preserves pixels for approved showcase goldens", asy
         ? "&shapeToTrim=squircleSlimmed&cropSideMargins=true"
         : "";
       const actual = await renderParamsToSvg(`${fixtureParams}${suffix}`);
+      const [a, b] = await Promise.all([
+        svg2rgba(actual, { height: 128 }),
+        svg2rgba(expected, { height: 128 }),
+      ]);
+      assertEquals(a.width, b.width);
+      assertEquals(a.height, b.height);
+      let differingBytes = 0;
+      for (let i = 0; i < a.pixels.length; i++) {
+        if (a.pixels[i] !== b.pixels[i]) differingBytes++;
+      }
+      assertEquals(differingBytes, 0);
+    });
+  }
+  for (
+    const [name, suffix] of [["default", ""], [
+      "shape_circle",
+      "&shapeToTrim=circle",
+    ]]
+  ) {
+    await t.step(`202401_${name}`, async () => {
+      const expected = await Deno.readTextFile(
+        `tests/fixtures/showcase-202401_001-${name}.svg`,
+      );
+      const actual = await renderParamsToSvg(`${fixture202401Params}${suffix}`);
       const [a, b] = await Promise.all([
         svg2rgba(actual, { height: 128 }),
         svg2rgba(expected, { height: 128 }),
