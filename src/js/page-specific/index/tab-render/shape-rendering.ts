@@ -39,6 +39,11 @@ function replaceShapeRendering(
   svgString: string,
   shapeRendering: string,
 ): string {
+  if (
+    shapeRendering !== "crispEdges" && shapeRendering !== "geometricPrecision"
+  ) {
+    throw new TypeError("Invalid shapeRendering");
+  }
   // 正規表現パターンを作成
   const patternForShapeRendering = /shape-rendering="[^"]*"/g;
   // 正規表現でマッチした部分を書き換える

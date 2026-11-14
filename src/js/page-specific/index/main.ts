@@ -69,7 +69,8 @@ if (normalizedSearch !== originalSearch.slice(1)) {
 }
 applyLocaleFromUrl();
 
-(async function (): Promise<void> {
+let startupFailed = false;
+const startupPromise = (async function (): Promise<void> {
   // Initialize sample artwork data.
 
   // If no artwork URL parameters are present (e.g., on initial page load),
@@ -158,7 +159,16 @@ applyLocaleFromUrl();
 
   // Startup layout initialization process must be executed before 'DOMContentLoaded'
   adjustLayoutIfNotMobile();
-})(); // `(async function () { ... })` 無名即時実行関数
+})().catch((error: unknown) => {
+  startupFailed = true;
+  console.error("Unable to render URL", error);
+  const errorScreen = document.getElementById("decode-error");
+  if (errorScreen) errorScreen.hidden = false;
+  const header = document.querySelector("body > header");
+  if (header) (header as HTMLElement).hidden = true;
+  const main = document.querySelector("body > main");
+  if (main) (main as HTMLElement).hidden = true;
+});
 
 // IIFEの外にDOMContentLoadedイベントリスナーを設定
 // - 即時実行関数（IIFE: Immediately Invoked Function Expression）
@@ -170,7 +180,9 @@ applyLocaleFromUrl();
 // 最初の即実行関数内のSVGデコード時に URLパラメータのデータから 動的に生成されるので
 // それを待ってからイベントリスナーを設定する
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  await startupPromise;
+  if (startupFailed) return;
   const imageUrl =
     "https://res.cloudinary.com/ddoy3pmjg/image/upload/v1734026224/cld-sample-3.jpg";
   const ogImageMeta = document.querySelector('meta[property="og:image"]');
