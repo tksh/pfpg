@@ -128,11 +128,11 @@ in `canonical-image-input.ts`. `shared-image-key-test.ts` asserts that:
 - `effectiveOpacityUint8()` snaps with the nearest-grid rule and the same
   earlier/larger tie-break as the UI.
 
-Until Phase 1 replaces the server's `renderPipeline`, `POST /ogp/render` rejects
-any request carrying `opacitySteps` with 400 after checking
-`x-ogp-shared-secret` against `OGP_SHARED_SECRET`. This temporary guard prevents
-an unsnapped render from being uploaded under a key that describes snapped
-pixels; Phase 2 removes it with the renderer replacement.
+Phase 2 removed the temporary `opacitySteps` guard: `POST /ogp/render` now uses
+`renderParamsToSvg()` and accepts supported opacity steps, snapping them before
+rasterization. The endpoint still checks `x-ogp-shared-secret` against
+`OGP_SHARED_SECRET`. Invalid artwork params return 400; missing or incorrect
+secrets return 403.
 
 Bumping `SHARED_IMAGE_KEY_VERSION` is not required for this change: this project
 has no users or shared assets to protect (dev-era decision, 2026-11-06), and
@@ -191,48 +191,29 @@ logging the skip.
 
 ## Server-side reuse
 
-`server/ogp-probe.ts` imports `getSharedImageKeyHash()` unchanged, so the Deno
-Deploy endpoints always agree with the browser on the key:
+`server/ogp-probe.ts` shares the browser's `renderParamsToSvg()` and
+`getSharedImageKeyHash()`:
 
 - `GET /ogp/image-meta` returns `{ key, publicId, imageUrl }` without uploading
-  anything — the image URL is deterministic from the `publicId` (`<key>-png`,
-  see below).
-- `POST /ogp/render` decodes the same params, renders and uploads. Its SVG
-  assembly mirrors the browser pipeline (state keys filtered, `<g>` color
-  overrides applied, `removeOpacity` honored). Note that it does not yet apply
-  `shapeToTrim` / `shapeRendering` / `opacitySteps` / `widthNarrowness` /
-  `topHeavyRatio` / `cropSideMargins`, so the uploaded image does not yet match
-  the browser preview exactly. It is being reworked to the same pure renderer
-  the browser uses.
+  anything; the deterministic URL uses `<key>-png`.
+- `POST /ogp/render` renders the full parameter set, rasterizes at
+  `heightPixelSize` (256 by default), and uploads the PNG. The temporary
+  `opacitySteps` rejection is removed. Manual uploads receive `pfpg,history`
+  tags. Requests with `auto=1` retain their raw params sidecar but receive
+  `pfpg,ogp-auto`, so crawler recovery does not populate history.
+- `GET /ogp` has been removed. The service keeps `/ogp/image-meta` and
+  `/ogp/render`.
 
-### Where the `og:image` actually comes from
+The regular `og:image` URL is still supplied by the browser-uploaded image. The
+Pages functions compute its URL with `/ogp/image-meta`. An optional Method A
+recovery path is implemented for allowlisted crawler user agents. It is
+controlled by `OGP_METHOD_A` (default off), checks the URL with HEAD, and calls
+`POST /ogp/render?auto=1` only after a 404. Human requests never trigger
+recovery. A non-404 HEAD result, timeout, render error, missing secret, or other
+failure removes the `og:image` tag entirely. The secret is required for the
+render POST, but does not itself prevent abuse by spoofed user agents.
 
-The `og:image` that crawlers (and unfurl previews in chat tools) show is not
-produced by the server. The browser page renders the artwork, and — after a page
-render settles (`UPLOAD_DEBOUNCE_MS`) — uploads its rendered PNG (or, if
-`imageFormat=webp`, WebP) under `<key>-png` (`<key>-webp`) via
-`uploadRenderedImage`. The Netlify / Cloudflare middleware computes the same
-deterministic URL from the params and injects it into `og:image`; nothing is
-rendered server-side on that path, and no server-side job checks that the asset
-exists.
-
-Consequences:
-
-- A URL that has never been opened in a browser has no `og:image` asset at that
-  URL (it 404s) until someone renders it, or ops calls `POST /ogp/render` for
-  it.
-- The browser's upload is the asset that wins — a later, reduced-fidelity server
-  render from `POST /ogp/render` would overwrite a correct image with a
-  different one. Re-uploading by mistake is destructive to the OGP preview of
-  that URL.
-- `/ogp/image-meta` always returns the `-png` URL on purpose: OGP crawlers
-  support PNG widely, whereas WebP support is spotty. This is a deliberate
-  special case for the OGP path, not the general contract of the renderer — the
-  library built from this pipeline (`@tksh/libpfpg`, when published) honors
-  `imageFormat` and would return the WebP.
-- `pfpg-ogp.tksh.deno.net` is the Deno Deploy service hosting these endpoints;
-  the site previously used it for all server-side rendering. The production
-  `og:image` path depends on it only for `/ogp/image-meta`.
-- `POST /ogp/render` is the manual/ops route for pre-rendering a URL that has
-  never been opened in a browser (so its `og:image` is valid from the start).
-  `GET /ogp` (diagnostic) may be removed without affecting the production path.
+Method A must remain disabled in production until edge rate limiting, a daily
+cap, a purge procedure for `pfpg,ogp-auto` assets, and staging verification are
+in place. `SHARED_IMAGE_KEY_VERSION` remains unchanged: this renderer now
+follows the existing canonical pixel contract.

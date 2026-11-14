@@ -1,30 +1,18 @@
-// Deno Deploy probe: decode the artwork URL params to SVG and compute the
-// shared-image key on the server (no DOM, no location), plus a Wasm render
-// smoke check via @tksh/svg2ui8a. Does not upload to Cloudinary yet.
-//
-// Parity with the browser pipeline: artwork params go through stln-codec,
-// then `<g>` color overrides from the `groupColors` state param are applied
-// via the shared group-colors-svg helpers, then the optimize-svg state keys
-// (like `removeOpacity`) are applied.
-import { decodeUrlToSvg } from "@tksh/stln-codec";
-import {
-  excludeStateKeys,
-  normalizeScalarParams,
-} from "common-utils/read-url-params";
+// Deno Deploy OGP endpoints. Rendering is shared with the browser through
+// libpfpg; this service rasterizes and uploads the result.
 import { PhotonImage } from "@denext/photon";
-import {
-  applyGroupColorsToSvg,
-  removeOpacity,
-} from "group-colors-svg/group-colors-svg";
-import { getSharedImageKeyHash } from "shared-image/shared-image-key";
-import { decodeGroupColorsAsArray } from "tab-lines/decode-colors-as-array";
 import {
   API_KEY,
   CLOUD_NAME,
   createSignedUpload,
   UPLOAD_PRESET,
 } from "../functions/lib/sign-upload.ts";
-import { svg2rgba } from "svg2ui8a";
+import { getSharedImageKeyHash } from "shared-image/shared-image-key";
+import {
+  InvalidOgpParamsError,
+  renderFailureResponse,
+  renderPipeline,
+} from "./ogp-render.ts";
 import { initializeRasterizer } from "./rasterizer.ts";
 import { renderGuardResponse } from "./ogp-render-guard.ts";
 
@@ -38,9 +26,6 @@ Deno.serve(async (req: Request): Promise<Response> => {
   const url = new URL(req.url);
   const pathname = url.pathname;
 
-  if (pathname === "/ogp" && req.method === "GET") {
-    return await handleProbe(url);
-  }
   if (pathname === "/ogp/image-meta" && req.method === "GET") {
     try {
       const key = await getSharedImageKeyHash(url.searchParams);
@@ -52,17 +37,19 @@ Deno.serve(async (req: Request): Promise<Response> => {
         { headers: { "content-type": "application/json" } },
       );
     } catch (error) {
-      return jsonError(error);
+      console.log("ogp: meta-fetch-fail");
+      return jsonError(error, 400);
     }
   }
   if (pathname === "/ogp/render" && req.method === "POST") {
-    // Temporary until renderPipeline is replaced by Phase 1's snapping renderer.
     const guardResponse = renderGuardResponse(
       req,
-      url,
       Deno.env.get("OGP_SHARED_SECRET"),
     );
-    if (guardResponse !== null) return guardResponse;
+    if (guardResponse !== null) {
+      if (guardResponse.status === 403) console.log("ogp: secret-rejected");
+      return guardResponse;
+    }
     try {
       const data = await renderAndUpload(url);
       return new Response(
@@ -70,7 +57,16 @@ Deno.serve(async (req: Request): Promise<Response> => {
         { headers: { "content-type": "application/json" } },
       );
     } catch (error) {
-      return jsonError(error);
+      if (error instanceof InvalidOgpParamsError) {
+        console.log("ogp: render-fail");
+        return renderFailureResponse(error);
+      }
+      if (error instanceof DOMException && error.name === "TimeoutError") {
+        console.log("ogp: timeout");
+      } else {
+        console.log("ogp: render-fail");
+      }
+      return renderFailureResponse(error);
     }
   }
   if (pathname === "/share" && req.method === "GET") {
@@ -82,12 +78,12 @@ Deno.serve(async (req: Request): Promise<Response> => {
   });
 });
 
-function jsonError(error: unknown): Response {
+function jsonError(error: unknown, status = 500): Response {
   return new Response(
     JSON.stringify({
       error: error instanceof Error ? error.message : String(error),
     }),
-    { status: 500, headers: { "content-type": "application/json" } },
+    { status, headers: { "content-type": "application/json" } },
   );
 }
 
@@ -112,12 +108,10 @@ async function renderAndUpload(url: URL): Promise<{
   svgBytes: number;
 }> {
   const params = url.searchParams;
-  const apiSecret = Deno.env.get("CLOUDINARY_API_SECRET");
-  if (!apiSecret) {
-    throw new Error("CLOUDINARY_API_SECRET is not configured");
-  }
-
   const { key, svg, pixels, width, height } = await renderPipeline(params);
+  const isAuto = params.getAll("auto").at(-1) === "1";
+  const apiSecret = Deno.env.get("CLOUDINARY_API_SECRET");
+  if (!apiSecret) throw new Error("CLOUDINARY_API_SECRET is not configured");
 
   // Encode RGBA to PNG via photon (same strategy as svg2ui8a-demo)
   using img = new PhotonImage(pixels, width, height);
@@ -128,10 +122,18 @@ async function renderAndUpload(url: URL): Promise<{
     new Blob([new Uint8Array(pngBytes)], { type: "image/png" }),
     publicId,
     apiSecret,
+    isAuto,
   );
   const paramsBlob = new Blob([url.search], { type: "text/plain" });
   try {
-    await uploadAsset("raw", paramsBlob, publicId, apiSecret, "params.txt");
+    await uploadAsset(
+      "raw",
+      paramsBlob,
+      publicId,
+      apiSecret,
+      isAuto,
+      "params.txt",
+    );
   } catch (sidecarError) {
     console.error("Error uploading params sidecar:", sidecarError);
   }
@@ -144,85 +146,19 @@ async function renderAndUpload(url: URL): Promise<{
   };
 }
 
-async function handleProbe(url: URL): Promise<Response> {
-  const params = url.searchParams;
-  if (params.toString() === "") {
-    return new Response(
-      JSON.stringify({ error: "missing artwork params" }),
-      { status: 400, headers: { "content-type": "application/json" } },
-    );
-  }
-  try {
-    const { key, svg, pixels, width, height } = await renderPipeline(params);
-
-    return new Response(
-      JSON.stringify({
-        key,
-        svgBytes: new TextEncoder().encode(svg).length,
-        rgbaBytes: pixels.length,
-        width,
-        height,
-      }),
-      { headers: { "content-type": "application/json" } },
-    );
-  } catch (error) {
-    return new Response(
-      JSON.stringify({
-        error: error instanceof Error ? error.message : String(error),
-      }),
-      { status: 500, headers: { "content-type": "application/json" } },
-    );
-  }
-}
-
-// Decode params (state-key aware) -> svg string -> rgba pixels
-async function renderPipeline(params: URLSearchParams): Promise<{
-  key: string;
-  svg: string;
-  pixels: Uint8Array;
-  width: number;
-  height: number;
-}> {
-  params = normalizeScalarParams(params);
-  const pathMode = params.get("pathMode") === "relativeMerged"
-    ? "relativeMerged"
-    : "absoluteSeparated";
-  const { svg: decodedSvg } = await decodeUrlToSvg(
-    excludeStateKeys(params),
-    { pathMode },
-  );
-
-  let svg = decodedSvg;
-  const groupColors = params.get("groupColors");
-  const isOpacityRemoved = params.get("removeOpacity") === "true";
-  const colorFormat = params.get("colorFormat") ?? "rgb";
-
-  if (groupColors) {
-    const colorsByGroups = decodeGroupColorsAsArray(groupColors, colorFormat);
-    svg = applyGroupColorsToSvg(svg, colorsByGroups, {
-      removeOpacity: isOpacityRemoved,
-    });
-  }
-  if (isOpacityRemoved) {
-    svg = removeOpacity(svg);
-  }
-
-  const key = await getSharedImageKeyHash(params);
-  const { width, height, pixels } = await svg2rgba(svg, { height: 256 });
-  return { key, svg, pixels, width, height };
-}
-
 async function uploadAsset(
   resourceType: "image" | "raw",
   blob: Blob,
   publicId: string,
   apiSecret: string,
+  isAuto: boolean,
   fileName = "file",
 ): Promise<string> {
   const now = new Date();
   const yyyy = now.getFullYear();
   const yyyyMm = `${yyyy}-${("00" + (now.getMonth() + 1)).slice(-2)}`;
-  const tags = ["pfpg", "history", yyyy, yyyyMm].join(",");
+  const tags = ["pfpg", isAuto ? "ogp-auto" : "history", yyyy, yyyyMm]
+    .join(",");
 
   const signed = await createSignedUpload({ publicId, tags }, apiSecret);
 
@@ -237,7 +173,11 @@ async function uploadAsset(
 
   const uploadUrl =
     `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${resourceType}/upload`;
-  const resp = await fetch(uploadUrl, { method: "POST", body: form });
+  const resp = await fetch(uploadUrl, {
+    method: "POST",
+    body: form,
+    signal: AbortSignal.timeout(4_000),
+  });
   const data: unknown = await resp.json();
   if (!resp.ok) {
     let message = "Cloudinary upload failed";

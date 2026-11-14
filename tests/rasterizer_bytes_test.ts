@@ -108,6 +108,8 @@ Deno.test("server source initializes before listening and has no fixed URL", asy
   assert(!probe.includes("jsr.io/@tksh"));
   assert(!probe.includes("RASTERIZER_WASM_URL"));
   assert(!probe.includes("ensureRasterizer"));
+  assert(!probe.includes('pathname === "/ogp"'));
+  assert(probe.includes('pathname === "/ogp/render"'));
   assert(
     probe.indexOf("await initializeRasterizer()") <
       probe.indexOf("Deno.serve("),
@@ -121,5 +123,13 @@ Deno.test("server source initializes before listening and has no fixed URL", asy
     rasterizer.includes("wasmBytes:"),
     "the server must initialize from bytes",
   );
+  const ogpRenderer = await Deno.readTextFile(
+    new URL("../server/ogp-render.ts", import.meta.url),
+  );
+  assert(ogpRenderer.includes("renderParamsToSvg"));
+  assert(ogpRenderer.includes("readHeightPixelSize"));
+  assert(probe.includes('isAuto ? "ogp-auto" : "history"'));
+  assert(probe.includes("`${key}-png`"));
+  assert(!probe.includes('pathname === "/ogp"'));
   assertEquals(SVG2UI8A_VERSION, "0.6.1");
 });

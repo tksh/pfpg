@@ -47,36 +47,41 @@ recorded in `src/assets/svg2ui8a/README.md`.
 
 The deployed OGP service is <https://pfpg-ogp.tksh.deno.net>:
 
-The production `og:image` is not rendered by this service. The browser page
-uploads its own rendered PNG (or WebP) to Cloudinary under a key derived from
-the drawing itself (see `docs/shared-image-key.md`). The Netlify/Cloudflare
-middleware computes that deterministic URL from the params and injects it as
-`og:image`; the server never renders or uploads on that path. A URL that has
-never been opened in a browser therefore has no `og:image` asset (404) until
-someone renders it or ops calls `POST /ogp/render`.
+The regular `og:image` path points to the browser-uploaded PNG. The Pages
+middleware computes its deterministic `<key>-png` URL through
+`GET /ogp/image-meta`. The optional Method A recovery path is implemented for
+allowlisted crawler user agents: when explicitly enabled with `OGP_METHOD_A=on`,
+it checks the image with HEAD and synchronously renders only when HEAD
+returns 404. It is off unless the deployment environment opts in, and must
+remain off until the Phase 2 abuse controls and staging checks are complete. Any
+failed check or render omits the `og:image` tag entirely. Human visits never
+trigger recovery.
 
 `GET /ogp/image-meta?<artwork params>` returns the Cloudinary key and image URL
-without rendering or uploading — the image URL is deterministic from the
-`publicId`. It always returns the `-png` variant: PNG is the OGP-compatible
-default (WebP is not widely supported by crawlers), a deliberate special case —
-the library built from this pipeline (`@tksh/libpfpg`, when published) honors
-`imageFormat` and would return the WebP.
+without rendering or uploading. It always returns the `-png` variant: PNG is the
+OGP-compatible default (WebP is not widely supported by crawlers), a deliberate
+special case; the library built from this pipeline (`@tksh/libpfpg`, when
+published) honors `imageFormat`.
 
-`POST /ogp/render` renders the params server-side and uploads the PNG. It is the
-manual/ops route for pre-rendering a URL that has never been opened in a
-browser. It requires `x-ogp-shared-secret` matching `OGP_SHARED_SECRET`.
-Temporarily, requests carrying `opacitySteps` receive 400 until Phase 1's
-renderer applies the same snapping as the shared-image key. Note: the current
-server-side renderer is not yet pixel-faithful to the browser preview (it does
-not apply `shapeToTrim` / `shapeRendering` / `opacitySteps` / `widthNarrowness`
-/ `topHeavyRatio` / `cropSideMargins`); it is being reworked onto the same pure
-renderer the browser uses. Because it uploads under the same `publicId`, a
-server re-render can overwrite a correct browser-uploaded image.
+`POST /ogp/render` uses `src/js/libpfpg/render.ts`, rasterizes at
+`heightPixelSize` (256 by default), and uploads the PNG. It requires
+`x-ogp-shared-secret` matching `OGP_SHARED_SECRET`. Manual requests carry the
+`pfpg,history` tags; Method A passes `auto=1`, preserving the params sidecar but
+tagging assets `pfpg,ogp-auto` so crawler-generated URLs do not enter history.
+Invalid rendering params return 400. The server uses the same canonical key and
+full SVG pipeline as the browser. A manual server re-render can still overwrite
+a browser-uploaded image under the same `publicId`.
 
-`GET /ogp?<artwork params>` renders the artwork and returns the key, SVG and
-RGBA byte counts and output dimensions for diagnosis. It does not upload. (Note:
-`GET /ogp` is slated for removal — it was never part of the OGP flow and its
-existence invited the misreading that the server produces the `og:image`.)
+`GET /ogp` has been removed; it was diagnostic only and was not part of the
+production image path. `OGP_METHOD_A` is an opt-in kill switch, not an abuse
+control. Production enablement is gated on edge rate limiting, a daily cap,
+asset purge procedures, and successful staging verification. Configure
+`OGP_METHOD_A` and `OGP_SHARED_SECRET` for Cloudflare Pages production/preview
+and the Netlify site; configure `OGP_SHARED_SECRET` on the Deno Deploy service.
+Keep `OGP_METHOD_A` unset or off until the staging gate is complete. At least
+monthly, review Cloudinary assets tagged `pfpg,ogp-auto` in each account and
+delete their image and raw sidecar resources; confirm crawler-created assets do
+not carry `pfpg,history`.
 
 ## Deploy on Netlify
 

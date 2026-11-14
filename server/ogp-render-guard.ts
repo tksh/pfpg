@@ -2,7 +2,6 @@ export { renderGuardResponse };
 
 function renderGuardResponse(
   request: Request,
-  url: URL,
   sharedSecret: string | undefined,
 ): Response | null {
   if (
@@ -13,12 +12,6 @@ function renderGuardResponse(
       status: 403,
       headers: { "content-type": "application/json" },
     });
-  }
-  if (url.searchParams.has("opacitySteps")) {
-    return new Response(
-      JSON.stringify({ error: "opacitySteps is temporarily unsupported" }),
-      { status: 400, headers: { "content-type": "application/json" } },
-    );
   }
   return null;
 }
