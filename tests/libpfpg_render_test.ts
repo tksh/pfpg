@@ -113,10 +113,14 @@ Deno.test("libpfpg renderer preserves pixels for approved showcase goldens", asy
     const name of [
       "default",
       "groupColors_override",
+      "shape_square",
       "shape_circle",
       "shape_squircle",
+      "shape_squircleSlimmed_cropFalse",
+      "shape_squircleSlimmed_cropTrue",
       "opacitySteps_explicit",
       "shapeRendering_explicit",
+      "heightPixelSize_explicit",
     ]
   ) {
     await t.step(name, async () => {
@@ -133,6 +137,12 @@ Deno.test("libpfpg renderer preserves pixels for approved showcase goldens", asy
         ? "&shapeToTrim=circle"
         : name === "shape_squircle"
         ? "&shapeToTrim=squircle"
+        : name === "shape_square"
+        ? "&shapeToTrim=square"
+        : name === "shape_squircleSlimmed_cropFalse"
+        ? "&shapeToTrim=squircleSlimmed&cropSideMargins=false"
+        : name === "shape_squircleSlimmed_cropTrue"
+        ? "&shapeToTrim=squircleSlimmed&cropSideMargins=true"
         : "";
       const actual = await renderParamsToSvg(`${fixtureParams}${suffix}`);
       const [a, b] = await Promise.all([
