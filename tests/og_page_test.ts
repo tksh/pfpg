@@ -37,7 +37,7 @@ function stub(
   };
 }
 
-Deno.test("method A off omits og:image and does no HEAD", async () => {
+Deno.test("method A off preserves URL-only og:image and does no HEAD", async () => {
   const calls: Call[] = [];
   const fetcher = stub(
     (url) =>
@@ -55,7 +55,7 @@ Deno.test("method A off omits og:image and does no HEAD", async () => {
   );
   const body = await response.text();
   assertStringIncludes(body, "og:url");
-  assert(!body.includes('property="og:image"'));
+  assertStringIncludes(body, `content="${imageUrl}"`);
   assertEquals(calls.length, 2);
   assert(!calls.some((call) => call.method === "HEAD"));
 });
@@ -112,7 +112,7 @@ Deno.test("method A does not recover on a non-404 HEAD and removes og:image", as
   assert(!calls.some((call) => call.method === "POST"));
 });
 
-Deno.test("non-allowlisted agents get no image when method A is on", async () => {
+Deno.test("non-allowlisted agents keep URL-only og:image when method A is on", async () => {
   const calls: Call[] = [];
   const fetcher = stub(
     (url) =>
@@ -128,7 +128,7 @@ Deno.test("non-allowlisted agents get no image when method A is on", async () =>
   );
   const body = await response.text();
   assertStringIncludes(body, "og:url");
-  assert(!body.includes('property="og:image"'));
+  assertStringIncludes(body, `content="${imageUrl}"`);
   assert(
     !calls.some((call) => call.method === "HEAD" || call.method === "POST"),
   );

@@ -72,7 +72,7 @@ export async function serveOgPage(
   if (
     env.OGP_METHOD_A !== "on" ||
     !isCrawlerUserAgent(req.headers.get("user-agent") ?? "")
-  ) return htmlResponse(injectOgUrl(baseHtml, url));
+  ) return htmlResponse(injectOgUrl(baseHtml, url, imageUrl));
 
   let head: Response;
   try {
