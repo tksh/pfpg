@@ -47,15 +47,14 @@ recorded in `src/assets/svg2ui8a/README.md`.
 
 The deployed OGP service is <https://pfpg-ogp.tksh.deno.net>:
 
-The regular `og:image` path points to the browser-uploaded PNG. The Pages
-middleware computes its deterministic `<key>-png` URL through
-`GET /ogp/image-meta`. The optional Method A recovery path is implemented for
-allowlisted crawler user agents: when explicitly enabled with `OGP_METHOD_A=on`,
-it checks the image with HEAD and synchronously renders only when HEAD
-returns 404. It is off unless the deployment environment opts in, and must
-remain off until the Phase 2 abuse controls and staging checks are complete. Any
-failed check or render omits the `og:image` tag entirely. Human visits never
-trigger recovery.
+Method A is the only path that injects `og:image`: for allowlisted crawler user
+agents, when explicitly enabled with `OGP_METHOD_A=on`, the Pages middleware
+computes the deterministic `<key>-png` URL through `GET /ogp/image-meta`, checks
+it with HEAD, and synchronously renders only when HEAD returns 404. When Method
+A is off or the user agent is not allowlisted, the page injects `og:url` and
+omits `og:image`. It must remain off in deployments until the Phase 2 abuse
+controls and staging checks are complete. Any failed check or render also omits
+the `og:image` tag entirely.
 
 `GET /ogp/image-meta?<artwork params>` returns the Cloudinary key and image URL
 without rendering or uploading. It always returns the `-png` variant: PNG is the

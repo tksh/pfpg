@@ -37,7 +37,7 @@ function stub(
   };
 }
 
-Deno.test("method A stays off by default and does no HEAD for human UAs", async () => {
+Deno.test("method A off omits og:image and does no HEAD", async () => {
   const calls: Call[] = [];
   const fetcher = stub(
     (url) =>
@@ -48,10 +48,14 @@ Deno.test("method A stays off by default and does no HEAD for human UAs", async 
         }),
     calls,
   );
-  const response = await callPage("Mozilla/5.0", {}, fetcher);
+  const response = await callPage(
+    "Googlebot/2.1",
+    { OGP_METHOD_A: "off" },
+    fetcher,
+  );
   const body = await response.text();
-  assertStringIncludes(body, `content="${imageUrl}"`);
   assertStringIncludes(body, "og:url");
+  assert(!body.includes('property="og:image"'));
   assertEquals(calls.length, 2);
   assert(!calls.some((call) => call.method === "HEAD"));
 });
@@ -108,7 +112,7 @@ Deno.test("method A does not recover on a non-404 HEAD and removes og:image", as
   assert(!calls.some((call) => call.method === "POST"));
 });
 
-Deno.test("non-allowlisted agents stay on URL-only behavior when method A is on", async () => {
+Deno.test("non-allowlisted agents get no image when method A is on", async () => {
   const calls: Call[] = [];
   const fetcher = stub(
     (url) =>
@@ -122,7 +126,9 @@ Deno.test("non-allowlisted agents stay on URL-only behavior when method A is on"
     { OGP_METHOD_A: "on", OGP_SHARED_SECRET: "shared-secret" },
     fetcher,
   );
-  assertStringIncludes(await response.text(), `content="${imageUrl}"`);
+  const body = await response.text();
+  assertStringIncludes(body, "og:url");
+  assert(!body.includes('property="og:image"'));
   assert(
     !calls.some((call) => call.method === "HEAD" || call.method === "POST"),
   );

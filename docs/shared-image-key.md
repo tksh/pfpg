@@ -204,14 +204,14 @@ logging the skip.
 - `GET /ogp` has been removed. The service keeps `/ogp/image-meta` and
   `/ogp/render`.
 
-The regular `og:image` URL is still supplied by the browser-uploaded image. The
-Pages functions compute its URL with `/ogp/image-meta`. An optional Method A
-recovery path is implemented for allowlisted crawler user agents. It is
-controlled by `OGP_METHOD_A` (default off), checks the URL with HEAD, and calls
-`POST /ogp/render?auto=1` only after a 404. Human requests never trigger
-recovery. A non-404 HEAD result, timeout, render error, missing secret, or other
-failure removes the `og:image` tag entirely. The secret is required for the
-render POST, but does not itself prevent abuse by spoofed user agents.
+Method A is the only path that injects `og:image`. For an allowlisted crawler,
+the Pages functions compute the browser-upload URL with `/ogp/image-meta` when
+`OGP_METHOD_A=on`, check it with HEAD, and call `POST /ogp/render?auto=1` only
+after a 404. When the switch is off or the user agent is not allowlisted, the
+page injects `og:url` and omits `og:image`. A non-404 HEAD result, timeout,
+render error, missing secret, or other failure also removes the `og:image` tag
+entirely. The secret is required for the render POST, but does not itself
+prevent abuse by spoofed user agents.
 
 Method A must remain disabled in production until edge rate limiting, a daily
 cap, a purge procedure for `pfpg,ogp-auto` assets, and staging verification are
