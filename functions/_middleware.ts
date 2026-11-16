@@ -1,14 +1,12 @@
-import { type OgPageEnv, serveOgPage } from "./lib/og-page.ts";
+import { serveOgPage } from "./lib/og-page.ts";
 
 interface EventContext {
   request: Request;
   next: () => Promise<Response> | Response;
-  env: OgPageEnv;
 }
 
-// Intercept `/` and `/index.html` so only crawler requests can opt into
-// synchronous image recovery; OGP_METHOD_A remains off unless explicitly set.
-// Keep aligned with netlify/functions/index-html-og.ts.
+// Keep aligned with netlify/functions/index-html-og.ts. OGP tags use only
+// assets that already exist; page requests never start image rendering.
 export async function onRequest(context: EventContext): Promise<Response> {
   const url = new URL(context.request.url);
   if (
@@ -18,7 +16,6 @@ export async function onRequest(context: EventContext): Promise<Response> {
     return await serveOgPage(
       context.request,
       () => context.next(),
-      context.env,
     );
   }
   return context.next();

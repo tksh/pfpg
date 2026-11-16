@@ -11,17 +11,12 @@ type StubFetcher = (
   init?: RequestInit,
 ) => Promise<Response>;
 
-function callPage(
-  userAgent: string,
-  env: { OGP_METHOD_A?: string; OGP_SHARED_SECRET?: string },
-  fetcher: StubFetcher,
-): Promise<Response> {
+function callPage(userAgent: string, fetcher: StubFetcher): Promise<Response> {
   return serveOgPage(
     new Request("https://site.test/index.html?bits=~7", {
       headers: { "user-agent": userAgent },
     }),
     () => new Response("fallback"),
-    env,
     fetcher,
   );
 }
@@ -37,101 +32,98 @@ function stub(
   };
 }
 
-Deno.test("method A off preserves URL-only og:image and does no HEAD", async () => {
-  const calls: Call[] = [];
-  const fetcher = stub(
-    (url) =>
-      url.endsWith("index-raw.html")
-        ? new Response(html)
-        : new Response(JSON.stringify({ imageUrl }), {
-          headers: { "content-type": "application/json" },
-        }),
-    calls,
-  );
-  const response = await callPage(
-    "Googlebot/2.1",
-    { OGP_METHOD_A: "off" },
-    fetcher,
-  );
-  const body = await response.text();
-  assertStringIncludes(body, "og:url");
-  assertStringIncludes(body, `content="${imageUrl}"`);
-  assertEquals(calls.length, 2);
-  assert(!calls.some((call) => call.method === "HEAD"));
+function metaResponse(): Response {
+  return new Response(JSON.stringify({ imageUrl }), {
+    headers: { "content-type": "application/json" },
+  });
+}
+
+Deno.test("all user agents receive an existing image without rendering", async () => {
+  for (
+    const userAgent of [
+      "Twitterbot/1.0",
+      "Googlebot/2.1",
+      "Google-Keep-preview/unknown",
+      "Mozilla/5.0",
+    ]
+  ) {
+    const calls: Call[] = [];
+    const fetcher = stub((url, init) => {
+      if (url.endsWith("index-raw.html")) return new Response(html);
+      if (url.includes("/ogp/image-meta")) return metaResponse();
+      if (init?.method === "HEAD") return new Response(null, { status: 200 });
+      throw new Error("OGP page requests must not call the render endpoint");
+    }, calls);
+
+    const response = await callPage(userAgent, fetcher);
+    const body = await response.text();
+    assertStringIncludes(
+      body,
+      'content="https://site.test/index.html?bits=~7"',
+    );
+    assertStringIncludes(body, `content="${imageUrl}"`);
+    assertEquals(calls.map((call) => call.method), ["GET", "GET", "HEAD"]);
+    assert(!calls.some((call) => call.url.includes("/ogp/render")));
+  }
 });
 
-Deno.test("allowlisted crawler renders only after a 404 and sends auto secret", async () => {
-  const calls: Call[] = [];
-  const fetcher = stub((url, init) => {
-    if (url.endsWith("index-raw.html")) return new Response(html);
-    if (url.includes("/ogp/image-meta")) {
-      return new Response(JSON.stringify({ imageUrl }), {
-        headers: { "content-type": "application/json" },
-      });
-    }
-    if (init?.method === "HEAD") return new Response(null, { status: 404 });
-    return new Response(JSON.stringify({ imageUrl }), {
-      headers: { "content-type": "application/json" },
-    });
-  }, calls);
-  const response = await callPage("Googlebot/2.1", {
-    OGP_METHOD_A: "on",
-    OGP_SHARED_SECRET: "shared-secret",
-  }, fetcher);
-  assertStringIncludes(await response.text(), `content="${imageUrl}"`);
-  const head = calls.find((call) => call.method === "HEAD");
-  const post = calls.find((call) => call.method === "POST");
-  assert(head);
-  assert(post);
-  assert(post.url.includes("auto=1"));
-  assertEquals(
-    new Headers(post.init?.headers).get("x-ogp-shared-secret"),
-    "shared-secret",
-  );
-  assert(post.init?.signal instanceof AbortSignal);
+Deno.test("all user agents omit an image that has not been rendered", async () => {
+  for (
+    const userAgent of ["Twitterbot", "Google-Keep-preview", "Mozilla/5.0"]
+  ) {
+    const calls: Call[] = [];
+    const fetcher = stub((url, init) => {
+      if (url.endsWith("index-raw.html")) return new Response(html);
+      if (url.includes("/ogp/image-meta")) return metaResponse();
+      if (init?.method === "HEAD") return new Response(null, { status: 404 });
+      throw new Error("OGP page requests must not call the render endpoint");
+    }, calls);
+
+    const response = await callPage(userAgent, fetcher);
+    const body = await response.text();
+    assertStringIncludes(
+      body,
+      'content="https://site.test/index.html?bits=~7"',
+    );
+    assert(!body.includes('property="og:image"'));
+    assert(!calls.some((call) => call.url.includes("/ogp/render")));
+  }
 });
 
-Deno.test("method A does not recover on a non-404 HEAD and removes og:image", async () => {
-  const calls: Call[] = [];
-  const fetcher = stub((url, init) => {
-    if (url.endsWith("index-raw.html")) return new Response(html);
-    if (url.includes("/ogp/image-meta")) {
-      return new Response(JSON.stringify({ imageUrl }));
-    }
-    if (init?.method === "HEAD") return new Response(null, { status: 503 });
-    throw new Error("POST must not be sent");
-  }, calls);
-  const response = await callPage(
-    "Discordbot",
-    { OGP_METHOD_A: "on" },
-    fetcher,
-  );
-  const body = await response.text();
-  assertStringIncludes(body, "og:url");
-  assert(!body.includes('property="og:image"'));
-  assert(!calls.some((call) => call.method === "POST"));
-});
+Deno.test("HEAD failures omit og:image and never call render", async () => {
+  const failures: Array<{
+    label: string;
+    head: () => Response | Promise<Response>;
+  }> = [
+    { label: "403", head: () => new Response(null, { status: 403 }) },
+    { label: "503", head: () => new Response(null, { status: 503 }) },
+    {
+      label: "timeout",
+      head: () => {
+        throw new DOMException("deadline", "TimeoutError");
+      },
+    },
+    {
+      label: "network error",
+      head: () => Promise.reject(new Error("offline")),
+    },
+  ];
 
-Deno.test("non-allowlisted agents keep URL-only og:image when method A is on", async () => {
-  const calls: Call[] = [];
-  const fetcher = stub(
-    (url) =>
-      url.endsWith("index-raw.html")
-        ? new Response(html)
-        : new Response(JSON.stringify({ imageUrl })),
-    calls,
-  );
-  const response = await callPage(
-    "Blueskybot/1.0",
-    { OGP_METHOD_A: "on", OGP_SHARED_SECRET: "shared-secret" },
-    fetcher,
-  );
-  const body = await response.text();
-  assertStringIncludes(body, "og:url");
-  assertStringIncludes(body, `content="${imageUrl}"`);
-  assert(
-    !calls.some((call) => call.method === "HEAD" || call.method === "POST"),
-  );
+  for (const failure of failures) {
+    const calls: Call[] = [];
+    const fetcher = stub((url, init) => {
+      if (url.endsWith("index-raw.html")) return new Response(html);
+      if (url.includes("/ogp/image-meta")) return metaResponse();
+      if (init?.method === "HEAD") return failure.head();
+      throw new Error(`Unexpected request during ${failure.label}`);
+    }, calls);
+
+    const response = await callPage("Google-Keep-preview", fetcher);
+    const body = await response.text();
+    assertStringIncludes(body, "og:url");
+    assert(!body.includes('property="og:image"'));
+    assert(!calls.some((call) => call.url.includes("/ogp/render")));
+  }
 });
 
 Deno.test("image-meta failure omits the complete og:image tag", async () => {
@@ -143,65 +135,22 @@ Deno.test("image-meta failure omits the complete og:image tag", async () => {
         : new Response("unavailable", { status: 503 }),
     calls,
   );
-  const response = await callPage(
-    "Googlebot",
-    { OGP_METHOD_A: "off" },
-    fetcher,
-  );
+  const response = await callPage("Googlebot", fetcher);
   const body = await response.text();
   assertStringIncludes(body, "og:url");
   assert(!body.includes('property="og:image"'));
+  assert(!calls.some((call) => call.method === "HEAD"));
 });
 
-Deno.test("crawler HEAD timeout omits the image and never sends render POST", async () => {
-  const calls: Call[] = [];
-  const fetcher = stub((url, init) => {
-    if (url.endsWith("index-raw.html")) return new Response(html);
-    if (url.includes("/ogp/image-meta")) {
-      return new Response(JSON.stringify({ imageUrl }));
-    }
-    if (init?.method === "HEAD") {
-      throw new DOMException("deadline", "TimeoutError");
-    }
-    throw new Error("POST must not be sent");
-  }, calls);
-  const response = await callPage("Googlebot", { OGP_METHOD_A: "on" }, fetcher);
-  assert(!(await response.text()).includes('property="og:image"'));
-  assert(!calls.some((call) => call.method === "POST"));
-});
-
-Deno.test("missing render secret omits og:image after a crawler sees a 404", async () => {
-  const calls: Call[] = [];
-  const fetcher = stub((url, init) => {
-    if (url.endsWith("index-raw.html")) return new Response(html);
-    if (url.includes("/ogp/image-meta")) {
-      return new Response(JSON.stringify({ imageUrl }));
-    }
-    if (init?.method === "HEAD") return new Response(null, { status: 404 });
-    return new Response(JSON.stringify({ error: "unauthorized" }), {
-      status: 403,
-    });
-  }, calls);
-  const response = await callPage("Googlebot", { OGP_METHOD_A: "on" }, fetcher);
-  assert(!(await response.text()).includes('property="og:image"'));
-  assert(calls.some((call) => call.method === "POST"));
-});
-
-Deno.test("existing image on HEAD success is reused without rendering", async () => {
-  const calls: Call[] = [];
-  const fetcher = stub((url, init) => {
-    if (url.endsWith("index-raw.html")) return new Response(html);
-    if (url.includes("/ogp/image-meta")) {
-      return new Response(JSON.stringify({ imageUrl }));
-    }
-    if (init?.method === "HEAD") return new Response(null, { status: 200 });
-    throw new Error("POST must not be sent");
-  }, calls);
-  const response = await callPage(
-    "LinkedInBot",
-    { OGP_METHOD_A: "on" },
-    fetcher,
+Deno.test("index fetch failure preserves og:url and omits og:image", async () => {
+  const response = await serveOgPage(
+    new Request("https://site.test/index.html?bits=~7"),
+    () => new Response(html),
+    async () => {
+      throw new Error("index unavailable");
+    },
   );
-  assertStringIncludes(await response.text(), `content="${imageUrl}"`);
-  assert(!calls.some((call) => call.method === "POST"));
+  const body = await response.text();
+  assertStringIncludes(body, 'content="https://site.test/index.html?bits=~7"');
+  assert(!body.includes('property="og:image"'));
 });
