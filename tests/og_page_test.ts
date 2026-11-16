@@ -146,9 +146,7 @@ Deno.test("index fetch failure preserves og:url and omits og:image", async () =>
   const response = await serveOgPage(
     new Request("https://site.test/index.html?bits=~7"),
     () => new Response(html),
-    async () => {
-      throw new Error("index unavailable");
-    },
+    () => Promise.reject(new Error("index unavailable")),
   );
   const body = await response.text();
   assertStringIncludes(body, 'content="https://site.test/index.html?bits=~7"');
