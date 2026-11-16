@@ -6,8 +6,7 @@ const IMAGE_HEAD_TIMEOUT_MS = 1_500;
 
 type Fetcher = typeof fetch;
 
-// Shared by Cloudflare Pages and Netlify. Keep both entry points aligned so
-// crawler recovery cannot behave differently by deployment platform.
+// Shared by Cloudflare Pages and Netlify so existing-asset checks stay aligned.
 export async function serveOgPage(
   req: Request,
   fallback: () => Promise<Response> | Response,
