@@ -48,13 +48,11 @@ recorded in `src/assets/svg2ui8a/README.md`.
 The deployed OGP service is <https://pfpg-ogp.tksh.deno.net>:
 
 The Pages middleware computes the deterministic `<key>-png` URL through
-`GET /ogp/image-meta`. When Method A is off or the user agent is not
-allowlisted, it preserves the URL-only `og:image` behavior and does not check or
-render the asset; a never-rendered URL can therefore point to a 404. For
-allowlisted crawlers, `OGP_METHOD_A=on` enables a HEAD check and synchronous
-rendering only when HEAD returns 404. A failed Method A check or render omits
-`og:image`. Method A should remain off in production until the Phase 2 abuse
-controls and staging checks are complete.
+`GET /ogp/image-meta`, then checks the asset with `HEAD` for every request,
+without inspecting the User-Agent. It includes `og:image` only when the asset
+already exists; a miss or check failure omits the tag. A page request never
+renders or uploads an image, so a new custom image appears in OGP after the
+browser has uploaded it.
 
 `GET /ogp/image-meta?<artwork params>` returns the Cloudinary key and image URL
 without rendering or uploading. It always returns the `-png` variant: PNG is the
@@ -64,23 +62,20 @@ published) honors `imageFormat`.
 
 `POST /ogp/render` uses `src/js/libpfpg/render.ts`, rasterizes at
 `heightPixelSize` (256 by default), and uploads the PNG. It requires
-`x-ogp-shared-secret` matching `OGP_SHARED_SECRET`. Manual requests carry the
-`pfpg,history` tags; Method A passes `auto=1`, preserving the params sidecar but
-tagging assets `pfpg,ogp-auto` so crawler-generated URLs do not enter history.
-Invalid rendering params return 400. The server uses the same canonical key and
-full SVG pipeline as the browser. A manual server re-render can still overwrite
-a browser-uploaded image under the same `publicId`.
+`x-ogp-shared-secret` matching `OGP_SHARED_SECRET`. It preserves the raw params
+sidecar and tags both uploads `pfpg,history` plus the existing date tags. The
+removed `auto` query parameter returns 400. Invalid rendering params also return
+400. The server uses the same canonical key and full SVG pipeline as the
+browser. A manual server re-render can still overwrite a browser-uploaded image
+under the same `publicId`.
 
 `GET /ogp` has been removed; it was diagnostic only and was not part of the
-production image path. `OGP_METHOD_A` is an opt-in kill switch, not an abuse
-control. Production enablement is gated on edge rate limiting, a daily cap,
-asset purge procedures, and successful staging verification. Configure
-`OGP_METHOD_A` and `OGP_SHARED_SECRET` for Cloudflare Pages production/preview
-and the Netlify site; configure `OGP_SHARED_SECRET` on the Deno Deploy service.
-Keep `OGP_METHOD_A` unset or off until the staging gate is complete. At least
-monthly, review Cloudinary assets tagged `pfpg,ogp-auto` in each account and
-delete their image and raw sidecar resources; confirm crawler-created assets do
-not carry `pfpg,history`.
+production image path. `OGP_METHOD_A` and the crawler User-Agent allowlist have
+been removed. Cloudflare Pages and Netlify no longer need `OGP_METHOD_A` or
+`OGP_SHARED_SECRET`; keep `OGP_SHARED_SECRET` on Deno Deploy to protect the
+manual render endpoint. Existing assets tagged `pfpg,ogp-auto` are historical;
+they are no longer created and may be removed with their raw sidecars from the
+Cloudinary console if desired.
 
 ## Deploy on Netlify
 

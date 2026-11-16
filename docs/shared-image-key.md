@@ -198,22 +198,24 @@ logging the skip.
   anything; the deterministic URL uses `<key>-png`.
 - `POST /ogp/render` renders the full parameter set, rasterizes at
   `heightPixelSize` (256 by default), and uploads the PNG. The temporary
-  `opacitySteps` rejection is removed. Manual uploads receive `pfpg,history`
-  tags. Requests with `auto=1` retain their raw params sidecar but receive
-  `pfpg,ogp-auto`, so crawler recovery does not populate history.
+  `opacitySteps` rejection is removed. Uploads retain their raw params sidecar
+  and receive `pfpg,history` plus the existing date tags. The removed `auto`
+  query parameter is rejected with 400; uploads no longer use a crawler-specific
+  tag path.
 - `GET /ogp` has been removed. The service keeps `/ogp/image-meta` and
   `/ogp/render`.
 
-The Pages functions compute the browser-upload URL with `/ogp/image-meta`. When
-`OGP_METHOD_A` is off or the user agent is not allowlisted, they preserve the
-URL-only `og:image` behavior without checking the asset; a never-rendered URL
-can point to a 404. For an allowlisted crawler with `OGP_METHOD_A=on`, the page
-checks the URL with HEAD and calls `POST /ogp/render?auto=1` only after a 404. A
-non-404 HEAD result, timeout, render error, missing secret, or other Method A
-failure removes the `og:image` tag entirely. The secret is required for the
-render POST, but does not itself prevent abuse by spoofed user agents.
+The Pages functions compute the browser-upload URL with `/ogp/image-meta`, then
+check the Cloudinary URL with `HEAD` for every User-Agent. They include
+`og:image` only when the asset already exists. A 404, timeout, other non-success
+response, or fetch error omits the complete `og:image` tag while retaining
+`og:url`. OGP page requests never call `POST /ogp/render`; images appear after
+they have been uploaded through the browser or the protected manual endpoint.
 
-Method A must remain disabled in production until edge rate limiting, a daily
-cap, a purge procedure for `pfpg,ogp-auto` assets, and staging verification are
-in place. `SHARED_IMAGE_KEY_VERSION` remains unchanged: this renderer now
-follows the existing canonical pixel contract.
+`OGP_METHOD_A` and the crawler User-Agent allowlist have been removed. Edge
+deployments no longer need `OGP_METHOD_A` or `OGP_SHARED_SECRET`. The Deno
+service still requires `OGP_SHARED_SECRET` for the manual render endpoint.
+Previously uploaded `pfpg,ogp-auto` assets are historical and are not changed by
+this behavior. They may be removed manually from Cloudinary with their raw
+sidecars. `SHARED_IMAGE_KEY_VERSION` remains unchanged: this renderer follows
+the existing canonical pixel contract.
