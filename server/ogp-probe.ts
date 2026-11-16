@@ -109,7 +109,6 @@ async function renderAndUpload(url: URL): Promise<{
 }> {
   const params = url.searchParams;
   const { key, svg, pixels, width, height } = await renderPipeline(params);
-  const isAuto = params.getAll("auto").at(-1) === "1";
   const apiSecret = Deno.env.get("CLOUDINARY_API_SECRET");
   if (!apiSecret) throw new Error("CLOUDINARY_API_SECRET is not configured");
 
@@ -122,7 +121,6 @@ async function renderAndUpload(url: URL): Promise<{
     new Blob([new Uint8Array(pngBytes)], { type: "image/png" }),
     publicId,
     apiSecret,
-    isAuto,
   );
   const paramsBlob = new Blob([url.search], { type: "text/plain" });
   try {
@@ -131,7 +129,6 @@ async function renderAndUpload(url: URL): Promise<{
       paramsBlob,
       publicId,
       apiSecret,
-      isAuto,
       "params.txt",
     );
   } catch (sidecarError) {
@@ -151,14 +148,12 @@ async function uploadAsset(
   blob: Blob,
   publicId: string,
   apiSecret: string,
-  isAuto: boolean,
   fileName = "file",
 ): Promise<string> {
   const now = new Date();
   const yyyy = now.getFullYear();
   const yyyyMm = `${yyyy}-${("00" + (now.getMonth() + 1)).slice(-2)}`;
-  const tags = ["pfpg", isAuto ? "ogp-auto" : "history", yyyy, yyyyMm]
-    .join(",");
+  const tags = ["pfpg", "history", yyyy, yyyyMm].join(",");
 
   const signed = await createSignedUpload({ publicId, tags }, apiSecret);
 

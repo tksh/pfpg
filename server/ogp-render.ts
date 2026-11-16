@@ -24,9 +24,12 @@ export class InvalidOgpParamsError extends Error {
 export async function renderPipeline(
   input: URLSearchParams,
 ): Promise<OgpRenderResult> {
-  const params = normalizeScalarParams(
-    new URLSearchParams([...input.entries()].filter(([key]) => key !== "auto")),
-  );
+  if (input.has("auto")) {
+    throw new InvalidOgpParamsError(
+      'The "auto" query parameter is no longer supported',
+    );
+  }
+  const params = normalizeScalarParams(new URLSearchParams(input));
 
   let svg: string;
   let key: string;

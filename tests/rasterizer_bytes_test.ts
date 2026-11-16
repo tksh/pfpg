@@ -128,7 +128,8 @@ Deno.test("server source initializes before listening and has no fixed URL", asy
   );
   assert(ogpRenderer.includes("renderParamsToSvg"));
   assert(ogpRenderer.includes("readHeightPixelSize"));
-  assert(probe.includes('isAuto ? "ogp-auto" : "history"'));
+  assert(probe.includes('["pfpg", "history", yyyy, yyyyMm]'));
+  assert(!probe.includes("ogp-auto"));
   assert(probe.includes("`${key}-png`"));
   assert(!probe.includes('pathname === "/ogp"'));
   assertEquals(SVG2UI8A_VERSION, "0.6.1");

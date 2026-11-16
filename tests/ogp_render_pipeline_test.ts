@@ -30,13 +30,14 @@ Deno.test("OGP pipeline reuses libpfpg SVG and selected raster dimensions", asyn
   assertEquals(result.pixels, browserPixels.pixels);
 });
 
-Deno.test("OGP auto discriminator does not affect artwork output or key", async () => {
-  const normal = await renderPipeline(fixture);
-  const auto = new URLSearchParams(fixture);
-  auto.set("auto", "1");
-  const automatic = await renderPipeline(auto);
-  assertEquals(automatic.key, normal.key);
-  assertEquals(automatic.svg, normal.svg);
+Deno.test("OGP render rejects the removed auto query parameter", async () => {
+  const params = new URLSearchParams(fixture);
+  params.set("auto", "1");
+  await assertRejects(
+    () => renderPipeline(params),
+    InvalidOgpParamsError,
+    'The "auto" query parameter is no longer supported',
+  );
 });
 
 Deno.test("OGP pipeline rejects unusable params as a client error", async () => {
