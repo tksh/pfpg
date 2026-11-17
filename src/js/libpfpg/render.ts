@@ -142,7 +142,7 @@ function applyShape(
     ? `<clipPath id="shape-to-trim">${element}</clipPath>`
     : `<clipPath id="shape-to-trim">\n            ${element}\n        </clipPath>`;
   let output = svg.replace(
-    /<clipPath id="shape-to-trim">(?:\n?).*(?:\n?).*<\/clipPath>/s,
+    /<clipPath id="shape-to-trim">[\s\S]*?<\/clipPath>/,
     clip,
   );
   if (geometry && crop) {
