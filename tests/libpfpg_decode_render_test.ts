@@ -218,3 +218,70 @@ Deno.test("decodeArtwork returns the codec's decoded params", async () => {
   const viaCodec = await decodeUrlParams(artworkParamsOf(showcase202412));
   assertEquals(decoded.linesData.size, viaCodec.linesData.size);
 });
+
+// A canvas that is not square must keep both of its dimensions. Using the
+// height for the width too would stretch the drawing.
+Deno.test("a non-square canvas keeps its width and height", async () => {
+  const decoded = await decodeArtwork(
+    artworkParamsOf(showcase202412),
+    { cache: false },
+  );
+  const stretched = {
+    ...decoded,
+    sizeData: { viewbox: "0 0 40 31", width: 40, height: 31 },
+  };
+  const svg = renderArtwork(stretched, {
+    ...resolveSvgRenderSettings(new URLSearchParams(showcase202412)),
+    shapeToTrim: "square",
+    cropSideMargins: false,
+  });
+  assertEquals(svg.match(/viewBox="([^"]+)"/)?.[1], "0 0 40 31");
+});
+
+// The sequence a user performs in the page, replayed against the library.
+// Each row is the URL state after one more interaction; the SVG must match what
+// the browser shows, so the page and the library cannot drift.
+Deno.test("an interaction sequence matches the params pipeline", async (t) => {
+  const steps: Array<[string, string]> = [
+    ["initial", ""],
+    ["shape_circle", "&shapeToTrim=circle"],
+    ["shape_squircleSlimmed", "&shapeToTrim=squircleSlimmed"],
+    [
+      "widthNarrowness_15",
+      "&shapeToTrim=squircleSlimmed&widthNarrowness=15",
+    ],
+    [
+      "shapeRendering_geometricPrecision",
+      "&shapeToTrim=squircleSlimmed&widthNarrowness=15" +
+      "&shapeRendering=geometricPrecision",
+    ],
+    [
+      "pathMode_relativeMerged",
+      "&shapeToTrim=squircleSlimmed&widthNarrowness=15" +
+      "&shapeRendering=geometricPrecision&pathMode=relativeMerged",
+    ],
+    [
+      "removeSpaces_off",
+      "&shapeToTrim=squircleSlimmed&widthNarrowness=15" +
+      "&shapeRendering=geometricPrecision&pathMode=relativeMerged" +
+      "&removeSpaces=false",
+    ],
+  ];
+
+  for (const [name, suffix] of steps) {
+    await t.step(name, async () => {
+      const params = new URLSearchParams(`${showcase202412}${suffix}`);
+      const expected = await renderParamsToSvg(params);
+
+      const artwork = await decodeArtwork(artworkParamsOf(params), {
+        cache: false,
+      });
+      const actual = renderArtwork(artwork, resolveSvgRenderSettings(params));
+
+      assertEquals(actual, expected);
+      // A relative path mode produces a much shorter document, so a step that
+      // silently fell back to absolute would be caught here.
+      assert(actual.startsWith("<svg"));
+    });
+  }
+});

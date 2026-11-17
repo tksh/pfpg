@@ -18,15 +18,16 @@ import {
 } from "libpfpg/group-colors";
 import { rgbStringify } from "libpfpg/color-hex";
 import { rgbObjToHex } from "libpfpg/color-rgb";
-import { applyGroupColors } from "tab-lines/apply-group-colors";
-import { getGroupColorsAsJoinedHex } from "libpfpg/group-colors-encode";
 import { svg2pngOption } from "state/resvg-option";
 import {
   adjustInputValueViaButton,
   syncInputNumberAndRange,
 } from "tab-render/sync-number-and-range";
 import { getState, updateState } from "state/url-state-manager";
-import { executeSvg2png } from "svg-to-png";
+import { commitRender } from "state/render-commit";
+import { generateGroupColorsHtmlElements } from "tab-lines/group-colors-generator";
+import { addEventListenerForGroupColorsInputs } from "tab-lines/group-colors-listener";
+import { getNumberOfGroups } from "libpfpg/group-colors";
 
 export { initRandomizeGroupColors, rememberArtworkLineStrokes };
 
@@ -166,31 +167,53 @@ function randomizeEveryGroupColor(): void {
     ];
   });
 
-  // applyGroupColors() is the same multi-group rewrite the initial decode runs:
-  // it rebuilds every <g> element, regenerates the pickers (the Alwan instances
-  // hold their own color state and would otherwise desync from the thumbnails),
-  // and re-binds the opacity selectors.
-  const updatedSvg = applyGroupColors(
-    svgString,
-    svg2pngOption,
-    groupColorsByGroups,
-    getState("opacitySteps") as number,
-  );
-
-  const svgTextarea = document.querySelector("#svg-string");
-  if (svgTextarea === null) {
-    throw new Error(
-      "randomizeEveryGroupColor: element not found: #svg-string",
-    );
-  }
-  (svgTextarea as HTMLTextAreaElement).value = updatedSvg;
-
   // The sliders themselves are not written to the URL - a shared link must not
   // re-randomize - but the resulting colors are, through the same 'groupColors'
-  // key a manual color change uses.
-  updateState("groupColors", getGroupColorsAsJoinedHex(updatedSvg));
+  // key a manual color change uses. Writing it before rendering means the
+  // renderer sees the new colors without any extra plumbing.
+  updateState(
+    "groupColors",
+    joinOverridesHex(groupColorsByGroups),
+  );
 
-  executeSvg2png({ target: { value: updatedSvg } }, svg2pngOption);
+  // The pickers hold their own colour state, so they are rebuilt from the new
+  // SVG rather than patched.
+  const svg = commitRender();
+  generateGroupColorsHtmlElements(
+    svg,
+    colorFormat,
+    getState("opacitySteps") as number,
+  );
+  addEventListenerForGroupColorsInputs(
+    getNumberOfGroups(svg),
+    svg2pngOption,
+    "opacity",
+  );
+  addEventListenerForGroupColorsInputs(
+    getNumberOfGroups(svg),
+    svg2pngOption,
+    "stroke-opacity",
+  );
+}
+
+// Join the per-group [stroke, opacity, stroke-opacity] triples into the
+// compact form the 'groupColors' URL param uses.
+function joinOverridesHex(
+  groupColorsByGroups: Array<Array<string | number | undefined>>,
+): string {
+  return groupColorsByGroups
+    .map((entry) => {
+      const stroke = String(entry[1] ?? "");
+      const hex = stroke.startsWith("#")
+        ? stroke.slice(1).padEnd(6, stroke.slice(-1))
+        : (stroke.match(/\d+/g) ?? []).slice(0, 3)
+          .map((n) => Number(n).toString(16).padStart(2, "0"))
+          .join("");
+      const byte = (value: string | number | undefined) =>
+        Math.round(Number(value ?? 1) * 255).toString(16).padStart(2, "0");
+      return `${hex}${byte(entry[2])}${byte(entry[3])}`;
+    })
+    .join("_");
 }
 
 // One group's color: its anchor taken to OKLCH, perturbed around itself, and

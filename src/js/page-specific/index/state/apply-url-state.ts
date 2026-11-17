@@ -1,18 +1,9 @@
 import {
   replaceButtonText,
   syncCopyAvailability,
-  updateButtonWithSvgSize,
 } from "button/update-button-text";
 import { isAllowedOpacityStep, SETTINGS_DEFAULTS } from "constants";
-import {
-  calculateStepsFromTwoOpacities,
-  getInitialOpacitySteps,
-} from "init/initial-opacity-steps";
-import {
-  tryRemoveLineBreaks,
-  tryRemoveOpacity,
-  tryRemoveSpaces,
-} from "modal/optimize-svg";
+import { getInitialOpacitySteps } from "init/initial-opacity-steps";
 import {
   getState,
   getStateUrl,
@@ -20,39 +11,34 @@ import {
   updateState,
 } from "state/url-state-manager";
 import { getImageFormat } from "state/image-format";
-import { applyGroupColors } from "tab-lines/apply-group-colors";
-import {
-  decodeGroupColorsAsArray,
-  getGroupOpacitiesAsMap,
-} from "libpfpg/group-colors-array";
+import { currentArtwork, currentSettings } from "state/render-state";
+import { renderArtwork } from "libpfpg/render";
 import { generateGroupColorsHtmlElements } from "tab-lines/group-colors-generator";
 import { rememberArtworkLineStrokes } from "tab-lines/randomize-group-colors";
-import {
-  changeOpacitySelectOptionsAsNewStep,
-  updateSvgWithNewSteps,
-} from "tab-lines/opacity-steps";
-import { updateSvgWithNewShapePath } from "tab-canvas/shape-to-trim";
+import { changeOpacitySelectOptionsAsNewStep } from "tab-lines/opacity-steps";
 import { toggleDisplay } from "tab-canvas/shape-to-trim-listener";
-import { replaceShapeRendering } from "tab-render/shape-rendering";
 import { adjustImageDisplay } from "tab-render/height-pixel-size";
 import { toggleCheckerboardBg } from "tab-ui/checkerboard-bg";
 import { toggleTextWrapping } from "tab-ui/text-wrapping";
 import { changeThemeColor } from "tab-ui/theme-color";
 import { switchViewScaling } from "tab-ui/view-scaling";
 
-export { applyImageCustomization, applySvgOptimization, applyUiConfiguration };
+export { applyImageCustomization, applyUiConfiguration };
 
+/**
+ * Sync the Lines / Canvas / Render controls to the URL, and build the
+ * group-color pickers from the artwork.
+ *
+ * This no longer touches the SVG: rendering is the shared renderer's job, and
+ * `main.ts` calls it right after this. What remains here is everything that is
+ * genuinely UI-only — select values, the opacity-step options each picker
+ * offers, and the artwork's own line colours the randomizer anchors to.
+ */
 async function applyImageCustomization(
-  svgString: string,
-  svg2pngOption: { height: number },
-): Promise<string> {
-  let updatedSvg = svgString;
-
+  _svg2pngOption: { height: number },
+): Promise<void> {
   ////////////////////////////////////////////////// colorFormat //////////////////////////////////////////////////
-  // Generate the HTML elements of group attrs color-pickers
   // Default value of color-format is 'rgb'
-  // Require to generate the initial group colors input elements, even if there is no 'colorFormat' in url param,
-  // Because below 'changeOpacitySelectOptionsAsNewStep()` needs pre-generated input elements.
   const colorFormat = getState("colorFormat");
   const colorFormatElem = document.getElementById("color-format");
   if (colorFormatElem === null) {
@@ -60,105 +46,75 @@ async function applyImageCustomization(
   }
   (colorFormatElem as HTMLSelectElement).value = String(colorFormat);
 
-  // Use possibly temporary 'opacitySteps' value as argument in this timing.
-  // Calculate it from original lines data.
-  let opacitySteps = await getInitialOpacitySteps(); // Getting the steps - 1st of 3
-  SETTINGS_DEFAULTS.set("opacitySteps", opacitySteps); // Set as default values
+  // The artwork's own opacity step. A URL may override it; anything outside
+  // the supported three values counts as unspecified and is dropped.
+  let opacitySteps = await getInitialOpacitySteps();
+  SETTINGS_DEFAULTS.set("opacitySteps", opacitySteps);
 
-  // Update the html elements
-  const opacityStepsSelector = document.getElementById("opacity-steps");
-  if (opacityStepsSelector === null) {
-    throw new Error("applyImageCustomization: missing element #opacity-steps");
-  }
-  const opacityStepsSelect = opacityStepsSelector as HTMLSelectElement;
-  opacityStepsSelect.value = String(opacitySteps);
-
-  // Create the group colors input elements
-  generateGroupColorsHtmlElements(
-    svgString,
-    colorFormat as string,
-    opacitySteps,
-  );
-
-  ////////////////////////////////////////////////// groupColors //////////////////////////////////////////////////
-  // Apply the image customization values via url params if exists
-
-  // Snapshot the artwork's own line colors before anything can overwrite them.
-  // This is what 'Anchor: Original line colors' anchors to, so it is taken
-  // unconditionally: `groupColors` is an override of these colors, not the
-  // artwork, and only exists on some URLs. Taken here, at decode time, rather
-  // than inside applyGroupColors() to keep that module free of a dependency back
-  // onto the randomizer.
-  rememberArtworkLineStrokes(svgString);
-
-  const groupColors = getState("groupColors");
-  if (groupColors) {
-    const groupColorsByGroupsArr = decodeGroupColorsAsArray(
-      groupColors as string,
-      colorFormat as string,
-    );
-    updatedSvg = applyGroupColors(
-      svgString,
-      svg2pngOption,
-      groupColorsByGroupsArr,
-      opacitySteps,
-    );
-
-    // Get the opacitySteps from customized group colors
-    const opacitiesByGroupMap = getGroupOpacitiesAsMap(groupColorsByGroupsArr);
-    opacitySteps = calculateStepsFromTwoOpacities(opacitiesByGroupMap); // Getting the steps - 2nd of 3
-  }
-
-  ////////////////////////////////////////////////// opacitySteps //////////////////////////////////////////////////
-  // Try to retrieve the value via url param with 'getStateUrl()' instead of 'getState()' like others
-  // 'opacitySteps' does not have default value in 'SETTINGS_DEFAULTS' map object, before the decoding svg.
-  // The only way to get the default value is calculated from original lines data. (at above 'colorFormat' section)
-  const opacityStepsViaUrl = getStateUrl("opacitySteps"); // Getting the steps - 3rd of 3
-  // Guard: `opacitySteps` is a closed three-value set ({0.04, 0.1, 0.2}).
-  // Anything else in the URL (0, abc, true, 0.3, 1, ...) is treated as
-  // "not specified": the param is dropped and the artwork-derived default is
-  // used. The same rule applies on the server / render path, so the two
-  // never disagree. (`numbersIncrementByStep` keeps its own finite
-  // `0 < step <= 1` RangeError guard as programmer-error defence.)
-  const opacityStepsViaUrlIsValid = isAllowedOpacityStep(opacityStepsViaUrl);
-  const parsedOpacityStepsViaUrl = opacityStepsViaUrlIsValid
+  // 'opacitySteps' has no default in SETTINGS_DEFAULTS before the decode: the
+  // only source is the artwork itself, which is what was just calculated.
+  const opacityStepsViaUrl = getStateUrl("opacitySteps");
+  const parsedOpacityStepsViaUrl = isAllowedOpacityStep(opacityStepsViaUrl)
     ? Number(opacityStepsViaUrl)
     : undefined;
 
-  if (opacityStepsViaUrl !== undefined && !opacityStepsViaUrlIsValid) {
+  if (
+    opacityStepsViaUrl !== undefined && parsedOpacityStepsViaUrl === undefined
+  ) {
     console.warn(
       `applyImageCustomization: ignoring opacitySteps="${
         String(opacityStepsViaUrl)
       }" — not one of 0.04/0.1/0.2; using the artwork-derived default`,
     );
-    removeUrlParams(["opacitySteps"]); // so downstream reads fall back to the default
+    removeUrlParams(["opacitySteps"]);
   } else if (parsedOpacityStepsViaUrl !== undefined) {
-    opacityStepsSelect.value = String(parsedOpacityStepsViaUrl);
-    changeOpacitySelectOptionsAsNewStep(updatedSvg, parsedOpacityStepsViaUrl); // Update the group colors input elements
-    updatedSvg = updateSvgWithNewSteps(updatedSvg); // Extract the steps value from input elements selected
+    opacitySteps = parsedOpacityStepsViaUrl;
+  }
+
+  const opacityStepsSelector = document.getElementById("opacity-steps");
+  if (opacityStepsSelector === null) {
+    throw new Error("applyImageCustomization: missing element #opacity-steps");
+  }
+  (opacityStepsSelector as HTMLSelectElement).value = String(opacitySteps);
+
+  // The pickers read the artwork's current colours, so they need the base SVG
+  // before any override. Rendering that is the library's job; here we only ask
+  // for the string.
+  const baseSvg = renderArtwork(currentArtwork(), {
+    ...currentSettings(),
+    groupColors: undefined,
+    opacitySteps: undefined,
+  });
+  rememberArtworkLineStrokes(baseSvg);
+
+  generateGroupColorsHtmlElements(
+    baseSvg,
+    colorFormat as string,
+    opacitySteps,
+  );
+
+  // The pickers' <option> lists must reflect the step in effect, so a URL
+  // override has to be pushed into them before the first render.
+  if (parsedOpacityStepsViaUrl !== undefined) {
+    changeOpacitySelectOptionsAsNewStep(
+      baseSvg,
+      parsedOpacityStepsViaUrl,
+    );
   }
 
   ////////////////////////////////////////////////// shapeToTrim //////////////////////////////////////////////////
-  /////////////////////////// includes: widthNarrowness, topHeavyRatio, cropSideMargins ///////////////////////////
-  const shapeToTrim = getState("shapeToTrim");
-  updatedSvg = await updateSvgWithNewShapePath(
-    shapeToTrim as string,
-    updatedSvg,
-  );
-
   // 'squircleSlimmed'が 選ばれた時だけ表示される
   // 2つのオプション選択用の<select>要素 と 横幅クロップ用の<label>&<input>要素 を取得し 表示または非表示にする
+  const shapeToTrim = getState("shapeToTrim");
   const elementsToToggle = [
     "width-narrowness-div",
     "top-heavy-ratio-div",
     "crop-side-margins-div",
   ];
-
-  if (shapeToTrim === "squircleSlimmed") {
-    toggleDisplay(elementsToToggle, "inline");
-  } else {
-    toggleDisplay(elementsToToggle, "none");
-  }
+  toggleDisplay(
+    elementsToToggle,
+    shapeToTrim === "squircleSlimmed" ? "inline" : "none",
+  );
 
   ////////////////////////////////////////////////// shapeRendering //////////////////////////////////////////////////
   const shapeRendering = getState("shapeRendering");
@@ -169,11 +125,10 @@ async function applyImageCustomization(
     );
   }
   (shapeRenderingElem as HTMLSelectElement).value = String(shapeRendering);
-  updatedSvg = replaceShapeRendering(updatedSvg, shapeRendering as string);
 
   ////////////////////////////////////////////////// heightPixelSize //////////////////////////////////////////////////
   const heightPixelSize = parseInt(String(getState("heightPixelSize")), 10);
-  svg2pngOption.height = heightPixelSize;
+  _svg2pngOption.height = heightPixelSize;
 
   const pngSizeNumberElem = document.querySelector("#png-size-number");
   if (pngSizeNumberElem === null) {
@@ -187,8 +142,6 @@ async function applyImageCustomization(
     throw new Error("applyImageCustomization: missing element #png-size-range");
   }
   (pngSizeRangeElem as HTMLInputElement).value = String(heightPixelSize);
-
-  return updatedSvg;
 }
 
 function applyUiConfiguration(): void {
@@ -263,126 +216,4 @@ function applyUiConfiguration(): void {
   // Both selects now hold the restored values, so the copy button and its ⓘ
   // have to reflect them before anything else can change them.
   syncCopyAvailability();
-}
-
-function applySvgOptimization(svgString: string): string {
-  /////////////////////////////////////// removeOpacity ///////////////////////////////////////
-  const isOpacityRemoved = getState("removeOpacity");
-  updateState("removeOpacity", isOpacityRemoved);
-  // Optimize the svg text
-  const removeOpacityApplied = tryRemoveOpacity(svgString, isOpacityRemoved);
-
-  // Set the checkbox state
-  const removeOpacityElem = document.getElementById("remove-opacity");
-  if (removeOpacityElem === null) {
-    throw new Error("applySvgOptimization: missing element #remove-opacity");
-  }
-  (removeOpacityElem as HTMLInputElement).checked = isOpacityRemoved as boolean;
-  // Toggle classes for the <code> content text
-  const beforeRemoveOpacityElem = document.querySelector(
-    "#before-remove-opacity",
-  );
-  if (beforeRemoveOpacityElem === null) {
-    throw new Error(
-      "applySvgOptimization: missing element #before-remove-opacity",
-    );
-  }
-  beforeRemoveOpacityElem.classList.toggle("option-applied", !isOpacityRemoved);
-  const afterRemoveOpacityElem = document.querySelector(
-    "#after-remove-opacity",
-  );
-  if (afterRemoveOpacityElem === null) {
-    throw new Error(
-      "applySvgOptimization: missing element #after-remove-opacity",
-    );
-  }
-  afterRemoveOpacityElem.classList.toggle(
-    "option-applied",
-    isOpacityRemoved as boolean,
-  );
-
-  ////////////////////////////////////// removeLineBreaks //////////////////////////////////////
-  const isLineBreaksRemoved = getState("removeLineBreaks");
-  updateState("removeLineBreaks", isLineBreaksRemoved);
-  // Optimize the svg text
-  const removeLineBreaksApplied = tryRemoveLineBreaks(
-    removeOpacityApplied,
-    isLineBreaksRemoved,
-  );
-
-  // Set the checkbox state
-  const removeLineBreaksElem = document.getElementById("remove-line-breaks");
-  if (removeLineBreaksElem === null) {
-    throw new Error(
-      "applySvgOptimization: missing element #remove-line-breaks",
-    );
-  }
-  (removeLineBreaksElem as HTMLInputElement).checked =
-    isLineBreaksRemoved as boolean;
-  // Toggle classes for the <code> content text
-  const beforeRemoveLineBreaksElem = document.querySelector(
-    "#before-remove-line-breaks",
-  );
-  if (beforeRemoveLineBreaksElem === null) {
-    throw new Error(
-      "applySvgOptimization: missing element #before-remove-line-breaks",
-    );
-  }
-  beforeRemoveLineBreaksElem.classList.toggle(
-    "option-applied",
-    !isLineBreaksRemoved,
-  );
-  const afterRemoveLineBreaksElem = document.querySelector(
-    "#after-remove-line-breaks",
-  );
-  if (afterRemoveLineBreaksElem === null) {
-    throw new Error(
-      "applySvgOptimization: missing element #after-remove-line-breaks",
-    );
-  }
-  afterRemoveLineBreaksElem.classList.toggle(
-    "option-applied",
-    isLineBreaksRemoved as boolean,
-  );
-
-  /////////////////////////////////////// removeSpaces ///////////////////////////////////////
-  const isSpacesRemoved = getState("removeSpaces");
-  updateState("removeSpaces", isSpacesRemoved);
-  // Optimize the svg text
-  const removeSpacesApplied = tryRemoveSpaces(
-    removeLineBreaksApplied,
-    isSpacesRemoved,
-  );
-
-  // Set the checkbox state
-  const removeSpacesElem = document.getElementById("remove-spaces");
-  if (removeSpacesElem === null) {
-    throw new Error("applySvgOptimization: missing element #remove-spaces");
-  }
-  (removeSpacesElem as HTMLInputElement).checked = isSpacesRemoved as boolean;
-  // Toggle classes for the <code> content text
-  const beforeRemoveSpacesElem = document.querySelector(
-    "#before-remove-spaces",
-  );
-  if (beforeRemoveSpacesElem === null) {
-    throw new Error(
-      "applySvgOptimization: missing element #before-remove-spaces",
-    );
-  }
-  beforeRemoveSpacesElem.classList.toggle("option-applied", !isSpacesRemoved);
-  const afterRemoveSpacesElem = document.querySelector("#after-remove-spaces");
-  if (afterRemoveSpacesElem === null) {
-    throw new Error(
-      "applySvgOptimization: missing element #after-remove-spaces",
-    );
-  }
-  afterRemoveSpacesElem.classList.toggle(
-    "option-applied",
-    isSpacesRemoved as boolean,
-  );
-
-  // Count the size of the updated SVG string and display it on the SVG download/copy button
-  updateButtonWithSvgSize(removeSpacesApplied);
-
-  return removeSpacesApplied;
 }

@@ -1,11 +1,7 @@
-import { replaceShapeRendering } from "libpfpg/svg-attrs";
-import { getSvgString } from "button/download-as-file";
-import { svg2pngOption } from "state/resvg-option";
+import { commitRender } from "state/render-commit";
 import { updateState } from "state/url-state-manager";
-import { executeSvg2png } from "svg-to-png";
 
 export { initShapeRenderingSelect };
-export { replaceShapeRendering };
 
 function initShapeRenderingSelect(): void {
   // Event listeners for 'shape-rendering' type changes
@@ -20,19 +16,8 @@ function initShapeRenderingSelect(): void {
       const shapeRendering = (event.target as HTMLSelectElement).value; // 'geometricPrecision' | 'crispEdges'
       updateState("shapeRendering", shapeRendering);
 
-      // <textarea>の value属性を 取得
-      const svgString = getSvgString();
-
-      // 選択された値に SVG文字列を 置き換える
-      const updatedSvg = replaceShapeRendering(svgString, shapeRendering);
-
-      // <textarea>の value属性を 更新する
-      const svgTextarea = document.querySelector("#svg-string");
-      if (!svgTextarea) throw new Error("Element '#svg-string' not found");
-      (svgTextarea as HTMLTextAreaElement).value = updatedSvg;
-
-      // Rendering the PNG with updated SVG
-      executeSvg2png({ target: { value: updatedSvg } }, svg2pngOption);
+      // Persisting the setting is enough: the SVG is regenerated from it.
+      commitRender();
     },
   );
 }

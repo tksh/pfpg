@@ -1,20 +1,13 @@
 import { getSvgString } from "button/download-as-file";
-import { GROUP_COLORS_ELEMENT_REGEX } from "libpfpg/group-colors";
-import { numbersIncrementByStep } from "tab-lines/opacity-steps-grid";
-import { svg2pngOption } from "state/resvg-option";
+import { commitRender } from "state/render-commit";
 import { updateState } from "state/url-state-manager";
-import { executeSvg2png } from "svg-to-png";
 import { getGroupColorsValues } from "libpfpg/group-colors";
-import { generateGroupColorsSvgTags } from "tab-lines/group-colors-generator";
-import { getNumberOfGroups } from "libpfpg/group-colors";
-import { replaceAtIndex } from "libpfpg/group-colors";
+import { numbersIncrementByStep } from "libpfpg/opacity-steps";
 
 export {
   changeOpacitySelectOptionsAsNewStep,
   getElementValueById,
   initOpacityStepsSelect,
-  numbersIncrementByStep,
-  updateSvgWithNewSteps,
 };
 
 // Event listeners for 'Opacity steps' value changes
@@ -38,30 +31,14 @@ function initOpacityStepsSelect(): void {
     // グローバルステート更新
     updateState("opacitySteps", opacitySteps);
 
-    // 新しいセレクトメニューに更新
+    // 新しい <option> のリストで各ピッカーを作り直す
+    // （ピッカーの値は SVG とは独立した表示）
     changeOpacitySelectOptionsAsNewStep(
       getSvgString(),
       opacitySteps,
-      svg2pngOption,
     );
 
-    // 新しいセレクトメニューへの 更新で選ばれた その opacitySteps での 一番近い値の表示と 元々のSVGの色情報が ずれてしまうので
-    // 新しいセレクトメニューでの 値 を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
-    const updatedSvg = updateSvgWithNewSteps(
-      getSvgString(),
-      opacitySteps,
-      svg2pngOption,
-    );
-
-    // Update the textarea content
-    const svgTextarea = document.querySelector("#svg-string");
-    if (svgTextarea === null) {
-      throw new Error("initOpacityStepsSelect: element not found: #svg-string");
-    }
-    (svgTextarea as HTMLTextAreaElement).value = updatedSvg;
-
-    // Rendering the PNG with updated SVG
-    executeSvg2png({ target: { value: updatedSvg } }, svg2pngOption);
+    commitRender();
   });
 }
 
@@ -171,53 +148,6 @@ function replaceToNewStepOptions(
 // Array (6) [ "1.0", "0.8", "0.6", "0.4", "0.2", "0.0" ]
 
 // Update SVG
-
-function updateSvgWithNewSteps(
-  inputSvg: string,
-  _opacitySteps?: number,
-  _svg2pngOption?: { height: number },
-): string {
-  // Get the number of groups
-  const numberOfGroups = getNumberOfGroups(inputSvg);
-
-  // Loop by group ID: Extract the values from UI tab HTML elements => Replace the <textarea> string
-
-  // Function to process each group
-  const processGroup = (inputSvg: string, gId: number): string => {
-    // Get 'stroke' value
-    const strokeElementId = `group-colors-stroke-thumbnail-${gId}`;
-    const stroke = getElementValueById(strokeElementId);
-
-    // Get 'opacity' value
-    const opacityElementId = `group-colors-opacity-${gId}`;
-    const opacity = getElementValueById(opacityElementId);
-
-    // Get 'stroke-opacity' value
-    const strokeOpacityElementId = `group-colors-stroke-opacity-${gId}`;
-    const strokeOpacity = getElementValueById(strokeOpacityElementId);
-
-    // Generate the array like regex 'match' object with input value
-    const groupColorsArr = [
-      undefined, // [0] = undefined
-      stroke, // [1] = value of stroke
-      opacity, // [2] = value of opacity
-      strokeOpacity, // [3] = value of stroke-opacity
-    ];
-
-    // Generate new group colors <g> element
-    const changedGroupElem = generateGroupColorsSvgTags(gId, groupColorsArr);
-
-    // Replace the <g> elements via group ID
-    const pattern = GROUP_COLORS_ELEMENT_REGEX;
-    return replaceAtIndex(inputSvg, pattern, changedGroupElem, gId);
-  };
-
-  // Process each group and update svgString
-  const updatedSvg = Array.from({ length: numberOfGroups }, (_, gId) => gId)
-    .reduce((acc, gId) => processGroup(acc, gId), inputSvg);
-
-  return updatedSvg;
-}
 
 // Function to get the group colors value by ID
 function getElementValueById(id: string): string {

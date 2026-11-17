@@ -1,7 +1,7 @@
 import { getSvgString } from "button/download-as-file";
 import { svg2pngOption } from "state/resvg-option";
+import { commitRender } from "state/render-commit";
 import { getState, updateState } from "state/url-state-manager";
-import { updateSvgAsNewColorFormat } from "tab-lines/update-svg-color-format";
 import { generateGroupColorsHtmlElements } from "tab-lines/group-colors-generator";
 import { addEventListenerForGroupColorsInputs } from "tab-lines/group-colors-listener";
 import { getNumberOfGroups } from "libpfpg/group-colors";
@@ -22,10 +22,12 @@ export function initColorFormatSelect(): void {
     }
     const colorFormat = target.value; // rgb | hex
 
-    // グローバルステートを 更新
     updateState("colorFormat", colorFormat);
 
-    // HTMLを 新しい表示フォーマットに 更新
+    // Color format is a serialization setting: it changes the SVG text but not
+    // the pixels, so the render is regenerated and no rasterization follows.
+    commitRender();
+
     const svgString = getSvgString();
     generateGroupColorsHtmlElements(
       svgString,
@@ -33,10 +35,7 @@ export function initColorFormatSelect(): void {
       getState("opacitySteps") as number,
     );
 
-    // Get the number of groups
     const numberOfGroups = getNumberOfGroups(svgString);
-
-    // Add event listener for new format opacity selectors
     addEventListenerForGroupColorsInputs(
       numberOfGroups,
       svg2pngOption,
@@ -47,19 +46,5 @@ export function initColorFormatSelect(): void {
       svg2pngOption,
       "stroke-opacity",
     );
-
-    // 新しいセレクトメニューでの 値 を取得して <g stroke=" ... >部分のSVG文字列を 生成し 置き換える
-    const updatedSvg = updateSvgAsNewColorFormat(colorFormat);
-
-    // Update the textarea content
-    const svgTextarea = document.querySelector("#svg-string");
-    if (svgTextarea === null) {
-      throw new Error("initColorFormatSelect: element not found: #svg-string");
-    }
-    (svgTextarea as HTMLTextAreaElement).value = updatedSvg;
-
-    // Only update the SVG strings in the textarea.
-    // No need to execute `executeSvg2png()`,
-    // because the color-format does not affect the appearance of the artwork.
   });
 }

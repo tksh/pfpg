@@ -178,7 +178,11 @@ function applyShape(
   );
   if (geometry && crop) {
     output = replaceViewBox(output, slimmedViewBox(geometry, vb));
-  } else output = replaceViewBox(output, `0 0 ${size} ${size}`);
+  } else {
+    // Restore the artwork's own canvas. Using the height for both axes would
+    // stretch a non-square drawing into a square one.
+    output = replaceViewBox(output, `0 0 ${vb.width} ${vb.height}`);
+  }
   return output;
 }
 

@@ -5,7 +5,7 @@ import {
   getUrlParamsExceptsStates,
   normalizeScalarParams,
 } from "common-utils/read-url-params";
-import { decodeUrlToSvgForPage as decodeUrlToSvg } from "state/url-decode";
+import { loadArtwork, renderCurrentSvg } from "state/render-state";
 import {
   adjustLayoutIfNotMobile,
   initViewportLister,
@@ -21,7 +21,6 @@ import { initSvgOptimization } from "modal/optimize-svg";
 import { initResetSettings } from "modal/reset-settings";
 import {
   applyImageCustomization,
-  applySvgOptimization,
   applyUiConfiguration,
 } from "state/apply-url-state";
 import { svg2pngOption } from "state/resvg-option";
@@ -122,8 +121,9 @@ const startupPromise = (async function (): Promise<void> {
     ? "relativeMerged"
     : "absoluteSeparated";
 
-  // Decode the SVG from url params
-  const initialDecodedSvgString = await decodeUrlToSvg(isRelative);
+  // Decode the artwork once. Every later change re-renders from this and the
+  // URL settings, without touching the codec again.
+  await loadArtwork();
 
   // URLに themeColor が既にある場合はそれを尊重し、ブラウザ設定による検知・上書きは行わない
   const existingThemeColor = getState("themeColor");
@@ -133,29 +133,22 @@ const startupPromise = (async function (): Promise<void> {
     updateState("themeColor", themeColor);
   }
 
-  // Apply URL params to customize SVG, falling back to SETTINGS_DEFAULTS when empty
-  if (initialDecodedSvgString === undefined) {
-    throw new Error("No artwork URL params to decode");
-  }
-  const svgString = await applyImageCustomization(
-    initialDecodedSvgString,
-    svg2pngOption,
-  );
+  // Build the controls that mirror the URL settings, then render.
+  // `applyImageCustomization()` now only syncs the UI; the SVG itself comes
+  // from the shared renderer.
+  await applyImageCustomization(svg2pngOption);
+
+  const svgString = renderCurrentSvg();
 
   // Initial rendering. The rasterizer loads its Wasm module on the first
   // render, and the render path points it at the vendored binary, so there is
   // no separate initialization step here.
   executeSvg2png({ target: { value: svgString } }, svg2pngOption);
 
-  // Restore SVG string optimization
-  // - This processes doesn't affect the rendering result
-  // - It only updates the SVG string
-  const optimizedSvg = applySvgOptimization(svgString);
-
   // Insert the SVG string to textarea
   const svgTextarea = document.querySelector("#svg-string");
   if (!svgTextarea) throw new Error("Element '#svg-string' not found");
-  (svgTextarea as HTMLTextAreaElement).value = optimizedSvg;
+  (svgTextarea as HTMLTextAreaElement).value = svgString;
 
   // Startup layout initialization process must be executed before 'DOMContentLoaded'
   adjustLayoutIfNotMobile();

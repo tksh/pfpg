@@ -5,8 +5,7 @@ import {
   getGroupColorsValues,
 } from "libpfpg/group-colors";
 import { getState } from "state/url-state-manager";
-import { executeSvg2png } from "svg-to-png";
-import { numbersIncrementByStep } from "tab-lines/opacity-steps";
+import { numbersIncrementByStep } from "libpfpg/opacity-steps";
 import { updateSvgWithNewColorValue } from "tab-lines/group-colors-listener";
 
 import { svg2pngOption } from "state/resvg-option";
@@ -290,7 +289,7 @@ function addEventListenerToAlwanOnChange(
   alwanInstance: InstanceType<typeof Alwan>,
   gId: number,
   colorFormat: string,
-  svg2pngOption: { height: number },
+  _svg2pngOption: { height: number },
 ): void {
   alwanInstance.on("change", (ev) => {
     // e.g: Color changed for group 0: rgb(255, 255, 255) #ffffff
@@ -318,11 +317,8 @@ function addEventListenerToAlwanOnChange(
     const textLightness = getTextLightness(inputValue); // Get text color
     strokeThumbDiv.style.color = `oklch(${textLightness} 0 0)`; // Apply text color
 
-    // Apply the value to SVG string
+    // Apply the value to the artwork state and re-render
     // @attrName = 'stroke'
-    const updatedSvg = updateSvgWithNewColorValue(inputValue, "stroke", gId);
-
-    // Render new PNG
-    executeSvg2png({ target: { value: updatedSvg } }, svg2pngOption);
+    updateSvgWithNewColorValue(inputValue, "stroke", gId);
   });
 }
