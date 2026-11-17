@@ -38,6 +38,11 @@
     // Necessary post-processing tasks after building the project, both dev and production builds
     "postprocessing": "deno task bulk-copy && cp dist/index.html dist/index-raw.html",
 
+    // Timing checks for the render path. Kept out of `deno task test` because
+    // shared runners make wall-clock assertions flaky; compare against the
+    // decode time in the same process instead of an absolute threshold.
+    "bench": "deno run --allow-read --allow-env=NODE_ENV scripts/bench_render.ts",
+
     // Verification tasks apply to the whole project.
     // tests/fixtures/* are byte-exact copies that must never be reformatted.
     // --allow-env=NODE_ENV is required by colorjs.io (it reads process.env.NODE_ENV
@@ -201,6 +206,10 @@
     "@std/streams/text-line-stream": "jsr:@std/streams@^1.1.2/text-line-stream",
 
     "constants": "./src/js/constants.ts",
+
+    // DOM-free renderer core: the seed of the future @tksh/libpfpg package.
+    "libpfpg/settings": "./src/js/libpfpg/settings.ts",
+    "libpfpg/render": "./src/js/libpfpg/render.ts",
 
     "common-utils/compression-stream": "./src/js/common-utils/compression-stream.ts",
     "common-utils/format-as-float": "./src/js/common-utils/format-as-float.ts",

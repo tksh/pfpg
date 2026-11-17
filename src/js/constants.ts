@@ -2,6 +2,11 @@
 // Used for both encoding and decoding
 ////////////////////////////////////////////////////////////////////////////////
 
+import {
+  SVG_OPTIMIZE_SETTING_DEFAULTS,
+  VISUAL_SETTING_DEFAULTS,
+} from "libpfpg/settings";
+
 // The keys in this array are optional. If a key does not exist, it will be ignored.
 export const BASIC_DATA_KEYS = [
   "bits", // required for bruteforce53|bigint64 decoding
@@ -111,37 +116,25 @@ export const ENCODING_METHOD_AND_CONFIG_MAP: Map<string, string> = new Map([
 
 export type SettingValue = string | number | boolean | undefined;
 
-export const SVG_OPTIMIZE_DEFAULTS = new Map<string, SettingValue>([
-  //  ['Attribute name',   default value],         // Appeared at:           | Type: | Possible values:
-  ["removeOpacity", false], // SVG optimization modal | Bool  | true, false
-  ["removeLineBreaks", false], // SVG optimization modal | Bool  | true, false
-  ["removeSpaces", true], // SVG optimization modal | Bool  | true, false
-]);
+export const SVG_OPTIMIZE_DEFAULTS = new Map<string, SettingValue>(
+  SVG_OPTIMIZE_SETTING_DEFAULTS,
+);
 
 /**
  * Visual configuration schema.
  *
- * Entry order is the canonical serialization order.
- * Do not reorder entries unless the canonical format is intentionally changed.
+ * Sourced from `libpfpg` so the library and this app share one definition of
+ * which settings exist and what their defaults are. The map's entry order is
+ * the library's order and is the canonical serialization order.
  *
  * URL-state axis: `SETTINGS_DEFAULTS[3, 3 + this map's size)`, the slice
  * `getStateUrlsOfImageCustomization()` and Reset's "Image customization"
  * box read. Inserting a key moves the boundary that the hard-coded 13 in
  * `url-state-manager.ts` relies on; appending only widens this slice.
  */
-export const VISUAL_CONFIG_DEFAULTS = new Map<string, SettingValue>([
-  //  ['Attribute name',   default value],         // Appeared at: | Type:  | Possible values:
-  ["groupColors", undefined], //    Lines tab | String | 1|3|5|6|10 digits each group-colors hexes has joined with '_', e.g. 12345699FF_000123_FFF_A
-  ["pathMode", "absoluteSeparated"], //    Lines tab | String | 'absoluteSeparated', 'relativeMerged'
-  ["opacitySteps", undefined], //    Lines tab | Float  | 0.2, 0.1, 0.04; other values mean unspecified (detected from initial decoded SVG)
-  ["colorFormat", "rgb"], //    Lines tab | String | 'hex', 'rgb'
-  ["shapeToTrim", "square"], //   Canvas tab | String | 'square', 'circle', 'squircle', 'squircleSlimmed'
-  ["widthNarrowness", 10], //   Canvas tab | Uint   | 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30
-  ["topHeavyRatio", 1], //   Canvas tab | Int    | 3, 2, 1, 0, -1, -2, -3
-  ["cropSideMargins", true], //   Canvas tab | Bool   | true, false
-  ["shapeRendering", "crispEdges"], //   Render tab | String | 'crispEdges', 'geometricPrecision'
-  ["heightPixelSize", 256], //   Render tab | Uint   | 0 <
-]);
+export const VISUAL_CONFIG_DEFAULTS = new Map<string, SettingValue>(
+  VISUAL_SETTING_DEFAULTS,
+);
 
 /**
  * UI configuration schema.

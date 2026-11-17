@@ -1,13 +1,38 @@
 import { BASIC_DATA_KEYS } from "@tksh/stln-codec";
 
 export const MAX_PARAMS_LENGTH = 8192;
-const stateDefaults = new Map<string, string | boolean | number>([
+
+/**
+ * SVG optimization toggles, in the order the app serializes them.
+ *
+ * Entry order is part of the contract: `url-state-manager.ts` slices the
+ * combined settings list by position, so inserting a key moves those
+ * boundaries.
+ */
+export const SVG_OPTIMIZE_SETTING_DEFAULTS = new Map<
+  string,
+  string | boolean | number | undefined
+>([
   ["removeOpacity", false],
   ["removeLineBreaks", false],
   ["removeSpaces", true],
-  ["groupColors", ""],
+]);
+
+/**
+ * The one definition of the keys that decide the drawn artwork, in the order
+ * the app serializes them. `src/js/constants.ts` derives its settings maps
+ * from this, so the library and the UI cannot drift apart.
+ *
+ * Only entries the library itself reads belong here. UI-only settings
+ * (`themeColor`, `buttonAction`, …) stay in the app.
+ */
+export const VISUAL_SETTING_DEFAULTS = new Map<
+  string,
+  string | boolean | number | undefined
+>([
+  ["groupColors", undefined],
   ["pathMode", "absoluteSeparated"],
-  ["opacitySteps", ""],
+  ["opacitySteps", undefined],
   ["colorFormat", "rgb"],
   ["shapeToTrim", "square"],
   ["widthNarrowness", 10],
@@ -15,19 +40,37 @@ const stateDefaults = new Map<string, string | boolean | number>([
   ["cropSideMargins", true],
   ["shapeRendering", "crispEdges"],
   ["heightPixelSize", 256],
-  ["themeColor", ""],
-  ["buttonAction", "download"],
-  ["viewScaling", "fit"],
-  ["checkerboardBg", true],
-  ["textWrapping", false],
-  ["imageFormat", "png"],
-  ["lang", ""],
 ]);
+
+/**
+ * Every key the library reads, in serialization order: SVG optimization
+ * first, then the visual settings.
+ */
+export const RENDER_SETTING_DEFAULTS = new Map<
+  string,
+  string | boolean | number | undefined
+>([...SVG_OPTIMIZE_SETTING_DEFAULTS, ...VISUAL_SETTING_DEFAULTS]);
+
+export const RENDER_SETTING_KEYS: readonly string[] = [
+  ...RENDER_SETTING_DEFAULTS.keys(),
+];
+
+/**
+ * Keys that are app state rather than artwork data. The library only needs the
+ * ones that are part of the render contract; the app passes its own additional
+ * keys (locale, theme, …) when it filters params.
+ */
+const stateDefaults = RENDER_SETTING_DEFAULTS;
 
 export function normalizeScalarParams(
   params: URLSearchParams,
+  extraKeys: Iterable<string> = [],
 ): URLSearchParams {
-  const keys = new Set([...stateDefaults.keys(), ...BASIC_DATA_KEYS]);
+  const keys = new Set([
+    ...stateDefaults.keys(),
+    ...extraKeys,
+    ...BASIC_DATA_KEYS,
+  ]);
   const entries = [...params.entries()];
   const last = new Map<string, number>();
   entries.forEach(([key], i) => {
@@ -45,8 +88,18 @@ export function readLastParam(
   return params.getAll(key).at(-1) ?? null;
 }
 
-export function excludeStateKeys(params: URLSearchParams): URLSearchParams {
-  const excluded = new Set(stateDefaults.keys());
+/**
+ * Drop the app's own state keys so only artwork params remain.
+ *
+ * `extraKeys` covers state the library does not know about (locale, theme,
+ * …); the app passes the keys it owns so the server and the browser filter
+ * the same way.
+ */
+export function excludeStateKeys(
+  params: URLSearchParams,
+  extraKeys: Iterable<string> = [],
+): URLSearchParams {
+  const excluded = new Set([...stateDefaults.keys(), ...extraKeys]);
   return new URLSearchParams(
     [...params.entries()].filter(([key]) => !excluded.has(key)),
   );

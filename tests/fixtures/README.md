@@ -72,11 +72,11 @@ explicit `opacitySteps`, explicit `shapeRendering`, and explicit
 
 The six `showcase-202412_001-widthNarrowness{5,15,25}_crop{True,False}.svg`
 files were not captured from the browser: they are the renderer's own output,
-frozen so the clip path and the slimmed viewBox are held to one shared
-rounding rule. 5, 15 and 25 are the `widthNarrowness` values whose raw side
-inset does not already round to two decimals, so they are where the two sides
-of the viewBox could drift apart by 0.01. They are L1 byte-exact goldens like
-the others.
+frozen so the clip path and the slimmed viewBox are held to one shared rounding
+rule. 5, 15 and 25 are the `widthNarrowness` values whose raw side inset does
+not already round to two decimals, so they are where the two sides of the
+viewBox could drift apart by 0.01. They are L1 byte-exact goldens like the
+others.
 
 On 2026-11-14, two `showcase-202401_001` outputs were captured from
 `#svg-string` in Google Chrome 151.0.7922.173 using a same-origin iframe
