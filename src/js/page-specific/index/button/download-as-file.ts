@@ -1,18 +1,22 @@
 import { extractViewboxValues } from "libpfpg/svg-attrs";
 import { getGroupColorsAsJoinedHex } from "libpfpg/group-colors-encode";
 import { getImageFormat, IMAGE_FORMATS } from "state/image-format";
+import { renderCurrentSvg } from "state/render-state";
 
 export { downloadPngAsFile, downloadSvgAsFile, getArtworkTitle, getSvgString };
 
 // Get Artwork data
 
-// Get the svg string from <textarea> element
+/**
+ * The current SVG, rendered from the artwork and the URL settings.
+ *
+ * Deliberately not read back from the textarea: the textarea is output, and
+ * treating it as the source of truth is what made every edit a regex rewrite.
+ * Re-rendering costs about 0.25 ms, so callers get a value that is always
+ * consistent with the URL.
+ */
 function getSvgString(): string {
-  const svgStringElem = document.querySelector("#svg-string");
-  if (svgStringElem === null) {
-    throw new Error("getSvgString: missing element #svg-string");
-  }
-  return (svgStringElem as HTMLTextAreaElement).value.trim(); // '.trim()' => 文字列の両端の空白を削除
+  return renderCurrentSvg();
 }
 
 // Get the artwork ID

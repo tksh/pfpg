@@ -34,9 +34,7 @@ export { applyImageCustomization, applyUiConfiguration };
  * genuinely UI-only — select values, the opacity-step options each picker
  * offers, and the artwork's own line colours the randomizer anchors to.
  */
-async function applyImageCustomization(
-  _svg2pngOption: { height: number },
-): Promise<void> {
+function applyImageCustomization(_svg2pngOption: { height: number }): void {
   ////////////////////////////////////////////////// colorFormat //////////////////////////////////////////////////
   // Default value of color-format is 'rgb'
   const colorFormat = getState("colorFormat");
@@ -48,7 +46,7 @@ async function applyImageCustomization(
 
   // The artwork's own opacity step. A URL may override it; anything outside
   // the supported three values counts as unspecified and is dropped.
-  let opacitySteps = await getInitialOpacitySteps();
+  let opacitySteps = getInitialOpacitySteps();
   SETTINGS_DEFAULTS.set("opacitySteps", opacitySteps);
 
   // 'opacitySteps' has no default in SETTINGS_DEFAULTS before the decode: the

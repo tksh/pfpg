@@ -106,7 +106,6 @@
     "state/resvg-option": "./src/js/page-specific/index/state/resvg-option.ts",
     "state/render-state": "./src/js/page-specific/index/state/render-state.ts",
     "state/render-commit": "./src/js/page-specific/index/state/render-commit.ts",
-    "state/url-decode": "./src/js/page-specific/index/state/url-decode.ts",
     "state/url-state-manager": "./src/js/page-specific/index/state/url-state-manager.ts",
 
     "modal/modal-toggle": "./src/js/page-specific/index/modal/modal-toggle.ts",

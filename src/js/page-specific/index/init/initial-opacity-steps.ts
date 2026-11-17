@@ -1,12 +1,12 @@
 import { resolveDefaultOpacitySteps } from "libpfpg/opacity-steps";
-import { getDecodedLinesData } from "state/url-decode";
+import { currentLinesData } from "state/render-state";
 
 export { calculateStepsFromTwoOpacities, getInitialOpacitySteps };
 
 // Get initial opacity steps from original lines data
-async function getInitialOpacitySteps(): Promise<number> {
-  // Get the whole lines data
-  const decodedLinesByGroups = await getDecodedLinesData();
+function getInitialOpacitySteps(): number {
+  // Get the whole lines data from the artwork decoded at startup
+  const decodedLinesByGroups = currentLinesData();
   // e.g.: Map(3) {0 => {…}, 1 => {…}, 2 => {…}}
 
   return calculateStepsFromTwoOpacities(decodedLinesByGroups);

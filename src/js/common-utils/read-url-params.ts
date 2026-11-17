@@ -14,7 +14,7 @@ export {
 
 // Artwork URL params with UI state keys and app-configuration keys (like the
 // `lang` locale selector) filtered out, for stln-codec.
-// (Decoding itself moved to stln-codec; see 'state/url-decode'.)
+// (Decoding itself moved to the library: see `state/render-state.ts`.)
 
 // The library owns the render-setting keys and their order; the app adds the
 // keys it owns on top. Sharing one rule keeps the codec input and the OGP key

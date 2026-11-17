@@ -1,4 +1,4 @@
-import type { DecodedParams } from "@tksh/stln-codec";
+import type { DecodedGroup, DecodedParams } from "@tksh/stln-codec";
 import { decodeArtwork } from "libpfpg/decode";
 import { renderArtwork } from "libpfpg/render";
 import {
@@ -61,4 +61,21 @@ export function currentSettings(): SvgRenderSettings {
  */
 export function renderCurrentSvg(): string {
   return renderArtwork(currentArtwork(), currentSettings());
+}
+
+/**
+ * The decoded line groups, for UI that derives a setting from the artwork
+ * itself rather than from the URL.
+ *
+ * Reading them here is what keeps a second decode out of the startup path:
+ * `decodeUrlParams()` costs about 5-7 ms, and the artwork never changes while
+ * the page is open.
+ */
+export function currentLinesData(): Map<number, DecodedGroup> {
+  return currentArtwork().linesData;
+}
+
+/** The decoded canvas size, for callers that need the original viewBox. */
+export function currentSizeData() {
+  return currentArtwork().sizeData;
 }

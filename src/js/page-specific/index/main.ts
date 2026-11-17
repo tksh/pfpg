@@ -136,7 +136,7 @@ const startupPromise = (async function (): Promise<void> {
   // Build the controls that mirror the URL settings, then render.
   // `applyImageCustomization()` now only syncs the UI; the SVG itself comes
   // from the shared renderer.
-  await applyImageCustomization(svg2pngOption);
+  applyImageCustomization(svg2pngOption);
 
   const svgString = renderCurrentSvg();
 
