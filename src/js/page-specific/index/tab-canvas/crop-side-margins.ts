@@ -70,9 +70,12 @@ function calculateSquircleSlimmedSides(
   widthNarrowness: number,
 ): { left: number; right: number } {
   const eachSideWidthForNarrowing = (gridSize / 100) * (widthNarrowness / 2);
+  const left = roundToTwoDecimals(eachSideWidthForNarrowing);
   return {
-    left: roundToTwoDecimals(eachSideWidthForNarrowing),
-    right: roundToTwoDecimals(gridSize - eachSideWidthForNarrowing),
+    left,
+    // Derived from the rounded left inset so the two side margins stay equal;
+    // rounding the raw inset separately could differ by 0.01.
+    right: roundToTwoDecimals(gridSize - left),
   };
 }
 

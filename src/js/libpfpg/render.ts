@@ -22,7 +22,11 @@ import {
   readWidthNarrowness,
 } from "./settings.ts";
 import { numbersIncrementByStep, snapToGrid } from "./opacity-steps.ts";
-import { clipShapeElement, squircleSlimmedGeometry } from "./squircles.ts";
+import {
+  clipShapeElement,
+  slimmedViewBox,
+  squircleSlimmedGeometry,
+} from "./squircles.ts";
 import {
   extractViewboxValues,
   replaceShapeRendering,
@@ -146,10 +150,7 @@ function applyShape(
     clip,
   );
   if (geometry && crop) {
-    output = replaceViewBox(
-      output,
-      `${geometry.left} ${vb.y} ${geometry.right - geometry.left} ${vb.height}`,
-    );
+    output = replaceViewBox(output, slimmedViewBox(geometry, vb));
   } else output = replaceViewBox(output, `0 0 ${size} ${size}`);
   return output;
 }

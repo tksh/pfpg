@@ -28,6 +28,32 @@ Deno.test("libpfpg renderer matches approved showcase goldens", async (t) => {
       "shape_squircleSlimmed_cropTrue",
       "&shapeToTrim=squircleSlimmed&cropSideMargins=true",
     ],
+    // `widthNarrowness` values whose raw insets do not round to two decimals
+    // are where the UI and the library used to disagree by 0.01.
+    [
+      "widthNarrowness5_cropTrue",
+      "&shapeToTrim=squircleSlimmed&cropSideMargins=true&widthNarrowness=5",
+    ],
+    [
+      "widthNarrowness5_cropFalse",
+      "&shapeToTrim=squircleSlimmed&cropSideMargins=false&widthNarrowness=5",
+    ],
+    [
+      "widthNarrowness15_cropTrue",
+      "&shapeToTrim=squircleSlimmed&cropSideMargins=true&widthNarrowness=15",
+    ],
+    [
+      "widthNarrowness15_cropFalse",
+      "&shapeToTrim=squircleSlimmed&cropSideMargins=false&widthNarrowness=15",
+    ],
+    [
+      "widthNarrowness25_cropTrue",
+      "&shapeToTrim=squircleSlimmed&cropSideMargins=true&widthNarrowness=25",
+    ],
+    [
+      "widthNarrowness25_cropFalse",
+      "&shapeToTrim=squircleSlimmed&cropSideMargins=false&widthNarrowness=25",
+    ],
     ["opacitySteps_explicit", "&opacitySteps=0.1"],
     ["shapeRendering_explicit", "&shapeRendering=geometricPrecision"],
     ["heightPixelSize_explicit", "&heightPixelSize=300"],
@@ -138,6 +164,12 @@ Deno.test("libpfpg renderer preserves pixels for approved showcase goldens", asy
       "shape_squircle",
       "shape_squircleSlimmed_cropFalse",
       "shape_squircleSlimmed_cropTrue",
+      "widthNarrowness5_cropTrue",
+      "widthNarrowness5_cropFalse",
+      "widthNarrowness15_cropTrue",
+      "widthNarrowness15_cropFalse",
+      "widthNarrowness25_cropTrue",
+      "widthNarrowness25_cropFalse",
       "opacitySteps_explicit",
       "shapeRendering_explicit",
       "heightPixelSize_explicit",
@@ -163,6 +195,10 @@ Deno.test("libpfpg renderer preserves pixels for approved showcase goldens", asy
         ? "&shapeToTrim=squircleSlimmed&cropSideMargins=false"
         : name === "shape_squircleSlimmed_cropTrue"
         ? "&shapeToTrim=squircleSlimmed&cropSideMargins=true"
+        : name.startsWith("widthNarrowness")
+        ? `&shapeToTrim=squircleSlimmed&cropSideMargins=${
+          name.endsWith("cropTrue") ? "true" : "false"
+        }&widthNarrowness=${name.match(/\d+/)?.[0]}`
         : "";
       const actual = await renderParamsToSvg(`${fixtureParams}${suffix}`);
       const [a, b] = await Promise.all([
