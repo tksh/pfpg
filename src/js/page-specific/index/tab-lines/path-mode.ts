@@ -1,11 +1,11 @@
 import { getSvgString } from "button/download-as-file";
-import { GROUP_COLORS_ELEMENT_REGEX } from "group-colors-svg/group-colors-svg";
+import { GROUP_COLORS_ELEMENT_REGEX } from "libpfpg/group-colors";
 import { decodeUrlToSvgForPage } from "state/url-decode";
 import { optimizeSvg } from "modal/optimize-svg";
 import { svg2pngOption } from "state/resvg-option";
 import { getState, updateState } from "state/url-state-manager";
 import { executeSvg2png } from "svg-to-png";
-import { replaceAtIndex } from "group-colors-svg/group-colors-svg";
+import { replaceAtIndex } from "libpfpg/group-colors";
 
 export { decodeAsSelectedPathMode, initPathModeSelect };
 

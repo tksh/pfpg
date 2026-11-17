@@ -1,12 +1,12 @@
 import { getState } from "state/url-state-manager";
-import { GROUP_COLORS_ELEMENT_REGEX } from "group-colors-svg/group-colors-svg";
+import { GROUP_COLORS_ELEMENT_REGEX } from "libpfpg/group-colors";
 import {
   generateGroupColorsHtmlElements,
   generateGroupColorsSvgTags,
 } from "tab-lines/group-colors-generator";
 import { addEventListenerForGroupColorsInputs } from "tab-lines/group-colors-listener";
-import { getNumberOfGroups } from "group-colors-svg/group-colors-svg";
-import { replaceAtIndex } from "group-colors-svg/group-colors-svg";
+import { getNumberOfGroups } from "libpfpg/group-colors";
+import { replaceAtIndex } from "libpfpg/group-colors";
 
 export function applyGroupColors(
   svgString: string,

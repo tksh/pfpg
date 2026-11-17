@@ -1,3 +1,4 @@
+// @tksh/libpfpg: hex <-> normalized-fraction helpers. Pure arithmetic only.
 export { hexToRgbArr, hexToUint8, normalizedFromHex, rgbStringify };
 
 // strip a leading "#" if present

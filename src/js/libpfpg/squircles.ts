@@ -16,6 +16,23 @@ export function squircleClipPath(gridSize: number): string {
   const center = roundToTwoDecimals(gridSize / 2);
   return `<path d="M 0 ${center} Q 0 0 ${center} 0 T ${gridSize} ${center} ${center} ${gridSize} 0 ${center}" />`;
 }
+/**
+ * Round the horizontal insets of 'Squircle, slimmed' (= how much each side is
+ * reduced) so the clip path and the slimmed viewBox always match.
+ *
+ * `right` derives from the rounded `left` rather than from the raw inset, so
+ * the two side margins stay equal; rounding them independently can differ by
+ * 0.01.
+ */
+export function calculateSquircleSlimmedSides(
+  gridSize: number,
+  widthNarrowness: number,
+): { left: number; right: number } {
+  const eachSideWidthForNarrowing = (gridSize / 100) * (widthNarrowness / 2);
+  const left = roundToTwoDecimals(eachSideWidthForNarrowing);
+  return { left, right: roundToTwoDecimals(gridSize - left) };
+}
+
 export function squircleSlimmedGeometry(
   gridSize: number,
   opts: { widthNarrowness: number; topHeavyRatio: number },
@@ -24,10 +41,10 @@ export function squircleSlimmedGeometry(
     !Number.isFinite(opts.widthNarrowness) ||
     !Number.isFinite(opts.topHeavyRatio)
   ) throw new RangeError("Geometry values must be finite");
-  const left = roundToTwoDecimals(
-    (gridSize / 100) * (opts.widthNarrowness / 2),
+  const { left, right } = calculateSquircleSlimmedSides(
+    gridSize,
+    opts.widthNarrowness,
   );
-  const right = roundToTwoDecimals(gridSize - left);
   const center = roundToTwoDecimals(gridSize / 2);
   const topControlPoint = roundToTwoDecimals(
     left - ((gridSize / 100) * opts.topHeavyRatio),

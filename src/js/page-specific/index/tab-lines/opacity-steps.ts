@@ -1,13 +1,13 @@
 import { getSvgString } from "button/download-as-file";
-import { GROUP_COLORS_ELEMENT_REGEX } from "group-colors-svg/group-colors-svg";
+import { GROUP_COLORS_ELEMENT_REGEX } from "libpfpg/group-colors";
 import { numbersIncrementByStep } from "tab-lines/opacity-steps-grid";
 import { svg2pngOption } from "state/resvg-option";
 import { updateState } from "state/url-state-manager";
 import { executeSvg2png } from "svg-to-png";
-import { getGroupColorsValues } from "group-colors-svg/group-colors-svg";
+import { getGroupColorsValues } from "libpfpg/group-colors";
 import { generateGroupColorsSvgTags } from "tab-lines/group-colors-generator";
-import { getNumberOfGroups } from "group-colors-svg/group-colors-svg";
-import { replaceAtIndex } from "group-colors-svg/group-colors-svg";
+import { getNumberOfGroups } from "libpfpg/group-colors";
+import { replaceAtIndex } from "libpfpg/group-colors";
 
 export {
   changeOpacitySelectOptionsAsNewStep,

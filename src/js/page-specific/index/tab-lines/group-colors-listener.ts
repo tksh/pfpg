@@ -1,18 +1,18 @@
 import { getSvgString } from "button/download-as-file";
-import { GROUP_COLORS_ELEMENT_REGEX } from "group-colors-svg/group-colors-svg";
+import { GROUP_COLORS_ELEMENT_REGEX } from "libpfpg/group-colors";
 import { svg2pngOption } from "state/resvg-option";
 import { updateState } from "state/url-state-manager";
 import { executeSvg2png } from "svg-to-png";
-import { getGroupColorsAsJoinedHex } from "tab-lines/encode-colors-as-hex";
+import { getGroupColorsAsJoinedHex } from "libpfpg/group-colors-encode";
 import { generateGroupColorsSvgTags } from "tab-lines/group-colors-generator";
 import {
   getOpacity,
   getStroke,
   getStrokeOpacity,
   regexMatchesOfGroupColors,
-} from "group-colors-svg/group-colors-svg";
-import { replaceAtIndex } from "group-colors-svg/group-colors-svg";
-import { getNumberOfGroups } from "group-colors-svg/group-colors-svg";
+} from "libpfpg/group-colors";
+import { replaceAtIndex } from "libpfpg/group-colors";
+import { getNumberOfGroups } from "libpfpg/group-colors";
 
 export {
   addEventListenerForGroupColorsInputs,

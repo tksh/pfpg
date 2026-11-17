@@ -1,5 +1,5 @@
 import { getSvgString } from "button/download-as-file";
-import { convertToRgbArr } from "color-formatter/format-converter";
+import { convertToRgbArr } from "libpfpg/color-format";
 import { oklchToRgb } from "color-formatter/oklch-to-rgb";
 import { randomizeOklch } from "color-formatter/randomize-oklch";
 import type {
@@ -15,11 +15,11 @@ import {
   getStroke,
   getStrokeOpacity,
   regexMatchesOfGroupColors,
-} from "group-colors-svg/group-colors-svg";
-import { rgbStringify } from "color-formatter/normalized-from-hex";
-import { rgbObjToHex } from "color-formatter/normalized-to-hex";
+} from "libpfpg/group-colors";
+import { rgbStringify } from "libpfpg/color-hex";
+import { rgbObjToHex } from "libpfpg/color-rgb";
 import { applyGroupColors } from "tab-lines/apply-group-colors";
-import { getGroupColorsAsJoinedHex } from "tab-lines/encode-colors-as-hex";
+import { getGroupColorsAsJoinedHex } from "libpfpg/group-colors-encode";
 import { svg2pngOption } from "state/resvg-option";
 import {
   adjustInputValueViaButton,

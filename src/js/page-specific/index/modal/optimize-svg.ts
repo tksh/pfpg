@@ -1,10 +1,13 @@
 import { TAB_SPACE } from "constants";
 import { getSvgString } from "button/download-as-file";
 import { updateButtonWithSvgSize } from "button/update-button-text";
+import { restoreOpacity } from "libpfpg/group-colors";
 import {
+  removeLineBreaks,
   removeOpacity,
-  restoreOpacity,
-} from "group-colors-svg/group-colors-svg";
+  removeSpaces,
+  tryRemoveSpaces,
+} from "libpfpg/optimize";
 import { getState, updateState } from "state/url-state-manager";
 import { decodeAsSelectedPathMode } from "tab-lines/path-mode";
 
@@ -40,13 +43,6 @@ function tryRemoveLineBreaks(
 ): string {
   if (isLineBreaksRemoved) {
     return removeLineBreaks(svgString);
-  } else {
-    return svgString;
-  }
-}
-function tryRemoveSpaces(svgString: string, isSpacesRemoved: unknown): string {
-  if (isSpacesRemoved) {
-    return removeSpaces(svgString);
   } else {
     return svgString;
   }
@@ -168,10 +164,6 @@ async function updateSvg(event: Event): Promise<void> {
   }
 }
 
-function removeLineBreaks(svgString: string): string {
-  return svgString.replace(/>\s+</g, "><");
-}
-
 async function restoreLineBreaks(
   svgString: string,
   pathMode?: string,
@@ -210,31 +202,6 @@ async function getCurrentPathModeIndentation(
   return getSvgIndentation(svgString ?? "");
 }
 
-function removeSpaces(svgString: string): string {
-  return svgString.replace(
-    /(\sd="[^>]+>)/g,
-    (_match: string, pathData: string) => { // Use \sd= to skip id=
-      const optimizedPath = pathData
-        // コマンド後のスペース削除
-        .replace(/([MLHVCSQTAZ])\s+/gi, "$1")
-        // e.g.: <path d="M 12 34 L 56 78" /> => <path d="M12 34 L56 78" />
-
-        // 数字 と コマンド のあいだのスペース削除
-        .replace(/(\d)\s+([MLHVCSQTAZ])/gi, "$1$2")
-        // e.g.: <path d="M12 34 L56 78" /> => <path d="M12 34L56 78" />
-
-        // 数字 と 負の値の数字 のあいだのスペース削除 (for relative coordinates values)
-        .replace(/ -/g, "-")
-        // e.g.: <path d="d="m12 3 45 6m-7 89 -10 11"/> => <path d="d="m12 3 45 6m-7 89-10 11"/>
-
-        // ダブルクォート と スラッシュ のあいだのスペース削除
-        .replace(/"\s+(\/)/g, '"$1');
-      // e.g.: <path d="M12 34L56 78" /> => <path d="M12 34L56 78"/>
-
-      return optimizedPath;
-    },
-  );
-}
 // // Test
 // console.log(removeSpaces('<path d="M 12 34 L 56 78" />'))  // Absolute
 // // <path d="M36 61L33 68"/>

@@ -1,5 +1,5 @@
-import { hexToRgbArr, rgbStringify } from "color-formatter/normalized-from-hex";
-import { rgbStrToRgbArr, rgbToHex } from "color-formatter/normalized-to-hex";
+import { hexToRgbArr, rgbStringify } from "./color-hex.ts";
+import { rgbStrToRgbArr, rgbToHex } from "./color-rgb.ts";
 
 export { convertColorFormat, convertColorFormatForArray, convertToRgbArr };
 

@@ -1,4 +1,4 @@
-import { convertToRgbArr } from "color-formatter/format-converter";
+import { convertToRgbArr } from "libpfpg/color-format";
 import { rgbToOklch } from "color-formatter/rgb-to-oklch";
 
 export { getTextLightness };

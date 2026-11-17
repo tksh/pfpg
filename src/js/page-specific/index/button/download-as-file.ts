@@ -1,5 +1,5 @@
-import { extractViewboxValues } from "tab-canvas/crop-side-margins";
-import { getGroupColorsAsJoinedHex } from "tab-lines/encode-colors-as-hex";
+import { extractViewboxValues } from "libpfpg/svg-attrs";
+import { getGroupColorsAsJoinedHex } from "libpfpg/group-colors-encode";
 import { getImageFormat, IMAGE_FORMATS } from "state/image-format";
 
 export { downloadPngAsFile, downloadSvgAsFile, getArtworkTitle, getSvgString };
@@ -188,10 +188,8 @@ function downloadSvgAsFile(): void {
   if (viewboxValues === null) {
     throw new Error("downloadSvgAsFile: invalid viewBox");
   }
-  const viewboxValueDelimitedWithUnderscores = viewboxValues.get("x") + "_" +
-    viewboxValues.get("y") + "_" +
-    viewboxValues.get("w") + "_" +
-    viewboxValues.get("h"); // e.g.: 0_0_31_31
+  const viewboxValueDelimitedWithUnderscores =
+    `${viewboxValues.x}_${viewboxValues.y}_${viewboxValues.width}_${viewboxValues.height}`; // e.g.: 0_0_31_31
 
   // current status
   const currentStatus = getCurrentStatusForFilename();

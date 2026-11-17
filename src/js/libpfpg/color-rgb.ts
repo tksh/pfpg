@@ -1,3 +1,4 @@
+// @tksh/libpfpg: rgb <-> hex helpers. Pure arithmetic only.
 export { normalizedToHex, rgbObjToHex, rgbStrToRgbArr, rgbToHex, uint8ToHex };
 
 function tryAddHash(hexString: string): string {

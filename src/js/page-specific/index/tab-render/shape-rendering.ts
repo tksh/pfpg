@@ -1,9 +1,11 @@
+import { replaceShapeRendering } from "libpfpg/svg-attrs";
 import { getSvgString } from "button/download-as-file";
 import { svg2pngOption } from "state/resvg-option";
 import { updateState } from "state/url-state-manager";
 import { executeSvg2png } from "svg-to-png";
 
-export { initShapeRenderingSelect, replaceShapeRendering };
+export { initShapeRenderingSelect };
+export { replaceShapeRendering };
 
 function initShapeRenderingSelect(): void {
   // Event listeners for 'shape-rendering' type changes
@@ -32,23 +34,5 @@ function initShapeRenderingSelect(): void {
       // Rendering the PNG with updated SVG
       executeSvg2png({ target: { value: updatedSvg } }, svg2pngOption);
     },
-  );
-}
-
-function replaceShapeRendering(
-  svgString: string,
-  shapeRendering: string,
-): string {
-  if (
-    shapeRendering !== "crispEdges" && shapeRendering !== "geometricPrecision"
-  ) {
-    throw new TypeError("Invalid shapeRendering");
-  }
-  // 正規表現パターンを作成
-  const patternForShapeRendering = /shape-rendering="[^"]*"/g;
-  // 正規表現でマッチした部分を書き換える
-  return svgString.replace(
-    patternForShapeRendering,
-    `shape-rendering="${shapeRendering}"`,
   );
 }

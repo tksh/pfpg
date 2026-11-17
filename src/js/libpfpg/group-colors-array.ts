@@ -1,9 +1,11 @@
+// @tksh/libpfpg: decode the `groupColors` URL value into per-group color
+// entries, and report the opacities those entries imply. Pure string/number work.
 import {
   expandGroupColor,
   shortenHexAsHalf,
 } from "@tksh/group-colors-param-codec";
-import { normalizedFromHex } from "color-formatter/normalized-from-hex";
-import { convertColorFormat } from "color-formatter/format-converter";
+import { normalizedFromHex } from "./color-hex.ts";
+import { convertColorFormat } from "./color-format.ts";
 
 export { decodeGroupColorsAsArray, getGroupOpacitiesAsMap };
 

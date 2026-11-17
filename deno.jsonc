@@ -144,8 +144,6 @@
     "tab-lines/apply-group-colors": "./src/js/page-specific/index/tab-lines/apply-group-colors.ts",
     "tab-lines/color-format": "./src/js/page-specific/index/tab-lines/color-format.ts",
     "tab-lines/details-toggle-listener": "./src/js/page-specific/index/tab-lines/details-toggle-listener.ts",
-    "tab-lines/decode-colors-as-array": "./src/js/page-specific/index/tab-lines/decode-colors-as-array.ts",
-    "tab-lines/encode-colors-as-hex": "./src/js/page-specific/index/tab-lines/encode-colors-as-hex.ts",
     "tab-lines/group-colors-listener": "./src/js/page-specific/index/tab-lines/group-colors-listener.ts",
     "tab-lines/group-colors-generator": "./src/js/page-specific/index/tab-lines/group-colors-generator.ts",
     "tab-lines/opacity-steps": "./src/js/page-specific/index/tab-lines/opacity-steps.ts",
@@ -168,7 +166,6 @@
     "tab-ui/theme-color": "./src/js/page-specific/index/tab-ui/theme-color.ts",
     "tab-ui/view-scaling": "./src/js/page-specific/index/tab-ui/view-scaling.ts",
 
-    "group-colors-svg/group-colors-svg": "./src/js/group-colors-svg/group-colors-svg.ts",
     "utils/number-rounding": "./src/js/page-specific/index/utils/number-rounding.ts",
 
     "button/copy-to-clipboard": "./src/js/page-specific/index/button/copy-to-clipboard.ts",
@@ -208,8 +205,18 @@
     "constants": "./src/js/constants.ts",
 
     // DOM-free renderer core: the seed of the future @tksh/libpfpg package.
+    "libpfpg/optimize": "./src/js/libpfpg/optimize.ts",
+    "libpfpg/svg-attrs": "./src/js/libpfpg/svg-attrs.ts",
+    "libpfpg/squircles": "./src/js/libpfpg/squircles.ts",
     "libpfpg/settings": "./src/js/libpfpg/settings.ts",
     "libpfpg/render": "./src/js/libpfpg/render.ts",
+    "libpfpg/group-colors": "./src/js/libpfpg/group-colors.ts",
+    "libpfpg/opacity-steps": "./src/js/libpfpg/opacity-steps.ts",
+    "libpfpg/color-format": "./src/js/libpfpg/color-format.ts",
+    "libpfpg/color-hex": "./src/js/libpfpg/color-hex.ts",
+    "libpfpg/color-rgb": "./src/js/libpfpg/color-rgb.ts",
+    "libpfpg/group-colors-array": "./src/js/libpfpg/group-colors-array.ts",
+    "libpfpg/group-colors-encode": "./src/js/libpfpg/group-colors-encode.ts",
 
     "common-utils/compression-stream": "./src/js/common-utils/compression-stream.ts",
     "common-utils/format-as-float": "./src/js/common-utils/format-as-float.ts",
@@ -220,9 +227,6 @@
     "common-utils/select-output-textarea": "./src/js/common-utils/select-output-textarea.ts",
     "common-utils/show-processing-time": "./src/js/common-utils/show-processing-time.ts",
 
-    "color-formatter/format-converter": "./src/js/color-formatter/format-converter.ts",
-    "color-formatter/normalized-from-hex": "./src/js/color-formatter/normalized-from-hex.ts",
-    "color-formatter/normalized-to-hex": "./src/js/color-formatter/normalized-to-hex.ts",
     "color-formatter/colorjs-spaces": "./src/js/color-formatter/colorjs-spaces.ts",
     "color-formatter/rgb-to-oklch": "./src/js/color-formatter/rgb-to-oklch.ts",
     "color-formatter/oklch-to-rgb": "./src/js/color-formatter/oklch-to-rgb.ts",

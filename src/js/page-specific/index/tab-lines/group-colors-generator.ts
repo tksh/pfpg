@@ -1,9 +1,9 @@
-import { convertColorFormatForArray } from "color-formatter/format-converter";
+import { convertColorFormatForArray } from "libpfpg/color-format";
 import { getTextLightness } from "color-formatter/text-lightness";
 import {
   buildGroupColorElement,
   getGroupColorsValues,
-} from "group-colors-svg/group-colors-svg";
+} from "libpfpg/group-colors";
 import { getState } from "state/url-state-manager";
 import { executeSvg2png } from "svg-to-png";
 import { numbersIncrementByStep } from "tab-lines/opacity-steps";

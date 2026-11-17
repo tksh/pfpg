@@ -1,7 +1,7 @@
-// @tksh/group-colors-svg (internal extraction): single source of truth for
-// parsing and rewriting the `<g stroke=...>` group-color elements in the SVG.
-// Previously, the same regex and attribute parsers were duplicated across
-// several tab-* modules.
+// @tksh/libpfpg: single source of truth for parsing and rewriting the
+// `<g stroke=...>` group-color elements in the SVG. Pure string handling with
+// no DOM or state access, so the browser and the renderer can share it.
+import { removeOpacity } from "./optimize.ts";
 
 export {
   getGroupColorsValues,
@@ -57,12 +57,7 @@ function getGroupColorsValues(
 }
 
 export function getNumberOfGroups(inputSvg: string): number {
-  const matches = inputSvg.match(GROUP_COLORS_ELEMENT_REGEX);
-  console.log(
-    'matches like <g (id="0") stroke="rgb(0 0 0)|#000000" ... >: ',
-    matches,
-  );
-  return matches?.length ?? 0;
+  return inputSvg.match(GROUP_COLORS_ELEMENT_REGEX)?.length ?? 0;
 }
 
 function regexMatchesOfGroupColors(inputSvg: string): string[] {
@@ -127,12 +122,6 @@ export function replaceAtIndex(
 }
 
 // Strip the default-opaque opacity/stroke-opacity attributes from every
-// element; the <g> element generator above omits them entirely. This remains
-// for post-processing arbitrary SVG text.
-export function removeOpacity(svgString: string): string {
-  return svgString.replace(/\s(opacity|stroke-opacity)="1(\.0)?"/g, "");
-}
-
 // Re-insert default opacity attributes on <g> elements that have a stroke.
 export function restoreOpacity(svgString: string): string {
   return svgString.replace(
@@ -194,29 +183,4 @@ export function buildGroupColorElement(
   return opts?.removeOpacity ? removeOpacity(groupElem) : groupElem;
 }
 
-// Replace every `<g stroke=...>` element in the SVG with the decoded colors.
-// Works on arbitrary strings (browser applyGroupColors and the Deno Deploy
-// pipeline share it), so no document/state access happens here.
-export function applyGroupColorsToSvg(
-  svgString: string,
-  colorsByGroups: Array<[undefined, string, number, number]>,
-  opts?: { removeOpacity?: boolean },
-): string {
-  let updatedSvg = svgString;
-  colorsByGroups.forEach((groupColorsArr, gId) => {
-    const gElem = buildGroupColorElement(
-      gId,
-      groupColorsArr[1],
-      groupColorsArr[2],
-      groupColorsArr[3],
-      opts,
-    );
-    updatedSvg = replaceAtIndex(
-      updatedSvg,
-      GROUP_COLORS_ELEMENT_REGEX,
-      gElem,
-      gId,
-    );
-  });
-  return updatedSvg;
-}
+export { removeOpacity };

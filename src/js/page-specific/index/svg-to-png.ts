@@ -8,7 +8,7 @@ import { uploadRenderedImage } from "shared-image/generate-and-upload";
 import { getSharedImageKeyHashForCurrentUrl } from "shared-image/shared-image-key";
 import { type EncodedImage, encodeRasterImage } from "state/image-encoder";
 import { displayFormatName } from "state/image-format";
-import { extractViewboxValues } from "tab-canvas/crop-side-margins";
+import { extractViewboxValues } from "libpfpg/svg-attrs";
 
 export {
   executeSvg2png,
@@ -179,12 +179,7 @@ async function encode(
   // SVG viewBox dimension
   const viewboxValues = extractViewboxValues(svgString);
   if (!viewboxValues) throw new Error("viewBox not found in SVG string");
-  const svgWidth = viewboxValues.get("w");
-  const svgHeight = viewboxValues.get("h");
-  if (svgWidth === undefined || svgHeight === undefined) {
-    throw new Error("viewBox width/height not found in SVG string");
-  }
-  updateDimensionInfo("svg", "svg", svgWidth, svgHeight);
+  updateDimensionInfo("svg", "svg", viewboxValues.width, viewboxValues.height);
 
   return image;
 }

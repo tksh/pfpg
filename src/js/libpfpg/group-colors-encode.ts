@@ -1,10 +1,12 @@
+// @tksh/libpfpg: encode the current per-group colors back into the compact
+// `groupColors` URL value. Pure string/number work.
 import {
   expandHexToSix,
   shortenGroupColor,
 } from "@tksh/group-colors-param-codec";
-import { normalizedToHex } from "color-formatter/normalized-to-hex";
-import { convertColorFormatForArray } from "color-formatter/format-converter";
-import { getGroupColorsValues } from "group-colors-svg/group-colors-svg";
+import { normalizedToHex } from "./color-rgb.ts";
+import { convertColorFormatForArray } from "./color-format.ts";
+import { getGroupColorsValues } from "./group-colors.ts";
 
 export function getGroupColorsAsJoinedHex(inputSvg: string): string {
   // Lines group color attributes (stroke(st), opacity(op), stroke-opacity(so))

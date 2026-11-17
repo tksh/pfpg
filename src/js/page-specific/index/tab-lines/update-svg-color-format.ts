@@ -1,10 +1,10 @@
 import { getSvgString } from "button/download-as-file";
-import { GROUP_COLORS_ELEMENT_REGEX } from "group-colors-svg/group-colors-svg";
-import { convertColorFormat } from "color-formatter/format-converter";
+import { GROUP_COLORS_ELEMENT_REGEX } from "libpfpg/group-colors";
+import { convertColorFormat } from "libpfpg/color-format";
 import { generateGroupColorsSvgTags } from "tab-lines/group-colors-generator";
 import { getElementValueById } from "tab-lines/opacity-steps";
-import { getNumberOfGroups } from "group-colors-svg/group-colors-svg";
-import { replaceAtIndex } from "group-colors-svg/group-colors-svg";
+import { getNumberOfGroups } from "libpfpg/group-colors";
+import { replaceAtIndex } from "libpfpg/group-colors";
 
 export function updateSvgAsNewColorFormat(colorFormat: string): string {
   // Get the SVG string value

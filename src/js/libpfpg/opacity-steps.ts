@@ -1,3 +1,38 @@
+/**
+ * The largest opacity step from the supported set that divides every given
+ * opacity. Used to derive an artwork's own default step, so a drawing whose
+ * opacities are all multiples of 0.1 is presented on the 0.1 grid.
+ */
+export function resolveDefaultOpacitySteps(
+  opacities: Iterable<number>,
+): number {
+  // Work in integer hundredths so the modulo tests below are exact.
+  const intValues = [...opacities].map((value) => Math.round(value * 100));
+
+  let currentGcd = 0;
+  for (const intValue of intValues) {
+    if (intValue % 20 === 0) {
+      currentGcd = gcd(currentGcd, 20);
+    } else if (intValue % 10 === 0) {
+      currentGcd = gcd(currentGcd, 10);
+    } else if (intValue % 4 === 0) {
+      currentGcd = gcd(currentGcd, 4);
+    }
+  }
+
+  if (currentGcd === 20) return 0.2;
+  if (currentGcd === 10) return 0.1;
+  if (currentGcd === 4) return 0.04;
+  return 0.2;
+}
+
+function gcd(a: number, b: number): number {
+  while (b !== 0) {
+    [a, b] = [b, a % b];
+  }
+  return Math.abs(a);
+}
+
 export function numbersIncrementByStep(step: number): string[] {
   if (!Number.isFinite(step) || step <= 0 || step > 1) {
     throw new RangeError("step must be finite and 0 < step <= 1");
