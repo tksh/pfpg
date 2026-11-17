@@ -126,8 +126,20 @@ Deno.test("server source initializes before listening and has no fixed URL", asy
   const ogpRenderer = await Deno.readTextFile(
     new URL("../server/ogp-render.ts", import.meta.url),
   );
-  assert(ogpRenderer.includes("renderParamsToSvg"));
-  assert(ogpRenderer.includes("readHeightPixelSize"));
+  // The server shares the library's render path instead of its own copy: it
+  // decodes through libpfpg and renders synchronously from the resolved
+  // settings. The raster height comes from the shared raster settings reader.
+  assert(ogpRenderer.includes("decodeArtwork"));
+  assert(ogpRenderer.includes("renderArtwork"));
+  assert(ogpRenderer.includes("resolveRasterSettings"));
+  // Request-scoped callers must not populate the artwork cache: OGP takes
+  // arbitrary URLs, so a cache keyed by user input would grow without bound.
+  assert(
+    ogpRenderer.includes("cache: false"),
+    "the server must opt out of the artwork cache",
+  );
+  // The 8192-byte cap stays on the server entry path.
+  assert(ogpRenderer.includes("MAX_PARAMS_LENGTH"));
   assert(probe.includes('["pfpg", "history", yyyy, yyyyMm]'));
   assert(!probe.includes("ogp-auto"));
   assert(probe.includes("`${key}-png`"));

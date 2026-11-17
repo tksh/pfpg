@@ -1,4 +1,4 @@
-import { decodeUrlParams } from "@tksh/stln-codec";
+import { type DecodedParams, decodeUrlParams } from "@tksh/stln-codec";
 import {
   excludeStateKeys,
   normalizeScalarParams,
@@ -22,17 +22,21 @@ export { getSharedImageKeyHash, getSharedImageKeyHashForCurrentUrl };
  * @async
  * @function getSharedImageKeyHash
  * @param {URLSearchParams} urlParams - The full query parameters of the URL
+ * @param {DecodedParams} [decoded] - Already-decoded artwork, when the caller
+ *   decoded the same params for rendering. Passing it avoids decoding twice;
+ *   it must be the decode of `urlParams` with the state keys filtered out.
  * @returns {Promise<string>} A 32-character hexadecimal string
  */
 async function getSharedImageKeyHash(
   urlParams: URLSearchParams,
+  decoded?: DecodedParams,
 ): Promise<string> {
   urlParams = normalizeScalarParams(urlParams);
   // State keys are the app's own settings, not artwork data
   const artworkParams = excludeStateKeys(urlParams);
-  const decoded = await decodeUrlParams(artworkParams);
+  const artwork = decoded ?? await decodeUrlParams(artworkParams);
   const hashHexPadded = hashCanonicalImageInput(
-    buildCanonicalImageInput(urlParams, decoded),
+    buildCanonicalImageInput(urlParams, artwork),
   );
 
   return hashHexPadded;

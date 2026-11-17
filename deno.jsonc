@@ -210,6 +210,7 @@
     "libpfpg/squircles": "./src/js/libpfpg/squircles.ts",
     "libpfpg/settings": "./src/js/libpfpg/settings.ts",
     "libpfpg/render": "./src/js/libpfpg/render.ts",
+    "libpfpg/decode": "./src/js/libpfpg/decode.ts",
     "libpfpg/group-colors": "./src/js/libpfpg/group-colors.ts",
     "libpfpg/opacity-steps": "./src/js/libpfpg/opacity-steps.ts",
     "libpfpg/color-format": "./src/js/libpfpg/color-format.ts",

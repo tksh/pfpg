@@ -1,4 +1,4 @@
-import { decodeUrlToSvg } from "@tksh/stln-codec";
+import { type DecodedParams, generateSvg } from "@tksh/stln-codec";
 import {
   expandGroupColor,
   shortenHexAsHalf,
@@ -7,19 +7,13 @@ import {
   excludeStateKeys,
   MAX_PARAMS_LENGTH,
   normalizeScalarParams,
-  readColorFormat,
-  readCropSideMargins,
-  readGroupColors,
+  type OpacityStep,
   readHeightPixelSize,
-  readOpacitySteps,
   readPathMode,
-  readRemoveLineBreaks,
-  readRemoveOpacity,
-  readRemoveSpaces,
-  readShapeRendering,
-  readShapeToTrim,
-  readTopHeavyRatio,
-  readWidthNarrowness,
+  resolveRasterSettings,
+  resolveSvgRenderSettings,
+  type ShapeToTrim,
+  type SvgRenderSettings,
 } from "./settings.ts";
 import { numbersIncrementByStep, snapToGrid } from "./opacity-steps.ts";
 import {
@@ -33,7 +27,67 @@ import {
   replaceViewBox,
 } from "./svg-attrs.ts";
 import { optimizeSvgText } from "./optimize.ts";
+import { decodeArtwork } from "./decode.ts";
 
+export { numbersIncrementByStep };
+
+/**
+ * Render an SVG from already-decoded artwork and resolved settings.
+ *
+ * Synchronous by design: the caller decodes once (see `decodeArtwork()`), then
+ * every later setting change is just this call. That is what lets the browser
+ * re-render on each interaction without decoding the URL again.
+ *
+ * Contract: `colorFormat` only takes effect when a step rebuilds the group
+ * elements, i.e. when `groupColors` or `opacitySteps` is present. A lone
+ * `colorFormat` leaves the SVG untouched.
+ */
+export function renderArtwork(
+  artwork: DecodedParams,
+  settings: SvgRenderSettings,
+): string {
+  let svg = generateSvg(artwork, { pathMode: settings.pathMode });
+
+  if (settings.groupColors) {
+    svg = applyGroupColors(
+      svg,
+      settings.groupColors,
+      settings.colorFormat,
+      settings.optimize.removeOpacity,
+    );
+  }
+  if (settings.opacitySteps !== undefined) {
+    svg = snapToGrid(
+      svg,
+      settings.opacitySteps,
+      settings.colorFormat,
+      settings.optimize.removeOpacity,
+    );
+  }
+
+  svg = applyShape(
+    svg,
+    settings.shapeToTrim,
+    settings.widthNarrowness,
+    settings.topHeavyRatio,
+    settings.cropSideMargins,
+  );
+  svg = replaceShapeRendering(svg, settings.shapeRendering);
+
+  return optimizeSvgText(svg, settings.optimize);
+}
+
+/**
+ * Render an SVG straight from URL params: decode, resolve, render.
+ *
+ * This is the one-shot entry point the OGP endpoint and the tests use. The
+ * browser keeps a decoded artwork and calls `renderArtwork()` instead.
+ *
+ * The 8192-byte cap and the `heightPixelSize` validation stay here rather than
+ * in `decodeArtwork()` / `renderArtwork()`: the browser's own decoder never
+ * imposed the cap, and the server relies on the validation to answer 400
+ * instead of 500 for a bad size.
+ */
 export async function renderParamsToSvg(
   input: string | URLSearchParams,
 ): Promise<string> {
@@ -46,42 +100,15 @@ export async function renderParamsToSvg(
     new TextEncoder().encode(artworkParams.toString()).length >
       MAX_PARAMS_LENGTH
   ) throw new RangeError("URL parameters exceed 8192 bytes");
-  const { svg: decodedSvg } = await decodeUrlToSvg(artworkParams, {
-    pathMode: readPathMode(params),
-  });
-  let svg = decodedSvg;
-  const colors = readGroupColors(params);
-  if (colors) {
-    svg = applyGroupColors(
-      svg,
-      colors,
-      readColorFormat(params),
-      readRemoveOpacity(params),
-    );
-  }
-  const steps = readOpacitySteps(params);
-  if (steps !== undefined) {
-    svg = snapToGrid(
-      svg,
-      steps,
-      readColorFormat(params),
-      readRemoveOpacity(params),
-    );
-  }
-  svg = applyShape(
-    svg,
-    readShapeToTrim(params),
-    readWidthNarrowness(params),
-    readTopHeavyRatio(params),
-    readCropSideMargins(params),
-  );
-  svg = replaceShapeRendering(svg, readShapeRendering(params));
-  readHeightPixelSize(params);
-  return optimizeSvgText(svg, {
-    removeOpacity: readRemoveOpacity(params),
-    removeLineBreaks: readRemoveLineBreaks(params),
-    removeSpaces: readRemoveSpaces(params),
-  });
+
+  const settings = resolveSvgRenderSettings(params);
+  const artwork = await decodeArtwork(artworkParams, { cache: false });
+
+  // Validate the raster settings even though this call only returns SVG, so an
+  // unusable `heightPixelSize` fails here as a client error rather than later.
+  resolveRasterSettings(params);
+
+  return renderArtwork(artwork, settings);
 }
 
 function applyGroupColors(
@@ -129,7 +156,7 @@ function applyGroupColors(
 
 function applyShape(
   svg: string,
-  shape: string,
+  shape: ShapeToTrim,
   widthNarrowness: number,
   topHeavyRatio: number,
   crop: boolean,
@@ -155,4 +182,7 @@ function applyShape(
   return output;
 }
 
-export { numbersIncrementByStep };
+// Re-exported so callers that only need the raster side do not import the
+// whole settings module's readers.
+export { readHeightPixelSize, readPathMode };
+export type { OpacityStep };

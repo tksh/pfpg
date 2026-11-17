@@ -1,7 +1,12 @@
-import { renderParamsToSvg } from "../src/js/libpfpg/render.ts";
+import type { DecodedParams } from "@tksh/stln-codec";
+import { decodeArtwork, type DecodeOptions } from "../src/js/libpfpg/decode.ts";
+import { renderArtwork } from "../src/js/libpfpg/render.ts";
 import {
+  excludeStateKeys,
+  MAX_PARAMS_LENGTH,
   normalizeScalarParams,
-  readHeightPixelSize,
+  resolveRasterSettings,
+  resolveSvgRenderSettings,
 } from "../src/js/libpfpg/settings.ts";
 import { getSharedImageKeyHash } from "shared-image/shared-image-key";
 import { svg2rgba } from "svg2ui8a";
@@ -35,9 +40,24 @@ export async function renderPipeline(
   let key: string;
   let height: number;
   try {
-    svg = await renderParamsToSvg(params);
-    key = await getSharedImageKeyHash(params);
-    height = readHeightPixelSize(params);
+    const artworkParams = excludeStateKeys(params);
+    if (
+      new TextEncoder().encode(artworkParams.toString()).length >
+        MAX_PARAMS_LENGTH
+    ) {
+      throw new RangeError("URL parameters exceed 8192 bytes");
+    }
+
+    // The server answers arbitrary URLs, so it must not keep a cache keyed by
+    // user input: unique URLs would grow the isolate's memory without bound.
+    const decodeOptions: DecodeOptions = { cache: false };
+    const decoded = await decodeArtwork(artworkParams, decodeOptions);
+
+    svg = renderArtwork(decoded, resolveSvgRenderSettings(params));
+    // Reuse the decode the render already did; decoding again here would double
+    // the cost of every request.
+    key = await getSharedImageKeyHash(params, decoded);
+    height = resolveRasterSettings(params).heightPixelSize;
   } catch (error) {
     throw new InvalidOgpParamsError(error);
   }
@@ -61,3 +81,6 @@ export function renderFailureResponse(error: unknown): Response {
     { status, headers: { "content-type": "application/json" } },
   );
 }
+
+// Kept for callers that only need the decoded artwork of a request.
+export type { DecodedParams };

@@ -156,11 +156,13 @@ export function readGroupColors(params: URLSearchParams): string | undefined {
   }
   return value;
 }
-export function readOpacitySteps(params: URLSearchParams): number | undefined {
+export function readOpacitySteps(
+  params: URLSearchParams,
+): OpacityStep | undefined {
   const value = raw(params, "opacitySteps");
   if (value === null || value === "") return undefined;
   const n = Number(value);
-  return [0.04, 0.1, 0.2].includes(n) ? n : undefined;
+  return isOpacityStep(n) ? n : undefined;
 }
 export function readRemoveOpacity(params: URLSearchParams): boolean {
   return bool(params, "removeOpacity", false);
@@ -194,4 +196,90 @@ export function readWidthNarrowness(params: URLSearchParams): number {
 }
 export function readTopHeavyRatio(params: URLSearchParams): number {
   return finite(params, "topHeavyRatio", 1);
+}
+
+export type ShapeToTrim = "square" | "circle" | "squircle" | "squircleSlimmed";
+export type ShapeRendering = "crispEdges" | "geometricPrecision";
+export type PathMode = "absoluteSeparated" | "relativeMerged";
+export type ColorFormat = "rgb" | "hex";
+export type OpacityStep = 0.04 | 0.1 | 0.2;
+
+function isOpacityStep(value: number): value is OpacityStep {
+  return value === 0.04 || value === 0.1 || value === 0.2;
+}
+
+/**
+ * Everything that changes the SVG text.
+ *
+ * This is the resolved, typed form of the URL params. `renderArtwork()` takes
+ * it so a caller can render from params once and then re-render synchronously
+ * after each change, without decoding again.
+ */
+export interface SvgRenderSettings {
+  pathMode: PathMode;
+  /** Raw `groupColors` value; `undefined` means "no override". */
+  groupColors?: string;
+  /** `undefined` means unspecified, so the artwork keeps its own opacities. */
+  opacitySteps?: OpacityStep;
+  colorFormat: ColorFormat;
+  shapeToTrim: ShapeToTrim;
+  widthNarrowness: number;
+  topHeavyRatio: number;
+  cropSideMargins: boolean;
+  shapeRendering: ShapeRendering;
+  optimize: {
+    removeOpacity: boolean;
+    removeLineBreaks: boolean;
+    removeSpaces: boolean;
+  };
+}
+
+/**
+ * Settings that change the raster, not the SVG text.
+ *
+ * Kept separate because the OGP server always encodes PNG while the browser
+ * can pick a format, and because `heightPixelSize` cannot change the markup.
+ */
+export interface RasterSettings {
+  heightPixelSize: number;
+}
+
+/**
+ * Resolve the typed render settings from URL params.
+ *
+ * `colorFormat` is carried here but only takes effect when a step rebuilds the
+ * group elements (`groupColors` or `opacitySteps`): a lone `colorFormat=hex`
+ * leaves the SVG untouched, matching what the page has always done.
+ */
+export function resolveSvgRenderSettings(
+  params: URLSearchParams,
+): SvgRenderSettings {
+  return {
+    pathMode: readPathMode(params),
+    groupColors: readGroupColors(params),
+    opacitySteps: readOpacitySteps(params),
+    colorFormat: readColorFormat(params) as ColorFormat,
+    shapeToTrim: readShapeToTrim(params) as ShapeToTrim,
+    widthNarrowness: readWidthNarrowness(params),
+    topHeavyRatio: readTopHeavyRatio(params),
+    cropSideMargins: readCropSideMargins(params),
+    shapeRendering: readShapeRendering(params) as ShapeRendering,
+    optimize: {
+      removeOpacity: readRemoveOpacity(params),
+      removeLineBreaks: readRemoveLineBreaks(params),
+      removeSpaces: readRemoveSpaces(params),
+    },
+  };
+}
+
+/**
+ * Resolve the raster settings from URL params.
+ *
+ * Uses `Number.parseInt` rather than `Number` so `96px` still yields 96, which
+ * is what the page and the OGP endpoint have always accepted.
+ */
+export function resolveRasterSettings(
+  params: URLSearchParams,
+): RasterSettings {
+  return { heightPixelSize: readHeightPixelSize(params) };
 }
