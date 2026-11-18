@@ -11,8 +11,9 @@ import {
   updateState,
 } from "state/url-state-manager";
 import { getImageFormat } from "state/image-format";
+import { syncSvgOptimizationUi } from "modal/optimize-svg";
 import { currentArtwork, currentSettings } from "state/render-state";
-import { renderArtwork } from "libpfpg/render";
+import { renderArtworkForPickers } from "libpfpg/render";
 import { generateGroupColorsHtmlElements } from "tab-lines/group-colors-generator";
 import { rememberArtworkLineStrokes } from "tab-lines/randomize-group-colors";
 import { changeOpacitySelectOptionsAsNewStep } from "tab-lines/opacity-steps";
@@ -75,18 +76,28 @@ function applyImageCustomization(_svg2pngOption: { height: number }): void {
   }
   (opacityStepsSelector as HTMLSelectElement).value = String(opacitySteps);
 
-  // The pickers read the artwork's current colours, so they need the base SVG
-  // before any override. Rendering that is the library's job; here we only ask
-  // for the string.
-  const baseSvg = renderArtwork(currentArtwork(), {
+  // Two different SVGs are needed here, and they answer different questions.
+  //
+  // The artwork's own line colours are what 'Anchor: Original line colors'
+  // anchors to, so that snapshot deliberately ignores any `groupColors`
+  // override in the URL.
+  const artworkSvg = renderArtworkForPickers(currentArtwork(), {
     ...currentSettings(),
     groupColors: undefined,
     opacitySteps: undefined,
   });
-  rememberArtworkLineStrokes(baseSvg);
+  rememberArtworkLineStrokes(artworkSvg);
 
+  // The pickers, on the other hand, must show what the artwork actually looks
+  // like, so they are built from the rendered SVG including the override. If
+  // they were built from the un-overridden artwork, the first picker edit would
+  // suddenly reveal colours the user never saw.
+  const pickersSvg = renderArtworkForPickers(currentArtwork(), {
+    ...currentSettings(),
+    opacitySteps: undefined,
+  });
   generateGroupColorsHtmlElements(
-    baseSvg,
+    pickersSvg,
     colorFormat as string,
     opacitySteps,
   );
@@ -95,7 +106,7 @@ function applyImageCustomization(_svg2pngOption: { height: number }): void {
   // override has to be pushed into them before the first render.
   if (parsedOpacityStepsViaUrl !== undefined) {
     changeOpacitySelectOptionsAsNewStep(
-      baseSvg,
+      pickersSvg,
       parsedOpacityStepsViaUrl,
     );
   }
@@ -140,6 +151,10 @@ function applyImageCustomization(_svg2pngOption: { height: number }): void {
     throw new Error("applyImageCustomization: missing element #png-size-range");
   }
   (pngSizeRangeElem as HTMLInputElement).value = String(heightPixelSize);
+
+  // The modal's checkboxes ship unchecked, so a URL that turns an option on
+  // would otherwise show an unchecked box next to a sample claiming it is off.
+  syncSvgOptimizationUi();
 }
 
 function applyUiConfiguration(): void {

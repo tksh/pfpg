@@ -87,3 +87,17 @@ Deno.test("numbersIncrementByStep returns the descending grid for the valid step
     "0.0",
   ]);
 });
+
+// The URL stores every value as a string, and getState() returns it unchanged.
+// A caller that hands that straight to numbersIncrementByStep throws, so the
+// conversion has to happen before the call. This is the regression guard for
+// the colour-format and randomize handlers.
+Deno.test("a URL-sourced opacitySteps reaches the grid builder as a number", () => {
+  const raw = new URLSearchParams("?opacitySteps=0.1").get("opacitySteps");
+  assertEquals(typeof raw, "string");
+
+  const step = Number(raw);
+  assertEquals(typeof step, "number");
+  assertEquals(step, 0.1);
+  assertEquals(numbersIncrementByStep(step).length, 11);
+});

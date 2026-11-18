@@ -78,9 +78,26 @@ export function renderArtwork(
 }
 
 /**
+ * The SVG a picker or thumbnail should be built from.
+ *
+ * Identical to `renderArtwork()` except that `opacitySteps` is not applied:
+ * the step is a UI concern expressed by the <option> lists, so baking it in
+ * here would round every picker value before the user has chosen a step.
+ *
+ * `groupColors` is left alone, so callers see the colours the artwork will
+ * actually be drawn with, override included.
+ */
+export function renderArtworkForPickers(
+  artwork: DecodedParams,
+  settings: SvgRenderSettings,
+): string {
+  return renderArtwork(artwork, { ...settings, opacitySteps: undefined });
+}
+
+/**
  * Render an SVG straight from URL params: decode, resolve, render.
  *
- * This is the one-shot entry point the OGP endpoint and the tests use. The
+ * This is the one-shot entry point the tests and the OGP endpoint use. The
  * browser keeps a decoded artwork and calls `renderArtwork()` instead.
  *
  * The 8192-byte cap and the `heightPixelSize` validation stay here rather than
@@ -88,14 +105,28 @@ export function renderArtwork(
  * imposed the cap, and the server relies on the validation to answer 400
  * instead of 500 for a bad size.
  */
+export interface RenderParamsOptions {
+  /**
+   * Keys to treat as app state rather than artwork data.
+   *
+   * The library only knows the render settings. The app owns the rest (locale,
+   * theme, …) and passes them so one URL renders identically in the browser
+   * and on the server. Without them a plain URL such as `?lang=ja` fails to
+   * decode, because the codec would read the value as a line group.
+   */
+  extraStateKeys?: Iterable<string>;
+}
+
 export async function renderParamsToSvg(
   input: string | URLSearchParams,
+  options: RenderParamsOptions = {},
 ): Promise<string> {
   const raw = typeof input === "string"
     ? new URLSearchParams(input.startsWith("?") ? input.slice(1) : input)
     : input;
-  const params = normalizeScalarParams(raw);
-  const artworkParams = excludeStateKeys(params);
+  const extraStateKeys = options.extraStateKeys ?? [];
+  const params = normalizeScalarParams(raw, extraStateKeys);
+  const artworkParams = excludeStateKeys(params, extraStateKeys);
   if (
     new TextEncoder().encode(artworkParams.toString()).length >
       MAX_PARAMS_LENGTH

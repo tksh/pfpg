@@ -182,7 +182,7 @@ function randomizeEveryGroupColor(): void {
   generateGroupColorsHtmlElements(
     svg,
     colorFormat,
-    getState("opacitySteps") as number,
+    Number(getState("opacitySteps")),
   );
   addEventListenerForGroupColorsInputs(
     getNumberOfGroups(svg),

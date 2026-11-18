@@ -108,6 +108,13 @@ export function excludeStateKeys(
 function raw(params: URLSearchParams, key: string): string | null {
   return readLastParam(params, key);
 }
+/**
+ * Read a boolean setting.
+ *
+ * Only `true` / `false` are accepted, case-insensitively. Anything else falls
+ * back, rather than being coerced, so `?cropSideMargins=1` does not silently
+ * turn on a setting the shared-image key would treat as off.
+ */
 function bool(
   params: URLSearchParams,
   key: string,
@@ -117,7 +124,7 @@ function bool(
   if (value === null) return fallback;
   if (/^true$/i.test(value)) return true;
   if (/^false$/i.test(value)) return false;
-  return Boolean(value);
+  return fallback;
 }
 function finite(
   params: URLSearchParams,
@@ -145,8 +152,11 @@ export function readShapeToTrim(params: URLSearchParams): string {
     ? value
     : "squircle";
 }
-export function readColorFormat(params: URLSearchParams): string {
-  return raw(params, "colorFormat") ?? "rgb";
+export function readColorFormat(params: URLSearchParams): ColorFormat {
+  const value = raw(params, "colorFormat");
+  // Anything other than the two formats the UI can express is treated as the
+  // default rather than silently reaching the renderer as an unknown format.
+  return value === "hex" ? "hex" : "rgb";
 }
 export function readGroupColors(params: URLSearchParams): string | undefined {
   const value = raw(params, "groupColors");
@@ -258,7 +268,7 @@ export function resolveSvgRenderSettings(
     pathMode: readPathMode(params),
     groupColors: readGroupColors(params),
     opacitySteps: readOpacitySteps(params),
-    colorFormat: readColorFormat(params) as ColorFormat,
+    colorFormat: readColorFormat(params),
     shapeToTrim: readShapeToTrim(params) as ShapeToTrim,
     widthNarrowness: readWidthNarrowness(params),
     topHeavyRatio: readTopHeavyRatio(params),

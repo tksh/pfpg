@@ -8,8 +8,26 @@ import {
   resolveRasterSettings,
   resolveSvgRenderSettings,
 } from "../src/js/libpfpg/settings.ts";
+import {
+  SETTINGS_DEFAULTS,
+  URL_PARAMS_EXCLUDED_FROM_ARTWORK,
+} from "../src/js/constants.ts";
 import { getSharedImageKeyHash } from "shared-image/shared-image-key";
 import { svg2rgba } from "svg2ui8a";
+
+/**
+ * State keys the app owns and the library does not know about.
+ *
+ * A shared URL carries the locale and the UI settings, and they are not artwork
+ * data: the codec would read them as line groups and the request would fail.
+ * The browser filters them through `common-utils/read-url-params.ts`; the server
+ * has to pass them explicitly, or the same URL renders in the browser and 400s
+ * on the OGP endpoint.
+ */
+const APP_STATE_KEYS: readonly string[] = [
+  ...SETTINGS_DEFAULTS.keys(),
+  ...URL_PARAMS_EXCLUDED_FROM_ARTWORK,
+];
 
 export interface OgpRenderResult {
   key: string;
@@ -34,13 +52,16 @@ export async function renderPipeline(
       'The "auto" query parameter is no longer supported',
     );
   }
-  const params = normalizeScalarParams(new URLSearchParams(input));
+  const params = normalizeScalarParams(
+    new URLSearchParams(input),
+    APP_STATE_KEYS,
+  );
 
   let svg: string;
   let key: string;
   let height: number;
   try {
-    const artworkParams = excludeStateKeys(params);
+    const artworkParams = excludeStateKeys(params, APP_STATE_KEYS);
     if (
       new TextEncoder().encode(artworkParams.toString()).length >
         MAX_PARAMS_LENGTH

@@ -40,11 +40,6 @@ export function currentArtwork(): DecodedParams {
   return artwork;
 }
 
-/** Drop the held artwork, e.g. before loading a different one. */
-export function resetArtwork(): void {
-  artwork = null;
-}
-
 /** The settings the URL currently asks for. */
 export function currentSettings(): SvgRenderSettings {
   return resolveSvgRenderSettings(
@@ -73,9 +68,4 @@ export function renderCurrentSvg(): string {
  */
 export function currentLinesData(): Map<number, DecodedGroup> {
   return currentArtwork().linesData;
-}
-
-/** The decoded canvas size, for callers that need the original viewBox. */
-export function currentSizeData() {
-  return currentArtwork().sizeData;
 }

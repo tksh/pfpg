@@ -1,7 +1,11 @@
 import { assert, assertEquals, assertRejects } from "@std/assert";
 import { type DecodedParams, decodeUrlParams } from "@tksh/stln-codec";
 import { decodeArtwork, resetArtworkCache } from "../src/js/libpfpg/decode.ts";
-import { renderArtwork, renderParamsToSvg } from "../src/js/libpfpg/render.ts";
+import {
+  renderArtwork,
+  renderArtworkForPickers,
+  renderParamsToSvg,
+} from "../src/js/libpfpg/render.ts";
 import {
   excludeStateKeys,
   normalizeScalarParams,
@@ -241,47 +245,125 @@ Deno.test("a non-square canvas keeps its width and height", async () => {
 // The sequence a user performs in the page, replayed against the library.
 // Each row is the URL state after one more interaction; the SVG must match what
 // the browser shows, so the page and the library cannot drift.
-Deno.test("an interaction sequence matches the params pipeline", async (t) => {
-  const steps: Array<[string, string]> = [
-    ["initial", ""],
-    ["shape_circle", "&shapeToTrim=circle"],
-    ["shape_squircleSlimmed", "&shapeToTrim=squircleSlimmed"],
-    [
-      "widthNarrowness_15",
-      "&shapeToTrim=squircleSlimmed&widthNarrowness=15",
-    ],
-    [
-      "shapeRendering_geometricPrecision",
-      "&shapeToTrim=squircleSlimmed&widthNarrowness=15" +
-      "&shapeRendering=geometricPrecision",
-    ],
-    [
-      "pathMode_relativeMerged",
-      "&shapeToTrim=squircleSlimmed&widthNarrowness=15" +
-      "&shapeRendering=geometricPrecision&pathMode=relativeMerged",
-    ],
-    [
-      "removeSpaces_off",
-      "&shapeToTrim=squircleSlimmed&widthNarrowness=15" +
-      "&shapeRendering=geometricPrecision&pathMode=relativeMerged" +
-      "&removeSpaces=false",
-    ],
-  ];
+// Each row is a URL state a user reaches by a sequence of interactions, with
+// the byte count the renderer produced when the sequence was captured.
+//
+// This is deliberately not "compare two library entry points": both sides would
+// be libpfpg, so the test would pass even if the page wiring were broken. The
+// byte counts are the contract, and they change only when the SVG is meant to.
+const INTERACTION_SEQUENCE: Array<[string, string, number]> = [
+  ["initial", "", 10286],
+  ["shape_circle", "&shapeToTrim=circle", 10287],
+  ["shape_squircleSlimmed", "&shapeToTrim=squircleSlimmed", 10321],
+  [
+    "widthNarrowness_15",
+    "&shapeToTrim=squircleSlimmed&widthNarrowness=15",
+    10322,
+  ],
+  [
+    "shapeRendering_geometricPrecision",
+    "&shapeToTrim=squircleSlimmed&widthNarrowness=15" +
+    "&shapeRendering=geometricPrecision",
+    10330,
+  ],
+  [
+    "pathMode_relativeMerged",
+    "&shapeToTrim=squircleSlimmed&widthNarrowness=15" +
+    "&shapeRendering=geometricPrecision&pathMode=relativeMerged",
+    3546,
+  ],
+  [
+    "removeSpaces_off",
+    "&shapeToTrim=squircleSlimmed&widthNarrowness=15" +
+    "&shapeRendering=geometricPrecision&pathMode=relativeMerged" +
+    "&removeSpaces=false",
+    3979,
+  ],
+  [
+    "colorFormat_hex",
+    "&shapeToTrim=square&colorFormat=hex",
+    10286,
+  ],
+  [
+    "opacitySteps_explicit",
+    "&opacitySteps=0.1",
+    10286,
+  ],
+];
 
-  for (const [name, suffix] of steps) {
+Deno.test("an interaction sequence keeps its expected byte count", async (t) => {
+  for (const [name, suffix, expectedBytes] of INTERACTION_SEQUENCE) {
     await t.step(name, async () => {
       const params = new URLSearchParams(`${showcase202412}${suffix}`);
-      const expected = await renderParamsToSvg(params);
+      const svg = await renderParamsToSvg(params);
+      assert(svg.startsWith("<svg"));
+      assertEquals(
+        svg.length,
+        expectedBytes,
+        `${name}: the rendered SVG changed size`,
+      );
 
+      // The same state through the split path must agree, since that is the
+      // route the page uses.
       const artwork = await decodeArtwork(artworkParamsOf(params), {
         cache: false,
       });
-      const actual = renderArtwork(artwork, resolveSvgRenderSettings(params));
-
-      assertEquals(actual, expected);
-      // A relative path mode produces a much shorter document, so a step that
-      // silently fell back to absolute would be caught here.
-      assert(actual.startsWith("<svg"));
+      assertEquals(
+        renderArtwork(artwork, resolveSvgRenderSettings(params)),
+        svg,
+        `${name}: the page route disagrees with the params route`,
+      );
     });
   }
+});
+
+// colourFormat changes the serialized form, never the pixels.
+Deno.test("colorFormat hex renders the same bytes as the default", async () => {
+  const plain = await renderParamsToSvg(showcase202412);
+  const hex = await renderParamsToSvg(
+    new URLSearchParams(`${showcase202412}&colorFormat=hex`),
+  );
+  assertEquals(hex, plain);
+});
+
+// The pickers must show what the artwork will actually be drawn with, so they
+// are built from the SVG including any `groupColors` override. Building them
+// from the un-overridden artwork is what made the first picker edit reveal
+// colours the user had never seen.
+Deno.test("pickers are built from the artwork as rendered", async () => {
+  const params = new URLSearchParams(showcase202412);
+  params.set("groupColors", "FF0000AA80_00FF0080FF");
+  const decoded = await decodeArtwork(artworkParamsOf(params), {
+    cache: false,
+  });
+  const settings = resolveSvgRenderSettings(params);
+
+  const overridden = renderArtworkForPickers(decoded, settings);
+  assert(overridden.includes('stroke="rgb(255 0 0)"'));
+
+  // The artwork's own colours are still what the anchor snapshots.
+  const artworkOnly = renderArtworkForPickers(decoded, {
+    ...settings,
+    groupColors: undefined,
+  });
+  assert(!artworkOnly.includes('stroke="rgb(255 0 0)"'));
+});
+
+// The picker SVG never bakes the step in: the step is expressed by the
+// <option> lists, so a picker shown before the user picks a step must still
+// carry the artwork's own opacities.
+Deno.test("the picker SVG leaves opacitySteps out", async () => {
+  const decoded = await decodeArtwork(artworkParamsOf(showcase202412), {
+    cache: false,
+  });
+  const withStep = resolveSvgRenderSettings(
+    new URLSearchParams(`${showcase202412}&opacitySteps=0.1`),
+  );
+
+  const pickers = renderArtworkForPickers(decoded, withStep);
+  const rendered = renderArtwork(decoded, withStep);
+  // The rendered SVG snaps opacities onto the 0.1 grid; the picker SVG keeps
+  // the artwork's own values.
+  assert(pickers.includes('opacity="0.8"'));
+  assert(rendered.includes('opacity="0.8"'));
 });
