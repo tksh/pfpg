@@ -84,6 +84,33 @@ The repository's coding conventions are enforced by the formatter and the
 linter. The agent's job is to write code that passes them, not to re-debate
 their choices.
 
+### Strictness over flexibility
+
+pfpg exists to define and render a personal SVG subset for `tksh/Straightlines`.
+It is not a general-purpose product for anonymous users. While it is under
+development, URL compatibility is not guaranteed. When choosing between
+accepting a questionable input and failing it, fail it.
+
+- **Defaults are for absent keys only.** A missing key may take its schema
+  default. A key that is present with an invalid value must not be silently
+  replaced by the default.
+- **No undocumented coercions.** Accept only the documented spelling (`true` /
+  `false`, the listed enum values, decimal numbers). Do not treat `1`, `yes`,
+  `TRUE`, `96px`, or an empty string as a convenient alternative.
+- **One parser, one verdict.** Rendering, the UI, the shared-image key, and the
+  OGP endpoint must validate through the same parser. Do not add per-consumer
+  readers that can disagree about the same URL.
+- **Failures are visible and consistent.** A URL that the server rejects must
+  also be rejected in the browser. An error screen that names the offending key
+  and value is preferable to rendering a different picture silently.
+- **No compatibility shims.** Old URLs may break during development. Fix the
+  caller or the URL; do not add a fallback that preserves the old meaning.
+
+Treat a new silent fallback as a defect unless the approved plan explicitly
+justifies it.
+
+### General conventions
+
 - **Deno-style imports.** Use `import { ... } from "..."` with static
   specifiers. No `require`. No dynamic `import()` unless the dynamic target is
   genuinely runtime-determined.
