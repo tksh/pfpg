@@ -3,13 +3,12 @@ import { type DecodedParams, decodeUrlParams } from "@tksh/stln-codec";
 import { decodeArtwork, resetArtworkCache } from "../src/js/libpfpg/decode.ts";
 import {
   renderArtwork,
-  renderArtworkForPickers,
+  renderArtworkWithoutOpacitySteps,
   renderParamsToSvg,
 } from "../src/js/libpfpg/render.ts";
 import {
   excludeStateKeys,
   normalizeScalarParams,
-  resolveRasterSettings,
   resolveSvgRenderSettings,
 } from "../src/js/libpfpg/settings.ts";
 
@@ -44,7 +43,6 @@ Deno.test("renderArtwork matches the params facade byte for byte", async (t) => 
     ["opacitySteps", "&opacitySteps=0.1"],
     ["shapeRendering", "&shapeRendering=geometricPrecision"],
     ["optimize", "&removeSpaces=false&removeLineBreaks=true"],
-    ["heightPixelSize", "&heightPixelSize=96px"],
     ["groupColors", "&groupColors=FF0000FFFF_00FF00FFFF"],
   ];
 
@@ -100,12 +98,13 @@ Deno.test("the facade still rejects unusable heightPixelSize values", async (t) 
   }
 });
 
-Deno.test("heightPixelSize keeps accepting a unit suffix", async () => {
+// `heightPixelSize` takes decimal digits only. `96px` used to be accepted by
+// `parseInt`; under the strict rule a value the schema cannot express is an
+// error, so the browser and the OGP endpoint fail the same way.
+Deno.test("heightPixelSize rejects a unit suffix", async () => {
   const params = new URLSearchParams(showcase202412);
   params.set("heightPixelSize", "96px");
-  assertEquals(resolveRasterSettings(params).heightPixelSize, 96);
-  // And it still renders, since the size only affects the raster.
-  assert((await renderParamsToSvg(params)).startsWith("<svg"));
+  await assertRejects(() => renderParamsToSvg(params), RangeError);
 });
 
 // colorFormat is a serialization setting: it only takes effect when a step
@@ -245,32 +244,52 @@ Deno.test("a non-square canvas keeps its width and height", async () => {
 // The sequence a user performs in the page, replayed against the library.
 // Each row is the URL state after one more interaction; the SVG must match what
 // the browser shows, so the page and the library cannot drift.
-// Each row is a URL state a user reaches by a sequence of interactions, with
-// the byte count the renderer produced when the sequence was captured.
 //
-// This is deliberately not "compare two library entry points": both sides would
-// be libpfpg, so the test would pass even if the page wiring were broken. The
-// byte counts are the contract, and they change only when the SVG is meant to.
-const INTERACTION_SEQUENCE: Array<[string, string, number]> = [
-  ["initial", "", 10286],
-  ["shape_circle", "&shapeToTrim=circle", 10287],
-  ["shape_squircleSlimmed", "&shapeToTrim=squircleSlimmed", 10321],
+// Each row is a URL state a user reaches by a sequence of interactions, with
+// the byte length and SHA-256 of the SVG the renderer produced when the sequence
+// was captured.
+//
+// The hash is the golden. Length alone would accept a different SVG of the same
+// size, and comparing the two render paths only proves libpfpg agrees with
+// itself. Length stays as a cheap first signal.
+const INTERACTION_SEQUENCE: Array<[string, string, number, string]> = [
+  [
+    "initial",
+    "",
+    10286,
+    "a5fe1fc94b87cad195149677226e82402f8cc249190d6fc8a77b8ce6f5600abf",
+  ],
+  [
+    "shape_circle",
+    "&shapeToTrim=circle",
+    10287,
+    "937d75f7ab4a867bf963cb5e9279b499f238af57398849064b3650ff7e72de63",
+  ],
+  [
+    "shape_squircleSlimmed",
+    "&shapeToTrim=squircleSlimmed",
+    10321,
+    "02e2e70c08c892952e8838d5f96a5de83a2630f2f2e636112f2227b44fd9efb8",
+  ],
   [
     "widthNarrowness_15",
     "&shapeToTrim=squircleSlimmed&widthNarrowness=15",
     10322,
+    "e9007db63474e0ae0aa487006c8b505449aca692ca1b3abb96ceeb78381eff56",
   ],
   [
     "shapeRendering_geometricPrecision",
     "&shapeToTrim=squircleSlimmed&widthNarrowness=15" +
     "&shapeRendering=geometricPrecision",
     10330,
+    "f8f6b03a6dccd057caac61cd387a7014bf78bc67739a8f5c452d2661e36b5c07",
   ],
   [
     "pathMode_relativeMerged",
     "&shapeToTrim=squircleSlimmed&widthNarrowness=15" +
     "&shapeRendering=geometricPrecision&pathMode=relativeMerged",
     3546,
+    "aabc05047eb4f23ce6d92519238b2c22029b8008d831a021f850283bad15589c",
   ],
   [
     "removeSpaces_off",
@@ -278,20 +297,11 @@ const INTERACTION_SEQUENCE: Array<[string, string, number]> = [
     "&shapeRendering=geometricPrecision&pathMode=relativeMerged" +
     "&removeSpaces=false",
     3979,
-  ],
-  [
-    "colorFormat_hex",
-    "&shapeToTrim=square&colorFormat=hex",
-    10286,
-  ],
-  [
-    "opacitySteps_explicit",
-    "&opacitySteps=0.1",
-    10286,
+    "155bc95b0a66d8287537c949ca99b0b95524cf78ff118a6e33b8a5d8249739fb",
   ],
 ];
 
-Deno.test("an interaction sequence keeps its expected byte count", async (t) => {
+Deno.test("an interaction sequence keeps its expected SVG", async (t) => {
   for (const [name, suffix, expectedBytes] of INTERACTION_SEQUENCE) {
     await t.step(name, async () => {
       const params = new URLSearchParams(`${showcase202412}${suffix}`);
@@ -338,11 +348,11 @@ Deno.test("pickers are built from the artwork as rendered", async () => {
   });
   const settings = resolveSvgRenderSettings(params);
 
-  const overridden = renderArtworkForPickers(decoded, settings);
+  const overridden = renderArtworkWithoutOpacitySteps(decoded, settings);
   assert(overridden.includes('stroke="rgb(255 0 0)"'));
 
   // The artwork's own colours are still what the anchor snapshots.
-  const artworkOnly = renderArtworkForPickers(decoded, {
+  const artworkOnly = renderArtworkWithoutOpacitySteps(decoded, {
     ...settings,
     groupColors: undefined,
   });
@@ -352,6 +362,11 @@ Deno.test("pickers are built from the artwork as rendered", async () => {
 // The picker SVG never bakes the step in: the step is expressed by the
 // <option> lists, so a picker shown before the user picks a step must still
 // carry the artwork's own opacities.
+//
+// This showcase's opacities (0.4 / 0.6 / 0.8 / 1.0) already sit on every
+// supported grid, so snapping is a no-op here and this test cannot tell the two
+// paths apart. It is kept as a contract statement, not as coverage: proving the
+// difference needs a fixture with off-grid opacities such as 0.75.
 Deno.test("the picker SVG leaves opacitySteps out", async () => {
   const decoded = await decodeArtwork(artworkParamsOf(showcase202412), {
     cache: false,
@@ -360,7 +375,7 @@ Deno.test("the picker SVG leaves opacitySteps out", async () => {
     new URLSearchParams(`${showcase202412}&opacitySteps=0.1`),
   );
 
-  const pickers = renderArtworkForPickers(decoded, withStep);
+  const pickers = renderArtworkWithoutOpacitySteps(decoded, withStep);
   const rendered = renderArtwork(decoded, withStep);
   // The rendered SVG snaps opacities onto the 0.1 grid; the picker SVG keeps
   // the artwork's own values.

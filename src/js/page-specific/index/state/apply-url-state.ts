@@ -13,7 +13,7 @@ import {
 import { getImageFormat } from "state/image-format";
 import { syncSvgOptimizationUi } from "modal/optimize-svg";
 import { currentArtwork, currentSettings } from "state/render-state";
-import { renderArtworkForPickers } from "libpfpg/render";
+import { renderArtworkWithoutOpacitySteps } from "libpfpg/render";
 import { generateGroupColorsHtmlElements } from "tab-lines/group-colors-generator";
 import { rememberArtworkLineStrokes } from "tab-lines/randomize-group-colors";
 import { changeOpacitySelectOptionsAsNewStep } from "tab-lines/opacity-steps";
@@ -81,7 +81,7 @@ function applyImageCustomization(_svg2pngOption: { height: number }): void {
   // The artwork's own line colours are what 'Anchor: Original line colors'
   // anchors to, so that snapshot deliberately ignores any `groupColors`
   // override in the URL.
-  const artworkSvg = renderArtworkForPickers(currentArtwork(), {
+  const artworkSvg = renderArtworkWithoutOpacitySteps(currentArtwork(), {
     ...currentSettings(),
     groupColors: undefined,
     opacitySteps: undefined,
@@ -92,7 +92,7 @@ function applyImageCustomization(_svg2pngOption: { height: number }): void {
   // like, so they are built from the rendered SVG including the override. If
   // they were built from the un-overridden artwork, the first picker edit would
   // suddenly reveal colours the user never saw.
-  const pickersSvg = renderArtworkForPickers(currentArtwork(), {
+  const pickersSvg = renderArtworkWithoutOpacitySteps(currentArtwork(), {
     ...currentSettings(),
     opacitySteps: undefined,
   });

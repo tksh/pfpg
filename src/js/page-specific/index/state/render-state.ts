@@ -1,6 +1,6 @@
 import type { DecodedGroup, DecodedParams } from "@tksh/stln-codec";
 import { decodeArtwork } from "libpfpg/decode";
-import { renderArtwork } from "libpfpg/render";
+import { renderArtwork, type RenderOverrides } from "libpfpg/render";
 import {
   resolveSvgRenderSettings,
   type SvgRenderSettings,
@@ -54,8 +54,10 @@ export function currentSettings(): SvgRenderSettings {
  * the URL again. Roughly 0.25 ms for a typical artwork, far below the
  * rasterization that follows it.
  */
-export function renderCurrentSvg(): string {
-  return renderArtwork(currentArtwork(), currentSettings());
+export function renderCurrentSvg(
+  overrides: RenderOverrides = {},
+): string {
+  return renderArtwork(currentArtwork(), currentSettings(), overrides);
 }
 
 /**

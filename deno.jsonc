@@ -105,6 +105,7 @@
     "state/image-encoder": "./src/js/page-specific/index/state/image-encoder.ts",
     "state/resvg-option": "./src/js/page-specific/index/state/resvg-option.ts",
     "state/render-state": "./src/js/page-specific/index/state/render-state.ts",
+    "state/number-settings": "./src/js/page-specific/index/state/number-settings.ts",
     "state/render-commit": "./src/js/page-specific/index/state/render-commit.ts",
     "state/url-state-manager": "./src/js/page-specific/index/state/url-state-manager.ts",
 

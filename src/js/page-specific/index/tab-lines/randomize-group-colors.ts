@@ -24,6 +24,7 @@ import {
   syncInputNumberAndRange,
 } from "tab-render/sync-number-and-range";
 import { getState, updateState } from "state/url-state-manager";
+import { getOpacitySteps } from "state/number-settings";
 import { commitRender } from "state/render-commit";
 import { generateGroupColorsHtmlElements } from "tab-lines/group-colors-generator";
 import { addEventListenerForGroupColorsInputs } from "tab-lines/group-colors-listener";
@@ -182,7 +183,7 @@ function randomizeEveryGroupColor(): void {
   generateGroupColorsHtmlElements(
     svg,
     colorFormat,
-    Number(getState("opacitySteps")),
+    getOpacitySteps(getState("opacitySteps") as number),
   );
   addEventListenerForGroupColorsInputs(
     getNumberOfGroups(svg),

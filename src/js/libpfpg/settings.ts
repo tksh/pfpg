@@ -111,9 +111,10 @@ function raw(params: URLSearchParams, key: string): string | null {
 /**
  * Read a boolean setting.
  *
- * Only `true` / `false` are accepted, case-insensitively. Anything else falls
- * back, rather than being coerced, so `?cropSideMargins=1` does not silently
- * turn on a setting the shared-image key would treat as off.
+ * Only `true` / `false` are accepted, case-insensitively. A key that is present
+ * with anything else is an error rather than a silent default: coercing `1` to
+ * true here while the shared-image key reads it as false is what made one URL
+// produce two different pictures under one key.
  */
 function bool(
   params: URLSearchParams,
@@ -124,7 +125,7 @@ function bool(
   if (value === null) return fallback;
   if (/^true$/i.test(value)) return true;
   if (/^false$/i.test(value)) return false;
-  return fallback;
+  throw new TypeError(`Invalid ${key}: ${value}`);
 }
 function finite(
   params: URLSearchParams,
@@ -133,30 +134,42 @@ function finite(
 ): number {
   const value = raw(params, key);
   if (value === null) return fallback;
+  // An empty value is not a number: `Number("")` is 0, which would silently
+  // become a valid coordinate.
+  if (value.trim() === "") throw new TypeError(`Invalid ${key}: ${value}`);
   const n = Number(value);
-  if (!Number.isFinite(n)) throw new RangeError(`${key} must be finite`);
+  if (!Number.isFinite(n)) {
+    throw new RangeError(`Invalid ${key}: ${value}`);
+  }
   return n;
 }
 
-export function readPathMode(
-  params: URLSearchParams,
-): "absoluteSeparated" | "relativeMerged" {
-  return raw(params, "pathMode") === "relativeMerged"
-    ? "relativeMerged"
-    : "absoluteSeparated";
+export function readPathMode(params: URLSearchParams): PathMode {
+  const value = raw(params, "pathMode");
+  if (value === null) return "absoluteSeparated";
+  if (value === "relativeMerged" || value === "absoluteSeparated") return value;
+  throw new TypeError(`Invalid pathMode: ${value}`);
 }
-export function readShapeToTrim(params: URLSearchParams): string {
+export function readShapeToTrim(params: URLSearchParams): ShapeToTrim {
   const value = raw(params, "shapeToTrim");
   if (value === null) return "square";
-  return ["square", "circle", "squircle", "squircleSlimmed"].includes(value)
-    ? value
-    : "squircle";
+  if (
+    value === "square" || value === "circle" || value === "squircle" ||
+    value === "squircleSlimmed"
+  ) {
+    return value;
+  }
+  throw new TypeError(`Invalid shapeToTrim: ${value}`);
 }
-export function readColorFormat(params: URLSearchParams): ColorFormat {
+export function readColorFormat(
+  params: URLSearchParams,
+): ColorFormat | undefined {
   const value = raw(params, "colorFormat");
-  // Anything other than the two formats the UI can express is treated as the
-  // default rather than silently reaching the renderer as an unknown format.
-  return value === "hex" ? "hex" : "rgb";
+  // Absent means "leave the codec's notation alone". A value that is neither
+  // format the UI can express is an error, not a silent default.
+  if (value === null) return undefined;
+  if (value === "rgb" || value === "hex") return value;
+  throw new TypeError(`Invalid colorFormat: ${value}`);
 }
 export function readGroupColors(params: URLSearchParams): string | undefined {
   const value = raw(params, "groupColors");
@@ -172,7 +185,8 @@ export function readOpacitySteps(
   const value = raw(params, "opacitySteps");
   if (value === null || value === "") return undefined;
   const n = Number(value);
-  return isOpacityStep(n) ? n : undefined;
+  if (isOpacityStep(n)) return n;
+  throw new TypeError(`Invalid opacitySteps: ${value}`);
 }
 export function readRemoveOpacity(params: URLSearchParams): boolean {
   return bool(params, "removeOpacity", false);
@@ -195,9 +209,9 @@ export function readShapeRendering(params: URLSearchParams): string {
 }
 export function readHeightPixelSize(params: URLSearchParams): number {
   const value = raw(params, "heightPixelSize");
-  const n = value === null ? 256 : Number.parseInt(value, 10);
-  if (!Number.isFinite(n) || n <= 0) {
-    throw new RangeError("heightPixelSize must be positive");
+  const n = value === null ? 256 : Number(value);
+  if (!Number.isInteger(n) || n <= 0) {
+    throw new RangeError(`Invalid heightPixelSize: ${value}`);
   }
   return n;
 }
@@ -231,7 +245,8 @@ export interface SvgRenderSettings {
   groupColors?: string;
   /** `undefined` means unspecified, so the artwork keeps its own opacities. */
   opacitySteps?: OpacityStep;
-  colorFormat: ColorFormat;
+  /** `undefined` keeps whatever notation the codec produced. */
+  colorFormat?: ColorFormat;
   shapeToTrim: ShapeToTrim;
   widthNarrowness: number;
   topHeavyRatio: number;

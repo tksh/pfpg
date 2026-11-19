@@ -4,6 +4,7 @@ import {
   shortenHexAsHalf,
 } from "@tksh/group-colors-param-codec";
 import {
+  type ColorFormat,
   excludeStateKeys,
   MAX_PARAMS_LENGTH,
   normalizeScalarParams,
@@ -27,6 +28,7 @@ import {
   replaceViewBox,
 } from "./svg-attrs.ts";
 import { optimizeSvgText } from "./optimize.ts";
+import { convertColorFormat } from "./color-format.ts";
 import { decodeArtwork } from "./decode.ts";
 
 export { numbersIncrementByStep };
@@ -38,29 +40,34 @@ export { numbersIncrementByStep };
  * every later setting change is just this call. That is what lets the browser
  * re-render on each interaction without decoding the URL again.
  *
- * Contract: `colorFormat` only takes effect when a step rebuilds the group
- * elements, i.e. when `groupColors` or `opacitySteps` is present. A lone
- * `colorFormat` leaves the SVG untouched.
+ * `settings.colorFormat` applies when a step rebuilds the group elements
+ * (`groupColors` or `opacitySteps`). When neither is present, pass
+ * `overrides.forceColorFormat` to re-serialize the existing groups into that
+ * notation; without it the codec's own notation is kept.
  */
 export function renderArtwork(
   artwork: DecodedParams,
   settings: SvgRenderSettings,
+  overrides: RenderOverrides = {},
 ): string {
   let svg = generateSvg(artwork, { pathMode: settings.pathMode });
+  const colorFormat = settings.colorFormat ?? "rgb";
 
   if (settings.groupColors) {
     svg = applyGroupColors(
       svg,
       settings.groupColors,
-      settings.colorFormat,
+      colorFormat,
       settings.optimize.removeOpacity,
     );
+  } else if (overrides.forceColorFormat && settings.colorFormat !== undefined) {
+    svg = recolorGroups(svg, settings.colorFormat);
   }
   if (settings.opacitySteps !== undefined) {
     svg = snapToGrid(
       svg,
       settings.opacitySteps,
-      settings.colorFormat,
+      colorFormat,
       settings.optimize.removeOpacity,
     );
   }
@@ -80,14 +87,34 @@ export function renderArtwork(
 /**
  * The SVG a picker or thumbnail should be built from.
  *
- * Identical to `renderArtwork()` except that `opacitySteps` is not applied:
- * the step is a UI concern expressed by the <option> lists, so baking it in
- * here would round every picker value before the user has chosen a step.
+ * Identical to `renderArtwork()` except that `opacitySteps` is not applied.
  *
- * `groupColors` is left alone, so callers see the colours the artwork will
- * actually be drawn with, override included.
+ * The step selects which values the opacity controls offer; applying it here
+ * would round the artwork's own opacities before a step has been chosen. Every
+ * other setting, `groupColors` included, is applied as usual.
  */
-export function renderArtworkForPickers(
+/**
+ * Per-call rendering choices that are not part of the resolved settings.
+ *
+ * Kept out of `SvgRenderSettings` on purpose: settings describe the URL, and
+ * the shared-image key hashes exactly that. A caller-side choice such as
+ * "re-serialize the groups now" must not leak into the key.
+ */
+export interface RenderOverrides {
+  /** Re-serialize every group into `settings.colorFormat`. */
+  forceColorFormat?: boolean;
+}
+
+/** Re-serialize each group's stroke into `colorFormat`, leaving opacity alone. */
+function recolorGroups(svg: string, colorFormat: ColorFormat): string {
+  return svg.replace(/<g\b[^>]*stroke="[^"]*"[^>]*>/g, (tag) => {
+    const stroke = tag.match(/stroke="([^"]+)"/)?.[1];
+    if (stroke === undefined) return tag;
+    return tag.replace(stroke, convertColorFormat(stroke, colorFormat));
+  });
+}
+
+export function renderArtworkWithoutOpacitySteps(
   artwork: DecodedParams,
   settings: SvgRenderSettings,
 ): string {

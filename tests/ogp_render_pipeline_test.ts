@@ -18,7 +18,7 @@ Deno.test("OGP pipeline reuses libpfpg SVG and selected raster dimensions", asyn
   });
   const params = new URLSearchParams(fixture);
   params.set("shapeToTrim", "circle");
-  params.set("heightPixelSize", "96px");
+  params.set("heightPixelSize", "96");
   const result = await renderPipeline(params);
   const expectedSvg = await Deno.readTextFile(
     "tests/fixtures/showcase-202401_001-shape_circle.svg",

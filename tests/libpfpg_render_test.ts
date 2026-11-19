@@ -107,7 +107,12 @@ Deno.test("renderer rejects invalid inputs before returning SVG", async () => {
     )).includes('shape-rendering="crispEdges"'),
     true,
   );
-  await renderParamsToSvg(`${fixtureParams}&removeSpaces=${"x".repeat(9000)}`);
+  // A state key present with a non-boolean value is an error, not a default.
+  await assertRejects(
+    () =>
+      renderParamsToSvg(`${fixtureParams}&removeSpaces=${"x".repeat(9000)}`),
+    TypeError,
+  );
   await assertRejects(
     () => renderParamsToSvg(`${fixtureParams}&groupColors=illegal!`),
     TypeError,
@@ -116,17 +121,24 @@ Deno.test("renderer rejects invalid inputs before returning SVG", async () => {
     () => renderParamsToSvg(`bits=~5&x=${"a".repeat(8200)}`),
     RangeError,
   );
-  for (const step of ["0.04", "0.1", "0.2"]) {
-    const trailing = step === "0.04" ? "0.040" : step === "0.2" ? "0.20" : step;
+  // Numerically equal spellings are the same step ("0.10" and "0.1").
+  for (
+    const [step, trailing] of [
+      ["0.04", "0.040"],
+      ["0.1", "0.10"],
+      ["0.2", "0.20"],
+    ]
+  ) {
     assertEquals(
       await renderParamsToSvg(`${fixtureParams}&opacitySteps=${step}`),
       await renderParamsToSvg(`${fixtureParams}&opacitySteps=${trailing}`),
     );
   }
+  // A value outside the three supported steps is an error, not "unspecified".
   for (const step of ["0", "abc", "0.3", "true", "1"]) {
-    assertEquals(
-      await renderParamsToSvg(`${fixtureParams}&opacitySteps=${step}`),
-      await renderParamsToSvg(fixtureParams),
+    await assertRejects(
+      () => renderParamsToSvg(`${fixtureParams}&opacitySteps=${step}`),
+      TypeError,
     );
   }
 });

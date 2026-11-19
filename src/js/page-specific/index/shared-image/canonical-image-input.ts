@@ -126,19 +126,23 @@ function defaultFor(key: string): SettingValue {
 // URL could share.
 function readShapeToTrim(raw: SettingValue): string {
   const value = raw === undefined ? defaultFor("shapeToTrim") : raw;
-  if (value === "squircleSlimmed") return "squircleSlimmed";
-  if (value === "square" || value === "circle") return value;
-  return "squircle";
+  if (
+    value === "squircleSlimmed" || value === "square" ||
+    value === "circle" || value === "squircle"
+  ) {
+    return value;
+  }
+  throw new TypeError(
+    `buildCanonicalImageInput: invalid shapeToTrim: ${value}`,
+  );
 }
 
 function readShapeRendering(raw: SettingValue): string {
   const value = raw === undefined ? defaultFor("shapeRendering") : raw;
-  if (typeof value !== "string") {
-    throw new Error(
-      "buildCanonicalImageInput: shapeRendering must be a string",
-    );
-  }
-  return value;
+  if (value === "crispEdges" || value === "geometricPrecision") return value;
+  throw new TypeError(
+    `buildCanonicalImageInput: invalid shapeRendering: ${value}`,
+  );
 }
 
 function readFiniteNumber(
@@ -149,6 +153,10 @@ function readFiniteNumber(
   const value = raw === undefined ? defaultFor(key) : raw;
   if (typeof value !== "string" && typeof value !== "number") {
     throw new Error(`buildCanonicalImageInput: ${key} must be a number`);
+  }
+  // An empty string is not a number; `Number("")` is 0.
+  if (typeof value === "string" && value.trim() === "") {
+    throw new TypeError(`buildCanonicalImageInput: ${key} is empty`);
   }
   const parsed = toNumber(value);
   if (!Number.isFinite(parsed)) {
@@ -161,11 +169,16 @@ function readFiniteNumber(
   return parsed;
 }
 
-// The app reads the boolean settings through the same case-insensitive
-// "true"/"false" rule as the state manager, and treats anything else as off.
+// The app reads boolean settings through the same case-insensitive
+// "true"/"false" rule as the library, and rejects anything else. Coercing here
+// would let one URL produce a key that disagrees with the rendered picture.
 function readCropSideMargins(raw: SettingValue): boolean {
   const value = raw === undefined ? defaultFor("cropSideMargins") : raw;
-  return String(value).toLowerCase() === "true";
+  if (value === true || value === false) return value;
+  const text = String(value);
+  if (/^true$/i.test(text)) return true;
+  if (/^false$/i.test(text)) return false;
+  throw new TypeError(`Invalid cropSideMargins: ${text}`);
 }
 
 // `opacitySteps` helpers. The parameter itself is never part of the canonical
@@ -248,7 +261,7 @@ function readSettings(params: URLSearchParams): CanonicalSettings {
     readFiniteNumber(
       "heightPixelSize",
       params.get("heightPixelSize") ?? undefined,
-      (value) => parseInt(String(value), 10),
+      Number,
     ),
   ];
 }

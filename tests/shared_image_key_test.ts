@@ -435,11 +435,20 @@ Deno.test("unusable values throw instead of reusing another key", async () => {
   assertThrows(() => build({ groupColors: "nothex" }), Error);
   assertThrows(() => build({ groupColors: "FF" }), Error, "expected 1, 3, 5");
 
-  // The app parses the height the same lenient way, so the key follows it
-  assertEquals(build({ heightPixelSize: "300px" }).settings[5], 300);
-  // ...and an unknown shape falls through to the squircle clip path
-  assertEquals(build({ shapeToTrim: "nope" }).settings[0], "squircle");
-  assertEquals(build({ cropSideMargins: "yes" }).settings[3], false);
+  // A value the schema cannot express is rejected, not coerced, so one URL
+  // cannot produce a key that disagrees with the rendered picture.
+  assertThrows(
+    () => build({ heightPixelSize: "300px" }),
+    Error,
+    "heightPixelSize",
+  );
+  assertThrows(() => build({ shapeToTrim: "nope" }), Error, "shapeToTrim");
+  assertThrows(
+    () => build({ cropSideMargins: "yes" }),
+    Error,
+    "cropSideMargins",
+  );
+  // Case-insensitive true/false is still the same boolean.
   assertEquals(build({ cropSideMargins: "TRUE" }).settings[3], true);
 });
 

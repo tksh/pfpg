@@ -1,6 +1,7 @@
-import { getSvgString } from "button/download-as-file";
 import { svg2pngOption } from "state/resvg-option";
 import { getState, updateState } from "state/url-state-manager";
+import { getOpacitySteps } from "state/number-settings";
+import { commitRender } from "state/render-commit";
 import { generateGroupColorsHtmlElements } from "tab-lines/group-colors-generator";
 import { addEventListenerForGroupColorsInputs } from "tab-lines/group-colors-listener";
 import { getNumberOfGroups } from "libpfpg/group-colors";
@@ -23,15 +24,18 @@ export function initColorFormatSelect(): void {
 
     updateState("colorFormat", colorFormat);
 
-    // The SVG text is regenerated from the same settings, but colour format is
-    // a serialization setting: it only takes effect when a group is rebuilt
-    // (a colour or opacity change). Rebuilding the pickers is enough here, and
-    // deliberately does not rasterize, since the pixels are unchanged.
-    const svgString = getSvgString();
+    // The colour format is a serialization setting: the SVG text is re-serialized
+    // into it so the download and the pickers agree. Pixels are unchanged, so
+    // there is no rasterization here.
+    const svgString = commitRender({
+      forceColorFormat: true,
+      skipRaster: true,
+    });
+
     generateGroupColorsHtmlElements(
       svgString,
       colorFormat,
-      Number(getState("opacitySteps")),
+      getOpacitySteps(getState("opacitySteps") as number),
     );
 
     const numberOfGroups = getNumberOfGroups(svgString);
