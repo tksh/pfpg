@@ -173,7 +173,7 @@ export function readColorFormat(
 }
 export function readGroupColors(params: URLSearchParams): string | undefined {
   const value = raw(params, "groupColors");
-  if (!value) return undefined;
+  if (value === null) return undefined;
   if (!/^[0-9a-fA-F_]+$/.test(value)) {
     throw new TypeError("Invalid groupColors");
   }
@@ -183,7 +183,7 @@ export function readOpacitySteps(
   params: URLSearchParams,
 ): OpacityStep | undefined {
   const value = raw(params, "opacitySteps");
-  if (value === null || value === "") return undefined;
+  if (value === null) return undefined;
   const n = Number(value);
   if (isOpacityStep(n)) return n;
   throw new TypeError(`Invalid opacitySteps: ${value}`);

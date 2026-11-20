@@ -7,11 +7,11 @@ import {
   createSignedUpload,
   UPLOAD_PRESET,
 } from "../functions/lib/sign-upload.ts";
-import { getSharedImageKeyHash } from "shared-image/shared-image-key";
 import {
   InvalidOgpParamsError,
   renderFailureResponse,
   renderPipeline,
+  resolveImageMeta,
 } from "./ogp-render.ts";
 import { initializeRasterizer } from "./rasterizer.ts";
 import { renderGuardResponse } from "./ogp-render-guard.ts";
@@ -28,17 +28,14 @@ Deno.serve(async (req: Request): Promise<Response> => {
 
   if (pathname === "/ogp/image-meta" && req.method === "GET") {
     try {
-      const key = await getSharedImageKeyHash(url.searchParams);
-      const publicId = `${key}-png`;
-      const imageUrl =
-        `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${publicId}.png`;
+      const data = await resolveImageMeta(url.searchParams, CLOUD_NAME);
       return new Response(
-        JSON.stringify({ key, publicId, imageUrl }),
+        JSON.stringify(data),
         { headers: { "content-type": "application/json" } },
       );
     } catch (error) {
       console.log("ogp: meta-fetch-fail");
-      return jsonError(error, 400);
+      return renderFailureResponse(error);
     }
   }
   if (pathname === "/ogp/render" && req.method === "POST") {
@@ -77,15 +74,6 @@ Deno.serve(async (req: Request): Promise<Response> => {
     headers: { "content-type": "application/json" },
   });
 });
-
-function jsonError(error: unknown, status = 500): Response {
-  return new Response(
-    JSON.stringify({
-      error: error instanceof Error ? error.message : String(error),
-    }),
-    { status, headers: { "content-type": "application/json" } },
-  );
-}
 
 // The Deno Deploy host serves no static assets, so redirect /share directly
 // to the production pages site, where the Pages middleware injects the OGP

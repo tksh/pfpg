@@ -2,14 +2,8 @@ import {
   replaceButtonText,
   syncCopyAvailability,
 } from "button/update-button-text";
-import { isAllowedOpacityStep, SETTINGS_DEFAULTS } from "constants";
 import { getInitialOpacitySteps } from "init/initial-opacity-steps";
-import {
-  getState,
-  getStateUrl,
-  removeUrlParams,
-  updateState,
-} from "state/url-state-manager";
+import { getState, getStateUrl, updateState } from "state/url-state-manager";
 import { getImageFormat } from "state/image-format";
 import { syncSvgOptimizationUi } from "modal/optimize-svg";
 import { currentArtwork, currentSettings } from "state/render-state";
@@ -36,39 +30,19 @@ export { applyImageCustomization, applyUiConfiguration };
  * offers, and the artwork's own line colours the randomizer anchors to.
  */
 function applyImageCustomization(_svg2pngOption: { height: number }): void {
+  const settings = currentSettings();
+
   ////////////////////////////////////////////////// colorFormat //////////////////////////////////////////////////
   // Default value of color-format is 'rgb'
-  const colorFormat = getState("colorFormat");
+  const colorFormat = settings.colorFormat ?? "rgb";
   const colorFormatElem = document.getElementById("color-format");
   if (colorFormatElem === null) {
     throw new Error("applyImageCustomization: missing element #color-format");
   }
   (colorFormatElem as HTMLSelectElement).value = String(colorFormat);
 
-  // The artwork's own opacity step. A URL may override it; anything outside
-  // the supported three values counts as unspecified and is dropped.
-  let opacitySteps = getInitialOpacitySteps();
-  SETTINGS_DEFAULTS.set("opacitySteps", opacitySteps);
-
-  // 'opacitySteps' has no default in SETTINGS_DEFAULTS before the decode: the
-  // only source is the artwork itself, which is what was just calculated.
-  const opacityStepsViaUrl = getStateUrl("opacitySteps");
-  const parsedOpacityStepsViaUrl = isAllowedOpacityStep(opacityStepsViaUrl)
-    ? Number(opacityStepsViaUrl)
-    : undefined;
-
-  if (
-    opacityStepsViaUrl !== undefined && parsedOpacityStepsViaUrl === undefined
-  ) {
-    console.warn(
-      `applyImageCustomization: ignoring opacitySteps="${
-        String(opacityStepsViaUrl)
-      }" — not one of 0.04/0.1/0.2; using the artwork-derived default`,
-    );
-    removeUrlParams(["opacitySteps"]);
-  } else if (parsedOpacityStepsViaUrl !== undefined) {
-    opacitySteps = parsedOpacityStepsViaUrl;
-  }
+  // The artwork's own opacity step. A URL may override it.
+  const opacitySteps = settings.opacitySteps ?? getInitialOpacitySteps();
 
   const opacityStepsSelector = document.getElementById("opacity-steps");
   if (opacityStepsSelector === null) {
@@ -82,7 +56,7 @@ function applyImageCustomization(_svg2pngOption: { height: number }): void {
   // anchors to, so that snapshot deliberately ignores any `groupColors`
   // override in the URL.
   const artworkSvg = renderArtworkWithoutOpacitySteps(currentArtwork(), {
-    ...currentSettings(),
+    ...settings,
     groupColors: undefined,
     opacitySteps: undefined,
   });
@@ -93,21 +67,21 @@ function applyImageCustomization(_svg2pngOption: { height: number }): void {
   // they were built from the un-overridden artwork, the first picker edit would
   // suddenly reveal colours the user never saw.
   const pickersSvg = renderArtworkWithoutOpacitySteps(currentArtwork(), {
-    ...currentSettings(),
+    ...settings,
     opacitySteps: undefined,
   });
   generateGroupColorsHtmlElements(
     pickersSvg,
-    colorFormat as string,
+    colorFormat,
     opacitySteps,
   );
 
   // The pickers' <option> lists must reflect the step in effect, so a URL
   // override has to be pushed into them before the first render.
-  if (parsedOpacityStepsViaUrl !== undefined) {
+  if (settings.opacitySteps !== undefined) {
     changeOpacitySelectOptionsAsNewStep(
       pickersSvg,
-      parsedOpacityStepsViaUrl,
+      settings.opacitySteps,
     );
   }
 

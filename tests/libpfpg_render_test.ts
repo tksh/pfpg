@@ -135,7 +135,7 @@ Deno.test("renderer rejects invalid inputs before returning SVG", async () => {
     );
   }
   // A value outside the three supported steps is an error, not "unspecified".
-  for (const step of ["0", "abc", "0.3", "true", "1"]) {
+  for (const step of ["", "0", "abc", "0.3", "true", "1"]) {
     await assertRejects(
       () => renderParamsToSvg(`${fixtureParams}&opacitySteps=${step}`),
       TypeError,

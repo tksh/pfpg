@@ -103,5 +103,32 @@ export function renderFailureResponse(error: unknown): Response {
   );
 }
 
+export interface OgpImageMetaResult {
+  key: string;
+  publicId: string;
+  imageUrl: string;
+}
+
+export async function resolveImageMeta(
+  input: URLSearchParams,
+  cloudName: string,
+): Promise<OgpImageMetaResult> {
+  const params = normalizeScalarParams(
+    new URLSearchParams(input),
+    APP_STATE_KEYS,
+  );
+  try {
+    resolveSvgRenderSettings(params);
+    resolveRasterSettings(params);
+    const key = await getSharedImageKeyHash(params);
+    const publicId = `${key}-png`;
+    const imageUrl =
+      `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}.png`;
+    return { key, publicId, imageUrl };
+  } catch (error) {
+    throw new InvalidOgpParamsError(error);
+  }
+}
+
 // Kept for callers that only need the decoded artwork of a request.
 export type { DecodedParams };

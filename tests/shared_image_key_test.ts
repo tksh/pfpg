@@ -271,17 +271,18 @@ Deno.test("settings that cannot change the pixels keep the key", async () => {
 Deno.test("opacitySteps is only reflected through the effective pixels", async () => {
   const reference = await keyFor(artworkSearch());
 
-  // Unsupported values are "not specified": the drawn pixels are unchanged,
-  // so the key stays identical.
+  // Unsupported values must throw rather than silently falling back to "not specified".
   for (
-    const step of ["0", "-0.1", "0.3", "0.5", "0.07", "1", "true", "abc", ""]
+    const step of ["0", "-0.1", "0.3", "0.5", "0.07", "1", "true", "abc"]
   ) {
-    assertEquals(
-      (await keyFor(artworkSearch({ opacitySteps: step }))).key,
-      reference.key,
-      `opacitySteps=${step} must not change the key`,
+    await assertRejects(
+      () => keyFor(artworkSearch({ opacitySteps: step })),
+      TypeError,
     );
   }
+  const emptyParams = artworkSearch();
+  emptyParams.set("opacitySteps", "");
+  await assertRejects(() => keyFor(emptyParams), TypeError);
 
   // The fixture artwork sits exactly on the 0.04 / 0.1 / 0.2 grids, so the
   // allowed steps snap nothing and the key is unchanged.
@@ -443,6 +444,11 @@ Deno.test("unusable values throw instead of reusing another key", async () => {
     "heightPixelSize",
   );
   assertThrows(() => build({ shapeToTrim: "nope" }), Error, "shapeToTrim");
+  assertThrows(
+    () => build({ opacitySteps: "0.3" }),
+    TypeError,
+    "opacitySteps",
+  );
   assertThrows(
     () => build({ cropSideMargins: "yes" }),
     Error,

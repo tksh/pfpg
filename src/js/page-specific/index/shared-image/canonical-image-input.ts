@@ -187,13 +187,19 @@ const OPACITY_STEP_GRIDS = new Map<AllowedOpacityStep, readonly number[]>();
 
 /**
  * The supported `opacitySteps` from the URL (`0.04` / `0.1` / `0.2`), or
- * `undefined` for "not specified" (missing, `0`, `0.3`, `true`, `abc`, …).
+ * `undefined` for "not specified" (missing). A value that is present but outside
+ * the allowlist throws, matching the renderer.
  */
 function readOpacitySteps(
   params: URLSearchParams,
 ): AllowedOpacityStep | undefined {
   const raw = params.get("opacitySteps");
-  if (!isAllowedOpacityStep(raw)) return undefined;
+  if (raw === null) return undefined;
+  if (!isAllowedOpacityStep(raw)) {
+    throw new TypeError(
+      `buildCanonicalImageInput: invalid opacitySteps: ${raw}`,
+    );
+  }
   const step = Number(raw);
   switch (step) {
     case 0.04:

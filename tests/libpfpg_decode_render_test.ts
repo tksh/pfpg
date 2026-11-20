@@ -107,6 +107,23 @@ Deno.test("heightPixelSize rejects a unit suffix", async () => {
   await assertRejects(() => renderParamsToSvg(params), RangeError);
 });
 
+Deno.test("empty string in settings is rejected", async () => {
+  const params = new URLSearchParams(showcase202412);
+  params.set("groupColors", "");
+  await assertRejects(
+    () => renderParamsToSvg(params),
+    TypeError,
+    "groupColors",
+  );
+  params.delete("groupColors");
+  params.set("opacitySteps", "");
+  await assertRejects(
+    () => renderParamsToSvg(params),
+    TypeError,
+    "opacitySteps",
+  );
+});
+
 // colorFormat is a serialization setting: it only takes effect when a step
 // rebuilds the group elements.
 

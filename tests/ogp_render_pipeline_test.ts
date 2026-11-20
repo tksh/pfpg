@@ -4,6 +4,7 @@ import {
   InvalidOgpParamsError,
   renderFailureResponse,
   renderPipeline,
+  resolveImageMeta,
 } from "../server/ogp-render.ts";
 
 const fixture = new URLSearchParams(
@@ -95,4 +96,40 @@ Deno.test("OGP renders the same pixels for either color format", async () => {
   const rgb = await renderPipeline(rgbParams);
   const hex = await renderPipeline(hexParams);
   assertEquals(rgb.pixels, hex.pixels);
+});
+
+Deno.test("resolveImageMeta returns stable metadata for valid params", async () => {
+  const meta = await resolveImageMeta(
+    new URLSearchParams(fixture),
+    "testcloud",
+  );
+  assertEquals(meta.key.length, 32);
+  assertEquals(meta.publicId, `${meta.key}-png`);
+  assertEquals(
+    meta.imageUrl,
+    `https://res.cloudinary.com/testcloud/image/upload/${meta.key}-png.png`,
+  );
+});
+
+Deno.test("resolveImageMeta rejects invalid settings as InvalidOgpParamsError", async () => {
+  const badOpacity = new URLSearchParams(fixture);
+  badOpacity.set("opacitySteps", "0.3");
+  await assertRejects(
+    () => resolveImageMeta(badOpacity, "testcloud"),
+    InvalidOgpParamsError,
+  );
+
+  const badHeight = new URLSearchParams(fixture);
+  badHeight.set("heightPixelSize", "96px");
+  await assertRejects(
+    () => resolveImageMeta(badHeight, "testcloud"),
+    InvalidOgpParamsError,
+  );
+
+  const emptyOpacity = new URLSearchParams(fixture);
+  emptyOpacity.set("opacitySteps", "");
+  await assertRejects(
+    () => resolveImageMeta(emptyOpacity, "testcloud"),
+    InvalidOgpParamsError,
+  );
 });
