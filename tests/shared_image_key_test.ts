@@ -238,7 +238,7 @@ Deno.test("settings that change the pixels change the key", async () => {
 
   const overrides: Array<Record<string, string>> = [
     { shapeToTrim: "circle" },
-    { widthNarrowness: "12" },
+    { widthNarrowness: "15" },
     { topHeavyRatio: "-1" },
     { cropSideMargins: "false" },
     { shapeRendering: "geometricPrecision" },
@@ -454,8 +454,13 @@ Deno.test("unusable values throw instead of reusing another key", async () => {
     Error,
     "cropSideMargins",
   );
-  // Case-insensitive true/false is still the same boolean.
-  assertEquals(build({ cropSideMargins: "TRUE" }).settings[3], true);
+  // Uppercase spellings are no longer accepted by the app, so they cannot
+  // produce a key either.
+  assertThrows(
+    () => build({ cropSideMargins: "TRUE" }),
+    TypeError,
+    "cropSideMargins",
+  );
 });
 
 Deno.test("a broken query produces no key at all", async () => {

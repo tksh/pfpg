@@ -169,16 +169,15 @@ function readFiniteNumber(
   return parsed;
 }
 
-// The app reads boolean settings through the same case-insensitive
-// "true"/"false" rule as the library, and rejects anything else. Coercing here
-// would let one URL produce a key that disagrees with the rendered picture.
+// The app reads boolean settings as the exact spellings "true"/"false" and
+// rejects everything else — including "TRUE". Coercing here would let one URL
+// produce a key that disagrees with the rendered picture.
 function readCropSideMargins(raw: SettingValue): boolean {
   const value = raw === undefined ? defaultFor("cropSideMargins") : raw;
   if (value === true || value === false) return value;
-  const text = String(value);
-  if (/^true$/i.test(text)) return true;
-  if (/^false$/i.test(text)) return false;
-  throw new TypeError(`Invalid cropSideMargins: ${text}`);
+  if (value === "true") return true;
+  if (value === "false") return false;
+  throw new TypeError(`Invalid cropSideMargins: ${String(value)}`);
 }
 
 // `opacitySteps` helpers. The parameter itself is never part of the canonical

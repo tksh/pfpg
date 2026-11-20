@@ -111,10 +111,11 @@ function raw(params: URLSearchParams, key: string): string | null {
 /**
  * Read a boolean setting.
  *
- * Only `true` / `false` are accepted, case-insensitively. A key that is present
- * with anything else is an error rather than a silent default: coercing `1` to
- * true here while the shared-image key reads it as false is what made one URL
-// produce two different pictures under one key.
+ * Only the exact spellings `true` / `false` are accepted. A key that is present
+ * with anything else — including `TRUE`, `1` or an empty string — is an error
+ * rather than a silent default: coercing a value here while the shared-image key
+ * reads it differently is what made one URL produce two different pictures
+ * under one key.
  */
 function bool(
   params: URLSearchParams,
@@ -123,27 +124,10 @@ function bool(
 ): boolean {
   const value = raw(params, key);
   if (value === null) return fallback;
-  if (/^true$/i.test(value)) return true;
-  if (/^false$/i.test(value)) return false;
+  if (value === "true") return true;
+  if (value === "false") return false;
   throw new TypeError(`Invalid ${key}: ${value}`);
 }
-function finite(
-  params: URLSearchParams,
-  key: string,
-  fallback: number,
-): number {
-  const value = raw(params, key);
-  if (value === null) return fallback;
-  // An empty value is not a number: `Number("")` is 0, which would silently
-  // become a valid coordinate.
-  if (value.trim() === "") throw new TypeError(`Invalid ${key}: ${value}`);
-  const n = Number(value);
-  if (!Number.isFinite(n)) {
-    throw new RangeError(`Invalid ${key}: ${value}`);
-  }
-  return n;
-}
-
 export function readPathMode(params: URLSearchParams): PathMode {
   const value = raw(params, "pathMode");
   if (value === null) return "absoluteSeparated";
@@ -207,19 +191,80 @@ export function readShapeRendering(params: URLSearchParams): string {
   }
   return value;
 }
+/** The only `widthNarrowness` values the UI can emit. */
+const WIDTH_NARROWNESS_VALUES: readonly number[] = [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  15,
+  20,
+  25,
+  30,
+];
+/** The only `topHeavyRatio` values the UI can emit. */
+const TOP_HEAVY_RATIO_VALUES: readonly number[] = [-3, -2, -1, 0, 1, 2, 3];
+const MAX_HEIGHT_PIXEL_SIZE = 4096;
+
+/**
+ * Read an integer whose domain is exactly the choices the UI offers. A value
+ * outside that set has no rendered counterpart, so it must fail everywhere
+ * instead of being rounded or replaced by the default.
+ */
+function readClosedInteger(
+  params: URLSearchParams,
+  key: string,
+  allowed: readonly number[],
+  fallback: number,
+): number {
+  const value = raw(params, key);
+  if (value === null) return fallback;
+  if (!/^-?[0-9]+$/.test(value)) {
+    throw new RangeError(`Invalid ${key}: ${value}`);
+  }
+  const n = Number(value);
+  if (!allowed.includes(n)) {
+    throw new RangeError(`Invalid ${key}: ${value}`);
+  }
+  return n;
+}
+
 export function readHeightPixelSize(params: URLSearchParams): number {
   const value = raw(params, "heightPixelSize");
-  const n = value === null ? 256 : Number(value);
-  if (!Number.isInteger(n) || n <= 0) {
+  if (value === null) return 256;
+  // A unit suffix, exponent or sign is not the decimal spelling the UI emits;
+  // `Number`/`parseInt` used to salvage some of them into a valid height.
+  if (!/^[1-9][0-9]*$/.test(value)) {
+    throw new RangeError(`Invalid heightPixelSize: ${value}`);
+  }
+  const n = Number(value);
+  if (!Number.isSafeInteger(n) || n > MAX_HEIGHT_PIXEL_SIZE) {
     throw new RangeError(`Invalid heightPixelSize: ${value}`);
   }
   return n;
 }
 export function readWidthNarrowness(params: URLSearchParams): number {
-  return finite(params, "widthNarrowness", 10);
+  return readClosedInteger(
+    params,
+    "widthNarrowness",
+    WIDTH_NARROWNESS_VALUES,
+    10,
+  );
 }
 export function readTopHeavyRatio(params: URLSearchParams): number {
-  return finite(params, "topHeavyRatio", 1);
+  return readClosedInteger(
+    params,
+    "topHeavyRatio",
+    TOP_HEAVY_RATIO_VALUES,
+    1,
+  );
 }
 
 export type ShapeToTrim = "square" | "circle" | "squircle" | "squircleSlimmed";
@@ -300,8 +345,9 @@ export function resolveSvgRenderSettings(
 /**
  * Resolve the raster settings from URL params.
  *
- * Uses `Number.parseInt` rather than `Number` so `96px` still yields 96, which
- * is what the page and the OGP endpoint have always accepted.
+ * `heightPixelSize` accepts a decimal integer in `1..4096` only. Spellings like
+ * `96px` are rejected rather than salvaged by `Number.parseInt`, so the browser
+ * and the OGP endpoint fail the same URL in the same way.
  */
 export function resolveRasterSettings(
   params: URLSearchParams,

@@ -65,18 +65,21 @@ the pixels, kept in that map's relative order. The test asserts this order, and
 asserts that the remaining visual keys are exactly the pixel-neutral ones (see
 below), so adding a visual key fails the suite until it is classified.
 
-Values are read the way the app reads them:
+A key is only computed for URLs the app can render: `libpfpg/settings.ts`
+validates every render and raster setting first, and the projection rejects a
+value outside the same domain. The accepted domains are closed:
 
-- `shapeToTrim`: missing value falls back to the default; `squircle`,
-  `squircleSlimmed`, `square` and `circle` are kept as-is, while anything
-  unrecognized falls through to the squircle clip path and is therefore
-  canonicalized to `squircle`.
-- `widthNarrowness`, `topHeavyRatio`: `Number()`; `heightPixelSize`:
-  `parseInt()`, so the app's lenient spellings (e.g. `"300px"` → `300`) hash the
-  same as the value the app actually renders.
-- `cropSideMargins`: the same case-insensitive `"true"`/`"false"` rule as the
-  state manager; anything else counts as off.
-- `shapeRendering`: kept verbatim (must be a string).
+- `shapeToTrim`: missing value falls back to the default; only `square`,
+  `circle`, `squircle` and `squircleSlimmed` are accepted. An unrecognized value
+  is an error, not a fallthrough to the squircle clip path.
+- `widthNarrowness`: one of the 15 values `0..10, 15, 20, 25, 30`;
+  `topHeavyRatio`: one of `-3, -2, -1, 0, 1, 2, 3`. Both are decimal integers; a
+  value the UI cannot express has no rendered counterpart.
+- `heightPixelSize`: a decimal integer in `1..4096`. `96px`, `0x10`, `1e3`, `0`
+  and numbers above 4096 are rejected.
+- `cropSideMargins`: exactly `"true"` or `"false"` (or a boolean default).
+  `"TRUE"`, `"1"` and an empty string are rejected, not coerced.
+- `shapeRendering`: only `crispEdges` or `geometricPrecision`.
 
 ### Deliberately excluded
 
@@ -163,11 +166,13 @@ a bump even when the DTO is untouched.
 
 A setting the app cannot use is an error, never a silent fallback: a fallback
 would hand an image the key of a different drawing. This covers non-finite
-numbers, unusable `groupColors` spellings and undecodable queries. In the page
-this surfaces as a failed upload while the preview still renders — the drawing
-is shown, it just is not published. The known lenient cases are part of the
-spec, not accidents: `heightPixelSize: "300px"` parses to `300`,
-`cropSideMargins: "TRUE"` is on, an unknown `shapeToTrim` becomes `squircle`.
+numbers, values outside the closed domains above, `heightPixelSize` above 4096,
+uppercase booleans, unusable `groupColors` spellings and undecodable queries.
+The old lenient spellings are not part of the spec any more: a unit suffix on
+`heightPixelSize` is rejected instead of parsed, `cropSideMargins: "TRUE"` is
+rejected instead of counting as on, and an unknown `shapeToTrim` is rejected
+instead of becoming `squircle`. In the page this surfaces as a failed render; on
+the OGP endpoints it is HTTP 400.
 
 ## Upload flow
 

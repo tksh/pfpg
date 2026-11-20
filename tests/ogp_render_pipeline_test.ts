@@ -85,6 +85,32 @@ Deno.test("OGP accepts a URL that carries app state keys", async () => {
   }
 });
 
+// An invalid UI value is app state, not artwork data, but it must still be a
+// client error: the browser rejects the same URL, so the endpoint must not hand
+// out a shared-image URL for it through either route.
+Deno.test("OGP rejects invalid UI params on both endpoints", async () => {
+  const badUi = new URLSearchParams(fixture);
+  badUi.set("themeColor", "almost-black");
+  await assertRejects(
+    () => renderPipeline(badUi),
+    InvalidOgpParamsError,
+    "themeColor",
+  );
+  await assertRejects(
+    () => resolveImageMeta(badUi, "testcloud"),
+    InvalidOgpParamsError,
+    "themeColor",
+  );
+
+  const badBool = new URLSearchParams(fixture);
+  badBool.set("checkerboardBg", "TRUE");
+  await assertRejects(
+    () => renderPipeline(badBool),
+    InvalidOgpParamsError,
+    "checkerboardBg",
+  );
+});
+
 // colourFormat changes the serialized form, never the pixels. The shared-image
 // key and the raster must agree with the rgb rendering.
 Deno.test("OGP renders the same pixels for either color format", async () => {

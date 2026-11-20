@@ -12,6 +12,7 @@ import {
   SETTINGS_DEFAULTS,
   URL_PARAMS_EXCLUDED_FROM_ARTWORK,
 } from "../src/js/constants.ts";
+import { resolveUiSettings } from "../src/js/page-specific/index/state/ui-settings.ts";
 import { getSharedImageKeyHash } from "shared-image/shared-image-key";
 import { svg2rgba } from "svg2ui8a";
 
@@ -61,6 +62,10 @@ export async function renderPipeline(
   let key: string;
   let height: number;
   try {
+    // UI settings are app state, but a present-invalid value must still fail
+    // here: otherwise the endpoint would answer 200 with a valid picture for a
+    // URL the browser rejects.
+    resolveUiSettings(params);
     const artworkParams = excludeStateKeys(params, APP_STATE_KEYS);
     if (
       new TextEncoder().encode(artworkParams.toString()).length >
@@ -120,6 +125,7 @@ export async function resolveImageMeta(
   try {
     resolveSvgRenderSettings(params);
     resolveRasterSettings(params);
+    resolveUiSettings(params);
     const key = await getSharedImageKeyHash(params);
     const publicId = `${key}-png`;
     const imageUrl =
