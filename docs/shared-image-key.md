@@ -174,6 +174,19 @@ rejected instead of counting as on, and an unknown `shapeToTrim` is rejected
 instead of becoming `squircle`. In the page this surfaces as a failed render; on
 the OGP endpoints it is HTTP 400.
 
+## Artwork-dependent validation
+
+Some invalid URLs can only be recognised after decoding: `groupColors` may name
+more groups than the artwork has, and the width derived from the viewBox and
+`heightPixelSize` may push the rendered image past 4096px on its longest side.
+`validateArtworkConstraints()`
+(`src/js/page-specific/index/state/param-validator.ts`) runs after decoding and
+before drawing or key generation on every path. It throws
+`TypeError("Excess groupColors specified for artwork")` and
+`RangeError("Rendered image dimensions exceed 4096px")` respectively. Surplus
+colors are rejected rather than silently ignored: a drawing that does not use
+them must not receive a key that another URL shares.
+
 ## Upload flow
 
 `uploadRenderedImage(image)` in `generate-and-upload.ts`:

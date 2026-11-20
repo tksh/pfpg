@@ -315,6 +315,16 @@ export interface RasterSettings {
 }
 
 /**
+ * The resolved render settings shared by the renderer, the artwork-constraint
+ * validator and the canonical-image key. Pass this around instead of raw URL
+ * params so every consumer sees the same validated values.
+ */
+export interface ResolvedRenderSettings {
+  svg: SvgRenderSettings;
+  raster: RasterSettings;
+}
+
+/**
  * Resolve the typed render settings from URL params.
  *
  * `colorFormat` is carried here but only takes effect when a step rebuilds the

@@ -2,10 +2,12 @@ import type { DecodedGroup, DecodedParams } from "@tksh/stln-codec";
 import { decodeArtwork } from "libpfpg/decode";
 import { renderArtwork, type RenderOverrides } from "libpfpg/render";
 import {
+  resolveRasterSettings,
   resolveSvgRenderSettings,
   type SvgRenderSettings,
 } from "libpfpg/settings";
 import { getUrlParamsExceptsStates } from "common-utils/read-url-params";
+import { validateArtworkConstraints } from "./param-validator.ts";
 
 /**
  * The page's render state.
@@ -57,7 +59,17 @@ export function currentSettings(): SvgRenderSettings {
 export function renderCurrentSvg(
   overrides: RenderOverrides = {},
 ): string {
-  return renderArtwork(currentArtwork(), currentSettings(), overrides);
+  const artwork = currentArtwork();
+  const settings = currentSettings();
+  // Validate after the artwork is decoded and before anything is drawn, on
+  // every re-render — the group colors can change from a UI handler too.
+  validateArtworkConstraints(artwork, {
+    svg: settings,
+    raster: resolveRasterSettings(
+      new URLSearchParams(globalThis.location.search),
+    ),
+  });
+  return renderArtwork(artwork, settings, overrides);
 }
 
 /**

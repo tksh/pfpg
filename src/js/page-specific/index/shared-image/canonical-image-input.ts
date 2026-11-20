@@ -6,12 +6,8 @@ import {
   decodeGroupColors,
 } from "@tksh/stln-codec";
 import { murmurHash3_x64_128 } from "@timepp/murmurhash";
-import {
-  type AllowedOpacityStep,
-  isAllowedOpacityStep,
-  type SettingValue,
-  VISUAL_CONFIG_DEFAULTS,
-} from "constants";
+import type { AllowedOpacityStep } from "constants";
+import type { ResolvedRenderSettings } from "libpfpg/settings";
 import { numbersIncrementByStep } from "tab-lines/opacity-steps-grid";
 
 export {
@@ -22,7 +18,6 @@ export {
   type CanonicalSettings,
   effectiveOpacityUint8,
   hashCanonicalImageInput,
-  readOpacitySteps,
   serializeCanonicalImageInput,
   SHARED_IMAGE_KEY_VERSION,
 };
@@ -113,104 +108,24 @@ type CanonicalSettings = [
   heightPixelSize: number,
 ];
 
-function defaultFor(key: string): SettingValue {
-  return VISUAL_CONFIG_DEFAULTS.get(key);
-}
-
-// Read one setting the way the app reads it, so the canonical value is the
-// value that reaches the renderer. A value the app cannot use is an error
-// rather than a silent fallback to the default: a fallback would hand the
-// image a key that belongs to a different drawing.
-// An unrecognized `shapeToTrim` falls through to the squircle clip path, so
-// it is canonicalized to `squircle` instead of producing a key that no other
-// URL could share.
-function readShapeToTrim(raw: SettingValue): string {
-  const value = raw === undefined ? defaultFor("shapeToTrim") : raw;
-  if (
-    value === "squircleSlimmed" || value === "square" ||
-    value === "circle" || value === "squircle"
-  ) {
-    return value;
-  }
-  throw new TypeError(
-    `buildCanonicalImageInput: invalid shapeToTrim: ${value}`,
-  );
-}
-
-function readShapeRendering(raw: SettingValue): string {
-  const value = raw === undefined ? defaultFor("shapeRendering") : raw;
-  if (value === "crispEdges" || value === "geometricPrecision") return value;
-  throw new TypeError(
-    `buildCanonicalImageInput: invalid shapeRendering: ${value}`,
-  );
-}
-
-function readFiniteNumber(
-  key: string,
-  raw: SettingValue,
-  toNumber: (value: string | number | boolean) => number,
-): number {
-  const value = raw === undefined ? defaultFor(key) : raw;
-  if (typeof value !== "string" && typeof value !== "number") {
-    throw new Error(`buildCanonicalImageInput: ${key} must be a number`);
-  }
-  // An empty string is not a number; `Number("")` is 0.
-  if (typeof value === "string" && value.trim() === "") {
-    throw new TypeError(`buildCanonicalImageInput: ${key} is empty`);
-  }
-  const parsed = toNumber(value);
-  if (!Number.isFinite(parsed)) {
-    throw new Error(
-      `buildCanonicalImageInput: ${key} is not a finite number: ${
-        JSON.stringify(value)
-      }`,
-    );
-  }
-  return parsed;
-}
-
-// The app reads boolean settings as the exact spellings "true"/"false" and
-// rejects everything else — including "TRUE". Coercing here would let one URL
-// produce a key that disagrees with the rendered picture.
-function readCropSideMargins(raw: SettingValue): boolean {
-  const value = raw === undefined ? defaultFor("cropSideMargins") : raw;
-  if (value === true || value === false) return value;
-  if (value === "true") return true;
-  if (value === "false") return false;
-  throw new TypeError(`Invalid cropSideMargins: ${String(value)}`);
+// The projection takes the settings the app already resolved, so it cannot
+// disagree with the renderer about what a URL value means. Validation is the
+// caller's job (Stage 1 in the parsers, Stage 2 after decoding).
+function readSettings(settings: ResolvedRenderSettings): CanonicalSettings {
+  const { svg, raster } = settings;
+  return [
+    svg.shapeToTrim,
+    svg.widthNarrowness,
+    svg.topHeavyRatio,
+    svg.cropSideMargins,
+    svg.shapeRendering,
+    raster.heightPixelSize,
+  ];
 }
 
 // `opacitySteps` helpers. The parameter itself is never part of the canonical
 // settings — its *effect* on the drawn opacities is (see the header comment).
 const OPACITY_STEP_GRIDS = new Map<AllowedOpacityStep, readonly number[]>();
-
-/**
- * The supported `opacitySteps` from the URL (`0.04` / `0.1` / `0.2`), or
- * `undefined` for "not specified" (missing). A value that is present but outside
- * the allowlist throws, matching the renderer.
- */
-function readOpacitySteps(
-  params: URLSearchParams,
-): AllowedOpacityStep | undefined {
-  const raw = params.get("opacitySteps");
-  if (raw === null) return undefined;
-  if (!isAllowedOpacityStep(raw)) {
-    throw new TypeError(
-      `buildCanonicalImageInput: invalid opacitySteps: ${raw}`,
-    );
-  }
-  const step = Number(raw);
-  switch (step) {
-    case 0.04:
-    case 0.1:
-    case 0.2:
-      return step;
-    default:
-      throw new Error(
-        `buildCanonicalImageInput: unreachable opacitySteps after allowlist: ${step}`,
-      );
-  }
-}
 
 function opacityStepGrid(
   step: AllowedOpacityStep,
@@ -248,37 +163,14 @@ function effectiveOpacityUint8(
   return Math.round(chosen * 255);
 }
 
-function readSettings(params: URLSearchParams): CanonicalSettings {
-  return [
-    readShapeToTrim(params.get("shapeToTrim") ?? undefined),
-    readFiniteNumber(
-      "widthNarrowness",
-      params.get("widthNarrowness") ?? undefined,
-      Number,
-    ),
-    readFiniteNumber(
-      "topHeavyRatio",
-      params.get("topHeavyRatio") ?? undefined,
-      Number,
-    ),
-    readCropSideMargins(params.get("cropSideMargins") ?? undefined),
-    readShapeRendering(params.get("shapeRendering") ?? undefined),
-    readFiniteNumber(
-      "heightPixelSize",
-      params.get("heightPixelSize") ?? undefined,
-      Number,
-    ),
-  ];
-}
-
 // The `groupColors` state, expanded to the same shape the codec decodes the
 // artwork's own group keys into. Overrides are positional: they replace the
 // n-th group, and groups the state does not mention keep their own color.
 function readColorOverrides(
-  groupColors: string | null,
+  groupColors: string | undefined,
 ): Map<number, DecodedGroupColors> {
   const overrides = new Map<number, DecodedGroupColors>();
-  if (groupColors === null || groupColors === "") return overrides;
+  if (groupColors === undefined || groupColors === "") return overrides;
   groupColors.split("_").forEach((shortHex, index) => {
     overrides.set(index, decodeGroupColors(expandGroupColor(shortHex)));
   });
@@ -358,18 +250,19 @@ function groupOf(
 }
 
 /**
- * Project a decoded artwork and its URL settings onto the canonical input.
+ * Project a decoded artwork and its already-resolved settings onto the
+ * canonical input.
  *
- * `params` are the full URL params (state keys included); `decoded` must be
- * the codec's decode of the same URL with the state keys filtered out, so
- * that both sides describe the same drawing.
+ * Pure: it never reads URL params, so the key cannot disagree with the renderer
+ * about what a value means. Callers resolve and validate the settings first
+ * (Stage 1 in the parsers, Stage 2 after decoding) and pass them here.
  */
 function buildCanonicalImageInput(
-  params: URLSearchParams,
   decoded: DecodedParams,
+  settings: ResolvedRenderSettings,
 ): CanonicalImageInput {
-  const overrides = readColorOverrides(params.get("groupColors"));
-  const opacitySteps = readOpacitySteps(params);
+  const overrides = readColorOverrides(settings.svg.groupColors);
+  const opacitySteps = settings.svg.opacitySteps;
 
   // Map iteration order is the group order of the URL, which is the draw
   // order. It is kept as-is: reordering groups changes the drawing.
@@ -385,7 +278,7 @@ function buildCanonicalImageInput(
 
   return {
     canvas: [decoded.sizeData.width, decoded.sizeData.height],
-    settings: readSettings(params),
+    settings: readSettings(settings),
     groups,
   };
 }

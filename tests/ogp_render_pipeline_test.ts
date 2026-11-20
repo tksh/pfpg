@@ -111,6 +111,24 @@ Deno.test("OGP rejects invalid UI params on both endpoints", async () => {
   );
 });
 
+// Constraints that depend on the decoded artwork are Stage 2: too many group
+// colors for the drawing must be a client error on both endpoints, not an
+// ignored surplus that still produces a shared-image URL.
+Deno.test("OGP rejects excess groupColors on both endpoints", async () => {
+  const params = new URLSearchParams(fixture);
+  params.set("groupColors", new Array(100).fill("F0F").join("_"));
+  await assertRejects(
+    () => renderPipeline(params),
+    InvalidOgpParamsError,
+    "Excess groupColors",
+  );
+  await assertRejects(
+    () => resolveImageMeta(params, "testcloud"),
+    InvalidOgpParamsError,
+    "Excess groupColors",
+  );
+});
+
 // colourFormat changes the serialized form, never the pixels. The shared-image
 // key and the raster must agree with the rgb rendering.
 Deno.test("OGP renders the same pixels for either color format", async () => {

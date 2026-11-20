@@ -25,6 +25,10 @@ import {
 } from "@tksh/stln-codec";
 import { BASIC_DATA_KEYS, FLAGS_MAP, VISUAL_CONFIG_DEFAULTS } from "constants";
 import { excludeStateKeys } from "common-utils/read-url-params";
+import {
+  resolveRasterSettings,
+  resolveSvgRenderSettings,
+} from "libpfpg/settings";
 import { getSharedImageKeyHash } from "shared-image/shared-image-key";
 import {
   buildCanonicalImageInput,
@@ -67,7 +71,10 @@ async function keyFor(
   { input: ReturnType<typeof buildCanonicalImageInput>; key: string }
 > {
   const decoded = await decodeUrlParams(excludeStateKeys(params));
-  const input = buildCanonicalImageInput(params, decoded);
+  const input = buildCanonicalImageInput(decoded, {
+    svg: resolveSvgRenderSettings(params),
+    raster: resolveRasterSettings(params),
+  });
   return { input, key: hashCanonicalImageInput(input) };
 }
 
@@ -419,8 +426,13 @@ Deno.test("partial group color overrides leave other groups alone", async () => 
 
 Deno.test("unusable values throw instead of reusing another key", async () => {
   const decoded = await decodeUrlParams(excludeStateKeys(artworkSearch()));
-  const build = (overrides: Record<string, string>) =>
-    buildCanonicalImageInput(artworkSearch(overrides), decoded);
+  const build = (overrides: Record<string, string>) => {
+    const params = artworkSearch(overrides);
+    return buildCanonicalImageInput(decoded, {
+      svg: resolveSvgRenderSettings(params),
+      raster: resolveRasterSettings(params),
+    });
+  };
 
   assertThrows(
     () => build({ widthNarrowness: "abc" }),

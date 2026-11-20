@@ -12,6 +12,7 @@ import {
   SETTINGS_DEFAULTS,
   URL_PARAMS_EXCLUDED_FROM_ARTWORK,
 } from "../src/js/constants.ts";
+import { validateArtworkConstraints } from "../src/js/page-specific/index/state/param-validator.ts";
 import { resolveUiSettings } from "../src/js/page-specific/index/state/ui-settings.ts";
 import { getSharedImageKeyHash } from "shared-image/shared-image-key";
 import { svg2rgba } from "svg2ui8a";
@@ -78,12 +79,19 @@ export async function renderPipeline(
     // user input: unique URLs would grow the isolate's memory without bound.
     const decodeOptions: DecodeOptions = { cache: false };
     const decoded = await decodeArtwork(artworkParams, decodeOptions);
+    const settings = {
+      svg: resolveSvgRenderSettings(params),
+      raster: resolveRasterSettings(params),
+    };
+    // Artwork-dependent checks must run before drawing, not only before the
+    // key is computed: an oversized render would otherwise rasterize first.
+    validateArtworkConstraints(decoded, settings);
 
-    svg = renderArtwork(decoded, resolveSvgRenderSettings(params));
+    svg = renderArtwork(decoded, settings.svg);
     // Reuse the decode the render already did; decoding again here would double
     // the cost of every request.
     key = await getSharedImageKeyHash(params, decoded);
-    height = resolveRasterSettings(params).heightPixelSize;
+    height = settings.raster.heightPixelSize;
   } catch (error) {
     throw new InvalidOgpParamsError(error);
   }

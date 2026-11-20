@@ -4,6 +4,11 @@ import {
   normalizeScalarParams,
 } from "common-utils/read-url-params";
 import {
+  resolveRasterSettings,
+  resolveSvgRenderSettings,
+} from "libpfpg/settings";
+import { validateArtworkConstraints } from "../state/param-validator.ts";
+import {
   buildCanonicalImageInput,
   hashCanonicalImageInput,
 } from "shared-image/canonical-image-input";
@@ -32,14 +37,15 @@ async function getSharedImageKeyHash(
   decoded?: DecodedParams,
 ): Promise<string> {
   urlParams = normalizeScalarParams(urlParams);
+  const settings = {
+    svg: resolveSvgRenderSettings(urlParams),
+    raster: resolveRasterSettings(urlParams),
+  };
   // State keys are the app's own settings, not artwork data
   const artworkParams = excludeStateKeys(urlParams);
   const artwork = decoded ?? await decodeUrlParams(artworkParams);
-  const hashHexPadded = hashCanonicalImageInput(
-    buildCanonicalImageInput(urlParams, artwork),
-  );
-
-  return hashHexPadded;
+  validateArtworkConstraints(artwork, settings);
+  return hashCanonicalImageInput(buildCanonicalImageInput(artwork, settings));
 }
 
 // Current-page wrapper for the browser callers
