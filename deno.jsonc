@@ -84,7 +84,7 @@
     "@tksh/stln-codec": "jsr:@tksh/stln-codec@^0.1.4",
 
     // Shared group-color parameter codec (URL/state shortening + expansion).
-    "@tksh/group-colors-param-codec": "jsr:@tksh/group-colors-param-codec@^0.1.1",
+    "@tksh/group-colors-param-codec": "jsr:@tksh/group-colors-param-codec@^0.2.0",
 
     // Color-space conversion: sRGB <-> OKLCH, plus CSS Color 4 gamut mapping.
     // The "fn" entry is Color.js's tree-shakeable procedural API. Color.js

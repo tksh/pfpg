@@ -18,6 +18,7 @@
     "jsr:@std/streams@^1.1.2": "1.1.2",
     "jsr:@std/xml@0.2": "0.2.0",
     "jsr:@timepp/murmurhash@~0.1.1": "0.1.1",
+    "jsr:@tksh/group-colors-param-codec@0.2": "0.2.0",
     "jsr:@tksh/group-colors-param-codec@~0.1.1": "0.1.1",
     "jsr:@tksh/stln-codec@~0.1.4": "0.1.4",
     "jsr:@tksh/svg2ui8a@~0.6.1": "0.6.1",
@@ -104,12 +105,15 @@
     "@tksh/group-colors-param-codec@0.1.1": {
       "integrity": "5b59bddb81bf91832ca8b56c506a4ab4507425baf52b33a665ffa0c23f4ccdf3"
     },
+    "@tksh/group-colors-param-codec@0.2.0": {
+      "integrity": "a794cc246e95fd473243f5c742427853bac0cd0543b74e3130afc6585b355afe"
+    },
     "@tksh/stln-codec@0.1.4": {
       "integrity": "6dcc5182707880b9303aec7cdc0ba897c415208a5b9be57d5824548b558b3cef",
       "dependencies": [
         "jsr:@std/collections",
         "jsr:@std/xml",
-        "jsr:@tksh/group-colors-param-codec",
+        "jsr:@tksh/group-colors-param-codec@~0.1.1",
         "jsr:@tksh/url-compressor"
       ]
     },
@@ -169,7 +173,7 @@
       "jsr:@std/encoding@^1.0.11",
       "jsr:@std/streams@^1.1.2",
       "jsr:@timepp/murmurhash@~0.1.1",
-      "jsr:@tksh/group-colors-param-codec@~0.1.1",
+      "jsr:@tksh/group-colors-param-codec@0.2",
       "jsr:@tksh/stln-codec@~0.1.4",
       "jsr:@tksh/svg2ui8a@~0.6.1",
       "npm:@jsquash/avif@2.1.1",
