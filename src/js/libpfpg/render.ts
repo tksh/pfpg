@@ -1,6 +1,9 @@
 import { type DecodedParams, generateSvg } from "@tksh/stln-codec";
 import {
   expandGroupColor,
+  hexToOpacity,
+  hexToRgb,
+  rgbToString,
   shortenHexAsHalf,
 } from "@tksh/group-colors-param-codec";
 import {
@@ -179,16 +182,10 @@ function applyGroupColors(
     const expanded = expandGroupColor(value);
     const hex = shortenHexAsHalf(expanded.slice(0, 6));
     const stroke = format === "rgb"
-      ? `rgb(${
-        [0, 2, 4].map((i) => parseInt(expanded.slice(i, i + 2), 16)).join(" ")
-      })`
+      ? rgbToString(hexToRgb(`#${expanded.slice(0, 6)}`))
       : `#${hex}`;
-    const opacity = Number(
-      (parseInt(expanded.slice(6, 8), 16) / 255).toFixed(2),
-    );
-    const strokeOpacity = Number(
-      (parseInt(expanded.slice(8, 10), 16) / 255).toFixed(2),
-    );
+    const opacity = hexToOpacity(expanded.slice(6, 8));
+    const strokeOpacity = hexToOpacity(expanded.slice(8, 10));
     return [undefined, stroke, opacity, strokeOpacity] as [
       undefined,
       string,

@@ -1,4 +1,10 @@
 import { assertEquals, assertRejects } from "@std/assert";
+import {
+  expandHexToSix,
+  opacityToHex,
+  parseRgbString,
+  rgbToHex,
+} from "@tksh/group-colors-param-codec";
 import { renderParamsToSvg } from "../src/js/libpfpg/render.ts";
 import { initSvg2rgba, svg2rgba } from "svg2ui8a";
 
@@ -152,13 +158,11 @@ function encodeGroupColors(svg: string): string {
     .slice(0, 1)
     .map(([, stroke, opacity, strokeOpacity]) => {
       const hex = stroke!.startsWith("#")
-        ? stroke!.slice(1).padEnd(6, stroke!.slice(-1))
-        : (stroke!.match(/\d+/g) ?? []).slice(0, 3).map((n) =>
-          Number(n).toString(16).padStart(2, "0")
-        ).join("");
-      const byte = (value: string) =>
-        Math.round(Number(value) * 255).toString(16).padStart(2, "0");
-      return `${hex}${byte(opacity!)}${byte(strokeOpacity!)}`;
+        ? expandHexToSix(stroke!)
+        : rgbToHex(parseRgbString(stroke!));
+      return `${hex}${opacityToHex(Number(opacity))}${
+        opacityToHex(Number(strokeOpacity))
+      }`;
     }).join("_");
 }
 

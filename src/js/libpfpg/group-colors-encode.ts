@@ -2,9 +2,9 @@
 // `groupColors` URL value. Pure string/number work.
 import {
   expandHexToSix,
+  opacityToHex,
   shortenGroupColor,
 } from "@tksh/group-colors-param-codec";
-import { normalizedToHex } from "./color-rgb.ts";
 import { convertColorFormatForArray } from "./color-format.ts";
 import { getGroupColorsValues } from "./group-colors.ts";
 
@@ -31,10 +31,10 @@ export function getGroupColorsAsJoinedHex(inputSvg: string): string {
     expandHexToSix(colorValueStr.slice(1))
   ); // Delete '#'
   const opHexArray = opArray.map((colorValueStr) =>
-    normalizedToHex(Number(colorValueStr)).toUpperCase()
+    opacityToHex(Number(colorValueStr))
   );
   const soHexArray = soArray.map((colorValueStr) =>
-    normalizedToHex(Number(colorValueStr)).toUpperCase()
+    opacityToHex(Number(colorValueStr))
   );
 
   // Each group is normalized to a 6-digit stroke + 2-digit opacity +

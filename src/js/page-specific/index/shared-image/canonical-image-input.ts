@@ -1,4 +1,8 @@
-import { expandGroupColor } from "@tksh/group-colors-param-codec";
+import {
+  expandGroupColor,
+  hexToOpacity,
+  uint8ToHex,
+} from "@tksh/group-colors-param-codec";
 import {
   type DecodedGroup,
   type DecodedGroupColors,
@@ -149,7 +153,9 @@ function effectiveOpacityUint8(
   uint8: number,
   step: AllowedOpacityStep | undefined,
 ): number {
-  const displayed = Number((uint8 / 255).toFixed(2));
+  // Route the uint8 -> two-decimal conversion through the codec so the key's
+  // displayed opacity matches the renderer's and the URL parser's rule.
+  const displayed = hexToOpacity(uint8ToHex(uint8));
   if (step === undefined) return Math.round(displayed * 255);
   let chosen = 1;
   let bestDistance = Number.POSITIVE_INFINITY;

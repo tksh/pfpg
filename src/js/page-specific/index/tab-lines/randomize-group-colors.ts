@@ -1,4 +1,11 @@
 import { getSvgString } from "button/download-as-file";
+import {
+  expandHexToSix,
+  opacityToHex,
+  parseRgbString,
+  rgbToHex,
+  rgbToString,
+} from "@tksh/group-colors-param-codec";
 import { convertToRgb } from "libpfpg/color-format";
 import { oklchToRgb } from "color-formatter/oklch-to-rgb";
 import { randomizeOklch } from "color-formatter/randomize-oklch";
@@ -16,8 +23,6 @@ import {
   getStrokeOpacity,
   regexMatchesOfGroupColors,
 } from "libpfpg/group-colors";
-import { rgbStringify } from "libpfpg/color-hex";
-import { rgbObjToHex } from "libpfpg/color-rgb";
 import { svg2pngOption } from "state/resvg-option";
 import {
   adjustInputValueViaButton,
@@ -206,12 +211,10 @@ function joinOverridesHex(
     .map((entry) => {
       const stroke = String(entry[1] ?? "");
       const hex = stroke.startsWith("#")
-        ? stroke.slice(1).padEnd(6, stroke.slice(-1))
-        : (stroke.match(/\d+/g) ?? []).slice(0, 3)
-          .map((n) => Number(n).toString(16).padStart(2, "0"))
-          .join("");
+        ? expandHexToSix(stroke)
+        : rgbToHex(parseRgbString(stroke));
       const byte = (value: string | number | undefined) =>
-        Math.round(Number(value ?? 1) * 255).toString(16).padStart(2, "0");
+        opacityToHex(Number(value ?? 1));
       return `${hex}${byte(entry[2])}${byte(entry[3])}`;
     })
     .join("_");
@@ -243,9 +246,7 @@ function randomizeStroke(
     randomized.hue,
   );
 
-  return colorFormat === "rgb"
-    ? rgbStringify([rgb.r, rgb.g, rgb.b])
-    : "#" + rgbObjToHex(rgb);
+  return colorFormat === "rgb" ? rgbToString(rgb) : "#" + rgbToHex(rgb);
 }
 
 function readSpreadFromSliders(): OklchSpread {

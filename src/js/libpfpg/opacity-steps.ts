@@ -1,3 +1,9 @@
+import {
+  parseRgbString,
+  rgbToHex,
+  shortenHexAsHalf,
+} from "@tksh/group-colors-param-codec";
+
 /**
  * The largest opacity step from the supported set that divides every given
  * opacity. Used to derive an artwork's own default step, so a drawing whose
@@ -69,10 +75,7 @@ export function snapToGrid(
 }
 function convertColor(color: string, format: string): string {
   if (format === "rgb" || !color.startsWith("rgb")) return color;
-  const channels = color.match(/\d+/g)?.slice(0, 3).map(Number) ?? [0, 0, 0];
-  const hex = channels.map((n) => n.toString(16).padStart(2, "0")).join("");
-  const short = /^([\da-f])\1([\da-f])\2([\da-f])\3$/i.exec(hex);
-  return `#${short ? short.slice(1).join("") : hex}`;
+  return `#${shortenHexAsHalf(rgbToHex(parseRgbString(color)))}`;
 }
 function nearest(grid: number[], value: number): string {
   let best = grid[0] ?? 1;

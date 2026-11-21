@@ -2,9 +2,9 @@
 // entries, and report the opacities those entries imply. Pure string/number work.
 import {
   expandGroupColor,
+  hexToOpacity,
   shortenHexAsHalf,
 } from "@tksh/group-colors-param-codec";
-import { normalizedFromHex } from "./color-hex.ts";
 import { convertColorFormat } from "./color-format.ts";
 
 export { decodeGroupColorsAsArray, getGroupOpacitiesAsMap };
@@ -23,8 +23,8 @@ function decodeGroupColorsAsArray(
     const tenDigitsHex = expandGroupColor(hex);
     const strokeAsHex = "#" + shortenHexAsHalf(tenDigitsHex.slice(0, 6)); // 6 digits hex => Reduce to 3 digits if could
     const stroke = convertColorFormat(strokeAsHex, colorFormat); // Convert to RGB if it's currently selected, otherwise return as-is
-    const opacity = normalizedFromHex(tenDigitsHex.slice(6, 8)); // 2 digits hex => Float [0-1]
-    const strokeOpacity = normalizedFromHex(tenDigitsHex.slice(8)); // 2 digits hex => Float [0-1]
+    const opacity = hexToOpacity(tenDigitsHex.slice(6, 8)); // 2 digits hex => Float [0-1]
+    const strokeOpacity = hexToOpacity(tenDigitsHex.slice(8)); // 2 digits hex => Float [0-1]
 
     // Generate the array as same structured like regex '.match()' object
     return [undefined, stroke, opacity, strokeOpacity];

@@ -215,8 +215,6 @@
     "libpfpg/group-colors": "./src/js/libpfpg/group-colors.ts",
     "libpfpg/opacity-steps": "./src/js/libpfpg/opacity-steps.ts",
     "libpfpg/color-format": "./src/js/libpfpg/color-format.ts",
-    "libpfpg/color-hex": "./src/js/libpfpg/color-hex.ts",
-    "libpfpg/color-rgb": "./src/js/libpfpg/color-rgb.ts",
     "libpfpg/group-colors-array": "./src/js/libpfpg/group-colors-array.ts",
     "libpfpg/group-colors-encode": "./src/js/libpfpg/group-colors-encode.ts",
 
