@@ -1,7 +1,12 @@
-import { type SettingValue, UI_CONFIG_DEFAULTS } from "constants";
+import {
+  LOCALE_URL_PARAM,
+  type SettingValue,
+  UI_CONFIG_DEFAULTS,
+} from "constants";
+import { type Locale, parseLocale } from "i18n/supported-locales";
 import { readLastParam } from "libpfpg/settings";
 
-export { resolveUiSettings };
+export { resolveLocaleStrict, resolveUiSettings };
 
 export type ThemeColor = "white" | "light" | "dark" | "black";
 export type ButtonAction = "download" | "copy";
@@ -147,4 +152,15 @@ function resolveUiSettings(params: URLSearchParams): UiSettings {
       requiredEnumDefault("imageFormat", IMAGE_FORMATS),
     ),
   };
+}
+
+/**
+ * Resolve `lang` from the same params the other resolvers see.
+ *
+ * The locale is deliberately kept out of `SETTINGS_DEFAULTS`: Reset must not
+ * reload the page in another language. It still has to be validated on every
+ * path, so it lives beside the UI resolver rather than inside `libpfpg`.
+ */
+function resolveLocaleStrict(params: URLSearchParams): Locale {
+  return parseLocale(readLastParam(params, LOCALE_URL_PARAM));
 }

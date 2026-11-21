@@ -39,8 +39,8 @@ Deno.test("the library's combined keys lead the app's settings in order", () => 
     "the app is expected to add UI-only keys after the render keys",
   );
 
-  // The hard-coded slice boundaries in url-state-manager.ts depend on the
-  // SVG-optimize / visual split, so the sub-map sizes must not shift.
+  // The sub-maps are the schema each UI group selects by key, so a missing or
+  // duplicated entry would move a key out of its Reset box.
   assertEquals(SVG_OPTIMIZE_DEFAULTS.size, 3);
   assertEquals(VISUAL_CONFIG_DEFAULTS.size, 10);
 });

@@ -5,15 +5,15 @@ import {
   excludeStateKeys,
   MAX_PARAMS_LENGTH,
   normalizeScalarParams,
-  resolveRasterSettings,
-  resolveSvgRenderSettings,
 } from "../src/js/libpfpg/settings.ts";
 import {
   SETTINGS_DEFAULTS,
   URL_PARAMS_EXCLUDED_FROM_ARTWORK,
 } from "../src/js/constants.ts";
-import { validateArtworkConstraints } from "../src/js/page-specific/index/state/param-validator.ts";
-import { resolveUiSettings } from "../src/js/page-specific/index/state/ui-settings.ts";
+import {
+  validateArtworkConstraints,
+  validateParamsSchema,
+} from "../src/js/page-specific/index/state/param-validator.ts";
 import { getSharedImageKeyHash } from "shared-image/shared-image-key";
 import { svg2rgba } from "svg2ui8a";
 
@@ -63,10 +63,9 @@ export async function renderPipeline(
   let key: string;
   let height: number;
   try {
-    // UI settings are app state, but a present-invalid value must still fail
-    // here: otherwise the endpoint would answer 200 with a valid picture for a
-    // URL the browser rejects.
-    resolveUiSettings(params);
+    // Stage 1 runs before decoding or any side effect; the browser uses the
+    // same validator at startup, so a rejected URL gets the same verdict here.
+    const validated = validateParamsSchema(params);
     const artworkParams = excludeStateKeys(params, APP_STATE_KEYS);
     if (
       new TextEncoder().encode(artworkParams.toString()).length >
@@ -79,19 +78,15 @@ export async function renderPipeline(
     // user input: unique URLs would grow the isolate's memory without bound.
     const decodeOptions: DecodeOptions = { cache: false };
     const decoded = await decodeArtwork(artworkParams, decodeOptions);
-    const settings = {
-      svg: resolveSvgRenderSettings(params),
-      raster: resolveRasterSettings(params),
-    };
     // Artwork-dependent checks must run before drawing, not only before the
     // key is computed: an oversized render would otherwise rasterize first.
-    validateArtworkConstraints(decoded, settings);
+    validateArtworkConstraints(decoded, validated);
 
-    svg = renderArtwork(decoded, settings.svg);
-    // Reuse the decode the render already did; decoding again here would double
-    // the cost of every request.
-    key = await getSharedImageKeyHash(params, decoded);
-    height = settings.raster.heightPixelSize;
+    svg = renderArtwork(decoded, validated.svg);
+    // Reuse both the decode and the resolved settings; neither should be
+    // recomputed for the key of the same request.
+    key = await getSharedImageKeyHash(params, decoded, validated);
+    height = validated.raster.heightPixelSize;
   } catch (error) {
     throw new InvalidOgpParamsError(error);
   }
@@ -131,10 +126,8 @@ export async function resolveImageMeta(
     APP_STATE_KEYS,
   );
   try {
-    resolveSvgRenderSettings(params);
-    resolveRasterSettings(params);
-    resolveUiSettings(params);
-    const key = await getSharedImageKeyHash(params);
+    const validated = validateParamsSchema(params);
+    const key = await getSharedImageKeyHash(params, undefined, validated);
     const publicId = `${key}-png`;
     const imageUrl =
       `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}.png`;

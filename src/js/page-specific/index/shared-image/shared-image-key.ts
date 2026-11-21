@@ -4,10 +4,10 @@ import {
   normalizeScalarParams,
 } from "common-utils/read-url-params";
 import {
-  resolveRasterSettings,
-  resolveSvgRenderSettings,
-} from "libpfpg/settings";
-import { validateArtworkConstraints } from "../state/param-validator.ts";
+  validateArtworkConstraints,
+  type ValidatedParams,
+  validateParamsSchema,
+} from "../state/param-validator.ts";
 import {
   buildCanonicalImageInput,
   hashCanonicalImageInput,
@@ -30,17 +30,17 @@ export { getSharedImageKeyHash, getSharedImageKeyHashForCurrentUrl };
  * @param {DecodedParams} [decoded] - Already-decoded artwork, when the caller
  *   decoded the same params for rendering. Passing it avoids decoding twice;
  *   it must be the decode of `urlParams` with the state keys filtered out.
+ * @param {ValidatedParams} [validated] - Settings validated by the caller, so
+ *   this path does not parse the params a second time.
  * @returns {Promise<string>} A 32-character hexadecimal string
  */
 async function getSharedImageKeyHash(
   urlParams: URLSearchParams,
   decoded?: DecodedParams,
+  validated?: ValidatedParams,
 ): Promise<string> {
   urlParams = normalizeScalarParams(urlParams);
-  const settings = {
-    svg: resolveSvgRenderSettings(urlParams),
-    raster: resolveRasterSettings(urlParams),
-  };
+  const settings = validated ?? validateParamsSchema(urlParams);
   // State keys are the app's own settings, not artwork data
   const artworkParams = excludeStateKeys(urlParams);
   const artwork = decoded ?? await decodeUrlParams(artworkParams);

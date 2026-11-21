@@ -1,4 +1,10 @@
-import { SETTINGS_DEFAULTS, type SettingValue } from "constants";
+import {
+  SETTINGS_DEFAULTS,
+  type SettingValue,
+  SVG_OPTIMIZE_DEFAULTS,
+  UI_CONFIG_DEFAULTS,
+  VISUAL_CONFIG_DEFAULTS,
+} from "constants";
 import { readLastParam } from "common-utils/read-url-params";
 
 export {
@@ -6,7 +12,6 @@ export {
   getStateUrl,
   getStateUrlsAsMapExcludesSvgOptimization,
   getStateUrlsAsRawWithDefaultFill,
-  getStateUrlsInRangeAsMapWithDefaultFill,
   getStateUrlsOfImageCustomization,
   getStateUrlsOfSvgOptimization,
   getStateUrlsOfUiConfiguration,
@@ -112,83 +117,42 @@ function setStateUrl(params: Record<string, SettingValue | null>): void {
 
 // Select the specific keys
 
-// URLから特定の範囲の状態パラメータを取得する汎用関数（ブール値対応）
-function getStateUrlsInRange(
-  startIndex: number,
-  endIndex: number,
+// Select state params by the schema map that owns them, never by position:
+// inserting a key must not silently move a Reset box's boundary.
+function getStateUrlsForKeys(
+  keys: Iterable<string>,
 ): Map<string, string | boolean> {
-  const allParams = getAllStateUrls(); // return Object
-  const stateKeys = Array.from(SETTINGS_DEFAULTS.keys()).slice(
-    startIndex,
-    endIndex,
-  );
+  const wanted = new Set(keys);
   return new Map(
-    Object.entries(allParams).filter(([key]) => stateKeys.includes(key)),
+    Object.entries(getAllStateUrls()).filter(([key]) => wanted.has(key)),
   );
-}
-// URLから特定の範囲の状態パラメータを取得する汎用関数
-function getStateUrlsInRangeAsMapWithDefaultFill(
-  startIndex: number,
-  endIndex: number,
-): Map<string, SettingValue> {
-  const allParams = getStateUrlsAsMapWithDefaultFill(); // return Map
-  const stateKeys = Array.from(SETTINGS_DEFAULTS.keys()).slice(
-    startIndex,
-    endIndex,
-  );
-  return new Map(
-    Object.entries(allParams).filter(([key]) => stateKeys.includes(key)),
-  );
-}
-// マップオブジェクトを SETTINGS_DEFAULTS の開始インデックスと終了インデックスでフィルタリングする関数
-function filterStateByIndex(
-  stateMap: Map<string, SettingValue>,
-  startIndex: number,
-  endIndex: number,
-): Map<string, SettingValue> {
-  const filteredMap = new Map<string, SettingValue>();
-
-  // SETTINGS_DEFAULTS からキーを範囲で抽出
-  const keysInRange = Array.from(SETTINGS_DEFAULTS.keys()).slice(
-    startIndex,
-    endIndex + 1,
-  );
-
-  // stateMap の中で指定されたキーのみを保持
-  keysInRange.forEach((key) => {
-    if (stateMap.has(key)) {
-      filteredMap.set(key, stateMap.get(key));
-    }
-  });
-
-  return filteredMap;
 }
 
 // SVG optimization の状態パラメータを全て取得する関数
 function getStateUrlsOfSvgOptimization(): Map<string, string | boolean> {
-  return getStateUrlsInRange(0, 3);
+  return getStateUrlsForKeys(SVG_OPTIMIZE_DEFAULTS.keys());
 }
 
 // Image customization の状態パラメータを全て取得する関数
 function getStateUrlsOfImageCustomization(): Map<string, string | boolean> {
-  return getStateUrlsInRange(3, 13);
+  return getStateUrlsForKeys(VISUAL_CONFIG_DEFAULTS.keys());
 }
 
 // UI configuration の状態パラメータを全て取得する関数
 function getStateUrlsOfUiConfiguration(): Map<string, string | boolean> {
-  return getStateUrlsInRange(13, SETTINGS_DEFAULTS.size);
+  return getStateUrlsForKeys(UI_CONFIG_DEFAULTS.keys());
 }
 
 // Image customization, UI configuration の状態パラメータを全て取得し 存在しない場合はデフォルト値で補完する関数
 // - ブーリアンへの型変換は行わなず 文字列のまま 取得する
 function getStateUrlsAsMapExcludesSvgOptimization(): Map<string, SettingValue> {
-  const statusExcludeArtworkData = getStateUrlsAsMapWithDefaultFill();
-  const statusExcludeSvgOptimization = filterStateByIndex(
-    statusExcludeArtworkData,
-    3,
-    SETTINGS_DEFAULTS.size,
+  const kept = new Set([
+    ...VISUAL_CONFIG_DEFAULTS.keys(),
+    ...UI_CONFIG_DEFAULTS.keys(),
+  ]);
+  return new Map(
+    [...getStateUrlsAsMapWithDefaultFill()].filter(([key]) => kept.has(key)),
   );
-  return statusExcludeSvgOptimization;
 }
 
 // Remove the url params to reset

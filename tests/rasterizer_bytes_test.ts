@@ -127,11 +127,11 @@ Deno.test("server source initializes before listening and has no fixed URL", asy
     new URL("../server/ogp-render.ts", import.meta.url),
   );
   // The server shares the library's render path instead of its own copy: it
-  // decodes through libpfpg and renders synchronously from the resolved
-  // settings. The raster height comes from the shared raster settings reader.
+  // decodes through libpfpg and renders synchronously from the settings that
+  // the shared Stage 1 validator resolved (raster height included).
   assert(ogpRenderer.includes("decodeArtwork"));
   assert(ogpRenderer.includes("renderArtwork"));
-  assert(ogpRenderer.includes("resolveRasterSettings"));
+  assert(ogpRenderer.includes("validateParamsSchema"));
   // Request-scoped callers must not populate the artwork cache: OGP takes
   // arbitrary URLs, so a cache keyed by user input would grow without bound.
   assert(

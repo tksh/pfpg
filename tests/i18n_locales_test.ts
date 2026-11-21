@@ -1,6 +1,7 @@
-import { assert, assertEquals } from "@std/assert";
+import { assert, assertEquals, assertThrows } from "@std/assert";
 import { excludeStateKeys } from "common-utils/read-url-params";
 import { getLocale, resolveLocale, setLocale, t } from "i18n/i18n";
+import { resolveLocaleStrict } from "state/ui-settings";
 import deJson from "../src/js/i18n/locales/de.json" with { type: "json" };
 import enJson from "../src/js/i18n/locales/en.json" with { type: "json" };
 import arJson from "../src/js/i18n/locales/ar.json" with { type: "json" };
@@ -57,15 +58,28 @@ Deno.test("locale values are non-empty strings in every file", () => {
   }
 });
 
-Deno.test("locale resolution defaults to English and honors ?lang", () => {
+Deno.test("locale resolution defaults to English only when lang is absent", () => {
   assertEquals(resolveLocale(""), "en");
   for (const [code] of LOCALE_JSONS) {
-    // Uppercase on purpose: resolution normalizes the requested code.
-    assertEquals(resolveLocale(`?lang=${code.toUpperCase()}`), code);
+    assertEquals(resolveLocale(`?lang=${code}`), code);
   }
-  assertEquals(resolveLocale("?lang="), "en");
-  assertEquals(resolveLocale("?lang=xx"), "en");
   assertEquals(resolveLocale("?foo=2&title=~202401_001"), "en");
+});
+
+Deno.test("locale resolution rejects present-but-unsupported values", () => {
+  for (const search of ["?lang=JA", "?lang=", "?lang=xx", "?lang= ja"]) {
+    assertThrows(() => resolveLocale(search), TypeError, "lang");
+  }
+});
+
+Deno.test("resolveLocaleStrict applies the same closed domain to URL params", () => {
+  assertEquals(resolveLocaleStrict(new URLSearchParams()), "en");
+  assertEquals(resolveLocaleStrict(new URLSearchParams("lang=ja")), "ja");
+  assertThrows(
+    () => resolveLocaleStrict(new URLSearchParams("lang=JA")),
+    TypeError,
+    "lang",
+  );
 });
 
 Deno.test("resolution ignores neighboring artwork state params", () => {

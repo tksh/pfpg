@@ -127,10 +127,9 @@ export const SVG_OPTIMIZE_DEFAULTS = new Map<string, SettingValue>(
  * which settings exist and what their defaults are. The map's entry order is
  * the library's order and is the canonical serialization order.
  *
- * URL-state axis: `SETTINGS_DEFAULTS[3, 3 + this map's size)`, the slice
- * `getStateUrlsOfImageCustomization()` and Reset's "Image customization"
- * box read. Inserting a key moves the boundary that the hard-coded 13 in
- * `url-state-manager.ts` relies on; appending only widens this slice.
+ * `getStateUrlsOfImageCustomization()` and Reset's "Image customization" box
+ * select by this map's keys, not by a position in `SETTINGS_DEFAULTS`, so
+ * inserting or appending a key cannot shift another box's membership.
  */
 export const VISUAL_CONFIG_DEFAULTS = new Map<string, SettingValue>(
   VISUAL_SETTING_DEFAULTS,
@@ -139,11 +138,10 @@ export const VISUAL_CONFIG_DEFAULTS = new Map<string, SettingValue>(
 /**
  * UI configuration schema.
  *
- * URL-state axis: `SETTINGS_DEFAULTS[3 + VISUAL_CONFIG_DEFAULTS.size, size)`,
- * the slice `getStateUrlsOfUiConfiguration()` and Reset's "UI configuration"
- * box read. Appending here only widens the last slice. `lang` is UI
- * configuration but not state (`LOCALE_URL_PARAM`), so it must not be added
- * here: Reset would then drop it and reload the page in another language.
+ * `getStateUrlsOfUiConfiguration()` and Reset's "UI configuration" box select
+ * by this map's keys, not by position. `lang` is UI configuration but not state
+ * (`LOCALE_URL_PARAM`), so it must not be added here: Reset would then drop it
+ * and reload the page in another language.
  */
 export const UI_CONFIG_DEFAULTS = new Map<string, SettingValue>([
   //  ['Attribute name',   default value],         // Appeared at: | Type:  | Possible values:

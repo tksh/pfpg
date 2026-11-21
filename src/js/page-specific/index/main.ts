@@ -1,11 +1,16 @@
 import { initDownloadButtons } from "button/init-download-buttons";
 import { initButtonActionSelect } from "button/update-button-text";
 import { LOCALE_URL_PARAM } from "constants";
+import { getUrlParamsExceptsStates } from "common-utils/read-url-params";
 import {
-  getUrlParamsExceptsStates,
-  normalizeScalarParams,
-} from "common-utils/read-url-params";
-import { loadArtwork, renderCurrentSvg } from "state/render-state";
+  parseStartupUrl,
+  validateArtworkConstraints,
+} from "state/param-validator";
+import {
+  currentArtwork,
+  loadArtwork,
+  renderCurrentSvg,
+} from "state/render-state";
 import {
   adjustLayoutIfNotMobile,
   initViewportLister,
@@ -52,24 +57,25 @@ import {
 } from "tab-ui/theme-color";
 import { initViewScalingSelect } from "tab-ui/view-scaling";
 
-// Module scripts run after the DOM is parsed, so the locale from the URL can
-// be applied before anything renders or any JS text is produced.
-const originalSearch = globalThis.location.search;
-const normalizedSearch = normalizeScalarParams(
-  new URLSearchParams(originalSearch),
-).toString();
-if (normalizedSearch !== originalSearch.slice(1)) {
-  const search = normalizedSearch === "" ? "" : `?${normalizedSearch}`;
-  globalThis.history.replaceState(
-    {},
-    "",
-    `${globalThis.location.pathname}${search}${globalThis.location.hash}`,
-  );
-}
-applyLocaleFromUrl();
-
+// Parse first: nothing may rewrite the URL or the DOM until every URL value
+// has passed Stage 1. A rejected URL reaches #decode-error byte-for-byte as it
+// was typed, so the error screen names the real offending input.
 let startupFailed = false;
 const startupPromise = (async function (): Promise<void> {
+  const originalSearch = globalThis.location.search;
+  const { validated, normalizedSearch } = parseStartupUrl(originalSearch);
+
+  // Schema passed. Locale and URL normalization are now safe.
+  applyLocaleFromUrl();
+  if (normalizedSearch !== originalSearch.slice(1)) {
+    const search = normalizedSearch === "" ? "" : `?${normalizedSearch}`;
+    globalThis.history.replaceState(
+      {},
+      "",
+      `${globalThis.location.pathname}${search}${globalThis.location.hash}`,
+    );
+  }
+
   // Initialize sample artwork data.
 
   // If no artwork URL parameters are present (e.g., on initial page load),
@@ -124,6 +130,9 @@ const startupPromise = (async function (): Promise<void> {
   // Decode the artwork once. Every later change re-renders from this and the
   // URL settings, without touching the codec again.
   await loadArtwork();
+  // Stage 2 needs the decoded artwork: excess colors or an oversized render
+  // must stop startup before any customization is applied.
+  validateArtworkConstraints(currentArtwork(), validated);
 
   // URLに themeColor が既にある場合はそれを尊重し、ブラウザ設定による検知・上書きは行わない
   const existingThemeColor = getState("themeColor");

@@ -1,4 +1,9 @@
 import { LOCALE_URL_PARAM } from "constants";
+import {
+  DEFAULT_LOCALE,
+  type Locale,
+  parseLocale,
+} from "i18n/supported-locales";
 import arJson from "./locales/ar.json" with { type: "json" };
 import zhJson from "./locales/zh.json" with { type: "json" };
 import enJson from "./locales/en.json" with { type: "json" };
@@ -10,26 +15,11 @@ import frJson from "./locales/fr.json" with { type: "json" };
 import ruJson from "./locales/ru.json" with { type: "json" };
 import deJson from "./locales/de.json" with { type: "json" };
 
-// Adding a language = one JSON file under ./locales, one entry here, and one
-// <option> for the Language select in index.html. Nothing else.
-// Mirrors the <option> order in index.html (top-ten languages by internet
-// users, endonym-labeled).
-const SUPPORTED_LOCALES = [
-  "en",
-  "zh",
-  "es",
-  "ar",
-  "id",
-  "pt",
-  "fr",
-  "ja",
-  "ru",
-  "de",
-] as const;
+// Adding a language = one JSON file under ./locales, one entry in
+// supported-locales.ts, and one <option> for the Language select in
+// index.html. Nothing else.
+export type { Locale };
 
-export type Locale = (typeof SUPPORTED_LOCALES)[number];
-
-const DEFAULT_LOCALE: Locale = "en";
 const LANGUAGE_SELECT_ID = "language";
 
 type LocaleData = Readonly<Record<string, string>>;
@@ -61,14 +51,10 @@ const localeData = new Map<Locale, LocaleData>([
   ["de", validatedLocaleData("de", deJson)],
 ]);
 
-// Pure so the resolution rules stay unit-testable without a DOM.
+// Pure so the resolution rules stay unit-testable without a DOM. An absent
+// `lang` selects the default; a present one must be an exact supported code.
 export function resolveLocale(search: string): Locale {
-  const requested = new URLSearchParams(search).get(LOCALE_URL_PARAM);
-  if (requested === null) return DEFAULT_LOCALE;
-  const normalized = requested.trim().toLowerCase();
-  return (SUPPORTED_LOCALES as readonly string[]).includes(normalized)
-    ? normalized as Locale
-    : DEFAULT_LOCALE;
+  return parseLocale(new URLSearchParams(search).get(LOCALE_URL_PARAM));
 }
 
 let currentLocale: Locale = DEFAULT_LOCALE;

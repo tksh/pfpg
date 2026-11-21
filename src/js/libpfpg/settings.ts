@@ -5,9 +5,8 @@ export const MAX_PARAMS_LENGTH = 8192;
 /**
  * SVG optimization toggles, in the order the app serializes them.
  *
- * Entry order is part of the contract: `url-state-manager.ts` slices the
- * combined settings list by position, so inserting a key moves those
- * boundaries.
+ * The entry order is a serialization contract. Consumers that group these keys
+ * for the UI select them by membership in this map, not by position.
  */
 export const SVG_OPTIMIZE_SETTING_DEFAULTS = new Map<
   string,
