@@ -71,6 +71,18 @@ const INVALID_CASES: readonly InvalidCase[] = [
     message: "opacitySteps",
   },
   {
+    name: "non-hex groupColors",
+    key: "groupColors",
+    value: "nothex",
+    message: "groupColors",
+  },
+  {
+    name: "invalid colorFormat",
+    key: "colorFormat",
+    value: "xyz",
+    message: "colorFormat",
+  },
+  {
     name: "invalid themeColor",
     key: "themeColor",
     value: "almost-black",
