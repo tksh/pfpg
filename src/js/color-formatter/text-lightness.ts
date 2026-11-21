@@ -1,4 +1,4 @@
-import { convertToRgbArr } from "libpfpg/color-format";
+import { convertToRgb } from "libpfpg/color-format";
 import { rgbToOklch } from "color-formatter/rgb-to-oklch";
 
 export { getTextLightness };
@@ -9,13 +9,10 @@ export { getTextLightness };
  * @return {number} - Lightness value for OKLCH, [0-1]
  */
 function getTextLightness(colorString: string): number {
-  const rgbArr = convertToRgbArr(colorString);
-  // Number() preserves the legacy coercion for invalid input (sentinel strings flow the same way).
-  const oklch = rgbToOklch(
-    Number(rgbArr[0]),
-    Number(rgbArr[1]),
-    Number(rgbArr[2]),
-  ); // r, g, b UInt8 [0-255]
+  // convertToRgb throws on a malformed color; no sentinel or NaN ever reaches
+  // the perceptual conversion.
+  const { r, g, b } = convertToRgb(colorString);
+  const oklch = rgbToOklch(r, g, b); // r, g, b UInt8 [0-255]
   // OKLCH lightness is normalized [0, 1], so the midpoint is 0.5 and the offset is
   // half the scale. Rounding to an integer here would collapse the scale to {0, 1}
   // and destroy the contrast decision entirely.

@@ -1,4 +1,4 @@
-import { assert, assertEquals } from "@std/assert";
+import { assert, assertEquals, assertThrows } from "@std/assert";
 import { oklchToRgb } from "color-formatter/oklch-to-rgb";
 import { rgbToOklch } from "color-formatter/rgb-to-oklch";
 import { getTextLightness } from "color-formatter/text-lightness";
@@ -148,13 +148,12 @@ Deno.test("rgbToOklch: every byte-range input stays in the OKLCH ranges", () => 
   }
 });
 
-Deno.test("rgbToOklch: legacy sentinel input degrades without throwing", () => {
-  // convertToRgbArr returns "Invalid hex string" for bad input, and
-  // getTextLightness coerces it with Number(). The old implementation let the
-  // NaN flow through; keep that behavior rather than throwing or clamping.
-  const sentinel = Number("Invalid hex string");
-  const actual = rgbToOklch(sentinel, sentinel, sentinel);
-  assert(Number.isNaN(actual.lightness), "NaN lightness should flow through");
+Deno.test("getTextLightness rejects a malformed color without a fallback", () => {
+  // Invalid colors now throw at the parser instead of becoming a sentinel
+  // string that Number() turned into NaN and silently fed to Color.js.
+  for (const bad of ["not-a-color", "#GGGGGG", "rgb(999 0 0)"]) {
+    assertThrows(() => getTextLightness(bad), Error, undefined, bad);
+  }
 });
 
 Deno.test("oklchToRgb: colors already inside sRGB are returned unchanged", () => {
@@ -297,10 +296,6 @@ Deno.test("getTextLightness: the decision flips at the documented gray", () => {
   assert(getTextLightness("#808080") < 0.5, "gray 128 should get dark text");
 });
 
-Deno.test("getTextLightness: legacy sentinel input degrades without throwing", () => {
-  // rgb() and hex() both produce a "Invalid ..." sentinel string for malformed
-  // values; Number() turns it into NaN and the old code emitted an invalid
-  // color that the CSS parser ignored.
-  const actual = getTextLightness("#ZZZZZZ");
-  assert(Number.isNaN(actual), "NaN lightness should flow through");
+Deno.test("getTextLightness: malformed hex throws instead of leaking NaN", () => {
+  assertThrows(() => getTextLightness("#ZZZZZZ"), Error, "expandHexToSix");
 });

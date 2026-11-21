@@ -1,25 +1,48 @@
-import { hexToRgbArr, rgbStringify } from "./color-hex.ts";
-import { rgbStrToRgbArr, rgbToHex } from "./color-rgb.ts";
+// @tksh/libpfpg: switch a stroke between the HEX and RGB notations the UI
+// offers. The conversions themselves come from the codec, so a value this
+// module keeps has already been parsed by the same rules everywhere else.
+import {
+  hexToRgb,
+  parseRgbString,
+  type Rgb,
+  rgbToHex as codecRgbToHex,
+  rgbToString,
+} from "@tksh/group-colors-param-codec";
 
-export { convertColorFormat, convertColorFormatForArray, convertToRgbArr };
+export { convertColorFormat, convertColorFormatForArray, convertToRgb };
 
-// 単一の色情報の文字列を指定の形式に変換する
-function convertColorFormat(color: string, colorFormat: string): string {
-  const currentFormat = detectColorFormat(color);
-  if (currentFormat === colorFormat) {
-    // 形式が一致している場合は何もせずに元の値を返す
-    return color;
-  } else {
-    // 形式が一致していない場合は変換処理を行う
-    if (colorFormat === "rgb") {
-      return rgbStringify(hexToRgbArr(color)); // HEXからRGBへの変換関数を呼び出す
-    } else {
-      return rgbToHex(color); // RGBからHEXへの変換関数を呼び出す
-    }
+function detectColorFormat(color: string): "rgb" | "hex" {
+  // `startsWith("rgb")` misclassified `RGB(...)` and `rgba(...)`; only a value
+  // the codec can parse is the RGB notation.
+  try {
+    parseRgbString(color);
+    return "rgb";
+  } catch {
+    return "hex";
   }
 }
 
-// 色情報の文字列の配列を指定の形式に変換する
+function convertColorFormat(color: string, colorFormat: string): string {
+  const currentFormat = detectColorFormat(color);
+  if (currentFormat === colorFormat) {
+    // Keeping the value still validates it: an unparseable color must not be
+    // written into the SVG just because its format matched.
+    if (currentFormat === "rgb") parseRgbString(color);
+    else hexToRgb(color);
+    return color;
+  }
+  if (colorFormat === "rgb") {
+    return rgbToString(hexToRgb(color));
+  }
+  // A hex target — and, for compatibility with the existing UI contract, any
+  // other non-"rgb" spelling — converts an RGB stroke to HEX.
+  if (currentFormat === "rgb") {
+    return `#${codecRgbToHex(parseRgbString(color))}`;
+  }
+  hexToRgb(color);
+  return color;
+}
+
 function convertColorFormatForArray(
   strokeArr: string[],
   colorFormat: string,
@@ -27,17 +50,8 @@ function convertColorFormatForArray(
   return strokeArr.map((color) => convertColorFormat(color, colorFormat));
 }
 
-// RGB形式かHEX形式かを判定する関数
-function detectColorFormat(colorString: string): string {
-  return colorString.startsWith("rgb") ? "rgb" : "hex";
-}
-
-// Convert input to RGB array (handles both RGB and HEX formats)
-function convertToRgbArr(colorString: string): Array<number | string> | string {
-  const currentFormat = detectColorFormat(colorString);
-  if (currentFormat === "rgb") {
-    return rgbStrToRgbArr(colorString); // rgb string => rgb array
-  } else {
-    return hexToRgbArr(colorString); // hex string => rgb array
-  }
+function convertToRgb(colorString: string): Rgb {
+  return detectColorFormat(colorString) === "rgb"
+    ? parseRgbString(colorString)
+    : hexToRgb(colorString);
 }

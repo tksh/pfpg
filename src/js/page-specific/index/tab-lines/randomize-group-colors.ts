@@ -1,5 +1,5 @@
 import { getSvgString } from "button/download-as-file";
-import { convertToRgbArr } from "libpfpg/color-format";
+import { convertToRgb } from "libpfpg/color-format";
 import { oklchToRgb } from "color-formatter/oklch-to-rgb";
 import { randomizeOklch } from "color-formatter/randomize-oklch";
 import type {
@@ -226,12 +226,8 @@ function randomizeStroke(
   distribution: OffsetDistribution,
   colorFormat: string,
 ): string {
-  const rgbArr = convertToRgbArr(anchor);
-  const { lightness, chroma, hue } = rgbToOklch(
-    Number(rgbArr[0]),
-    Number(rgbArr[1]),
-    Number(rgbArr[2]),
-  );
+  const { r, g, b } = convertToRgb(anchor);
+  const { lightness, chroma, hue } = rgbToOklch(r, g, b);
 
   const randomized: Oklch = randomizeOklch(
     lightness,
