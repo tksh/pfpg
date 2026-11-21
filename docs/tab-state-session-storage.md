@@ -12,7 +12,7 @@ is persisted.
 - `src/index.html` — the `.tab-link` buttons with `data-tab="tab-N"` and the
   matching `.tab-content#tab-N` panels.
 - `src/js/page-specific/index/main.ts` — calls `initTabs()` from the
-  `DOMContentLoaded` handler.
+  `DOMContentLoaded` handler, but only after startup validation succeeds.
 - `src/js/i18n/i18n.ts` — the language selector changes the `lang` URL param and
   reloads the page. It has no knowledge of the tab storage.
 - `src/js/page-specific/index/init/adjust-layout.ts` — called after each tab
@@ -59,7 +59,9 @@ written to storage.
 
 ## Restore and switch flow
 
-1. `DOMContentLoaded` fires, and `main.ts` calls `initTabs()`.
+1. `DOMContentLoaded` fires and `main.ts` awaits the startup promise. If URL
+   validation or rendering failed, `initTabs()` is skipped and the error screen
+   stays visible.
 2. `initTabs()` attaches click handlers to every `.tab-link`, then calls
    `openTab(null, readInitialTabName())`, then registers the keyboard handler.
 3. `readInitialTabName()` reads `pfpg.activeTab`. It returns the stored id only
@@ -97,6 +99,7 @@ language-specific exception.
 
 | Situation                                          | Behavior                                                       |
 | -------------------------------------------------- | -------------------------------------------------------------- |
+| URL validation fails at startup                    | `initTabs()` is skipped; the error screen stays visible.       |
 | No stored value                                    | Open `tab-1`.                                                  |
 | Stored value is unknown or its panel is gone       | Open `tab-1`.                                                  |
 | `sessionStorage.getItem()` throws                  | Ignore the error and open `tab-1`.                             |

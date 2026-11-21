@@ -10,8 +10,13 @@ when it has to be bumped.
 - `src/js/page-specific/index/shared-image/canonical-image-input.ts` — the pure
   projection, serialization and hash. No DOM, no `location`, no network.
 - `src/js/page-specific/index/shared-image/shared-image-key.ts` —
-  `getSharedImageKeyHash()` / `getSharedImageKeyHashForCurrentUrl()`: reads the
-  URL, decodes it with the codec, hashes it.
+  `getSharedImageKeyHash()` / `getSharedImageKeyHashForCurrentUrl()`: validates
+  the URL, decodes it with the codec, then hashes it.
+- `src/js/page-specific/index/state/param-validator.ts` —
+  `validateParamsSchema()` (Stage 1) and `validateArtworkConstraints()` (Stage
+  2), shared by the browser, the key and the OGP endpoints.
+- `server/ogp-render.ts` — `renderPipeline()` and `resolveImageMeta()`, the
+  entry points the OGP service uses.
 - `src/js/page-specific/index/shared-image/generate-and-upload.ts` — uploads the
   rendered image plus the raw params sidecar to Cloudinary.
 - `src/js/page-specific/index/shared-image/constants.ts` — the Cloudinary config
@@ -21,11 +26,15 @@ when it has to be bumped.
   generation and the key therefore cannot disagree about that.
 - `src/js/page-specific/index/svg-to-png.ts` — debounced OGP upload with a
   same-image guard (see "Upload flow").
-- `server/ogp-probe.ts` — the Deno Deploy app reuses `getSharedImageKeyHash()`
-  directly, so browser and server compute identical keys for identical URLs.
+- `server/ogp-probe.ts` — the Deno Deploy app calls `renderPipeline()` and
+  `resolveImageMeta()`, which share the browser's validators and key function,
+  so browser and server compute identical keys for identical URLs.
 - `tests/shared_image_key_test.ts` — the key's behavior, network-free.
 - `tests/svg_and_shared_image_key_golden_test.ts` — version-stable golden keys
   for the showcase artworks.
+- `tests/strictness_and_parity_test.ts` — asserts that an invalid value is
+  rejected on all four paths (browser startup, key, `/ogp/render`,
+  `/ogp/image-meta`).
 
 ## What the key identifies
 
@@ -65,9 +74,13 @@ the pixels, kept in that map's relative order. The test asserts this order, and
 asserts that the remaining visual keys are exactly the pixel-neutral ones (see
 below), so adding a visual key fails the suite until it is classified.
 
-A key is only computed for URLs the app can render: `libpfpg/settings.ts`
-validates every render and raster setting first, and the projection rejects a
-value outside the same domain. The accepted domains are closed:
+A key is only computed for URLs the app can render. `validateParamsSchema()`
+(Stage 1) resolves every render, raster, UI and locale value through the same
+parsers the browser and the OGP endpoints use, and
+`validateArtworkConstraints()` (Stage 2) checks the decoded artwork.
+`buildCanonicalImageInput()` is then a pure projection of that decoded artwork
+and the resolved settings — it never reads URL params again. The accepted
+domains are closed:
 
 - `shapeToTrim`: missing value falls back to the default; only `square`,
   `circle`, `squircle` and `squircleSlimmed` are accepted. An unrecognized value
@@ -110,31 +123,33 @@ share a key — but its **effect on the pixels is included**:
   snap rule and tie-break are the same as the renderer's: nearest grid value,
   plain `<` comparison (ties go to the earlier/larger grid value). Grid values
   are the three-decimal-grid the UI emits (`"1.0"`, `"0.96"`, …).
-- Unsupported or invalid values (anything but `0.04` / `0.1` / `0.2`) are
-  treated as "opacitySteps not specified": the artwork keeps the opacities it
-  was drawn with, and the key is identical to the same URL without the param.
-  The browser does the same thing — it drops the invalid param and keeps the
-  artwork-derived default.
+- Only a missing key means "not specified". A present value outside `0.04` /
+  `0.1` / `0.2` (including an empty string) is a `TypeError` on every path. The
+  old behaviour — dropping the param and falling back to the artwork-derived
+  default — was removed in Phase 1 so one URL cannot produce two different
+  pictures.
 - The raw parameter is not re-included under any supported value, so an artwork
   already on the grid (e.g. showcase artworks snapped by construction) keeps its
   current key no matter which allowed step the URL carries.
 
-The rules are implemented by `readOpacitySteps()` and `effectiveOpacityUint8()`
-in `canonical-image-input.ts`. `shared-image-key-test.ts` asserts that:
+The rules are implemented by `readOpacitySteps()` in `libpfpg/settings.ts` and
+`effectiveOpacityUint8()` in `canonical-image-input.ts`.
+`shared-image-key-test.ts` asserts that:
 
 - the fixture artwork (opacity `1.0` / `0.8` / `0.6` / `0.4`, on every grid)
-  keeps its key for all three steps and for every unsupported value (`0`,
-  `-0.1`, `0.3`, `0.5`, `0.07`, `1`, `true`, `abc`, empty);
+  keeps its key for all three steps, while every unsupported value (`0`, `-0.1`,
+  `0.3`, `0.5`, `0.07`, `1`, `true`, `abc`, empty) throws a `TypeError`;
 - a `groupColors` override encoding an off-grid `0.5` stroke-opacity changes the
   key under `opacitySteps=0.04` and `opacitySteps=0.2` (it snaps to 0.52 / 0.6),
   and keeps the plain key under `opacitySteps=0.1`;
 - `effectiveOpacityUint8()` snaps with the nearest-grid rule and the same
   earlier/larger tie-break as the UI.
 
-Phase 2 removed the temporary `opacitySteps` guard: `POST /ogp/render` now uses
-`renderParamsToSvg()` and accepts supported opacity steps, snapping them before
-rasterization. The endpoint still checks `x-ogp-shared-secret` against
-`OGP_SHARED_SECRET`. Invalid artwork params return 400; missing or incorrect
+Phase 1 removed the silent `opacitySteps` fallback, and Phase 4 moved the OGP
+endpoints onto the same `validateParamsSchema()` the browser uses.
+`POST /ogp/render` now goes through `renderPipeline()`, accepts supported steps
+and snaps them before rasterization. It still checks `x-ogp-shared-secret`
+against `OGP_SHARED_SECRET`. Invalid params return 400; missing or incorrect
 secrets return 403.
 
 Bumping `SHARED_IMAGE_KEY_VERSION` is not required for this change: this project
@@ -148,11 +163,12 @@ pixel-affecting settings), bump the version as documented below.
 
 `getSharedImageKeyHash()` splits the URL in two: the codec decodes
 `excludeStateKeys(urlParams)` (state keys are defined by `SETTINGS_DEFAULTS`),
-while `buildCanonicalImageInput()` receives the full params and reads the
-pixel-affecting settings out of them itself. Decoding with unfiltered params
-would fail or misbehave; hashing only the filtered ones would lose the settings.
-Both halves must see the same keys, which is why the filter lives in one shared
-helper.
+while the already-resolved settings from `validateParamsSchema()` are passed to
+`buildCanonicalImageInput()` directly. Decoding with unfiltered params would
+fail or misbehave; hashing only the filtered ones would lose the settings. Both
+halves must see the same keys, which is why the filter lives in one shared
+helper. A caller that has already decoded and validated the request can pass
+both in, so neither step is repeated.
 
 ## When a key becomes wrong
 
@@ -167,12 +183,15 @@ a bump even when the DTO is untouched.
 A setting the app cannot use is an error, never a silent fallback: a fallback
 would hand an image the key of a different drawing. This covers non-finite
 numbers, values outside the closed domains above, `heightPixelSize` above 4096,
-uppercase booleans, unusable `groupColors` spellings and undecodable queries.
-The old lenient spellings are not part of the spec any more: a unit suffix on
-`heightPixelSize` is rejected instead of parsed, `cropSideMargins: "TRUE"` is
-rejected instead of counting as on, and an unknown `shapeToTrim` is rejected
-instead of becoming `squircle`. In the page this surfaces as a failed render; on
-the OGP endpoints it is HTTP 400.
+uppercase booleans, unusable `groupColors` spellings, malformed hex/RGB colors,
+unsupported locales and undecodable queries. Color conversions all go through
+`@tksh/group-colors-param-codec`, which throws on invalid input instead of
+returning a sentinel string that `Number()` turned into `NaN`. The old lenient
+spellings are not part of the spec any more: a unit suffix on `heightPixelSize`
+is rejected instead of parsed, `cropSideMargins: "TRUE"` is rejected instead of
+counting as on, and an unknown `shapeToTrim` is rejected instead of becoming
+`squircle`. In the page this surfaces as the error screen before anything is
+drawn; on the OGP endpoints it is HTTP 400.
 
 ## Artwork-dependent validation
 
@@ -209,17 +228,19 @@ logging the skip.
 
 ## Server-side reuse
 
-`server/ogp-probe.ts` shares the browser's `renderParamsToSvg()` and
+`server/ogp-probe.ts` delegates to `renderPipeline()` and `resolveImageMeta()`
+in `server/ogp-render.ts`, which share the browser's Stage 1/2 validators and
 `getSharedImageKeyHash()`:
 
 - `GET /ogp/image-meta` returns `{ key, publicId, imageUrl }` without uploading
   anything; the deterministic URL uses `<key>-png`.
-- `POST /ogp/render` renders the full parameter set, rasterizes at
-  `heightPixelSize` (256 by default), and uploads the PNG. The temporary
-  `opacitySteps` rejection is removed. Uploads retain their raw params sidecar
-  and receive `pfpg,history` plus the existing date tags. The removed `auto`
-  query parameter is rejected with 400; uploads no longer use a crawler-specific
-  tag path.
+- `POST /ogp/render` renders the full parameter set through `renderPipeline()`,
+  rasterizes at `heightPixelSize` (256 by default), and uploads the PNG. Invalid
+  render, raster, UI or locale values — including an unsupported `opacitySteps`
+  — are rejected with 400 by the shared validator. Uploads retain their raw
+  params sidecar and receive `pfpg,history` plus the existing date tags. The
+  removed `auto` query parameter is rejected with 400; uploads no longer use a
+  crawler-specific tag path.
 - `GET /ogp` has been removed. The service keeps `/ogp/image-meta` and
   `/ogp/render`.
 
