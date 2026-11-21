@@ -1,0 +1,17 @@
+{
+  // JSR manifest for the future @tksh/libpfpg package.
+  // Publication is deferred until Favorites is implemented (see 43_ §6);
+  // this file defines the package boundary so that the app import rewrite is
+  // a mechanical one-time change when the time comes.
+  "name": "@tksh/libpfpg",
+  "exports": "./mod.ts",
+  "license": "MPL-2.0",
+  "compilerOptions": {
+    "strict": true,
+    "noUncheckedIndexedAccess": true
+  },
+  "imports": {
+    "@tksh/stln-codec": "jsr:@tksh/stln-codec@^0.1.5",
+    "@tksh/group-colors-param-codec": "jsr:@tksh/group-colors-param-codec@^0.2.0"
+  }
+}

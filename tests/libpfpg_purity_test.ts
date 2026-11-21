@@ -27,13 +27,21 @@ function stripComments(source: string): string {
 }
 
 function sourceFiles(): string[] {
-  const entries: string[] = [];
-  for (const entry of Deno.readDirSync(LIB_DIR)) {
-    if (entry.isFile && entry.name.endsWith(".ts")) {
-      entries.push(entry.name);
+  // Walk recursively so a future subdirectory cannot silently escape the
+  // purity contract. Paths are relative to LIB_DIR for readable test names.
+  const files: string[] = [];
+  const walk = (dir: URL, prefix: string): void => {
+    for (const entry of Deno.readDirSync(dir)) {
+      const relative = prefix === "" ? entry.name : `${prefix}/${entry.name}`;
+      if (entry.isDirectory) {
+        walk(new URL(`${entry.name}/`, dir), relative);
+      } else if (entry.name.endsWith(".ts")) {
+        files.push(relative);
+      }
     }
-  }
-  return entries.sort();
+  };
+  walk(LIB_DIR, "");
+  return files.sort();
 }
 
 Deno.test("libpfpg contains TypeScript sources", () => {

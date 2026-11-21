@@ -8,10 +8,10 @@ export const MAX_PARAMS_LENGTH = 8192;
  * The entry order is a serialization contract. Consumers that group these keys
  * for the UI select them by membership in this map, not by position.
  */
-export const SVG_OPTIMIZE_SETTING_DEFAULTS = new Map<
+export const SVG_OPTIMIZE_SETTING_DEFAULTS: Map<
   string,
   string | boolean | number | undefined
->([
+> = new Map<string, string | boolean | number | undefined>([
   ["removeOpacity", false],
   ["removeLineBreaks", false],
   ["removeSpaces", true],
@@ -25,10 +25,10 @@ export const SVG_OPTIMIZE_SETTING_DEFAULTS = new Map<
  * Only entries the library itself reads belong here. UI-only settings
  * (`themeColor`, `buttonAction`, …) stay in the app.
  */
-export const VISUAL_SETTING_DEFAULTS = new Map<
+export const VISUAL_SETTING_DEFAULTS: Map<
   string,
   string | boolean | number | undefined
->([
+> = new Map<string, string | boolean | number | undefined>([
   ["groupColors", undefined],
   ["pathMode", "absoluteSeparated"],
   ["opacitySteps", undefined],
@@ -45,10 +45,13 @@ export const VISUAL_SETTING_DEFAULTS = new Map<
  * Every key the library reads, in serialization order: SVG optimization
  * first, then the visual settings.
  */
-export const RENDER_SETTING_DEFAULTS = new Map<
+export const RENDER_SETTING_DEFAULTS: Map<
   string,
   string | boolean | number | undefined
->([...SVG_OPTIMIZE_SETTING_DEFAULTS, ...VISUAL_SETTING_DEFAULTS]);
+> = new Map<string, string | boolean | number | undefined>([
+  ...SVG_OPTIMIZE_SETTING_DEFAULTS,
+  ...VISUAL_SETTING_DEFAULTS,
+]);
 
 export const RENDER_SETTING_KEYS: readonly string[] = [
   ...RENDER_SETTING_DEFAULTS.keys(),
