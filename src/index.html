@@ -1131,7 +1131,11 @@
         </dl>
       </details>
 
-      <p
-        class="text-align-center padding-block-start-2">© 2023-present, SAITO Takashi (tksh)</p>
+      <!-- The credit is a fixed legal notice, so it stays in English. Pin the
+           direction as well: in RTL locales the page base direction would
+           otherwise reorder "2023–present" and split the range. `lang` keeps
+           it read as English while <html lang> follows the active locale. -->
+      <p lang="en" dir="ltr"
+        class="text-align-center padding-block-start-2">© 2023–present, SAITO Takashi (tksh)</p>
     </footer>
   </body>
