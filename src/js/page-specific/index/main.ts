@@ -43,10 +43,7 @@ import { initGroupColorsInputs } from "tab-lines/group-colors-listener";
 import { initOpacityStepsSelect } from "tab-lines/opacity-steps";
 import { initPathModeSelect } from "tab-lines/path-mode";
 import { initRandomizeGroupColors } from "tab-lines/randomize-group-colors";
-import {
-  initHeightPixelSizeInputElements,
-  initNumberInputValidatorListener,
-} from "tab-render/height-pixel-size";
+import { initHeightPixelSizeInputElements } from "tab-render/height-pixel-size";
 import { initShapeRenderingSelect } from "tab-render/shape-rendering";
 import { initImageFormatSelect } from "tab-render/image-format";
 import { initCheckerboardBgCheckbox } from "tab-ui/checkerboard-bg";
@@ -213,7 +210,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Tab - Render
   initShapeRenderingSelect();
   initHeightPixelSizeInputElements();
-  initNumberInputValidatorListener();
   initImageFormatSelect();
 
   // Tab - UI

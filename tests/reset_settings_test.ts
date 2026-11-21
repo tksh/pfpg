@@ -4,10 +4,9 @@ import { initResetSettings } from "modal/reset-settings";
 // Reset must not drop `lang`. The language is app configuration, not artwork
 // state, so a reader who resets the drawing should stay in the language they
 // chose. The key set comes from `getStateUrlsOf*()` in `state/url-state-
-// manager.ts`, which slices `SETTINGS_DEFAULTS` by index: adding a key to
-// `UI_CONFIG_DEFAULTS` (or anywhere before it) would silently put `lang` — or
-// shift the boundary onto some other key — inside a reset group, and only a
-// test that drives the real listener catches that. Everything is stubbed
+// manager.ts`, which selects keys from the owning schema map rather than by
+// index, so a key cannot drift into another reset group. Only a test that
+// drives the real listener catches an accidental membership change. Everything is stubbed
 // locally because the listener reads `document`, `location` and `history`
 // from the global object.
 

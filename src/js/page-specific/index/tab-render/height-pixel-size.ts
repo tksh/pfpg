@@ -7,11 +7,7 @@ import {
 import { updateState } from "state/url-state-manager";
 import { executeSvg2png } from "svg-to-png";
 
-export {
-  adjustImageDisplay,
-  initHeightPixelSizeInputElements,
-  initNumberInputValidatorListener,
-};
+export { adjustImageDisplay, initHeightPixelSizeInputElements };
 
 // Attach the event listeners to number input, range slider, and inc/dec buttons
 
@@ -32,19 +28,6 @@ function initHeightPixelSizeInputElements(): void {
   incButton.addEventListener("click", () => handleButtonClick(1));
 }
 
-// Attach the event listener to number input
-
-function initNumberInputValidatorListener(): void {
-  // Constraint validation
-  const numberInput = document.getElementById("png-size-number");
-  if (!numberInput) throw new Error("Element 'png-size-number' not found");
-  const numberInputElement = numberInput as HTMLInputElement;
-  numberInputElement.addEventListener(
-    "change",
-    numberInputElement.reportValidity,
-  ); // 入力値が変更されたとき その妥当性を報告する
-}
-
 // Update svg2pngOption with new height size, and convert from SVG to PNG
 
 function updateAndConvert(value: string | number): void {
@@ -61,6 +44,13 @@ function updateAndConvert(value: string | number): void {
 // Event listener for both png-size-number and png-size-range
 function pngSizeElement(event: Event): void {
   const target = event.target as HTMLInputElement;
+  // The number input's min/max are the same 1..4096 domain the URL parser
+  // enforces. Reject the edit before it reaches the URL, the slider or the
+  // rasterizer, and let the browser show why the value was refused.
+  if (!target.checkValidity()) {
+    target.reportValidity();
+    return;
+  }
   syncInputNumberAndRange(target);
   updateAndConvert(target.value);
 }
